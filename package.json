@@ -1,0 +1,30 @@
+{
+  "name": "uscor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "prettier": "turbo run prettier",
+    "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
+    "test:unit": "turbo run test:unit",
+    "test:integration": "turbo run test:integration",
+    "test:e2e": "turbo run test:e2e",
+    "test:coverage": "turbo run test:coverage",
+    "test:watch": "turbo run test:watch"
+  },
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "apps/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  }
+}
