@@ -1,5 +1,6 @@
 "use client"
 import { AuroraHero } from '@/components/AuroraHero';
+import ScrollTriggered from '@/components/features-scroll-triggered';
 import { Icons } from '@/components/Icons';
 import { HowItWorks, NewsletterSignup, StatsSection, Testimonials } from '@/components/landing-components';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
@@ -37,6 +38,7 @@ export default function Home() {
       <MaxWidthWrapper>
 
         <StatsSection />
+        {/* <ScrollTriggered /> */}
         <PlatformFeatures />
         <ProductReel
           query={{

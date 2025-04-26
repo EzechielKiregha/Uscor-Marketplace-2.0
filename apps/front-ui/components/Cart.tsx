@@ -39,7 +39,7 @@ const Cart = () => {
   const fee = 1
 
   return (
-    <Sheet >
+    <Sheet>
       <SheetTrigger className='group -m-2 flex items-center p-2'>
         <ShoppingCart
           aria-hidden='true'

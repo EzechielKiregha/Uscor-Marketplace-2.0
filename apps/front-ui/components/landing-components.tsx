@@ -8,12 +8,35 @@ import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 
-import { useAnimation, animate } from 'framer-motion';
+import { useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { animate, useTransform } from "motion/react"
+import { useEffect } from "react"
+
+export default function AnimatedStats({ nombre }: { nombre: number }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (value) => Math.round(value)); // Use count as dependency
+
+  useEffect(() => {
+    const controls = animate(count, nombre, { duration: 2 }); // Adjust duration as needed
+    return () => controls.stop();
+  }, [count, nombre]); // Add dependencies to ensure proper reactivity
+
+  return <motion.pre style={text}>{rounded}</motion.pre>;
+}
+
+/**
+* ==============   Styles   ================
+*/
+
+const text = {
+  fontSize: 64,
+  color: "#8df0cc",
+}
 
 // 1. Statistics Section with scroll-triggered count-up
 export const StatsSection: React.FC = () => {
-  const stats = [
+  const stats: { label: string; value: number }[] = [
     { label: 'Produits', value: 1200 },
     { label: 'Ventes', value: 850 },
     { label: 'Clients satisfaits', value: 450 },
@@ -32,22 +55,15 @@ export const StatsSection: React.FC = () => {
   }, [controls, inView, stats]);
 
   return (
-    <section ref={ref} className="py-16 bg-white dark:bg-gray-950">
+    <section ref={ref} className="py-4 bg-white dark:bg-gray-950">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
         {stats.map((stat, index) => (
-          <div key={stat.label}>
-            <motion.span
-              className="text-4xl font-bold text-blue-600"
-              custom={index}
-              animate={controls}
-              initial={{ opacity: 0 }}
-            >
-              {/** @ts-ignore */}
-              {controls.hasAnimated && <>{stat.value}</>}
-              {/** Fallback render during animation */}
+          <motion.div key={stat.label}>
+            <motion.span>
+              <AnimatedStats nombre={stat.value} />
             </motion.span>
             <p className="mt-2 text-lg text-gray-700 dark:text-gray-300">{stat.label}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

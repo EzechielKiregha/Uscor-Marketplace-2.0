@@ -11,7 +11,7 @@ export default function AuthLayout({
 }>) {
   return (
     <>
-      <main className="relative flex flex-col min-h-screen">
+      <main className="relative flex flex-col min-h-screen" >
         {/* <Providers> */}
         <div className="flex-grow flex justify-center items-center">{children}</div>
         {/* </Providers> */}
