@@ -1,0 +1,902 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ChatMessageEntity {
+  id: String!
+  chatId: String!
+  message: String!
+  senderId: String!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AdEntity {
+  id: String!
+  businessId: String!
+  productId: String!
+  price: Float!
+  periodDays: Int!
+  createdAt: DateTime!
+  endedAt: DateTime
+  business: BusinessEntity!
+  product: ProductEntity!
+}
+
+type CategoryEntity {
+  id: String!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [ProductEntity!]
+}
+
+type MediaEntity {
+  id: String!
+  url: String!
+  type: String!
+  productId: String!
+  createdAt: DateTime!
+  product: ProductEntity!
+}
+
+type PaymentTransactionEntity {
+  id: String!
+  amount: Float!
+  method: String!
+  status: String!
+  transactionDate: DateTime!
+  qrCode: String
+  createdAt: DateTime!
+  order: OrderEntity!
+  PostTransaction: [PostTransactionEntity!]
+}
+
+type PostTransactionEntity {
+  id: String!
+  amount: Float!
+  status: String!
+  createdAt: DateTime!
+}
+
+type OrderEntity {
+  id: String!
+  deliveryFee: Float!
+  deliveryAddress: String
+  qrCode: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  client: ClientEntity!
+  payment: PaymentTransactionEntity
+  products: [OrderProductEntity!]
+}
+
+type OrderProductEntity {
+  id: String!
+  orderId: String!
+  productId: String!
+  quantity: Int!
+  order: OrderEntity!
+  product: ProductEntity!
+}
+
+type ReOwnedProductEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  productId: String!
+  product: ProductEntity!
+  oldOwnerId: String!
+  oldPrice: Float!
+  newPrice: Float!
+  markupPercentage: Float!
+  agreedViaChatId: String!
+  agreementDate: DateTime!
+  isApproved: Boolean!
+  createdAt: DateTime!
+}
+
+type RepostedProductEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  productId: String!
+  product: ProductEntity!
+  earnPercentage: Float!
+  createdAt: DateTime!
+}
+
+type ReviewEntity {
+  id: String!
+  clientId: String!
+  productId: String!
+  rating: Int!
+  comment: String
+  createdAt: DateTime!
+  client: ClientEntity!
+  product: ProductEntity!
+}
+
+type ProductEntity {
+  id: String!
+  title: String!
+  description: String
+  price: Float!
+  stock: Int!
+  businessId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  medias: [MediaEntity!]!
+  business: BusinessEntity
+  category: CategoryEntity
+  reviews: [ReviewEntity!]!
+  orders: [OrderProductEntity!]!
+  chats: [ChatEntity!]!
+  reposts: [RepostedProductEntity!]!
+  reowns: [ReOwnedProductEntity!]!
+  ads: [AdEntity!]!
+}
+
+type KnowYourCustomerEntity {
+  id: String!
+  status: String!
+  documentUrl: String!
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+  businessId: String
+  clientId: String
+  workerId: String
+  business: BusinessEntity
+  client: ClientEntity
+  worker: WorkerEntity
+}
+
+type WorkerEntity {
+  id: String!
+  email: String!
+  fullName: String
+  role: String
+  isVerified: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity
+  kyc: KnowYourCustomerEntity
+  freelanceServices: [FreelanceServiceEntity!]
+  chats: [ChatEntity!]!
+}
+
+type FreelanceServiceEntity {
+  id: String!
+  title: String!
+  description: String
+  isHourly: Boolean!
+  rate: Float!
+  category: FreelanceServiceCategory!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity!
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
+}
+
+enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+type WorkerServiceAssignmentEntity {
+  id: String!
+  worker: WorkerEntity!
+  role: String!
+  assignedAt: DateTime!
+}
+
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  createdAt: DateTime!
+}
+
+type ChatEntity {
+  id: String!
+  status: ChatStatus!
+  isSecure: Boolean!
+  negotiationType: NegotiationType
+  productId: String
+  product: ProductEntity
+  serviceId: String
+  service: FreelanceServiceEntity
+  participants: [ChatParticipantEntity!]!
+  messages: [ChatMessageEntity!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ChatStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+enum NegotiationType {
+  REOWNERSHIP
+  FREELANCEORDER
+  PURCHASE
+  GENERAL
+}
+
+type FreelanceOrderEntity {
+  id: String!
+  status: FreelanceStatus!
+  quantity: Int!
+  totalAmount: Float!
+  escrowAmount: Float!
+  commissionPercent: Float!
+  escrowStatus: EscrowStatus
+  createdAt: DateTime!
+  escrowReleasedAt: DateTime!
+  client: ClientEntity!
+  service: FreelanceServiceEntity!
+  freelanceOrderBusiness: [FreelanceOrderBusinessEntity!]!
+  payment: PaymentTransactionEntity
+}
+
+enum FreelanceStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  DISPUTED
+}
+
+type FreelanceOrderBusinessEntity {
+  id: String!
+  business: BusinessEntity!
+  role: String!
+  assignedAt: DateTime!
+}
+
+type ClientEntity {
+  id: String!
+  username: String!
+  email: String!
+  fullName: String
+  address: String
+  phone: String
+  password: String!
+  isVerified: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  orders: [OrderEntity!]!
+  reviews: [ReviewEntity!]!
+  chats: [ChatEntity!]!
+  recharges: [AccountRechargeEntity!]!
+  freelanceOrders: [FreelanceOrderEntity!]!
+  referralsMade: [ReferralEntity!]!
+  referralsReceived: [ReferralEntity!]!
+}
+
+type AccountRechargeEntity {
+  id: String!
+  amount: Float!
+  method: RechargeMethod!
+  origin: Country!
+  createdAt: DateTime!
+  client: ClientEntity
+  business: BusinessEntity
+}
+
+enum RechargeMethod {
+  MTN_MONEY
+  AIRTEL_MONEY
+  ORANGE_MONEY
+  MPESA
+}
+
+enum Country {
+  DRC
+  KENYA
+  UGANDA
+  RWANDA
+  BURUNDI
+  TANZANIA
+}
+
+type PostOfSaleEntity {
+  id: String!
+  title: String!
+  description: String
+  price: Float!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type BusinessEntity {
+  id: String!
+  name: String!
+  email: String!
+  description: String
+  address: String
+  phone: String
+  avatar: String
+  coverImage: String
+  password: String!
+  isVerified: Boolean!
+  kycStatus: KycStatus!
+  totalProductsSold: Int!
+  hasAgreedToTerms: Boolean!
+  isB2BEnabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [ProductEntity!]!
+  workers: [WorkerEntity!]!
+  repostedItems: [RepostedProductEntity!]!
+  reownedItems: [ReOwnedProductEntity!]!
+  recharges: [AccountRechargeEntity!]!
+  ads: [AdEntity!]!
+  freelanceServices: [FreelanceServiceEntity!]!
+  freelanceOrders: [FreelanceOrderEntity!]!
+  referralsMade: [ReferralEntity!]!
+  referralsReceived: [ReferralEntity!]!
+  chats: [ChatEntity!]!
+  postOfSales: [PostOfSaleEntity!]
+}
+
+enum KycStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+type ReferralEntity {
+  id: String!
+  affiliateBusinessId: String
+  affiliateClientId: String
+  referredBusinessId: String
+  referredClientId: String
+  verifiedPurchase: Boolean!
+  createdAt: DateTime!
+  affiliateBusiness: BusinessEntity
+  affiliateClient: ClientEntity
+  referredBusiness: BusinessEntity
+  referredClient: ClientEntity
+}
+
+type AuthPayloadClient {
+  id: String!
+  email: String!
+  fullname: String!
+  phone: String!
+  avatar: String
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthPayloadWorker {
+  id: String!
+  email: String!
+  fullname: String!
+  phone: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthPayloadBusiness {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  avatar: String
+  coverImage: String
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Query {
+  """Retrieves all products with their relations."""
+  products: [ProductEntity!]!
+
+  """Retrieves a single product by ID."""
+  product(id: String!): ProductEntity!
+
+  """Retrieves orders based on user role."""
+  orders: [OrderEntity!]!
+
+  """Retrieves a single order by ID."""
+  order(id: String!): OrderEntity!
+
+  """Retrieves all businesses with their relations."""
+  businesses: [BusinessEntity!]!
+
+  """Retrieves a single business by ID."""
+  business(id: String!): BusinessEntity!
+
+  """Retrieves all clients with their relations."""
+  clients: [ClientEntity!]!
+
+  """Retrieves a single client by ID."""
+  client(id: String!): ClientEntity!
+
+  """Retrieves all workers with their relations."""
+  workers: [WorkerEntity!]!
+
+  """Retrieves a single worker by ID."""
+  worker(id: String!): WorkerEntity!
+
+  """Retrieves chats for the user."""
+  chats: [ChatEntity!]!
+
+  """Retrieves a single chat by ID."""
+  chat(id: String!): ChatEntity!
+
+  """Retrieves reposted products for a business."""
+  repostedProducts: [RepostedProductEntity!]!
+
+  """Retrieves a single reposted product by ID."""
+  repostedProduct(id: String!): RepostedProductEntity!
+
+  """Retrieves re-owned products for a business."""
+  reOwnedProducts: [ReOwnedProductEntity!]!
+
+  """Retrieves a single re-owned product by ID."""
+  reOwnedProduct(id: String!): ReOwnedProductEntity!
+
+  """Retrieves the total recharge balance for the user."""
+  accountBalance: Float!
+
+  """Retrieves account recharges for the user."""
+  accountRecharges: [AccountRechargeEntity!]!
+
+  """Retrieves a single account recharge by ID."""
+  accountRecharge(id: String!): AccountRechargeEntity!
+
+  """Retrieves payment transactions based on user role."""
+  paymentTransactions: [PaymentTransactionEntity!]!
+
+  """Retrieves a single payment transaction by ID."""
+  paymentTransaction(id: String!): PaymentTransactionEntity!
+
+  """Retrieves freelance services, optionally filtered by category."""
+  freelanceServices(category: FreelanceCategory): [FreelanceServiceEntity!]!
+
+  """Retrieves a single freelance service by ID."""
+  freelanceService(id: String!): FreelanceServiceEntity!
+
+  """Retrieves freelance orders based on user role."""
+  freelanceOrders: [FreelanceOrderEntity!]!
+
+  """Retrieves a single freelance order by ID."""
+  freelanceOrder(id: String!): FreelanceOrderEntity!
+  postOfSale(id: Int!): PostOfSaleEntity!
+
+  """Retrieves all categories with their products."""
+  categories: [CategoryEntity!]!
+
+  """Retrieves a single category by ID."""
+  category(id: String!): CategoryEntity!
+}
+
+enum FreelanceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+type Mutation {
+  """Creates a new product for a business."""
+  createProduct(createProductInput: CreateProductInput!): ProductEntity!
+
+  """Updates a product’s details."""
+  updateProduct(id: String!, updateProductInput: UpdateProductInput!): ProductEntity!
+
+  """Deletes a product."""
+  deleteProduct(id: String!): ProductEntity!
+
+  """Creates a new order for a client."""
+  createOrder(createOrderInput: CreateOrderInput!): OrderEntity!
+
+  """Updates an order’s details."""
+  updateOrder(id: String!, updateOrderInput: UpdateOrderInput!): OrderEntity!
+
+  """Deletes an order."""
+  deleteOrder(id: String!): OrderEntity!
+
+  """Creates a new business with hashed password."""
+  createBusiness(createBusinessInput: CreateBusinessInput!): BusinessEntity!
+
+  """Updates a business’s details."""
+  updateBusiness(id: String!, updateBusinessInput: UpdateBusinessInput!): BusinessEntity!
+
+  """Deletes a business."""
+  deleteBusiness(id: String!): BusinessEntity!
+
+  """Creates a new client with hashed password."""
+  createClient(createClientInput: CreateClientInput!): ClientEntity!
+
+  """Updates a client’s details."""
+  updateClient(id: String!, updateClientInput: UpdateClientInput!): ClientEntity!
+
+  """Deletes a client."""
+  deleteClient(id: String!): ClientEntity!
+
+  """Creates a new worker with hashed password."""
+  createWorker(createWorkerInput: CreateWorkerInput!): WorkerEntity!
+
+  """Updates a worker’s details."""
+  updateWorker(id: String!, updateWorkerInput: UpdateWorkerInput!): WorkerEntity!
+
+  """Deletes a worker."""
+  deleteWorker(id: String!): WorkerEntity!
+
+  """Creates a new chat with dynamic participants."""
+  createChat(createChatInput: CreateChatInput!): ChatEntity!
+
+  """Sends a message in a chat."""
+  createChatMessage(createChatMessageInput: CreateChatMessageInput!): ChatMessageEntity!
+
+  """Updates a chat’s status or properties."""
+  updateChat(id: String!, updateChatInput: UpdateChatInput!): ChatEntity!
+
+  """Deletes a chat."""
+  deleteChat(id: String!): ChatEntity!
+
+  """Creates a reposted product."""
+  createRepostedProduct(createRepostedProductInput: CreateRepostedProductInput!): RepostedProductEntity!
+
+  """Deletes a reposted product."""
+  deleteRepostedProduct(id: String!): RepostedProductEntity!
+
+  """Initiates a re-ownership request."""
+  createReOwnedProduct(createReOwnedProductInput: CreateReOwnedProductInput!): ReOwnedProductEntity!
+
+  """Approves or rejects a re-ownership request."""
+  approveReOwnedProduct(approveReOwnedProductInput: ApproveReOwnedProductInput!): ReOwnedProductEntity!
+
+  """Creates a new account recharge."""
+  createAccountRecharge(createAccountRechargeInput: CreateAccountRechargeInput!): AccountRechargeEntity!
+
+  """Updates an account recharge."""
+  updateAccountRecharge(id: String!, updateAccountRechargeInput: UpdateAccountRechargeInput!): AccountRechargeEntity!
+
+  """Deletes an account recharge."""
+  deleteAccountRecharge(id: String!): AccountRechargeEntity!
+
+  """Creates a new payment transaction."""
+  createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
+
+  """Updates a payment transaction’s status or QR code."""
+  updatePaymentTransaction(id: String!, updatePaymentTransactionInput: UpdatePaymentTransactionInput!): PaymentTransactionEntity!
+
+  """Deletes a payment transaction."""
+  deletePaymentTransaction(id: String!): PaymentTransactionEntity!
+
+  """Creates a new freelance service."""
+  createFreelanceService(createFreelanceServiceInput: CreateFreelanceServiceInput!): FreelanceServiceEntity!
+
+  """Updates a freelance service."""
+  updateFreelanceService(id: String!, updateFreelanceServiceInput: UpdateFreelanceServiceInput!): FreelanceServiceEntity!
+
+  """Assigns workers to a freelance service."""
+  assignWorkersToService(assignWorkersInput: AssignWorkersInput!): FreelanceServiceEntity!
+
+  """Deletes a freelance service."""
+  deleteFreelanceService(id: String!): FreelanceServiceEntity!
+
+  """Creates a new freelance order."""
+  createFreelanceOrder(createFreelanceOrderInput: CreateFreelanceOrderInput!): FreelanceOrderEntity!
+
+  """Updates a freelance order’s status or escrow status."""
+  updateFreelanceOrder(id: String!, updateFreelanceOrderInput: UpdateFreelanceOrderInput!): FreelanceOrderEntity!
+
+  """Assigns businesses to a freelance order."""
+  assignBusinessesToOrder(assignBusinessesInput: AssignBusinessesInput!): FreelanceOrderEntity!
+
+  """Deletes a freelance order."""
+  deleteFreelanceOrder(id: String!): FreelanceOrderEntity!
+  signIn(SignInInput: SignInInput!): AuthPayloadClient!
+  signBusinessIn(SignInInput: SignInInput!): AuthPayloadBusiness!
+  signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
+  refreshToken(refreshToken: String!): AuthPayloadClient!
+  createPostOfSale(createPostOfSaleInput: CreatePostOfSaleInput!): PostOfSaleEntity!
+  updatePostOfSale(updatePostOfSaleInput: UpdatePostOfSaleInput!): PostOfSaleEntity!
+  removePostOfSale(id: Int!): PostOfSaleEntity!
+
+  """Creates a new category."""
+  createCategory(createCategoryInput: CreateCategoryInput!): CategoryEntity!
+
+  """Updates a category’s details."""
+  updateCategory(id: String!, updateCategoryInput: UpdateCategoryInput!): CategoryEntity!
+
+  """Deletes a category."""
+  deleteCategory(id: String!): CategoryEntity!
+}
+
+input CreateProductInput {
+  title: String!
+  description: String
+  price: Float!
+  stock: Int!
+  businessId: String!
+  categoryId: String!
+}
+
+input UpdateProductInput {
+  title: String
+  description: String
+  price: Float
+  stock: Int
+  businessId: String
+  categoryId: String
+  id: String!
+}
+
+input CreateOrderInput {
+  clientId: String!
+  deliveryFee: Float!
+  deliveryAddress: String
+  qrCode: String
+  orderProducts: [CreateOrderProductInput!]!
+  payment: CreatePaymentTransactionInput!
+}
+
+input CreateOrderProductInput {
+  productId: String!
+  quantity: Int!
+}
+
+input CreatePaymentTransactionInput {
+  orderId: String!
+  amount: Float!
+  method: PaymentMethod!
+  status: PaymentStatus!
+  qrCode: String
+}
+
+enum PaymentMethod {
+  TOKEN
+  MOBILE_MONEY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+input UpdateOrderInput {
+  clientId: String
+  deliveryFee: Float
+  deliveryAddress: String
+  qrCode: String
+  orderProducts: [CreateOrderProductInput!]
+  payment: CreatePaymentTransactionInput
+  id: String!
+}
+
+input CreateBusinessInput {
+  name: String!
+  email: String!
+  description: String
+  avatar: String
+  coverImage: String
+  address: String
+  phone: String
+  password: String!
+  isVerified: Boolean! = false
+}
+
+input UpdateBusinessInput {
+  name: String
+  email: String
+  description: String
+  avatar: String
+  coverImage: String
+  address: String
+  phone: String
+  password: String
+  isVerified: Boolean
+  kycId: String
+  kycStatus: KycStatus!
+  totalProductsSold: Int
+  hasAgreedToTerms: Boolean
+  isB2BEnabled: Boolean
+}
+
+input CreateClientInput {
+  username: String!
+  email: String!
+  fullName: String
+  address: String
+  phone: String
+  password: String!
+  isVerified: Boolean!
+}
+
+input UpdateClientInput {
+  username: String
+  email: String
+  fullName: String
+  address: String
+  phone: String
+  password: String
+  isVerified: Boolean
+  id: Int!
+  kycId: String
+}
+
+input CreateWorkerInput {
+  email: String!
+  fullName: String
+  role: String
+  password: String!
+  isVerified: Boolean! = false
+  businessId: String
+  kycId: String
+}
+
+input UpdateWorkerInput {
+  email: String
+  fullName: String
+  role: String
+  password: String
+  isVerified: Boolean = false
+  businessId: String
+  kycId: String
+  id: String!
+}
+
+input CreateChatInput {
+  productId: String
+  serviceId: String
+  participantIds: [String!]!
+  isSecure: Boolean! = false
+  negotiationType: NegotiationType
+}
+
+input CreateChatMessageInput {
+  chatId: String!
+  message: String!
+}
+
+input UpdateChatInput {
+  id: String!
+  status: ChatStatus
+  isSecure: Boolean
+  negotiationType: NegotiationType
+}
+
+input CreateRepostedProductInput {
+  productId: String!
+  businessId: String!
+  earnPercentage: Float! = 0.002
+}
+
+input CreateReOwnedProductInput {
+  productId: String!
+  requestingBusinessId: String!
+  newPrice: Float!
+  markupPercentage: Float!
+}
+
+input ApproveReOwnedProductInput {
+  reOwnedProductId: String!
+  chatId: String!
+  isApproved: Boolean!
+}
+
+input CreateAccountRechargeInput {
+  amount: Float!
+  method: RechargeMethod!
+  origin: Country!
+  clientId: String
+  businessId: String
+}
+
+input UpdateAccountRechargeInput {
+  amount: Float
+  method: RechargeMethod
+  origin: Country
+  clientId: String
+  businessId: String
+  id: String!
+}
+
+input UpdatePaymentTransactionInput {
+  status: PaymentStatus
+  qrCode: String
+}
+
+input CreateFreelanceServiceInput {
+  title: String!
+  description: String
+  isHourly: Boolean! = true
+  category: FreelanceServiceCategory!
+  rate: Float!
+  workerIds: [String!]
+}
+
+input UpdateFreelanceServiceInput {
+  id: String!
+  title: String
+  description: String
+  isHourly: Boolean
+  rate: Float
+  workerIds: [String!]
+}
+
+input AssignWorkersInput {
+  serviceId: String!
+  workerIds: [String!]!
+}
+
+input CreateFreelanceOrderInput {
+  serviceId: String!
+  clientId: String!
+  quantity: Int! = 1
+  businessIds: [String!]
+  paymentMethod: PaymentMethod! = TOKEN
+}
+
+input UpdateFreelanceOrderInput {
+  status: FreelanceStatus
+  escrowStatus: EscrowStatus
+  commissionPercent: Float
+}
+
+input AssignBusinessesInput {
+  orderId: String!
+  businessIds: [String!]!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+input CreatePostOfSaleInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePostOfSaleInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  name: String!
+  description: String
+}
+
+input UpdateCategoryInput {
+  name: String
+  description: String
+  id: String!
+}
