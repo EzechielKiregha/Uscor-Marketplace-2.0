@@ -34,6 +34,10 @@ import { ConfigModule } from '@nestjs/config'
 import { PostOfSaleModule } from './post-of-sale/post-of-sale.module';
 import { CategoryModule } from './category/category.module';
 import { TokenTransactionModule } from './token-transaction/token-transaction.module';
+import { SaleModule } from './sale/sale.module';
+import { StoreModule } from './store/store.module';
+import { InventoryModule } from './inventory/inventory.module';
+import GraphQLJSON from 'graphql-type-json'
 
 @Module({
   imports: [
@@ -43,6 +47,7 @@ import { TokenTransactionModule } from './token-transaction/token-transaction.mo
         process.cwd(),
         'src/graphql/schema.gql',
       ), // Path to the generated schema file
+      resolvers: { JSON: GraphQLJSON },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -72,6 +77,9 @@ import { TokenTransactionModule } from './token-transaction/token-transaction.mo
     PostOfSaleModule,
     CategoryModule,
     TokenTransactionModule,
+    SaleModule,
+    StoreModule,
+    InventoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
 import { IsBoolean, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export enum WorkerRole {
@@ -7,6 +7,8 @@ export enum WorkerRole {
   MANAGER = 'MANAGER',
   FREELANCER = 'FREELANCER'
 }
+
+registerEnumType(WorkerRole, {name : "WorkerRole"})
 
 @InputType()
 export class CreateWorkerInput {

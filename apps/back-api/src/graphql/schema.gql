@@ -71,6 +71,7 @@ type OrderEntity {
   qrCode: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  clientId: String!
   client: ClientEntity!
   payment: PaymentTransactionEntity
   products: [OrderProductEntity!]
@@ -85,29 +86,45 @@ type OrderProductEntity {
   product: ProductEntity!
 }
 
+type ShippingEntity {
+  id: String!
+  reOwnedProductId: String!
+  status: String!
+  trackingNumber: String
+  carrier: String
+  shippedAt: DateTime
+  deliveredAt: DateTime
+  createdAt: DateTime!
+}
+
 type ReOwnedProductEntity {
   id: String!
-  businessId: String!
-  business: BusinessEntity!
-  productId: String!
-  product: ProductEntity!
+  newProductId: String!
+  newProduct: ProductEntity!
+  originalProductId: String!
+  originalProduct: ProductEntity!
   oldOwnerId: String!
+  newOwnerId: String!
+  quantity: Int!
   oldPrice: Float!
   newPrice: Float!
   markupPercentage: Float!
   agreedViaChatId: String!
   agreementDate: DateTime!
-  isApproved: Boolean!
+  isOriginalApproved: Boolean!
+  isNewOwnerApproved: Boolean!
+  shippingId: String
+  shipping: ShippingEntity
   createdAt: DateTime!
 }
 
 type RepostedProductEntity {
   id: String!
-  businessId: String!
-  business: BusinessEntity!
   productId: String!
   product: ProductEntity!
-  earnPercentage: Float!
+  businessId: String!
+  business: BusinessEntity!
+  markupPercentage: Float!
   createdAt: DateTime!
 }
 
@@ -128,7 +145,9 @@ type ProductEntity {
   description: String
   price: Float!
   stock: Int!
+  quantity: Int!
   businessId: String!
+  isPhysical: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
   medias: [MediaEntity!]!
@@ -297,14 +316,39 @@ type ClientEntity {
   referralsReceived: [ReferralEntity!]!
 }
 
+type TokenTransactionEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  reOwnedProductId: String
+  reOwnedProduct: ReOwnedProductEntity
+  repostedProductId: String
+  repostedProduct: RepostedProductEntity
+  amount: Float!
+  type: TokenTransactionType!
+  isRedeemed: Boolean!
+  isReleased: Boolean!
+  createdAt: DateTime!
+}
+
+enum TokenTransactionType {
+  RELEASE
+  PROFIT_SHARE
+  REPOST_COMMISSION
+}
+
 type AccountRechargeEntity {
   id: String!
   amount: Float!
   method: RechargeMethod!
   origin: Country!
-  createdAt: DateTime!
-  client: ClientEntity
+  businessId: String
   business: BusinessEntity
+  clientId: String
+  client: ClientEntity
+  tokenTransactionId: String
+  tokenTransaction: TokenTransactionEntity
+  createdAt: DateTime!
 }
 
 enum RechargeMethod {
@@ -312,6 +356,7 @@ enum RechargeMethod {
   AIRTEL_MONEY
   ORANGE_MONEY
   MPESA
+  TOKEN
 }
 
 enum Country {
@@ -414,6 +459,72 @@ type AuthPayloadBusiness {
   refreshToken: String!
 }
 
+type SaleProductEntity {
+  id: String!
+  quantity: Int!
+  price: Float!
+  modifiers: JSON
+  createdAt: DateTime!
+  product: ProductEntity!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type ReturnEntity {
+  id: String!
+  saleId: String!
+  reason: String
+  status: String!
+  createdAt: DateTime!
+}
+
+type StoreEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  name: String!
+  address: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SaleEntity {
+  id: String!
+  storeId: String!
+  store: StoreEntity!
+  workerId: String!
+  worker: WorkerEntity!
+  clientId: String
+  client: ClientEntity
+  totalAmount: Float!
+  discount: Float!
+  paymentMethod: PaymentMethod!
+  status: SaleStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  saleProducts: [SaleProductEntity!]!
+  returns: [ReturnEntity!]!
+}
+
+enum PaymentMethod {
+  TOKEN
+  MOBILE_MONEY
+}
+
+enum SaleStatus {
+  OPEN
+  CLOSED
+  REFUNDED
+}
+
+type Inventory {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   """Retrieves all products with their relations."""
   products: [ProductEntity!]!
@@ -421,11 +532,26 @@ type Query {
   """Retrieves a single product by ID."""
   product(id: String!): ProductEntity!
 
-  """Retrieves orders based on user role."""
+  """Retrieves orders."""
   orders: [OrderEntity!]!
 
   """Retrieves a single order by ID."""
   order(id: String!): OrderEntity!
+
+  """Retrieves token transactions for a business."""
+  tokenTransactions: [TokenTransactionEntity!]!
+
+  """Retrieves a single token transaction by ID."""
+  tokenTransaction(id: String!): TokenTransactionEntity!
+
+  """Retrieves account recharges for a user."""
+  accountRecharges: [AccountRechargeEntity!]!
+
+  """Retrieves a single account recharge by ID."""
+  accountRecharge(id: String!): AccountRechargeEntity!
+
+  """Retrieves the account balance for a user."""
+  accountBalance: Float!
 
   """Retrieves all businesses with their relations."""
   businesses: [BusinessEntity!]!
@@ -463,15 +589,6 @@ type Query {
   """Retrieves a single re-owned product by ID."""
   reOwnedProduct(id: String!): ReOwnedProductEntity!
 
-  """Retrieves the total recharge balance for the user."""
-  accountBalance: Float!
-
-  """Retrieves account recharges for the user."""
-  accountRecharges: [AccountRechargeEntity!]!
-
-  """Retrieves a single account recharge by ID."""
-  accountRecharge(id: String!): AccountRechargeEntity!
-
   """Retrieves payment transactions based on user role."""
   paymentTransactions: [PaymentTransactionEntity!]!
 
@@ -496,6 +613,19 @@ type Query {
 
   """Retrieves a single category by ID."""
   category(id: String!): CategoryEntity!
+
+  """Retrieves sales for a store."""
+  sales(storeId: String!): [SaleEntity!]!
+
+  """Retrieves a single sale by ID."""
+  sale(id: String!): SaleEntity!
+
+  """Retrieves stores for a business."""
+  stores: [StoreEntity!]!
+
+  """Retrieves a single store by ID."""
+  store(id: String!): StoreEntity!
+  inventory(id: Int!): Inventory!
 }
 
 enum FreelanceCategory {
@@ -518,14 +648,32 @@ type Mutation {
   """Deletes a product."""
   deleteProduct(id: String!): ProductEntity!
 
-  """Creates a new order for a client."""
+  """Creates an order for a product."""
   createOrder(createOrderInput: CreateOrderInput!): OrderEntity!
 
-  """Updates an order’s details."""
+  """Updates an order."""
   updateOrder(id: String!, updateOrderInput: UpdateOrderInput!): OrderEntity!
 
   """Deletes an order."""
   deleteOrder(id: String!): OrderEntity!
+
+  """Creates a token transaction."""
+  createTokenTransaction(createTokenTransactionInput: CreateTokenTransactionInput!): TokenTransactionEntity!
+
+  """Redeems a token transaction."""
+  redeemTokenTransaction(redeemTokenTransactionInput: RedeemTokenTransactionInput!): TokenTransactionEntity!
+
+  """Releases a token transaction."""
+  releaseTokenTransaction(releaseTokenTransactionInput: ReleaseTokenTransactionInput!): TokenTransactionEntity!
+
+  """Creates an account recharge."""
+  createAccountRecharge(createAccountRechargeInput: CreateAccountRechargeInput!): AccountRechargeEntity!
+
+  """Updates an account recharge."""
+  updateAccountRecharge(id: String!, updateAccountRechargeInput: UpdateAccountRechargeInput!): AccountRechargeEntity!
+
+  """Deletes an account recharge."""
+  deleteAccountRecharge(id: String!): AccountRechargeEntity!
 
   """Creates a new business with hashed password."""
   createBusiness(createBusinessInput: CreateBusinessInput!): BusinessEntity!
@@ -578,14 +726,8 @@ type Mutation {
   """Approves or rejects a re-ownership request."""
   approveReOwnedProduct(approveReOwnedProductInput: ApproveReOwnedProductInput!): ReOwnedProductEntity!
 
-  """Creates a new account recharge."""
-  createAccountRecharge(createAccountRechargeInput: CreateAccountRechargeInput!): AccountRechargeEntity!
-
-  """Updates an account recharge."""
-  updateAccountRecharge(id: String!, updateAccountRechargeInput: UpdateAccountRechargeInput!): AccountRechargeEntity!
-
-  """Deletes an account recharge."""
-  deleteAccountRecharge(id: String!): AccountRechargeEntity!
+  """Creates shipping details for a re-owned product."""
+  createShipping(createShippingInput: CreateShippingInput!): ShippingEntity!
 
   """Creates a new payment transaction."""
   createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
@@ -635,6 +777,30 @@ type Mutation {
 
   """Deletes a category."""
   deleteCategory(id: String!): CategoryEntity!
+
+  """Creates a new POS sale."""
+  createSale(createSaleInput: CreateSaleInput!): SaleEntity!
+
+  """Updates an existing POS sale."""
+  updateSale(id: String!, updateSaleInput: UpdateSaleInput!): SaleEntity!
+
+  """Closes a POS sale."""
+  closeSale(closeSaleInput: CloseSaleInput!): SaleEntity!
+
+  """Processes a return for a POS sale."""
+  createReturn(createReturnInput: CreateReturnInput!): ReturnEntity!
+
+  """Creates a new store for a business."""
+  createStore(createStoreInput: CreateStoreInput!): StoreEntity!
+
+  """Updates an existing store."""
+  updateStore(id: String!, updateStoreInput: UpdateStoreInput!): StoreEntity!
+
+  """Deletes a store."""
+  deleteStore(id: String!): StoreEntity!
+  createInventory(createInventoryInput: CreateInventoryInput!): Inventory!
+  updateInventory(updateInventoryInput: UpdateInventoryInput!): Inventory!
+  removeInventory(id: Int!): Inventory!
 }
 
 input CreateProductInput {
@@ -678,11 +844,6 @@ input CreatePaymentTransactionInput {
   qrCode: String
 }
 
-enum PaymentMethod {
-  TOKEN
-  MOBILE_MONEY
-}
-
 enum PaymentStatus {
   PENDING
   COMPLETED
@@ -690,13 +851,42 @@ enum PaymentStatus {
 }
 
 input UpdateOrderInput {
-  clientId: String
-  deliveryFee: Float
   deliveryAddress: String
   qrCode: String
-  orderProducts: [CreateOrderProductInput!]
-  payment: CreatePaymentTransactionInput
-  id: String!
+  deliveryFee: Float
+}
+
+input CreateTokenTransactionInput {
+  businessId: String!
+  reOwnedProductId: String
+  repostedProductId: String
+  amount: Float!
+  type: TokenTransactionType!
+}
+
+input RedeemTokenTransactionInput {
+  tokenTransactionId: String!
+  isRedeemed: Boolean!
+}
+
+input ReleaseTokenTransactionInput {
+  tokenTransactionId: String!
+  isReleased: Boolean!
+}
+
+input CreateAccountRechargeInput {
+  amount: Float!
+  method: RechargeMethod!
+  origin: Country!
+  clientId: String
+  businessId: String
+  tokenTransactionId: String
+}
+
+input UpdateAccountRechargeInput {
+  amount: Float
+  method: String
+  origin: String
 }
 
 input CreateBusinessInput {
@@ -753,17 +943,24 @@ input UpdateClientInput {
 input CreateWorkerInput {
   email: String!
   fullName: String
-  role: String
+  role: WorkerRole!
   password: String!
   isVerified: Boolean! = false
   businessId: String
   kycId: String
 }
 
+enum WorkerRole {
+  ADMIN
+  STAFF
+  MANAGER
+  FREELANCER
+}
+
 input UpdateWorkerInput {
   email: String
   fullName: String
-  role: String
+  role: WorkerRole
   password: String
   isVerified: Boolean = false
   businessId: String
@@ -794,12 +991,13 @@ input UpdateChatInput {
 input CreateRepostedProductInput {
   productId: String!
   businessId: String!
-  earnPercentage: Float! = 0.002
+  markupPercentage: Float! = 0.02
 }
 
 input CreateReOwnedProductInput {
-  productId: String!
-  requestingBusinessId: String!
+  originalProductId: String!
+  newOwnerId: String!
+  quantity: Int!
   newPrice: Float!
   markupPercentage: Float!
 }
@@ -810,21 +1008,10 @@ input ApproveReOwnedProductInput {
   isApproved: Boolean!
 }
 
-input CreateAccountRechargeInput {
-  amount: Float!
-  method: RechargeMethod!
-  origin: Country!
-  clientId: String
-  businessId: String
-}
-
-input UpdateAccountRechargeInput {
-  amount: Float
-  method: RechargeMethod
-  origin: Country
-  clientId: String
-  businessId: String
-  id: String!
+input CreateShippingInput {
+  reOwnedProductId: String!
+  trackingNumber: String!
+  carrier: String!
 }
 
 input UpdatePaymentTransactionInput {
@@ -899,4 +1086,62 @@ input UpdateCategoryInput {
   name: String
   description: String
   id: String!
+}
+
+input CreateSaleInput {
+  storeId: String!
+  workerId: String!
+  clientId: String
+  totalAmount: Float!
+  discount: Float
+  paymentMethod: PaymentMethod!
+  saleProducts: [SaleProductInput!]!
+}
+
+input SaleProductInput {
+  productId: String!
+  quantity: Int!
+  price: Float!
+  modifiers: JSON
+}
+
+input UpdateSaleInput {
+  clientId: String
+  totalAmount: Float
+  discount: Float
+  paymentMethod: PaymentMethod
+  saleProducts: [SaleProductInput!]
+}
+
+input CloseSaleInput {
+  saleId: String!
+  paymentMethod: PaymentMethod!
+  status: SaleStatus
+}
+
+input CreateReturnInput {
+  saleId: String!
+  reason: String!
+}
+
+input CreateStoreInput {
+  businessId: String!
+  name: String!
+  address: String
+}
+
+input UpdateStoreInput {
+  name: String
+  address: String
+}
+
+input CreateInventoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateInventoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

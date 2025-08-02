@@ -55,6 +55,13 @@ export class ProductService {
     });
   }
 
+  async updateStock(id: string, data: { stock: { increment?: number; decrement?: number } }) {
+    await this.prisma.product.update({
+      where : { id },
+      data
+    })
+  }
+
   async update(id: string, updateProductInput: UpdateProductInput) {
     const { categoryId, ...productData } = updateProductInput;
     const data: any = { ...productData };

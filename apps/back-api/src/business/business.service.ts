@@ -76,6 +76,13 @@ export class BusinessService {
     });
   }
 
+  async updateTotalProuctSold(id: string, data: { totalProductsSold?: { increment: number } }) {
+    await this.prisma.business.update({
+      where : { id },
+      data
+    })
+  }
+
   async update(id: string, updateBusinessInput: UpdateBusinessInput) {
     const { password, kycId, ...businessData } = updateBusinessInput;
     const data: any = { ...businessData };
