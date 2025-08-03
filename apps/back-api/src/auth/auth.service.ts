@@ -52,7 +52,7 @@ export class AuthService {
     }
     // Generate a token (e.g., JWT) and return it
     const payload: AuthJwtPayload = { sub: userId, role };
-    const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '30m' });
+    const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '1d' });
     const refreshToken = await this.jwtService.signAsync(payload, { expiresIn: '7d' });
     return { accessToken, refreshToken };
   }

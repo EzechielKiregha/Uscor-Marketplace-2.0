@@ -32,7 +32,7 @@ export class PaymentTransactionService {
 
     // Validate token balance for TOKEN method
     if (method === PaymentMethod.TOKEN) {
-      const hasEnoughTokens = await this.validateTokenBalance(clientId, amount);
+      const hasEnoughTokens = await this.validateTokenBalance(clientId, amount || 0);
       if (!hasEnoughTokens) {
         throw new Error('Insufficient token balance');
       }
@@ -41,7 +41,7 @@ export class PaymentTransactionService {
     return this.prisma.paymentTransaction.create({
       data: {
         ...data,
-        amount,
+        amount: amount || 0,
         method,
         order: { connect: { id: orderId } },
       },

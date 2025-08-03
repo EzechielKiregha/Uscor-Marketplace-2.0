@@ -1,13 +1,9 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { AdjustmentType } from 'src/generated/prisma/enums';
 import { ProductEntity } from 'src/product/entities/product.entity';
 import { StoreEntity } from 'src/store/entities/store.entity';
 
 @ObjectType()
-export class InventoryAdjustmentEntity {
-  @Field()
-  id: string;
-
+export class LowStockAlertEntity {
   @Field()
   productId: string;
 
@@ -20,15 +16,9 @@ export class InventoryAdjustmentEntity {
   @Field(() => StoreEntity)
   store: StoreEntity;
 
-  @Field(() => AdjustmentType)
-  adjustmentType: AdjustmentType;
+  @Field(() => Int)
+  stock: number;
 
   @Field(() => Int)
-  quantity: number;
-
-  @Field({ nullable: true })
-  reason?: string;
-
-  @Field()
-  createdAt: Date;
+  threshold: number;
 }

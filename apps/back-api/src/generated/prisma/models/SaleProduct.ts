@@ -297,7 +297,7 @@ export type SaleProductCreateInput = {
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   sale: Prisma.SaleCreateNestedOneWithoutSaleProductsInput
-  product: Prisma.ProductCreateNestedOneWithoutSaleProductInput
+  product: Prisma.ProductCreateNestedOneWithoutSaleProductsInput
 }
 
 export type SaleProductUncheckedCreateInput = {
@@ -317,7 +317,7 @@ export type SaleProductUpdateInput = {
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sale?: Prisma.SaleUpdateOneRequiredWithoutSaleProductsNestedInput
-  product?: Prisma.ProductUpdateOneRequiredWithoutSaleProductNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutSaleProductsNestedInput
 }
 
 export type SaleProductUncheckedUpdateInput = {
@@ -553,7 +553,7 @@ export type SaleProductCreateWithoutSaleInput = {
   price: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutSaleProductInput
+  product: Prisma.ProductCreateNestedOneWithoutSaleProductsInput
 }
 
 export type SaleProductUncheckedCreateWithoutSaleInput = {
@@ -642,7 +642,7 @@ export type SaleProductUpdateWithoutSaleInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutSaleProductNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutSaleProductsNestedInput
 }
 
 export type SaleProductUncheckedUpdateWithoutSaleInput = {

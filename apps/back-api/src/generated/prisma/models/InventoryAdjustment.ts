@@ -296,7 +296,7 @@ export type InventoryAdjustmentCreateInput = {
   quantity: number
   reason?: string | null
   createdAt?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutInventoryAdjustmentInput
+  product: Prisma.ProductCreateNestedOneWithoutInventoryAdjustmentsInput
   store: Prisma.StoreCreateNestedOneWithoutInventoryAdjustmentsInput
 }
 
@@ -316,7 +316,7 @@ export type InventoryAdjustmentUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutInventoryAdjustmentNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutInventoryAdjustmentsNestedInput
   store?: Prisma.StoreUpdateOneRequiredWithoutInventoryAdjustmentsNestedInput
 }
 
@@ -557,7 +557,7 @@ export type InventoryAdjustmentCreateWithoutStoreInput = {
   quantity: number
   reason?: string | null
   createdAt?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutInventoryAdjustmentInput
+  product: Prisma.ProductCreateNestedOneWithoutInventoryAdjustmentsInput
 }
 
 export type InventoryAdjustmentUncheckedCreateWithoutStoreInput = {
@@ -646,7 +646,7 @@ export type InventoryAdjustmentUpdateWithoutStoreInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutInventoryAdjustmentNestedInput
+  product?: Prisma.ProductUpdateOneRequiredWithoutInventoryAdjustmentsNestedInput
 }
 
 export type InventoryAdjustmentUncheckedUpdateWithoutStoreInput = {

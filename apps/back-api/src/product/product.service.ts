@@ -9,10 +9,11 @@ export class ProductService {
   constructor(private prisma: PrismaService) {}
 
   async create(createProductInput: CreateProductInput) {
-    const { businessId, categoryId, ...productData } = createProductInput;
+    const { businessId, categoryId, storeId, ...productData } = createProductInput;
     return this.prisma.product.create({
       data: {
         ...productData,
+        store: { connect : { id: storeId } },
         business: { connect: { id: businessId } },
         category: { connect: { id: categoryId } },
       },
@@ -21,11 +22,12 @@ export class ProductService {
         title: true,
         description: true,
         price: true,
-        stock: true,
+        quantity: true,
         createdAt: true,
         updatedAt: true,
         business: { select: { id: true, name: true, email: true } },
         category: { select: { id: true, name: true } },
+        store : { select: { id: true, name: true  } }
       },
     });
   }
@@ -35,6 +37,7 @@ export class ProductService {
       include: {
         business: { select: { id: true, name: true, email: true, createdAt: true } },
         category: { select: { id: true, name: true, description: true, createdAt: true } },
+        store : { select: { id: true, name: true, address: true, createdAt: true  } },
         orders: { select: { id: true, quantity: true, orderId: true } },
         reposts: { select: { id: true, markupPercentage: true, createdAt: true } },
         reOwnedProducts: { select: { id: true, oldPrice: true, newPrice: true, markupPercentage: true, createdAt: true } },
@@ -48,6 +51,7 @@ export class ProductService {
       include: {
         business: { select: { id: true, name: true, email: true, createdAt: true } },
         category: { select: { id: true, name: true, description: true, createdAt: true } },
+        store : { select: { id: true, name: true, address: true, createdAt: true  } },
         orders: { select: { id: true, quantity: true, orderId: true } },
         reposts: { select: { id: true, markupPercentage: true, createdAt: true } },
         reOwnedProducts: { select: { id: true, oldPrice: true, newPrice: true, markupPercentage: true, createdAt: true } },
@@ -83,6 +87,7 @@ export class ProductService {
         updatedAt: true,
         business: { select: { id: true, name: true, email: true } },
         category: { select: { id: true, name: true } },
+        store : { select: { id: true, name: true, address: true, createdAt: true  } },
       },
     });
   }

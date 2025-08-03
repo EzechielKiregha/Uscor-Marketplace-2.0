@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PaymentMethod, PaymentStatus } from 'src/generated/prisma/enums';
+import { PaymentStatus } from 'src/generated/prisma/enums';
 import { TokenTransactionService } from 'src/token-transaction/token-transaction.service';
 import { TokenTransactionType } from 'src/token-transaction/dto/create-token-transaction.input';
 // Service
@@ -26,12 +26,12 @@ export class OrderService {
     for (const op of orderProducts) {
       const product = await this.prisma.product.findUnique({
         where: { id: op.productId },
-        select: { id: true, stock: true, price: true },
+        select: { id: true, quantity: true, price: true },
       });
       if (!product) {
         throw new Error(`Product ${op.productId} not found`);
       }
-      if (product.stock < op.quantity) {
+      if (product.quantity < op.quantity) {
         throw new Error(`Insufficient stock for product ${op.productId}`);
       }
     }
@@ -47,9 +47,10 @@ export class OrderService {
       })
     )).reduce((sum, val) => sum + val, 0);
     const totalAmount = productTotal + (orderData.deliveryFee || 0);
-    if (payment.amount !== totalAmount) {
-      throw new Error(`Payment amount (${payment.amount}) does not match total (${totalAmount})`);
-    }
+
+    // if (payment.amount !== totalAmount) {
+    //   throw new Error(`Payment amount (${payment.amount}) does not match total (${totalAmount})`);
+    // }
 
     // Create order
     const order = await this.prisma.order.create({
@@ -58,7 +59,7 @@ export class OrderService {
         client: { connect: { id: clientId } },
         payment: {
           create: {
-            amount: payment.amount,
+            amount: totalAmount,
             method: payment.method,
             status: payment.status || PaymentStatus.PENDING,
             qrCode: payment.qrCode,
@@ -124,7 +125,7 @@ export class OrderService {
 
         if (!product) throw new Error("Product not found")
 
-        const commission = product.price * 0.003 * op.quantity; // 0.3% commission per unit
+        const commission = product.price * 0.002 * op.quantity; // 0.02% commission per unit
         await this.tokenTransactionService.create({
           businessId: repostedProduct.businessId,
           repostedProductId: repostedProduct.id,

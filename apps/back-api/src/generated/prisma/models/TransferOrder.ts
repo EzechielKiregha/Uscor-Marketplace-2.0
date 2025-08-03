@@ -191,6 +191,7 @@ export type TransferOrderWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"TransferOrder"> | Date | string
   fromStore?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
   toStore?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
+  products?: Prisma.TransferOrderProductListRelationFilter
 }
 
 export type TransferOrderOrderByWithRelationInput = {
@@ -202,6 +203,7 @@ export type TransferOrderOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   fromStore?: Prisma.StoreOrderByWithRelationInput
   toStore?: Prisma.StoreOrderByWithRelationInput
+  products?: Prisma.TransferOrderProductOrderByRelationAggregateInput
 }
 
 export type TransferOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -216,6 +218,7 @@ export type TransferOrderWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"TransferOrder"> | Date | string
   fromStore?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
   toStore?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
+  products?: Prisma.TransferOrderProductListRelationFilter
 }, "id">
 
 export type TransferOrderOrderByWithAggregationInput = {
@@ -249,6 +252,7 @@ export type TransferOrderCreateInput = {
   updatedAt?: Date | string
   fromStore: Prisma.StoreCreateNestedOneWithoutTransferOrdersFromInput
   toStore: Prisma.StoreCreateNestedOneWithoutTransferOrdersToInput
+  products?: Prisma.TransferOrderProductCreateNestedManyWithoutTransferOrderInput
 }
 
 export type TransferOrderUncheckedCreateInput = {
@@ -258,6 +262,7 @@ export type TransferOrderUncheckedCreateInput = {
   status?: $Enums.TransferOrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  products?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutTransferOrderInput
 }
 
 export type TransferOrderUpdateInput = {
@@ -267,6 +272,7 @@ export type TransferOrderUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fromStore?: Prisma.StoreUpdateOneRequiredWithoutTransferOrdersFromNestedInput
   toStore?: Prisma.StoreUpdateOneRequiredWithoutTransferOrdersToNestedInput
+  products?: Prisma.TransferOrderProductUpdateManyWithoutTransferOrderNestedInput
 }
 
 export type TransferOrderUncheckedUpdateInput = {
@@ -276,6 +282,7 @@ export type TransferOrderUncheckedUpdateInput = {
   status?: Prisma.EnumTransferOrderStatusFieldUpdateOperationsInput | $Enums.TransferOrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  products?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutTransferOrderNestedInput
 }
 
 export type TransferOrderCreateManyInput = {
@@ -338,6 +345,11 @@ export type TransferOrderMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type TransferOrderScalarRelationFilter = {
+  is?: Prisma.TransferOrderWhereInput
+  isNot?: Prisma.TransferOrderWhereInput
 }
 
 export type TransferOrderCreateNestedManyWithoutFromStoreInput = {
@@ -428,12 +440,27 @@ export type EnumTransferOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.TransferOrderStatus
 }
 
+export type TransferOrderCreateNestedOneWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.TransferOrderCreateWithoutProductsInput, Prisma.TransferOrderUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.TransferOrderCreateOrConnectWithoutProductsInput
+  connect?: Prisma.TransferOrderWhereUniqueInput
+}
+
+export type TransferOrderUpdateOneRequiredWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.TransferOrderCreateWithoutProductsInput, Prisma.TransferOrderUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.TransferOrderCreateOrConnectWithoutProductsInput
+  upsert?: Prisma.TransferOrderUpsertWithoutProductsInput
+  connect?: Prisma.TransferOrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TransferOrderUpdateToOneWithWhereWithoutProductsInput, Prisma.TransferOrderUpdateWithoutProductsInput>, Prisma.TransferOrderUncheckedUpdateWithoutProductsInput>
+}
+
 export type TransferOrderCreateWithoutFromStoreInput = {
   id?: string
   status?: $Enums.TransferOrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   toStore: Prisma.StoreCreateNestedOneWithoutTransferOrdersToInput
+  products?: Prisma.TransferOrderProductCreateNestedManyWithoutTransferOrderInput
 }
 
 export type TransferOrderUncheckedCreateWithoutFromStoreInput = {
@@ -442,6 +469,7 @@ export type TransferOrderUncheckedCreateWithoutFromStoreInput = {
   status?: $Enums.TransferOrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  products?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutTransferOrderInput
 }
 
 export type TransferOrderCreateOrConnectWithoutFromStoreInput = {
@@ -460,6 +488,7 @@ export type TransferOrderCreateWithoutToStoreInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   fromStore: Prisma.StoreCreateNestedOneWithoutTransferOrdersFromInput
+  products?: Prisma.TransferOrderProductCreateNestedManyWithoutTransferOrderInput
 }
 
 export type TransferOrderUncheckedCreateWithoutToStoreInput = {
@@ -468,6 +497,7 @@ export type TransferOrderUncheckedCreateWithoutToStoreInput = {
   status?: $Enums.TransferOrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  products?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutTransferOrderInput
 }
 
 export type TransferOrderCreateOrConnectWithoutToStoreInput = {
@@ -524,6 +554,58 @@ export type TransferOrderUpdateManyWithWhereWithoutToStoreInput = {
   data: Prisma.XOR<Prisma.TransferOrderUpdateManyMutationInput, Prisma.TransferOrderUncheckedUpdateManyWithoutToStoreInput>
 }
 
+export type TransferOrderCreateWithoutProductsInput = {
+  id?: string
+  status?: $Enums.TransferOrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  fromStore: Prisma.StoreCreateNestedOneWithoutTransferOrdersFromInput
+  toStore: Prisma.StoreCreateNestedOneWithoutTransferOrdersToInput
+}
+
+export type TransferOrderUncheckedCreateWithoutProductsInput = {
+  id?: string
+  fromStoreId: string
+  toStoreId: string
+  status?: $Enums.TransferOrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransferOrderCreateOrConnectWithoutProductsInput = {
+  where: Prisma.TransferOrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransferOrderCreateWithoutProductsInput, Prisma.TransferOrderUncheckedCreateWithoutProductsInput>
+}
+
+export type TransferOrderUpsertWithoutProductsInput = {
+  update: Prisma.XOR<Prisma.TransferOrderUpdateWithoutProductsInput, Prisma.TransferOrderUncheckedUpdateWithoutProductsInput>
+  create: Prisma.XOR<Prisma.TransferOrderCreateWithoutProductsInput, Prisma.TransferOrderUncheckedCreateWithoutProductsInput>
+  where?: Prisma.TransferOrderWhereInput
+}
+
+export type TransferOrderUpdateToOneWithWhereWithoutProductsInput = {
+  where?: Prisma.TransferOrderWhereInput
+  data: Prisma.XOR<Prisma.TransferOrderUpdateWithoutProductsInput, Prisma.TransferOrderUncheckedUpdateWithoutProductsInput>
+}
+
+export type TransferOrderUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransferOrderStatusFieldUpdateOperationsInput | $Enums.TransferOrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fromStore?: Prisma.StoreUpdateOneRequiredWithoutTransferOrdersFromNestedInput
+  toStore?: Prisma.StoreUpdateOneRequiredWithoutTransferOrdersToNestedInput
+}
+
+export type TransferOrderUncheckedUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStoreId?: Prisma.StringFieldUpdateOperationsInput | string
+  toStoreId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransferOrderStatusFieldUpdateOperationsInput | $Enums.TransferOrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type TransferOrderCreateManyFromStoreInput = {
   id?: string
   toStoreId: string
@@ -546,6 +628,7 @@ export type TransferOrderUpdateWithoutFromStoreInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   toStore?: Prisma.StoreUpdateOneRequiredWithoutTransferOrdersToNestedInput
+  products?: Prisma.TransferOrderProductUpdateManyWithoutTransferOrderNestedInput
 }
 
 export type TransferOrderUncheckedUpdateWithoutFromStoreInput = {
@@ -554,6 +637,7 @@ export type TransferOrderUncheckedUpdateWithoutFromStoreInput = {
   status?: Prisma.EnumTransferOrderStatusFieldUpdateOperationsInput | $Enums.TransferOrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  products?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutTransferOrderNestedInput
 }
 
 export type TransferOrderUncheckedUpdateManyWithoutFromStoreInput = {
@@ -570,6 +654,7 @@ export type TransferOrderUpdateWithoutToStoreInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fromStore?: Prisma.StoreUpdateOneRequiredWithoutTransferOrdersFromNestedInput
+  products?: Prisma.TransferOrderProductUpdateManyWithoutTransferOrderNestedInput
 }
 
 export type TransferOrderUncheckedUpdateWithoutToStoreInput = {
@@ -578,6 +663,7 @@ export type TransferOrderUncheckedUpdateWithoutToStoreInput = {
   status?: Prisma.EnumTransferOrderStatusFieldUpdateOperationsInput | $Enums.TransferOrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  products?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutTransferOrderNestedInput
 }
 
 export type TransferOrderUncheckedUpdateManyWithoutToStoreInput = {
@@ -589,6 +675,35 @@ export type TransferOrderUncheckedUpdateManyWithoutToStoreInput = {
 }
 
 
+/**
+ * Count Type TransferOrderCountOutputType
+ */
+
+export type TransferOrderCountOutputType = {
+  products: number
+}
+
+export type TransferOrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  products?: boolean | TransferOrderCountOutputTypeCountProductsArgs
+}
+
+/**
+ * TransferOrderCountOutputType without action
+ */
+export type TransferOrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferOrderCountOutputType
+   */
+  select?: Prisma.TransferOrderCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TransferOrderCountOutputType without action
+ */
+export type TransferOrderCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferOrderProductWhereInput
+}
+
 
 export type TransferOrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -599,6 +714,8 @@ export type TransferOrderSelect<ExtArgs extends runtime.Types.Extensions.Interna
   updatedAt?: boolean
   fromStore?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   toStore?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
+  products?: boolean | Prisma.TransferOrder$productsArgs<ExtArgs>
+  _count?: boolean | Prisma.TransferOrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transferOrder"]>
 
 export type TransferOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -636,6 +753,8 @@ export type TransferOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type TransferOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fromStore?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   toStore?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
+  products?: boolean | Prisma.TransferOrder$productsArgs<ExtArgs>
+  _count?: boolean | Prisma.TransferOrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TransferOrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fromStore?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
@@ -651,6 +770,7 @@ export type $TransferOrderPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     fromStore: Prisma.$StorePayload<ExtArgs>
     toStore: Prisma.$StorePayload<ExtArgs>
+    products: Prisma.$TransferOrderProductPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1055,6 +1175,7 @@ export interface Prisma__TransferOrderClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   fromStore<T extends Prisma.StoreDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StoreDefaultArgs<ExtArgs>>): Prisma.Prisma__StoreClient<runtime.Types.Result.GetResult<Prisma.$StorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   toStore<T extends Prisma.StoreDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StoreDefaultArgs<ExtArgs>>): Prisma.Prisma__StoreClient<runtime.Types.Result.GetResult<Prisma.$StorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  products<T extends Prisma.TransferOrder$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TransferOrder$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferOrderProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1483,6 +1604,30 @@ export type TransferOrderDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many TransferOrders to delete.
    */
   limit?: number
+}
+
+/**
+ * TransferOrder.products
+ */
+export type TransferOrder$productsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferOrderProduct
+   */
+  select?: Prisma.TransferOrderProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferOrderProduct
+   */
+  omit?: Prisma.TransferOrderProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferOrderProductInclude<ExtArgs> | null
+  where?: Prisma.TransferOrderProductWhereInput
+  orderBy?: Prisma.TransferOrderProductOrderByWithRelationInput | Prisma.TransferOrderProductOrderByWithRelationInput[]
+  cursor?: Prisma.TransferOrderProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferOrderProductScalarFieldEnum | Prisma.TransferOrderProductScalarFieldEnum[]
 }
 
 /**

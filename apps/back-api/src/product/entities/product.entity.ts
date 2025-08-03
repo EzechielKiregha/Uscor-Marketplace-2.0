@@ -8,6 +8,7 @@ import { OrderProductEntity } from 'src/order-product/entities/order-product.ent
 import { ReOwnedProductEntity } from 'src/re-owned-product/entities/re-owned-product.entity';
 import { RepostedProductEntity } from 'src/reposted-product/entities/reposted-product.entity';
 import { ReviewEntity } from 'src/review/entities/review.entity';
+import { StoreEntity } from 'src/store/entities/store.entity';
 
 @ObjectType()
 export class ProductEntity {
@@ -24,13 +25,13 @@ export class ProductEntity {
   price: number;
 
   @Field(() => Int)
-  stock: number;
-
-  @Field(() => Int)
   quantity: number;
 
   @Field()
   businessId: string;
+
+  @Field({nullable : true})
+  storeId: string;
 
   @Field()
   isPhysical: boolean;
@@ -47,6 +48,9 @@ export class ProductEntity {
 
   @Field(() => BusinessEntity, { nullable: true })
   business?: BusinessEntity;
+  
+  @Field(() => StoreEntity, { nullable: true })
+  store?: StoreEntity;
   
   @Field(() => CategoryEntity, { nullable: true })
   category?: CategoryEntity;

@@ -427,6 +427,8 @@ export const ModelName = {
   SaleProduct: 'SaleProduct',
   PurchaseOrder: 'PurchaseOrder',
   TransferOrder: 'TransferOrder',
+  PurchaseOrderProduct: 'PurchaseOrderProduct',
+  TransferOrderProduct: 'TransferOrderProduct',
   InventoryAdjustment: 'InventoryAdjustment',
   Shift: 'Shift',
   LoyaltyProgram: 'LoyaltyProgram',
@@ -447,7 +449,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "client" | "worker" | "category" | "product" | "media" | "order" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "pointsTransaction" | "return"
+    modelProps: "business" | "client" | "worker" | "category" | "product" | "media" | "order" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "pointsTransaction" | "return"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2893,6 +2895,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PurchaseOrderProduct: {
+      payload: Prisma.$PurchaseOrderProductPayload<ExtArgs>
+      fields: Prisma.PurchaseOrderProductFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PurchaseOrderProductFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PurchaseOrderProductFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>
+        }
+        findFirst: {
+          args: Prisma.PurchaseOrderProductFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PurchaseOrderProductFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>
+        }
+        findMany: {
+          args: Prisma.PurchaseOrderProductFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>[]
+        }
+        create: {
+          args: Prisma.PurchaseOrderProductCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>
+        }
+        createMany: {
+          args: Prisma.PurchaseOrderProductCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PurchaseOrderProductCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>[]
+        }
+        delete: {
+          args: Prisma.PurchaseOrderProductDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>
+        }
+        update: {
+          args: Prisma.PurchaseOrderProductUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>
+        }
+        deleteMany: {
+          args: Prisma.PurchaseOrderProductDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PurchaseOrderProductUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PurchaseOrderProductUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>[]
+        }
+        upsert: {
+          args: Prisma.PurchaseOrderProductUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PurchaseOrderProductPayload>
+        }
+        aggregate: {
+          args: Prisma.PurchaseOrderProductAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePurchaseOrderProduct>
+        }
+        groupBy: {
+          args: Prisma.PurchaseOrderProductGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PurchaseOrderProductGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PurchaseOrderProductCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PurchaseOrderProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    TransferOrderProduct: {
+      payload: Prisma.$TransferOrderProductPayload<ExtArgs>
+      fields: Prisma.TransferOrderProductFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransferOrderProductFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransferOrderProductFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>
+        }
+        findFirst: {
+          args: Prisma.TransferOrderProductFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransferOrderProductFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>
+        }
+        findMany: {
+          args: Prisma.TransferOrderProductFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>[]
+        }
+        create: {
+          args: Prisma.TransferOrderProductCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>
+        }
+        createMany: {
+          args: Prisma.TransferOrderProductCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransferOrderProductCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>[]
+        }
+        delete: {
+          args: Prisma.TransferOrderProductDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>
+        }
+        update: {
+          args: Prisma.TransferOrderProductUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransferOrderProductDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransferOrderProductUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransferOrderProductUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransferOrderProductUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferOrderProductPayload>
+        }
+        aggregate: {
+          args: Prisma.TransferOrderProductAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransferOrderProduct>
+        }
+        groupBy: {
+          args: Prisma.TransferOrderProductGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferOrderProductGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransferOrderProductCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferOrderProductCountAggregateOutputType> | number
+        }
+      }
+    }
     InventoryAdjustment: {
       payload: Prisma.$InventoryAdjustmentPayload<ExtArgs>
       fields: Prisma.InventoryAdjustmentFieldRefs
@@ -3763,6 +3913,28 @@ export const TransferOrderScalarFieldEnum = {
 export type TransferOrderScalarFieldEnum = (typeof TransferOrderScalarFieldEnum)[keyof typeof TransferOrderScalarFieldEnum]
 
 
+export const PurchaseOrderProductScalarFieldEnum = {
+  id: 'id',
+  purchaseOrderId: 'purchaseOrderId',
+  productId: 'productId',
+  quantity: 'quantity',
+  createdAt: 'createdAt'
+} as const
+
+export type PurchaseOrderProductScalarFieldEnum = (typeof PurchaseOrderProductScalarFieldEnum)[keyof typeof PurchaseOrderProductScalarFieldEnum]
+
+
+export const TransferOrderProductScalarFieldEnum = {
+  id: 'id',
+  transferOrderId: 'transferOrderId',
+  productId: 'productId',
+  quantity: 'quantity',
+  createdAt: 'createdAt'
+} as const
+
+export type TransferOrderProductScalarFieldEnum = (typeof TransferOrderProductScalarFieldEnum)[keyof typeof TransferOrderProductScalarFieldEnum]
+
+
 export const InventoryAdjustmentScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
@@ -4321,6 +4493,8 @@ export type GlobalOmitConfig = {
   saleProduct?: Prisma.SaleProductOmit
   purchaseOrder?: Prisma.PurchaseOrderOmit
   transferOrder?: Prisma.TransferOrderOmit
+  purchaseOrderProduct?: Prisma.PurchaseOrderProductOmit
+  transferOrderProduct?: Prisma.TransferOrderProductOmit
   inventoryAdjustment?: Prisma.InventoryAdjustmentOmit
   shift?: Prisma.ShiftOmit
   loyaltyProgram?: Prisma.LoyaltyProgramOmit

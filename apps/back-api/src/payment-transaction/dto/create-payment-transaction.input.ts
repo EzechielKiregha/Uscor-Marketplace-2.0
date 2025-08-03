@@ -19,15 +19,16 @@ registerEnumType(PaymentMethod, { name: 'PaymentMethod' });
 
 @InputType()
 export class CreatePaymentTransactionInput {
-  @Field()
+  @Field({nullable: true})
   @IsOptional()
   @IsString()
   orderId?: string;
 
-  @Field(() => Float)
+  @Field(() => Float, {nullable: true})
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount?: number;
 
   @Field(() => PaymentMethod)
   @IsEnum(PaymentMethod)

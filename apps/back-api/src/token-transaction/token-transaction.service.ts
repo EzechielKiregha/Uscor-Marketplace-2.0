@@ -83,6 +83,8 @@ export class TokenTransactionService {
       },
     });
 
+    if (!tokenTransaction.reOwnedProduct?.oldOwnerId) throw new Error("Product Owner is missing")
+
     // If both redeemed and released, create AccountRecharge
     if (isRedeemed && updatedTransaction.isReleased) {
       await this.accountRechargeService.create(
@@ -94,6 +96,18 @@ export class TokenTransactionService {
           tokenTransactionId: tokenTransaction.id,
         },
         businessId,
+        'business',
+      );
+
+      await this.accountRechargeService.create(
+        {
+          businessId: tokenTransaction.reOwnedProduct?.oldOwnerId,
+          amount: -tokenTransaction.amount,
+          method: RechargeMethod.TOKEN,
+          origin: Country.DRC,
+          tokenTransactionId: tokenTransaction.id,
+        },
+        tokenTransaction.reOwnedProduct?.oldOwnerId,
         'business',
       );
     }
@@ -151,6 +165,18 @@ export class TokenTransactionService {
           tokenTransactionId: tokenTransaction.id,
         },
         productOwnerId,
+        'business',
+      );
+
+      await this.accountRechargeService.create(
+        {
+          businessId,
+          amount: tokenTransaction.amount,
+          method: RechargeMethod.MTN_MONEY,
+          origin: Country.DRC,
+          tokenTransactionId: tokenTransaction.id,
+        },
+        businessId,
         'business',
       );
     }

@@ -294,8 +294,10 @@ export type ProductWhereInput = {
   ads?: Prisma.AdListRelationFilter
   reOwnedProducts?: Prisma.ReOwnedProductListRelationFilter
   newReOwnedProducts?: Prisma.ReOwnedProductListRelationFilter
-  SaleProduct?: Prisma.SaleProductListRelationFilter
-  InventoryAdjustment?: Prisma.InventoryAdjustmentListRelationFilter
+  saleProducts?: Prisma.SaleProductListRelationFilter
+  transferOrderProducts?: Prisma.TransferOrderProductListRelationFilter
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductListRelationFilter
+  inventoryAdjustments?: Prisma.InventoryAdjustmentListRelationFilter
 }
 
 export type ProductOrderByWithRelationInput = {
@@ -323,8 +325,10 @@ export type ProductOrderByWithRelationInput = {
   ads?: Prisma.AdOrderByRelationAggregateInput
   reOwnedProducts?: Prisma.ReOwnedProductOrderByRelationAggregateInput
   newReOwnedProducts?: Prisma.ReOwnedProductOrderByRelationAggregateInput
-  SaleProduct?: Prisma.SaleProductOrderByRelationAggregateInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentOrderByRelationAggregateInput
+  saleProducts?: Prisma.SaleProductOrderByRelationAggregateInput
+  transferOrderProducts?: Prisma.TransferOrderProductOrderByRelationAggregateInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductOrderByRelationAggregateInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentOrderByRelationAggregateInput
 }
 
 export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -355,8 +359,10 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   ads?: Prisma.AdListRelationFilter
   reOwnedProducts?: Prisma.ReOwnedProductListRelationFilter
   newReOwnedProducts?: Prisma.ReOwnedProductListRelationFilter
-  SaleProduct?: Prisma.SaleProductListRelationFilter
-  InventoryAdjustment?: Prisma.InventoryAdjustmentListRelationFilter
+  saleProducts?: Prisma.SaleProductListRelationFilter
+  transferOrderProducts?: Prisma.TransferOrderProductListRelationFilter
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductListRelationFilter
+  inventoryAdjustments?: Prisma.InventoryAdjustmentListRelationFilter
 }, "id">
 
 export type ProductOrderByWithAggregationInput = {
@@ -421,8 +427,10 @@ export type ProductCreateInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateInput = {
@@ -447,8 +455,10 @@ export type ProductUncheckedCreateInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductUpdateInput = {
@@ -473,8 +483,10 @@ export type ProductUpdateInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateInput = {
@@ -499,8 +511,10 @@ export type ProductUncheckedUpdateInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyInput = {
@@ -874,32 +888,60 @@ export type ProductUncheckedUpdateManyWithoutStoreNestedInput = {
   deleteMany?: Prisma.ProductScalarWhereInput | Prisma.ProductScalarWhereInput[]
 }
 
-export type ProductCreateNestedOneWithoutSaleProductInput = {
-  create?: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductInput, Prisma.ProductUncheckedCreateWithoutSaleProductInput>
-  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSaleProductInput
+export type ProductCreateNestedOneWithoutSaleProductsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductsInput, Prisma.ProductUncheckedCreateWithoutSaleProductsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSaleProductsInput
   connect?: Prisma.ProductWhereUniqueInput
 }
 
-export type ProductUpdateOneRequiredWithoutSaleProductNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductInput, Prisma.ProductUncheckedCreateWithoutSaleProductInput>
-  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSaleProductInput
-  upsert?: Prisma.ProductUpsertWithoutSaleProductInput
+export type ProductUpdateOneRequiredWithoutSaleProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductsInput, Prisma.ProductUncheckedCreateWithoutSaleProductsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutSaleProductsInput
+  upsert?: Prisma.ProductUpsertWithoutSaleProductsInput
   connect?: Prisma.ProductWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutSaleProductInput, Prisma.ProductUpdateWithoutSaleProductInput>, Prisma.ProductUncheckedUpdateWithoutSaleProductInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutSaleProductsInput, Prisma.ProductUpdateWithoutSaleProductsInput>, Prisma.ProductUncheckedUpdateWithoutSaleProductsInput>
 }
 
-export type ProductCreateNestedOneWithoutInventoryAdjustmentInput = {
-  create?: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentInput>
-  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutInventoryAdjustmentInput
+export type ProductCreateNestedOneWithoutPurchaseOrderProductsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutPurchaseOrderProductsInput, Prisma.ProductUncheckedCreateWithoutPurchaseOrderProductsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutPurchaseOrderProductsInput
   connect?: Prisma.ProductWhereUniqueInput
 }
 
-export type ProductUpdateOneRequiredWithoutInventoryAdjustmentNestedInput = {
-  create?: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentInput>
-  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutInventoryAdjustmentInput
-  upsert?: Prisma.ProductUpsertWithoutInventoryAdjustmentInput
+export type ProductUpdateOneRequiredWithoutPurchaseOrderProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutPurchaseOrderProductsInput, Prisma.ProductUncheckedCreateWithoutPurchaseOrderProductsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutPurchaseOrderProductsInput
+  upsert?: Prisma.ProductUpsertWithoutPurchaseOrderProductsInput
   connect?: Prisma.ProductWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutInventoryAdjustmentInput, Prisma.ProductUpdateWithoutInventoryAdjustmentInput>, Prisma.ProductUncheckedUpdateWithoutInventoryAdjustmentInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutPurchaseOrderProductsInput, Prisma.ProductUpdateWithoutPurchaseOrderProductsInput>, Prisma.ProductUncheckedUpdateWithoutPurchaseOrderProductsInput>
+}
+
+export type ProductCreateNestedOneWithoutTransferOrderProductsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutTransferOrderProductsInput, Prisma.ProductUncheckedCreateWithoutTransferOrderProductsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutTransferOrderProductsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutTransferOrderProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutTransferOrderProductsInput, Prisma.ProductUncheckedCreateWithoutTransferOrderProductsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutTransferOrderProductsInput
+  upsert?: Prisma.ProductUpsertWithoutTransferOrderProductsInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutTransferOrderProductsInput, Prisma.ProductUpdateWithoutTransferOrderProductsInput>, Prisma.ProductUncheckedUpdateWithoutTransferOrderProductsInput>
+}
+
+export type ProductCreateNestedOneWithoutInventoryAdjustmentsInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentsInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutInventoryAdjustmentsInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutInventoryAdjustmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentsInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentsInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutInventoryAdjustmentsInput
+  upsert?: Prisma.ProductUpsertWithoutInventoryAdjustmentsInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutInventoryAdjustmentsInput, Prisma.ProductUpdateWithoutInventoryAdjustmentsInput>, Prisma.ProductUncheckedUpdateWithoutInventoryAdjustmentsInput>
 }
 
 export type ProductCreateWithoutBusinessInput = {
@@ -923,8 +965,10 @@ export type ProductCreateWithoutBusinessInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutBusinessInput = {
@@ -948,8 +992,10 @@ export type ProductUncheckedCreateWithoutBusinessInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutBusinessInput = {
@@ -1018,8 +1064,10 @@ export type ProductCreateWithoutCategoryInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutCategoryInput = {
@@ -1043,8 +1091,10 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutCategoryInput = {
@@ -1094,8 +1144,10 @@ export type ProductCreateWithoutMediasInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutMediasInput = {
@@ -1119,8 +1171,10 @@ export type ProductUncheckedCreateWithoutMediasInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutMediasInput = {
@@ -1160,8 +1214,10 @@ export type ProductUpdateWithoutMediasInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutMediasInput = {
@@ -1185,8 +1241,10 @@ export type ProductUncheckedUpdateWithoutMediasInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutOrdersInput = {
@@ -1210,8 +1268,10 @@ export type ProductCreateWithoutOrdersInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutOrdersInput = {
@@ -1235,8 +1295,10 @@ export type ProductUncheckedCreateWithoutOrdersInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutOrdersInput = {
@@ -1276,8 +1338,10 @@ export type ProductUpdateWithoutOrdersInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutOrdersInput = {
@@ -1301,8 +1365,10 @@ export type ProductUncheckedUpdateWithoutOrdersInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutReviewsInput = {
@@ -1326,8 +1392,10 @@ export type ProductCreateWithoutReviewsInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutReviewsInput = {
@@ -1351,8 +1419,10 @@ export type ProductUncheckedCreateWithoutReviewsInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutReviewsInput = {
@@ -1392,8 +1462,10 @@ export type ProductUpdateWithoutReviewsInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutReviewsInput = {
@@ -1417,8 +1489,10 @@ export type ProductUncheckedUpdateWithoutReviewsInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutChatsInput = {
@@ -1442,8 +1516,10 @@ export type ProductCreateWithoutChatsInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutChatsInput = {
@@ -1467,8 +1543,10 @@ export type ProductUncheckedCreateWithoutChatsInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutChatsInput = {
@@ -1508,8 +1586,10 @@ export type ProductUpdateWithoutChatsInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutChatsInput = {
@@ -1533,8 +1613,10 @@ export type ProductUncheckedUpdateWithoutChatsInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutRepostsInput = {
@@ -1558,8 +1640,10 @@ export type ProductCreateWithoutRepostsInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutRepostsInput = {
@@ -1583,8 +1667,10 @@ export type ProductUncheckedCreateWithoutRepostsInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutRepostsInput = {
@@ -1624,8 +1710,10 @@ export type ProductUpdateWithoutRepostsInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutRepostsInput = {
@@ -1649,8 +1737,10 @@ export type ProductUncheckedUpdateWithoutRepostsInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutNewReOwnedProductsInput = {
@@ -1674,8 +1764,10 @@ export type ProductCreateWithoutNewReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductCreateNestedManyWithoutProductInput
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutNewReOwnedProductsInput = {
@@ -1699,8 +1791,10 @@ export type ProductUncheckedCreateWithoutNewReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutProductInput
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutNewReOwnedProductsInput = {
@@ -1729,8 +1823,10 @@ export type ProductCreateWithoutReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductCreateNestedManyWithoutProductInput
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutReOwnedProductsInput = {
@@ -1754,8 +1850,10 @@ export type ProductUncheckedCreateWithoutReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutProductInput
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutReOwnedProductsInput = {
@@ -1795,8 +1893,10 @@ export type ProductUpdateWithoutNewReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductUpdateManyWithoutProductNestedInput
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutNewReOwnedProductsInput = {
@@ -1820,8 +1920,10 @@ export type ProductUncheckedUpdateWithoutNewReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductUncheckedUpdateManyWithoutProductNestedInput
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUpsertWithoutReOwnedProductsInput = {
@@ -1856,8 +1958,10 @@ export type ProductUpdateWithoutReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductUpdateManyWithoutProductNestedInput
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutReOwnedProductsInput = {
@@ -1881,8 +1985,10 @@ export type ProductUncheckedUpdateWithoutReOwnedProductsInput = {
   reposts?: Prisma.RepostedProductUncheckedUpdateManyWithoutProductNestedInput
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutAdsInput = {
@@ -1906,8 +2012,10 @@ export type ProductCreateWithoutAdsInput = {
   reposts?: Prisma.RepostedProductCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutAdsInput = {
@@ -1931,8 +2039,10 @@ export type ProductUncheckedCreateWithoutAdsInput = {
   reposts?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutAdsInput = {
@@ -1972,8 +2082,10 @@ export type ProductUpdateWithoutAdsInput = {
   reposts?: Prisma.RepostedProductUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutAdsInput = {
@@ -1997,8 +2109,10 @@ export type ProductUncheckedUpdateWithoutAdsInput = {
   reposts?: Prisma.RepostedProductUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateWithoutStoreInput = {
@@ -2022,8 +2136,10 @@ export type ProductCreateWithoutStoreInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutStoreInput = {
@@ -2047,8 +2163,10 @@ export type ProductUncheckedCreateWithoutStoreInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutStoreInput = {
@@ -2077,7 +2195,7 @@ export type ProductUpdateManyWithWhereWithoutStoreInput = {
   data: Prisma.XOR<Prisma.ProductUpdateManyMutationInput, Prisma.ProductUncheckedUpdateManyWithoutStoreInput>
 }
 
-export type ProductCreateWithoutSaleProductInput = {
+export type ProductCreateWithoutSaleProductsInput = {
   id?: string
   title: string
   description?: string | null
@@ -2099,10 +2217,12 @@ export type ProductCreateWithoutSaleProductInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
-export type ProductUncheckedCreateWithoutSaleProductInput = {
+export type ProductUncheckedCreateWithoutSaleProductsInput = {
   id?: string
   title: string
   description?: string | null
@@ -2124,26 +2244,28 @@ export type ProductUncheckedCreateWithoutSaleProductInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
-export type ProductCreateOrConnectWithoutSaleProductInput = {
+export type ProductCreateOrConnectWithoutSaleProductsInput = {
   where: Prisma.ProductWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductInput, Prisma.ProductUncheckedCreateWithoutSaleProductInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductsInput, Prisma.ProductUncheckedCreateWithoutSaleProductsInput>
 }
 
-export type ProductUpsertWithoutSaleProductInput = {
-  update: Prisma.XOR<Prisma.ProductUpdateWithoutSaleProductInput, Prisma.ProductUncheckedUpdateWithoutSaleProductInput>
-  create: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductInput, Prisma.ProductUncheckedCreateWithoutSaleProductInput>
+export type ProductUpsertWithoutSaleProductsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutSaleProductsInput, Prisma.ProductUncheckedUpdateWithoutSaleProductsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutSaleProductsInput, Prisma.ProductUncheckedCreateWithoutSaleProductsInput>
   where?: Prisma.ProductWhereInput
 }
 
-export type ProductUpdateToOneWithWhereWithoutSaleProductInput = {
+export type ProductUpdateToOneWithWhereWithoutSaleProductsInput = {
   where?: Prisma.ProductWhereInput
-  data: Prisma.XOR<Prisma.ProductUpdateWithoutSaleProductInput, Prisma.ProductUncheckedUpdateWithoutSaleProductInput>
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutSaleProductsInput, Prisma.ProductUncheckedUpdateWithoutSaleProductsInput>
 }
 
-export type ProductUpdateWithoutSaleProductInput = {
+export type ProductUpdateWithoutSaleProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2165,10 +2287,12 @@ export type ProductUpdateWithoutSaleProductInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
-export type ProductUncheckedUpdateWithoutSaleProductInput = {
+export type ProductUncheckedUpdateWithoutSaleProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2190,10 +2314,12 @@ export type ProductUncheckedUpdateWithoutSaleProductInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
-export type ProductCreateWithoutInventoryAdjustmentInput = {
+export type ProductCreateWithoutPurchaseOrderProductsInput = {
   id?: string
   title: string
   description?: string | null
@@ -2215,10 +2341,12 @@ export type ProductCreateWithoutInventoryAdjustmentInput = {
   ads?: Prisma.AdCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
 }
 
-export type ProductUncheckedCreateWithoutInventoryAdjustmentInput = {
+export type ProductUncheckedCreateWithoutPurchaseOrderProductsInput = {
   id?: string
   title: string
   description?: string | null
@@ -2240,26 +2368,28 @@ export type ProductUncheckedCreateWithoutInventoryAdjustmentInput = {
   ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
-  SaleProduct?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
 }
 
-export type ProductCreateOrConnectWithoutInventoryAdjustmentInput = {
+export type ProductCreateOrConnectWithoutPurchaseOrderProductsInput = {
   where: Prisma.ProductWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutPurchaseOrderProductsInput, Prisma.ProductUncheckedCreateWithoutPurchaseOrderProductsInput>
 }
 
-export type ProductUpsertWithoutInventoryAdjustmentInput = {
-  update: Prisma.XOR<Prisma.ProductUpdateWithoutInventoryAdjustmentInput, Prisma.ProductUncheckedUpdateWithoutInventoryAdjustmentInput>
-  create: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentInput>
+export type ProductUpsertWithoutPurchaseOrderProductsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutPurchaseOrderProductsInput, Prisma.ProductUncheckedUpdateWithoutPurchaseOrderProductsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutPurchaseOrderProductsInput, Prisma.ProductUncheckedCreateWithoutPurchaseOrderProductsInput>
   where?: Prisma.ProductWhereInput
 }
 
-export type ProductUpdateToOneWithWhereWithoutInventoryAdjustmentInput = {
+export type ProductUpdateToOneWithWhereWithoutPurchaseOrderProductsInput = {
   where?: Prisma.ProductWhereInput
-  data: Prisma.XOR<Prisma.ProductUpdateWithoutInventoryAdjustmentInput, Prisma.ProductUncheckedUpdateWithoutInventoryAdjustmentInput>
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutPurchaseOrderProductsInput, Prisma.ProductUncheckedUpdateWithoutPurchaseOrderProductsInput>
 }
 
-export type ProductUpdateWithoutInventoryAdjustmentInput = {
+export type ProductUpdateWithoutPurchaseOrderProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2281,10 +2411,12 @@ export type ProductUpdateWithoutInventoryAdjustmentInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
-export type ProductUncheckedUpdateWithoutInventoryAdjustmentInput = {
+export type ProductUncheckedUpdateWithoutPurchaseOrderProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2306,7 +2438,257 @@ export type ProductUncheckedUpdateWithoutInventoryAdjustmentInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutTransferOrderProductsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  price: number
+  stock?: number
+  quantity?: number
+  isPhysical?: boolean
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutProductsInput
+  store?: Prisma.StoreCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
+  medias?: Prisma.MediaCreateNestedManyWithoutProductInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutProductInput
+  orders?: Prisma.OrderProductCreateNestedManyWithoutProductInput
+  chats?: Prisma.ChatCreateNestedManyWithoutProductInput
+  reposts?: Prisma.RepostedProductCreateNestedManyWithoutProductInput
+  ads?: Prisma.AdCreateNestedManyWithoutProductInput
+  reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
+  newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutTransferOrderProductsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  price: number
+  stock?: number
+  quantity?: number
+  isPhysical?: boolean
+  businessId: string
+  storeId?: string | null
+  categoryId: string
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutProductInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
+  orders?: Prisma.OrderProductUncheckedCreateNestedManyWithoutProductInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutProductInput
+  reposts?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutProductInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
+  reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
+  newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutTransferOrderProductsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutTransferOrderProductsInput, Prisma.ProductUncheckedCreateWithoutTransferOrderProductsInput>
+}
+
+export type ProductUpsertWithoutTransferOrderProductsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutTransferOrderProductsInput, Prisma.ProductUncheckedUpdateWithoutTransferOrderProductsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutTransferOrderProductsInput, Prisma.ProductUncheckedCreateWithoutTransferOrderProductsInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutTransferOrderProductsInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutTransferOrderProductsInput, Prisma.ProductUncheckedUpdateWithoutTransferOrderProductsInput>
+}
+
+export type ProductUpdateWithoutTransferOrderProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
+  store?: Prisma.StoreUpdateOneWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutProductNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutProductNestedInput
+  orders?: Prisma.OrderProductUpdateManyWithoutProductNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutProductNestedInput
+  reposts?: Prisma.RepostedProductUpdateManyWithoutProductNestedInput
+  ads?: Prisma.AdUpdateManyWithoutProductNestedInput
+  reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
+  newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutTransferOrderProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutProductNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
+  orders?: Prisma.OrderProductUncheckedUpdateManyWithoutProductNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutProductNestedInput
+  reposts?: Prisma.RepostedProductUncheckedUpdateManyWithoutProductNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
+  reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
+  newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutInventoryAdjustmentsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  price: number
+  stock?: number
+  quantity?: number
+  isPhysical?: boolean
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutProductsInput
+  store?: Prisma.StoreCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
+  medias?: Prisma.MediaCreateNestedManyWithoutProductInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutProductInput
+  orders?: Prisma.OrderProductCreateNestedManyWithoutProductInput
+  chats?: Prisma.ChatCreateNestedManyWithoutProductInput
+  reposts?: Prisma.RepostedProductCreateNestedManyWithoutProductInput
+  ads?: Prisma.AdCreateNestedManyWithoutProductInput
+  reOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutOriginalProductInput
+  newReOwnedProducts?: Prisma.ReOwnedProductCreateNestedManyWithoutNewProductInput
+  saleProducts?: Prisma.SaleProductCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutInventoryAdjustmentsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  price: number
+  stock?: number
+  quantity?: number
+  isPhysical?: boolean
+  businessId: string
+  storeId?: string | null
+  categoryId: string
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutProductInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutProductInput
+  orders?: Prisma.OrderProductUncheckedCreateNestedManyWithoutProductInput
+  chats?: Prisma.ChatUncheckedCreateNestedManyWithoutProductInput
+  reposts?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutProductInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutProductInput
+  reOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutOriginalProductInput
+  newReOwnedProducts?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutNewProductInput
+  saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutProductInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedCreateNestedManyWithoutProductInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutInventoryAdjustmentsInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentsInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentsInput>
+}
+
+export type ProductUpsertWithoutInventoryAdjustmentsInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutInventoryAdjustmentsInput, Prisma.ProductUncheckedUpdateWithoutInventoryAdjustmentsInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutInventoryAdjustmentsInput, Prisma.ProductUncheckedCreateWithoutInventoryAdjustmentsInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutInventoryAdjustmentsInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutInventoryAdjustmentsInput, Prisma.ProductUncheckedUpdateWithoutInventoryAdjustmentsInput>
+}
+
+export type ProductUpdateWithoutInventoryAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
+  store?: Prisma.StoreUpdateOneWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutProductNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutProductNestedInput
+  orders?: Prisma.OrderProductUpdateManyWithoutProductNestedInput
+  chats?: Prisma.ChatUpdateManyWithoutProductNestedInput
+  reposts?: Prisma.RepostedProductUpdateManyWithoutProductNestedInput
+  ads?: Prisma.AdUpdateManyWithoutProductNestedInput
+  reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
+  newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutInventoryAdjustmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  stock?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutProductNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutProductNestedInput
+  orders?: Prisma.OrderProductUncheckedUpdateManyWithoutProductNestedInput
+  chats?: Prisma.ChatUncheckedUpdateManyWithoutProductNestedInput
+  reposts?: Prisma.RepostedProductUncheckedUpdateManyWithoutProductNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
+  reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
+  newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyBusinessInput = {
@@ -2345,8 +2727,10 @@ export type ProductUpdateWithoutBusinessInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutBusinessInput = {
@@ -2370,8 +2754,10 @@ export type ProductUncheckedUpdateWithoutBusinessInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateManyWithoutBusinessInput = {
@@ -2425,8 +2811,10 @@ export type ProductUpdateWithoutCategoryInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutCategoryInput = {
@@ -2450,8 +2838,10 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateManyWithoutCategoryInput = {
@@ -2505,8 +2895,10 @@ export type ProductUpdateWithoutStoreInput = {
   ads?: Prisma.AdUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutStoreInput = {
@@ -2530,8 +2922,10 @@ export type ProductUncheckedUpdateWithoutStoreInput = {
   ads?: Prisma.AdUncheckedUpdateManyWithoutProductNestedInput
   reOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutOriginalProductNestedInput
   newReOwnedProducts?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutNewProductNestedInput
-  SaleProduct?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
-  InventoryAdjustment?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
+  saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutProductNestedInput
+  transferOrderProducts?: Prisma.TransferOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  purchaseOrderProducts?: Prisma.PurchaseOrderProductUncheckedUpdateManyWithoutProductNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateManyWithoutStoreInput = {
@@ -2563,8 +2957,10 @@ export type ProductCountOutputType = {
   ads: number
   reOwnedProducts: number
   newReOwnedProducts: number
-  SaleProduct: number
-  InventoryAdjustment: number
+  saleProducts: number
+  transferOrderProducts: number
+  purchaseOrderProducts: number
+  inventoryAdjustments: number
 }
 
 export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2576,8 +2972,10 @@ export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   ads?: boolean | ProductCountOutputTypeCountAdsArgs
   reOwnedProducts?: boolean | ProductCountOutputTypeCountReOwnedProductsArgs
   newReOwnedProducts?: boolean | ProductCountOutputTypeCountNewReOwnedProductsArgs
-  SaleProduct?: boolean | ProductCountOutputTypeCountSaleProductArgs
-  InventoryAdjustment?: boolean | ProductCountOutputTypeCountInventoryAdjustmentArgs
+  saleProducts?: boolean | ProductCountOutputTypeCountSaleProductsArgs
+  transferOrderProducts?: boolean | ProductCountOutputTypeCountTransferOrderProductsArgs
+  purchaseOrderProducts?: boolean | ProductCountOutputTypeCountPurchaseOrderProductsArgs
+  inventoryAdjustments?: boolean | ProductCountOutputTypeCountInventoryAdjustmentsArgs
 }
 
 /**
@@ -2649,14 +3047,28 @@ export type ProductCountOutputTypeCountNewReOwnedProductsArgs<ExtArgs extends ru
 /**
  * ProductCountOutputType without action
  */
-export type ProductCountOutputTypeCountSaleProductArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ProductCountOutputTypeCountSaleProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SaleProductWhereInput
 }
 
 /**
  * ProductCountOutputType without action
  */
-export type ProductCountOutputTypeCountInventoryAdjustmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ProductCountOutputTypeCountTransferOrderProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferOrderProductWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountPurchaseOrderProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PurchaseOrderProductWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
+export type ProductCountOutputTypeCountInventoryAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InventoryAdjustmentWhereInput
 }
 
@@ -2686,8 +3098,10 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ads?: boolean | Prisma.Product$adsArgs<ExtArgs>
   reOwnedProducts?: boolean | Prisma.Product$reOwnedProductsArgs<ExtArgs>
   newReOwnedProducts?: boolean | Prisma.Product$newReOwnedProductsArgs<ExtArgs>
-  SaleProduct?: boolean | Prisma.Product$SaleProductArgs<ExtArgs>
-  InventoryAdjustment?: boolean | Prisma.Product$InventoryAdjustmentArgs<ExtArgs>
+  saleProducts?: boolean | Prisma.Product$saleProductsArgs<ExtArgs>
+  transferOrderProducts?: boolean | Prisma.Product$transferOrderProductsArgs<ExtArgs>
+  purchaseOrderProducts?: boolean | Prisma.Product$purchaseOrderProductsArgs<ExtArgs>
+  inventoryAdjustments?: boolean | Prisma.Product$inventoryAdjustmentsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
 
@@ -2758,8 +3172,10 @@ export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   ads?: boolean | Prisma.Product$adsArgs<ExtArgs>
   reOwnedProducts?: boolean | Prisma.Product$reOwnedProductsArgs<ExtArgs>
   newReOwnedProducts?: boolean | Prisma.Product$newReOwnedProductsArgs<ExtArgs>
-  SaleProduct?: boolean | Prisma.Product$SaleProductArgs<ExtArgs>
-  InventoryAdjustment?: boolean | Prisma.Product$InventoryAdjustmentArgs<ExtArgs>
+  saleProducts?: boolean | Prisma.Product$saleProductsArgs<ExtArgs>
+  transferOrderProducts?: boolean | Prisma.Product$transferOrderProductsArgs<ExtArgs>
+  purchaseOrderProducts?: boolean | Prisma.Product$purchaseOrderProductsArgs<ExtArgs>
+  inventoryAdjustments?: boolean | Prisma.Product$inventoryAdjustmentsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2787,8 +3203,10 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ads: Prisma.$AdPayload<ExtArgs>[]
     reOwnedProducts: Prisma.$ReOwnedProductPayload<ExtArgs>[]
     newReOwnedProducts: Prisma.$ReOwnedProductPayload<ExtArgs>[]
-    SaleProduct: Prisma.$SaleProductPayload<ExtArgs>[]
-    InventoryAdjustment: Prisma.$InventoryAdjustmentPayload<ExtArgs>[]
+    saleProducts: Prisma.$SaleProductPayload<ExtArgs>[]
+    transferOrderProducts: Prisma.$TransferOrderProductPayload<ExtArgs>[]
+    purchaseOrderProducts: Prisma.$PurchaseOrderProductPayload<ExtArgs>[]
+    inventoryAdjustments: Prisma.$InventoryAdjustmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3209,8 +3627,10 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
   ads<T extends Prisma.Product$adsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$adsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reOwnedProducts<T extends Prisma.Product$reOwnedProductsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$reOwnedProductsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReOwnedProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   newReOwnedProducts<T extends Prisma.Product$newReOwnedProductsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$newReOwnedProductsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReOwnedProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  SaleProduct<T extends Prisma.Product$SaleProductArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$SaleProductArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  InventoryAdjustment<T extends Prisma.Product$InventoryAdjustmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$InventoryAdjustmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  saleProducts<T extends Prisma.Product$saleProductsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$saleProductsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferOrderProducts<T extends Prisma.Product$transferOrderProductsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$transferOrderProductsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferOrderProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  purchaseOrderProducts<T extends Prisma.Product$purchaseOrderProductsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$purchaseOrderProductsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchaseOrderProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inventoryAdjustments<T extends Prisma.Product$inventoryAdjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$inventoryAdjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3860,9 +4280,9 @@ export type Product$newReOwnedProductsArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * Product.SaleProduct
+ * Product.saleProducts
  */
-export type Product$SaleProductArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Product$saleProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the SaleProduct
    */
@@ -3884,9 +4304,57 @@ export type Product$SaleProductArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Product.InventoryAdjustment
+ * Product.transferOrderProducts
  */
-export type Product$InventoryAdjustmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Product$transferOrderProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferOrderProduct
+   */
+  select?: Prisma.TransferOrderProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferOrderProduct
+   */
+  omit?: Prisma.TransferOrderProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferOrderProductInclude<ExtArgs> | null
+  where?: Prisma.TransferOrderProductWhereInput
+  orderBy?: Prisma.TransferOrderProductOrderByWithRelationInput | Prisma.TransferOrderProductOrderByWithRelationInput[]
+  cursor?: Prisma.TransferOrderProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferOrderProductScalarFieldEnum | Prisma.TransferOrderProductScalarFieldEnum[]
+}
+
+/**
+ * Product.purchaseOrderProducts
+ */
+export type Product$purchaseOrderProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PurchaseOrderProduct
+   */
+  select?: Prisma.PurchaseOrderProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PurchaseOrderProduct
+   */
+  omit?: Prisma.PurchaseOrderProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PurchaseOrderProductInclude<ExtArgs> | null
+  where?: Prisma.PurchaseOrderProductWhereInput
+  orderBy?: Prisma.PurchaseOrderProductOrderByWithRelationInput | Prisma.PurchaseOrderProductOrderByWithRelationInput[]
+  cursor?: Prisma.PurchaseOrderProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PurchaseOrderProductScalarFieldEnum | Prisma.PurchaseOrderProductScalarFieldEnum[]
+}
+
+/**
+ * Product.inventoryAdjustments
+ */
+export type Product$inventoryAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the InventoryAdjustment
    */

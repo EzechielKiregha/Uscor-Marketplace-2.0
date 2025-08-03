@@ -202,6 +202,16 @@ export type PurchaseOrder = Prisma.PurchaseOrderModel
  */
 export type TransferOrder = Prisma.TransferOrderModel
 /**
+ * Model PurchaseOrderProduct
+ * 
+ */
+export type PurchaseOrderProduct = Prisma.PurchaseOrderProductModel
+/**
+ * Model TransferOrderProduct
+ * 
+ */
+export type TransferOrderProduct = Prisma.TransferOrderProductModel
+/**
  * Model InventoryAdjustment
  * 
  */

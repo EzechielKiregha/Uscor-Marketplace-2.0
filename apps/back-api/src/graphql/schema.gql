@@ -139,19 +139,30 @@ type ReviewEntity {
   product: ProductEntity!
 }
 
+type StoreEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  name: String!
+  address: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type ProductEntity {
   id: String!
   title: String!
   description: String
   price: Float!
-  stock: Int!
   quantity: Int!
   businessId: String!
+  storeId: String
   isPhysical: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
   medias: [MediaEntity!]!
   business: BusinessEntity
+  store: StoreEntity
   category: CategoryEntity
   reviews: [ReviewEntity!]!
   orders: [OrderProductEntity!]!
@@ -481,16 +492,6 @@ type ReturnEntity {
   createdAt: DateTime!
 }
 
-type StoreEntity {
-  id: String!
-  businessId: String!
-  business: BusinessEntity!
-  name: String!
-  address: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type SaleEntity {
   id: String!
   storeId: String!
@@ -520,9 +521,90 @@ enum SaleStatus {
   REFUNDED
 }
 
-type Inventory {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type InventoryAdjustmentEntity {
+  id: String!
+  productId: String!
+  product: ProductEntity!
+  storeId: String!
+  store: StoreEntity!
+  adjustmentType: AdjustmentType!
+  quantity: Int!
+  reason: String
+  createdAt: DateTime!
+}
+
+enum AdjustmentType {
+  ADD
+  REMOVE
+}
+
+type PurchaseOrderProductEntity {
+  id: String!
+  productId: String!
+  quantity: Int!
+  product: ProductEntity!
+  createdAt: DateTime!
+}
+
+type BulkImportResultEntity {
+  success: Boolean!
+  count: Int!
+}
+
+type LowStockAlertEntity {
+  productId: String!
+  product: ProductEntity!
+  storeId: String!
+  store: StoreEntity!
+  stock: Int!
+  threshold: Int!
+}
+
+type TransferOrderProductEntity {
+  id: String!
+  productId: String!
+  quantity: Int!
+  product: ProductEntity!
+  createdAt: DateTime!
+}
+
+type TransferOrderEntity {
+  id: String!
+  fromStoreId: String!
+  fromStore: StoreEntity!
+  toStoreId: String!
+  toStore: StoreEntity!
+  status: TransferOrderStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [TransferOrderProductEntity!]!
+}
+
+enum TransferOrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+type PurchaseOrderEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  storeId: String!
+  store: StoreEntity!
+  supplierId: String
+  status: PurchaseOrderStatus!
+  expectedDelivery: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [PurchaseOrderProductEntity!]!
+}
+
+enum PurchaseOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
 }
 
 type Query {
@@ -625,7 +707,12 @@ type Query {
 
   """Retrieves a single store by ID."""
   store(id: String!): StoreEntity!
-  inventory(id: Int!): Inventory!
+
+  """Retrieves low stock alerts for a store."""
+  lowStockAlerts(lowStockAlertInput: LowStockAlertInput!): [LowStockAlertEntity!]!
+
+  """Exports products for a store."""
+  bulkExportProducts(storeId: String!): [PurchaseOrderProductEntity!]!
 }
 
 enum FreelanceCategory {
@@ -636,6 +723,11 @@ enum FreelanceCategory {
   TUTOR
   CLEANER
   OTHER
+}
+
+input LowStockAlertInput {
+  storeId: String!
+  threshold: Int!
 }
 
 type Mutation {
@@ -798,16 +890,33 @@ type Mutation {
 
   """Deletes a store."""
   deleteStore(id: String!): StoreEntity!
-  createInventory(createInventoryInput: CreateInventoryInput!): Inventory!
-  updateInventory(updateInventoryInput: UpdateInventoryInput!): Inventory!
-  removeInventory(id: Int!): Inventory!
+
+  """Creates a new purchase order."""
+  createPurchaseOrder(createPurchaseOrderInput: CreatePurchaseOrderInput!): PurchaseOrderEntity!
+
+  """Updates a purchase order."""
+  updatePurchaseOrder(id: String!, updatePurchaseOrderInput: UpdatePurchaseOrderInput!): PurchaseOrderEntity!
+
+  """Creates a new transfer order."""
+  createTransferOrder(createTransferOrderInput: CreateTransferOrderInput!): TransferOrderEntity!
+
+  """Updates a transfer order."""
+  updateTransferOrder(id: String!, updateTransferOrderInput: UpdateTransferOrderInput!): TransferOrderEntity!
+
+  """Creates an inventory adjustment."""
+  createInventoryAdjustment(createInventoryAdjustmentInput: CreateInventoryAdjustmentInput!): InventoryAdjustmentEntity!
+
+  """Imports products in bulk."""
+  bulkImportProducts(storeId: String!, products: [PurchaseOrderProductInput!]!): BulkImportResultEntity!
 }
 
 input CreateProductInput {
   title: String!
   description: String
   price: Float!
-  stock: Int!
+  quantity: Int!
+  storeId: String
+  isPhysical: Boolean!
   businessId: String!
   categoryId: String!
 }
@@ -816,7 +925,9 @@ input UpdateProductInput {
   title: String
   description: String
   price: Float
-  stock: Int
+  quantity: Int
+  storeId: String
+  isPhysical: Boolean
   businessId: String
   categoryId: String
   id: String!
@@ -837,8 +948,8 @@ input CreateOrderProductInput {
 }
 
 input CreatePaymentTransactionInput {
-  orderId: String!
-  amount: Float!
+  orderId: String
+  amount: Float
   method: PaymentMethod!
   status: PaymentStatus!
   qrCode: String
@@ -1135,13 +1246,46 @@ input UpdateStoreInput {
   address: String
 }
 
-input CreateInventoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input CreatePurchaseOrderInput {
+  businessId: String!
+  storeId: String!
+  supplierId: String
+  expectedDelivery: DateTime
+  products: [PurchaseOrderProductInput!]!
 }
 
-input UpdateInventoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input PurchaseOrderProductInput {
+  productId: String!
+  quantity: Int!
+}
+
+input UpdatePurchaseOrderInput {
+  supplierId: String
+  expectedDelivery: DateTime
+  status: PurchaseOrderStatus
+  products: [PurchaseOrderProductInput!]
+}
+
+input CreateTransferOrderInput {
+  fromStoreId: String!
+  toStoreId: String!
+  products: [TransferOrderProductInput!]!
+}
+
+input TransferOrderProductInput {
+  productId: String!
+  quantity: Int!
+}
+
+input UpdateTransferOrderInput {
+  status: TransferOrderStatus
+  products: [TransferOrderProductInput!]
+}
+
+input CreateInventoryAdjustmentInput {
+  productId: String!
+  storeId: String!
+  adjustmentType: AdjustmentType!
+  quantity: Int!
+  reason: String
 }

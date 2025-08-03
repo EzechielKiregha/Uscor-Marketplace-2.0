@@ -260,7 +260,6 @@ export type AccountRechargeOrderByWithRelationInput = {
 
 export type AccountRechargeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  tokenTransactionId?: string
   AND?: Prisma.AccountRechargeWhereInput | Prisma.AccountRechargeWhereInput[]
   OR?: Prisma.AccountRechargeWhereInput[]
   NOT?: Prisma.AccountRechargeWhereInput | Prisma.AccountRechargeWhereInput[]
@@ -269,11 +268,12 @@ export type AccountRechargeWhereUniqueInput = Prisma.AtLeast<{
   origin?: Prisma.EnumCountryFilter<"AccountRecharge"> | $Enums.Country
   businessId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   clientId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
+  tokenTransactionId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
   tokenTransaction?: Prisma.XOR<Prisma.TokenTransactionNullableScalarRelationFilter, Prisma.TokenTransactionWhereInput> | null
-}, "id" | "tokenTransactionId">
+}, "id">
 
 export type AccountRechargeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

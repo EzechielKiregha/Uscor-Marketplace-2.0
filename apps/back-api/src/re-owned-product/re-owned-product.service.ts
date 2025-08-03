@@ -71,6 +71,7 @@ export class ReOwnedProductService {
       data: {
         business: { connect: { id: newOwnerId } },
         title: originalProduct.title,
+        description: originalProduct.description,
         price: newPrice,
         quantity,
         isPhysical: originalProduct.isPhysical,
@@ -97,6 +98,7 @@ export class ReOwnedProductService {
       include: {
         newProduct: { select: { id: true, title: true, price: true, quantity: true, businessId: true, isPhysical: true } },
         originalProduct: { select: { id: true, title: true, price: true, quantity: true, businessId: true, isPhysical: true } },
+        shipping: true
       },
     });
 
