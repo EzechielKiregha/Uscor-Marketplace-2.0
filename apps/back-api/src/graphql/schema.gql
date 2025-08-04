@@ -513,6 +513,8 @@ type SaleEntity {
 enum PaymentMethod {
   TOKEN
   MOBILE_MONEY
+  CASH
+  CARD
 }
 
 enum SaleStatus {
@@ -556,7 +558,7 @@ type LowStockAlertEntity {
   product: ProductEntity!
   storeId: String!
   store: StoreEntity!
-  stock: Int!
+  quantity: Int!
   threshold: Int!
 }
 

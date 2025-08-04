@@ -4,7 +4,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { StoreService } from 'src/store/store.service';
 import { ProductService } from 'src/product/product.service';
 import { BusinessService } from 'src/business/business.service';
-import { WorkerService } from 'src/worker/worker.service';
 import { CreatePurchaseOrderInput } from './dto/create-purchase-order.input';
 import { LowStockAlertInput } from './dto/low-stock-alert.input';
 import { CreateTransferOrderInput } from './dto/create-transfer-order.input';
@@ -57,7 +56,7 @@ export class InventoryService {
         business: { select: { id: true, name: true, createdAt: true } },
         store: { select: { id: true, name: true, createdAt: true } },
         products: {
-          include: { product: { select: { id: true, title: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, quantity: true, createdAt: true } } },
         },
       },
     });
@@ -91,7 +90,7 @@ export class InventoryService {
       const products = input.products || purchaseOrder.products;
       await Promise.all(
         products.map((p) =>
-          this.productService.updateStock(p.productId, { stock: { increment: p.quantity } }),
+          this.productService.updateStock(p.productId, { quantity: { increment: p.quantity } }),
         ),
       );
     }
@@ -116,7 +115,7 @@ export class InventoryService {
         business: { select: { id: true, name: true, createdAt: true } },
         store: { select: { id: true, name: true, createdAt: true } },
         products: {
-          include: { product: { select: { id: true, title: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, quantity: true, createdAt: true } } },
         },
       },
     });
@@ -141,7 +140,7 @@ export class InventoryService {
       if (product.storeId !== fromStoreId) {
         throw new Error(`Product ${p.productId} does not belong to store ${fromStoreId}`);
       }
-      if (product.stock < p.quantity) {
+      if (product.quantity < p.quantity) {
         throw new Error(`Insufficient stock for product ${p.productId}`);
       }
     }
@@ -162,7 +161,7 @@ export class InventoryService {
         fromStore: { select: { id: true, name: true, createdAt: true } },
         toStore: { select: { id: true, name: true, createdAt: true } },
         products: {
-          include: { product: { select: { id: true, title: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, quantity: true, createdAt: true } } },
         },
       },
     });
@@ -171,7 +170,7 @@ export class InventoryService {
   async updateTransferOrder(id: string, input: UpdateTransferOrderInput, user: { id: string; role: string }) {
     const transferOrder = await this.prisma.transferOrder.findUnique({
       where: { id },
-      include: { fromStore: true, products: true },
+      include: { fromStore: true, toStore: true, products: { include: { product: true } } },
     });
     if (!transferOrder) {
       throw new Error('Transfer order not found');
@@ -182,13 +181,13 @@ export class InventoryService {
     if (input.products) {
       for (const p of input.products) {
         const product = await this.productService.findOne(p.productId);
-
-      if (!product) throw new Error("Product not found")
-
+        if (!product) {
+          throw new Error(`Product ${p.productId} not found`);
+        }
         if (product.storeId !== transferOrder.fromStoreId) {
           throw new Error(`Product ${p.productId} does not belong to store ${transferOrder.fromStoreId}`);
         }
-        if (product.stock < p.quantity) {
+        if (product.quantity < p.quantity) {
           throw new Error(`Insufficient stock for product ${p.productId}`);
         }
       }
@@ -197,18 +196,43 @@ export class InventoryService {
     // Update stock if status changes to DELIVERED
     if (input.status === 'DELIVERED' && transferOrder.status !== 'DELIVERED') {
       const products = input.products || transferOrder.products;
+
       await Promise.all(
-        products.map((p) =>
-          this.productService.updateStock(p.productId, { stock: { decrement: p.quantity } }),
-        ),
-      );
-      await Promise.all(
-        products.map((p) =>
-          this.prisma.product.update({
-            where: { id: p.productId },
-            data: { store: { connect: { id: transferOrder.toStoreId } }, stock: { increment: p.quantity } },
-          }),
-        ),
+        products.map(async (p) => {
+          // Decrement stock in source store
+          const original = await this.productService.updateStock(p.productId, { quantity: { decrement: p.quantity } });
+
+          // Check if a product with the same title and attributes exists in the destination store
+          const existingProduct = await this.prisma.product.findFirst({
+            where: {
+              storeId: transferOrder.toStoreId,
+              title: original.title,
+              categoryId: original.categoryId,
+              price: original.price,
+            },
+          });
+
+          if (existingProduct) {
+            // If product exists, increment its stock
+            await this.productService.updateStock(existingProduct.id, { quantity: { increment: p.quantity } });
+          } else {
+            // Create new product in destination store
+            await this.prisma.product.create({
+              data: {
+                title: original.title,
+                price: original.price,
+                quantity: p.quantity,
+                store: { connect: { id: transferOrder.toStoreId } },
+                business: { connect: { id: original.businessId} },
+                category: { connect: { id: original.categoryId } },
+                description: original.description,
+                isPhysical: original.isPhysical,
+                variants: original.variants || `{}`,
+                createdAt: new Date(),
+              },
+            });
+          }
+        }),
       );
     }
 
@@ -230,7 +254,7 @@ export class InventoryService {
         fromStore: { select: { id: true, name: true, createdAt: true } },
         toStore: { select: { id: true, name: true, createdAt: true } },
         products: {
-          include: { product: { select: { id: true, title: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, quantity: true, createdAt: true } } },
         },
       },
     });
@@ -248,13 +272,13 @@ export class InventoryService {
     if (product.storeId !== storeId) {
       throw new Error(`Product ${productId} does not belong to store ${storeId}`);
     }
-    if (adjustmentType === 'REMOVE' && product.stock < quantity) {
+    if (adjustmentType === 'REMOVE' && product.quantity < quantity) {
       throw new Error(`Insufficient stock for product ${productId}`);
     }
 
     // Update stock
     const stockUpdate = adjustmentType === 'ADD' ? { increment: quantity } : { decrement: quantity };
-    await this.productService.updateStock(productId, { stock: stockUpdate });
+    await this.productService.updateStock(productId, { quantity: stockUpdate });
 
     return this.prisma.inventoryAdjustment.create({
       data: {
@@ -265,7 +289,7 @@ export class InventoryService {
         reason,
       },
       include: {
-        product: { select: { id: true, title: true, stock: true, createdAt: true } },
+        product: { select: { id: true, title: true, quantity: true, createdAt: true } },
         store: { select: { id: true, name: true, createdAt: true } },
       },
     });
@@ -276,11 +300,11 @@ export class InventoryService {
     await this.storeService.verifyStoreAccess(storeId, user);
 
     const products = await this.prisma.product.findMany({
-      where: { storeId, stock: { lte: threshold } },
+      where: { storeId, quantity: { lte: threshold } },
       select: {
         id: true,
         title: true,
-        stock: true,
+        quantity: true,
         createdAt: true,
         store: { select: { id: true, name: true, createdAt: true } },
       },
@@ -291,7 +315,7 @@ export class InventoryService {
       product: p,
       storeId,
       store: p.store,
-      stock: p.stock,
+      quantity: p.quantity,
       threshold,
     }));
   }
@@ -324,7 +348,7 @@ export class InventoryService {
 
     await Promise.all(
       products.map((p) =>
-        this.productService.updateStock(p.productId, { stock: { increment: p.quantity } }),
+        this.productService.updateStock(p.productId, { quantity: { increment: p.quantity } }),
       ),
     );
 
@@ -335,8 +359,8 @@ export class InventoryService {
     await this.storeService.verifyStoreAccess(storeId, user);
     const products = await this.prisma.product.findMany({
       where: { storeId },
-      select: { id: true, title: true, stock: true },
+      select: { id: true, title: true, quantity: true },
     });
-    return products.map((p) => ({ productId: p.id, title: p.title, quantity: p.stock }));
+    return products.map((p) => ({ productId: p.id, title: p.title, quantity: p.quantity }));
   }
 }

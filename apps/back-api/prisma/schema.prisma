@@ -736,3 +736,12 @@ model Return {
   status       SaleStatus     @default(REFUNDED)
   createdAt    DateTime       @default(now())
 }
+
+model StripeCustomer {
+  id                String @id @default(uuid())
+  userId            String @unique
+  striperCustomerId String @unique
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -159,7 +159,7 @@ export class ReOwnedProductService {
         data: {
           business: { connect: { id: reOwnedProduct.newOwnerId } },
           reOwnedProduct: { connect: { id: reOwnedProductId } },
-          amount: reOwnedProduct.quantity,
+          amount: reOwnedProduct.oldPrice,
           type: 'RELEASE',
         },
       });

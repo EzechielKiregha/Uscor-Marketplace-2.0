@@ -11,6 +11,8 @@ export enum PaymentStatus {
 export enum PaymentMethod {
   TOKEN = 'TOKEN',
   MOBILE_MONEY = 'MOBILE_MONEY',
+  CASH = 'CASH',
+  CARD = 'CARD'
 }
 
 // Register enums with GraphQL

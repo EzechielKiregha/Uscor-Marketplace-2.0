@@ -12,6 +12,7 @@ import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { BusinessService } from 'src/business/business.service';
 import { ProductService } from 'src/product/product.service';
+
 // Service
 @Injectable()
 export class SaleService {
@@ -48,7 +49,7 @@ export class SaleService {
       }
     }
 
-    // Validate products and stock
+    // Validate products and quantity
     for (const sp of saleProducts) {
       const product = await this.productService.findOne(sp.productId);
 
@@ -57,8 +58,8 @@ export class SaleService {
       if (product.storeId !== storeId) {
         throw new Error(`Product ${sp.productId} does not belong to store ${storeId}`);
       }
-      if (product.stock < sp.quantity) {
-        throw new Error(`Insufficient stock for product ${sp.productId}`);
+      if (product.quantity < sp.quantity) {
+        throw new Error(`Insufficient quantity for product ${sp.productId}`);
       }
     }
 
@@ -66,7 +67,7 @@ export class SaleService {
     const calculatedTotal = saleProducts.reduce((sum, sp) => sum + sp.price * sp.quantity, 0);
     const finalTotal = calculatedTotal - (discount || 0);
     if (totalAmount !== finalTotal) {
-      throw new Error(`Total amount (${totalAmount}) does not match calculated total (${finalTotal})`);
+      // throw new Error(`Total amount (${totalAmount}) does not match calculated total (${finalTotal})`);
     }
 
     // Handle token payment
@@ -94,7 +95,7 @@ export class SaleService {
         store: { connect: { id: storeId } },
         worker: { connect: { id: workerId } },
         client: clientId ? { connect: { id: clientId } } : undefined,
-        totalAmount,
+        totalAmount : finalTotal,
         discount: discount || 0,
         paymentMethod,
         status: paymentMethod === 'TOKEN' ? 'CLOSED' : 'OPEN',
@@ -112,16 +113,16 @@ export class SaleService {
         worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
         client: clientId ? { select: { id: true, username: true, email: true, createdAt: true } } : false,
         saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
         },
         returns: true,
       },
     });
 
-    // Update stock
+    // Update quantity
     await Promise.all(
       saleProducts.map((sp) =>
-        this.productService.updateStock(sp.productId, { stock: { decrement: sp.quantity } }),
+        this.productService.updateStock(sp.productId, { quantity: { decrement: sp.quantity } }),
       ),
     );
 
@@ -149,7 +150,7 @@ export class SaleService {
         select: { id: true, businessId: true },
       });
       if (repostedProduct) {
-        const commission = sp.price * 0.003 * sp.quantity; // 0.3% commission
+        const commission = sp.price * 0.002 * sp.quantity; // 0.02% commission
         await this.tokenTransactionService.create({
           businessId: repostedProduct.businessId,
           repostedProductId: repostedProduct.id,
@@ -229,24 +230,24 @@ export class SaleService {
         worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
         client: clientId ? { select: { id: true, username: true, email: true, createdAt: true } } : false,
         saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
         },
         returns: true,
       },
     });
 
-    // Update stock if saleProducts changed
+    // Update quantity if saleProducts changed
     if (saleProducts) {
-      // Revert old stock
+      // Revert old quantity
       await Promise.all(
         sale.saleProducts.map((sp) =>
-          this.productService.updateStock(sp.productId, { stock: { increment: sp.quantity } }),
+          this.productService.updateStock(sp.productId, { quantity: { increment: sp.quantity } }),
         ),
       );
-      // Apply new stock
+      // Apply new quantity
       await Promise.all(
         saleProducts.map((sp) =>
-          this.productService.updateStock(sp.productId, { stock: { decrement: sp.quantity } }),
+          this.productService.updateStock(sp.productId, { quantity: { decrement: sp.quantity } }),
         ),
       );
     }
@@ -303,7 +304,7 @@ export class SaleService {
         worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
         client: sale.clientId ? { select: { id: true, username: true, email: true, createdAt: true } } : false,
         saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
         },
         returns: true,
       },
@@ -328,10 +329,10 @@ export class SaleService {
       throw new Error('Sale already refunded');
     }
 
-    // Revert stock
+    // Revert quantity
     await Promise.all(
       sale.saleProducts.map((sp) =>
-        this.productService.updateStock(sp.productId, { stock: { increment: sp.quantity } }),
+        this.productService.updateStock(sp.productId, { quantity: { increment: sp.quantity } }),
       ),
     );
 
@@ -380,7 +381,7 @@ export class SaleService {
         worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
         client: { select: { id: true, username: true, email: true, createdAt: true } },
         saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
         },
         returns: true,
       },
@@ -395,7 +396,7 @@ export class SaleService {
         worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
         client: { select: { id: true, username: true, email: true, createdAt: true } },
         saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, stock: true, createdAt: true } } },
+          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
         },
         returns: true,
       },

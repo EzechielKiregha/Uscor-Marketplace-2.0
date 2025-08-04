@@ -59,8 +59,8 @@ export class ProductService {
     });
   }
 
-  async updateStock(id: string, data: { stock: { increment?: number; decrement?: number } }) {
-    await this.prisma.product.update({
+  async updateStock(id: string, data: { quantity: { increment?: number; decrement?: number } }) {
+    return await this.prisma.product.update({
       where : { id },
       data
     })
@@ -82,7 +82,7 @@ export class ProductService {
         title: true,
         description: true,
         price: true,
-        stock: true,
+        quantity: true,
         createdAt: true,
         updatedAt: true,
         business: { select: { id: true, name: true, email: true } },

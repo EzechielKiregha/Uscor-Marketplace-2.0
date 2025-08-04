@@ -37,6 +37,7 @@ import { TokenTransactionModule } from './token-transaction/token-transaction.mo
 import { SaleModule } from './sale/sale.module';
 import { StoreModule } from './store/store.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { ShiftModule } from './shift/shift.module';
 import GraphQLJSON from 'graphql-type-json'
 
 @Module({
@@ -80,6 +81,7 @@ import GraphQLJSON from 'graphql-type-json'
     SaleModule,
     StoreModule,
     InventoryModule,
+    ShiftModule,
   ],
   controllers: [AppController],
   providers: [AppService],

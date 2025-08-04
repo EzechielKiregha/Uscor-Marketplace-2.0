@@ -17,7 +17,7 @@ export class LowStockAlertEntity {
   store: StoreEntity;
 
   @Field(() => Int)
-  stock: number;
+  quantity: number;
 
   @Field(() => Int)
   threshold: number;
