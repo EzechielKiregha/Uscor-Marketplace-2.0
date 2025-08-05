@@ -1,7 +1,36 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
+import { StoreEntity } from 'src/store/entities/store.entity';
+import { WorkerEntity } from 'src/worker/entities/worker.entity';
 
 @ObjectType()
-export class Shift {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+export class ShiftEntity {
+  @Field()
+  id: string;
+
+  @Field()
+  workerId: string;
+
+  @Field(() => WorkerEntity)
+  worker: WorkerEntity;
+
+  @Field()
+  storeId: string;
+
+  @Field(() => StoreEntity)
+  store: StoreEntity;
+
+  @Field()
+  startTime: Date;
+
+  @Field({ nullable: true })
+  endTime?: Date;
+
+  @Field(() => Float)
+  sales: number;
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }

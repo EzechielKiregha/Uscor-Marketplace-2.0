@@ -38,6 +38,7 @@ import { SaleModule } from './sale/sale.module';
 import { StoreModule } from './store/store.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ShiftModule } from './shift/shift.module';
+import { LoyaltyProgramModule } from './loyalty-program/loyalty-program.module';
 import GraphQLJSON from 'graphql-type-json'
 
 @Module({
@@ -82,6 +83,7 @@ import GraphQLJSON from 'graphql-type-json'
     StoreModule,
     InventoryModule,
     ShiftModule,
+    LoyaltyProgramModule,
   ],
   controllers: [AppController],
   providers: [AppService],

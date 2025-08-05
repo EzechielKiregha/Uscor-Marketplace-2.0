@@ -9,6 +9,7 @@ async function bootstrap() {
     transform: true,
     forbidNonWhitelisted: true,
   })); // Enable validation for incoming requests
+
   await app.listen(process.env.PORT ?? 8000);
 }
 bootstrap();

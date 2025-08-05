@@ -18,10 +18,11 @@ export class CreateSaleInput {
   @IsString()
   clientId?: string;
 
-  @Field(() => Float)
+  @Field(() => Float, {nullable: true})
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  totalAmount: number;
+  totalAmount?: number;
 
   @Field(() => Float, { nullable: true })
   @IsOptional()

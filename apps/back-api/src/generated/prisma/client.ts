@@ -236,6 +236,11 @@ export type PointsTransaction = Prisma.PointsTransactionModel
  * 
  */
 export type Return = Prisma.ReturnModel
+/**
+ * Model StripeCustomer
+ * 
+ */
+export type StripeCustomer = Prisma.StripeCustomerModel
 
 export type MediaType = $Enums.MediaType
 export const MediaType = $Enums.MediaType

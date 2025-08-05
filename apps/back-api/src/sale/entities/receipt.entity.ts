@@ -1,27 +1,15 @@
 import { ObjectType, Field, Int, Float, registerEnumType } from '@nestjs/graphql';
 import { SaleStatus } from 'src/generated/prisma/enums';
-import { SaleEntity } from './sale.entity';
 
 // Enums
 registerEnumType(SaleStatus, { name: 'SaleStatus' });
 
 @ObjectType()
-export class ReturnEntity {
+export class ReceiptEntity {
   @Field()
-  id: string;
-
-  @Field()
-  saleId: string;
+  filePath: string;
 
   @Field({ nullable: true })
-  reason?: string;
-
-  @Field()
-  status: SaleStatus;
-
-  @Field()
-  createdAt: Date;
-
-  @Field(() => SaleEntity)
-    sale: SaleEntity;
+  emailSent?: boolean;
 }
+

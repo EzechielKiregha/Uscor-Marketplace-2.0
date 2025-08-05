@@ -128,4 +128,14 @@ export class BusinessService {
       },
     });
   }
+
+  async verifyBusinessAccess(businessId: string | undefined | null, user: { id: string; role: string }) {
+    const business = this.findOne(user.id)
+
+    if (!business) {
+      throw new Error('Worker can only access stores of their business');
+    }
+  
+    return true;
+  }
 }

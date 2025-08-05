@@ -490,6 +490,7 @@ type ReturnEntity {
   reason: String
   status: String!
   createdAt: DateTime!
+  sale: SaleEntity!
 }
 
 type SaleEntity {
@@ -521,6 +522,37 @@ enum SaleStatus {
   OPEN
   CLOSED
   REFUNDED
+}
+
+type ReceiptEntity {
+  filePath: String!
+  emailSent: Boolean
+}
+
+type LoyaltyProgramEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  name: String!
+  pointsPerPurchase: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PointsTransactionEntity {
+  id: String!
+  clientId: String!
+  client: ClientEntity!
+  loyaltyProgramId: String!
+  loyaltyProgram: LoyaltyProgramEntity!
+  points: Float!
+  createdAt: DateTime!
+}
+
+type ClientPointsBalanceEntity {
+  clientId: String!
+  client: ClientEntity!
+  totalPoints: Float!
 }
 
 type InventoryAdjustmentEntity {
@@ -607,6 +639,19 @@ enum PurchaseOrderStatus {
   PENDING
   COMPLETED
   CANCELLED
+}
+
+type ShiftEntity {
+  id: String!
+  workerId: String!
+  worker: WorkerEntity!
+  storeId: String!
+  store: StoreEntity!
+  startTime: DateTime!
+  endTime: DateTime
+  sales: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Query {
@@ -710,11 +755,29 @@ type Query {
   """Retrieves a single store by ID."""
   store(id: String!): StoreEntity!
 
+  """Retrieves points transactions for a client."""
+  pointsTransactionsByClient(clientId: String!): [PointsTransactionEntity!]!
+
+  """Retrieves points transactions for a loyalty program."""
+  pointsTransactionsByProgram(loyaltyProgramId: String!): [PointsTransactionEntity!]!
+
+  """Retrieves total points for a client."""
+  clientPointsBalance(clientId: String!): ClientPointsBalanceEntity!
+
   """Retrieves low stock alerts for a store."""
   lowStockAlerts(lowStockAlertInput: LowStockAlertInput!): [LowStockAlertEntity!]!
 
   """Exports products for a store."""
   bulkExportProducts(storeId: String!): [PurchaseOrderProductEntity!]!
+
+  """Retrieves a single shift."""
+  shift(id: String!): ShiftEntity!
+
+  """Retrieves shifts for a store."""
+  shiftsByStore(storeId: String!): [ShiftEntity!]!
+
+  """Retrieves shifts for a worker."""
+  shiftsByWorker(workerId: String!): [ShiftEntity!]!
 }
 
 enum FreelanceCategory {
@@ -884,6 +947,12 @@ type Mutation {
   """Processes a return for a POS sale."""
   createReturn(createReturnInput: CreateReturnInput!): ReturnEntity!
 
+  """Generates a PDF receipt and optionally emails it."""
+  generateReceipt(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
+
+  """Generates a PDF receipt using pdfkit and optionally emails it."""
+  generateReceiptWithPDFKit(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
+
   """Creates a new store for a business."""
   createStore(createStoreInput: CreateStoreInput!): StoreEntity!
 
@@ -892,6 +961,15 @@ type Mutation {
 
   """Deletes a store."""
   deleteStore(id: String!): StoreEntity!
+
+  """Creates a new loyalty program."""
+  createLoyaltyProgram(createLoyaltyProgramInput: CreateLoyaltyProgramInput!): LoyaltyProgramEntity!
+
+  """Updates a loyalty program."""
+  updateLoyaltyProgram(id: String!, updateLoyaltyProgramInput: UpdateLoyaltyProgramInput!): LoyaltyProgramEntity!
+
+  """Creates a points transaction."""
+  createPointsTransaction(createPointsTransactionInput: CreatePointsTransactionInput!): PointsTransactionEntity!
 
   """Creates a new purchase order."""
   createPurchaseOrder(createPurchaseOrderInput: CreatePurchaseOrderInput!): PurchaseOrderEntity!
@@ -910,6 +988,15 @@ type Mutation {
 
   """Imports products in bulk."""
   bulkImportProducts(storeId: String!, products: [PurchaseOrderProductInput!]!): BulkImportResultEntity!
+
+  """Starts a new shift for a worker."""
+  createShift(createShiftInput: CreateShiftInput!): ShiftEntity!
+
+  """Ends a shift and calculates sales."""
+  endShift(endShiftInput: EndShiftInput!): ShiftEntity!
+
+  """Updates shift details (business only)."""
+  updateShift(id: String!, updateShiftInput: UpdateShiftInput!): ShiftEntity!
 }
 
 input CreateProductInput {
@@ -1205,7 +1292,7 @@ input CreateSaleInput {
   storeId: String!
   workerId: String!
   clientId: String
-  totalAmount: Float!
+  totalAmount: Float
   discount: Float
   paymentMethod: PaymentMethod!
   saleProducts: [SaleProductInput!]!
@@ -1214,7 +1301,7 @@ input CreateSaleInput {
 input SaleProductInput {
   productId: String!
   quantity: Int!
-  price: Float!
+  price: Float
   modifiers: JSON
 }
 
@@ -1237,6 +1324,11 @@ input CreateReturnInput {
   reason: String!
 }
 
+input GenerateReceiptInput {
+  saleId: String!
+  email: String
+}
+
 input CreateStoreInput {
   businessId: String!
   name: String!
@@ -1246,6 +1338,23 @@ input CreateStoreInput {
 input UpdateStoreInput {
   name: String
   address: String
+}
+
+input CreateLoyaltyProgramInput {
+  businessId: String!
+  name: String!
+  pointsPerPurchase: Float!
+}
+
+input UpdateLoyaltyProgramInput {
+  name: String
+  pointsPerPurchase: Float
+}
+
+input CreatePointsTransactionInput {
+  clientId: String!
+  loyaltyProgramId: String!
+  points: Float!
 }
 
 input CreatePurchaseOrderInput {
@@ -1290,4 +1399,19 @@ input CreateInventoryAdjustmentInput {
   adjustmentType: AdjustmentType!
   quantity: Int!
   reason: String
+}
+
+input CreateShiftInput {
+  storeId: String!
+  startTime: DateTime!
+}
+
+input EndShiftInput {
+  shiftId: String!
+  endTime: DateTime!
+}
+
+input UpdateShiftInput {
+  startTime: DateTime
+  endTime: DateTime
 }

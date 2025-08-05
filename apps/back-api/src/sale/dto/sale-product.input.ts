@@ -14,10 +14,11 @@ export class SaleProductInput {
   @Min(1)
   quantity: number;
 
-  @Field(() => Float)
+  @Field(() => Float, {nullable: true})
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  price: number;
+  price?: number;
 
   @Field(() => GraphQLJSON, { nullable: true })
   @IsOptional()

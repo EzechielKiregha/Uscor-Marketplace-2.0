@@ -11,6 +11,8 @@ import { CloseSaleInput } from './dto/close-sale.input';
 import { CreateReturnInput } from './dto/create-return.input';
 import { ReturnEntity } from './entities/return.entity';
 import { StoreService } from 'src/store/store.service';
+import { ReceiptEntity } from './entities/receipt.entity';
+import { GenerateReceiptInput } from './dto/receipt.input';
 
 // Resolver
 @Resolver(() => SaleEntity)
@@ -79,6 +81,26 @@ export class SaleResolver {
     @Context() context,
   ) {
     return this.saleService.findOne(id, context.req.user);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Mutation(() => ReceiptEntity, { description: 'Generates a PDF receipt and optionally emails it.' })
+  async generateReceipt(
+    @Args('generateReceiptInput') input: GenerateReceiptInput,
+    @Context() context,
+  ) {
+    return this.saleService.generateReceipt(input, context.req.user);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Mutation(() => ReceiptEntity, { description: 'Generates a PDF receipt using pdfkit and optionally emails it.' })
+  async generateReceiptWithPDFKit(
+  @Args('generateReceiptInput') input: GenerateReceiptInput,
+  @Context() context,
+  ) {
+  return this.saleService.generateReceiptWithPDFKit(input, context.req.user);
   }
 }
 

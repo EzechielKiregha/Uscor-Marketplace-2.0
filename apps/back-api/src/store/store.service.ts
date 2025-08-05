@@ -109,7 +109,7 @@ export class StoreService {
     return store;
   }
 
-  async verifyStoreAccess(storeId: string, user: { id: string; role: string }) {
+  async verifyStoreAccess(storeId: string , user: { id: string; role: string }) {
     const store = await this.findOne(storeId);
     if (user.role === 'business' && store.businessId !== user.id) {
       throw new Error('Business can only access their own stores');
@@ -124,6 +124,20 @@ export class StoreService {
       }
     }
     return store;
+  }
+  async verifyBusinessAccess( user: { id: string; role: string }) {
+    
+    const worker = await this.workerService.findOne(user.id);
+    
+    if (!worker) throw new Error("Worker not found")
+
+      const business = this.businessService.findOne(worker.businessId)
+
+    if (!business) {
+      throw new Error('Worker can only access stores of their business');
+    }
+  
+    return true;
   }
 }
 

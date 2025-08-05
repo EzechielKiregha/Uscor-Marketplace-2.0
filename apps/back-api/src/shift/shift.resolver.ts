@@ -1,35 +1,76 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { ShiftService } from './shift.service';
-import { Shift } from './entities/shift.entity';
-import { CreateShiftInput } from './dto/create-shift.input';
+import { CreateShiftInput, EndShiftInput } from './dto/create-shift.input';
 import { UpdateShiftInput } from './dto/update-shift.input';
+import { ShiftEntity } from './entities/shift.entity';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
-@Resolver(() => Shift)
+// Resolver
+@Resolver(() => ShiftEntity)
 export class ShiftResolver {
   constructor(private readonly shiftService: ShiftService) {}
 
-  @Mutation(() => Shift)
-  createShift(@Args('createShiftInput') createShiftInput: CreateShiftInput) {
-    return this.shiftService.create(createShiftInput);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('worker', 'business')
+  @Mutation(() => ShiftEntity, { description: 'Starts a new shift for a worker.' })
+  async createShift(
+    @Args('createShiftInput') input: CreateShiftInput,
+    @Context() context,
+  ) {
+    return this.shiftService.createShift(input, context.req.user);
   }
 
-  @Query(() => [Shift], { name: 'shift' })
-  findAll() {
-    return this.shiftService.findAll();
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('worker', 'business')
+  @Mutation(() => ShiftEntity, { description: 'Ends a shift and calculates sales.' })
+  async endShift(
+    @Args('endShiftInput') input: EndShiftInput,
+    @Context() context,
+  ) {
+    return this.shiftService.endShift(input, context.req.user);
   }
 
-  @Query(() => Shift, { name: 'shift' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.shiftService.findOne(id);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Mutation(() => ShiftEntity, { description: 'Updates shift details (business only).' })
+  async updateShift(
+    @Args('id', { type: () => String }) id: string,
+    @Args('updateShiftInput') input: UpdateShiftInput,
+    @Context() context,
+  ) {
+    return this.shiftService.updateShift(id, input, context.req.user);
   }
 
-  @Mutation(() => Shift)
-  updateShift(@Args('updateShiftInput') updateShiftInput: UpdateShiftInput) {
-    return this.shiftService.update(updateShiftInput.id, updateShiftInput);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('worker', 'business')
+  @Query(() => ShiftEntity, { name: 'shift', description: 'Retrieves a single shift.' })
+  async getShift(
+    @Args('id', { type: () => String }) id: string,
+    @Context() context,
+  ) {
+    return this.shiftService.getShift(id, context.req.user);
   }
 
-  @Mutation(() => Shift)
-  removeShift(@Args('id', { type: () => Int }) id: number) {
-    return this.shiftService.remove(id);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Query(() => [ShiftEntity], { name: 'shiftsByStore', description: 'Retrieves shifts for a store.' })
+  async getShiftsByStore(
+    @Args('storeId', { type: () => String }) storeId: string,
+    @Context() context,
+  ) {
+    return this.shiftService.getShiftsByStore(storeId, context.req.user);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('worker', 'business')
+  @Query(() => [ShiftEntity], { name: 'shiftsByWorker', description: 'Retrieves shifts for a worker.' })
+  async getShiftsByWorker(
+    @Args('workerId', { type: () => String }) workerId: string,
+    @Context() context,
+  ) {
+    return this.shiftService.getShiftsByWorker(workerId, context.req.user);
   }
 }

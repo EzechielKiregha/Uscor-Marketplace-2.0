@@ -433,7 +433,8 @@ export const ModelName = {
   Shift: 'Shift',
   LoyaltyProgram: 'LoyaltyProgram',
   PointsTransaction: 'PointsTransaction',
-  Return: 'Return'
+  Return: 'Return',
+  StripeCustomer: 'StripeCustomer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -449,7 +450,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "client" | "worker" | "category" | "product" | "media" | "order" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "pointsTransaction" | "return"
+    modelProps: "business" | "client" | "worker" | "category" | "product" | "media" | "order" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "pointsTransaction" | "return" | "stripeCustomer"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3413,6 +3414,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StripeCustomer: {
+      payload: Prisma.$StripeCustomerPayload<ExtArgs>
+      fields: Prisma.StripeCustomerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StripeCustomerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StripeCustomerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        findFirst: {
+          args: Prisma.StripeCustomerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StripeCustomerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        findMany: {
+          args: Prisma.StripeCustomerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        create: {
+          args: Prisma.StripeCustomerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        createMany: {
+          args: Prisma.StripeCustomerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StripeCustomerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        delete: {
+          args: Prisma.StripeCustomerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        update: {
+          args: Prisma.StripeCustomerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        deleteMany: {
+          args: Prisma.StripeCustomerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StripeCustomerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StripeCustomerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        upsert: {
+          args: Prisma.StripeCustomerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        aggregate: {
+          args: Prisma.StripeCustomerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStripeCustomer>
+        }
+        groupBy: {
+          args: Prisma.StripeCustomerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeCustomerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StripeCustomerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeCustomerCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3996,6 +4071,17 @@ export const ReturnScalarFieldEnum = {
 export type ReturnScalarFieldEnum = (typeof ReturnScalarFieldEnum)[keyof typeof ReturnScalarFieldEnum]
 
 
+export const StripeCustomerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  striperCustomerId: 'striperCustomerId',
+  createAt: 'createAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StripeCustomerScalarFieldEnum = (typeof StripeCustomerScalarFieldEnum)[keyof typeof StripeCustomerScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -4500,6 +4586,7 @@ export type GlobalOmitConfig = {
   loyaltyProgram?: Prisma.LoyaltyProgramOmit
   pointsTransaction?: Prisma.PointsTransactionOmit
   return?: Prisma.ReturnOmit
+  stripeCustomer?: Prisma.StripeCustomerOmit
 }
 
 /* Types for Logging */
