@@ -179,6 +179,11 @@ model Business {
   stores Store[]
   purchaseOrders PurchaseOrder[]
   loyaltyPrograms LoyaltyProgram[]
+
+  // Index to speed up listing businesses by creation date
+  @@index([createdAt])
+  @@index([email])
+
 }
 
 model Client {
@@ -207,6 +212,12 @@ model Client {
   chatParticipants ChatParticipant[]
   sales Sale[]
   pointsTransactions PointsTransaction[]
+
+  // Common lookup
+  @@index([createdAt])
+  @@index([id])
+  @@index([email])
+
 }
 
 model Worker {
@@ -226,6 +237,9 @@ model Worker {
   chatParticipants ChatParticipant[]
   sales Sale[]
   shifts Shift[]
+
+  @@index([id])
+  @@index([email])
 }
 
 model Category {
@@ -268,6 +282,18 @@ model Product {
   transferOrderProducts        TransferOrderProduct[]
   purchaseOrderProducts        PurchaseOrderProduct[]
   inventoryAdjustments InventoryAdjustment[]
+
+  // Foreign keys
+  @@index([businessId])
+  @@index([categoryId])
+
+  // Common filters / sorts
+  @@index([price])
+  @@index([stock])
+  @@index([createdAt])
+
+  // If you frequently search by title
+  @@index([title])
 }
 
 model Media {
@@ -292,6 +318,10 @@ model Order {
   payment              PaymentTransaction?
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
+
+  // Speed up queries like “orders by client” and “recent orders”
+  @@index([clientId])
+  @@index([createdAt])
 }
 
 // Join table for many-to-many between Order and Product
@@ -303,6 +333,10 @@ model OrderProduct {
   productId            String
   quantity             Int                   @default(1)
   createdAt            DateTime              @default(now())
+
+  // Foreign keys
+  @@index([orderId])
+  @@index([productId])
 }
 
 model Review {
@@ -315,8 +349,6 @@ model Review {
   comment              String?
   createdAt            DateTime              @default(now())
 }
-
-
 
 model Chat {
   id                   String                @id @default(uuid())
@@ -331,6 +363,9 @@ model Chat {
   messages             ChatMessage[]
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
+  
+  @@index([createdAt])
+
 }
 
 model ChatParticipant {
@@ -344,6 +379,9 @@ model ChatParticipant {
   worker               Worker?               @relation(fields: [workerId], references: [id])
   workerId             String?
   createdAt            DateTime              @default(now())
+
+  @@index([businessId])
+  @@index([clientId])
 }
 
 model ChatMessage {
@@ -353,6 +391,9 @@ model ChatMessage {
   message              String
   senderId             String?               // ID of the sender (business or client)
   createdAt            DateTime              @default(now())
+
+   // Fast retrieval of recent messages in a chat
+  @@index([chatId, createdAt])
 }
 
 model RepostedProduct {
@@ -364,6 +405,9 @@ model RepostedProduct {
   markupPercentage     Float                 @default(0.02)
   createdAt            DateTime              @default(now())
   tokenTransactions    TokenTransaction[]
+
+  @@index([createdAt])
+
 }
 
 model ReOwnedProduct {
@@ -388,6 +432,9 @@ model ReOwnedProduct {
 
   tokenTransactions    TokenTransaction[]
   businessProductOwners       Business[]
+
+  @@index([createdAt])
+
 }
 
 model Shipping {
@@ -400,6 +447,10 @@ model Shipping {
   shippedAt            DateTime?             // Timestamp of shipping
   deliveredAt          DateTime?             // Timestamp of delivery
   createdAt            DateTime              @default(now())
+
+  @@index([createdAt, id])
+
+  
 }
 
 model TokenTransaction {
@@ -417,6 +468,9 @@ model TokenTransaction {
   createdAt            DateTime              @default(now())
 
   AccountRecharge AccountRecharge[]
+
+  @@index([createdAt])
+
 }
 
 model KYC {
@@ -445,6 +499,10 @@ model AccountRecharge {
   tokenTransaction     TokenTransaction?     @relation(fields: [tokenTransactionId], references: [id])
   tokenTransactionId   String?               
   createdAt            DateTime              @default(now())
+
+  @@index([createdAt])
+  @@index([origin])
+
 }
 
 model Token {
@@ -468,6 +526,9 @@ model PaymentTransaction {
   freelanceOrderId     String?               @unique
 
   postTransactions PostTransaction[]
+
+  @@index([createdAt])
+
 }
 
 model Ad {
@@ -480,6 +541,10 @@ model Ad {
   periodDays           Int
   createdAt            DateTime              @default(now())
   endedAt              DateTime?
+
+  @@index([productId])
+  @@index([businessId])
+
 }
 
 // Freelancing Models
@@ -498,6 +563,11 @@ model FreelanceService {
   updatedAt            DateTime              @updatedAt
   workerServiceAssignments WorkerServiceAssignment[]
   chats Chat[]
+
+  @@index([createdAt])
+  @@index([businessId])
+  @@index([category])
+
 }
 
 model WorkerServiceAssignment {
@@ -528,6 +598,9 @@ model FreelanceOrder {
   updatedAt            DateTime              @updatedAt
 
   freelanceOrderBusiness FreelanceOrderBusiness[]
+
+  @@index([createdAt])
+
 }
 
 model FreelanceOrderBusiness {
@@ -554,6 +627,9 @@ model Referral {
   referredClientId     String?
   verifiedPurchase     Boolean               @default(false)
   createdAt            DateTime              @default(now())
+
+  @@index([createdAt])
+
 }
 
 // 2. Core PostOfSale model
@@ -622,6 +698,11 @@ model Sale {
   updatedAt    DateTime       @updatedAt
   saleProducts SaleProduct[]
   returns      Return[]
+
+  // Queries like “sales by store” & “recent sales”
+  @@index([storeId])
+  @@index([workerId])
+  @@index([createdAt])
 }
 
 model SaleProduct {
@@ -634,6 +715,9 @@ model SaleProduct {
   price        Float
   modifiers    Json?          // For item variants or modifiers (e.g., size, color)
   createdAt    DateTime       @default(now())
+
+  @@index([saleId])
+  @@index([productId])
 }
 
 model PurchaseOrder {
@@ -648,6 +732,9 @@ model PurchaseOrder {
   products        PurchaseOrderProduct[]
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt
+
+  @@index([storeId])
+  @@index([createdAt])
 }
 
 model TransferOrder {
@@ -660,6 +747,10 @@ model TransferOrder {
   products        TransferOrderProduct[]
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt
+
+  @@index([fromStoreId])
+  @@index([toStoreId])
+  @@index([createdAt])
 }
 
 model PurchaseOrderProduct {
@@ -705,6 +796,10 @@ model Shift {
   sales        Float          @default(0) // Total sales during shift
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+
+  @@index([storeId])
+  @@index([workerId])
+  @@index([createdAt])
 }
 
 model LoyaltyProgram {

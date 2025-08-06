@@ -4,10 +4,10 @@ import MaxWidthWrapper from './MaxWidthWrapper'
 import Link from 'next/link'
 import NavItems from './NavItems'
 import { buttonVariants } from './ui/button'
-import Cart from './Cart'
+// import Cart from './Cart'
 // import { getServerSideUser } from '@/lib/payload-utils'
 // import { cookies } from 'next/headers'
-import UserAccountNav from './UserAccountNav'
+// import UserAccountNav from './UserAccountNav'
 import MobileNav from './MobileNav'
 import Image from 'next/image'
 import { ModeToggle } from './mode-toggle'
@@ -116,7 +116,7 @@ function Navbar() {
                                 </div>
                                 <div className="flex felx-col space-x-2 ml-4 pr-2.5 lg:ml-6">
                                     <ModeToggle />
-                                    <Cart />
+                                    {/* <Cart /> */}
                                 </div>
                             </div>
                         </div>

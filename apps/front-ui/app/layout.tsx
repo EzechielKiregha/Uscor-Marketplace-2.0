@@ -8,6 +8,7 @@ import { LoadingProvider } from "./context/loadingContext";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider"
 import { MainNavbar } from "@/components/main-navbar";
+import { ToastProvider } from "@/components/toast-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,14 +47,17 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <main className="relative flex flex-col min-h-screen">
-              <ClientWrapper>
-                {/* <Providers> */}
-                {/* <Navbar /> */}
+              <ToastProvider>
+                {children}
+              </ToastProvider>
+              {/* <ClientWrapper>
+                <Providers>
+                <Navbar />
                 <MainNavbar />
                 <div className="flex-grow flex-1 justify-center items-center">{children}</div>
                 <Footer />
-                {/* </Providers> */}
-              </ClientWrapper>
+                </Providers>
+              </ClientWrapper> */}
             </main>
 
             <Toaster position='top-center' richColors />

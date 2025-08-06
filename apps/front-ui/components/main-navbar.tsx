@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import Cart from './Cart';
+// import Cart from './Cart';
 import { ModeToggle } from './mode-toggle';
 import { cn } from '@/lib/utils';
 
@@ -57,7 +57,7 @@ export const MainNavbar: React.FC = () => {
             ))}
             <div className="flex felx-col space-x-2 ml-4 pr-2.5 lg:ml-6">
               <ModeToggle />
-              <Cart />
+              {/* <Cart /> */}
             </div>
           </div>
 
@@ -99,7 +99,7 @@ export const MainNavbar: React.FC = () => {
                       ))}
                       <div className="flex felx-raw space-x-2 ml-4 pr-2.5 lg:ml-6">
                         {/* <ModeToggle /> */}
-                        <Cart />
+                        {/* <Cart /> */}
                       </div>
                     </motion.div>
                   </DropdownMenu.Content>
