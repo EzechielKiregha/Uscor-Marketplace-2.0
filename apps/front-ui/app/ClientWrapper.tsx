@@ -5,6 +5,8 @@ import LoadingSpinner from '@/components/LoadingSpinner'
 import { useLoading } from './context/loadingContext'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { ApolloProvider } from '@apollo/client'
+import { client } from '@/lib/apollo-client'
 
 export default function ClientWrapper({
     children,
@@ -27,7 +29,9 @@ export default function ClientWrapper({
     return (
         <>
             {isLoading && <LoadingSpinner />}
-            {children}
+            <ApolloProvider client={client}>
+                {children}
+            </ApolloProvider>
         </>
     )
 }

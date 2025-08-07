@@ -10,6 +10,8 @@ import { useToast } from '@/components/toast-provider';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import Button from '@/components/seraui/button';
 import { GlowButton } from '@/components/seraui/GlowButton';
+import { Select } from '@radix-ui/react-select';
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // SVG Icons (reused from Signin1)
 const UserIcon: React.FC = () => (
@@ -216,7 +218,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 bg-white dark:bg-black">
+    <div className="relative w-full flex items-center justify-center min-h-screen bg-white dark:bg-black">
       <div className="w-full max-w-md">
         {/* Progress Bar */}
         <div className="mb-6">
@@ -250,7 +252,7 @@ export default function SignupPage() {
           </div>
 
           <Form {...form}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 items-center">
               {/* Step 1: Role Selection */}
               {step === 1 && (
                 <div className="space-y-4">
@@ -261,14 +263,22 @@ export default function SignupPage() {
                       <FormItem>
                         <FormLabel>Account Type</FormLabel>
                         <FormControl>
-                          <select
-                            {...field}
-                            className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            defaultValue="Client"
                           >
-                            <option value="Client">Client</option>
-                            <option value="Business">Business</option>
-                            <option value="Worker">Worker</option>
-                          </select>
+                            <FormControl>
+                              <SelectTrigger className="form-field">
+                                <SelectValue placeholder="Select role" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="form-field">
+                              <SelectItem value="Client">Client</SelectItem>
+                              <SelectItem value="Business">Business</SelectItem>
+                              <SelectItem value="Worker">Worker</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -279,7 +289,7 @@ export default function SignupPage() {
                     type="button"
                     onClick={handleNext}
                     disabled={!role}
-                    className="w-full"
+                    className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
                   >
                     Next Step <ArrowRightIcon />
                   </GlowButton>
@@ -344,6 +354,25 @@ export default function SignupPage() {
                                 <option value="MANAGER">Manager</option>
                                 <option value="FREELANCER">Freelancer</option>
                               </select>
+
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue="Client"
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="form-field">
+                                    <SelectValue placeholder="Select role" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="form-field">
+                                  <SelectItem value="Admin">Admin</SelectItem>
+                                  <SelectItem value="Staff">Staff</SelectItem>
+                                  <SelectItem value="Manager">Manager</SelectItem>
+                                  <SelectItem value="Freelancer">Freelancer</SelectItem>
+                                </SelectContent>
+                              </Select>
+
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -374,7 +403,7 @@ export default function SignupPage() {
                     type="button"
                     onClick={handleNext}
                     disabled={!watch('fullName') || (role === 'Worker' && !watch('workerRole'))}
-                    className="w-full"
+                    className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
                   >
                     Next Step <ArrowRightIcon />
                   </GlowButton>
@@ -438,19 +467,12 @@ export default function SignupPage() {
                         </FormItem>
                       )}
                     />
-                    <GlowButton
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-light dark:text-secondary-dark hover:text-primary"
-                    >
-                      {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-                    </GlowButton>
                   </div>
                   <GlowButton
                     type="button"
                     onClick={handleNext}
                     disabled={!watch('email') || !watch('password')}
-                    className="w-full"
+                    className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
                   >
                     Next Step <ArrowRightIcon />
                   </GlowButton>
@@ -542,29 +564,7 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* Inject Styles */}
-      <style jsx>{`
-        .signin-input:focus {
-          box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
-        }
-        .dark .signin-input:focus {
-          box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
-        }
-        @keyframes slideIn {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .signin-step {
-          animation: slideIn 0.3s ease-out;
-        }
-        .signin-card {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
+
     </div>
   );
 }

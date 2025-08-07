@@ -1,4 +1,4 @@
-// src/components/DarkModeToggle.tsx
+"use client"
 import { useEffect, useState } from 'react';
 import { GlowButton } from './seraui/GlowButton';
 
