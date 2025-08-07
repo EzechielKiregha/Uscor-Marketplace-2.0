@@ -81,6 +81,7 @@ html {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  
   --primary: #F97316; /* Orange */
   --accent: #EA580C; /* Dark Orange */
   --white: #FFFFFF;
@@ -142,7 +143,6 @@ html {
   }
 }
 
-/* Custom styles for Sera UI components */
 .signin-input:focus {
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
 }
@@ -186,51 +186,12 @@ html {
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3) !important;
 }
 
-.hero-section {
-  background-color: var(--white) !important;
-}
-
-.dark .hero-section {
-  background-color: var(--black) !important;
-}
-
-.hero-section h1 {
-  color: var(--secondary-dark) !important;
-}
-
-.dark .hero-section h1 {
-  color: var(--lightGray) !important;
-}
-
-.hero-section p {
-  color: var(--secondary-light) !important;
-}
-
-.dark .hero-section p {
-  color: var(--secondary-dark) !important;
-}
-
-.testimonial-card {
-  background-color: var(--secondary-light) !important;
-  border: 1px solid var(--secondary-dark) !important;
-}
-
-.dark .testimonial-card {
-  background-color: var(--secondary-dark) !important;
-  border: 1px solid var(--lightGray) !important;
-}
-
-.marquee-scroller {
-  background-color: var(--secondary-light) !important;
-}
-
 .dark .marquee-scroller {
   background-color: var(--secondary-dark) !important;
 }
 
 /* Animations */
-.signin-input:focus,
-.hero-section [data-animation="text-reveal"] {
+.signin-input:focus [data-animation="text-reveal"] {
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
 }
 
@@ -244,8 +205,21 @@ html {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.signin-step,
-.hero-section,
-.testimonial-card {
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.signin-step {
   animation: fadeIn 0.3s ease-out;
 }

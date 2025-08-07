@@ -10,6 +10,9 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { MainNavbar } from "@/components/main-navbar";
 import { ToastProvider } from "@/components/toast-provider";
 import DarkModeToggle from "@/components/DarkModeToggle";
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+
+const __DEV__ = process.env.NODE_ENV
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +38,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  if (__DEV__) {
+    // Adds messages only in a dev environment
+    loadDevMessages();
+    loadErrorMessages();
+  }
+
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <LoadingProvider>

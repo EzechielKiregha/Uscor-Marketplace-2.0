@@ -1,27 +1,30 @@
 'use client';
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface MasonryItem {
-  id: number;
+// --- TypeScript Interfaces ---
+interface Product {
+  id: string | number;
   imageUrl: string;
   title: string;
-  href?: string;
+  price: number;
+  quantity?: number;
+  href: string;
 }
 
 interface GridItemProps {
-  item: MasonryItem;
-  onClick?: (id: number) => void;
+  product: Product;
+  onLike?: (id: string | number) => void;
 }
 
 interface MasonryGridProps {
-  className?: string;
-  items: MasonryItem[];
-  onItemClick?: (id: number) => void;
-  columns?: string;
+  products: Product[];
+  onLike?: (id: string | number) => void;
 }
 
-const HeartIcon: React.FC = () => (
+// --- SVG Icons (Themed with CSS variables) ---
+const HeartIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -32,69 +35,98 @@ const HeartIcon: React.FC = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    className="h-5 w-5 text-white group-hover:text-[var(--accent)] transition-colors"
+    className="h-5 w-5 text-white group-hover:text-pink-500 transition-colors duration-200"
   >
     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
   </svg>
 );
 
-const GridItem: React.FC<GridItemProps> = ({ item, onClick }) => {
+// --- GridItem Component ---
+const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imgSrc, setImgSrc] = useState(product.imageUrl);
+
+  const handleImageError = () => {
+    setImgSrc(`https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`);
+  };
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onLike) onLike(product.id);
+  };
 
   return (
     <motion.div
-      className="mb-4 break-inside-avoid relative cursor-pointer"
+      className="mb-6 break-inside-avoid cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => onClick?.(item.id)}
       whileHover={{ y: -5 }}
       transition={{ type: 'spring', stiffness: 300 }}
+      onClick={() => (window.location.href = product.href)}
     >
-      <img
-        src={item.imageUrl}
-        alt={item.title}
-        className="w-full h-auto rounded-xl shadow-lg"
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-          e.currentTarget.src = `https://placehold.co/400x300/[var(--accent)]/FFFFFF?text=${encodeURIComponent(item.title)}`;
-        }}
-      />
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-gradient-to-t from-[var(--secondary-dark)]/60 to-transparent rounded-xl"
-          >
-            <div className="p-4 h-full flex flex-col justify-between">
-              <div className="flex justify-start gap-3">
-                <motion.button whileHover={{ scale: 1.1 }} className="p-2 bg-[var(--secondary-dark)]/30 rounded-lg backdrop-blur-sm group">
-                  <HeartIcon />
-                </motion.button>
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-lg bg-muted">
+        <img
+          src={imgSrc}
+          alt={product.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={handleImageError}
+        />
+
+        {/* Hover Overlay */}
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"
+            >
+              <div className="p-4 h-full flex flex-col justify-between pointer-events-auto">
+                <div className="flex justify-start">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    onClick={handleLike}
+                    className="p-2 bg-black/30 rounded-lg backdrop-blur-sm group"
+                    aria-label={`Like ${product.title}`}
+                  >
+                    <HeartIcon />
+                  </motion.button>
+                </div>
+
+                <div>
+                  <p className="text-white font-bold text-base truncate">{product.title}</p>
+                  <p className="text-white text-sm opacity-90">${product.price.toFixed(2)}</p>
+                  {product.quantity !== undefined && (
+                    <p className="text-white/75 text-xs">Only {product.quantity} left</p>
+                  )}
+                </div>
               </div>
-              <p className="text-white font-bold text-base truncate">{item.title}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Mobile/Fallback Info (visible when not hovered) */}
+      {!isHovered && (
+        <div className="mt-2">
+          <p className="text-foreground font-medium truncate">{product.title}</p>
+          <p className="text-primary text-sm font-bold">${product.price.toFixed(2)}</p>
+        </div>
+      )}
     </motion.div>
   );
 };
 
-const MasonryGrid: React.FC<MasonryGridProps> = ({
-  className = '',
-  items,
-  onItemClick,
-  columns = 'columns-1 sm:columns-2 lg:columns-3 xl:columns-4',
-}) => {
+// --- MasonryGrid Component ---
+export default function MasonryGrid({ products, onLike }: MasonryGridProps) {
   return (
-    <div className={`font-inter ${columns} gap-6 ${className}`} style={{ columnWidth: '280px' }}>
-      {items.map((item) => (
-        <GridItem key={item.id} item={item} onClick={onItemClick} />
-      ))}
+    <div className="space-y-6">
+      <div className="columns-1 gap-6 sm:columns-2 md:columns-3 lg:columns-4">
+        {products.map((product) => (
+          <GridItem key={product.id} product={product} onLike={onLike} />
+        ))}
+      </div>
     </div>
   );
-};
-
-export default MasonryGrid;
+}
