@@ -1,6 +1,7 @@
 "use client"
 import { logos1, logos2 } from '@/components/icons/Logos';
 import FeaturedProducts from '@/components/seraui/FeaturedProducts';
+import FeaturesSection from '@/components/seraui/FeaturesSection';
 import Footer from '@/components/seraui/FooterSection';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
 import HeroSection from '@/components/seraui/HeroSection';
@@ -20,6 +21,11 @@ export default function HomePage() {
       {/* Hero */}
       <HeroSection />
 
+
+
+      {/* Featured Products */}
+      <FeaturesSection />
+
       {/* Logos Marquee */}
       <div className="py-12 px-4">
         <MarqueeScroller items={logos1} speed="25s" direction="forwards" itemWidth="120px" />
@@ -27,9 +33,6 @@ export default function HomePage() {
           <MarqueeScroller items={logos2} speed="30s" direction="reverse" itemWidth="120px" />
         </div>
       </div>
-
-      {/* Featured Products */}
-      <FeaturedProducts />
 
       {/* Testimonials */}
       <TestimonialSection />
