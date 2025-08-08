@@ -22,15 +22,6 @@ const ArrowRightIcon: FC<SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-// --- Feature Interface ---
-interface Feature {
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  hueA: number;
-  hueB: number;
-}
-
 // --- BentoGrid & BentoCard ---
 interface BentoGridProps extends ComponentPropsWithoutRef<'div'> {
   children: React.ReactNode;
@@ -49,46 +40,49 @@ const BentoGrid: FC<BentoGridProps> = ({ children, className, ...props }) => {
     </div>
   );
 };
+// Define the icon type properly
+type IconType = React.ComponentType<SVGProps<SVGSVGElement>>;
 
-interface BentoCardProps extends ComponentPropsWithoutRef<'div'> {
+// --- Feature Interface ---
+interface Feature {
   title: string;
   description: string;
-  icon: React.ElementType;
+  icon: IconType;
   hueA: number;
   hueB: number;
 }
 
-const BentoCard: FC<BentoCardProps> = ({
-  title,
-  description,
-  icon: Icon,
-  hueA,
-  hueB,
-  ...props
-}) => {
-  const gradient = `linear-gradient(45deg, hsl(${hueA}, 80%, 60%), hsl(${hueB}, 75%, 65%))`;
 
+interface BentoCardProps extends ComponentPropsWithoutRef<'div'> {
+  title: string;
+  description: string;
+  icon: IconType;
+  hueA: number;
+  hueB: number;
+}
+
+const BentoCard: FC<BentoCardProps> = ({ title, description, icon: Icon, hueA, hueB, ...props }) => {
   return (
     <div
-      className={cn(
-        'group relative flex flex-col justify-between overflow-hidden rounded-2xl',
-        'bg-card border border-border/60 shadow-sm hover:shadow-lg',
-        'transform-gpu transition-all duration-300'
-      )}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-card border border-border/60 shadow-sm hover:shadow-lg transform-gpu transition-all duration-300"
       {...props}
     >
       <div
         className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
-        style={{ background: gradient }}
+        style={{
+          background: `linear-gradient(45deg, hsl(${hueA}, 80%, 60%), hsl(${hueB}, 75%, 65%))`,
+        }}
       />
 
       <div className="relative z-10 p-6">
-        <Icon
+        <div
           className="h-12 w-12 mb-4 text-primary origin-left transform transition-transform duration-300 group-hover:scale-110"
           style={{ color: `hsl(${hueA}, 70%, 50%)` }}
-        />
-        <h3 className="text-2xl font-semibold text-foreground mb-2">{title}</h3>
-        <p className="text-xl text-muted-foreground leading-relaxed">{description}</p>
+        >
+          <Icon aria-hidden="true" focusable="false" />
+        </div>
+        <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
       </div>
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 transform translate-y-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 p-6">
