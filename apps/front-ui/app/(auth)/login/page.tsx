@@ -142,7 +142,7 @@ export default function LoginPage() {
     defaultValues: { role: 'Client' },
   });
   const { handleSubmit, watch } = form;
-  const [signIn, { loading, error }] = useMutation(getLoginMutation(watch('role')));
+  const [signIn, { loading }] = useMutation(getLoginMutation(watch('role')));
   const { showToast } = useToast();
 
   const onSubmit = async (data: FormData) => {

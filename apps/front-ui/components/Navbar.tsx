@@ -57,9 +57,9 @@ function Navbar() {
                             {/* TODO : Navbar sur mobile */}
                             <MobileNav />
                             <div className="ml-8 pl-2.5 flex flex-row lg:ml-0">
-                                <a href='/'>
+                                <Link href='/'>
                                     <Image alt='logo' src='/logo.png' width={50} height={40} />
-                                </a>
+                                </Link>
                             </div>
                             <div className="hidden z-50 lg:ml-8 lg:block lg:self-stretch">
                                 <NavItems />

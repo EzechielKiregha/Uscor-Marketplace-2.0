@@ -38,6 +38,7 @@ const MobileNav = () => {
   if (!isOpen)
     return (
       <button
+        title='button'
         type='button'
         onClick={() => setIsOpen(true)}
         className='lg:hidden relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400'>
@@ -56,15 +57,16 @@ const MobileNav = () => {
           <div className='relative flex w-full max-w-sm flex-col overflow-y-auto bg-white pb-12 shadow-xl'>
             <div className='flex px-4 pb-2 pt-5'>
               <button
+                title='butt'
                 type='button'
                 onClick={() => setIsOpen(false)}
                 className='relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400'>
                 <X className='h-6 w-6' aria-hidden='true' />
               </button>
               <div className="ml-4 flex lg:ml-0">
-                <a href='/'>
+                <Link href='/'>
                   <Icons.logo className='h-16 w-30' />
-                </a>
+                </Link>
               </div>
             </div>
 
