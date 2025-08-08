@@ -1,15 +1,15 @@
 // import VerifyEmail from '@/components/VerifyEmail'
 import Image from 'next/image'
 
-interface PageProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined
-  }
-}
+// interface PageProps {
+//   search: {
+//     [key: string]: string | string[] | undefined
+//   }
+// }
 
-const VerifyEmailPage = ({ searchParams }: PageProps) => {
-  const token = searchParams.token
-  const toEmail = searchParams.to
+const VerifyEmailPage = () => {
+  const token = "search.token"
+  const toEmail = "search.to"
 
   return (
     <div className='container relative flex pt-20 flex-col items-center justify-center lg:px-0'>
