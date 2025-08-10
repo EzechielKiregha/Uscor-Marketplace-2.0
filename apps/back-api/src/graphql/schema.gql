@@ -658,6 +658,9 @@ type Query {
   """Retrieves all products with their relations."""
   products: [ProductEntity!]!
 
+  """Retrieves all featured products with their relations."""
+  featuredProducts: [ProductEntity!]!
+
   """Retrieves a single product by ID."""
   product(id: String!): ProductEntity!
 

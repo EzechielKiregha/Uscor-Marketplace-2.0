@@ -11,6 +11,9 @@ interface Product {
   price: number;
   quantity?: number;
   href: string;
+  categoryName?: string;
+  businessName?: string;
+  businessAvatarUrl?: string;
 }
 
 interface GridItemProps {
@@ -23,7 +26,7 @@ interface MasonryGridProps {
   onLike?: (id: string | number) => void;
 }
 
-// --- SVG Icons (Themed with CSS variables) ---
+// --- SVG Icons ---
 const HeartIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +90,7 @@ const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     onClick={handleLike}
-                    className="p-2 bg-black/30 rounded-lg backdrop-blur-sm group"
+                    className="p-2 bg-background dark:bg-gray-950/30 rounded-lg backdrop-blur-sm group"
                     aria-label={`Like ${product.title}`}
                   >
                     <HeartIcon />
@@ -100,6 +103,21 @@ const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
                   {product.quantity !== undefined && (
                     <p className="text-white/75 text-xs">Only {product.quantity} left</p>
                   )}
+                  {product.categoryName && (
+                    <p className="text-white text-xs opacity-80">{product.categoryName}</p>
+                  )}
+                  {product.businessName && (
+                    <div className="flex items-center mt-1">
+                      {product.businessAvatarUrl && (
+                        <img
+                          src={product.businessAvatarUrl}
+                          alt={product.businessName}
+                          className="w-5 h-5 rounded-full mr-2"
+                        />
+                      )}
+                      <p className="text-white text-xs opacity-80">{product.businessName}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -107,11 +125,26 @@ const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
         </AnimatePresence>
       </div>
 
-      {/* Mobile/Fallback Info (visible when not hovered) */}
+      {/* Mobile/Fallback Info */}
       {!isHovered && (
         <div className="mt-2">
           <p className="text-foreground font-medium truncate">{product.title}</p>
           <p className="text-primary text-sm font-bold">${product.price.toFixed(2)}</p>
+          {product.categoryName && (
+            <p className="text-muted-foreground text-xs">{product.categoryName}</p>
+          )}
+          {product.businessName && (
+            <div className="flex items-center mt-1">
+              {product.businessAvatarUrl && (
+                <img
+                  src={product.businessAvatarUrl}
+                  alt={product.businessName}
+                  className="w-4 h-4 rounded-full mr-1"
+                />
+              )}
+              <p className="text-xs text-muted-foreground">{product.businessName}</p>
+            </div>
+          )}
         </div>
       )}
     </motion.div>

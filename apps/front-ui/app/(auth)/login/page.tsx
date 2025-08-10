@@ -175,8 +175,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative w-full flex items-center justify-center min-h-screen bg-white dark:bg-black">
-      <div className="w-full max-w-sm p-6 space-y-6 bg-white dark:bg-black rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
+    <div className="relative w-full flex items-center justify-center min-h-screen bg-white dark:bg-gray-950">
+      <div className="w-full max-w-sm p-6 space-y-6 bg-white dark:bg-gray-950 rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
         {/* Header */}
         <div className="text-center space-y-3">
           <div className="inline-flex p-2 bg-secondary-light dark:bg-secondary-dark rounded-md border border-secondary-light dark:border-secondary-dark">
@@ -193,7 +193,7 @@ export default function LoginPage() {
           {[{ icon: <AppleIcon /> }, { icon: <GoogleIcon /> }, { icon: <XIcon /> }].map((item, index) => (
             <button
               key={index}
-              className="flex items-center justify-center h-9 px-3 rounded-md border border-secondary-light dark:border-secondary-dark bg-white dark:bg-black hover:bg-secondary-light dark:hover:bg-secondary-dark hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+              className="flex items-center justify-center h-9 px-3 rounded-md border border-secondary-light dark:border-secondary-dark bg-white dark:bg-gray-950 hover:bg-secondary-light dark:hover:bg-secondary-dark hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
             >
               {item.icon}
             </button>
@@ -206,7 +206,7 @@ export default function LoginPage() {
             <span className="w-full border-t border-secondary-light dark:border-secondary-dark" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white dark:bg-black px-2 text-secondary-light dark:text-secondary-dark">
+            <span className="bg-white dark:bg-gray-950 px-2 text-secondary-light dark:text-secondary-dark">
               Or continue with
             </span>
           </div>

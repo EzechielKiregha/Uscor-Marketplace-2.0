@@ -70,7 +70,7 @@ const BentoCard: FC<BentoCardProps> = ({ title, description, icon: Icon, hueA, h
       <div
         className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
         style={{
-          background: `linear-gradient(45deg, hsl(${hueA}, 80%, 60%), hsl(${hueB}, 75%, 65%))`,
+          background: `linear-gradient(45deg, hsl(${hueA}, 60%, 40%), hsl(${hueB}, 75%, 65%))`,
         }}
       />
 
@@ -82,7 +82,7 @@ const BentoCard: FC<BentoCardProps> = ({ title, description, icon: Icon, hueA, h
           <Icon aria-hidden="true" focusable="false" />
         </div>
         <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+        <p className=" text-muted-foreground leading-relaxed">{description}</p>
       </div>
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 transform translate-y-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 p-6">

@@ -49,7 +49,7 @@ const MobileNav = () => {
   return (
     <div>
       <div className='relative z-40 lg:hidden'>
-        <div className='fixed inset-0 bg-black bg-opacity-25' />
+        <div className='fixed inset-0 bg-background dark:bg-gray-950 bg-opacity-25' />
       </div>
 
       <div className='fixed overflow-y-scroll overscroll-y-none inset-0 z-40 flex'>

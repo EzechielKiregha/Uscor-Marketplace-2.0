@@ -266,6 +266,8 @@ model Product {
   categoryId           String
   category             Category         @relation("ProductCategory", fields: [categoryId], references: [id])
   variants             Json?                 // For size, color, etc.
+  featured             Boolean               @default(false)
+  approvedForSale      Boolean               @default(false)
   medias               Media[]
   reviews              Review[]
   orders               OrderProduct[]

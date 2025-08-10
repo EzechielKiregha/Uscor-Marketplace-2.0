@@ -23,6 +23,7 @@ export class ProductService {
         description: true,
         price: true,
         quantity: true,
+        approvedForSale: true,
         createdAt: true,
         updatedAt: true,
         business: { select: { id: true, name: true, email: true } },
@@ -83,6 +84,7 @@ export class ProductService {
         description: true,
         price: true,
         quantity: true,
+        approvedForSale: true,
         createdAt: true,
         updatedAt: true,
         business: { select: { id: true, name: true, email: true } },
@@ -99,6 +101,24 @@ export class ProductService {
         id: true,
         title: true,
       },
+    });
+  }
+
+  async getFeaturedProducts() {
+    return await this.prisma.product.findMany({
+      where: { featured: true },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        quantity: true,
+        description: true,
+        medias: {select:{url:true}},
+        approvedForSale: true,
+        category: { select: { name: true } },
+        business: { select: { name: true, avatar: true } },
+      },
+      orderBy: { createdAt: 'desc' }, // show newest first
     });
   }
 }

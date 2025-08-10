@@ -40,14 +40,14 @@ const teamMembers: TeamMember[] = [
   { name: 'Emily Jonson', role: 'CEO', imageUrl: 'https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg' },
   { name: 'Harshita Patel', role: 'HR', imageUrl: 'https://i.pinimg.com/736x/6f/a3/6a/6fa36aa2c367da06b2a4c8ae1cf9ee02.jpg' },
   { name: 'Eleanor Morales', role: 'HR', imageUrl: 'https://i.pinimg.com/1200x/c2/4e/27/c24e271f2f992fd7e62e8c1e8d9b3e2f.jpg' },
-  { name: 'Sophia Monic', role: 'Product Manager', imageUrl: 'https://i.pinimg.com/736x/81/d6/b1/81d6b158728f5fc97ca6e0a025fefee0.jpg' },
-  { name: 'James Miller', role: 'Marketing Lead', imageUrl: 'https://i.pinimg.com/736x/9f/46/74/9f4674ca9c17330ab419c1b2f5951d9a.jpg' },
-  { name: 'Olivia Chen', role: 'Lead Developer', imageUrl: 'https://i.pinimg.com/736x/57/3c/80/573c80967c9429d0ed0ce32701f85b70.jpg' },
-  { name: 'Benjamin Carter', role: 'UX Designer', imageUrl: 'https://i.pinimg.com/736x/b0/c4/21/b0c421e77cf563962026ade82c90dd5b.jpg' },
-  { name: 'Ava Rodriguez', role: 'Data Scientist', imageUrl: 'https://i.pinimg.com/736x/ce/31/42/ce3142d7a968fff3aecd0100572a5e8b.jpg' },
-  { name: 'Lucas Garcia', role: 'Backend Engineer', imageUrl: 'https://i.pinimg.com/736x/79/63/a5/7963a5246188d408b8f28961a0cf2b90.jpg' },
-  { name: 'Mia Martinez', role: 'Frontend Developer', imageUrl: 'https://i.pinimg.com/736x/8e/c1/f8/8ec1f80db272047cedf4c20263114387.jpg' },
-  { name: 'Henry Wilson', role: 'DevOps Engineer', imageUrl: 'https://i.pinimg.com/1200x/08/a2/41/08a2413b771b729a9f9df20fa97be52a.jpg' },
+  // { name: 'Sophia Monic', role: 'Product Manager', imageUrl: 'https://i.pinimg.com/736x/81/d6/b1/81d6b158728f5fc97ca6e0a025fefee0.jpg' },
+  // { name: 'James Miller', role: 'Marketing Lead', imageUrl: 'https://i.pinimg.com/736x/9f/46/74/9f4674ca9c17330ab419c1b2f5951d9a.jpg' },
+  // { name: 'Olivia Chen', role: 'Lead Developer', imageUrl: 'https://i.pinimg.com/736x/57/3c/80/573c80967c9429d0ed0ce32701f85b70.jpg' },
+  // { name: 'Benjamin Carter', role: 'UX Designer', imageUrl: 'https://i.pinimg.com/736x/b0/c4/21/b0c421e77cf563962026ade82c90dd5b.jpg' },
+  // { name: 'Ava Rodriguez', role: 'Data Scientist', imageUrl: 'https://i.pinimg.com/736x/ce/31/42/ce3142d7a968fff3aecd0100572a5e8b.jpg' },
+  // { name: 'Lucas Garcia', role: 'Backend Engineer', imageUrl: 'https://i.pinimg.com/736x/79/63/a5/7963a5246188d408b8f28961a0cf2b90.jpg' },
+  // { name: 'Mia Martinez', role: 'Frontend Developer', imageUrl: 'https://i.pinimg.com/736x/8e/c1/f8/8ec1f80db272047cedf4c20263114387.jpg' },
+  // { name: 'Henry Wilson', role: 'DevOps Engineer', imageUrl: 'https://i.pinimg.com/1200x/08/a2/41/08a2413b771b729a9f9df20fa97be52a.jpg' },
 ];
 
 // SVG Icon Components

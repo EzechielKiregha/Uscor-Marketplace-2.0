@@ -6,7 +6,6 @@ import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-// import { useNavigation } from '@/hooks/useNavigation'
 
 type Category = typeof PRODUCT_CATEGORIES[number]
 
@@ -23,10 +22,9 @@ const NavItem = ({
     isOpen,
     isAnyOpen
 }: NavItemProps) => {
-    // const nav = useNavigation()
     return <div className="flex">
         <div className="relative flex items-center">
-            <Button className='gap-1.5'
+            <Button className='gap-1.5 cursor-pointer'
                 variant={isOpen ? "secondary" : "ghost"}
                 onClick={handleOpen}
             >
@@ -49,9 +47,9 @@ const NavItem = ({
             )}>
                 <div
                     className='absolute inset-0 top-1/2 shadow bg-white'
-                    area-hidden='true'
+                    aria-hidden='true'
                 />
-                <div className="relative bg-white">
+                <div className="relative bg-white dark:bg-gray-950">
                     <div className="mx-auto max-w-7xl px-8">
                         <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
                             <div className="col-span-4 col-start-1 grid-cols-3 grid gap-x-8">
@@ -65,11 +63,10 @@ const NavItem = ({
                                             />
                                         </div>
                                         <Link
-                                            // onClick={() => nav()}
-                                            href={item.href} className='mt-6 font-medium text-gray-900'>
+                                            href={item.href} className='mt-6 font-medium text-gray-900 dark:text-gray-50'>
                                             {item.name}
                                         </Link>
-                                        <p area-hidden='true' className="mt-1">
+                                        <p aria-hidden='true' className="mt-1">
                                             achete maintenant
                                         </p>
                                     </div>

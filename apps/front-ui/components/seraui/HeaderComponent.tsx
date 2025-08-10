@@ -2,6 +2,10 @@
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import React, { useState, useId, useRef, useEffect, ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
+import NavItems from '../NavItems';
+import FreelanceNavItems from '../FreelanceNavItems';
+import Link from 'next/link';
 
 // Type definitions
 interface SearchIconProps {
@@ -44,9 +48,11 @@ interface NavigationMenuItemProps {
 }
 
 interface NavigationMenuLinkProps {
-  href: string;
+  href: string | undefined;
   className?: string;
   children: ReactNode;
+  target?: string;
+  rel?: string;
 }
 
 interface PopoverContextType {
@@ -69,7 +75,7 @@ interface PopoverContentProps {
   align?: 'start' | 'center' | 'end';
 }
 
-// Helper components to replicate the UI library's functionality
+// Helper components
 const SunIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +117,7 @@ const MoonIcon = ({ className }: { className?: string }) => (
     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
   </svg>
 );
-// --- Icon Components ---
+
 const SearchIcon: React.FC<SearchIconProps> = ({ size = 16, ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +136,6 @@ const SearchIcon: React.FC<SearchIconProps> = ({ size = 16, ...props }) => (
   </svg>
 );
 
-// This component relies on the parent's `group` and `aria-expanded` attribute for animations.
 const MenuIcon: React.FC = () => (
   <svg
     className="pointer-events-none"
@@ -159,7 +164,6 @@ const MenuIcon: React.FC = () => (
   </svg>
 );
 
-// --- UI Components ---
 const Logo: React.FC = () => (
   <div className="flex items-center justify-center gap-2">
     <Image alt='logo' src='/logo.png' width={50} height={40} />
@@ -171,7 +175,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ asChild = fal
   const Comp = asChild ? 'span' : 'button';
   const baseClasses = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
   const variantClasses: Record<string, string> = {
-    default: "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200",
+    default: "bg-background dark:bg-gray-950 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200",
     ghost: "hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white",
   };
   const sizeClasses: Record<string, string> = {
@@ -186,7 +190,7 @@ Button.displayName = 'Button';
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
   <input
-    className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-black px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-950 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     ref={ref}
     {...props}
   />
@@ -196,13 +200,12 @@ Input.displayName = 'Input';
 const NavigationMenu: React.FC<NavigationMenuProps> = ({ children, className = '' }) => <nav className={`relative z-10 ${className}`}>{children}</nav>;
 const NavigationMenuList: React.FC<NavigationMenuListProps> = ({ children, className = '' }) => <ul className={`flex items-center ${className}`}>{children}</ul>;
 const NavigationMenuItem: React.FC<NavigationMenuItemProps> = ({ children, className = '', ...props }) => <li className={`list-none ${className}`} {...props}>{children}</li>;
-const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({ href, className = '', children }) => (
-  <a href={href} className={`block px-3 transition-colors ${className}`}>
+const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({ href, className = '', children, target, rel }) => (
+  <a href={href} className={`block px-3 transition-colors ${className}`} target={target} rel={rel}>
     {children}
   </a>
 );
 
-// --- Popover Component ---
 const PopoverContext = React.createContext<PopoverContextType | undefined>(undefined);
 
 const Popover: React.FC<PopoverProps> = ({ children }) => {
@@ -246,30 +249,63 @@ const PopoverContent: React.FC<PopoverContentProps> = ({ children, className = '
   };
   if (!isOpen) return null;
   return (
-    <div className={`absolute top-full mt-2 w-screen max-w-xs z-20 rounded-xl backdrop-blur-xl bg-white/95 dark:bg-black/95 border border-orange-400/60 dark:border-orange-500/70 p-2 shadow-lg ${alignmentClasses[align]} ${className}`}>
+    <div className={`absolute top-full mt-2 w-screen max-w-xs z-20 rounded-xl backdrop-blur-xl bg-white/95 dark:bg-gray-950/95 border border-orange-400/60 dark:border-orange-500/70 p-2 shadow-lg ${alignmentClasses[align]} ${className}`}>
       {children}
     </div>
   );
 };
 
-// --- Main Header Component ---
-const navigationLinks = [
-  { href: "#", label: "Products" },
-  { href: "#", label: "Categories" },
-  { href: "#", label: "Deals" },
+// Navigation links configuration
+const businessTypes = [
+  { href: '/business-types/grocery', label: 'Grocery & convenience' },
+  { href: '/business-types/cafe', label: 'Café' },
+  { href: '/business-types/restaurant', label: 'Restaurant' },
+  { href: '/business-types/retail', label: 'Retail' },
+  { href: '/business-types/bar', label: 'Bar & Pub' },
+  { href: '/business-types/clothing', label: 'Clothing & accessories' },
+];
+
+const marketplaceBusinessTypes = [
+  { href: '/business-types/artisan', label: 'Artisan Shop' },
+  { href: '/business-types/tool-making', label: 'Tool making' },
+  ...businessTypes,
 ];
 
 function HeaderComponent() {
   const id = useId();
   const [isMobileSearchVisible, setIsMobileSearchVisible] = useState(false);
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
+  // Define navigation links based on pathname
+  const navLinks = pathname === '/marketplace' ? [
+    { href: '/uscor-features', label: 'Features', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/hardware', label: 'Hardware', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '#', label: 'Business types', isPopover: true, popoverItems: marketplaceBusinessTypes, target: '_blank', rel: 'noopener noreferrer' },
+    { compLinks: NavItems, target: '_blank', rel: 'noopener noreferrer' },
+    // { href: '/freelance-gigs', label: 'freelance', target: '_blank', rel: 'noopener noreferrer' },
+    // { href: '/help', label: 'help', target: '_blank', rel: 'noopener noreferrer' },
+  ] : pathname === '/freelance-gigs' ? [
+    { href: '/uscor-features', label: 'Features', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/hardware', label: 'Hardware', target: '_blank', rel: 'noopener noreferrer' },
+    { compLinks: FreelanceNavItems, target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/help', label: 'help', target: '_blank', rel: 'noopener noreferrer' },
+  ] : [
+    { href: '/uscor-features', label: 'Features', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/hardware', label: 'Hardware', target: '_blank', rel: 'noopener noreferrer' },
+    { compLinks: "", target: '_blank', rel: 'noopener noreferrer' },
+    { href: '#', label: 'Business types', isPopover: true, popoverItems: businessTypes },
+    { href: '/marketplace', label: 'Marketplace', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/freelance-gigs', label: 'freelance', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/help', label: 'help', target: '_blank', rel: 'noopener noreferrer' },
+  ];
+
   return (
-    <header className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-black w-full sticky top-0 z-50">
+    <header className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 w-full sticky top-0 z-50">
       {/* Mobile Search View */}
       {isMobileSearchVisible && (
         <div className="flex h-14 sm:h-16 items-center gap-2 lg:hidden px-4">
@@ -277,7 +313,7 @@ function HeaderComponent() {
             <Input
               id={id + "-mobile-search"}
               className="form-field h-9 pl-9 pr-2 w-full"
-              placeholder="Search..."
+              placeholder="Search product..."
               type="search"
               autoFocus
             />
@@ -305,18 +341,44 @@ function HeaderComponent() {
               <PopoverContent align="start" className="w-48 p-1">
                 <NavigationMenu className="max-w-none *:w-full">
                   <NavigationMenuList className="flex-col items-start gap-0">
-                    {navigationLinks.map((link, index) => (
-                      <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink href={link.href} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
-                          {link.label}
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
+                    {navLinks.map((link, index) => (
+                      link.compLinks ? (
+                        <NavigationMenuItem key={index} className="w-full">
+                          <link.compLinks />
+                        </NavigationMenuItem>
+                      ) : (
+                        <NavigationMenuItem key={index} className="w-full">
+                          {link.isPopover ? (
+                            <Popover>
+                              <PopoverTrigger>
+                                <Button asChild variant="ghost" className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                                  <span>{link.label}</span>
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent align="start" className="w-48 p-1">
+                                <NavigationMenuList className="flex-col items-start gap-0">
+                                  {link.popoverItems?.map((item, i) => (
+                                    <NavigationMenuItem key={i} className="w-full">
+                                      <NavigationMenuLink href={item.href} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                                        {item.label}
+                                      </NavigationMenuLink>
+                                    </NavigationMenuItem>
+                                  ))}
+                                </NavigationMenuList>
+                              </PopoverContent>
+                            </Popover>
+                          ) : (
+                            <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                              {link.label}
+                            </NavigationMenuLink>
+                          )}
+                        </NavigationMenuItem>
+                      )
                     ))}
                     <NavigationMenuItem className="w-full" role="presentation" aria-hidden={true}>
-                      <div role="separator" aria-orientation="horizontal" className="bg-black/20 dark:bg-white/20 -mx-1 my-1 h-px"></div>
+                      <div role="separator" aria-orientation="horizontal" className="bg-background dark:bg-gray-950/20  -mx-1 my-1 h-px"></div>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="w-full">
-                      {/* Theme Toggle Button */}
                       <Button
                         onClick={toggleTheme}
                         asChild variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
@@ -330,7 +392,7 @@ function HeaderComponent() {
                       </Button>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="w-full">
-                      <NavigationMenuLink href="#" className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                      <NavigationMenuLink href="/login" className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
                         Sign In
                       </NavigationMenuLink>
                     </NavigationMenuItem>
@@ -339,16 +401,39 @@ function HeaderComponent() {
               </PopoverContent>
             </Popover>
           </div>
-          <a href="#" className="text-black dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+          <Link href="/" className="text-black dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
             <Logo />
-          </a>
+          </Link>
           <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList className="gap-2">
-              {navigationLinks.map((link, index) => (
+              {navLinks.map((link, index) => (
                 <NavigationMenuItem key={index} className="">
-                  <NavigationMenuLink href={link.href} className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1.5 font-medium transition-colors">
-                    {link.label}
-                  </NavigationMenuLink>
+                  {link.compLinks ? (
+                    <link.compLinks />
+                  ) : link.isPopover ? (
+                    <Popover>
+                      <PopoverTrigger>
+                        <Button asChild variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1.5 font-medium transition-colors">
+                          <span>{link.label}</span>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-48 p-1">
+                        <NavigationMenuList className="flex-col items-start gap-0">
+                          {link.popoverItems?.map((item, i) => (
+                            <NavigationMenuItem key={i} className="w-full">
+                              <NavigationMenuLink href={item.href} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                                {item.label}
+                              </NavigationMenuLink>
+                            </NavigationMenuItem>
+                          ))}
+                        </NavigationMenuList>
+                      </PopoverContent>
+                    </Popover>
+                  ) : (
+                    <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1.5 font-medium transition-colors">
+                      {link.label}
+                    </NavigationMenuLink>
+                  )}
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
@@ -368,9 +453,7 @@ function HeaderComponent() {
               <SearchIcon size={18} />
             </Button>
           </div>
-
           <div className="hidden lg:flex">
-            {/* Theme Toggle Button */}
             <Button
               onClick={toggleTheme}
               asChild variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
@@ -383,7 +466,7 @@ function HeaderComponent() {
               )}
             </Button>
             <Button asChild variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
-              <a href="#">Sign In</a>
+              <a href="/login">Sign In</a>
             </Button>
           </div>
         </div>

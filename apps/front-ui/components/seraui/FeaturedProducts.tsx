@@ -4,27 +4,10 @@ import { useEffect, useState } from 'react';
 
 // Your GraphQL client
 import { client } from '@/lib/apollo-client';
-import { gql } from '@apollo/client';
 import MasonryGrid from './MasonryGrid';
+import { GET_FEATURED_PRODUCTS } from '@/graphql/product.gql';
 // GraphQL query for featured products
-const GET_FEATURED_PRODUCTS = gql`
-  query GetProducts {
-    products {
-      id
-      title
-      price
-      quantity
-      business {
-        id
-        name
-      }
-      category {
-        id
-        name
-      }
-    }
-  }
-`;
+
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<any[]>([]);
@@ -33,19 +16,25 @@ export default function FeaturedProducts() {
     async function loadProducts() {
       try {
         const { data } = await client.query({ query: GET_FEATURED_PRODUCTS });
+
         const formatted = data.products.map((product: any) => ({
           id: product.id,
           title: product.title,
           price: product.price,
           quantity: product.quantity,
-          href: `/products/${product.id}`,
-          imageUrl: product.imageUrl || `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`,
+          href: `/marketplace/products/${product.id}`,
+          imageUrl: product.medias?.url || `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`,
+          categoryName: product.category?.name || 'Uncategorized',
+          businessName: product.business?.name || 'Unknown Vendor',
+          businessAvatarUrl: product.business?.avatar || null,
         }));
+
         setProducts(formatted);
       } catch (error) {
         console.error('Failed to load products:', error);
       }
     }
+
     loadProducts();
   }, []);
 

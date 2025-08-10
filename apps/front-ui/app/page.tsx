@@ -14,14 +14,12 @@ import TestimonialSection from '@/components/seraui/TestimonialSection';
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
       {/* Header */}
       <HeaderComponent />
 
       {/* Hero */}
       <HeroSection />
-
-
 
       {/* Featured Products */}
       <FeaturesSection />

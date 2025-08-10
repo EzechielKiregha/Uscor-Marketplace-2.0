@@ -26,7 +26,7 @@ const LinkedInIcon = () => (
 // --- Footer Component ---
 export default function Footer() {
   return (
-    <footer className=" bg-black border-t border-border text-foreground py-12 px-4">
+    <footer className=" bg-white dark:bg-gray-950  border-t border-border text-foreground py-12 px-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="space-y-4">
@@ -40,24 +40,24 @@ export default function Footer() {
             Empowering creators and businesses through a seamless digital marketplace experience.
           </p>
           <div className="flex space-x-4 pt-2">
-            <a
-              href="#"
+            <Link
+              href="https://github.com/EzechielKiregha"
               className="text-muted-foreground hover:text-primary transition-transform hover:scale-110"
             >
               <GitHubIcon />
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="https://twitter.com/EzechielKiregh1"
               className="text-muted-foreground hover:text-primary transition-transform hover:scale-110"
             >
               <TwitterIcon />
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/kambale-kiregha-125a60264"
               className="text-muted-foreground hover:text-primary transition-transform hover:scale-110"
             >
               <LinkedInIcon />
-            </a>
+            </Link>
           </div>
         </div>
 

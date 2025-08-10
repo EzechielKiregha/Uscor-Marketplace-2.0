@@ -31,6 +31,11 @@ export class ProductResolver {
   async getProducts() {
     return this.productService.findAll();
   }
+  
+  @Query(() => [ProductEntity], { name: 'featuredProducts', description: 'Retrieves all featured products with their relations.' })
+  async featuredProducts() {
+    return this.productService.getFeaturedProducts();
+  }
 
   @Query(() => ProductEntity, { name: 'product', description: 'Retrieves a single product by ID.' })
   async getProduct(@Args('id', { type: () => String }) id: string) {

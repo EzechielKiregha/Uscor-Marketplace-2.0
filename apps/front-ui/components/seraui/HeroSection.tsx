@@ -16,7 +16,7 @@ export default function HeroSection() {
       {/* Hero Content */}
       <div className="max-w-5xl mx-auto">
         {/* Badge */}
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-primary-foreground/90 bg-primary/20 rounded-full backdrop-blur-sm border border-primary/30">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 text-sm font-medium text-primary bg-primary/10 rounded-full backdrop-blur-sm border border-primary/30">
           <div className="w-2 h-2 rounded-full bg-current animate-pulse"></div>
           Marketplace Live
         </span>
@@ -34,7 +34,7 @@ export default function HeroSection() {
         {/* CTA Buttons */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button asChild size="lg" className="px-8 glow-button">
-            <Link href="/products">Browse Products</Link>
+            <Link href="/marketplace/products">Browse Products</Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="px-8 border-muted-foreground/30">
             <Link href="/freelance">Hire Talent</Link>

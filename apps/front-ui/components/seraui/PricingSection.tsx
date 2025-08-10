@@ -50,23 +50,47 @@ const PricingSection = () => {
       name: 'Client',
       monthlyPrice: '$0',
       yearlyPrice: '$0',
-      features: ['Product Browsing', 'Order Tracking', 'Loyalty Points'],
+      description: 'For shoppers and buyers',
+      features: [
+        'Browse products & services',
+        'Secure checkout with uTn',
+        'Order tracking & history',
+        'Earn loyalty points on every purchase',
+        'Access exclusive member deals',
+        'Save favorites & wishlists'
+      ],
       buttonText: 'Sign Up Free',
       isPopular: false,
     },
     {
       name: 'Business',
-      monthlyPrice: '$29',
-      yearlyPrice: '$290',
-      features: ['I-POS Sales', 'Inventory Management', 'Multi-Store Support'],
+      monthlyPrice: '$19',
+      yearlyPrice: '$190',
+      description: 'Full access to Intelligent POS & marketplace',
+      features: [
+        'Intelligent POS (I-POS) System',
+        'Real-time inventory & stock alerts',
+        'Multi-store management dashboard',
+        'Customer display (CDS) support',
+        'Advanced sales reporting & analytics',
+        'Priority customer support'
+      ],
       buttonText: 'Start Now',
       isPopular: true,
     },
     {
       name: 'Freelancer',
-      monthlyPrice: '$15',
-      yearlyPrice: '$150',
-      features: ['Service Listings', 'Order Management', 'KYC Verification'],
+      monthlyPrice: '$10',
+      yearlyPrice: '$90',
+      description: 'For creators, consultants, and service pros',
+      features: [
+        'List unlimited service gigs',
+        'Receive payments via uTn or mobile money',
+        'KYC-verified professional profile',
+        'Client booking & order management',
+        'Affiliate earnings (refer 15 = 2.5 uTn bonus)',
+        'Access to freelance collaboration tools'
+      ],
       buttonText: 'Get Started',
       isPopular: false,
     },
@@ -96,7 +120,7 @@ const PricingSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative bg-white dark:bg-black overflow-hidden">
+    <div className="min-h-screen w-full relative bg-white dark:bg-gray-950 overflow-hidden">
       {/* Background Gradients */}
       <div
         className="absolute inset-0 z-0 opacity-60"
@@ -190,8 +214,8 @@ const PricingSection = () => {
               <motion.div
                 key={tier.name}
                 className={`relative flex flex-col p-6 sm:p-8 rounded-xl border transition-all duration-300 ${tier.isPopular
-                    ? 'border-orange-500 bg-white/95 dark:bg-black/80 shadow-lg'
-                    : 'border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/70'
+                  ? 'border-orange-500 bg-white/95 dark:bg-gray-950/80 shadow-lg'
+                  : 'border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/70'
                   }`}
                 style={{
                   backdropFilter: 'blur(10px)',
@@ -258,8 +282,8 @@ const PricingSection = () => {
                 <div className="mt-6 sm:mt-8">
                   <motion.button
                     className={`glow-button w-full py-3 px-4 rounded-md text-sm sm:text-base font-medium transition-all duration-300 ${tier.isPopular
-                        ? ''
-                        : 'bg-white dark:bg-gray-800 text-orange-500 border-2 border-orange-500/30 hover:bg-orange-500 hover:text-white'
+                      ? ''
+                      : 'bg-white dark:bg-gray-800 text-orange-500 border-2 border-orange-500/30 hover:bg-orange-500 hover:text-white'
                       }`}
                     style={!tier.isPopular ? {
                       backdropFilter: 'blur(5px)',
