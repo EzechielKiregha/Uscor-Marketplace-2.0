@@ -12,20 +12,13 @@ import { Check, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
-  params: Promise<{
-    productId: string
-  }>
-}
-
-
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
   { id: 2, name: 'Products', href: '/marketplace/products' },
 ];
 
-export default async function Page({ params }: PageProps) {
-  const { productId } = await params;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const productId = (await params).id;
 
   const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id: productId },
