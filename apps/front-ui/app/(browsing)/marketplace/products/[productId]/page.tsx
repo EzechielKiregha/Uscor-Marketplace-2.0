@@ -11,6 +11,7 @@ import { formatPrice } from '@/lib/utils';
 import { Check, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { client } from '@/lib/apollo-client';
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
@@ -20,16 +21,16 @@ const BREADCRUMBS = [
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const productId = (await params).id;
 
-  const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
+  const { data } = await client.query({
+    query: GET_PRODUCT_BY_ID,
     variables: { id: productId },
-  });
+    fetchPolicy: 'no-cache',
+  })
 
-  if (loading) return <p className="text-center py-10 text-muted-foreground">Loading...</p>;
-  if (error) return <p className="text-center py-10 text-destructive">Failed to load product</p>;
-
-  const product = data?.product;
-  if (!product || product.approvedForSale !== 'approved') return notFound();
-
+  const product = data?.product
+  if (!product || product.approvedForSale !== 'approved') {
+    return notFound()
+  }
   const label = PRODUCT_CATEGORIES.find(
     ({ value }) => value === product.category
   )?.label;
