@@ -13,16 +13,19 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: { productId: string };
+  params: Promise<{
+    productId: string
+  }>
 }
+
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
   { id: 2, name: 'Products', href: '/marketplace/products' },
 ];
 
-export default function Page({ params }: PageProps) {
-  const { productId } = params;
+export default async function Page({ params }: PageProps) {
+  const { productId } = await params;
 
   const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id: productId },
