@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ChatStatus, CreateChatInput, CreateChatMessageInput } from './dto/create-chat.input';
 import { UpdateChatInput } from './dto/update-chat.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 // Service
 @Injectable()

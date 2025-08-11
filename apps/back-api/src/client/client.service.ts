@@ -1,7 +1,7 @@
 import { hash } from "argon2";
 import { UpdateClientInput } from "./dto/update-client.input";
 import { CreateClientInput } from "./dto/create-client.input";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
