@@ -4,7 +4,7 @@
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { useLoading } from './context/loadingContext'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { ApolloProvider } from '@apollo/client'
 import { client } from '@/lib/apollo-client'
 
@@ -30,7 +30,9 @@ export default function ClientWrapper({
         <>
             {isLoading && <LoadingSpinner />}
             <ApolloProvider client={client}>
-                {children}
+                <Suspense fallback={<LoadingSpinner />}>
+                    {children}
+                </Suspense>
             </ApolloProvider>
         </>
     )
