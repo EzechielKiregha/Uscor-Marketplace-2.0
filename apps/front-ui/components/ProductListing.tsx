@@ -8,7 +8,6 @@ import { PRODUCT_CATEGORIES } from '@/config'
 import ImageSlider from './ImageSlider'
 import { useNavigation } from '@/hooks/useNavigation'
 import { ProductEntity } from '@/lib/types'
-import Image from 'next/image'
 
 interface ProductListingProps {
   product: ProductEntity | null

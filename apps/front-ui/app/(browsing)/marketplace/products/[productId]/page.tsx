@@ -10,36 +10,41 @@ import { PRODUCT_CATEGORIES } from '@/config';
 import { formatPrice } from '@/lib/utils';
 import { Check, Shield } from 'lucide-react';
 import Link from 'next/link';
-import { notFound, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+import { notFound } from 'next/navigation';
 import { toast } from 'sonner';
+import { useGetProductIdParam } from '@/hooks/use-get-product-params';
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
   { id: 2, name: 'Products', href: '/marketplace/products' },
 ];
 
-export default async function Page() {
-  const productId = useSearchParams().get('productId');
-  const router = useRouter();
+export default function Page() {
 
-  if (!productId) return (
-    toast.error('Product ID is required to view product details.'),
-    notFound()
-  );
+  const productId = useGetProductIdParam();
+
+  console.log('Product ID:', productId);
 
   const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id: productId },
   });
 
   if (loading) return <p className="text-center py-10 text-muted-foreground">Loading...</p>;
-  if (error) return <p className="text-center py-10 text-destructive">Failed to load product</p>;
+  if (error) {
+    toast.error('Failed to load product details');
+    return <p className="text-center py-10 text-destructive">Error loading product</p>;
+  }
+  if (!productId) {
+    toast.error('Product ID is required');
+    return notFound();
+  }
 
   const product = data?.product;
-  if (!product || product.approvedForSale !== 'approved') return notFound();
+  // || product.approvedForSale !== 'approved'
+  if (!product) return notFound();
 
   const label = PRODUCT_CATEGORIES.find(
-    ({ value }) => value === product.category
+    ({ value }) => value === product.category?.name
   )?.label;
 
   const validUrls = (product.medias || [])
@@ -58,7 +63,7 @@ export default async function Page() {
             {/* Breadcrumbs */}
             <ol className="flex items-center space-x-2 text-sm">
               {BREADCRUMBS.map((breadcrumb, i) => (
-                <li key={breadcrumb.href} className="flex items-center">
+                <li key={i} className="flex items-center">
                   {breadcrumb.href ? (
                     <Link
                       href={breadcrumb.href}

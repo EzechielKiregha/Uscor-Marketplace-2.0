@@ -1,7 +1,8 @@
-// src/lib/apollo-client.ts
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { Observable } from '@apollo/client/utilities';
+import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
+
 import { getAccessToken, refreshToken } from '@/lib/auth';
 
 const httpLink = new HttpLink({ uri: 'http://localhost:8000/graphql' });
@@ -40,7 +41,29 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   return forward(operation);
 });
 
+// 👇 Add this link at the very start so all variables have __typename removed before sending
+const stripTypenameLink = new ApolloLink((operation, forward) => {
+  if (operation.variables) {
+    const removeTypename : any = (obj: any) => {
+      if (Array.isArray(obj)) {
+        return obj.map(removeTypename);
+      } else if (obj !== null && typeof obj === 'object') {
+        const newObj: any = {};
+        Object.keys(obj).forEach(key => {
+          if (key !== '__typename') {
+            newObj[key] = removeTypename(obj[key]);
+          }
+        });
+        return newObj;
+      }
+      return obj;
+    };
+    operation.variables = removeTypename(operation.variables);
+  }
+  return forward(operation);
+});
+
 export const client = new ApolloClient({
-  link: ApolloLink.from([errorLink, authLink, httpLink]),
+  link: ApolloLink.from([stripTypenameLink, errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
 });

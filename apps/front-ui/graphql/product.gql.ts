@@ -47,15 +47,23 @@ export const GET_FEATURED_PRODUCTS = gql`
 
 // 📦 Get Single Product
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($id: string!) {
+  query GetProductById($id: String!) {
     product(id: $id) {
       id
-      name
+      title
       price
       description
-      category
       medias {
         url
+      }
+      quantity
+      business {
+        id
+        name
+        avatar
+      }
+      category {
+        name
       }
       approvedForSale
     }
@@ -67,7 +75,7 @@ export const CREATE_PRODUCT = gql`
   mutation CreateProduct($createProductInput: CreateProductInput!) {
     createProduct(createProductInput: $createProductInput) {
       id
-      name
+      title
       price
       quantity
     }
@@ -79,7 +87,7 @@ export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct($id: String!, $updateProductInput: UpdateProductInput!) {
     updateProduct(id: $id, updateProductInput: $updateProductInput) {
       id
-      name
+      title
       price
       quantity
     }
@@ -91,7 +99,7 @@ export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: String!) {
     deleteProduct(id: $id) {
       id
-      name
+      title
     }
   }
 `;
