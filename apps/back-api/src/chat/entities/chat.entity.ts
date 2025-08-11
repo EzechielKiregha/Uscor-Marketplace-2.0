@@ -1,8 +1,8 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { ChatMessageEntity } from 'src/chat/entities/chat-nessage.entity';
-import { ProductEntity } from 'src/product/entities/product.entity';
+import { ChatMessageEntity } from '../../chat/entities/chat-nessage.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 import { ChatStatus, NegotiationType } from '../dto/create-chat.input';
-import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity';
+import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity';
 import { ChatParticipantEntity } from './chat-participants.entity';
 
 @ObjectType()
