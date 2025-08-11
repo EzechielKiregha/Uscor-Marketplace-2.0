@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UpdatePurchaseOrderInput } from './dto/update-purchase-order.input';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { StoreService } from 'src/store/store.service';
-import { ProductService } from 'src/product/product.service';
-import { BusinessService } from 'src/business/business.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { StoreService } from '../store/store.service';
+import { ProductService } from '../product/product.service';
+import { BusinessService } from '../business/business.service';
 import { CreatePurchaseOrderInput } from './dto/create-purchase-order.input';
 import { LowStockAlertInput } from './dto/low-stock-alert.input';
 import { CreateTransferOrderInput } from './dto/create-transfer-order.input';
 import { UpdateTransferOrderInput } from './dto/update-transfer-order.input';
 import { CreateInventoryAdjustmentInput } from './dto/create-inventory.input';
-import { PurchaseOrderStatus } from 'src/generated/prisma/enums';
+import { PurchaseOrderStatus } from '../generated/prisma/enums';
 // Service
 @Injectable()
 export class InventoryService {

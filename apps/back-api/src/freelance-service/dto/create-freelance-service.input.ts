@@ -1,5 +1,5 @@
-import { InputType, Int, Field, Float, registerEnumType } from '@nestjs/graphql';
-import { IsArray, IsBoolean, IsEnum, isEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { InputType, Field, Float, registerEnumType } from '@nestjs/graphql';
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export enum FreelanceServiceCategory {
   PLUMBER = 'PLUMBER',

@@ -1,6 +1,6 @@
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
-import { ChatStatus, CreateChatInput, NegotiationType } from './create-chat.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { ChatStatus, NegotiationType } from './create-chat.input';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateChatInput {

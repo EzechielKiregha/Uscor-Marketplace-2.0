@@ -4,9 +4,9 @@ import { WorkerEntity } from './entities/worker.entity';
 import { CreateWorkerInput } from './dto/create-worker.input';
 import { UpdateWorkerInput } from './dto/update-worker.input';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Resolver(() => WorkerEntity)
 export class WorkerResolver {

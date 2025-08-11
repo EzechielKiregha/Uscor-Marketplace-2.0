@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AssignWorkersInput, CreateFreelanceServiceInput } from './dto/create-freelance-service.input';
 import { UpdateFreelanceServiceInput } from './dto/update-freelance-service.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { FreelanceCategory } from './freelance-service.module';
 
 // Service

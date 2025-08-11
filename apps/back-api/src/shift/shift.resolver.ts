@@ -3,10 +3,10 @@ import { ShiftService } from './shift.service';
 import { CreateShiftInput, EndShiftInput } from './dto/create-shift.input';
 import { UpdateShiftInput } from './dto/update-shift.input';
 import { ShiftEntity } from './entities/shift.entity';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 // Resolver
 @Resolver(() => ShiftEntity)

@@ -3,11 +3,11 @@ import { ChatService } from './chat.service';
 import { ChatEntity } from './entities/chat.entity';
 import { CreateChatInput, CreateChatMessageInput } from './dto/create-chat.input';
 import { UpdateChatInput } from './dto/update-chat.input';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { ChatMessageEntity } from 'src/chat/entities/chat-nessage.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { ChatMessageEntity } from '../chat/entities/chat-nessage.entity';
 
 // Resolver
 @Resolver(() => ChatEntity)

@@ -1,6 +1,6 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { ProductEntity } from 'src/product/entities/product.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 
 @ObjectType()
 export class RepostedProductEntity {

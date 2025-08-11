@@ -1,6 +1,5 @@
 import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, Min } from 'class-validator';
-import { CreateFreelanceServiceInput } from './create-freelance-service.input';
-import { InputType, Field, Int, PartialType, Float } from '@nestjs/graphql';
+import { InputType, Field, Float } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateFreelanceServiceInput {

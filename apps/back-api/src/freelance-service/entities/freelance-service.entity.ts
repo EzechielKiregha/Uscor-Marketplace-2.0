@@ -1,7 +1,7 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { WorkerEntity } from 'src/worker/entities/worker.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { WorkerEntity } from '../../worker/entities/worker.entity';
 import { FreelanceServiceCategory } from '../dto/create-freelance-service.input';
 
 @ObjectType()

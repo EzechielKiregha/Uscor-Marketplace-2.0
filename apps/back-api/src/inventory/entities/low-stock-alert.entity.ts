@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ProductEntity } from 'src/product/entities/product.entity';
-import { StoreEntity } from 'src/store/entities/store.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
+import { StoreEntity } from '../../store/entities/store.entity';
 
 @ObjectType()
 export class LowStockAlertEntity {

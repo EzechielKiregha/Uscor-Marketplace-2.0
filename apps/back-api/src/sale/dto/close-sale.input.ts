@@ -1,7 +1,7 @@
 import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { SaleStatus } from 'src/generated/prisma/enums';
-import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
+import { SaleStatus } from '../../generated/prisma/enums';
+import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input';
 
 // Enums
 registerEnumType(SaleStatus, { name: 'SaleStatus' });

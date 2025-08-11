@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
-import { StoreEntity } from 'src/store/entities/store.entity';
-import { WorkerEntity } from 'src/worker/entities/worker.entity';
+import { StoreEntity } from '../../store/entities/store.entity';
+import { WorkerEntity } from '../../worker/entities/worker.entity';
 
 @ObjectType()
 export class ShiftEntity {

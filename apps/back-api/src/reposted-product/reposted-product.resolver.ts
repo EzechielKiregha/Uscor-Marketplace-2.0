@@ -1,8 +1,8 @@
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { Roles } from "src/auth/decorators/roles.decorator";
+import { Roles } from "../auth/decorators/roles.decorator";
 import { RepostedProductEntity } from "./entities/reposted-product.entity";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth/jwt-auth.guard";
-import { RolesGuard } from "src/auth/guards/roles.guard";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
+import { RolesGuard } from "../auth/guards/roles.guard";
 import { UseGuards } from "@nestjs/common";
 import { RepostedProductService } from "./reposted-product.service";
 import { CreateRepostedProductInput } from "./dto/create-reposted-product.input";

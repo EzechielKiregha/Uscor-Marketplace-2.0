@@ -1,5 +1,4 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { ChatEntity } from 'src/chat/entities/chat.entity';
 
 @ObjectType()
 export class ChatMessageEntity {

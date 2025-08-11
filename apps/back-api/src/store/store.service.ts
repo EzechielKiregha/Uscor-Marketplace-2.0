@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateStoreInput } from './dto/create-store.input';
 import { UpdateStoreInput } from './dto/update-store.input';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { BusinessService } from 'src/business/business.service';
-import { WorkerService } from 'src/worker/worker.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { BusinessService } from '../business/business.service';
+import { WorkerService } from '../worker/worker.service';
 
 // Service
 @Injectable()

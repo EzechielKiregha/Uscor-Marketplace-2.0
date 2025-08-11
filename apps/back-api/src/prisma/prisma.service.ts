@@ -1,6 +1,6 @@
 // apps/back-api/src/prisma/prisma.service.ts
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../../src/generated/prisma/client';
 
 declare global {
   // allow a global var so we can persist the client across hot reloads / serverless instances

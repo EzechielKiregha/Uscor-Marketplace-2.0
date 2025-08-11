@@ -2,10 +2,10 @@ import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { ReOwnedProductService } from './re-owned-product.service';
 import { ReOwnedProductEntity } from './entities/re-owned-product.entity';
 import { ApproveReOwnedProductInput, CreateReOwnedProductInput } from './dto/create-re-owned-product.input';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { ShippingEntity } from './entities/shipping.entity';
 import { CreateShippingInput } from './dto/create-shipping.input';
 

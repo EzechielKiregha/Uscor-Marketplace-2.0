@@ -2,10 +2,10 @@ import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { TokenTransactionService } from './token-transaction.service';
 import { TokenTransactionEntity } from './entities/token-transaction.entity';
 import { CreateTokenTransactionInput } from './dto/create-token-transaction.input';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { RedeemTokenTransactionInput } from './dto/redeem-token-transaction.input';
 import { ReleaseTokenTransactionInput } from './dto/release-token-transaction.input';
 // Resolver

@@ -4,10 +4,10 @@ import { LoyaltyProgramEntity } from './entities/loyalty-program.entity';
 import { CreateLoyaltyProgramInput, CreatePointsTransactionInput } from './dto/loyalty-program.input';
 
 import { PointsTransactionEntity } from './entities/points-transaction.entity';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { UpdateLoyaltyProgramInput } from './dto/update-loyalty-program.input';
 import { ClientPointsBalanceEntity } from './entities/client-points-balance.entity';
 // Resolver

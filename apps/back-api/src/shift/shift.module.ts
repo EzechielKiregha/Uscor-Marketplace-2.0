@@ -3,11 +3,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { StoreService } from '../store/store.service';
 import { WorkerService } from '../worker/worker.service';
 import { ShiftResolver } from './shift.resolver';
-import { WorkerModule } from 'src/worker/worker.module';
+import { WorkerModule } from '../worker/worker.module';
 import { ShiftService } from './shift.service';
-import { StoreModule } from 'src/store/store.module';
-import { BusinessModule } from 'src/business/business.module';
-import { BusinessService } from 'src/business/business.service';
+import { StoreModule } from '../store/store.module';
+import { BusinessModule } from '../business/business.module';
+import { BusinessService } from '../business/business.service';
 
 
 // Module

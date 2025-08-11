@@ -1,6 +1,5 @@
-import { Field, InputType, Int, registerEnumType } from "@nestjs/graphql";
-import { IsString, IsOptional, IsDate, IsArray, IsEnum, IsNumber, Min } from "class-validator";
-import { PurchaseOrderStatus, TransferOrderStatus, AdjustmentType } from "src/generated/prisma/enums";
+import { Field, InputType, Int } from "@nestjs/graphql";
+import { IsString, IsNumber, Min } from "class-validator";
 
 @InputType()
 export class PurchaseOrderProductInput {

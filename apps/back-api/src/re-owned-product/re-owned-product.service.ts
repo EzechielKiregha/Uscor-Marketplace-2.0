@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ApproveReOwnedProductInput, CreateReOwnedProductInput } from './dto/create-re-owned-product.input';
-import { UpdateReOwnedProductInput } from './dto/update-re-owned-product.input';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { ChatService } from 'src/chat/chat.service';
-import { NegotiationType } from 'src/chat/dto/create-chat.input';
-import { KycStatus } from 'src/generated/prisma/enums';
+import { PrismaService } from '../prisma/prisma.service';
+import { ChatService } from '../chat/chat.service';
+import { NegotiationType } from '../chat/dto/create-chat.input';
 import { CreateShippingInput } from './dto/create-shipping.input';
 
 // Service

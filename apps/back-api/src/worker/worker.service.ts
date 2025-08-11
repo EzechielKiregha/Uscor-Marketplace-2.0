@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateWorkerInput, WorkerRole } from './dto/create-worker.input';
 import { UpdateWorkerInput } from './dto/update-worker.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { hash } from 'argon2';
 
 @Injectable()

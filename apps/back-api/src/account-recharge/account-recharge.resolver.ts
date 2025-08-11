@@ -3,11 +3,10 @@ import { AccountRechargeService } from './account-recharge.service';
 import { AccountRechargeEntity } from './entities/account-recharge.entity';
 import { CreateAccountRechargeInput } from './dto/create-account-recharge.input';
 import { UpdateAccountRechargeInput } from './dto/update-account-recharge.input';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { UseGuards } from '@nestjs/common';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 
 // Resolver

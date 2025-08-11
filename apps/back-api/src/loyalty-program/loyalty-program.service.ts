@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLoyaltyProgramInput, CreatePointsTransactionInput } from './dto/loyalty-program.input';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { BusinessService } from 'src/business/business.service';
-import { ClientService } from 'src/client/client.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { BusinessService } from '../business/business.service';
+import { ClientService } from '../client/client.service';
 import { UpdateLoyaltyProgramInput } from './dto/update-loyalty-program.input';
 
 

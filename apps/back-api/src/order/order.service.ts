@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { PaymentStatus } from 'src/generated/prisma/enums';
-import { TokenTransactionService } from 'src/token-transaction/token-transaction.service';
-import { TokenTransactionType } from 'src/token-transaction/dto/create-token-transaction.input';
+import { PrismaService } from '../prisma/prisma.service';
+import { PaymentStatus } from '../generated/prisma/enums';
+import { TokenTransactionService } from '../token-transaction/token-transaction.service';
+import { TokenTransactionType } from '../token-transaction/dto/create-token-transaction.input';
 // Service
 @Injectable()
 export class OrderService {

@@ -1,8 +1,6 @@
 import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
 import { IsArray, IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
-import { RechargeMethod } from 'src/account-recharge/dto/create-account-recharge.input';
-import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
-
+import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input';
 
 // Enums
 export enum FreelanceStatus {

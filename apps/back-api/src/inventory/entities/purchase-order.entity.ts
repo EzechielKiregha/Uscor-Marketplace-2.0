@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { PurchaseOrderStatus } from 'src/generated/prisma/enums';
-import { StoreEntity } from 'src/store/entities/store.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { PurchaseOrderStatus } from '../../generated/prisma/enums';
+import { StoreEntity } from '../../store/entities/store.entity';
 import { PurchaseOrderProductEntity } from './purchase-order-product.entity';
 
 

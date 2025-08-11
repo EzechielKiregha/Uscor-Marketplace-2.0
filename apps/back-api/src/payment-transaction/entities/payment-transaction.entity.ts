@@ -1,5 +1,5 @@
 import { ObjectType, Field, Float, registerEnumType } from '@nestjs/graphql';
-import { OrderEntity } from 'src/order/entities/order.entity';
+import { OrderEntity } from '../../order/entities/order.entity';
 
 // Enums
 enum PaymentStatus {

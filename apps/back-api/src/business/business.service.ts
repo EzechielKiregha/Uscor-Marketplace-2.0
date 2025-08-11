@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBusinessInput } from './dto/create-business.input';
 import { UpdateBusinessInput } from './dto/update-business.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { hash } from 'argon2';
 
 @Injectable()

@@ -1,11 +1,11 @@
 import { ObjectType, Field, Int, Float, registerEnumType } from '@nestjs/graphql';
-import { WorkerEntity } from 'src/worker/entities/worker.entity';
-import { ClientEntity } from 'src/client/entities/client.entity';
-import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
-import { SaleStatus } from 'src/generated/prisma/enums';
+import { WorkerEntity } from '../../worker/entities/worker.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
+import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input';
+import { SaleStatus } from '../../generated/prisma/enums';
 import { SaleProductEntity } from './sale-product.entity';
 import { ReturnEntity } from './return.entity';
-import { StoreEntity } from 'src/store/entities/store.entity';
+import { StoreEntity } from '../../store/entities/store.entity';
 
 // Enums
 registerEnumType(SaleStatus, { name: 'SaleStatus' });

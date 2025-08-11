@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRepostedProductInput } from './dto/create-reposted-product.input';
-import { UpdateRepostedProductInput } from './dto/update-reposted-product.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 // Service
 @Injectable()

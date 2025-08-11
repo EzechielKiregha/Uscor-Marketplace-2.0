@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
-import { ProductEntity } from 'src/product/entities/product.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 
 @ObjectType()
 export class SaleProductEntity {

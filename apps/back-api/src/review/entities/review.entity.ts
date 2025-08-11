@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ClientEntity } from 'src/client/entities/client.entity';
-import { ProductEntity } from 'src/product/entities/product.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 
 @ObjectType()
 export class ReviewEntity {

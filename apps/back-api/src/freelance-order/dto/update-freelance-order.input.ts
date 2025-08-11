@@ -2,7 +2,6 @@ import { IsArray, IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-vali
 import { EscrowStatus, FreelanceStatus } from './create-freelance-order.input';
 import { InputType, Field, Float } from '@nestjs/graphql';
 
-
 @InputType()
 export class UpdateFreelanceOrderInput {
 

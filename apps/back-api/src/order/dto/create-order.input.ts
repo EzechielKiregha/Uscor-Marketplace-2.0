@@ -1,7 +1,7 @@
 import { InputType, Int, Field, Float } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
 import { ArrayMinSize, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
-import { CreatePaymentTransactionInput } from 'src/payment-transaction/dto/create-payment-transaction.input';
+import { CreatePaymentTransactionInput } from '../../payment-transaction/dto/create-payment-transaction.input';
 
 @InputType()
 export class CreateOrderInput {

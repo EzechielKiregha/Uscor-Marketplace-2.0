@@ -3,9 +3,9 @@ import { FreelanceServiceService } from './freelance-service.service';
 import { FreelanceServiceEntity } from './entities/freelance-service.entity';
 import { AssignWorkersInput, CreateFreelanceServiceInput } from './dto/create-freelance-service.input';
 import { UpdateFreelanceServiceInput } from './dto/update-freelance-service.input';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { UseGuards } from '@nestjs/common';
 import { FreelanceCategory } from './freelance-service.module';
 

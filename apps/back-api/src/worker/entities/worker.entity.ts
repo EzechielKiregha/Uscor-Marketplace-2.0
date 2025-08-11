@@ -1,8 +1,8 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { ChatEntity } from 'src/chat/entities/chat.entity';
-import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity';
-import { KnowYourCustomerEntity } from 'src/know-your-customer/entities/know-your-customer.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { ChatEntity } from '../../chat/entities/chat.entity';
+import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity';
+import { KnowYourCustomerEntity } from '../../know-your-customer/entities/know-your-customer.entity';
 
 @ObjectType()
 export class WorkerEntity {

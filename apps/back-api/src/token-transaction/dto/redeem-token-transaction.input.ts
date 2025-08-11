@@ -1,6 +1,5 @@
 import { IsBoolean, IsString } from 'class-validator';
-import { CreateTokenTransactionInput } from './create-token-transaction.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
 export class RedeemTokenTransactionInput {

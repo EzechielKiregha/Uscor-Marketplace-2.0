@@ -1,15 +1,15 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { AccountRechargeEntity } from 'src/account-recharge/entities/account-recharge.entity';
-import { AdEntity } from 'src/ad/entities/ad.entity';
-import { ChatEntity } from 'src/chat/entities/chat.entity';
-import { FreelanceOrderEntity } from 'src/freelance-order/entities/freelance-order.entity';
-import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity';
-import { PostOfSaleEntity } from 'src/post-of-sale/entities/post-of-sale.entity';
-import { ProductEntity } from 'src/product/entities/product.entity';
-import { ReOwnedProductEntity } from 'src/re-owned-product/entities/re-owned-product.entity';
-import { ReferralEntity } from 'src/referral/entities/referral.entity';
-import { RepostedProductEntity } from 'src/reposted-product/entities/reposted-product.entity';
-import { WorkerEntity } from 'src/worker/entities/worker.entity';
+import { AccountRechargeEntity } from '../../account-recharge/entities/account-recharge.entity';
+import { AdEntity } from '../../ad/entities/ad.entity';
+import { ChatEntity } from '../../chat/entities/chat.entity';
+import { FreelanceOrderEntity } from '../../freelance-order/entities/freelance-order.entity';
+import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity';
+import { PostOfSaleEntity } from '../../post-of-sale/entities/post-of-sale.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
+import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-product.entity';
+import { ReferralEntity } from '../../referral/entities/referral.entity';
+import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity';
+import { WorkerEntity } from '../../worker/entities/worker.entity';
 import { KycStatus } from '../dto/update-business.input';
 
 @ObjectType()

@@ -1,5 +1,5 @@
-import { ObjectType, Field, Int, Float, registerEnumType } from '@nestjs/graphql';
-import { SaleStatus } from 'src/generated/prisma/enums';
+import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import { SaleStatus } from '../../generated/prisma/enums';
 import { SaleEntity } from './sale.entity';
 
 // Enums

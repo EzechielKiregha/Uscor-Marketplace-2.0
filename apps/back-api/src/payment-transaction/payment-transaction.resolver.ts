@@ -3,11 +3,11 @@ import { PaymentTransactionService } from './payment-transaction.service';
 import { PaymentTransactionEntity } from './entities/payment-transaction.entity';
 import { CreatePaymentTransactionInput } from './dto/create-payment-transaction.input';
 import { UpdatePaymentTransactionInput } from './dto/update-payment-transaction.input';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { UseGuards } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 // Resolver
 @Resolver(() => PaymentTransactionEntity)

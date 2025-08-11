@@ -1,4 +1,4 @@
-import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
+import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input';
 import { InputType, Field } from '@nestjs/graphql';
 import { SaleProductInput } from './sale-product.input';
 import { IsArray, IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';

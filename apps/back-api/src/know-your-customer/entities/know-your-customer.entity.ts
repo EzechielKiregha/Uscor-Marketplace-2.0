@@ -1,7 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { ClientEntity } from 'src/client/entities/client.entity';
-import { WorkerEntity } from 'src/worker/entities/worker.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
+import { WorkerEntity } from '../../worker/entities/worker.entity';
 
 @ObjectType()
 export class KnowYourCustomerEntity {

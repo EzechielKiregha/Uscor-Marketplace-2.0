@@ -6,10 +6,10 @@ import { BusinessService } from '../business/business.service';
 import { WorkerService } from '../worker/worker.service';
 import { InventoryResolver } from './inventory.resolver';
 import { InventoryService } from './inventory.service';
-import { StoreModule } from 'src/store/store.module';
-import { ProductModule } from 'src/product/product.module';
-import { BusinessModule } from 'src/business/business.module';
-import { WorkerModule } from 'src/worker/worker.module';
+import { StoreModule } from '../store/store.module';
+import { ProductModule } from '../product/product.module';
+import { BusinessModule } from '../business/business.module';
+import { WorkerModule } from '../worker/worker.module';
 
 
 // Module

@@ -1,6 +1,6 @@
 import { Field, InputType, registerEnumType } from "@nestjs/graphql";
 import { IsOptional, IsArray, IsEnum } from "class-validator";
-import { TransferOrderStatus } from "src/generated/prisma/enums";
+import { TransferOrderStatus } from "../../generated/prisma/enums";
 import { TransferOrderProductInput } from "./create-transfer-order-product.input";
 
 

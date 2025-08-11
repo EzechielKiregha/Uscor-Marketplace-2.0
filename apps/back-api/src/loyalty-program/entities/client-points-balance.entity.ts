@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
-import { ClientEntity } from 'src/client/entities/client.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
 
 @ObjectType()
 export class ClientPointsBalanceEntity {

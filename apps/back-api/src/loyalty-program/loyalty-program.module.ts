@@ -4,8 +4,8 @@ import { BusinessService } from '../business/business.service';
 import { ClientService } from '../client/client.service';
 import { LoyaltyResolver } from './loyalty-program.resolver';
 import { LoyaltyService } from './loyalty-program.service';
-import { ClientModule } from 'src/client/client.module';
-import { BusinessModule } from 'src/business/business.module';
+import { ClientModule } from '../client/client.module';
+import { BusinessModule } from '../business/business.module';
 
 // Module
 @Module({

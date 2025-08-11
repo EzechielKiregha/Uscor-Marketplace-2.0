@@ -3,11 +3,11 @@ import { FreelanceOrderService } from './freelance-order.service';
 import { FreelanceOrderEntity } from './entities/freelance-order.entity';
 import { CreateFreelanceOrderInput } from './dto/create-freelance-order.input';
 import { AssignBusinessesInput, UpdateFreelanceOrderInput } from './dto/update-freelance-order.input';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 // Resolver
 @Resolver(() => FreelanceOrderEntity)

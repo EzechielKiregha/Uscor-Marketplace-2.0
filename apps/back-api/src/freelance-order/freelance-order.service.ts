@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFreelanceOrderInput, EscrowStatus, FreelanceStatus } from './dto/create-freelance-order.input';
 import { AssignBusinessesInput, UpdateFreelanceOrderInput } from './dto/update-freelance-order.input';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { PaymentTransactionService } from 'src/payment-transaction/payment-transaction.service';
-import { AccountRechargeService } from 'src/account-recharge/account-recharge.service';
-import { PaymentMethod, PaymentStatus } from 'src/payment-transaction/dto/create-payment-transaction.input';
-import { Country, RechargeMethod } from 'src/account-recharge/dto/create-account-recharge.input';
+import { PrismaService } from '../prisma/prisma.service';
+import { PaymentTransactionService } from '../payment-transaction/payment-transaction.service';
+import { AccountRechargeService } from '../account-recharge/account-recharge.service';
+import { PaymentMethod, PaymentStatus } from '../payment-transaction/dto/create-payment-transaction.input';
+import { Country, RechargeMethod } from '../account-recharge/dto/create-account-recharge.input';
 // Service
 @Injectable()
 export class FreelanceOrderService {

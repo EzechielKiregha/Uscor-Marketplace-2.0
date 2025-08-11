@@ -1,8 +1,8 @@
 import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { ClientEntity } from 'src/client/entities/client.entity';
-import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity';
-import { PaymentTransactionEntity } from 'src/payment-transaction/entities/payment-transaction.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
+import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity';
+import { PaymentTransactionEntity } from '../../payment-transaction/entities/payment-transaction.entity';
 import { EscrowStatus, FreelanceStatus } from '../dto/create-freelance-order.input';
 
 @ObjectType()

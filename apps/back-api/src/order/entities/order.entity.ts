@@ -1,7 +1,7 @@
 import { ObjectType, Field, Float } from '@nestjs/graphql';
-import { ClientEntity } from 'src/client/entities/client.entity';
-import { OrderProductEntity } from 'src/order-product/entities/order-product.entity';
-import { PaymentTransactionEntity } from 'src/payment-transaction/entities/payment-transaction.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
+import { OrderProductEntity } from '../../order-product/entities/order-product.entity';
+import { PaymentTransactionEntity } from '../../payment-transaction/entities/payment-transaction.entity';
 
 @ObjectType()
 export class OrderEntity {

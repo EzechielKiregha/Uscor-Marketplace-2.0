@@ -1,8 +1,8 @@
 import { ObjectType, Field, Float, registerEnumType } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { ClientEntity } from 'src/client/entities/client.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { ClientEntity } from '../../client/entities/client.entity';
 import { Country, RechargeMethod } from '../dto/create-account-recharge.input';
-import { TokenTransactionEntity } from 'src/token-transaction/entities/token-transaction.entity';
+import { TokenTransactionEntity } from '../../token-transaction/entities/token-transaction.entity';
 
 @ObjectType()
 export class AccountRechargeEntity {

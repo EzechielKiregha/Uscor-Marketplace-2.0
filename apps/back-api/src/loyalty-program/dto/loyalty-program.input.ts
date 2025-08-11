@@ -1,5 +1,5 @@
-import { InputType, Int, Field, Float } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { InputType, Field, Float } from '@nestjs/graphql';
+import { IsNumber, IsString, Min } from 'class-validator';
 
 // DTOs
 @InputType()

@@ -1,8 +1,8 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
 import { TokenTransactionType } from '../dto/create-token-transaction.input';
-import { ReOwnedProductEntity } from 'src/re-owned-product/entities/re-owned-product.entity';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { RepostedProductEntity } from 'src/reposted-product/entities/reposted-product.entity';
+import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-product.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity';
 
 
 @ObjectType()

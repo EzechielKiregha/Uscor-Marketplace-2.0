@@ -1,14 +1,14 @@
 import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
-import { AdEntity } from 'src/ad/entities/ad.entity';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { CategoryEntity } from 'src/category/entities/category.entity';
-import { ChatEntity } from 'src/chat/entities/chat.entity';
-import { MediaEntity } from 'src/media/entities/media.entity';
-import { OrderProductEntity } from 'src/order-product/entities/order-product.entity';
-import { ReOwnedProductEntity } from 'src/re-owned-product/entities/re-owned-product.entity';
-import { RepostedProductEntity } from 'src/reposted-product/entities/reposted-product.entity';
-import { ReviewEntity } from 'src/review/entities/review.entity';
-import { StoreEntity } from 'src/store/entities/store.entity';
+import { AdEntity } from '../../ad/entities/ad.entity';
+import { BusinessEntity } from '../../business/entities/business.entity';
+import { CategoryEntity } from '../../category/entities/category.entity';
+import { ChatEntity } from '../../chat/entities/chat.entity';
+import { MediaEntity } from '../../media/entities/media.entity';
+import { OrderProductEntity } from '../../order-product/entities/order-product.entity';
+import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-product.entity';
+import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity';
+import { ReviewEntity } from '../../review/entities/review.entity';
+import { StoreEntity } from '../../store/entities/store.entity';
 
 @ObjectType()
 export class ProductEntity {

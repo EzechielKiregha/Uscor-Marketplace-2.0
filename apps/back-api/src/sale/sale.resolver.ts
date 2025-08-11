@@ -3,14 +3,14 @@ import { SaleService } from './sale.service';
 import { CreateSaleInput } from './dto/create-sale.input';
 import { UpdateSaleInput } from './dto/update-sale.input';
 import { SaleEntity } from './entities/sale.entity';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { UseGuards } from '@nestjs/common';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { CloseSaleInput } from './dto/close-sale.input';
 import { CreateReturnInput } from './dto/create-return.input';
 import { ReturnEntity } from './entities/return.entity';
-import { StoreService } from 'src/store/store.service';
+import { StoreService } from '../store/store.service';
 import { ReceiptEntity } from './entities/receipt.entity';
 import { GenerateReceiptInput } from './dto/receipt.input';
 
