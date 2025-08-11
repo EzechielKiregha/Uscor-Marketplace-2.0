@@ -107,6 +107,8 @@ export interface ProductEntity {
   isPhysical: boolean;
   createdAt: Date;
   updatedAt: Date;
+  featured: boolean;
+  approvedForSale: boolean;
   medias: MediaEntity[];
   business?: BusinessEntity;
   store?: StoreEntity;

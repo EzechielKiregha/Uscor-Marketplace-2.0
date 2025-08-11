@@ -5,6 +5,7 @@ import ProductReel from '@/components/ProductReel';
 import Footer from '@/components/seraui/FooterSection';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { GET_FEATURED_PRODUCTS } from '@/graphql/product.gql';
 import { useNavigation } from '@/hooks/useNavigation';
 import { ArrowDownToLine, DollarSign, Paintbrush } from 'lucide-react';
 import Image from 'next/image';
@@ -76,13 +77,12 @@ export default function MarketplacePage() {
 
           {/* New Arrivals */}
           <ProductReel
-            query={{
-              sort: 'desc',
-              limit: 4,
-            }}
+            title="Featured Products"
             href="/marketplace/products"
-            title="New Arrivals"
+            query={GET_FEATURED_PRODUCTS}
+            limit={4}
           />
+
         </MaxWidthWrapper>
 
         {/* Perks Section */}

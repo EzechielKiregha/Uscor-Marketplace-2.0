@@ -160,6 +160,8 @@ type ProductEntity {
   isPhysical: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+  featured: Boolean!
+  approvedForSale: Boolean!
   medias: [MediaEntity!]!
   business: BusinessEntity
   store: StoreEntity
@@ -1011,6 +1013,8 @@ input CreateProductInput {
   isPhysical: Boolean!
   businessId: String!
   categoryId: String!
+  featured: Boolean! = false
+  approvedForSale: Boolean! = true
 }
 
 input UpdateProductInput {
@@ -1022,6 +1026,8 @@ input UpdateProductInput {
   isPhysical: Boolean
   businessId: String
   categoryId: String
+  featured: Boolean = false
+  approvedForSale: Boolean = true
   id: String!
 }
 

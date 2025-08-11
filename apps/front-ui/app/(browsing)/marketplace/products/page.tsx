@@ -3,26 +3,18 @@ import ProductReel from '@/components/ProductReel'
 import Footer from '@/components/seraui/FooterSection'
 import HeaderComponent from '@/components/seraui/HeaderComponent'
 import { PRODUCT_CATEGORIES } from '@/config'
+import { GET_PRODUCTS } from '@/graphql/product.gql'
+import { useSearchParams } from 'next/navigation'
 
-type Param = string | string[] | undefined
+function ProductsPage() {
+  const searchParams = useSearchParams();
 
-interface ProductsPageProps {
-  searchParams: { [key: string]: Param }
-}
-
-const parse = (param: Param) => {
-  return typeof param === 'string' ? param : undefined
-}
-
-const ProductsPage = ({
-  searchParams,
-}: ProductsPageProps) => {
-  const sort = parse(searchParams.sort)
-  const category = parse(searchParams.category)
+  const sort = searchParams.get('sort') ?? undefined;
+  const category = searchParams.get('category') ?? undefined;
 
   const label = PRODUCT_CATEGORIES.find(
     ({ value }) => value === category
-  )?.label
+  )?.label;
 
   return (
     <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
@@ -30,15 +22,10 @@ const ProductsPage = ({
       <HeaderComponent />
       <MaxWidthWrapper>
         <ProductReel
-          title={label ?? "Naviguez notre colection de produits de haute qualite"}
-          query={{
-            category,
-            limit: 40,
-            sort:
-              sort === 'desc' || sort === 'asc'
-                ? sort
-                : undefined,
-          }}
+          title="Explore Our High-Quality Products"
+          href="/marketplace/products"
+          query={GET_PRODUCTS}
+          limit={20}
         />
       </MaxWidthWrapper>
       {/* Footer */}

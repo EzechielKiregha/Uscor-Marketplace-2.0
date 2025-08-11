@@ -5,10 +5,13 @@ export const GET_PRODUCTS = gql`
   query GetProducts {
   products {
     id
-    name
+    title
     price
     quantity
-    medias
+    medias { url }
+    description
+    approvedForSale
+    featured
     category {
       name
     }
@@ -22,13 +25,15 @@ export const GET_PRODUCTS = gql`
 
 export const GET_FEATURED_PRODUCTS = gql`
   query GetFeaturedProducts {
-    products(featured: true) {
+    products {
       id
       title
       price
       quantity
       description
-      medias
+      featured
+      medias { url }
+      approvedForSale
       category {
         name
       }
@@ -42,7 +47,7 @@ export const GET_FEATURED_PRODUCTS = gql`
 
 // 📦 Get Single Product
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($id: ID!) {
+  query GetProductById($id: string!) {
     product(id: $id) {
       id
       name

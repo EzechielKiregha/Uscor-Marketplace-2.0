@@ -42,6 +42,12 @@ export class ProductEntity {
   @Field()
   updatedAt: Date;
 
+  @Field(() => Boolean)
+  featured: boolean;
+
+  @Field(() => Boolean)
+  approvedForSale: boolean;
+
   // Relations
   @Field(() => [MediaEntity]) // Media associated with the product
   medias: MediaEntity[];

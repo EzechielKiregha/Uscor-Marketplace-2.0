@@ -38,5 +38,13 @@ export class CreateProductInput {
   @Field()
   @IsString()
   categoryId: string;
+
+  @Field(() => Boolean, { defaultValue: false })
+  @IsOptional()
+  featured?: boolean;
+
+  @Field(() => Boolean, { defaultValue: true })
+  @IsOptional()
+  approvedForSale?: boolean;
 }
 

@@ -10,32 +10,39 @@ import { PRODUCT_CATEGORIES } from '@/config';
 import { formatPrice } from '@/lib/utils';
 import { Check, Shield } from 'lucide-react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { client } from '@/lib/apollo-client';
+import { notFound, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { toast } from 'sonner';
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
   { id: 2, name: 'Products', href: '/marketplace/products' },
 ];
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const productId = (await params).id;
+export default async function Page() {
+  const productId = useSearchParams().get('productId');
+  const router = useRouter();
 
-  const { data } = await client.query({
-    query: GET_PRODUCT_BY_ID,
+  if (!productId) return (
+    toast.error('Product ID is required to view product details.'),
+    notFound()
+  );
+
+  const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id: productId },
-    fetchPolicy: 'no-cache',
-  })
+  });
 
-  const product = data?.product
-  if (!product || product.approvedForSale !== 'approved') {
-    return notFound()
-  }
+  if (loading) return <p className="text-center py-10 text-muted-foreground">Loading...</p>;
+  if (error) return <p className="text-center py-10 text-destructive">Failed to load product</p>;
+
+  const product = data?.product;
+  if (!product || product.approvedForSale !== 'approved') return notFound();
+
   const label = PRODUCT_CATEGORIES.find(
     ({ value }) => value === product.category
   )?.label;
 
-  const validUrls = (product.images || [])
+  const validUrls = (product.medias || [])
     .map((img: any) => img.url)
     .filter(Boolean);
 
