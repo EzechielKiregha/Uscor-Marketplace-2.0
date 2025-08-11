@@ -3,7 +3,7 @@
   "builds": [
     {
       
-        "src" : "src/main.ts",
+        "src" : "api/index.ts",
         "use" : "@vercel/node"
       
     }
@@ -11,7 +11,7 @@
   "routes": [
     {
       "src" : "/(.*)",
-      "dest" : "src/main.ts",
+      "dest" : "/api/index.ts",
       "methods": ["GET", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Methods": "GET",

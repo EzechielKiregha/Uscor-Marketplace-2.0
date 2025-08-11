@@ -15,7 +15,6 @@
     "test:e2e": "turbo run test:e2e",
     "test:coverage": "turbo run test:coverage",
     "test:watch": "turbo run test:watch"
-    
   },
   "packageManager": "npm@10.9.2",
   "workspaces": [
@@ -29,6 +28,7 @@
     "turbo": "^2.5.0"
   },
   "dependencies": {
+    "aws-lambda": "^1.0.7",
     "glob": "^11.0.3"
   }
 }
