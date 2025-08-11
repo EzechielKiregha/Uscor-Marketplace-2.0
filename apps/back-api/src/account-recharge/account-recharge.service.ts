@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAccountRechargeInput } from './dto/create-account-recharge.input';
 import { UpdateAccountRechargeInput } from './dto/update-account-recharge.input';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 // Service
 @Injectable()
