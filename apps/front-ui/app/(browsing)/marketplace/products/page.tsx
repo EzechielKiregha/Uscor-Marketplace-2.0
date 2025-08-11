@@ -1,3 +1,4 @@
+"use client"
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/ProductReel'
 import Footer from '@/components/seraui/FooterSection'
