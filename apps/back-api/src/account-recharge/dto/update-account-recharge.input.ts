@@ -10,12 +10,12 @@ export class UpdateAccountRechargeInput {
   @Min(0)
   amount?: number;
 
-  @Field({ nullable: true })
+  @Field(() => RechargeMethod, { nullable: true })
   @IsOptional()
   @IsEnum(RechargeMethod)
   method?: RechargeMethod;
 
-  @Field({ nullable: true })
+  @Field(() => Country, { nullable: true })
   @IsOptional()
   @IsEnum(Country)
   origin?: Country;

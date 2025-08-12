@@ -490,9 +490,15 @@ type ReturnEntity {
   id: String!
   saleId: String!
   reason: String
-  status: String!
+  status: SaleStatus!
   createdAt: DateTime!
   sale: SaleEntity!
+}
+
+enum SaleStatus {
+  OPEN
+  CLOSED
+  REFUNDED
 }
 
 type SaleEntity {
@@ -518,12 +524,6 @@ enum PaymentMethod {
   MOBILE_MONEY
   CASH
   CARD
-}
-
-enum SaleStatus {
-  OPEN
-  CLOSED
-  REFUNDED
 }
 
 type ReceiptEntity {
@@ -1094,8 +1094,8 @@ input CreateAccountRechargeInput {
 
 input UpdateAccountRechargeInput {
   amount: Float
-  method: String
-  origin: String
+  method: RechargeMethod
+  origin: Country
 }
 
 input CreateBusinessInput {

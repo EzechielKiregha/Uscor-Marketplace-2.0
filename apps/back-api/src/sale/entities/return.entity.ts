@@ -16,7 +16,7 @@ export class ReturnEntity {
   @Field({ nullable: true })
   reason?: string;
 
-  @Field()
+  @Field(() => SaleStatus)
   status: SaleStatus;
 
   @Field()
