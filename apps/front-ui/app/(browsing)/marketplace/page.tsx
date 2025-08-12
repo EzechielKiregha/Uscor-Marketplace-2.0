@@ -2,6 +2,7 @@
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import ProductReel from '@/components/ProductReel';
+import FeaturedProducts from '@/components/seraui/FeaturedProducts';
 import Footer from '@/components/seraui/FooterSection';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -76,12 +77,13 @@ export default function MarketplacePage() {
           </div>
 
           {/* New Arrivals */}
-          <ProductReel
+          <FeaturedProducts />
+          {/* <ProductReel
             title="Featured Products"
             href="/marketplace/products"
             query={GET_FEATURED_PRODUCTS}
             limit={4}
-          />
+          /> */}
 
         </MaxWidthWrapper>
 

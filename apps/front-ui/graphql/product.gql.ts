@@ -11,7 +11,6 @@ export const GET_PRODUCTS = gql`
     medias { url }
     description
     approvedForSale
-    featured
     category {
       name
     }
@@ -31,7 +30,26 @@ export const GET_FEATURED_PRODUCTS = gql`
       price
       quantity
       description
-      featured
+      medias { url }
+      approvedForSale
+      category {
+        name
+      }
+      business {
+        name
+        avatar
+      }
+    }
+  }
+`;
+export const GET_RELATED_PRODUCTS = gql`
+  query GetRelatedProducts($category: String!) {
+    relatedProducts(category: $category) {
+      id
+      title
+      price
+      quantity
+      description
       medias { url }
       approvedForSale
       category {
@@ -103,3 +121,19 @@ export const DELETE_PRODUCT = gql`
     }
   }
 `;
+
+/**
+ * Utility function to remove __typename from objects.
+ */
+export const removeTypename : any = (obj: any) => {
+  if (Array.isArray(obj)) {
+    return obj.map(removeTypename);
+  } else if (obj && typeof obj === 'object') {
+    const { __typename, ...rest } = obj;
+    return Object.keys(rest).reduce((acc, key) => {
+      acc[key] = removeTypename(rest[key]);
+      return acc;
+    }, {} as any);
+  }
+  return obj;
+};

@@ -14,7 +14,6 @@ async function bootstrap() {
     });
 
     // Force Nest's GraphQLModule to mount at /graphql
-    app.setGlobalPrefix('/graphql');
     await app.init();
     cachedExpress = app.getHttpAdapter().getInstance();
     cachedServerless = serverlessExpress({ app: cachedExpress });

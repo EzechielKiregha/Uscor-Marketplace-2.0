@@ -31,7 +31,7 @@ const AddToCartButton = ({
         className: 'bg-primary hover:bg-blue-100  text-white w-full'
       })}
       size='lg'>
-      {isSuccess ? "C'est fait!!" : 'Ajoute au panier'}
+      {isSuccess ? "Done" : 'Add to Cart'}
     </Button>
   )
 }

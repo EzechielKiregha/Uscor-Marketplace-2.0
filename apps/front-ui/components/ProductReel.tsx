@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import ProductListing from './ProductListing';
 import { ProductEntity } from '@/lib/types';
+import { removeTypename } from '@/graphql/product.gql';
 
 interface ProductReelProps {
   title: string;
@@ -24,18 +25,20 @@ export default function ProductReel({
   variables,
   limit = FALLBACK_LIMIT,
 }: ProductReelProps) {
-  const { data, loading, error } = useQuery(query, { variables });
-
-  if (error) return <p className="text-center py-10 text-destructive">Failed to load products</p>;
+  const { data } = useQuery(query, { variables });
 
   const products: ProductEntity[] = data?.products || [];
 
-  const displayItems = products.length
+  const productsData = products.map((product: ProductEntity) => ({
+    ...removeTypename(product)
+  }));
+
+  const displayItems = productsData.length
     ? products
     : Array.from({ length: limit }, () => null);
 
   return (
-    <section className="py-30">
+    <section className="py-12 mx-1.5 sm:mx-0">
       <div className="md:flex md:items-center md:justify-between mb-4">
         <div className="max-w-2xl px-4 lg:max-w-4xl lg:px-0">
           {title && <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>}

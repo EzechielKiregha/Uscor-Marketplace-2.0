@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { client } from '@/lib/apollo-client';
 import MasonryGrid from './MasonryGrid';
 import { GET_FEATURED_PRODUCTS } from '@/graphql/product.gql';
+import { useQuery } from '@apollo/client';
 // GraphQL query for featured products
 
 
@@ -15,7 +16,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const { data } = await client.query({ query: GET_FEATURED_PRODUCTS });
+        const { data } = useQuery(GET_FEATURED_PRODUCTS);
 
         const formatted = data.products.map((product: any) => ({
           id: product.id,

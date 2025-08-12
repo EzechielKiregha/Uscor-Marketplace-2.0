@@ -663,6 +663,9 @@ type Query {
   """Retrieves all featured products with their relations."""
   featuredProducts: [ProductEntity!]!
 
+  """Retrieves all featured products with their relations."""
+  relatedProducts(category: String!): [ProductEntity!]!
+
   """Retrieves a single product by ID."""
   product(id: String!): ProductEntity!
 

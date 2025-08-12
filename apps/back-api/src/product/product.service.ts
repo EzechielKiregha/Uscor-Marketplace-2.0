@@ -124,5 +124,34 @@ export class ProductService {
       orderBy: { createdAt: 'desc' }, // show newest first
     });
   }
+  
+  async getRelatedProducts(category: string) {
+    if (!category) {
+      throw new Error('Category is required to fetch related products');
+    }
+    const cat = await this.prisma.category.findUnique({
+      where: { name: category },
+      select: { id: true },
+    });
+    if (!cat) {
+      throw new Error(`Category "${category}" not found`);
+    }
+    return await this.prisma.product.findMany({
+      where: { categoryId: cat.id },
+      take: 4, // Limit to 4 related products
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        quantity: true,
+        description: true,
+        medias: {select:{url:true}},
+        approvedForSale: true,
+        category: { select: { name: true } },
+        business: { select: { name: true, avatar: true } },
+      },
+      orderBy: { createdAt: 'desc' }, // show newest first
+    });
+  }
 }
 

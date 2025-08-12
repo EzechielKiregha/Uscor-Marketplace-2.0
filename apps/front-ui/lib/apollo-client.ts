@@ -3,6 +3,12 @@ import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/clien
 import { onError } from '@apollo/client/link/error';
 import { Observable } from '@apollo/client/utilities';
 import { getAccessToken, refreshToken } from '@/lib/auth';
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+
+if (process.env.NODE_ENV !== 'production') {
+  loadErrorMessages();
+  loadDevMessages();
+}
 
 const httpLink = new HttpLink({ uri: 'http://localhost:8000/graphql' });
 
