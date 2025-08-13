@@ -45,10 +45,10 @@ import GraphQLJSON from 'graphql-type-json'
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(
+      autoSchemaFile: process.env.NODE_ENV === 'production' ? true : join(
         process.cwd(),
-        process.env.NODE_ENV === 'production' ? 'tmp/schema.gql' : 'src/graphql/schema.gql',
-      ), // Path to the generated schema file
+        'src/graphql/schema.gql',
+      ), // Path to the generated schema file, 
       resolvers: { JSON: GraphQLJSON },
     }),
     ConfigModule.forRoot({
