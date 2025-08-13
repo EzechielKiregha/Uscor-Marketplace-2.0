@@ -25,16 +25,27 @@ export default function ProductReel({
   variables,
   limit = FALLBACK_LIMIT,
 }: ProductReelProps) {
-  const { data } = useQuery(query, { variables });
+  const { data, loading, error } = useQuery(query, { variables });
 
-  const products: ProductEntity[] = data?.products || [];
+  if (loading) return (
+    <div className="flex flex-col my-20 bg-background dark:bg-gray-950 justify-center items-center">
+      <div className="w-8 h-8 bg-orange-600 rounded animate-spin"></div>
+    </div>
+  );
+
+  if (error) return <p className="text-center py-10 text-destructive">Error loading products: {error.message}</p>;
+
+  // Dynamically extract the products field from the query result
+  const products: ProductEntity[] = (Object.values(data || {}).find(
+    (value): value is ProductEntity[] => Array.isArray(value) && value.every((item) => item.id)
+  )) || [];
 
   const productsData = products.map((product: ProductEntity) => ({
-    ...removeTypename(product)
+    ...removeTypename(product),
   }));
 
   const displayItems = productsData.length
-    ? products
+    ? productsData
     : Array.from({ length: limit }, () => null);
 
   return (

@@ -5,6 +5,7 @@ import ClientWrapper from "./ClientWrapper";
 import { LoadingProvider } from "./context/loadingContext";
 import { ThemeProvider } from "@/components/theme-provider"
 import { ToastProvider } from "@/components/toast-provider";
+import { Toaster } from "sonner";
 
 
 const geistSans = Geist({
@@ -51,6 +52,7 @@ export default function RootLayout({
                 </ToastProvider>
               </ClientWrapper>
             </main>
+            <Toaster />
 
             {/* <Toaster position='top-center' richColors /> */}
           </ThemeProvider>

@@ -18,14 +18,13 @@ import HeaderComponent from '@/components/seraui/HeaderComponent';
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
-  { id: 2, name: 'Products', href: '/marketplace/products' },
+  { id: 2, name: 'marketplace', href: '/marketplace' },
+  { id: 3, name: 'Products', href: '/marketplace/products' },
 ];
 
 export default function Page() {
 
   const productId = useGetProductIdParam();
-
-  console.log('Product ID:', productId);
 
   const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id: productId },
@@ -60,7 +59,9 @@ export default function Page() {
     .filter(Boolean);
 
   // Add product name to breadcrumbs
-  BREADCRUMBS.push({ id: 3, name: cleanedProduct.name, href: '' });
+  if (BREADCRUMBS.length < 4) {
+    BREADCRUMBS.push({ id: 4, name: cleanedProduct.title, href: '' });
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">

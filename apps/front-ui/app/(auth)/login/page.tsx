@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { setAuthToken } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,7 @@ import { GlowButton } from '@/components/seraui/GlowButton';
 import { useToast } from '@/components/toast-provider';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getLoginMutation } from '@/graphql/auth.gql';
 
 // SVG Icons (reused from provided Login)
 const UserIcon = () => (
@@ -108,22 +109,6 @@ const XIcon = () => (
   </svg>
 );
 
-// GraphQL Mutation
-const getLoginMutation = (role: string) => gql`
-  mutation Sign${role}In($SignInInput: SignInInput!) {
-    sign${role}In(SignInInput: $SignInInput) {
-      accessToken
-      refreshToken
-      id
-      email
-      fullname
-      phone
-      ${role === 'Business' ? 'coverImage' : ''}
-      avatar
-    }
-  }
-`;
-
 // Zod Schema
 const schema = z.object({
   role: z.enum(['Client', 'Business', 'Worker'], { message: 'Please select a role' }),
@@ -158,8 +143,8 @@ export default function LoginPage() {
         'Success',
         'Logged in successfully',
         true,
-        4000,
-        'bottom-left'
+        8000,
+        'bottom-right'
       )
       router.push('/');
     } catch (err: any) {
@@ -168,8 +153,8 @@ export default function LoginPage() {
         'Failed',
         err.message,
         true,
-        4000,
-        'bottom-left'
+        8000,
+        'bottom-right'
       )
     };
   }
@@ -219,7 +204,7 @@ export default function LoginPage() {
               control={form.control}
               name="role"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="form-item justify-center items-center w-full">
                   <FormLabel>Account Type</FormLabel>
                   <FormControl>
                     <Select
@@ -291,7 +276,9 @@ export default function LoginPage() {
               )}
             />
 
-            <GlowButton type="submit" disabled={loading} className="w-GlowButton">
+            <GlowButton type="submit"
+              disabled={loading}
+              className="w-full bg-primary rounded-md cursor-pointer py-1">
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white dark:border-darkGray border-t-transparent"></div>

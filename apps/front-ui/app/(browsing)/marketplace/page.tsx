@@ -77,7 +77,7 @@ export default function MarketplacePage() {
           </div>
 
           {/* New Arrivals */}
-          <FeaturedProducts />
+
           {/* <ProductReel
             title="Featured Products"
             href="/marketplace/products"
@@ -85,6 +85,7 @@ export default function MarketplacePage() {
             limit={4}
           /> */}
 
+          <FeaturedProducts />
         </MaxWidthWrapper>
 
         {/* Perks Section */}

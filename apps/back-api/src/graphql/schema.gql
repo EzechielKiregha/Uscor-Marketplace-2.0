@@ -926,7 +926,7 @@ type Mutation {
 
   """Deletes a freelance order."""
   deleteFreelanceOrder(id: String!): FreelanceOrderEntity!
-  signIn(SignInInput: SignInInput!): AuthPayloadClient!
+  signClientIn(SignInInput: SignInInput!): AuthPayloadClient!
   signBusinessIn(SignInInput: SignInInput!): AuthPayloadBusiness!
   signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
   refreshToken(refreshToken: String!): AuthPayloadClient!

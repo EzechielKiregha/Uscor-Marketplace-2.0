@@ -24,6 +24,8 @@ export default function HomePage() {
       {/* Featured Products */}
       <FeaturesSection />
 
+      <FeaturedProducts />
+
       {/* Logos Marquee */}
       <div className="py-12 px-4">
         <MarqueeScroller items={logos1} speed="25s" direction="forwards" itemWidth="120px" />

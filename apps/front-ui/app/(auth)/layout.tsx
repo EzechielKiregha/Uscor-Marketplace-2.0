@@ -1,5 +1,4 @@
 import "../globals.css";
-// import Providers from "@/components/Providers";
 import { constructMetadata } from "@/lib/utils";
 
 export const metadata = constructMetadata()

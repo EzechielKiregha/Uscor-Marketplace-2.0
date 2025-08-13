@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { GlowButton } from '@/components/seraui/GlowButton';
 import { Select } from '@radix-ui/react-select';
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CREATE_BUSINESS, CREATE_CLIENT, CREATE_WORKER } from '@/graphql/auth.gql';
 
 // SVG Icons (reused from Signin1)
 const UserIcon: React.FC = () => (
@@ -69,50 +70,6 @@ const ArrowLeftIcon: React.FC = () => (
   </svg>
 );
 
-// GraphQL Mutations
-const CREATE_CLIENT = gql`
-  mutation CreateClient($createClientInput: CreateClientInput!) {
-    createClient(createClientInput: $createClientInput) {
-      id
-      email
-      fullName
-      phone
-      avatar
-      accessToken
-      refreshToken
-    }
-  }
-`;
-
-const CREATE_BUSINESS = gql`
-  mutation CreateBusiness($createBusinessInput: CreateBusinessInput!) {
-    createBusiness(createBusinessInput: $createBusinessInput) {
-      id
-      email
-      name
-      phone
-      avatar
-      coverImage
-      accessToken
-      refreshToken
-    }
-  }
-`;
-
-const CREATE_WORKER = gql`
-  mutation CreateWorker($createWorkerInput: CreateWorkerInput!) {
-    createWorker(createWorkerInput: $createWorkerInput) {
-      id
-      email
-      fullName
-      role
-      isVerified
-      accessToken
-      refreshToken
-    }
-  }
-`;
-
 // Zod Schema
 const schema = z.object({
   role: z.enum(['Client', 'Business', 'Worker'], { message: 'Please select a role' }),
@@ -161,8 +118,10 @@ export default function SignupPage() {
             createClientInput: {
               email: data.email,
               password: data.password,
+              username: data.fullName.trim(),
               fullName: data.fullName,
               phone: data.phone,
+              isVerified: false,
             },
           },
         });
@@ -198,20 +157,20 @@ export default function SignupPage() {
       showToast(
         'success',
         'Success',
-        'Logged in successfully',
+        'Account Was Created',
         true,
-        4000,
-        'bottom-left'
+        8000,
+        'bottom-right'
       )
-      router.push('/');
+      router.push('/login');
     } catch (err: any) {
       showToast(
         'error',
         'Failed',
         err.message,
         true,
-        4000,
-        'bottom-left'
+        8000,
+        'bottom-right'
       )
     };
   };
@@ -259,7 +218,7 @@ export default function SignupPage() {
                     control={form.control}
                     name="role"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="form-item justify-center items-center w-full">
                         <FormLabel>Account Type</FormLabel>
                         <FormControl>
                           <Select
@@ -525,7 +484,7 @@ export default function SignupPage() {
                   <GlowButton
                     type="submit"
                     disabled={loading}
-                    className="w-full"
+                    className="w-full bg-primary rounded-md cursor-pointer py-1"
                   >
                     {loading ? (
                       <div className="flex items-center justify-center gap-2">

@@ -9,7 +9,7 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService, private jwtService: JwtService) {}
 
   @Mutation(() => AuthPayloadClient)
-  async signIn(@Args('SignInInput') signInInput: SignInInput) {
+  async signClientIn(@Args('SignInInput') signInInput: SignInInput) {
     const client = await this.authService.validateUser(signInInput.email, signInInput.password, "client");
     
     return this.authService.loginClient(client);
