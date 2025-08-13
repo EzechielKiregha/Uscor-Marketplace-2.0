@@ -1,4 +1,3 @@
-// src/lib/apollo-client.ts
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { Observable } from '@apollo/client/utilities';
@@ -10,7 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
   loadDevMessages();
 }
 
-const httpLink = new HttpLink({ uri: 'http://localhost:8000/graphql' });
+const httpLink = process.env.NODE_ENV === 'production' ? new HttpLink({ uri: 'https://uscor-marketplace-2-0-server.vercel.app/graphql' }) : new HttpLink({ uri: 'http://localhost:8000/graphql' });
 
 const authLink = new ApolloLink((operation, forward) => {
   const token = getAccessToken();
