@@ -2,20 +2,18 @@
   "version": 2,
   "builds": [
     {
-      
-        "src" : "api/index.ts",
-        "use" : "@vercel/node"
-      
+      "src": "api/index.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src" : "/(.*)",
-      "dest" : "/api/index.ts",
-      "methods": ["GET", "OPTIONS"],
+      "src": "/(.*)",
+      "dest": "/api/index.ts",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       "headers": {
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Headers": "Content-Type"
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
       }
     }
   ]
