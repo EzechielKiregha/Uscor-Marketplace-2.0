@@ -50,6 +50,7 @@ import GraphQLJSON from 'graphql-type-json'
         'src/graphql/schema.gql',
       ), // Path to the generated schema file, 
       resolvers: { JSON: GraphQLJSON },
+      csrfPrevention: false,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
