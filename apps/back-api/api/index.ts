@@ -9,7 +9,7 @@ async function bootstrap() {
   if (!cachedExpress) {
     const app = await NestFactory.create(AppModule, { bodyParser: true });
     app.enableCors({
-      origin: process.env.CORS_ORIGIN ?? '*',
+      origin: ["http://localhost:3000", "https://uscor-marketplace-2-0-front-ui.vercel.app"] ,
       credentials: true,
     });
 

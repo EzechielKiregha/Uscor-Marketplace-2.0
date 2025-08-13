@@ -12,7 +12,7 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
   })); // Enable validation for incoming requests
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN : '*', // Allow CORS from specified origins
+    origin: ["http://localhost:3000", "https://uscor-marketplace-2-0-front-ui.vercel.app"], // Allow CORS from specified origins
     credentials: true, // if you're using cookies or auth headers
   });
 
