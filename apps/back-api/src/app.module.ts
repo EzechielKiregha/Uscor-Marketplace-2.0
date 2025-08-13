@@ -47,7 +47,7 @@ import GraphQLJSON from 'graphql-type-json'
       driver: ApolloDriver,
       autoSchemaFile: join(
         process.cwd(),
-        'src/graphql/schema.gql',
+        process.env.NODE_ENV === 'production' ? 'tmp/schema.gql' : 'src/graphql/schema.gql',
       ), // Path to the generated schema file
       resolvers: { JSON: GraphQLJSON },
     }),
