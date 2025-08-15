@@ -442,6 +442,12 @@ type ReferralEntity {
   referredClient: ClientEntity
 }
 
+type AuthPayload {
+  id: String!
+  role: String!
+  email: String
+}
+
 type AuthPayloadClient {
   id: String!
   email: String!
@@ -733,7 +739,7 @@ type Query {
   paymentTransaction(id: String!): PaymentTransactionEntity!
 
   """Retrieves freelance services, optionally filtered by category."""
-  freelanceServices(category: FreelanceCategory): [FreelanceServiceEntity!]!
+  freelanceServices(category: FreelanceServiceCategory): [FreelanceServiceEntity!]!
 
   """Retrieves a single freelance service by ID."""
   freelanceService(id: String!): FreelanceServiceEntity!
@@ -743,6 +749,7 @@ type Query {
 
   """Retrieves a single freelance order by ID."""
   freelanceOrder(id: String!): FreelanceOrderEntity!
+  verifyCurrentUser: AuthPayload!
   postOfSale(id: Int!): PostOfSaleEntity!
 
   """Retrieves all categories with their products."""
@@ -786,16 +793,6 @@ type Query {
 
   """Retrieves shifts for a worker."""
   shiftsByWorker(workerId: String!): [ShiftEntity!]!
-}
-
-enum FreelanceCategory {
-  PLUMBER
-  ELECTRICIAN
-  CARPENTER
-  MECHANIC
-  TUTOR
-  CLEANER
-  OTHER
 }
 
 input LowStockAlertInput {

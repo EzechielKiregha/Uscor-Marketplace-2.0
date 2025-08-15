@@ -1,13 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { FreelanceServiceService } from './freelance-service.service';
 import { FreelanceServiceEntity } from './entities/freelance-service.entity';
-import { AssignWorkersInput, CreateFreelanceServiceInput } from './dto/create-freelance-service.input';
+import { AssignWorkersInput, CreateFreelanceServiceInput, FreelanceServiceCategory } from './dto/create-freelance-service.input';
 import { UpdateFreelanceServiceInput } from './dto/update-freelance-service.input';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UseGuards } from '@nestjs/common';
-import { FreelanceCategory } from './freelance-service.module';
 
 // Resolver
 @Resolver(() => FreelanceServiceEntity)
@@ -27,7 +26,7 @@ export class FreelanceServiceResolver {
 
   @Query(() => [FreelanceServiceEntity], { name: 'freelanceServices', description: 'Retrieves freelance services, optionally filtered by category.' })
   async getFreelanceServices(
-    @Args('category', { type: () => FreelanceCategory, nullable: true }) category?: FreelanceCategory,
+    @Args('category', { type: () => FreelanceServiceCategory, nullable: true }) category?: FreelanceServiceCategory,
   ) {
     return this.freelanceServiceService.findAll(category);
   }

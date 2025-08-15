@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AssignWorkersInput, CreateFreelanceServiceInput } from './dto/create-freelance-service.input';
+import { AssignWorkersInput, CreateFreelanceServiceInput, FreelanceServiceCategory } from './dto/create-freelance-service.input';
 import { UpdateFreelanceServiceInput } from './dto/update-freelance-service.input';
 import { PrismaService } from '../prisma/prisma.service';
-import { FreelanceCategory } from './freelance-service.module';
 
 // Service
 @Injectable()
@@ -32,7 +31,17 @@ export class FreelanceServiceService {
     });
   }
 
-  async findAll(category?: FreelanceCategory) {
+  async findAll(category?: FreelanceServiceCategory) {
+
+    if (category && !Object.values(FreelanceServiceCategory).includes(category)) {
+      return this.prisma.freelanceService.findMany({
+        include: {
+          business: { select: { id: true, name: true, avatar:true, email: true, createdAt: true } },
+          workerServiceAssignments: { include: { worker: true } },
+      }
+      });
+    }
+
     return this.prisma.freelanceService.findMany({
       where: { ...(category ? { category } : {}) },
       include: {

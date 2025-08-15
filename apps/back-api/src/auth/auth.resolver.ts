@@ -1,8 +1,9 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { SignInInput } from './dto/signin.input';
-import { AuthPayloadBusiness, AuthPayloadClient, AuthPayloadWorker } from './entities/auth-payload.entity';
+import { AuthPayload, AuthPayloadBusiness, AuthPayloadClient, AuthPayloadWorker } from './entities/auth-payload.entity';
 import { JwtService } from '@nestjs/jwt';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver()
 export class AuthResolver {
@@ -32,6 +33,22 @@ export class AuthResolver {
     const payload = await this.jwtService.verifyAsync(refreshToken);
     const { accessToken } = await this.authService.generateToken(payload.sub, payload.role);
     return { accessToken };
+  }
+  @Query(() => AuthPayload)
+  async verifyCurrentUser(@Context() context: any) {
+    const authHeader = context.req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('No token provided');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      const user = await this.authService.validateCurrentAccountJwt(payload.sub, payload.role);
+      return { id: user.id, role: user.role };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }
 

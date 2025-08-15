@@ -16,14 +16,42 @@ interface Product {
   businessAvatarUrl?: string;
 }
 
-interface GridItemProps {
-  product: Product;
-  onLike?: (id: string | number) => void;
+interface FreelanceService {
+  id: string | number;
+  title: string;
+  description: string;
+  isHourly: boolean;
+  rate: number;
+  category: string;
+  createdAt: string;
+  updatedAt: string;
+  business: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+  workerServiceAssignments: {
+    id: string;
+    role: string;
+    assignedAt: string;
+  }[];
+  href: string;
 }
 
-interface MasonryGridProps {
-  products: Product[];
+// --- Base Props for any Grid Item ---
+type GridItemProps<T> = {
+  item: T;
   onLike?: (id: string | number) => void;
+};
+
+// --- MasonryGrid Props ---
+interface MasonryGridProps<T> {
+  items: T[];
+  onLike?: (id: string | number) => void;
+  // Optional: custom GridItem component
+  GridItem?: React.FC<GridItemProps<T>>;
+  // Fallback if no GridItem is provided
+  defaultGridItem?: React.FC<GridItemProps<T>>;
 }
 
 // --- SVG Icons ---
@@ -44,8 +72,8 @@ const HeartIcon = () => (
   </svg>
 );
 
-// --- GridItem Component ---
-const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
+// --- Default GridItem for Product ---
+export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: product, onLike }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imgSrc, setImgSrc] = useState(product.imageUrl);
 
@@ -76,7 +104,6 @@ const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
           onError={handleImageError}
         />
 
-        {/* Hover Overlay */}
         <AnimatePresence>
           {isHovered && (
             <motion.div
@@ -125,7 +152,6 @@ const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
         </AnimatePresence>
       </div>
 
-      {/* Mobile/Fallback Info */}
       {!isHovered && (
         <div className="mt-2">
           <p className="text-foreground font-medium truncate">{product.title}</p>
@@ -151,13 +177,96 @@ const GridItem: React.FC<GridItemProps> = ({ product, onLike }) => {
   );
 };
 
-// --- MasonryGrid Component ---
-export default function MasonryGrid({ products, onLike }: MasonryGridProps) {
+// --- GridItem for Freelance Services ---
+export const ServiceGridItem: React.FC<GridItemProps<FreelanceService>> = ({ item: service, onLike }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onLike) onLike(service.id);
+  };
+
+  return (
+    <motion.div
+      className="mb-6 break-inside-avoid cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ y: -5 }}
+      transition={{ type: 'spring', stiffness: 300 }}
+      onClick={() => (window.location.href = service.href)}
+    >
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-lg bg-muted flex items-center justify-center">
+        <div className="p-6 text-center">
+          <h3 className="text-lg font-bold text-foreground mb-2">{service.title}</h3>
+          <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{service.description}</p>
+          <div className="flex justify-between items-center">
+            <span className="text-primary font-semibold">
+              ${service.rate.toFixed(2)} {service.isHourly ? '/hr' : 'fixed'}
+            </span>
+            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">{service.category}</span>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center"
+            >
+              <div className="p-6 text-center">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  onClick={handleLike}
+                  className="p-2 bg-white dark:bg-gray-950 rounded-full mb-4 group"
+                  aria-label={`Like ${service.title}`}
+                >
+                  <HeartIcon />
+                </motion.button>
+                <h3 className="text-white font-bold text-base">{service.title}</h3>
+                <p className="text-white/90 text-sm">${service.rate.toFixed(2)} {service.isHourly ? '/hr' : 'fixed'}</p>
+                <p className="text-white/75 text-xs mt-1">{service.business.name}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {!isHovered && (
+        <div className="mt-2">
+          <p className="text-foreground font-medium truncate">{service.title}</p>
+          <p className="text-primary text-sm font-bold">
+            ${service.rate.toFixed(2)} {service.isHourly ? '/hr' : 'fixed'}
+          </p>
+          <p className="text-muted-foreground text-xs">{service.category}</p>
+          <p className="text-xs text-muted-foreground truncate">{service.business.name}</p>
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+// --- Reusable MasonryGrid ---
+export default function MasonryGrid<T>({
+  items,
+  onLike,
+  GridItem,
+}: MasonryGridProps<T>) {
+  // Use the provided GridItem, or fallback to a placeholder
+  const ItemComponent = GridItem;
+
+  if (!ItemComponent) {
+    console.warn('MasonryGrid: No GridItem component provided.');
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <div className="columns-1 gap-6 sm:columns-2 md:columns-3 lg:columns-4">
-        {products.map((product) => (
-          <GridItem key={product.id} product={product} onLike={onLike} />
+        {items.map((item: any) => (
+          <ItemComponent key={item.id} item={item} onLike={onLike} />
         ))}
       </div>
     </div>

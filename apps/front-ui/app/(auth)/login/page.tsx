@@ -4,13 +4,14 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setAuthToken } from '@/lib/auth';
+import { getUserRole, setAuthToken } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { GlowButton } from '@/components/seraui/GlowButton';
 import { useToast } from '@/components/toast-provider';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getLoginMutation } from '@/graphql/auth.gql';
+import { removeTypename } from '@/graphql/client.gql';
 
 // SVG Icons (reused from provided Login)
 const UserIcon = () => (
@@ -133,11 +134,10 @@ export default function LoginPage() {
   const onSubmit = async (data: FormData) => {
     try {
       const mutation = getLoginMutation(data.role);
-      const { data: { [`sign${data.role}In`]: result } } = await signIn({
+      let { data: { [`sign${data.role}In`]: result } } = await signIn({
         mutation: mutation,
         variables: { SignInInput: { email: data.email, password: data.password } },
       });
-      setAuthToken(result.accessToken, result.refreshToken);
       showToast(
         'success',
         'Success',
@@ -146,7 +146,24 @@ export default function LoginPage() {
         8000,
         'bottom-right'
       )
-      router.push('/');
+      result = removeTypename(result);
+      setAuthToken(result.accessToken, result.refreshToken);
+      // router.push('/');
+      const role = getUserRole();
+      if (role && role === 'client') {
+        console.log('Redirecting to client dashboard');
+        router.push('/client/dashboard');
+      } else if (role && role === 'business') {
+        console.log('Redirecting to business dashboard');
+        router.push('/business/dashboard');
+      }
+      else if (role && role === 'worker') {
+        console.log('Redirecting to worker dashboard');
+        router.push('/worker/dashboard');
+      } else {
+        console.warn('Unknown role, redirecting to home');
+        router.push('/');
+      }
     } catch (err: any) {
       showToast(
         'error',

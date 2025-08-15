@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_FEATURED_PRODUCTS } from '@/graphql/product.gql';
-import MasonryGrid from './MasonryGrid';
+import MasonryGrid, { ProductGridItem } from './MasonryGrid';
+import Loader from './Loader';
 
 export default function FeaturedProducts() {
   const { data, error, loading } = useQuery(GET_FEATURED_PRODUCTS);
@@ -26,16 +27,8 @@ export default function FeaturedProducts() {
     }
   }, [data]);
 
-  if (loading) return (
-    <div className="flex flex-col my-20 bg-background dark:bg-gray-950 justify-center items-center">
-      <div className="w-8 h-8 bg-orange-600 rounded animate-spin"></div>
-    </div>
-  );
-  if (error) return (
-    <div className="flex flex-col my-20 bg-background dark:bg-gray-950 justify-center items-center">
-      <div className="w-8 h-8 bg-orange-600 rounded animate-spin"></div>
-    </div>
-  );
+  if (loading) return <Loader loading={true} />;
+  if (error) return <Loader loading={true} />;
 
   const handleLike = (id: string | number) => {
     console.log('Liked product:', id);
@@ -45,7 +38,7 @@ export default function FeaturedProducts() {
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8">
       <h2 className="text-2xl font-bold text-foreground mb-8">Featured Products</h2>
-      <MasonryGrid products={products} onLike={handleLike} />
+      <MasonryGrid items={products} GridItem={ProductGridItem} onLike={handleLike} />
     </section>
   );
 }

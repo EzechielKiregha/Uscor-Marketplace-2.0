@@ -1,12 +1,10 @@
 'use client';
 
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import ProductReel from '@/components/ProductReel';
 import FeaturedProducts from '@/components/seraui/FeaturedProducts';
 import Footer from '@/components/seraui/FooterSection';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { GET_FEATURED_PRODUCTS } from '@/graphql/product.gql';
 import { useNavigation } from '@/hooks/useNavigation';
 import { ArrowDownToLine, DollarSign, Paintbrush } from 'lucide-react';
 import Image from 'next/image';
