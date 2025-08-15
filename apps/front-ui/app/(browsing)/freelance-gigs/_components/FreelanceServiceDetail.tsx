@@ -8,14 +8,14 @@ import { useToast } from '@/components/toast-provider';
 import Loader from '@/components/seraui/Loader';
 
 interface FreelanceServiceDetailProps {
-  params: { id: string };
+  id: string
 }
 
-export default function FreelanceServiceDetail({ params }: FreelanceServiceDetailProps) {
+export default function FreelanceServiceDetail({ id }: FreelanceServiceDetailProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { loading, error, data } = useQuery(GET_FREELANCE_SERVICE_BY_ID, {
-    variables: { id: params.id },
+    variables: { id },
   });
   const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
     onCompleted: () => {
@@ -44,7 +44,7 @@ export default function FreelanceServiceDetail({ params }: FreelanceServiceDetai
     createChat({
       variables: {
         createChatInput: removeTypename({
-          serviceId: params.id,
+          serviceId: id,
           status: 'OPEN',
           isSecure: false,
           negotiationType: 'FREELANCE',

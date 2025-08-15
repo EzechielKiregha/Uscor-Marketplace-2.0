@@ -12,20 +12,20 @@ import { GlowButton } from '@/components/seraui/GlowButton';
 import { useToast } from '@/components/toast-provider';
 
 interface ChatThreadProps {
-  params: { id: string };
+  id: string
 }
 
 const messageSchema = z.object({
   message: z.string().min(1, 'Message is required'),
 });
 
-export default function ChatThread({ params }: ChatThreadProps) {
+export default function ChatThread({ id }: ChatThreadProps) {
   const { loading, error, data } = useQuery(GET_CHAT_BY_ID, {
-    variables: { id: params.id },
+    variables: { id: id },
   });
   const { showToast } = useToast();
   const { loading: messagesLoading, data: messagesData } = useQuery(GET_CHAT_MESSAGES_BY_CHAT, {
-    variables: { chatId: params.id },
+    variables: { chatId: id },
   });
   const [createMessage, { loading: createLoading }] = useMutation(CREATE_CHAT_MESSAGE, {
     onCompleted: () => {
@@ -49,7 +49,7 @@ export default function ChatThread({ params }: ChatThreadProps) {
         'bottom-right'
       )
     },
-    refetchQueries: [{ query: GET_CHAT_MESSAGES_BY_CHAT, variables: { chatId: params.id } }],
+    refetchQueries: [{ query: GET_CHAT_MESSAGES_BY_CHAT, variables: { chatId: id } }],
   });
 
   const form = useForm({
@@ -61,7 +61,7 @@ export default function ChatThread({ params }: ChatThreadProps) {
     createMessage({
       variables: {
         createChatMessageInput: removeTypename({
-          chatId: params.id,
+          chatId: id,
           message: data.message,
           senderId: 'current-user-id', // Replace with actual user ID from auth
         }),
