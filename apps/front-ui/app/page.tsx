@@ -24,7 +24,7 @@ export default function HomePage() {
       {/* Featured Products */}
       <FeaturesSection />
 
-      <FeaturedProducts />
+      <FeaturedProducts title='Featured Products' subtitle='' href='/marketplace/products' />
 
       {/* Logos Marquee */}
       <div className="py-12 px-4">
@@ -33,15 +33,14 @@ export default function HomePage() {
           <MarqueeScroller items={logos2} speed="30s" direction="reverse" itemWidth="120px" />
         </div>
       </div>
-
-      {/* Testimonials */}
-      <TestimonialSection />
+      {/* Pricing */}
+      <PricingSection />
 
       {/* Team */}
       <TeamSection />
 
-      {/* Pricing */}
-      <PricingSection />
+      {/* Testimonials */}
+      <TestimonialSection />
 
       {/* Footer */}
       <Footer />

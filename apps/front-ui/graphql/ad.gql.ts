@@ -1,110 +1,142 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-// 📦 Get All Ads
-export const GET_ADS = gql`
-  query GetAds {
-    ads {
+// ======================
+// AD ENTITIES
+// ======================
+
+export const AD_ENTITY = gql`
+  fragment AdEntity on Ad {
+    id
+    businessId
+    productId
+    price
+    periodDays
+    createdAt
+    endedAt
+    business {
       id
-      businessId
-      productId
+      name
+      avatar
+    }
+    product {
+      id
+      title
       price
-      periodDays
-      createdAt
-      endedAt
-      business {
-        id
-        name
-      }
-      product {
-        id
-        title
-      }
+      imageUrl
     }
   }
 `;
 
-// 📦 Get Ad by ID
+// ======================
+// QUERIES
+// ======================
+
+export const GET_ADS = gql`
+  query GetAds(
+    $businessId: String
+    $productId: String
+    $minPrice: Float
+    $maxPrice: Float
+    $activeOnly: Boolean
+    $page: Int = 1
+    $limit: Int = 20
+  ) {
+    ads(
+      businessId: $businessId
+      productId: $productId
+      minPrice: $minPrice
+      maxPrice: $maxPrice
+      activeOnly: $activeOnly
+      page: $page
+      limit: $limit
+    ) {
+      items {
+        ...AdEntity
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${AD_ENTITY}
+`;
+
 export const GET_AD_BY_ID = gql`
   query GetAdById($id: String!) {
     ad(id: $id) {
-      id
-      businessId
-      productId
-      price
-      periodDays
-      createdAt
-      endedAt
-      business {
-        id
-        name
-      }
-      product {
-        id
-        title
-      }
+      ...AdEntity
     }
   }
+  ${AD_ENTITY}
 `;
 
-// 📦 Get Ads by Business
-export const GET_ADS_BY_BUSINESS = gql`
-  query GetAdsByBusiness($businessId: String!) {
-    ads(businessId: $businessId) {
-      id
-      businessId
-      productId
-      price
-      periodDays
-      createdAt
-      endedAt
-      business {
-        id
-        name
-      }
-      product {
-        id
-        title
-      }
+export const GET_ACTIVE_ADS = gql`
+  query GetActiveAds {
+    activeAds {
+      ...AdEntity
     }
   }
+  ${AD_ENTITY}
 `;
 
-// ➕ Create Ad
+// ======================
+// MUTATIONS
+// ======================
+
 export const CREATE_AD = gql`
-  mutation CreateAd($createAdInput: CreateAdInput!) {
-    createAd(createAdInput: $createAdInput) {
-      id
-      businessId
-      productId
-      price
-      periodDays
-      createdAt
-      endedAt
+  mutation CreateAd($input: CreateAdInput!) {
+    createAd(input: $input) {
+      ...AdEntity
     }
   }
+  ${AD_ENTITY}
 `;
 
-// ✏ Update Ad
 export const UPDATE_AD = gql`
-  mutation UpdateAd($id: String!, $updateAdInput: UpdateAdInput!) {
-    updateAd(id: $id, updateAdInput: $updateAdInput) {
-      id
-      businessId
-      productId
-      price
-      periodDays
-      createdAt
-      endedAt
+  mutation UpdateAd($id: String!, $input: UpdateAdInput!) {
+    updateAd(id: $id, input: $input) {
+      ...AdEntity
     }
   }
+  ${AD_ENTITY}
 `;
 
-// ❌ Delete Ad
-export const DELETE_AD = gql`
-  mutation DeleteAd($id: String!) {
-    deleteAd(id: $id) {
+export const CANCEL_AD = gql`
+  mutation CancelAd($id: String!) {
+    cancelAd(id: $id) {
+      ...AdEntity
+    }
+  }
+  ${AD_ENTITY}
+`;
+
+// ======================
+// SUBSCRIPTIONS
+// ======================
+
+export const ON_AD_CREATED = gql`
+  subscription OnAdCreated($businessId: String!) {
+    adCreated(businessId: $businessId) {
+      ...AdEntity
+    }
+  }
+  ${AD_ENTITY}
+`;
+
+export const ON_AD_UPDATED = gql`
+  subscription OnAdUpdated($businessId: String!) {
+    adUpdated(businessId: $businessId) {
+      ...AdEntity
+    }
+  }
+  ${AD_ENTITY}
+`;
+
+export const ON_AD_ENDED = gql`
+  subscription OnAdEnded($businessId: String!) {
+    adEnded(businessId: $businessId) {
       id
-      productId
+      endedAt
     }
   }
 `;

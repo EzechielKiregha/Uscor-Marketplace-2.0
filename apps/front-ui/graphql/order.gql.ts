@@ -1,108 +1,224 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-// 📦 Get All Orders
-export const GET_ORDERS = gql`
-  query GetOrders {
-    orders {
+// ======================
+// ORDER ENTITIES
+// ======================
+
+export const ORDER_ENTITY = gql`
+  fragment OrderEntity on Order {
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
       id
-      deliveryFee
-      deliveryAddress
-      qrCode
+      fullName
+      email
+    }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        imageUrl
+      }
+    }
+    status
+  }
+`;
+
+export const ORDER_PRODUCT_ENTITY = gql`
+  fragment OrderProductEntity on OrderProduct {
+    id
+    orderId
+    productId
+    quantity
+    order {
+      id
       createdAt
-      updatedAt
-      clientId
-      client {
-        id
-        fullName
-      }
-      payment {
-        id
-        amount
-        status
-      }
-      products {
-        id
-        quantity
-        product {
-          id
-          title
-        }
-      }
+    }
+    product {
+      id
+      title
+      price
+      imageUrl
     }
   }
 `;
 
-// 📦 Get Order by ID
+// ======================
+// QUERIES
+// ======================
+
+export const GET_ORDERS = gql`
+  query GetOrders(
+    $clientId: String
+    $businessId: String
+    $minTotal: Float
+    $maxTotal: Float
+    $status: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $page: Int = 1
+    $limit: Int = 20
+  ) {
+    orders(
+      clientId: $clientId
+      businessId: $businessId
+      minTotal: $minTotal
+      maxTotal: $maxTotal
+      status: $status
+      startDate: $startDate
+      endDate: $endDate
+      page: $page
+      limit: $limit
+    ) {
+      items {
+        ...OrderEntity
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${ORDER_ENTITY}
+`;
+
 export const GET_ORDER_BY_ID = gql`
   query GetOrderById($id: String!) {
     order(id: $id) {
-      id
-      deliveryFee
-      deliveryAddress
-      qrCode
-      createdAt
-      updatedAt
-      clientId
-      client {
-        id
-        fullName
-      }
-      payment {
-        id
-        amount
-        status
-      }
-      products {
-        id
-        quantity
-        product {
-          id
-          title
-        }
-      }
+      ...OrderEntity
     }
   }
+  ${ORDER_ENTITY}
 `;
 
-// ➕ Create Order
+export const GET_CLIENT_ORDERS = gql`
+  query GetClientOrders($clientId: String!, $page: Int = 1, $limit: Int = 20) {
+    clientOrders(clientId: $clientId, page: $page, limit: $limit) {
+      items {
+        ...OrderEntity
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${ORDER_ENTITY}
+`;
+
+export const GET_BUSINESS_ORDERS = gql`
+  query GetBusinessOrders($businessId: String!, $page: Int = 1, $limit: Int = 20) {
+    businessOrders(businessId: $businessId, page: $page, limit: $limit) {
+      items {
+        ...OrderEntity
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${ORDER_ENTITY}
+`;
+
+// ======================
+// MUTATIONS
+// ======================
+
 export const CREATE_ORDER = gql`
-  mutation CreateOrder($createOrderInput: CreateOrderInput!) {
-    createOrder(createOrderInput: $createOrderInput) {
-      id
-      deliveryFee
-      deliveryAddress
-      qrCode
-      createdAt
-      updatedAt
-      clientId
+  mutation CreateOrder($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      ...OrderEntity
     }
   }
+  ${ORDER_ENTITY}
 `;
 
-// ✏ Update Order
 export const UPDATE_ORDER = gql`
-  mutation UpdateOrder($id: String!, $updateOrderInput: UpdateOrderInput!) {
-    updateOrder(id: $id, updateOrderInput: $updateOrderInput) {
+  mutation UpdateOrder($id: String!, $input: UpdateOrderInput!) {
+    updateOrder(id: $id, input: $input) {
+      ...OrderEntity
+    }
+  }
+  ${ORDER_ENTITY}
+`;
+
+export const ADD_ORDER_PRODUCT = gql`
+  mutation AddOrderProduct($orderId: String!, $input: AddOrderProductInput!) {
+    addOrderProduct(orderId: $orderId, input: $input) {
+      ...OrderProductEntity
+    }
+  }
+  ${ORDER_PRODUCT_ENTITY}
+`;
+
+export const UPDATE_ORDER_PRODUCT = gql`
+  mutation UpdateOrderProduct($id: String!, $input: UpdateOrderProductInput!) {
+    updateOrderProduct(id: $id, input: $input) {
+      ...OrderProductEntity
+    }
+  }
+  ${ORDER_PRODUCT_ENTITY}
+`;
+
+export const REMOVE_ORDER_PRODUCT = gql`
+  mutation RemoveOrderProduct($id: String!) {
+    removeOrderProduct(id: $id) {
       id
-      deliveryFee
-      deliveryAddress
-      qrCode
-      createdAt
-      updatedAt
-      clientId
     }
   }
 `;
 
-// ❌ Delete Order
-export const DELETE_ORDER = gql`
-  mutation DeleteOrder($id: String!) {
-    deleteOrder(id: $id) {
-      id
+export const PROCESS_ORDER_PAYMENT = gql`
+  mutation ProcessOrderPayment($orderId: String!, $input: ProcessPaymentInput!) {
+    processOrderPayment(orderId: $orderId, input: $input) {
+      ...OrderEntity
     }
   }
+  ${ORDER_ENTITY}
 `;
 
+// ======================
+// SUBSCRIPTIONS
+// ======================
+
+export const ON_ORDER_CREATED = gql`
+  subscription OnOrderCreated($clientId: String!, $businessId: String!) {
+    orderCreated(clientId: $clientId, businessId: $businessId) {
+      ...OrderEntity
+    }
+  }
+  ${ORDER_ENTITY}
+`;
+
+export const ON_ORDER_UPDATED = gql`
+  subscription OnOrderUpdated($clientId: String!, $businessId: String!) {
+    orderUpdated(clientId: $clientId, businessId: $businessId) {
+      ...OrderEntity
+    }
+  }
+  ${ORDER_ENTITY}
+`;
+
+export const ON_ORDER_PAYMENT_PROCESSED = gql`
+  subscription OnOrderPaymentProcessed($orderId: String!) {
+    orderPaymentProcessed(orderId: $orderId) {
+      ...OrderEntity
+    }
+  }
+  ${ORDER_ENTITY}
+`;
 /**
  * Utility function to remove __typename from objects.
  */

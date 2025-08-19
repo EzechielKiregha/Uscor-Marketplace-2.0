@@ -1,6 +1,6 @@
 // lib/useMe.ts
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { fetchMe } from './fetchMe';
 import { BusinessEntity, ClientEntity, WorkerEntity } from './types';
 import { useToast } from '@/components/toast-provider';
@@ -18,6 +18,7 @@ export function useMe() {
   const [id, setId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const path = usePathname()
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export function useMe() {
           setUser(null);
           setRole(null);
           setId(null);
-          router.push('/login');
+          if (path !== '/' && path !== "/marketplace/products" && path !== '/marketplace/freelance-gigs' ) router.push('/');
         } else {
           setUser(res.user);
           setRole(res.role);
@@ -44,7 +45,7 @@ export function useMe() {
         setUser(null);
         setRole(null);
         setId(null);
-        router.push('/login');
+        if (path !== '/' && path !== "/marketplace/products" && path !== '/marketplace/freelance-gigs' ) router.push('/login');
       } finally {
         if (mounted) setLoading(false);
       }
@@ -55,18 +56,21 @@ export function useMe() {
   }, [router]);
 
   // Show toast notification for errors
-  useEffect(() => {
-    if (error) {
-      showToast(
-        'error',
-        'Failed',
-        "failed to fetch user profile. Please log in again.",
-        true,
-        8000,
-        'bottom-right'
-      )
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (path !== '/'){
+  //     if (error) {
+  //       showToast(
+  //         'error',
+  //         'Failed',
+  //         "failed to fetch user profile. Please log in again.",
+  //         true,
+  //         8000,
+  //         'bottom-right'
+  //       )
+  //     }
+  //   }
+    
+  // }, [error]);
 
   return { loading, user, role, id, error };
 }

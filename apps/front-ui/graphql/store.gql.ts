@@ -1,109 +1,101 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-// 📦 Get All Stores
-export const GET_STORES = gql`
-  query GetStores {
-    stores {
+// ======================
+// STORE ENTITIES
+// ======================
+
+export const STORE_ENTITY = gql`
+  fragment StoreEntity on Store {
+    id
+    name
+    address
+    createdAt
+    updatedAt
+    business {
       id
-      businessId
       name
-      address
+    }
+    sales {
+      id
+      totalAmount
       createdAt
-      updatedAt
-      business {
-        id
-        name
-      }
+    }
+    purchaseOrders {
+      id
+      status
+      createdAt
+    }
+    transferOrdersFrom {
+      id
+      status
+      createdAt
+    }
+    transferOrdersTo {
+      id
+      status
+      createdAt
+    }
+    inventoryAdjustments {
+      id
+      quantity
+      createdAt
+    }
+    shifts {
+      id
+      startTime
+      endTime
     }
   }
 `;
 
-// 📦 Get Store by ID
+// ======================
+// QUERIES
+// ======================
+
+export const GET_STORES = gql`
+  query GetStores($businessId: String!) {
+    stores(businessId: $businessId) {
+      ...StoreEntity
+    }
+  }
+  ${STORE_ENTITY}
+`;
+
 export const GET_STORE_BY_ID = gql`
   query GetStoreById($id: String!) {
     store(id: $id) {
-      id
-      businessId
-      name
-      address
-      createdAt
-      updatedAt
-      business {
-        id
-        name
-      }
+      ...StoreEntity
     }
   }
+  ${STORE_ENTITY}
 `;
 
-// 📦 Get Stores by Business
-export const GET_STORES_BY_BUSINESS = gql`
-  query GetStoresByBusiness($businessId: String!) {
-    stores(businessId: $businessId) {
-      id
-      businessId
-      name
-      address
-      createdAt
-      updatedAt
-      business {
-        id
-        name
-      }
-    }
-  }
-`;
+// ======================
+// MUTATIONS
+// ======================
 
-// ➕ Create Store
 export const CREATE_STORE = gql`
-  mutation CreateStore($createStoreInput: CreateStoreInput!) {
-    createStore(createStoreInput: $createStoreInput) {
-      id
-      businessId
-      name
-      address
-      createdAt
-      updatedAt
+  mutation CreateStore($input: CreateStoreInput!) {
+    createStore(input: $input) {
+      ...StoreEntity
     }
   }
+  ${STORE_ENTITY}
 `;
 
-// ✏ Update Store
 export const UPDATE_STORE = gql`
-  mutation UpdateStore($id: String!, $updateStoreInput: UpdateStoreInput!) {
-    updateStore(id: $id, updateStoreInput: $updateStoreInput) {
-      id
-      businessId
-      name
-      address
-      createdAt
-      updatedAt
+  mutation UpdateStore($id: String!, $input: UpdateStoreInput!) {
+    updateStore(id: $id, input: $input) {
+      ...StoreEntity
     }
   }
+  ${STORE_ENTITY}
 `;
 
-// ❌ Delete Store
 export const DELETE_STORE = gql`
   mutation DeleteStore($id: String!) {
     deleteStore(id: $id) {
       id
-      name
     }
   }
 `;
-
-/**
- * Utility function to remove __typename from objects.
- */
-export const removeTypename: any = (obj: any) => {
-  if (Array.isArray(obj)) {
-    return obj.map(removeTypename);
-  } else if (obj && typeof obj === 'object') {
-    const { __typename, ...rest } = obj;
-    return Object.keys(rest).reduce((acc, key) => {
-      acc[key] = removeTypename(rest[key]);
-      return acc;
-    }, {} as any);
-  }
-  return obj;
-};

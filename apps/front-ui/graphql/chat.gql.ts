@@ -1,78 +1,157 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-// 📦 Get All Chats
-export const GET_CHATS = gql`
-  query GetChats {
-    chats {
+// ======================
+// CHAT ENTITIES
+// ======================
+
+export const CHAT_ENTITY = gql`
+  fragment ChatEntity on Chat {
+    id
+    productId
+    clientId
+    businessId
+    workerId
+    status
+    createdAt
+    updatedAt
+    product {
       id
-      status
-      isSecure
-      negotiationType
-      productId
-      serviceId
+      title
+      price
+    }
+    client {
+      id
+      fullName
+      avatar
+    }
+    business {
+      id
+      name
+      avatar
+    }
+    worker {
+      id
+      fullName
+      avatar
+    }
+    messages {
+      id
+      content
+      senderType
+      senderId
       createdAt
-      updatedAt
-      product {
-        id
-        title
-      }
-      service {
-        id
-        title
-      }
-      participants {
-        id
-        clientId
-        businessId
-        workerId
-      }
-      messages {
-        id
-        message
-        senderId
-        createdAt
-      }
     }
   }
 `;
 
-// 📦 Get Chat by ID
+export const CHAT_MESSAGE_ENTITY = gql`
+  fragment ChatMessageEntity on ChatMessage {
+    id
+    chatId
+    content
+    senderType
+    senderId
+    createdAt
+    sender {
+      id
+      fullName
+      avatar
+    }
+  }
+`;
+
+export const CHAT_NOTIFICATION_ENTITY = gql`
+  fragment ChatNotificationEntity on ChatNotification {
+    id
+    chatId
+    userId
+    lastReadAt
+    unreadCount
+    createdAt
+    updatedAt
+  }
+`;
+
+// ======================
+// QUERIES
+// ======================
+
+export const GET_CHATS = gql`
+  query GetChats(
+    $productId: String
+    $clientId: String
+    $businessId: String
+    $workerId: String
+    $status: ChatStatus
+    $search: String
+    $page: Int = 1
+    $limit: Int = 20
+  ) {
+    chats(
+      productId: $productId
+      clientId: $clientId
+      businessId: $businessId
+      workerId: $workerId
+      status: $status
+      search: $search
+      page: $page
+      limit: $limit
+    ) {
+      items {
+        ...ChatEntity
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
 export const GET_CHAT_BY_ID = gql`
   query GetChatById($id: String!) {
     chat(id: $id) {
-      id
-      status
-      isSecure
-      negotiationType
-      productId
-      serviceId
-      createdAt
-      updatedAt
-      product {
-        id
-        title
+      ...ChatEntity
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
+export const GET_CHAT_MESSAGES = gql`
+  query GetChatMessages(
+    $chatId: String!
+    $after: String
+    $before: String
+    $limit: Int = 20
+  ) {
+    chatMessages(
+      chatId: $chatId
+      after: $after
+      before: $before
+      limit: $limit
+    ) {
+      items {
+        ...ChatMessageEntity
       }
-      service {
-        id
-        title
-      }
-      participants {
-        id
-        clientId
-        businessId
-        workerId
-      }
-      messages {
-        id
-        message
-        senderId
-        createdAt
+      hasMore
+      cursor
+    }
+  }
+  ${CHAT_MESSAGE_ENTITY}
+`;
+
+export const GET_UNREAD_COUNT = gql`
+  query GetUnreadCount($userId: String!) {
+    unreadChatCount(userId: $userId) {
+      totalUnread
+      chatsWithUnread {
+        chatId
+        unreadCount
       }
     }
   }
 `;
 
-// 📦 Get Chats by Participant
 export const GET_CHATS_BY_PARTICIPANT = gql`
   query GetChatsByParticipant($participantId: String!) {
     chats(participantId: $participantId) {
@@ -108,56 +187,110 @@ export const GET_CHATS_BY_PARTICIPANT = gql`
   }
 `;
 
-// ➕ Create Chat
+export const GET_CHAT_NOTIFICATIONS = gql`
+  query GetChatNotifications($userId: String!) {
+    chatNotifications(userId: $userId) {
+      ...ChatNotificationEntity
+    }
+  }
+  ${CHAT_NOTIFICATION_ENTITY}
+`;
+
+// ======================
+// MUTATIONS
+// ======================
+
 export const CREATE_CHAT = gql`
-  mutation CreateChat($createChatInput: CreateChatInput!) {
-    createChat(createChatInput: $createChatInput) {
-      id
-      status
-      isSecure
-      negotiationType
-      productId
-      serviceId
-      createdAt
-      updatedAt
+  mutation CreateChat($input: CreateChatInput!) {
+    createChat(input: $input) {
+      ...ChatEntity
     }
   }
+  ${CHAT_ENTITY}
 `;
 
-// ✏ Update Chat
-export const UPDATE_CHAT = gql`
-  mutation UpdateChat($id: String!, $updateChatInput: UpdateChatInput!) {
-    updateChat(id: $id, updateChatInput: $updateChatInput) {
-      id
-      status
-      isSecure
-      negotiationType
-      productId
-      serviceId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
-// ❌ Delete Chat
-export const DELETE_CHAT = gql`
-  mutation DeleteChat($id: String!) {
-    deleteChat(id: $id) {
-      id
-    }
-  }
-`;
-
-// ➕ Send Message
 export const SEND_MESSAGE = gql`
-  mutation SendMessage($createChatMessageInput: CreateChatMessageInput!) {
-    sendMessage(createChatMessageInput: $createChatMessageInput) {
-      id
+  mutation SendMessage($input: SendMessageInput!) {
+    sendMessage(input: $input) {
+      ...ChatMessageEntity
+    }
+  }
+  ${CHAT_MESSAGE_ENTITY}
+`;
+
+export const MARK_MESSAGES_AS_READ = gql`
+  mutation MarkMessagesAsRead($chatId: String!, $userId: String!) {
+    markMessagesAsRead(chatId: $chatId, userId: $userId) {
+      success
+      unreadCount
+    }
+  }
+`;
+
+export const UPDATE_CHAT_STATUS = gql`
+  mutation UpdateChatStatus($id: String!, $status: ChatStatus!) {
+    updateChatStatus(id: $id, status: $status) {
+      ...ChatEntity
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
+export const START_NEGOTIATION = gql`
+  mutation StartNegotiation($input: StartNegotiationInput!) {
+    startNegotiation(input: $input) {
+      ...ChatEntity
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
+export const ACCEPT_NEGOTIATION = gql`
+  mutation AcceptNegotiation($negotiationId: String!) {
+    acceptNegotiation(negotiationId: $negotiationId) {
+      ...ChatEntity
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
+// ======================
+// SUBSCRIPTIONS
+// ======================
+
+export const ON_CHAT_CREATED = gql`
+  subscription OnChatCreated($userId: String!) {
+    chatCreated(userId: $userId) {
+      ...ChatEntity
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
+export const ON_MESSAGE_RECEIVED = gql`
+  subscription OnMessageReceived($chatId: String!) {
+    messageReceived(chatId: $chatId) {
+      ...ChatMessageEntity
+    }
+  }
+  ${CHAT_MESSAGE_ENTITY}
+`;
+
+export const ON_CHAT_STATUS_UPDATED = gql`
+  subscription OnChatStatusUpdated($userId: String!) {
+    chatStatusUpdated(userId: $userId) {
+      ...ChatEntity
+    }
+  }
+  ${CHAT_ENTITY}
+`;
+
+export const ON_UNREAD_COUNT_UPDATED = gql`
+  subscription OnUnreadCountUpdated($userId: String!) {
+    unreadCountUpdated(userId: $userId) {
+      totalUnread
       chatId
-      message
-      senderId
-      createdAt
+      unreadCount
     }
   }
 `;

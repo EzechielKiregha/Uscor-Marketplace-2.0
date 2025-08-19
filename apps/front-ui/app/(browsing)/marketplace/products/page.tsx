@@ -1,4 +1,5 @@
 "use client"
+import CategoryScrollArea from '@/components/CategoryScrollArea'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/ProductReel'
 import Footer from '@/components/seraui/FooterSection'
@@ -22,12 +23,21 @@ function ProductsPage() {
       {/* Header */}
       <HeaderComponent />
       <MaxWidthWrapper>
-        <ProductReel
-          title="Explore Our High-Quality Products"
-          href="/marketplace/products"
-          query={GET_PRODUCTS}
-          limit={20}
-        />
+        <div className="flex">
+          {/* Sidebar: Category Scroll Area */}
+          <CategoryScrollArea type="products" />
+
+          {/* Main: Service List */}
+          <div className="flex-1 min-w-0">
+            <ProductReel
+              title="Explore Our High-Quality Products"
+              href="/marketplace/products"
+              query={GET_PRODUCTS}
+              limit={20}
+            />
+          </div>
+        </div>
+
       </MaxWidthWrapper>
       {/* Footer */}
       <Footer />

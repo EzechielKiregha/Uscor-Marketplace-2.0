@@ -1,25 +1,123 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-// 📦 Get All Products
-export const GET_PRODUCTS = gql`
-  query GetProducts {
-  products {
+// ======================
+// PRODUCT ENTITIES
+// ======================
+
+export const PRODUCT_ENTITY = gql`
+  fragment ProductEntity on Product {
     id
     title
-    price
-    quantity
-    medias { url }
     description
-    approvedForSale
+    price
+    stock
+    isFeatured
+    categoryId
+    createdAt
+    updatedAt
     category {
+      id
       name
+      description
+    }
+    media {
+      id
+      url
+      type
     }
     business {
+      id
       name
       avatar
     }
   }
-}
+`;
+
+export const CATEGORY_ENTITY = gql`
+  fragment CategoryEntity on Category {
+    id
+    name
+    description
+    createdAt
+    updatedAt
+    products {
+      id
+      title
+      price
+      stock
+    }
+  }
+`;
+
+export const MEDIA_ENTITY = gql`
+  fragment MediaEntity on Media {
+    id
+    url
+    type
+    productId
+    createdAt
+  }
+`;
+
+// ======================
+// QUERIES
+// ======================
+
+export const GET_PRODUCTS = gql`
+  query GetProducts(
+    $categoryId: String
+    $minPrice: Float
+    $maxPrice: Float
+    $inStock: Boolean
+    $search: String
+    $page: Int = 1
+    $limit: Int = 20
+  ) {
+    products(
+      categoryId: $categoryId
+      minPrice: $minPrice
+      maxPrice: $maxPrice
+      inStock: $inStock
+      search: $search
+      page: $page
+      limit: $limit
+    ) {
+      items {
+        ...ProductEntity
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${PRODUCT_ENTITY}
+`;
+
+export const GET_PRODUCT_BY_ID = gql`
+  query GetProductById($id: String!) {
+    product(id: $id) {
+      ...ProductEntity
+    }
+  }
+  ${PRODUCT_ENTITY}
+`;
+
+export const GET_CATEGORIES = gql`
+  query GetCategories {
+    categories {
+      ...CategoryEntity
+    }
+  }
+  ${CATEGORY_ENTITY}
+`;
+
+export const GET_CATEGORY_BY_ID = gql`
+  query GetCategoryById($id: String!) {
+    category(id: $id) {
+      ...CategoryEntity
+    }
+  }
+  ${CATEGORY_ENTITY}
 `;
 
 export const GET_FEATURED_PRODUCTS = gql`
@@ -63,65 +161,92 @@ export const GET_RELATED_PRODUCTS = gql`
   }
 `;
 
-// 📦 Get Single Product
-export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($id: String!) {
-    product(id: $id) {
-      id
-      title
-      price
-      description
-      medias {
-        url
-      }
-      quantity
-      business {
-        id
-        name
-        avatar
-      }
-      category {
-        name
-      }
-      approvedForSale
-    }
-  }
-`;
+// ======================
+// MUTATIONS
+// ======================
 
-// ➕ Create Product
 export const CREATE_PRODUCT = gql`
-  mutation CreateProduct($createProductInput: CreateProductInput!) {
-    createProduct(createProductInput: $createProductInput) {
-      id
-      title
-      price
-      quantity
+  mutation CreateProduct($input: CreateProductInput!) {
+    createProduct(input: $input) {
+      ...ProductEntity
     }
   }
+  ${PRODUCT_ENTITY}
 `;
 
-// ✏ Update Product
 export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($id: String!, $updateProductInput: UpdateProductInput!) {
-    updateProduct(id: $id, updateProductInput: $updateProductInput) {
-      id
-      title
-      price
-      quantity
+  mutation UpdateProduct($id: String!, $input: UpdateProductInput!) {
+    updateProduct(id: $id, input: $input) {
+      ...ProductEntity
     }
   }
+  ${PRODUCT_ENTITY}
 `;
 
-// ❌ Delete Product
 export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: String!) {
     deleteProduct(id: $id) {
       id
-      title
     }
   }
 `;
 
+export const CREATE_CATEGORY = gql`
+  mutation CreateCategory($input: CreateCategoryInput!) {
+    createCategory(input: $input) {
+      ...CategoryEntity
+    }
+  }
+  ${CATEGORY_ENTITY}
+`;
+
+export const UPDATE_CATEGORY = gql`
+  mutation UpdateCategory($id: String!, $input: UpdateCategoryInput!) {
+    updateCategory(id: $id, input: $input) {
+      ...CategoryEntity
+    }
+  }
+  ${CATEGORY_ENTITY}
+`;
+
+export const ADD_PRODUCT_MEDIA = gql`
+  mutation AddProductMedia($productId: String!, $input: AddMediaInput!) {
+    addProductMedia(productId: $productId, input: $input) {
+      ...MediaEntity
+    }
+  }
+  ${MEDIA_ENTITY}
+`;
+
+export const REMOVE_PRODUCT_MEDIA = gql`
+  mutation RemoveProductMedia($mediaId: String!) {
+    removeProductMedia(mediaId: $mediaId) {
+      id
+    }
+  }
+`;
+
+// ======================
+// SUBSCRIPTIONS
+// ======================
+
+export const ON_PRODUCT_CREATED = gql`
+  subscription OnProductCreated($businessId: String!) {
+    productCreated(businessId: $businessId) {
+      ...ProductEntity
+    }
+  }
+  ${PRODUCT_ENTITY}
+`;
+
+export const ON_PRODUCT_UPDATED = gql`
+  subscription OnProductUpdated($businessId: String!) {
+    productUpdated(businessId: $businessId) {
+      ...ProductEntity
+    }
+  }
+  ${PRODUCT_ENTITY}
+`;
 /**
  * Utility function to remove __typename from objects.
  */

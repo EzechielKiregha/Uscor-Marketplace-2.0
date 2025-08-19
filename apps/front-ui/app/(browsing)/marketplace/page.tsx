@@ -83,7 +83,7 @@ export default function MarketplacePage() {
             limit={4}
           /> */}
 
-          <FeaturedProducts />
+          <FeaturedProducts title='Featured Products' subtitle='' href='/marketplace/products' />
         </MaxWidthWrapper>
 
         {/* Perks Section */}

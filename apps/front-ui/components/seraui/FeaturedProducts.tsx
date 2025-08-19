@@ -5,8 +5,24 @@ import { useQuery } from '@apollo/client';
 import { GET_FEATURED_PRODUCTS } from '@/graphql/product.gql';
 import MasonryGrid, { ProductGridItem } from './MasonryGrid';
 import Loader from './Loader';
+import Link from 'next/link';
 
-export default function FeaturedProducts() {
+interface ProductReelProps {
+  title: string;
+  subtitle?: string;
+  href?: string;
+  variables?: Record<string, any>;
+  limit?: number;
+}
+
+export default function FeaturedProducts({
+  title,
+  subtitle,
+  href,
+  variables,
+}: ProductReelProps
+
+) {
   const { data, error, loading } = useQuery(GET_FEATURED_PRODUCTS);
   const [products, setProducts] = useState<any[]>([]);
 
@@ -37,7 +53,20 @@ export default function FeaturedProducts() {
 
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8">
-      <h2 className="text-2xl font-bold text-foreground mb-8">Featured Products</h2>
+      <div className="md:flex md:items-center md:justify-between mb-4">
+        <div className="max-w-2xl px-4 lg:max-w-4xl lg:px-0">
+          {title && <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>}
+          {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
+        </div>
+        {href && (
+          <Link
+            href={href}
+            className="hidden text-sm font-medium underline md:block"
+          >
+            See more &rarr;
+          </Link>
+        )}
+      </div>
       <MasonryGrid items={products} GridItem={ProductGridItem} onLike={handleLike} />
     </section>
   );

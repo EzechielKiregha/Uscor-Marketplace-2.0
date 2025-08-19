@@ -44,7 +44,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
     message?: string,
     showIcon: boolean = true,
     duration: number = 3000,
-    position: NotificationPosition = 'top-right'
+    position: NotificationPosition = 'bottom-right'
   ) => {
     const id = nextIdRef.current++;
     const newNotification: NotificationItem = {

@@ -39,6 +39,36 @@ export const GET_BUSINESSES = gql`
   }
 `;
 
+export const GET_BUSINESS_DASHBOARD = gql`
+  query GetBusinessDashboard($businessId: String!) {
+    businessDashboard(businessId: $businessId) {
+      stats {
+        totalRevenue
+        revenueChange
+        totalOrders
+        ordersChange
+        totalProducts
+        lowStockProducts
+        unreadMessages
+        totalMessages
+      }
+      salesData {
+        date
+        sales
+      }
+      recentOrders {
+        id
+        client {
+          fullName
+        }
+        createdAt
+        totalAmount
+        status
+      }
+    }
+  }
+`;
+
 // 📦 Get Business by ID
 export const GET_BUSINESS_BY_ID = gql`
   query GetBusinessById($id: String!) {
