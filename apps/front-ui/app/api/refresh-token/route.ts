@@ -1,4 +1,3 @@
-// src/app/api/refresh-token/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { gql } from '@apollo/client';
 import { client } from '@/lib/apollo-client';

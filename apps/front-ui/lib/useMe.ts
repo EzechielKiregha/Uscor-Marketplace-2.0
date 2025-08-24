@@ -1,9 +1,9 @@
-// lib/useMe.ts
+"use client"
+
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { fetchMe } from './fetchMe';
 import { BusinessEntity, ClientEntity, WorkerEntity } from './types';
-import { useToast } from '@/components/toast-provider';
 
 type MeResult =
   | { role: 'client'; id: string; user: ClientEntity }
@@ -19,7 +19,6 @@ export function useMe() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const path = usePathname()
-  const { showToast } = useToast();
 
   useEffect(() => {
     let mounted = true;

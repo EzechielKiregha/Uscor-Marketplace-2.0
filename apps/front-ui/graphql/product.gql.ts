@@ -11,8 +11,7 @@ export const PRODUCT_ENTITY = gql`
     description
     price
     quantity
-    isFeatured
-    categoryId
+    featured
     createdAt
     updatedAt
     category {
@@ -20,7 +19,7 @@ export const PRODUCT_ENTITY = gql`
       name
       description
     }
-    media {
+    medias {
       id
       url
       type
@@ -64,42 +63,63 @@ export const MEDIA_ENTITY = gql`
 // ======================
 
 export const GET_PRODUCTS = gql`
-  query GetProducts(
-    $categoryId: String
-    $minPrice: Float
-    $maxPrice: Float
-    $inStock: Boolean
-    $search: String
-    $page: Int = 1
-    $limit: Int = 20
-  ) {
-    products(
-      categoryId: $categoryId
-      minPrice: $minPrice
-      maxPrice: $maxPrice
-      inStock: $inStock
-      search: $search
-      page: $page
-      limit: $limit
-    ) {
-      items {
-        ...ProductEntity
+  query GetProducts {
+    products {
+      id
+      title
+      description
+      price
+      quantity
+      featured
+      createdAt
+      updatedAt
+      category {
+        id
+        name
+        description
       }
-      total
-      page
-      limit
+      medias {
+        id
+        url
+        type
+      }
+      business {
+        id
+        name
+        avatar
+      }
     }
   }
-  ${PRODUCT_ENTITY}
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
-  query GetProductById($id: String!) {
+  query GetProduct($id: String!) {
     product(id: $id) {
-      ...ProductEntity
+      id
+      title
+      description
+      price
+      quantity
+      featured
+      createdAt
+      updatedAt
+      category {
+        id
+        name
+        description
+      }
+      medias {
+        id
+        url
+        type
+      }
+      business {
+        id
+        name
+        avatar
+      }
     }
   }
-  ${PRODUCT_ENTITY}
 `;
 
 export const GET_CATEGORIES = gql`
@@ -125,15 +145,24 @@ export const GET_FEATURED_PRODUCTS = gql`
     products {
       id
       title
+      description
       price
       quantity
-      description
-      medias { url }
-      approvedForSale
+      featured
+      createdAt
+      updatedAt
       category {
+        id
         name
+        description
+      }
+      medias {
+        id
+        url
+        type
       }
       business {
+        id
         name
         avatar
       }
@@ -145,15 +174,24 @@ export const GET_RELATED_PRODUCTS = gql`
     relatedProducts(category: $category) {
       id
       title
+      description
       price
       quantity
-      description
-      medias { url }
-      approvedForSale
+      featured
+      createdAt
+      updatedAt
       category {
+        id
         name
+        description
+      }
+      medias {
+        id
+        url
+        type
       }
       business {
+        id
         name
         avatar
       }

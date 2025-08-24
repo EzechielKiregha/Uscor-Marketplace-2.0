@@ -82,6 +82,46 @@ export enum TokenTransactionType {
   REPOST_COMMISSION = 'REPOST_COMMISSION',
 }
 
+
+export interface AuthPayload {
+  id: string;
+  role: string;
+  email?: string;
+}
+
+
+export interface AuthPayloadClient {
+  id : string;
+  email : string;
+  fullname : string;
+  phone : string;
+  avatar? : string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface AuthPayloadWorker {
+  id : string;
+  email : string;
+  fullname : string;
+  phone : string;
+  accessToken: string;
+  
+  refreshToken: string;
+}
+
+export interface AuthPayloadBusiness {
+  id : string;
+  email : string;
+  name : string;
+  phone : string;
+  avatar? : string;
+  coverImage? : string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+
 export interface ClientEntity {
   id: string;
   username: string;

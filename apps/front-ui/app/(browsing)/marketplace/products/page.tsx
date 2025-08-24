@@ -7,6 +7,7 @@ import HeaderComponent from '@/components/seraui/HeaderComponent'
 import { PRODUCT_CATEGORIES } from '@/config/product-categories'
 import { GET_PRODUCTS } from '@/graphql/product.gql'
 import { useSearchParams } from 'next/navigation'
+import ProductHero from '../../freelance-gigs/_components/ProductHero'
 
 function ProductsPage() {
   const searchParams = useSearchParams();
@@ -23,6 +24,7 @@ function ProductsPage() {
       {/* Header */}
       <HeaderComponent />
       <MaxWidthWrapper>
+        <ProductHero />
         <div className="flex">
           {/* Sidebar: Category Scroll Area */}
           <CategoryScrollArea type="products" />

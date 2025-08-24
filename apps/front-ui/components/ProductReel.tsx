@@ -5,6 +5,9 @@ import { useQuery } from '@apollo/client';
 import ProductListing from './ProductListing';
 import { ProductEntity } from '@/lib/types';
 import { removeTypename } from '@/lib/removeTypeName';
+import MasonryGrid, { ProductGridItem } from './seraui/MasonryGrid';
+import { AlertTriangle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface ProductReelProps {
   title: string;
@@ -26,49 +29,53 @@ export default function ProductReel({
   limit = FALLBACK_LIMIT,
 }: ProductReelProps) {
   const { data, loading, error } = useQuery(query, { variables });
+  const productsData: ProductEntity[] = new Array()
+  const [products, setProducts] = useState<any[]>([]);
 
-  if (loading) return (
-    <div className="flex flex-col my-20 bg-background dark:bg-gray-950 justify-center items-center">
-      <div className="w-8 h-8 bg-orange-600 rounded animate-spin"></div>
-    </div>
-  );
-
-  if (error) return <p className="text-center py-10 text-destructive">Error loading products: {error.message}</p>;
-
-  // Dynamically extract the products field from the query result
-  const products: ProductEntity[] = (Object.values(data || {}).find(
-    (value): value is ProductEntity[] => Array.isArray(value) && value.every((item) => item.id)
-  )) || [];
-
-  const productsData = products.map((product: ProductEntity) => ({
-    ...removeTypename(product),
-  }));
-
-  const displayItems = productsData.length
-    ? productsData
-    : Array.from({ length: limit }, () => null);
+  useEffect(() => {
+    if (data) {
+      const formatted = data.products.map((product: any) => ({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: product.quantity,
+        href: `/marketplace/products/${product.id}`,
+        imageUrl: product.medias?.url || `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`,
+        categoryName: product.category?.name || 'Uncategorized',
+        businessName: product.business?.name || 'Unknown Vendor',
+        businessAvatarUrl: product.business?.avatar || null,
+      }));
+      setProducts(formatted);
+    }
+  }, [data]);
 
   return (
-    <section className="py-12 mx-1.5 sm:mx-0">
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
       <div className="md:flex md:items-center md:justify-between mb-4">
         <div className="max-w-2xl px-4 lg:max-w-4xl lg:px-0">
           {title && <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>}
           {subtitle && <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>}
         </div>
-        {href && (
-          <Link
-            href={href}
-            className="hidden text-sm font-medium underline md:block"
-          >
-            See more &rarr;
-          </Link>
-        )}
       </div>
-      <div className="relative mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-4 lg:gap-x-8">
-        {displayItems.map((product, i) => (
-          <ProductListing key={`product-${i}`} product={product} index={i} />
-        ))}
-      </div>
-    </section>
+      {loading && (
+        <div className="flex flex-col bg-transparent justify-center items-center">
+          <div className="w-8 h-8 bg-orange-600 rounded mt-20 animate-spin"></div>
+          <h3 className="font-medium text-gray-700  text-xl">Loading products ...</h3>
+        </div>
+      )}
+      {error && <p className="text-center text-red-500">Error: {error.message}</p>}
+      {products && products.length > 0 ? (
+        <MasonryGrid
+          items={products}
+          GridItem={ProductGridItem}
+          onLike={(id) => console.log(`Liked service ${id}`)}
+        />
+      ) : !loading && (
+        <div className="flex flex-col justify-center mt-20 items-center">
+          <AlertTriangle />
+          <h3 className='font-medium text-gray-700 text-xl'>No Services Displayed</h3>
+        </div>
+      )}
+    </div>
   );
 }

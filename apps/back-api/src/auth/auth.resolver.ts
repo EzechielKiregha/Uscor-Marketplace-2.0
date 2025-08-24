@@ -34,6 +34,7 @@ export class AuthResolver {
     const { accessToken } = await this.authService.generateToken(payload.sub, payload.role);
     return { accessToken };
   }
+  
   @Query(() => AuthPayload)
   async verifyCurrentUser(@Context() context: any) {
     const authHeader = context.req.headers.authorization;

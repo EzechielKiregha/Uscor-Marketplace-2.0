@@ -37,7 +37,10 @@ export default function HeroSection() {
             <Link href="/marketplace/products">Browse Products</Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="px-8 border-muted-foreground/30">
-            <Link href="/freelance">Hire Talent</Link>
+            <Link href="/freelance-gigs">Hire Talent</Link>
+          </Button>
+          <Button asChild size="lg" className="px-8 glow-button">
+            <Link href="/signup">join as Business</Link>
           </Button>
         </div>
       </div>

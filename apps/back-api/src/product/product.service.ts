@@ -51,7 +51,7 @@ export class ProductService {
     return this.prisma.product.findUnique({
       where: { id },
       include: {
-        medias: { select: { id: true, url : true, type: true }},
+        medias: { select: { id: true, url : true, type: true } },
         business: { select: { id: true, name: true, email: true, avatar: true } },
         category: { select: { id: true, name: true, description: true, createdAt: true } },
         store : { select: { id: true, name: true, address: true, createdAt: true  } },

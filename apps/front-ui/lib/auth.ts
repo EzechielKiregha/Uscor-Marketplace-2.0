@@ -60,7 +60,7 @@ export const logout = () => {
 
 export const refreshToken = async () => {
   const refreshToken = getRefreshToken();
-  if (!refreshToken) throw new Error('No refresh token available');
+  if (!refreshToken) throw new Error('Invalid Role');
 
   try {
     const response = await fetch('/api/refresh-token', {

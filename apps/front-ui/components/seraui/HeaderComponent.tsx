@@ -33,6 +33,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { Button } from '../ui/button';
+import Cart from '../Cart';
 // Type definitions
 interface SearchIconProps {
   size?: number;
@@ -164,7 +165,7 @@ const MenuIcon: React.FC = () => (
 const Logo: React.FC = () => (
   <div className="flex items-center justify-center gap-2">
     <Image alt='logo' src='/logo.png' width={50} height={40} />
-    <span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">Uscor Marketplace</span>
+    <span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">Uscor</span>
   </div>
 );
 
@@ -205,6 +206,7 @@ export const businessTypes = [
 function HeaderComponent() {
   const id = useId();
   const [isMobileSearchVisible, setIsMobileSearchVisible] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
 
@@ -268,7 +270,7 @@ function HeaderComponent() {
               alt="User avatar"
               className="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600"
             />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
+            <span className="text-sm sm:hidden lg:block font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
               {displayName}
             </span>
             <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
@@ -358,6 +360,7 @@ function HeaderComponent() {
         </div>
       )}
 
+
       {/* Default Header View */}
       <div className={`flex h-14 sm:h-16 items-center justify-between gap-4 px-4 lg:px-6 ${isMobileSearchVisible ? 'hidden' : 'flex'}`}>
         {/* Left side: Mobile Menu, Logo, Desktop Nav */}
@@ -412,7 +415,7 @@ function HeaderComponent() {
                     <NavigationMenuItem className="w-full">
                       <Button
                         onClick={toggleTheme}
-                        asChild variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                        variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                         aria-label="Toggle theme"
                       >
                         {theme === 'dark' ? (
@@ -478,24 +481,29 @@ function HeaderComponent() {
 
         {/* Right side: Search, Theme Toggle, and Sign In */}
         <div className="flex items-center gap-2">
-          <div className="relative hidden lg:block">
+          <div className="relative hidden lg:hidden">
             <Input id={id} className="form-field h-9 pl-9 pr-2 w-64" placeholder="Search Product..." type="search" />
             <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
               <SearchIcon size={16} />
             </div>
           </div>
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="flex items-center lg:block md:hidden gap-2">
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsSearchVisible(true)}>
+              <SearchIcon size={18} />
+            </Button>
+
+          </div>
+          <div className="flex items-center lg:hidden gap-2">
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsMobileSearchVisible(true)}>
               <SearchIcon size={18} />
             </Button>
-            <div className="flex items-center">
-              <UserDropdown />
-            </div>
+            <UserDropdown />
+            <Cart />
           </div>
           <div className="hidden lg:flex">
             <Button
               onClick={toggleTheme}
-              asChild variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+              variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
               aria-label="Toggle theme"
             >
               {theme === 'dark' ? (
@@ -505,10 +513,30 @@ function HeaderComponent() {
               )}
             </Button>
             <UserDropdown />
+            <Cart />
 
           </div>
         </div>
       </div>
+      {isSearchVisible && (
+        <div className="flex h-14 sm:h-16 items-center gap-2 px-4">
+          <div className="relative flex-1">
+            <Input
+              id={id + "-mobile-search"}
+              className="form-field h-9 pl-9 pr-2 w-full"
+              placeholder="Search product..."
+              type="search"
+              autoFocus
+            />
+            <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
+              <SearchIcon size={16} />
+            </div>
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => setIsSearchVisible(false)}>
+            Cancel
+          </Button>
+        </div>
+      )}
     </header>
   );
 }
