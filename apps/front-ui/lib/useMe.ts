@@ -33,7 +33,7 @@ export function useMe() {
           setUser(null);
           setRole(null);
           setId(null);
-          if (path !== '/' && path !== "/marketplace/products" && path !== '/marketplace/freelance-gigs' ) router.push('/');
+          // if (path !== '/' && path !== "/marketplace/products" && path !== '/freelance-gigs' ) router.push('/');
         } else {
           setUser(res.user);
           setRole(res.role);
@@ -45,7 +45,7 @@ export function useMe() {
         setUser(null);
         setRole(null);
         setId(null);
-        if (path !== '/' && path !== "/marketplace/products" && path !== '/marketplace/freelance-gigs' ) router.push('/login');
+        if (path !== '/' && path !== "/marketplace/products" && path !== '/freelance-gigs' ) router.push('/login');
       } finally {
         if (mounted) setLoading(false);
       }

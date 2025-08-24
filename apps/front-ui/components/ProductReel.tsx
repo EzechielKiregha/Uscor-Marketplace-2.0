@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import ProductListing from './ProductListing';
 import { ProductEntity } from '@/lib/types';
-import { removeTypename } from '@/graphql/product.gql';
+import { removeTypename } from '@/lib/removeTypeName';
 
 interface ProductReelProps {
   title: string;

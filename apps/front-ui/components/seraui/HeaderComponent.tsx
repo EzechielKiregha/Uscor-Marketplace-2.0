@@ -3,27 +3,39 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import React, { useState, useId, useRef, useEffect, ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import NavItems from '../NavItems';
-import FreelanceNavItems from '../FreelanceNavItems';
 import Link from 'next/link';
 import { useMe } from '@/lib/useMe';
-import { getAccessToken, logout } from '@/lib/auth';
+import { logout } from '@/lib/auth';
 import { BusinessEntity, ClientEntity, WorkerEntity } from '@/lib/types';
 import { Popover, PopoverContent, PopoverTrigger } from './PopOver';
-import ResponsiveFreelanceNav from '../ResponsiveFreelanceNav';
-
+import {
+  ShoppingCart,
+  Coffee,
+  UtensilsCrossed,
+  Shirt,
+  Wine,
+  Store,
+  Hammer,
+  Palette,
+  Wrench,
+  Plug,
+  Car,
+  BookOpen,
+  GraduationCap,
+  Brush,
+  Layout,
+  PenTool,
+  Languages,
+  Lightbulb,
+  Briefcase,
+  ChevronDown,
+  ExternalLink,
+  ArrowUpRight,
+} from "lucide-react";
+import { Button } from '../ui/button';
 // Type definitions
 interface SearchIconProps {
   size?: number;
-}
-
-interface ButtonProps {
-  asChild?: boolean;
-  className?: string;
-  variant?: 'default' | 'ghost';
-  size?: 'default' | 'sm' | 'icon';
-  children?: ReactNode;
-  onClick?: () => void;
 }
 
 interface InputProps {
@@ -156,23 +168,6 @@ const Logo: React.FC = () => (
   </div>
 );
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ asChild = false, className = '', variant = 'default', size = 'default', children, ...props }, ref) => {
-  const Comp = asChild ? 'span' : 'button';
-  const baseClasses = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
-  const variantClasses: Record<string, string> = {
-    default: "bg-background dark:bg-gray-950 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200",
-    ghost: "hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white",
-  };
-  const sizeClasses: Record<string, string> = {
-    default: "h-10 px-4 py-2",
-    sm: "h-9 rounded-md px-3",
-    icon: "h-8 w-8 sm:h-10 sm:w-10",
-  };
-  const elementProps = props as React.HTMLAttributes<HTMLElement>;
-  return <Comp className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`} ref={ref} {...elementProps}>{children}</Comp>;
-});
-Button.displayName = 'Button';
-
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
   <input
     className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-950 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
@@ -193,20 +188,18 @@ const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({ href, className
 
 
 
-// Navigation links configuration
-const businessTypes = [
-  { href: '/business-types/grocery', label: 'Grocery & convenience' },
-  { href: '/business-types/cafe', label: 'Café' },
-  { href: '/business-types/restaurant', label: 'Restaurant' },
-  { href: '/business-types/retail', label: 'Retail' },
-  { href: '/business-types/bar', label: 'Bar & Pub' },
-  { href: '/business-types/clothing', label: 'Clothing & accessories' },
-];
-
-const marketplaceBusinessTypes = [
-  { href: '/business-types/artisan', label: 'Artisan Shop' },
-  { href: '/business-types/tool-making', label: 'Tool making' },
-  ...businessTypes,
+// ✅ Main business types for navigation
+export const businessTypes = [
+  { href: '/business-types/artisan', label: 'Artisan & Handcrafted Goods', icon: Palette },
+  { href: '/business-types/bookstore', label: 'Bookstore & Stationery', icon: BookOpen },
+  { href: '/business-types/electronics', label: 'Electronics & Gadgets', icon: Plug },
+  { href: '/business-types/hardware', label: 'Hardware & Tools', icon: Hammer },
+  { href: '/business-types/grocery', label: 'Grocery & Convenience', icon: ShoppingCart },
+  { href: '/business-types/cafe', label: 'Café & Coffee Shops', icon: Coffee },
+  { href: '/business-types/restaurant', label: 'Restaurant & Dining', icon: UtensilsCrossed },
+  { href: '/business-types/retail', label: 'Retail & General Stores', icon: Store },
+  { href: '/business-types/bar', label: 'Bar & Pub', icon: Wine },
+  { href: '/business-types/clothing', label: 'Clothing & Accessories', icon: Shirt },
 ];
 
 function HeaderComponent() {
@@ -343,7 +336,7 @@ function HeaderComponent() {
   );
 
   return (
-    <header className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 w-full sticky top-0 z-50">
+    <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-white dark:bg-gray-950 w-full sticky top-0 z-50">
       {/* Mobile Search View */}
       {isMobileSearchVisible && (
         <div className="flex h-14 sm:h-16 items-center gap-2 lg:hidden px-4">
@@ -355,7 +348,7 @@ function HeaderComponent() {
               type="search"
               autoFocus
             />
-            <div className="text-gray-400 dark:text-gray-500 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
+            <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
               <SearchIcon size={16} />
             </div>
           </div>
@@ -384,15 +377,17 @@ function HeaderComponent() {
                         {link.isPopover ? (
                           <Popover>
                             <PopoverTrigger>
-                              <Button asChild variant="ghost" className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                              <Button variant="ghost" className="cursor-pointer py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
                                 <span>{link.label}</span>
+                                <ChevronDown size={16} />
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent align="start" className="w-48 p-1">
                               <NavigationMenuList className="flex-col items-start gap-0">
                                 {link.popoverItems?.map((item, i) => (
                                   <NavigationMenuItem key={i} className="w-full">
-                                    <NavigationMenuLink href={item.href} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                                    <NavigationMenuLink href={item.href} className="flex py-2 px-3 gap-1 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                                      <item.icon size={18} className="text-primary" />
                                       {item.label}
                                     </NavigationMenuLink>
                                   </NavigationMenuItem>
@@ -401,8 +396,11 @@ function HeaderComponent() {
                             </PopoverContent>
                           </Popover>
                         ) : (
-                          <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
-                            {link.label}
+                          <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="">
+                            <Button variant="link" className='flex cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors'>
+                              {link.label}
+                              {link.target === '_blank' && <ArrowUpRight size={16} className="opacity-70" />}
+                            </Button>
                           </NavigationMenuLink>
                         )}
                       </NavigationMenuItem>
@@ -446,15 +444,17 @@ function HeaderComponent() {
                   {link.isPopover ? (
                     <Popover>
                       <PopoverTrigger>
-                        <Button asChild variant="ghost" className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1.5 font-medium transition-colors">
+                        <Button variant="ghost" className="cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors">
                           <span>{link.label}</span>
+                          <ChevronDown size={16} />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent align="start" className="w-48 p-1">
                         <NavigationMenuList className="flex-col items-start gap-0">
                           {link.popoverItems?.map((item, i) => (
                             <NavigationMenuItem key={i} className="w-full">
-                              <NavigationMenuLink href={item.href} className="py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                              <NavigationMenuLink href={item.href} className="flex py-2 px-3 gap-1 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                                <item.icon size={18} className="text-primary" />
                                 {item.label}
                               </NavigationMenuLink>
                             </NavigationMenuItem>
@@ -463,8 +463,11 @@ function HeaderComponent() {
                       </PopoverContent>
                     </Popover>
                   ) : (
-                    <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1.5 font-medium transition-colors">
-                      {link.label}
+                    <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="">
+                      <Button variant="link" className='flex cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors'>
+                        {link.label}
+                        {link.target === '_blank' && <ArrowUpRight size={16} className="opacity-70" />}
+                      </Button>
                     </NavigationMenuLink>
                   )}
                 </NavigationMenuItem>
@@ -476,8 +479,8 @@ function HeaderComponent() {
         {/* Right side: Search, Theme Toggle, and Sign In */}
         <div className="flex items-center gap-2">
           <div className="relative hidden lg:block">
-            <Input id={id} className="form-field h-9 pl-9 pr-2 w-64" placeholder="Search..." type="search" />
-            <div className="text-gray-400 dark:text-gray-500 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
+            <Input id={id} className="form-field h-9 pl-9 pr-2 w-64" placeholder="Search Product..." type="search" />
+            <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
               <SearchIcon size={16} />
             </div>
           </div>

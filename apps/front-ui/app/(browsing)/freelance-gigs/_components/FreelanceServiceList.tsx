@@ -4,6 +4,7 @@ import { ApolloError, useQuery } from '@apollo/client';
 import Loader from '@/components/seraui/Loader';
 import { useEffect, useState } from 'react';
 import { client } from '@/lib/apollo-client';
+import { AlertTriangle } from 'lucide-react';
 
 export default function FreelanceServiceList() {
   const [freelanceServices, setFreelanceServices] = useState([]);
@@ -36,18 +37,26 @@ export default function FreelanceServiceList() {
     fetchServices();
   }, []);
 
-  console.log('Freelance services:', freelanceServices);
-
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      {isloading && <Loader loading={true} />}
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
+      {isloading && (
+        <div className="flex flex-col bg-transparent justify-center items-center">
+          <div className="w-8 h-8 bg-orange-600 rounded mt-20 animate-spin"></div>
+          <h3 className="font-medium text-gray-700  text-xl">Loading Services ...</h3>
+        </div>
+      )}
       {error && <p className="text-center text-red-500">Error: {error.message}</p>}
-      {freelanceServices && (
+      {freelanceServices && freelanceServices.length > 0 ? (
         <MasonryGrid
           items={freelanceServices}
           GridItem={ServiceGridItem}
           onLike={(id) => console.log(`Liked service ${id}`)}
         />
+      ) : !isloading && (
+        <div className="flex flex-col justify-center mt-20 items-center">
+          <AlertTriangle />
+          <h3 className='font-medium text-gray-700 text-xl'>No Services Displayed</h3>
+        </div>
       )}
     </div>
   );

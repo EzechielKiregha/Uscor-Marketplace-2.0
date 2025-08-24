@@ -10,7 +10,7 @@ export const PRODUCT_ENTITY = gql`
     title
     description
     price
-    stock
+    quantity
     isFeatured
     categoryId
     createdAt
@@ -44,7 +44,7 @@ export const CATEGORY_ENTITY = gql`
       id
       title
       price
-      stock
+      quantity
     }
   }
 `;
@@ -247,18 +247,4 @@ export const ON_PRODUCT_UPDATED = gql`
   }
   ${PRODUCT_ENTITY}
 `;
-/**
- * Utility function to remove __typename from objects.
- */
-export const removeTypename : any = (obj: any) => {
-  if (Array.isArray(obj)) {
-    return obj.map(removeTypename);
-  } else if (obj && typeof obj === 'object') {
-    const { __typename, ...rest } = obj;
-    return Object.keys(rest).reduce((acc, key) => {
-      acc[key] = removeTypename(rest[key]);
-      return acc;
-    }, {} as any);
-  }
-  return obj;
-};
+

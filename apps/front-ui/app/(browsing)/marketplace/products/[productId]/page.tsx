@@ -1,12 +1,12 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCT_BY_ID, GET_RELATED_PRODUCTS, removeTypename } from '@/graphql/product.gql';
+import { GET_PRODUCT_BY_ID, GET_RELATED_PRODUCTS } from '@/graphql/product.gql';
 import AddToCartButton from '@/components/AddToCartButton';
 import ImageSlider from '@/components/ImageSlider';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import ProductReel from '@/components/ProductReel';
-import { PRODUCT_CATEGORIES } from '@/config';
+import { PRODUCT_CATEGORIES } from '@/config/product-categories';
 import { formatPrice } from '@/lib/utils';
 import { Check, Shield } from 'lucide-react';
 import Link from 'next/link';
@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { useGetProductIdParam } from '@/hooks/use-get-product-params';
 import Footer from '@/components/seraui/FooterSection';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
+import { removeTypename } from '@/lib/removeTypeName';
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },

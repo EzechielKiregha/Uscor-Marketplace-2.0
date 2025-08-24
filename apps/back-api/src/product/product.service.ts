@@ -36,8 +36,8 @@ export class ProductService {
   async findAll() {
     return this.prisma.product.findMany({
       include: {
-        medias: true,
-        business: { select: { id: true, name: true, email: true, createdAt: true } },
+        medias: { select: { id: true, url : true, type: true }},
+        business: { select: { id: true, name: true, email: true, avatar: true } },
         category: { select: { id: true, name: true, description: true, createdAt: true } },
         store : { select: { id: true, name: true, address: true, createdAt: true  } },
         orders: { select: { id: true, quantity: true, orderId: true } },
@@ -51,8 +51,8 @@ export class ProductService {
     return this.prisma.product.findUnique({
       where: { id },
       include: {
-        medias: { select: { url : true }},
-        business: { select: { id: true, name: true, email: true, createdAt: true } },
+        medias: { select: { id: true, url : true, type: true }},
+        business: { select: { id: true, name: true, email: true, avatar: true } },
         category: { select: { id: true, name: true, description: true, createdAt: true } },
         store : { select: { id: true, name: true, address: true, createdAt: true  } },
         orders: { select: { id: true, quantity: true, orderId: true } },

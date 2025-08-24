@@ -4,7 +4,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/ProductReel'
 import Footer from '@/components/seraui/FooterSection'
 import HeaderComponent from '@/components/seraui/HeaderComponent'
-import { PRODUCT_CATEGORIES } from '@/config'
+import { PRODUCT_CATEGORIES } from '@/config/product-categories'
 import { GET_PRODUCTS } from '@/graphql/product.gql'
 import { useSearchParams } from 'next/navigation'
 

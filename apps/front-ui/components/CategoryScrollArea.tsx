@@ -1,7 +1,7 @@
 'use client';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { PRODUCT_CATEGORIES } from '@/config';
+import { PRODUCT_CATEGORIES } from '@/config/product-categories';
 import { FREELANCE_SERVICE_CATEGORIES } from '@/config/freelance-categories';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,6 +18,7 @@ const CategoryScrollArea = ({ type }: CategoryScrollAreaProps) => {
       <div className="space-y-4">
         {categories.map((category: any) => (
           <div key={category.label} className="pb-2">
+            <category.icon size={16} className="text-primary" />
             <h3 className="px-4 text-sm font-semibold text-foreground">{category.label}</h3>
             <div className="mt-2 grid grid-cols-2 gap-2 px-2">
               {category[type === 'products' ? 'featured' : 'services'].map((item: any) => (
@@ -27,12 +28,13 @@ const CategoryScrollArea = ({ type }: CategoryScrollAreaProps) => {
                   className="group flex flex-col p-2 rounded-lg hover:bg-muted transition-colors"
                 >
                   <div className="relative aspect-square rounded-md overflow-hidden bg-muted mb-2">
-                    <img
+                    <Image
                       src={item.imageSrc}
                       alt={item.name}
-                      onError={(e) => {
-                        e.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.name)}`; // Fallback image
-                      }}
+                      fill
+                      // onError={(e) => {
+                      //   e.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.name)}`; // Fallback image
+                      // }}
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
