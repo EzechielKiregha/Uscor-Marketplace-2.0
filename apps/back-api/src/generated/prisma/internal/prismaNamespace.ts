@@ -3634,6 +3634,7 @@ export const OrderScalarFieldEnum = {
   deliveryFee: 'deliveryFee',
   deliveryAddress: 'deliveryAddress',
   qrCode: 'qrCode',
+  totalAmount: 'totalAmount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3694,6 +3695,7 @@ export const ChatMessageScalarFieldEnum = {
   id: 'id',
   chatId: 'chatId',
   message: 'message',
+  isRead: 'isRead',
   senderId: 'senderId',
   createdAt: 'createdAt'
 } as const

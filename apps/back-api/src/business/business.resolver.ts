@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { BusinessDashboardResponse } from './dto/business-dashboard.dto';
 
 @Resolver(() => BusinessEntity)
 export class BusinessResolver {
@@ -61,5 +62,19 @@ export class BusinessResolver {
       throw new Error('Businesses can only delete their own account');
     }
     return this.businessService.remove(id);
+  }
+
+  @Query(() => BusinessDashboardResponse, { name: 'businessDashboard' })
+  async getBusinessDashboard(
+    @Context() context,
+    @Args('businessId') businessId: string,
+  ): Promise<BusinessDashboardResponse> {
+    const user = context.req.user;
+    // Verify that the user has access to this business
+    if (user.role !== 'ADMIN' && user.businessId !== businessId) {
+      throw new Error('Unauthorized access to business dashboard');
+    }
+    
+    return this.businessService.getBusinessDashboard(businessId);
   }
 }
