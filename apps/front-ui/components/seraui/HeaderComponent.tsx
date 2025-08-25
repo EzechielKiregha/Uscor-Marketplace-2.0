@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { Button } from '../ui/button';
 import Cart from '../Cart';
+import { Separator } from '../ui/separator';
 // Type definitions
 interface SearchIconProps {
   size?: number;
@@ -163,7 +164,7 @@ const MenuIcon: React.FC = () => (
 );
 
 const Logo: React.FC = () => (
-  <div className="flex items-center justify-center gap-2">
+  <div className="flex items-center justify-center ">
     <Image alt='logo' src='/logo.png' width={50} height={40} />
     <span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">Uscor</span>
   </div>
@@ -171,7 +172,7 @@ const Logo: React.FC = () => (
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
   <input
-    className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-950 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-950 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
     ref={ref}
     {...props}
   />
@@ -182,7 +183,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ children, className = '
 const NavigationMenuList: React.FC<NavigationMenuListProps> = ({ children, className = '' }) => <ul className={`flex items-center ${className}`}>{children}</ul>;
 const NavigationMenuItem: React.FC<NavigationMenuItemProps> = ({ children, className = '', ...props }) => <li className={`list-none ${className}`} {...props}>{children}</li>;
 const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({ href, className = '', children, target, rel }) => (
-  <a href={href} className={`block px-3 transition-colors ${className}`} target={target} rel={rel}>
+  <a href={href} className={`block transition-colors ${className}`} target={target} rel={rel}>
     {children}
   </a>
 );
@@ -264,13 +265,13 @@ function HeaderComponent() {
     return (
       <Popover>
         <PopoverTrigger>
-          <div className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded-lg transition-colors cursor-pointer">
+          <div className="flex items-center  hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded-lg transition-colors cursor-pointer">
             <img
               src={avatar}
               alt="User avatar"
               className="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600"
             />
-            <span className="text-sm sm:hidden lg:block font-medium text-gray-700 dark:text-gray-200 hidden sm:block">
+            <span className="text-sm sm:hidden lg:block font-medium text-gray-700 dark:text-gray-200 hidden">
               {displayName}
             </span>
             <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
@@ -341,7 +342,7 @@ function HeaderComponent() {
     <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-white dark:bg-gray-950 w-full sticky top-0 z-50">
       {/* Mobile Search View */}
       {isMobileSearchVisible && (
-        <div className="flex h-14 sm:h-16 items-center gap-2 lg:hidden px-4">
+        <div className="flex h-14 sm:h-16 items-center  lg:hidden px-4">
           <div className="relative flex-1">
             <Input
               id={id + "-mobile-search"}
@@ -364,7 +365,7 @@ function HeaderComponent() {
       {/* Default Header View */}
       <div className={`flex h-14 sm:h-16 items-center justify-between gap-4 px-4 lg:px-6 ${isMobileSearchVisible ? 'hidden' : 'flex'}`}>
         {/* Left side: Mobile Menu, Logo, Desktop Nav */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center  sm:gap-4">
           <div className="lg:hidden">
             <Popover>
               <PopoverTrigger>
@@ -441,7 +442,7 @@ function HeaderComponent() {
             <Logo />
           </Link>
           <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList className="gap-2">
+            <NavigationMenuList className="">
               {navLinks.map((link, index) => (
                 <NavigationMenuItem key={index} className="">
                   {link.isPopover ? (
@@ -456,7 +457,7 @@ function HeaderComponent() {
                         <NavigationMenuList className="flex-col items-start gap-0">
                           {link.popoverItems?.map((item, i) => (
                             <NavigationMenuItem key={i} className="w-full">
-                              <NavigationMenuLink href={item.href} className="flex py-2 px-3 gap-1 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
+                              <NavigationMenuLink href={item.href} className="flex py-2 gap-1 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]">
                                 <item.icon size={18} className="text-primary" />
                                 {item.label}
                               </NavigationMenuLink>
@@ -497,8 +498,8 @@ function HeaderComponent() {
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsMobileSearchVisible(true)}>
               <SearchIcon size={18} />
             </Button>
-            <UserDropdown />
             <Cart />
+            <UserDropdown />
           </div>
           <div className="hidden lg:flex">
             <Button
@@ -512,8 +513,8 @@ function HeaderComponent() {
                 <MoonIcon className="h-5 w-5" />
               )}
             </Button>
-            <UserDropdown />
             <Cart />
+            <UserDropdown />
 
           </div>
         </div>

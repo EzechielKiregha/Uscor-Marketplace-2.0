@@ -735,7 +735,7 @@ type Query {
 
   """Retrieves a single business by ID."""
   business(id: String!): BusinessEntity!
-  businessDashboard(businessId: String!): BusinessDashboardResponse!
+  businessDashboard: BusinessDashboardResponse!
 
   """Retrieves all clients with their relations."""
   clients: [ClientEntity!]!

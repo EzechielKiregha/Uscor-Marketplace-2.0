@@ -40,8 +40,8 @@ export const GET_BUSINESSES = gql`
 `;
 
 export const GET_BUSINESS_DASHBOARD = gql`
-  query GetBusinessDashboard($businessId: String!) {
-    businessDashboard(businessId: $businessId) {
+  query GetBusinessDashboard {
+    businessDashboard{
       stats {
         totalRevenue
         revenueChange

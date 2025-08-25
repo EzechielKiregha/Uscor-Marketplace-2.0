@@ -7,8 +7,12 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { DollarSign, Package, ShoppingCart, MessageSquare } from 'lucide-react';
 import { GET_BUSINESS_DASHBOARD } from '@/graphql/business.gql';
 import { OrderEntity } from '@/lib/types';
+import { useMe } from '@/lib/useMe';
 
 export default function BusinessDashboardPage() {
+
+  const bUser = useMe()
+
   const { data, loading, error } = useQuery(GET_BUSINESS_DASHBOARD);
 
   if (loading) return <Loader loading={true} />;
