@@ -64,17 +64,14 @@ export class BusinessResolver {
     return this.businessService.remove(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
   @Query(() => BusinessDashboardResponse, { name: 'businessDashboard' })
-  async getBusinessDashboard(
-    @Context() context,
-    @Args('businessId') businessId: string,
-  ): Promise<BusinessDashboardResponse> {
+  async getBusinessDashboard(@Args('businessId', { type: () => String }) businessId: string,@Context() context) {
     const user = context.req.user;
-    // Verify that the user has access to this business
-    if (user.role !== 'ADMIN' && user.businessId !== businessId) {
-      throw new Error('Unauthorized access to business dashboard');
+    if (user.id !== businessId) {
+    throw new Error('Unauthorized access to business dashboard');
     }
-    
     return this.businessService.getBusinessDashboard(businessId);
   }
 }
