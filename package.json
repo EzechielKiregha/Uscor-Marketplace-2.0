@@ -25,7 +25,8 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "turbo": "^2.5.0"
+    "turbo": "^2.5.0",
+    "date-fns": "^4.1.0"
   },
   "dependencies": {
     "aws-lambda": "^1.0.7",
