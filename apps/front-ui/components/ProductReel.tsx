@@ -29,7 +29,7 @@ export default function ProductReel({
   limit = FALLBACK_LIMIT,
 }: ProductReelProps) {
   const { data, loading, error } = useQuery(query, { variables });
-  const productsData: ProductEntity[] = new Array()
+  const productsData: ProductEntity[] = []
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
