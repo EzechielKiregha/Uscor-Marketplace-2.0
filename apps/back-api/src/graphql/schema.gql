@@ -174,6 +174,46 @@ type ProductEntity {
   ads: [AdEntity!]!
 }
 
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  createdAt: DateTime!
+}
+
+type ChatEntity {
+  id: String!
+  status: ChatStatus!
+  isSecure: Boolean!
+  negotiationType: NegotiationType
+  productId: String
+  product: ProductEntity
+  serviceId: String
+  service: FreelanceServiceEntity
+  participants: [ChatParticipantEntity!]!
+  messages: [ChatMessageEntity!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ChatStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+enum NegotiationType {
+  REOWNERSHIP
+  FREELANCEORDER
+  PURCHASE
+  GENERAL
+}
+
 type KnowYourCustomerEntity {
   id: String!
   status: String!
@@ -232,46 +272,6 @@ type WorkerServiceAssignmentEntity {
   assignedAt: DateTime!
 }
 
-type ChatParticipantEntity {
-  id: String!
-  chatId: String!
-  clientId: String
-  client: ClientEntity
-  businessId: String
-  business: BusinessEntity
-  workerId: String
-  worker: WorkerEntity
-  createdAt: DateTime!
-}
-
-type ChatEntity {
-  id: String!
-  status: ChatStatus!
-  isSecure: Boolean!
-  negotiationType: NegotiationType
-  productId: String
-  product: ProductEntity
-  serviceId: String
-  service: FreelanceServiceEntity
-  participants: [ChatParticipantEntity!]!
-  messages: [ChatMessageEntity!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum ChatStatus {
-  PENDING
-  ACTIVE
-  CLOSED
-}
-
-enum NegotiationType {
-  REOWNERSHIP
-  FREELANCEORDER
-  PURCHASE
-  GENERAL
-}
-
 type FreelanceOrderEntity {
   id: String!
   status: FreelanceStatus!
@@ -313,7 +313,7 @@ type ClientEntity {
   id: String!
   username: String!
   email: String!
-  fullName: String
+  fullName: String!
   address: String
   phone: String
   password: String!
@@ -322,7 +322,6 @@ type ClientEntity {
   updatedAt: DateTime!
   orders: [OrderEntity!]!
   reviews: [ReviewEntity!]!
-  chats: [ChatEntity!]!
   recharges: [AccountRechargeEntity!]!
   freelanceOrders: [FreelanceOrderEntity!]!
   referralsMade: [ReferralEntity!]!
@@ -440,6 +439,41 @@ type ReferralEntity {
   affiliateClient: ClientEntity
   referredBusiness: BusinessEntity
   referredClient: ClientEntity
+}
+
+type DashboardStats {
+  totalRevenue: Int!
+  revenueChange: Int!
+  totalOrders: Int!
+  ordersChange: Int!
+  totalProducts: Int!
+  lowStockProducts: Int!
+  unreadMessages: Int!
+  totalMessages: Int!
+}
+
+type SalesDataPoint {
+  date: String!
+  sales: Int!
+}
+
+type DashboardClientDto {
+  id: ID!
+  fullName: String!
+}
+
+type RecentOrder {
+  id: String!
+  client: DashboardClientDto!
+  createdAt: DateTime!
+  totalAmount: Int!
+  status: String!
+}
+
+type BusinessDashboardResponse {
+  stats: DashboardStats!
+  salesData: [SalesDataPoint!]!
+  recentOrders: [RecentOrder!]!
 }
 
 type AuthPayload {
@@ -701,6 +735,7 @@ type Query {
 
   """Retrieves a single business by ID."""
   business(id: String!): BusinessEntity!
+  businessDashboard(businessId: String!): BusinessDashboardResponse!
 
   """Retrieves all clients with their relations."""
   clients: [ClientEntity!]!

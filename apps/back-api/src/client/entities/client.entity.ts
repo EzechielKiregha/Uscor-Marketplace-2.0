@@ -17,8 +17,8 @@ export class ClientEntity {
   @Field()
   email: string;
 
-  @Field({ nullable: true })
-  fullName?: string;
+  @Field()
+  fullName: string ;
 
   @Field({ nullable: true })
   address?: string;
@@ -45,8 +45,8 @@ export class ClientEntity {
   @Field(() => [ReviewEntity]) // Reviews written by the client
   reviews: ReviewEntity[];
 
-  @Field(() => [ChatEntity]) // Chats associated with the client
-  chats: ChatEntity[];
+  // @Field(() => [ChatEntity]) // Chats associated with the client
+  // chats: ChatEntity[];
 
   @Field(() => [AccountRechargeEntity]) // Recharges made by the client
   recharges: AccountRechargeEntity[];

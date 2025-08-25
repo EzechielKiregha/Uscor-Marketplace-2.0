@@ -3,8 +3,11 @@ import { CreateBusinessInput } from './dto/create-business.input';
 import { UpdateBusinessInput } from './dto/update-business.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { hash } from 'argon2';
-import { BusinessDashboardResponse, DashboardStats, RecentOrder, SalesDataPoint } from './dto/business-dashboard.dto';
 import { format, subDays, startOfDay, endOfDay, isAfter, isBefore, startOfWeek, endOfWeek, addDays } from 'date-fns';
+import { BusinessDashboardResponse } from './entities/business-dashboard.entity';
+import { DashboardStats } from './entities/business-dashboard-stats.entity';
+import { SalesDataPoint } from './entities/sales-data-points.entity';
+import { RecentOrder } from './entities/business-recent-order.entity';
 
 @Injectable()
 export class BusinessService {
@@ -562,6 +565,7 @@ export class BusinessService {
       include: {
         client: {
           select: {
+            id: true,
             fullName: true,
           },
         },
@@ -574,7 +578,8 @@ export class BusinessService {
     return orders.map(order => ({
       id: order.id,
       client: {
-        fullName: order?.client?.fullName ? order.client.fullName : "Client",
+        id: order.client.id,
+        fullName: order.client.fullName ? order.client.fullName : "No Full Name",
       },
       createdAt: order.createdAt,
       totalAmount: order.totalAmount,
