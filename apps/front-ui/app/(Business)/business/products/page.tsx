@@ -1,4 +1,3 @@
-// app/business/products/page.tsx
 'use client';
 
 import { useQuery, useMutation } from '@apollo/client';
@@ -10,20 +9,17 @@ import { useOpenCreateProductModal } from '../_hooks/use-open-create-product-mod
 import { useState } from 'react';
 import { ProductEntity } from '@/lib/types';
 import { useToast } from '@/components/toast-provider';
+import { useMe } from '@/lib/useMe';
 
 export default function BusinessProductsPage() {
   const { isOpen, setIsOpen } = useOpenCreateProductModal();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const showToast = useToast().showToast
+  const bUser = useMe()
 
-  const { data, loading, error, refetch } = useQuery(GET_PRODUCTS, {
-    variables: {
-      businessId: 'current-business-id',
-      search: searchTerm,
-      categoryId: categoryFilter || undefined
-    }
-  });
+  const { data, loading, error, refetch } = useQuery(GET_PRODUCTS);
+  // 1
 
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS]
