@@ -81,17 +81,23 @@ export class StoreService {
       throw new Error('Cannot delete store with associated products');
     }
 
-    return this.prisma.store.delete({
+    return await this.prisma.store.delete({
       where: { id },
       select: { id: true, name: true },
     });
   }
 
   async findAll(businessId: string) {
-    return this.prisma.store.findMany({
+    return await this.prisma.store.findMany({
       where: { businessId },
       include: {
         business: { select: { id: true, name: true, email: true, createdAt: true } },
+        transferOrdersFrom: { select : { id: true, status: true, createdAt:true}},
+        transferOrdersTo: { select : { id: true, status: true, createdAt: true}},
+        inventoryAdjustments: { select : { id: true, quantity: true, createdAt: true}},
+        purchaseOrders: { select : { id: true, status: true, createdAt : true}},
+        sales: { select : { id: true, totalAmount: true, createdAt: true}},
+        shifts: { select: { id: true, startTime: true, endTime: true, createdAt: true}}
       },
     });
   }

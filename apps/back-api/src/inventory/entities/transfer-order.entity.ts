@@ -5,30 +5,30 @@ import { TransferOrderProductEntity } from './transfer-order-product.entity';
 
 @ObjectType()
 export class TransferOrderEntity {
-  @Field()
-  id: string;
+  @Field({nullable: true})
+  id?: string;
 
-  @Field()
-  fromStoreId: string;
+  @Field({nullable: true})
+  fromStoreId?: string;
 
-  @Field(() => StoreEntity)
-  fromStore: StoreEntity;
+  @Field(() => StoreEntity, {nullable: true})
+  fromStore?: StoreEntity;
 
-  @Field()
-  toStoreId: string;
+  @Field({nullable: true})
+  toStoreId?: string;
 
-  @Field(() => StoreEntity)
-  toStore: StoreEntity;
+  @Field(() => StoreEntity, {nullable: true})
+  toStore?: StoreEntity;
 
-  @Field(() => TransferOrderStatus)
-  status: TransferOrderStatus;
+  @Field(() => TransferOrderStatus, {nullable: true})
+  status?: TransferOrderStatus;
 
-  @Field()
-  createdAt: Date;
+  @Field({nullable: true})
+  createdAt?: Date;
 
-  @Field()
-  updatedAt: Date;
+  @Field({nullable: true})
+  updatedAt?: Date;
 
-  @Field(() => [TransferOrderProductEntity])
-  products: TransferOrderProductEntity[];
+  @Field(() => [TransferOrderProductEntity, {nullable: true}])
+  products?: TransferOrderProductEntity[];
 }

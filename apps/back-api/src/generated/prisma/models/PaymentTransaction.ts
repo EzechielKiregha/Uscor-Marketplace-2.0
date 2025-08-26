@@ -321,7 +321,7 @@ export type PaymentTransactionCreateInput = {
   id?: string
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -335,7 +335,7 @@ export type PaymentTransactionUncheckedCreateInput = {
   orderId?: string | null
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -374,7 +374,7 @@ export type PaymentTransactionCreateManyInput = {
   orderId?: string | null
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -544,7 +544,7 @@ export type PaymentTransactionCreateWithoutOrderInput = {
   id?: string
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -556,7 +556,7 @@ export type PaymentTransactionUncheckedCreateWithoutOrderInput = {
   id?: string
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -608,7 +608,7 @@ export type PaymentTransactionCreateWithoutFreelanceOrderInput = {
   id?: string
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -621,7 +621,7 @@ export type PaymentTransactionUncheckedCreateWithoutFreelanceOrderInput = {
   orderId?: string | null
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -672,7 +672,7 @@ export type PaymentTransactionCreateWithoutPostTransactionsInput = {
   id?: string
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -685,7 +685,7 @@ export type PaymentTransactionUncheckedCreateWithoutPostTransactionsInput = {
   orderId?: string | null
   status?: $Enums.PaymentStatus
   method?: $Enums.PaymentMethod
-  amount: number
+  amount?: number
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
@@ -1505,7 +1505,7 @@ export type PaymentTransactionCreateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * The data needed to create a PaymentTransaction.
    */
-  data: Prisma.XOR<Prisma.PaymentTransactionCreateInput, Prisma.PaymentTransactionUncheckedCreateInput>
+  data?: Prisma.XOR<Prisma.PaymentTransactionCreateInput, Prisma.PaymentTransactionUncheckedCreateInput>
 }
 
 /**

@@ -281,7 +281,7 @@ export type LoyaltyProgramScalarWhereWithAggregatesInput = {
 export type LoyaltyProgramCreateInput = {
   id?: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutLoyaltyProgramsInput
@@ -292,7 +292,7 @@ export type LoyaltyProgramUncheckedCreateInput = {
   id?: string
   businessId: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutLoyaltyProgramInput
@@ -322,7 +322,7 @@ export type LoyaltyProgramCreateManyInput = {
   id?: string
   businessId: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -453,7 +453,7 @@ export type LoyaltyProgramUpdateOneRequiredWithoutPointsTransactionsNestedInput 
 export type LoyaltyProgramCreateWithoutBusinessInput = {
   id?: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutLoyaltyProgramInput
@@ -462,7 +462,7 @@ export type LoyaltyProgramCreateWithoutBusinessInput = {
 export type LoyaltyProgramUncheckedCreateWithoutBusinessInput = {
   id?: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutLoyaltyProgramInput
@@ -509,7 +509,7 @@ export type LoyaltyProgramScalarWhereInput = {
 export type LoyaltyProgramCreateWithoutPointsTransactionsInput = {
   id?: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutLoyaltyProgramsInput
@@ -519,7 +519,7 @@ export type LoyaltyProgramUncheckedCreateWithoutPointsTransactionsInput = {
   id?: string
   businessId: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -561,7 +561,7 @@ export type LoyaltyProgramUncheckedUpdateWithoutPointsTransactionsInput = {
 export type LoyaltyProgramCreateManyBusinessInput = {
   id?: string
   name: string
-  pointsPerPurchase: number
+  pointsPerPurchase?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }

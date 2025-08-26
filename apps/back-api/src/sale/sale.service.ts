@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateSaleInput } from './dto/create-sale.input';
 import { UpdateSaleInput } from './dto/update-sale.input';
 import { CloseSaleInput } from './dto/close-sale.input';
@@ -17,6 +17,9 @@ import { GenerateReceiptInput } from './dto/receipt.input';
 import { promisify } from 'util';
 import { exec } from 'child_process';
 import { createWriteStream, mkdir } from 'fs';
+import { subDays } from 'date-fns';
+import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
+import { PubSub } from 'graphql-subscriptions';
 const execAsync = promisify(exec);
 const mkdirAsync = promisify(mkdir);
 // import PDFDocument from 'pdfkit';
@@ -34,6 +37,7 @@ export class SaleService {
     private accountRechargeService: AccountRechargeService,
     private tokenTransactionService: TokenTransactionService,
     private loyaltyService: LoyaltyService,
+    @Inject('PUB_SUB') private pubSub: PubSub,
   ) {}
 
   async create(createSaleInput: CreateSaleInput, user: { id: string; role: string }) {
@@ -212,6 +216,10 @@ export class SaleService {
       }
     }
 
+    await this.pubSub.publish(`sale_created_${sale.storeId}`, { 
+      saleCreated: sale 
+    });
+
     return sale;
   }
 
@@ -334,6 +342,10 @@ export class SaleService {
       );
     }
 
+    await this.pubSub.publish(`sale_updated_${updatedSale.storeId}`, { 
+      saleUpdated: updatedSale 
+    });
+
     return updatedSale;
   }
 
@@ -394,7 +406,7 @@ export class SaleService {
       }
     }
 
-    return this.prisma.sale.update({
+    const closedSale = await this.prisma.sale.update({
       where: { id: saleId },
       data: { paymentMethod: paymentMethod || sale.paymentMethod, status: status || 'CLOSED' },
       include: {
@@ -407,6 +419,12 @@ export class SaleService {
         returns: true,
       },
     });
+
+    await this.pubSub.publish(`sale_updated_${sale.storeId}`, { 
+      saleUpdated: sale 
+    });
+
+    return closedSale
   }
 
   async createReturn(createReturnInput: CreateReturnInput, user: { id: string; role: string }) {
@@ -707,5 +725,361 @@ export class SaleService {
     return { filePath: `${outputDir}/${fileName}`, emailSent };
   }
 
+  // Add these methods to your existing SaleService class
+
+  async findActiveSales(storeId: string, user: { id: string; role: string }) {
+    await this.storeService.verifyStoreAccess(storeId, user);
+    
+    const whereClause: any = { 
+      storeId, 
+      status: 'OPEN' 
+    };
+    
+    if (user.role === 'worker') {
+      whereClause.workerId = user.id;
+    }
+
+    return this.prisma.sale.findMany({
+      where: whereClause,
+      include: {
+        store: { select: { id: true, name: true, address: true } },
+        worker: { select: { id: true, fullName: true, role: true } },
+        client: { select: { id: true, fullName: true, email: true } },
+        saleProducts: {
+          include: { 
+            product: { 
+              select: { id: true, title: true, price: true } 
+            } 
+          }
+        },
+        returns: true
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async findSalesWithPagination(params: {
+    storeId?: string;
+    workerId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    status?: string;
+    page?: number;
+    limit?: number;
+  }, user: { id: string; role: string }) {
+    
+    const { storeId, workerId, startDate, endDate, status, page = 1, limit = 20 } = params;
+    
+    if (storeId) {
+      await this.storeService.verifyStoreAccess(storeId, user);
+    }
+
+    const whereClause: any = {};
+    
+    if (storeId) whereClause.storeId = storeId;
+    if (workerId) whereClause.workerId = workerId;
+    if (status) whereClause.status = status;
+    if (startDate || endDate) {
+      whereClause.createdAt = {};
+      if (startDate) whereClause.createdAt.gte = startDate;
+      if (endDate) whereClause.createdAt.lte = endDate;
+    }
+    
+    if (user.role === 'worker' && !workerId) {
+      whereClause.workerId = user.id;
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.sale.findMany({
+        where: whereClause,
+        include: {
+          store: { select: { id: true, name: true, address: true } },
+          worker: { select: { id: true, fullName: true, role: true } },
+          client: { select: { id: true, fullName: true, email: true } },
+          saleProducts: {
+            include: { 
+              product: { 
+                select: { id: true, title: true, price: true } 
+              } 
+            }
+          },
+          returns: true
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit
+      }),
+      this.prisma.sale.count({ where: whereClause })
+    ]);
+
+    return { items, total, page, limit };
+  }
+
+  async getSalesDashboard(storeId: string, period: string = 'day', user: { id: string; role: string }) {
+    await this.storeService.verifyStoreAccess(storeId, user);
+    
+    const now = new Date();
+    let startDate: Date;
+    
+    switch (period) {
+      case 'week':
+        startDate = subDays(now, 7);
+        break;
+      case 'month':
+        startDate = subDays(now, 30);
+        break;
+      default:
+        startDate = subDays(now, 1);
+    }
+
+    const whereClause: any = {
+      storeId,
+      createdAt: { gte: startDate },
+      status: { not: 'REFUNDED' }
+    };
+    
+    if (user.role === 'worker') {
+      whereClause.workerId = user.id;
+    }
+
+    const [salesMetrics, topProductsData, paymentMethodsData] = await Promise.all([
+      this.prisma.sale.aggregate({
+        where: whereClause,
+        _count: true,
+        _sum: { totalAmount: true },
+        _avg: { totalAmount: true }
+      }),
+      
+      this.prisma.saleProduct.groupBy({
+        by: ['productId'],
+        where: {
+          sale: whereClause
+        },
+        _sum: { quantity: true },
+        orderBy: { _sum: { quantity: 'desc' } },
+        take: 5
+      }),
+      
+      this.prisma.sale.groupBy({
+        by: ['paymentMethod'],
+        where: whereClause,
+        _count: true,
+        _sum: { totalAmount: true }
+      })
+    ]);
+
+    // Get product details for top products
+    const topProducts = await Promise.all(
+      topProductsData.map(async (item) => {
+        const product = await this.prisma.product.findUnique({
+          where: { id: item.productId },
+          select: { id: true, title: true }
+        });
+        return {
+          id: product?.id,
+          title: product?.title,
+          quantitySold: item._sum.quantity || 0
+        };
+      })
+    );
+
+    return {
+      totalSales: salesMetrics._count,
+      totalRevenue: salesMetrics._sum.totalAmount || 0,
+      averageTicket: salesMetrics._avg.totalAmount || 0,
+      topProducts,
+      paymentMethods: paymentMethodsData.map(pm => ({
+        method: pm.paymentMethod,
+        count: pm._count,
+        amount: pm._sum.totalAmount || 0
+      }))
+    };
+  }
+
+  async addSaleProduct(input: {
+    saleId: string;
+    productId: string;
+    quantity: number;
+    modifiers?: any;
+  }, user: { id: string; role: string }) {
+    
+    const sale = await this.prisma.sale.findUnique({
+      where: { id: input.saleId },
+      include: { store: true }
+    });
+    
+    if (!sale) throw new Error('Sale not found');
+    if (sale.status !== 'OPEN') throw new Error('Can only add products to OPEN sales');
+    
+    await this.storeService.verifyStoreAccess(sale.storeId, user);
+    if (user.role === 'worker' && sale.workerId !== user.id) {
+      throw new Error('Workers can only modify their own sales');
+    }
+
+    const product = await this.productService.findOne(input.productId);
+    if (!product) throw new Error('Product not found');
+    if (product.storeId !== sale.storeId) {
+      throw new Error('Product does not belong to this store');
+    }
+    if (product.quantity < input.quantity) {
+      throw new Error('Insufficient product quantity');
+    }
+
+    const saleProduct = await this.prisma.saleProduct.create({
+      data: {
+        sale: { connect: { id: input.saleId } },
+        product: { connect: { id: input.productId } },
+        quantity: input.quantity,
+        price: product.price,
+        modifiers: input.modifiers
+      },
+      include: {
+        product: { select: { id: true, title: true, description: true, price: true } }
+      }
+    });
+
+    // Update sale total
+    await this.prisma.sale.update({
+      where: { id: input.saleId },
+      data: {
+        totalAmount: { increment: product.price * input.quantity }
+      }
+    });
+
+    // Update product stock
+    await this.productService.updateStock(input.productId, {
+      quantity: { decrement: input.quantity }
+    });
+
+    const updatedSale = await this.findOne(input.saleId, user);
+    await this.pubSub.publish(`sale_updated_${updatedSale.storeId}`, { 
+      saleUpdated: updatedSale 
+    });
+
+    return saleProduct;
+  }
+
+  async updateSaleProduct(id: string, input: {
+    quantity?: number;
+    modifiers?: any;
+  }, user: { id: string; role: string }) {
+    
+    const saleProduct = await this.prisma.saleProduct.findUnique({
+      where: { id },
+      include: { 
+        sale: { include: { store: true } },
+        product: { select: { price: true, quantity: true } }
+      }
+    });
+    
+    if (!saleProduct) throw new Error('Sale product not found');
+    if (saleProduct.sale.status !== 'OPEN') {
+      throw new Error('Can only update products in OPEN sales');
+    }
+    
+    await this.storeService.verifyStoreAccess(saleProduct.sale.storeId, user);
+    if (user.role === 'worker' && saleProduct.sale.workerId !== user.id) {
+      throw new Error('Workers can only modify their own sales');
+    }
+
+    const updates: any = {};
+    let priceChange = 0;
+    let stockChange = 0;
+
+    if (input.quantity !== undefined) {
+      const oldQuantity = saleProduct.quantity;
+      const quantityDiff = input.quantity - oldQuantity;
+      
+      if (quantityDiff > 0 && saleProduct.product.quantity < quantityDiff) {
+        throw new Error('Insufficient product quantity');
+      }
+      
+      updates.quantity = input.quantity;
+      priceChange = saleProduct.product.price * quantityDiff;
+      stockChange = -quantityDiff; // Negative because we're using more stock
+    }
+    
+    if (input.modifiers !== undefined) {
+      updates.modifiers = input.modifiers;
+    }
+
+    const updatedSaleProduct = await this.prisma.saleProduct.update({
+      where: { id },
+      data: updates,
+      include: {
+        product: { select: { id: true, title: true, description: true, price: true } }
+      }
+    });
+
+    // Update sale total if quantity changed
+    if (priceChange !== 0) {
+      await this.prisma.sale.update({
+        where: { id: saleProduct.saleId },
+        data: { totalAmount: { increment: priceChange } }
+      });
+    }
+
+    // Update product stock if quantity changed
+    if (stockChange !== 0) {
+      await this.productService.updateStock(saleProduct.productId, {
+        quantity: { increment: stockChange }
+      });
+    }
+
+    const updatedSale = await this.findOne(saleProduct.saleId, user);
+    await this.pubSub.publish(`sale_updated_${updatedSale.storeId}`, { 
+      saleUpdated: updatedSale 
+    });
+
+    return updatedSaleProduct;
+  }
+
+  async removeSaleProduct(id: string, user: { id: string; role: string }) {
+    const saleProduct = await this.prisma.saleProduct.findUnique({
+      where: { id },
+      include: { 
+        sale: { include: { store: true } },
+        product: { select: { price: true } }
+      }
+    });
+    
+    if (!saleProduct) throw new Error('Sale product not found');
+    if (saleProduct.sale.status !== 'OPEN') {
+      throw new Error('Can only remove products from OPEN sales');
+    }
+    
+    await this.storeService.verifyStoreAccess(saleProduct.sale.storeId, user);
+    if (user.role === 'worker' && saleProduct.sale.workerId !== user.id) {
+      throw new Error('Workers can only modify their own sales');
+    }
+
+    // Remove from sale
+    await this.prisma.saleProduct.delete({ where: { id } });
+
+    // Update sale total
+    const priceReduction = saleProduct.product.price * saleProduct.quantity;
+    await this.prisma.sale.update({
+      where: { id: saleProduct.saleId },
+      data: { totalAmount: { decrement: priceReduction } }
+    });
+
+    // Restore product stock
+    await this.productService.updateStock(saleProduct.productId, {
+      quantity: { increment: saleProduct.quantity }
+    });
+
+    const updatedSale = await this.findOne(saleProduct.saleId, user);
+    await this.pubSub.publish(`sale_updated_${updatedSale.storeId}`, { 
+      saleUpdated: updatedSale 
+    });
+
+    return { id };
+  }
+
+  async completeSale(id: string, paymentMethod: PaymentMethod, user: { id: string; role: string }) {
+    return this.close({ saleId: id, paymentMethod, status: 'CLOSED' }, user);
+  }
+
+  
 }
 

@@ -433,7 +433,7 @@ export type ProductCreateInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -463,7 +463,7 @@ export type ProductUncheckedCreateInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -553,7 +553,7 @@ export type ProductCreateManyInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -992,7 +992,7 @@ export type ProductCreateWithoutBusinessInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1021,7 +1021,7 @@ export type ProductUncheckedCreateWithoutBusinessInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1097,7 +1097,7 @@ export type ProductCreateWithoutCategoryInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1126,7 +1126,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1181,7 +1181,7 @@ export type ProductCreateWithoutMediasInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1210,7 +1210,7 @@ export type ProductUncheckedCreateWithoutMediasInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1313,7 +1313,7 @@ export type ProductCreateWithoutOrdersInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1342,7 +1342,7 @@ export type ProductUncheckedCreateWithoutOrdersInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1445,7 +1445,7 @@ export type ProductCreateWithoutReviewsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1474,7 +1474,7 @@ export type ProductUncheckedCreateWithoutReviewsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1577,7 +1577,7 @@ export type ProductCreateWithoutChatsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1606,7 +1606,7 @@ export type ProductUncheckedCreateWithoutChatsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1709,7 +1709,7 @@ export type ProductCreateWithoutRepostsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1738,7 +1738,7 @@ export type ProductUncheckedCreateWithoutRepostsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1841,7 +1841,7 @@ export type ProductCreateWithoutNewReOwnedProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1870,7 +1870,7 @@ export type ProductUncheckedCreateWithoutNewReOwnedProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1904,7 +1904,7 @@ export type ProductCreateWithoutReOwnedProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -1933,7 +1933,7 @@ export type ProductUncheckedCreateWithoutReOwnedProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2105,7 +2105,7 @@ export type ProductCreateWithoutAdsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2134,7 +2134,7 @@ export type ProductUncheckedCreateWithoutAdsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2237,7 +2237,7 @@ export type ProductCreateWithoutStoreInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2266,7 +2266,7 @@ export type ProductUncheckedCreateWithoutStoreInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2321,7 +2321,7 @@ export type ProductCreateWithoutSaleProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2350,7 +2350,7 @@ export type ProductUncheckedCreateWithoutSaleProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2453,7 +2453,7 @@ export type ProductCreateWithoutPurchaseOrderProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2482,7 +2482,7 @@ export type ProductUncheckedCreateWithoutPurchaseOrderProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2585,7 +2585,7 @@ export type ProductCreateWithoutTransferOrderProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2614,7 +2614,7 @@ export type ProductUncheckedCreateWithoutTransferOrderProductsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2717,7 +2717,7 @@ export type ProductCreateWithoutInventoryAdjustmentsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2746,7 +2746,7 @@ export type ProductUncheckedCreateWithoutInventoryAdjustmentsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2849,7 +2849,7 @@ export type ProductCreateManyBusinessInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -2941,7 +2941,7 @@ export type ProductCreateManyCategoryInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean
@@ -3033,7 +3033,7 @@ export type ProductCreateManyStoreInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   stock?: number
   quantity?: number
   isPhysical?: boolean

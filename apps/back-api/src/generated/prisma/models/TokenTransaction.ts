@@ -322,7 +322,7 @@ export type TokenTransactionScalarWhereWithAggregatesInput = {
 
 export type TokenTransactionCreateInput = {
   id?: string
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -338,7 +338,7 @@ export type TokenTransactionUncheckedCreateInput = {
   businessId: string
   reOwnedProductId?: string | null
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -377,7 +377,7 @@ export type TokenTransactionCreateManyInput = {
   businessId: string
   reOwnedProductId?: string | null
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -612,7 +612,7 @@ export type TokenTransactionUpdateOneWithoutAccountRechargeNestedInput = {
 
 export type TokenTransactionCreateWithoutBusinessInput = {
   id?: string
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -626,7 +626,7 @@ export type TokenTransactionUncheckedCreateWithoutBusinessInput = {
   id?: string
   reOwnedProductId?: string | null
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -677,7 +677,7 @@ export type TokenTransactionScalarWhereInput = {
 
 export type TokenTransactionCreateWithoutRepostedProductInput = {
   id?: string
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -691,7 +691,7 @@ export type TokenTransactionUncheckedCreateWithoutRepostedProductInput = {
   id?: string
   businessId: string
   reOwnedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -727,7 +727,7 @@ export type TokenTransactionUpdateManyWithWhereWithoutRepostedProductInput = {
 
 export type TokenTransactionCreateWithoutReOwnedProductInput = {
   id?: string
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -741,7 +741,7 @@ export type TokenTransactionUncheckedCreateWithoutReOwnedProductInput = {
   id?: string
   businessId: string
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -777,7 +777,7 @@ export type TokenTransactionUpdateManyWithWhereWithoutReOwnedProductInput = {
 
 export type TokenTransactionCreateWithoutAccountRechargeInput = {
   id?: string
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -792,7 +792,7 @@ export type TokenTransactionUncheckedCreateWithoutAccountRechargeInput = {
   businessId: string
   reOwnedProductId?: string | null
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -843,7 +843,7 @@ export type TokenTransactionCreateManyBusinessInput = {
   id?: string
   reOwnedProductId?: string | null
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -889,7 +889,7 @@ export type TokenTransactionCreateManyRepostedProductInput = {
   id?: string
   businessId: string
   reOwnedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
@@ -935,7 +935,7 @@ export type TokenTransactionCreateManyReOwnedProductInput = {
   id?: string
   businessId: string
   repostedProductId?: string | null
-  amount: number
+  amount?: number
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean

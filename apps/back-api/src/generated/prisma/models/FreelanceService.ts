@@ -325,7 +325,7 @@ export type FreelanceServiceCreateInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -340,7 +340,7 @@ export type FreelanceServiceUncheckedCreateInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   businessId: string
   createdAt?: Date | string
@@ -385,7 +385,7 @@ export type FreelanceServiceCreateManyInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   businessId: string
   createdAt?: Date | string
@@ -574,7 +574,7 @@ export type FreelanceServiceCreateWithoutBusinessInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -588,7 +588,7 @@ export type FreelanceServiceUncheckedCreateWithoutBusinessInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -643,7 +643,7 @@ export type FreelanceServiceCreateWithoutChatsInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -657,7 +657,7 @@ export type FreelanceServiceUncheckedCreateWithoutChatsInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   businessId: string
   createdAt?: Date | string
@@ -715,7 +715,7 @@ export type FreelanceServiceCreateWithoutWorkerServiceAssignmentsInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -729,7 +729,7 @@ export type FreelanceServiceUncheckedCreateWithoutWorkerServiceAssignmentsInput 
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   businessId: string
   createdAt?: Date | string
@@ -787,7 +787,7 @@ export type FreelanceServiceCreateWithoutOrdersInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -801,7 +801,7 @@ export type FreelanceServiceUncheckedCreateWithoutOrdersInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   businessId: string
   createdAt?: Date | string
@@ -859,7 +859,7 @@ export type FreelanceServiceCreateManyBusinessInput = {
   title: string
   description?: string | null
   isHourly?: boolean
-  rate: number
+  rate?: number
   category?: $Enums.FreelanceServiceCategory | null
   createdAt?: Date | string
   updatedAt?: Date | string

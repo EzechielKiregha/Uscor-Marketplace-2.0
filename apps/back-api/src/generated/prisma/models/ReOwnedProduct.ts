@@ -412,9 +412,9 @@ export type ReOwnedProductCreateInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -434,9 +434,9 @@ export type ReOwnedProductUncheckedCreateInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -494,9 +494,9 @@ export type ReOwnedProductCreateManyInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -796,9 +796,9 @@ export type ReOwnedProductCreateWithoutBusinessProductOwnersInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -817,9 +817,9 @@ export type ReOwnedProductUncheckedCreateWithoutBusinessProductOwnersInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -876,9 +876,9 @@ export type ReOwnedProductCreateWithoutOriginalProductInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -896,9 +896,9 @@ export type ReOwnedProductUncheckedCreateWithoutOriginalProductInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -924,9 +924,9 @@ export type ReOwnedProductCreateWithoutNewProductInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -944,9 +944,9 @@ export type ReOwnedProductUncheckedCreateWithoutNewProductInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -1004,9 +1004,9 @@ export type ReOwnedProductCreateWithoutShippingInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -1025,9 +1025,9 @@ export type ReOwnedProductUncheckedCreateWithoutShippingInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -1096,9 +1096,9 @@ export type ReOwnedProductCreateWithoutTokenTransactionsInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -1117,9 +1117,9 @@ export type ReOwnedProductUncheckedCreateWithoutTokenTransactionsInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -1245,9 +1245,9 @@ export type ReOwnedProductCreateManyOriginalProductInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean
@@ -1262,9 +1262,9 @@ export type ReOwnedProductCreateManyNewProductInput = {
   oldOwnerId?: string
   newOwnerId?: string
   quantity?: number
-  oldPrice: number
-  newPrice: number
-  markupPercentage: number
+  oldPrice?: number
+  newPrice?: number
+  markupPercentage?: number
   agreedViaChatId: string
   agreementDate: Date | string
   isOriginalApproved?: boolean

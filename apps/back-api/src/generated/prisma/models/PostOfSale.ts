@@ -309,7 +309,7 @@ export type PostOfSaleCreateInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -322,7 +322,7 @@ export type PostOfSaleUncheckedCreateInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   businessId: string
   createdAt?: Date | string
@@ -361,7 +361,7 @@ export type PostOfSaleCreateManyInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   businessId: string
   createdAt?: Date | string
@@ -547,7 +547,7 @@ export type PostOfSaleCreateWithoutBusinessInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -559,7 +559,7 @@ export type PostOfSaleUncheckedCreateWithoutBusinessInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -611,7 +611,7 @@ export type PostOfSaleCreateWithoutMediaInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -623,7 +623,7 @@ export type PostOfSaleUncheckedCreateWithoutMediaInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   businessId: string
   createdAt?: Date | string
@@ -656,7 +656,7 @@ export type PostOfSaleCreateWithoutTransactionsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -668,7 +668,7 @@ export type PostOfSaleUncheckedCreateWithoutTransactionsInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   businessId: string
   createdAt?: Date | string
@@ -720,7 +720,7 @@ export type PostOfSaleCreateManyBusinessInput = {
   id?: string
   title: string
   description?: string | null
-  price: number
+  price?: number
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string

@@ -23,12 +23,12 @@ export default function HeroSection() {
 
         {/* Title */}
         <h1 className="mt-6 text-4xl sm:text-5xl lg:text-7xl font-bold text-foreground leading-tight">
-          Discover & Sell <span className="text-primary">Digital Excellence</span>
+          Discover & Sell Digital Excellence with <span className="text-primary">Intelligent POS for Modern Businesses</span>
         </h1>
 
         {/* Subtitle */}
         <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
-          Explore a curated collection of premium digital products and freelance services built with innovation and crafted for impact.
+          Power your retail, restaurant, or service business with a full-featured, cloud-based point-of-sale system built for speed, insight, and growth.
         </p>
 
         {/* CTA Buttons */}

@@ -18,6 +18,7 @@ import { ClientModule } from '../client/client.module';
 import { TokenTransactionModule } from '../token-transaction/token-transaction.module';
 import { LoyaltyProgramModule } from '../loyalty-program/loyalty-program.module';
 import { LoyaltyService } from '../loyalty-program/loyalty-program.service';
+import { PubSub } from 'graphql-subscriptions';
 
 
 
@@ -36,6 +37,10 @@ import { LoyaltyService } from '../loyalty-program/loyalty-program.service';
     AccountRechargeService,
     TokenTransactionService,
     LoyaltyService,
+    {
+      provide: 'PUB_SUB',
+      useValue: new PubSub(),
+    },
   ],
   imports: [
     StoreModule,

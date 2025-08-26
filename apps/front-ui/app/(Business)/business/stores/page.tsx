@@ -9,17 +9,15 @@ import { useState } from 'react';
 import { useToast } from '@/components/toast-provider';
 import { useOpenCreateStoreModal } from '../_hooks/use-open-create-store-modal';
 import { StoreEntity } from '@/lib/types';
+import { useMe } from '@/lib/useMe';
 
 export default function BusinessStoresPage() {
   const { isOpen, setIsOpen } = useOpenCreateStoreModal();
   const [searchTerm, setSearchTerm] = useState('');
   const { showToast } = useToast()
+  const bUser = useMe()
 
-  const { data, loading, error, refetch } = useQuery(GET_STORES, {
-    variables: {
-      businessId: 'current-business-id' // In real app, get from useMe()
-    }
-  });
+  const { data, loading, error, refetch } = useQuery(GET_STORES);
 
   const [deleteStore] = useMutation(DELETE_STORE, {
     refetchQueries: [GET_STORES]

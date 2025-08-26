@@ -139,14 +139,159 @@ type ReviewEntity {
   product: ProductEntity!
 }
 
+type PurchaseOrderProductEntity {
+  id: String!
+  productId: String!
+  quantity: Int!
+  product: ProductEntity!
+  createdAt: DateTime!
+}
+
+type PurchaseOrderEntity {
+  id: String
+  businessId: String
+  business: BusinessEntity
+  storeId: String
+  store: StoreEntity
+  supplierId: String
+  status: PurchaseOrderStatus
+  expectedDelivery: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  products: [PurchaseOrderProductEntity!]!
+}
+
+enum PurchaseOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+type InventoryAdjustmentEntity {
+  id: String
+  productId: String
+  product: ProductEntity
+  storeId: String
+  store: StoreEntity
+  adjustmentType: AdjustmentType
+  quantity: Int
+  reason: String
+  createdAt: DateTime
+}
+
+enum AdjustmentType {
+  ADD
+  REMOVE
+}
+
+type TransferOrderProductEntity {
+  id: String!
+  productId: String!
+  quantity: Int!
+  product: ProductEntity!
+  createdAt: DateTime!
+}
+
+type TransferOrderEntity {
+  id: String
+  fromStoreId: String
+  fromStore: StoreEntity
+  toStoreId: String
+  toStore: StoreEntity
+  status: TransferOrderStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+  products: [TransferOrderProductEntity!]!
+}
+
+enum TransferOrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+type SaleProductEntity {
+  id: String!
+  quantity: Int!
+  price: Float!
+  modifiers: JSON
+  createdAt: DateTime!
+  product: ProductEntity!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type ReturnEntity {
+  id: String!
+  saleId: String!
+  reason: String
+  status: SaleStatus!
+  createdAt: DateTime!
+  sale: SaleEntity!
+}
+
+enum SaleStatus {
+  OPEN
+  CLOSED
+  REFUNDED
+}
+
+type SaleEntity {
+  id: String
+  storeId: String!
+  store: StoreEntity!
+  workerId: String!
+  worker: WorkerEntity!
+  clientId: String
+  client: ClientEntity
+  totalAmount: Float
+  discount: Float
+  paymentMethod: PaymentMethod!
+  status: SaleStatus!
+  createdAt: DateTime
+  updatedAt: DateTime
+  saleProducts: [SaleProductEntity!]!
+  returns: [ReturnEntity!]!
+}
+
+enum PaymentMethod {
+  TOKEN
+  MOBILE_MONEY
+  CASH
+  CARD
+}
+
+type ShiftEntity {
+  id: String
+  workerId: String
+  worker: WorkerEntity
+  storeId: String
+  store: StoreEntity
+  startTime: DateTime
+  endTime: DateTime
+  sales: Float
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type StoreEntity {
   id: String!
   businessId: String!
-  business: BusinessEntity!
   name: String!
   address: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  business: BusinessEntity!
+  transferOrdersFrom: TransferOrderEntity!
+  transferOrdersTo: TransferOrderEntity!
+  inventoryAdjustments: InventoryAdjustmentEntity!
+  purchaseOrders: PurchaseOrderEntity!
+  sales: SaleEntity!
+  shifts: ShiftEntity!
 }
 
 type ProductEntity {
@@ -399,7 +544,6 @@ type BusinessEntity {
   phone: String
   avatar: String
   coverImage: String
-  password: String!
   isVerified: Boolean!
   kycStatus: KycStatus!
   totalProductsSold: Int!
@@ -512,63 +656,40 @@ type AuthPayloadBusiness {
   refreshToken: String!
 }
 
-type SaleProductEntity {
-  id: String!
-  quantity: Int!
-  price: Float!
-  modifiers: JSON
-  createdAt: DateTime!
-  product: ProductEntity!
-}
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
-
-type ReturnEntity {
-  id: String!
-  saleId: String!
-  reason: String
-  status: SaleStatus!
-  createdAt: DateTime!
-  sale: SaleEntity!
-}
-
-enum SaleStatus {
-  OPEN
-  CLOSED
-  REFUNDED
-}
-
-type SaleEntity {
-  id: String!
-  storeId: String!
-  store: StoreEntity!
-  workerId: String!
-  worker: WorkerEntity!
-  clientId: String
-  client: ClientEntity
-  totalAmount: Float!
-  discount: Float!
-  paymentMethod: PaymentMethod!
-  status: SaleStatus!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  saleProducts: [SaleProductEntity!]!
-  returns: [ReturnEntity!]!
-}
-
-enum PaymentMethod {
-  TOKEN
-  MOBILE_MONEY
-  CASH
-  CARD
-}
-
 type ReceiptEntity {
   filePath: String!
   emailSent: Boolean
+}
+
+type PaginatedSalesResponse {
+  items: [SaleEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type TopProduct {
+  id: String!
+  title: String!
+  quantitySold: Int!
+}
+
+type PaymentMethodStat {
+  method: String!
+  count: Int!
+  amount: Float!
+}
+
+type SalesDashboard {
+  totalSales: Int!
+  totalRevenue: Float!
+  averageTicket: Float!
+  topProducts: [TopProduct!]!
+  paymentMethods: [PaymentMethodStat!]!
+}
+
+type DeleteResponse {
+  id: String!
 }
 
 type LoyaltyProgramEntity {
@@ -597,31 +718,6 @@ type ClientPointsBalanceEntity {
   totalPoints: Float!
 }
 
-type InventoryAdjustmentEntity {
-  id: String!
-  productId: String!
-  product: ProductEntity!
-  storeId: String!
-  store: StoreEntity!
-  adjustmentType: AdjustmentType!
-  quantity: Int!
-  reason: String
-  createdAt: DateTime!
-}
-
-enum AdjustmentType {
-  ADD
-  REMOVE
-}
-
-type PurchaseOrderProductEntity {
-  id: String!
-  productId: String!
-  quantity: Int!
-  product: ProductEntity!
-  createdAt: DateTime!
-}
-
 type BulkImportResultEntity {
   success: Boolean!
   count: Int!
@@ -634,66 +730,6 @@ type LowStockAlertEntity {
   store: StoreEntity!
   quantity: Int!
   threshold: Int!
-}
-
-type TransferOrderProductEntity {
-  id: String!
-  productId: String!
-  quantity: Int!
-  product: ProductEntity!
-  createdAt: DateTime!
-}
-
-type TransferOrderEntity {
-  id: String!
-  fromStoreId: String!
-  fromStore: StoreEntity!
-  toStoreId: String!
-  toStore: StoreEntity!
-  status: TransferOrderStatus!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  products: [TransferOrderProductEntity!]!
-}
-
-enum TransferOrderStatus {
-  PENDING
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
-type PurchaseOrderEntity {
-  id: String!
-  businessId: String!
-  business: BusinessEntity!
-  storeId: String!
-  store: StoreEntity!
-  supplierId: String
-  status: PurchaseOrderStatus!
-  expectedDelivery: DateTime
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  products: [PurchaseOrderProductEntity!]!
-}
-
-enum PurchaseOrderStatus {
-  PENDING
-  COMPLETED
-  CANCELLED
-}
-
-type ShiftEntity {
-  id: String!
-  workerId: String!
-  worker: WorkerEntity!
-  storeId: String!
-  store: StoreEntity!
-  startTime: DateTime!
-  endTime: DateTime
-  sales: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type Query {
@@ -792,12 +828,10 @@ type Query {
 
   """Retrieves a single category by ID."""
   category(id: String!): CategoryEntity!
-
-  """Retrieves sales for a store."""
-  sales(storeId: String!): [SaleEntity!]!
-
-  """Retrieves a single sale by ID."""
+  activeSales(storeId: String!): [SaleEntity!]!
   sale(id: String!): SaleEntity!
+  sales(storeId: String, workerId: String, startDate: DateTime, endDate: DateTime, status: String, page: Float! = 1, limit: Float! = 20): PaginatedSalesResponse!
+  salesDashboard(storeId: String!, period: String! = "day"): SalesDashboard!
 
   """Retrieves stores for a business."""
   stores: [StoreEntity!]!
@@ -974,15 +1008,13 @@ type Mutation {
 
   """Deletes a category."""
   deleteCategory(id: String!): CategoryEntity!
-
-  """Creates a new POS sale."""
-  createSale(createSaleInput: CreateSaleInput!): SaleEntity!
-
-  """Updates an existing POS sale."""
-  updateSale(id: String!, updateSaleInput: UpdateSaleInput!): SaleEntity!
-
-  """Closes a POS sale."""
-  closeSale(closeSaleInput: CloseSaleInput!): SaleEntity!
+  createSale(input: CreateSaleInput!): SaleEntity!
+  updateSale(id: String!, input: UpdateSaleInput!): SaleEntity!
+  closeSale(input: CloseSaleInput!): SaleEntity!
+  completeSale(id: String!, paymentMethod: String!): SaleEntity!
+  addSaleProduct(input: AddSaleProductInput!): SaleProductEntity!
+  updateSaleProduct(id: String!, input: UpdateSaleProductInput!): SaleProductEntity!
+  removeSaleProduct(id: String!): DeleteResponse!
 
   """Processes a return for a POS sale."""
   createReturn(createReturnInput: CreateReturnInput!): ReturnEntity!
@@ -1363,6 +1395,18 @@ input CloseSaleInput {
   status: SaleStatus
 }
 
+input AddSaleProductInput {
+  saleId: String!
+  productId: String!
+  quantity: Float!
+  modifiers: JSON
+}
+
+input UpdateSaleProductInput {
+  quantity: Float
+  modifiers: JSON
+}
+
 input CreateReturnInput {
   saleId: String!
   reason: String!
@@ -1458,4 +1502,9 @@ input EndShiftInput {
 input UpdateShiftInput {
   startTime: DateTime
   endTime: DateTime
+}
+
+type Subscription {
+  saleCreated(storeId: String!): SaleEntity!
+  saleUpdated(storeId: String!): SaleEntity!
 }

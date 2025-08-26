@@ -341,7 +341,7 @@ export type SaleScalarWhereWithAggregatesInput = {
 
 export type SaleCreateInput = {
   id?: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -359,7 +359,7 @@ export type SaleUncheckedCreateInput = {
   storeId: string
   workerId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -404,7 +404,7 @@ export type SaleCreateManyInput = {
   storeId: string
   workerId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -659,7 +659,7 @@ export type SaleUpdateOneRequiredWithoutReturnsNestedInput = {
 
 export type SaleCreateWithoutClientInput = {
   id?: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -675,7 +675,7 @@ export type SaleUncheckedCreateWithoutClientInput = {
   id?: string
   storeId: string
   workerId: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -729,7 +729,7 @@ export type SaleScalarWhereInput = {
 
 export type SaleCreateWithoutWorkerInput = {
   id?: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -745,7 +745,7 @@ export type SaleUncheckedCreateWithoutWorkerInput = {
   id?: string
   storeId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -783,7 +783,7 @@ export type SaleUpdateManyWithWhereWithoutWorkerInput = {
 
 export type SaleCreateWithoutStoreInput = {
   id?: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -799,7 +799,7 @@ export type SaleUncheckedCreateWithoutStoreInput = {
   id?: string
   workerId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -837,7 +837,7 @@ export type SaleUpdateManyWithWhereWithoutStoreInput = {
 
 export type SaleCreateWithoutSaleProductsInput = {
   id?: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -854,7 +854,7 @@ export type SaleUncheckedCreateWithoutSaleProductsInput = {
   storeId: string
   workerId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -909,7 +909,7 @@ export type SaleUncheckedUpdateWithoutSaleProductsInput = {
 
 export type SaleCreateWithoutReturnsInput = {
   id?: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -926,7 +926,7 @@ export type SaleUncheckedCreateWithoutReturnsInput = {
   storeId: string
   workerId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -983,7 +983,7 @@ export type SaleCreateManyClientInput = {
   id?: string
   storeId: string
   workerId: string
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -1035,7 +1035,7 @@ export type SaleCreateManyWorkerInput = {
   id?: string
   storeId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus
@@ -1087,7 +1087,7 @@ export type SaleCreateManyStoreInput = {
   id?: string
   workerId: string
   clientId?: string | null
-  totalAmount: number
+  totalAmount?: number
   discount?: number
   paymentMethod: $Enums.PaymentMethod
   status?: $Enums.SaleStatus

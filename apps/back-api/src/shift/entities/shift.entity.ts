@@ -4,33 +4,33 @@ import { WorkerEntity } from '../../worker/entities/worker.entity';
 
 @ObjectType()
 export class ShiftEntity {
-  @Field()
-  id: string;
+  @Field({nullable: true})
+  id?: string;
 
-  @Field()
-  workerId: string;
+  @Field({nullable: true})
+  workerId?: string;
 
-  @Field(() => WorkerEntity)
-  worker: WorkerEntity;
+  @Field(() => WorkerEntity, {nullable: true})
+  worker?: WorkerEntity;
 
-  @Field()
-  storeId: string;
+  @Field({nullable: true})
+  storeId?: string;
 
-  @Field(() => StoreEntity)
-  store: StoreEntity;
+  @Field(() => StoreEntity, {nullable: true})
+  store?: StoreEntity;
 
-  @Field()
-  startTime: Date;
+  @Field({nullable: true})
+  startTime?: Date;
 
-  @Field({ nullable: true })
+  @Field({nullable: true})
   endTime?: Date;
 
-  @Field(() => Float)
-  sales: number;
+  @Field(() => Float, {nullable: true})
+  sales?: number;
 
-  @Field()
-  createdAt: Date;
+  @Field({nullable: true})
+  createdAt?: Date;
 
-  @Field()
-  updatedAt: Date;
+  @Field({nullable: true})
+  updatedAt?: Date;
 }

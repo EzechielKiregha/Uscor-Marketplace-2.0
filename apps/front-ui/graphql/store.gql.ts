@@ -53,21 +53,95 @@ export const STORE_ENTITY = gql`
 // ======================
 
 export const GET_STORES = gql`
-  query GetStores($businessId: String!) {
-    stores(businessId: $businessId) {
-      ...StoreEntity
+  query GetStores {
+    stores {
+      id
+      name
+      address
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      sales {
+        id
+        totalAmount
+        createdAt
+      }
+      purchaseOrders {
+        id
+        status
+        createdAt
+      }
+      transferOrdersFrom {
+        id
+        status
+        createdAt
+      }
+      transferOrdersTo {
+        id
+        status
+        createdAt
+      }
+      inventoryAdjustments {
+        id
+        quantity
+        createdAt
+      }
+      shifts {
+        id
+        startTime
+        endTime
+      }
     }
   }
-  ${STORE_ENTITY}
 `;
 
 export const GET_STORE_BY_ID = gql`
   query GetStoreById($id: String!) {
     store(id: $id) {
-      ...StoreEntity
+      id
+      name
+      address
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      sales {
+        id
+        totalAmount
+        createdAt
+      }
+      purchaseOrders {
+        id
+        status
+        createdAt
+      }
+      transferOrdersFrom {
+        id
+        status
+        createdAt
+      }
+      transferOrdersTo {
+        id
+        status
+        createdAt
+      }
+      inventoryAdjustments {
+        id
+        quantity
+        createdAt
+      }
+      shifts {
+        id
+        startTime
+        endTime
+      }
     }
   }
-  ${STORE_ENTITY}
 `;
 
 // ======================

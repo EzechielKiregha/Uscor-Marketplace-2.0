@@ -255,7 +255,7 @@ model Product {
   id                   String                @id @default(uuid())
   title                String
   description          String?
-  price                Float                 @default(0)
+  price                Float
   stock                Int                   @default(0)
   quantity             Int                   @default(0) // New field for stock quantity
   isPhysical           Boolean               @default(false)  // New field to flag physical products
@@ -423,9 +423,9 @@ model ReOwnedProduct {
   oldOwnerId           String                @default("N/A") // Original business ID
   newOwnerId           String                @default("N/A") // New business ID
   quantity             Int                   @default(0) // Quantity re-owned
-  oldPrice             Float                 @default(0) // Original price per unit
-  newPrice             Float                 @default(0) // New price per unit
-  markupPercentage     Float                 @default(0) // Markup percentage
+  oldPrice             Float                 // Original price per unit
+  newPrice             Float                 // New price per unit
+  markupPercentage     Float                 // Markup percentage
   agreedViaChatId      String                // Chat ID for negotiation
   agreementDate        DateTime              // Agreement timestamp
   isOriginalApproved   Boolean               @default(false)  // Original owner approval
@@ -465,7 +465,7 @@ model TokenTransaction {
   reOwnedProductId     String?
   repostedProduct      RepostedProduct?      @relation(fields: [repostedProductId], references: [id])
   repostedProductId    String?
-  amount               Float                 @default(0)
+  amount               Float
   type                 TokenTransactionType
   isRedeemed           Boolean               @default(false)
   isReleased           Boolean               @default(false)
@@ -493,7 +493,7 @@ model KYC {
 
 model AccountRecharge {
   id                   String                @id @default(uuid())
-  amount               Float                 @default(0)
+  amount               Float
   method               RechargeMethod
   origin               Country
   business             Business?             @relation("BusinessRecharges", fields: [businessId], references: [id])
@@ -522,7 +522,7 @@ model PaymentTransaction {
   orderId              String?                @unique
   status               PaymentStatus         @default(PENDING)
   method               PaymentMethod         @default(TOKEN)
-  amount               Float                 @default(0)
+  amount               Float
   transactionDate      DateTime              @default(now())
   qrCode               String?
   createdAt            DateTime              @default(now())
@@ -541,7 +541,7 @@ model Ad {
   businessId           String
   product              Product               @relation(fields: [productId], references: [id])
   productId            String
-  price                Float                 @default(0)
+  price                Float
   periodDays           Int
   createdAt            DateTime              @default(now())
   endedAt              DateTime?
@@ -558,7 +558,7 @@ model FreelanceService {
   title                String
   description          String?
   isHourly             Boolean               @default(true)
-  rate                 Float                 @default(0) // Ts per hour or fixed
+  rate                 Float                 // Ts per hour or fixed
   category             FreelanceServiceCategory? @default(OTHER)
   business             Business              @relation("ServiceOwner", fields: [businessId], references: [id])
   businessId           String
@@ -592,9 +592,9 @@ model FreelanceOrder {
   serviceId            String
   status               FreelanceStatus       @default(PENDING)
   quantity             Int                   @default(1)  // hours or units
-  totalAmount          Float                 @default(0) // in Ts
-  escrowAmount         Float                 @default(0) // in Ts
-  commissionPercent    Float                 @default(0) // e.g. 0.1 for 10%
+  totalAmount          Float                 // in Ts
+  escrowAmount         Float                 // in Ts
+  commissionPercent    Float                 // e.g. 0.1 for 10%
   escrowStatus         EscrowStatus?         @default(HELD) // HELD, RELEASED, DISPUTED
   escrowReleasedAt     DateTime?
   payment              PaymentTransaction?   
@@ -641,7 +641,7 @@ model PostOfSale {
   id           String         @id @default(cuid())
   title        String
   description  String?
-  price        Float          @default(0)
+  price        Float
   status       PostStatus     @default(DRAFT)
   business     Business       @relation(fields: [businessId], references: [id])
   businessId   String
@@ -664,7 +664,7 @@ model PostTransaction {
   paymentTransactionId String?
 
   status              PostTransactionStatus   @default(PENDING)
-  amount              Float                   @default(0)
+  amount              Float
   createdAt           DateTime                @default(now())
 }
 
@@ -694,7 +694,7 @@ model Sale {
   worker       Worker         @relation(fields: [workerId], references: [id])
   clientId     String?
   client       Client?        @relation(fields: [clientId], references: [id])
-  totalAmount  Float          @default(0)
+  totalAmount  Float
   discount     Float          @default(0)
   paymentMethod PaymentMethod
   status       SaleStatus     @default(OPEN)
@@ -716,7 +716,7 @@ model SaleProduct {
   productId    String
   product      Product        @relation(fields: [productId], references: [id])
   quantity     Int            @default(1)
-  price        Float          @default(0)
+  price        Float
   modifiers    Json?          // For item variants or modifiers (e.g., size, color)
   createdAt    DateTime       @default(now())
 
@@ -811,7 +811,7 @@ model LoyaltyProgram {
   businessId      String
   business        Business          @relation(fields: [businessId], references: [id])
   name            String
-  pointsPerPurchase Float           @default(0) // Points earned per unit of currency spent
+  pointsPerPurchase Float          // Points earned per unit of currency spent
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   pointsTransactions PointsTransaction[]
@@ -823,7 +823,7 @@ model PointsTransaction {
   client          Client         @relation(fields: [clientId], references: [id])
   loyaltyProgramId String
   loyaltyProgram  LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
-  points          Float          @default(0)
+  points          Float
   createdAt       DateTime       @default(now())
 }
 

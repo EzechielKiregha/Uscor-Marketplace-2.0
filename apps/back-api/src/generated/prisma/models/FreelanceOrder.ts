@@ -372,9 +372,9 @@ export type FreelanceOrderCreateInput = {
   id?: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -391,9 +391,9 @@ export type FreelanceOrderUncheckedCreateInput = {
   serviceId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -442,9 +442,9 @@ export type FreelanceOrderCreateManyInput = {
   serviceId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -684,9 +684,9 @@ export type FreelanceOrderCreateWithoutClientInput = {
   id?: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -701,9 +701,9 @@ export type FreelanceOrderUncheckedCreateWithoutClientInput = {
   serviceId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -760,9 +760,9 @@ export type FreelanceOrderCreateWithoutPaymentInput = {
   id?: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -778,9 +778,9 @@ export type FreelanceOrderUncheckedCreateWithoutPaymentInput = {
   serviceId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -840,9 +840,9 @@ export type FreelanceOrderCreateWithoutServiceInput = {
   id?: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -857,9 +857,9 @@ export type FreelanceOrderUncheckedCreateWithoutServiceInput = {
   clientId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -898,9 +898,9 @@ export type FreelanceOrderCreateWithoutFreelanceOrderBusinessInput = {
   id?: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -916,9 +916,9 @@ export type FreelanceOrderUncheckedCreateWithoutFreelanceOrderBusinessInput = {
   serviceId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -979,9 +979,9 @@ export type FreelanceOrderCreateManyClientInput = {
   serviceId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string
@@ -1039,9 +1039,9 @@ export type FreelanceOrderCreateManyServiceInput = {
   clientId: string
   status?: $Enums.FreelanceStatus
   quantity?: number
-  totalAmount: number
-  escrowAmount: number
-  commissionPercent: number
+  totalAmount?: number
+  escrowAmount?: number
+  commissionPercent?: number
   escrowStatus?: $Enums.EscrowStatus | null
   escrowReleasedAt?: Date | string | null
   createdAt?: Date | string

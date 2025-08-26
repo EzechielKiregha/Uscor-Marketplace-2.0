@@ -296,7 +296,7 @@ export type AdScalarWhereWithAggregatesInput = {
 
 export type AdCreateInput = {
   id?: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -308,7 +308,7 @@ export type AdUncheckedCreateInput = {
   id?: string
   businessId: string
   productId: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -338,7 +338,7 @@ export type AdCreateManyInput = {
   id?: string
   businessId: string
   productId: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -498,7 +498,7 @@ export type AdUncheckedUpdateManyWithoutProductNestedInput = {
 
 export type AdCreateWithoutBusinessInput = {
   id?: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -508,7 +508,7 @@ export type AdCreateWithoutBusinessInput = {
 export type AdUncheckedCreateWithoutBusinessInput = {
   id?: string
   productId: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -555,7 +555,7 @@ export type AdScalarWhereInput = {
 
 export type AdCreateWithoutProductInput = {
   id?: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -565,7 +565,7 @@ export type AdCreateWithoutProductInput = {
 export type AdUncheckedCreateWithoutProductInput = {
   id?: string
   businessId: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -600,7 +600,7 @@ export type AdUpdateManyWithWhereWithoutProductInput = {
 export type AdCreateManyBusinessInput = {
   id?: string
   productId: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null
@@ -636,7 +636,7 @@ export type AdUncheckedUpdateManyWithoutBusinessInput = {
 export type AdCreateManyProductInput = {
   id?: string
   businessId: string
-  price: number
+  price?: number
   periodDays: number
   createdAt?: Date | string
   endedAt?: Date | string | null

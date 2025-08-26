@@ -33,10 +33,7 @@ export default function SalesManagementPage() {
     data: storesData,
     loading: storesLoading,
     error: storesError
-  } = useQuery(GET_STORES, {
-    variables: { businessId: user?.id },
-    skip: !user?.id
-  });
+  } = useQuery(GET_STORES);
 
   const {
     getCurrentSale,

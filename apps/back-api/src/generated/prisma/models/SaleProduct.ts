@@ -293,7 +293,7 @@ export type SaleProductScalarWhereWithAggregatesInput = {
 export type SaleProductCreateInput = {
   id?: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   sale: Prisma.SaleCreateNestedOneWithoutSaleProductsInput
@@ -305,7 +305,7 @@ export type SaleProductUncheckedCreateInput = {
   saleId: string
   productId: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -335,7 +335,7 @@ export type SaleProductCreateManyInput = {
   saleId: string
   productId: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -493,7 +493,7 @@ export type SaleProductUncheckedUpdateManyWithoutSaleNestedInput = {
 export type SaleProductCreateWithoutProductInput = {
   id?: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   sale: Prisma.SaleCreateNestedOneWithoutSaleProductsInput
@@ -503,7 +503,7 @@ export type SaleProductUncheckedCreateWithoutProductInput = {
   id?: string
   saleId: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -550,7 +550,7 @@ export type SaleProductScalarWhereInput = {
 export type SaleProductCreateWithoutSaleInput = {
   id?: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutSaleProductsInput
@@ -560,7 +560,7 @@ export type SaleProductUncheckedCreateWithoutSaleInput = {
   id?: string
   productId: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -595,7 +595,7 @@ export type SaleProductCreateManyProductInput = {
   id?: string
   saleId: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
@@ -631,7 +631,7 @@ export type SaleProductCreateManySaleInput = {
   id?: string
   productId: string
   quantity?: number
-  price: number
+  price?: number
   modifiers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }

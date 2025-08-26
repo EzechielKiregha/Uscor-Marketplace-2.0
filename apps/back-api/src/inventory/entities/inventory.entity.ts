@@ -5,30 +5,30 @@ import { StoreEntity } from '../../store/entities/store.entity';
 
 @ObjectType()
 export class InventoryAdjustmentEntity {
-  @Field()
-  id: string;
+  @Field({nullable: true})
+  id?: string;
 
-  @Field()
-  productId: string;
+  @Field({nullable: true})
+  productId?: string;
 
-  @Field(() => ProductEntity)
-  product: ProductEntity;
+  @Field(() => ProductEntity, {nullable : true})
+  product?: ProductEntity;
 
-  @Field()
-  storeId: string;
+  @Field({nullable: true})
+  storeId?: string;
 
-  @Field(() => StoreEntity)
-  store: StoreEntity;
+  @Field(() => StoreEntity, {nullable : true})
+  store?: StoreEntity;
 
-  @Field(() => AdjustmentType)
-  adjustmentType: AdjustmentType;
+  @Field(() => AdjustmentType, {nullable : true})
+  adjustmentType?: AdjustmentType;
 
-  @Field(() => Int)
-  quantity: number;
+  @Field(() => Int, {nullable : true})
+  quantity?: number;
 
-  @Field({ nullable: true })
+  @Field({nullable: true})
   reason?: string;
 
-  @Field()
-  createdAt: Date;
+  @Field({nullable: true})
+  createdAt?: Date;
 }

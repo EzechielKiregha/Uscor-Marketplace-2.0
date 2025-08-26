@@ -268,7 +268,7 @@ export type PointsTransactionScalarWhereWithAggregatesInput = {
 
 export type PointsTransactionCreateInput = {
   id?: string
-  points: number
+  points?: number
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutPointsTransactionsInput
   loyaltyProgram: Prisma.LoyaltyProgramCreateNestedOneWithoutPointsTransactionsInput
@@ -278,7 +278,7 @@ export type PointsTransactionUncheckedCreateInput = {
   id?: string
   clientId: string
   loyaltyProgramId: string
-  points: number
+  points?: number
   createdAt?: Date | string
 }
 
@@ -302,7 +302,7 @@ export type PointsTransactionCreateManyInput = {
   id?: string
   clientId: string
   loyaltyProgramId: string
-  points: number
+  points?: number
   createdAt?: Date | string
 }
 
@@ -448,7 +448,7 @@ export type PointsTransactionUncheckedUpdateManyWithoutLoyaltyProgramNestedInput
 
 export type PointsTransactionCreateWithoutClientInput = {
   id?: string
-  points: number
+  points?: number
   createdAt?: Date | string
   loyaltyProgram: Prisma.LoyaltyProgramCreateNestedOneWithoutPointsTransactionsInput
 }
@@ -456,7 +456,7 @@ export type PointsTransactionCreateWithoutClientInput = {
 export type PointsTransactionUncheckedCreateWithoutClientInput = {
   id?: string
   loyaltyProgramId: string
-  points: number
+  points?: number
   createdAt?: Date | string
 }
 
@@ -499,7 +499,7 @@ export type PointsTransactionScalarWhereInput = {
 
 export type PointsTransactionCreateWithoutLoyaltyProgramInput = {
   id?: string
-  points: number
+  points?: number
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutPointsTransactionsInput
 }
@@ -507,7 +507,7 @@ export type PointsTransactionCreateWithoutLoyaltyProgramInput = {
 export type PointsTransactionUncheckedCreateWithoutLoyaltyProgramInput = {
   id?: string
   clientId: string
-  points: number
+  points?: number
   createdAt?: Date | string
 }
 
@@ -540,7 +540,7 @@ export type PointsTransactionUpdateManyWithWhereWithoutLoyaltyProgramInput = {
 export type PointsTransactionCreateManyClientInput = {
   id?: string
   loyaltyProgramId: string
-  points: number
+  points?: number
   createdAt?: Date | string
 }
 
@@ -568,7 +568,7 @@ export type PointsTransactionUncheckedUpdateManyWithoutClientInput = {
 export type PointsTransactionCreateManyLoyaltyProgramInput = {
   id?: string
   clientId: string
-  points: number
+  points?: number
   createdAt?: Date | string
 }
 

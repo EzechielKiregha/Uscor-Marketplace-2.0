@@ -296,7 +296,7 @@ export type PostTransactionScalarWhereWithAggregatesInput = {
 export type PostTransactionCreateInput = {
   id?: string
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
   post: Prisma.PostOfSaleCreateNestedOneWithoutTransactionsInput
   client: Prisma.ClientCreateNestedOneWithoutPostTransactionsInput
@@ -309,7 +309,7 @@ export type PostTransactionUncheckedCreateInput = {
   clientId: string
   paymentTransactionId?: string | null
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -339,7 +339,7 @@ export type PostTransactionCreateManyInput = {
   clientId: string
   paymentTransactionId?: string | null
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -541,7 +541,7 @@ export type EnumPostTransactionStatusFieldUpdateOperationsInput = {
 export type PostTransactionCreateWithoutClientInput = {
   id?: string
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
   post: Prisma.PostOfSaleCreateNestedOneWithoutTransactionsInput
   paymentTransaction?: Prisma.PaymentTransactionCreateNestedOneWithoutPostTransactionsInput
@@ -552,7 +552,7 @@ export type PostTransactionUncheckedCreateWithoutClientInput = {
   postId: string
   paymentTransactionId?: string | null
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -598,7 +598,7 @@ export type PostTransactionScalarWhereInput = {
 export type PostTransactionCreateWithoutPaymentTransactionInput = {
   id?: string
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
   post: Prisma.PostOfSaleCreateNestedOneWithoutTransactionsInput
   client: Prisma.ClientCreateNestedOneWithoutPostTransactionsInput
@@ -609,7 +609,7 @@ export type PostTransactionUncheckedCreateWithoutPaymentTransactionInput = {
   postId: string
   clientId: string
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -642,7 +642,7 @@ export type PostTransactionUpdateManyWithWhereWithoutPaymentTransactionInput = {
 export type PostTransactionCreateWithoutPostInput = {
   id?: string
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutPostTransactionsInput
   paymentTransaction?: Prisma.PaymentTransactionCreateNestedOneWithoutPostTransactionsInput
@@ -653,7 +653,7 @@ export type PostTransactionUncheckedCreateWithoutPostInput = {
   clientId: string
   paymentTransactionId?: string | null
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -688,7 +688,7 @@ export type PostTransactionCreateManyClientInput = {
   postId: string
   paymentTransactionId?: string | null
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -724,7 +724,7 @@ export type PostTransactionCreateManyPaymentTransactionInput = {
   postId: string
   clientId: string
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 
@@ -760,7 +760,7 @@ export type PostTransactionCreateManyPostInput = {
   clientId: string
   paymentTransactionId?: string | null
   status?: $Enums.PostTransactionStatus
-  amount: number
+  amount?: number
   createdAt?: Date | string
 }
 

@@ -39,9 +39,6 @@ export class BusinessEntity {
   coverImage?: string;
 
   @Field()
-  password: string; // This should be hashed and not exposed in the GraphQL schema
-
-  @Field()
   isVerified: boolean;
 
   @Field(() => KycStatus)

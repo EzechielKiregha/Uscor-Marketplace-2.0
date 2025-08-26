@@ -307,7 +307,7 @@ export type AccountRechargeScalarWhereWithAggregatesInput = {
 
 export type AccountRechargeCreateInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   createdAt?: Date | string
@@ -318,7 +318,7 @@ export type AccountRechargeCreateInput = {
 
 export type AccountRechargeUncheckedCreateInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   businessId?: string | null
@@ -351,7 +351,7 @@ export type AccountRechargeUncheckedUpdateInput = {
 
 export type AccountRechargeCreateManyInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   businessId?: string | null
@@ -566,7 +566,7 @@ export type EnumCountryFieldUpdateOperationsInput = {
 
 export type AccountRechargeCreateWithoutBusinessInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   createdAt?: Date | string
@@ -576,7 +576,7 @@ export type AccountRechargeCreateWithoutBusinessInput = {
 
 export type AccountRechargeUncheckedCreateWithoutBusinessInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   clientId?: string | null
@@ -626,7 +626,7 @@ export type AccountRechargeScalarWhereInput = {
 
 export type AccountRechargeCreateWithoutClientInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   createdAt?: Date | string
@@ -636,7 +636,7 @@ export type AccountRechargeCreateWithoutClientInput = {
 
 export type AccountRechargeUncheckedCreateWithoutClientInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   businessId?: string | null
@@ -672,7 +672,7 @@ export type AccountRechargeUpdateManyWithWhereWithoutClientInput = {
 
 export type AccountRechargeCreateWithoutTokenTransactionInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   createdAt?: Date | string
@@ -682,7 +682,7 @@ export type AccountRechargeCreateWithoutTokenTransactionInput = {
 
 export type AccountRechargeUncheckedCreateWithoutTokenTransactionInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   businessId?: string | null
@@ -718,7 +718,7 @@ export type AccountRechargeUpdateManyWithWhereWithoutTokenTransactionInput = {
 
 export type AccountRechargeCreateManyBusinessInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   clientId?: string | null
@@ -758,7 +758,7 @@ export type AccountRechargeUncheckedUpdateManyWithoutBusinessInput = {
 
 export type AccountRechargeCreateManyClientInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   businessId?: string | null
@@ -798,7 +798,7 @@ export type AccountRechargeUncheckedUpdateManyWithoutClientInput = {
 
 export type AccountRechargeCreateManyTokenTransactionInput = {
   id?: string
-  amount: number
+  amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
   businessId?: string | null

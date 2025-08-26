@@ -163,12 +163,29 @@ const MenuIcon: React.FC = () => (
   </svg>
 );
 
-const Logo: React.FC = () => (
-  <div className="flex items-center justify-center ">
-    <Image alt='logo' src='/logo.png' width={50} height={40} />
-    <span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">Uscor</span>
-  </div>
-);
+const Logo: React.FC = () => {
+  const path = usePathname()
+  return (
+    <div className="flex items-center justify-center gap-1">
+      <Image alt='logo' src='/logo.png' width={50} height={40} />
+      <span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">Uscor {' '}
+        {path.includes('/marketplace') ? (
+          <span className='hidden font-bold lg:block'>
+            MarketPlace
+          </span>
+        ) : path.includes('/freelance-gigs') ? (
+          <span className='hidden font-bold lg:block'>
+            Freelance / Jobs
+          </span>
+        ) : path.includes('/') && (
+          <span className='hidden font-bold lg:block'>
+            Intelligent POS
+          </span>
+        )}
+      </span>
+    </div>
+  );
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
   <input
@@ -488,7 +505,7 @@ function HeaderComponent() {
               <SearchIcon size={16} />
             </div>
           </div>
-          <div className="flex items-center lg:block md:hidden gap-2">
+          <div className=" items-center lg:flex md:hidden hidden gap-2">
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsSearchVisible(true)}>
               <SearchIcon size={18} />
             </Button>

@@ -12,8 +12,8 @@ registerEnumType(SaleStatus, { name: 'SaleStatus' });
 
 @ObjectType()
 export class SaleEntity {
-  @Field()
-  id: string;
+  @Field({nullable: true})
+  id?: string;
 
   @Field()
   storeId: string;
@@ -33,11 +33,11 @@ export class SaleEntity {
   @Field(() => ClientEntity, { nullable: true })
   client?: ClientEntity;
 
-  @Field(() => Float)
-  totalAmount: number;
+  @Field(() => Float, {nullable: true})
+  totalAmount?: number;
 
-  @Field(() => Float)
-  discount: number;
+  @Field(() => Float, {nullable: true})
+  discount?: number;
 
   @Field(() => PaymentMethod)
   paymentMethod: PaymentMethod;
@@ -45,11 +45,11 @@ export class SaleEntity {
   @Field(() => SaleStatus)
   status: SaleStatus;
 
-  @Field()
-  createdAt: Date;
+  @Field({nullable: true})
+  createdAt?: Date;
 
-  @Field()
-  updatedAt: Date;
+  @Field({nullable: true})
+  updatedAt?: Date;
 
   @Field(() => [SaleProductEntity])
   saleProducts: SaleProductEntity[];
