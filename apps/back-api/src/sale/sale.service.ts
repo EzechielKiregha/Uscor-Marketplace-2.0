@@ -18,7 +18,7 @@ import { promisify } from 'util';
 import { exec } from 'child_process';
 import { createWriteStream, mkdir } from 'fs';
 import { subDays } from 'date-fns';
-import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
+import { PaymentMethod } from '../payment-transaction/dto/create-payment-transaction.input';
 import { PubSub } from 'graphql-subscriptions';
 const execAsync = promisify(exec);
 const mkdirAsync = promisify(mkdir);

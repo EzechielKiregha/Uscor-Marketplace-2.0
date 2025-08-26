@@ -19,7 +19,7 @@ import { SaleProductEntity } from './entities/sale-product.entity';
 import { AddSaleProductInput } from './dto/add-sale-product.input';
 import { UpdateSaleProductInput } from './dto/update-sale-product.input';
 import { DeleteResponse } from './entities/delete-response.entity';
-import { PaymentMethod } from 'src/payment-transaction/dto/create-payment-transaction.input';
+import { PaymentMethod } from '../payment-transaction/dto/create-payment-transaction.input';
 import { PubSub } from 'graphql-subscriptions';
 
 // Resolver

@@ -1,10 +1,10 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BusinessEntity } from '../../business/entities/business.entity';
-import { PurchaseOrderEntity } from 'src/inventory/entities/purchase-order.entity';
-import { InventoryAdjustmentEntity } from 'src/inventory/entities/inventory.entity';
-import { TransferOrderEntity } from 'src/inventory/entities/transfer-order.entity';
-import { SaleEntity } from 'src/sale/entities/sale.entity';
-import { ShiftEntity } from 'src/shift/entities/shift.entity';
+import { PurchaseOrderEntity } from '../../inventory/entities/purchase-order.entity';
+import { InventoryAdjustmentEntity } from '../../inventory/entities/inventory.entity';
+import { TransferOrderEntity } from '../../inventory/entities/transfer-order.entity';
+import { SaleEntity } from '../../sale/entities/sale.entity';
+import { ShiftEntity } from '../../shift/entities/shift.entity';
 
 @ObjectType()
 export class StoreEntity {
