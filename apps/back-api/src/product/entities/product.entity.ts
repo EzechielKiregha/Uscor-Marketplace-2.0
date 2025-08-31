@@ -49,8 +49,8 @@ export class ProductEntity {
   approvedForSale: boolean;
 
   // Relations
-  @Field(() => [MediaEntity]) // Media associated with the product
-  medias: MediaEntity[];
+  @Field(() => [MediaEntity], {nullable: true}) // Media associated with the product
+  medias?: MediaEntity[];
 
   @Field(() => BusinessEntity, { nullable: true })
   business?: BusinessEntity;

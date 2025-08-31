@@ -214,6 +214,8 @@ enum TransferOrderStatus {
 type SaleProductEntity {
   id: String!
   quantity: Int!
+  saleId: String!
+  productId: String!
   price: Float!
   description: String
   modifiers: JSON
@@ -309,7 +311,7 @@ type ProductEntity {
   updatedAt: DateTime!
   featured: Boolean!
   approvedForSale: Boolean!
-  medias: [MediaEntity!]!
+  medias: [MediaEntity!]
   business: BusinessEntity
   store: StoreEntity
   category: CategoryEntity
@@ -769,6 +771,9 @@ type Query {
 
   """Retrieves a single product by ID."""
   product(id: String!): ProductEntity!
+
+  """Retrieves a single product by name."""
+  productsByName(storeId: String!, title: String!): [ProductEntity!]!
 
   """Retrieves orders."""
   orders: [OrderEntity!]!

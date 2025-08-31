@@ -153,9 +153,10 @@ export class ProductService {
       orderBy: { createdAt: 'desc' }, // show newest first
     });
   }
-  async getFilteredProducts(title: string) {
+  async getFilteredProducts(storeId: string, title: string) {
     return await this.prisma.product.findMany({
-      where: { 
+      where: {
+        storeId,
         title: {
           contains: title, mode: 'insensitive'
         }

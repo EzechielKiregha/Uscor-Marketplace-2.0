@@ -82,7 +82,7 @@ export default function CurrentSalePanel({
     }
   }, [currentSale, refetchSale]);
 
-  const filteredProducts = productsData?.products?.items?.filter((product: ProductEntity) =>
+  const filteredProducts = productsData?.productsByName?.filter((product: ProductEntity) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product.description?.toLowerCase().includes(searchQuery.toLowerCase())
   ) || [];
@@ -256,22 +256,16 @@ export default function CurrentSalePanel({
                 onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative pt-[100%]">
-                  {product.medias && product.medias.length > 0 && product.medias[0].url ? (
-                    <img
-                      src={product.medias[0].url}
-                      alt={product.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={
-                        (event) => {
-                          event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`;
-                        }
+                  <img
+                    src={product.medias && product.medias.length > 0 ? product.medias[0].url : 'image.png'}
+                    alt={product.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={
+                      (event) => {
+                        event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`;
                       }
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                      <span className="text-muted-foreground">No image</span>
-                    </div>
-                  )}
+                    }
+                  />
                 </div>
                 <div className="p-3">
                   <h3 className="font-medium text-foreground line-clamp-1">{product.title}</h3>
@@ -290,17 +284,16 @@ export default function CurrentSalePanel({
             <div className="p-6">
               <div className="flex -mx-4 -mt-4 -mb-4 bg-muted border-b border-border p-4 mb-4">
                 <div className="w-24 h-24 flex-shrink-0 mr-4">
-                  {selectedProduct.medias && selectedProduct.medias.length > 0 && selectedProduct.medias[0].url ? (
-                    <img
-                      src={selectedProduct.medias[0].url}
-                      alt={selectedProduct.title}
-                      className="w-full h-full object-cover rounded"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-muted flex items-center justify-center rounded">
-                      <span className="text-muted-foreground">No image</span>
-                    </div>
-                  )}
+                  <img
+                    src={selectedProduct.medias && selectedProduct.medias.length > 0 ? selectedProduct.medias[0].url : 'image.png'}
+                    alt={selectedProduct.title}
+                    className="w-full h-full object-cover rounded"
+                    onError={
+                      (event) => {
+                        event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(selectedProduct.title)}`;
+                      }
+                    }
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-lg">{selectedProduct.title}</h3>

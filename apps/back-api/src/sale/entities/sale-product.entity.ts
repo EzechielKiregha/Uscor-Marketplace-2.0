@@ -10,6 +10,12 @@ export class SaleProductEntity {
   @Field(() => Int)
   quantity: number;
 
+  @Field(() => String)
+  saleId: string;
+
+  @Field(() => String)
+  productId: string;
+
   @Field(() => Float)
   price: number;
 

@@ -51,9 +51,9 @@ export default function SalesHistoryPanel({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'COMPLETED':
+      case 'CLOSED':
         return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Completed</span>;
-      case 'PROCESSING':
+      case 'OPEN':
         return <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Processing</span>;
       case 'RETURNED':
         return <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Returned</span>;

@@ -295,19 +295,47 @@ export const CREATE_SALE = gql`
 export const ADD_SALE_PRODUCT = gql`
   mutation AddSaleProduct($input: AddSaleProductInput!) {
     addSaleProduct(input: $input) {
-      ...SaleProductEntity
+      id
+      saleId
+      productId
+      quantity
+      price
+      modifiers
+      createdAt
+      product {
+        id
+        title
+        description
+        price
+        medias {
+          url  
+        }
+      }
     }
   }
-  ${SALE_PRODUCT_ENTITY}
 `;
 
 export const UPDATE_SALE_PRODUCT = gql`
   mutation UpdateSaleProduct($id: String!, $input: UpdateSaleProductInput!) {
     updateSaleProduct(id: $id, input: $input) {
-      ...SaleProductEntity
+    id
+    saleId
+    productId
+    quantity
+    price
+    modifiers
+    createdAt
+    product {
+      id
+      title
+      description
+      price
+      medias {
+        url  
+      }
     }
   }
-  ${SALE_PRODUCT_ENTITY}
+  }
 `;
 
 export const REMOVE_SALE_PRODUCT = gql`

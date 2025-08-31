@@ -92,7 +92,7 @@ export const GET_PRODUCTS = gql`
   }
 `;
 export const GET_PRODUCTS_BY_NAME = gql`
-  query GetProductsByName(storeId: String!, title: String!) {
+  query GetProductsByName($storeId: String!, $title: String!) {
     productsByName(storeId: $storeId, title: $title) {
       id
       title
