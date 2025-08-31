@@ -256,6 +256,13 @@ export interface StoreEntity {
   address?: string;
   createdAt: Date;
   updatedAt: Date;
+  sales?: SaleEntity[];
+  products?: ProductEntity[];
+  purchaseOrders?: any[];
+  transferOrdersFrom?: any[];
+  transferOrdersTo?: any[];
+  inventoryAdjustments?: any[];
+  shifts?: any[];
 }
 
 export interface CategoryEntity {

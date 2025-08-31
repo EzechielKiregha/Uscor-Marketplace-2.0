@@ -22,7 +22,7 @@ export default function HeroSection() {
         </span>
 
         {/* Title */}
-        <h1 className="mt-6 text-4xl sm:text-5xl lg:text-7xl font-bold text-foreground leading-tight">
+        <h1 className="mt-6 text-3xl sm:text-4xl lg:text-6xl font-bold text-foreground leading-tight">
           Discover & Sell Digital Excellence with <span className="text-primary">Intelligent POS for Modern Businesses</span>
         </h1>
 

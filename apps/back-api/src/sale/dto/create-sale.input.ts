@@ -30,11 +30,13 @@ export class CreateSaleInput {
   @Min(0)
   discount?: number;
 
-  @Field(() => PaymentMethod)
+  @Field(() => PaymentMethod, { nullable: true })
+  @IsOptional()
   @IsEnum(PaymentMethod)
-  paymentMethod: PaymentMethod;
+  paymentMethod?: PaymentMethod;
 
-  @Field(() => [SaleProductInput])
+  @Field(() => [SaleProductInput], { nullable: true })
+  @IsOptional()
   @IsArray()
-  saleProducts: SaleProductInput[];
+  saleProducts?: SaleProductInput[];
 }

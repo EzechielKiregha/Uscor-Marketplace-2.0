@@ -286,12 +286,13 @@ type StoreEntity {
   createdAt: DateTime!
   updatedAt: DateTime!
   business: BusinessEntity!
-  transferOrdersFrom: TransferOrderEntity!
-  transferOrdersTo: TransferOrderEntity!
-  inventoryAdjustments: InventoryAdjustmentEntity!
-  purchaseOrders: PurchaseOrderEntity!
-  sales: SaleEntity!
-  shifts: ShiftEntity!
+  transferOrdersFrom: [TransferOrderEntity!]
+  transferOrdersTo: [TransferOrderEntity!]
+  inventoryAdjustments: [InventoryAdjustmentEntity!]
+  purchaseOrders: [PurchaseOrderEntity!]
+  sales: [SaleEntity!]
+  shifts: [ShiftEntity!]
+  products: [ProductEntity!]
 }
 
 type ProductEntity {
@@ -692,6 +693,29 @@ type DeleteResponse {
   id: String!
 }
 
+type SalesStats {
+  total: Int!
+  monthly: Int!
+  weekly: Int!
+}
+
+type ProductStats {
+  total: Int!
+  lowStock: Int!
+}
+
+type RevenueStats {
+  total: Float!
+  monthly: Float!
+  weekly: Float!
+}
+
+type StoreStatistics {
+  sales: SalesStats!
+  revenue: RevenueStats!
+  products: ProductStats!
+}
+
 type LoyaltyProgramEntity {
   id: String!
   businessId: String!
@@ -830,6 +854,8 @@ type Query {
   category(id: String!): CategoryEntity!
   activeSales(storeId: String!): [SaleEntity!]!
   sale(id: String!): SaleEntity!
+
+  """Retrieves sales for a store in a business."""
   sales(storeId: String, workerId: String, startDate: DateTime, endDate: DateTime, status: String, page: Float! = 1, limit: Float! = 20): PaginatedSalesResponse!
   salesDashboard(storeId: String!, period: String! = "day"): SalesDashboard!
 
@@ -838,6 +864,9 @@ type Query {
 
   """Retrieves a single store by ID."""
   store(id: String!): StoreEntity!
+
+  """Retrieves statistics for a store."""
+  storeStatistics(storeId: String!): StoreStatistics!
 
   """Retrieves points transactions for a client."""
   pointsTransactionsByClient(clientId: String!): [PointsTransactionEntity!]!
@@ -1370,8 +1399,8 @@ input CreateSaleInput {
   clientId: String
   totalAmount: Float
   discount: Float
-  paymentMethod: PaymentMethod!
-  saleProducts: [SaleProductInput!]!
+  paymentMethod: PaymentMethod
+  saleProducts: [SaleProductInput!]
 }
 
 input SaleProductInput {

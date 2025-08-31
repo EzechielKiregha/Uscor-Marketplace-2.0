@@ -256,7 +256,7 @@ export default function CurrentSalePanel({
                 onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative pt-[100%]">
-                  {product.medias[0].url ? (
+                  {product.medias && product.medias.length > 0 && product.medias[0].url ? (
                     <img
                       src={product.medias[0].url}
                       alt={product.title}
@@ -285,9 +285,9 @@ export default function CurrentSalePanel({
             <div className="p-6">
               <div className="flex -mx-4 -mt-4 -mb-4 bg-muted border-b border-border p-4 mb-4">
                 <div className="w-24 h-24 flex-shrink-0 mr-4">
-                  {selectedProduct.imageUrl ? (
+                  {selectedProduct.medias && selectedProduct.medias.length > 0 && selectedProduct.medias[0].url ? (
                     <img
-                      src={selectedProduct.imageUrl}
+                      src={selectedProduct.medias[0].url}
                       alt={selectedProduct.title}
                       className="w-full h-full object-cover rounded"
                     />

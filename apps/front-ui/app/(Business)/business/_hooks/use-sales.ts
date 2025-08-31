@@ -11,8 +11,9 @@ import {
   ON_SALE_UPDATED
 } from '@/graphql/sales.gql';
 import { useToast } from '@/components/toast-provider';
+import { useMe } from '@/lib/useMe';
 
-export const useSales = (storeId: string) => {
+export const useSales = (storeId: string, wUserId: string) => {
   const [currentSaleId, setCurrentSaleId] = useState<string | null>(null);
   const {showToast} = useToast()
   
@@ -59,14 +60,19 @@ export const useSales = (storeId: string) => {
   });
 
   // Create a new sale
-  const createSale = useCallback(async () => {
+  const createSale = useCallback(async (clientId?: string) => {
     try {
       const { data } = await createSaleMutation({
         variables: { 
           input: { 
             storeId,
-            workerId: 'current-worker-id' // In real app, get from useMe()
-          } 
+            workerId: wUserId,
+            clientId: clientId || undefined, // Optional client
+            totalAmount: 0,
+            discount: 0,
+            paymentMethod: 'CASH',
+            saleProducts: []
+          }
         }
       });
       
@@ -75,10 +81,11 @@ export const useSales = (storeId: string) => {
       showToast('success', 'New Sale', 'Sale created successfully');
       return newSaleId;
     } catch (error) {
+      console.error('Create sale error:', error);
       showToast('error', 'Error', 'Failed to create sale');
       throw error;
     }
-  }, [storeId, createSaleMutation]);
+  }, [storeId, createSaleMutation, wUserId]);
 
   // Add product to current sale
   const addProductToSale = useCallback(async (productId: string, quantity: number = 1, modifiers?: any) => {

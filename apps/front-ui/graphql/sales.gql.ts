@@ -41,7 +41,9 @@ export const SALE_ENTITY = gql`
         id
         title
         price
-        imageUrl
+        medias {
+          url  
+        }
       }
     }
     returns {
@@ -67,7 +69,9 @@ export const SALE_PRODUCT_ENTITY = gql`
       title
       description
       price
-      imageUrl
+      medias {
+        url  
+      }
     }
   }
 `;

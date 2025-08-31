@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_STORES, DELETE_STORE } from '@/graphql/store.gql';
 import Loader from '@/components/seraui/Loader';
 import { Button } from '@/components/ui/button';
-import { Building, Pencil, Trash2, Plus, Search } from 'lucide-react';
+import { Building, Pencil, Trash2, Plus, Search, Package, DollarSign, ShoppingCart, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/components/toast-provider';
 import { useOpenCreateStoreModal } from '../_hooks/use-open-create-store-modal';
@@ -66,47 +66,92 @@ export default function BusinessStoresPage() {
 
       {/* Stores Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {data.stores.map((store: StoreEntity) => (
-          <div key={store.id} className="border border-border rounded-lg overflow-hidden bg-card">
-            <div className="p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <Building className="h-6 w-6 text-primary" />
-                <h3 className="font-semibold text-foreground">{store.name}</h3>
-              </div>
+        {data.stores.map((store: StoreEntity) => {
+          // Calculate store statistics
+          const totalSales = store.sales?.length || 0;
+          const totalProducts = store.products?.length || 0;
+          const totalRevenue = store.sales?.reduce((sum, sale) => sum + (sale.totalAmount || 0), 0) || 0;
+          const lowStockProducts = store.products?.filter(product => product.quantity < 10).length || 0;
 
-              {store.address && (
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{store.address}</p>
-              )}
+          return (
+            <div key={store.id} className="border border-border rounded-lg overflow-hidden bg-card">
+              <div className="p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <Building className="h-6 w-6 text-primary" />
+                  <h3 className="font-semibold text-foreground">{store.name}</h3>
+                </div>
 
-              <div className="border-t border-border pt-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-muted-foreground">
-                    Created {new Date(store.createdAt).toLocaleDateString()}
-                  </span>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setIsOpen({
-                        openCreateStoreModal: true,
-                        initialStoreData: store
-                      })}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleDelete(store.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                {store.address && (
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{store.address}</p>
+                )}
+
+                {/* Store Statistics */}
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="flex items-center gap-2 p-2 bg-muted rounded">
+                    <ShoppingCart className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Sales</p>
+                      <p className="font-semibold text-sm">{totalSales}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 p-2 bg-muted rounded">
+                    <DollarSign className="h-4 w-4 text-green-500" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Revenue</p>
+                      <p className="font-semibold text-sm">${totalRevenue.toFixed(2)}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 p-2 bg-muted rounded">
+                    <Package className="h-4 w-4 text-purple-500" />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Products</p>
+                      <p className="font-semibold text-sm">{totalProducts}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 p-2 bg-muted rounded">
+                    <AlertTriangle className={`h-4 w-4 ${lowStockProducts > 0 ? 'text-red-500' : 'text-gray-400'}`} />
+                    <div>
+                      <p className="text-xs text-muted-foreground">Low Stock</p>
+                      <p className={`font-semibold text-sm ${lowStockProducts > 0 ? 'text-red-500' : ''}`}>
+                        {lowStockProducts}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-border pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">
+                      Created {new Date(store.createdAt).toLocaleDateString()}
+                    </span>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => setIsOpen({
+                          openCreateStoreModal: true,
+                          initialStoreData: store
+                        })}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleDelete(store.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Empty State */}

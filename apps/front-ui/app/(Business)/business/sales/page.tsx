@@ -41,7 +41,7 @@ export default function SalesManagementPage() {
     createSale,
     activeSalesLoading,
     salesHistoryLoading
-  } = useSales(selectedStoreId || '');
+  } = useSales(selectedStoreId || '', user?.id || '');
 
   // Auto-select first store if none selected
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function SalesManagementPage() {
           <Button
             variant="default"
             size="sm"
-            onClick={createSale}
+            onClick={() => createSale()}
             disabled={!selectedStoreId}
           >
             <Plus className="h-4 w-4 mr-2" />

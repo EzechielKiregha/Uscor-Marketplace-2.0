@@ -67,6 +67,14 @@ export const GET_STORES = gql`
       sales {
         id
         totalAmount
+        status
+        createdAt
+      }
+      products {
+        id
+        title
+        price
+        quantity
         createdAt
       }
       purchaseOrders {
@@ -98,8 +106,29 @@ export const GET_STORES = gql`
   }
 `;
 
+export const GET_STORE_STATISTICS = gql`
+  query GetStoreStatistics($storeId: String!) {
+    storeStatistics(storeId: $storeId) {
+      sales {
+        total
+        monthly
+        weekly
+      }
+      revenue {
+        total
+        monthly
+        weekly
+      }
+      products {
+        total
+        lowStock
+      }
+    }
+  }
+`;
+
 export const GET_STORE_BY_ID = gql`
-  query GetStoreById($id: String!) {
+  query GetStore($id: String!) {
     store(id: $id) {
       id
       name

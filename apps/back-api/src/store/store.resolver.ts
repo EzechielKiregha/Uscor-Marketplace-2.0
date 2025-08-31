@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context, ObjectType, Field } from '@nestjs/graphql';
 import { StoreService } from './store.service';
 import { StoreEntity } from './entities/store.entity';
 import { CreateStoreInput } from './dto/create-store.input';
@@ -8,6 +8,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { WorkerService } from '../worker/worker.service';
+import { StoreStatistics } from './entities/store-stats.entity';
+
 
 // Resolver
 @Resolver(() => StoreEntity)
@@ -91,5 +93,24 @@ export class StoreResolver {
   ) {
     const user = context.req.user;
     return this.storeService.verifyStoreAccess(id, user);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Query(() => StoreStatistics, { name: 'storeStatistics', description: 'Retrieves statistics for a store.' })
+  async getStoreStatistics(
+    @Args('storeId', { type: () => String }) storeId: string,
+    @Context() context,
+  ) {
+    const user = context.req.user;
+    if (user.role === 'business') {
+      return this.storeService.getStoreStatistics(storeId, user.id);
+    }
+    if (user.role === 'worker') {
+      const worker = await this.workerService.findOne(user.id);
+      if (!worker) throw new Error("Worker not found");
+      return this.storeService.getStoreStatistics(storeId, worker.businessId);
+    }
+    throw new Error('Unauthorized');
   }
 }

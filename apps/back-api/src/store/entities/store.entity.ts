@@ -5,6 +5,7 @@ import { InventoryAdjustmentEntity } from '../../inventory/entities/inventory.en
 import { TransferOrderEntity } from '../../inventory/entities/transfer-order.entity';
 import { SaleEntity } from '../../sale/entities/sale.entity';
 import { ShiftEntity } from '../../shift/entities/shift.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 
 @ObjectType()
 export class StoreEntity {
@@ -30,33 +31,25 @@ export class StoreEntity {
   @Field(() => BusinessEntity)
   business: BusinessEntity;
  
-  @Field(() => TransferOrderEntity)
-  transferOrdersFrom: TransferOrderEntity
+  @Field(() => [TransferOrderEntity], { nullable: true })
+  transferOrdersFrom?: TransferOrderEntity[]
   
-  @Field(() => TransferOrderEntity)
-  transferOrdersTo: TransferOrderEntity
+  @Field(() => [TransferOrderEntity], { nullable: true })
+  transferOrdersTo?: TransferOrderEntity[]
   
-  @Field(() => InventoryAdjustmentEntity)
-  inventoryAdjustments : InventoryAdjustmentEntity
+  @Field(() => [InventoryAdjustmentEntity], { nullable: true })
+  inventoryAdjustments?: InventoryAdjustmentEntity[]
   
-  @Field(() => PurchaseOrderEntity)
-  purchaseOrders: PurchaseOrderEntity
+  @Field(() => [PurchaseOrderEntity], { nullable: true })
+  purchaseOrders?: PurchaseOrderEntity[]
   
-  @Field(() => SaleEntity)
-  sales: SaleEntity
+  @Field(() => [SaleEntity], { nullable: true })
+  sales?: SaleEntity[]
   
-  @Field(() => ShiftEntity)
-  shifts: ShiftEntity
+  @Field(() => [ShiftEntity], { nullable: true })
+  shifts?: ShiftEntity[]
+
+  @Field(() => [ProductEntity], { nullable: true })
+  products?: ProductEntity[]
 
 }
-
-// include: {
-//   business: { select: { id: true, name: true, email: true, createdAt: true } },
-//   transferOrdersFrom: { select : { id: true, status: true, createdAt:true}},
-//   transferOrdersTo: { select : { id: true, status: true, createdAt: true}},
-//   inventoryAdjustments: { select : { id: true, quantity: true, createdAt: true}},
-//   purchaseOrders: { select : { id: true, status: true, createdAt : true}},
-//   sales: { select : { id: true, totalAmount: true, createdAt: true}},
-//   shifts: { select: { id: true, startTime: true, endTime: true, createdAt: true}}
-// },
-

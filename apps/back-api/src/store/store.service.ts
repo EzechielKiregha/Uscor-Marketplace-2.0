@@ -96,10 +96,91 @@ export class StoreService {
         transferOrdersTo: { select : { id: true, status: true, createdAt: true}},
         inventoryAdjustments: { select : { id: true, quantity: true, createdAt: true}},
         purchaseOrders: { select : { id: true, status: true, createdAt : true}},
-        sales: { select : { id: true, totalAmount: true, createdAt: true}},
-        shifts: { select: { id: true, startTime: true, endTime: true, createdAt: true}}
+        sales: { 
+          select: { 
+            id: true, 
+            totalAmount: true, 
+            status: true,
+            createdAt: true 
+          }
+        },
+        shifts: { select: { id: true, startTime: true, endTime: true, createdAt: true}},
+        products: { 
+          select: { 
+            id: true, 
+            title: true, 
+            price: true, 
+            quantity: true,
+            createdAt: true 
+          }
+        },
+        _count: {
+          select: {
+            sales: true,
+            products: true,
+            shifts: true,
+            purchaseOrders: true
+          }
+        }
       },
     });
+  }
+
+  async getStoreStatistics(storeId: string, businessId: string) {
+    // Verify store belongs to business
+    const store = await this.prisma.store.findFirst({
+      where: { id: storeId, businessId }
+    });
+    
+    if (!store) {
+      throw new Error('Store not found or access denied');
+    }
+
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+
+    // Get sales statistics
+    const [totalSales, monthlySales, weeklySales, totalRevenue, monthlyRevenue, weeklyRevenue] = await Promise.all([
+      this.prisma.sale.count({ where: { storeId } }),
+      this.prisma.sale.count({ where: { storeId, createdAt: { gte: startOfMonth } } }),
+      this.prisma.sale.count({ where: { storeId, createdAt: { gte: startOfWeek } } }),
+      this.prisma.sale.aggregate({ 
+        where: { storeId, status: 'CLOSED' }, 
+        _sum: { totalAmount: true } 
+      }),
+      this.prisma.sale.aggregate({ 
+        where: { storeId, status: 'CLOSED', createdAt: { gte: startOfMonth } }, 
+        _sum: { totalAmount: true } 
+      }),
+      this.prisma.sale.aggregate({ 
+        where: { storeId, status: 'CLOSED', createdAt: { gte: startOfWeek } }, 
+        _sum: { totalAmount: true } 
+      })
+    ]);
+
+    // Get product statistics
+    const [totalProducts, lowStockProducts] = await Promise.all([
+      this.prisma.product.count({ where: { storeId } }),
+      this.prisma.product.count({ where: { storeId, quantity: { lt: 10 } } })
+    ]);
+
+    return {
+      sales: {
+        total: totalSales,
+        monthly: monthlySales,
+        weekly: weeklySales
+      },
+      revenue: {
+        total: totalRevenue._sum.totalAmount || 0,
+        monthly: monthlyRevenue._sum.totalAmount || 0,
+        weekly: weeklyRevenue._sum.totalAmount || 0
+      },
+      products: {
+        total: totalProducts,
+        lowStock: lowStockProducts
+      }
+    };
   }
 
   async findOne(id: string) {
@@ -131,6 +212,7 @@ export class StoreService {
     }
     return store;
   }
+
   async verifyBusinessAccess( user: { id: string; role: string }) {
     
     const worker = await this.workerService.findOne(user.id);

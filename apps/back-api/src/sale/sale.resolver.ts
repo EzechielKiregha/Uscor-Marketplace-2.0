@@ -41,17 +41,17 @@ export class SaleResolver {
     return this.saleService.findActiveSales(storeId, user);
   }
 
-  @Query(() => SaleEntity)
-  async sale(
-    @Args('id') id: string,
+  @Query(() => SaleEntity, { name: 'sale'})
+  async getSaleById(
+    @Args('id', { type: () => String }) id: string,
     @Context() context: any
   ) {
     const user = context.req.user;
     return this.saleService.findOne(id, user);
   }
 
-  @Query(() => PaginatedSalesResponse)
-  async sales(
+  @Query(() => PaginatedSalesResponse, { name: 'sales', description: 'Retrieves sales for a store in a business.' })
+  async getSalesHistory(
     @Context() context: any,
     @Args('storeId', { nullable: true }) storeId?: string,
     @Args('workerId', { nullable: true }) workerId?: string,
@@ -70,7 +70,7 @@ export class SaleResolver {
 
   @Query(() => SalesDashboard)
   async salesDashboard(
-    @Args('storeId') storeId: string,
+    @Args('storeId', { type: () => String }) storeId: string,
     @Args('period', { defaultValue: 'day' }) period: string = 'day',
     @Context() context: any
   ) {

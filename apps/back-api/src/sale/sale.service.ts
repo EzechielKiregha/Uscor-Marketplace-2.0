@@ -61,7 +61,7 @@ export class SaleService {
       }
     }
 
-    // Validate products and quantity
+    if (saleProducts) {// Validate products and quantity
     for (const sp of saleProducts) {
       const product = await this.productService.findOne(sp.productId);
       if (!product) throw new Error("Product not found");
@@ -71,31 +71,34 @@ export class SaleService {
       if (product.quantity < sp.quantity) {
         throw new Error(`Insufficient quantity for product ${sp.productId}`);
       }
-    }
+    }}
 
     
 
     // Calculate total
     let calculatedTotal = 0
     let sales = new Array
-    for (const sp of saleProducts) {
-    const p = await this.prisma.product.findUnique({
-      where : { id: sp.productId },
-      select: {
-        id: true,
-        quantity: true,
-        price: true,
-        createdAt: true,
+    
+    if (saleProducts) {
+      for (const sp of saleProducts) {
+      const p = await this.prisma.product.findUnique({
+        where : { id: sp.productId },
+        select: {
+          id: true,
+          quantity: true,
+          price: true,
+          createdAt: true,
+        }
+      })
+      if (!p) throw new Error("This product does not exist this store")
+      calculatedTotal = calculatedTotal + (p.price * sp.quantity)
+      
+      sales.push({
+        ...sp,
+        uniquePrice : p.price
+      })
+      
       }
-    })
-    if (!p) throw new Error("This product does not exist this store")
-    calculatedTotal = calculatedTotal + (p.price * sp.quantity)
-    
-    sales.push({
-      ...sp,
-      uniquePrice : p.price
-    })
-    
     }
 
     const finalTotal = calculatedTotal - (discount || 0);
@@ -130,16 +133,16 @@ export class SaleService {
         client: clientId ? { connect: { id: clientId } } : undefined,
         totalAmount: finalTotal,
         discount: discount || 0,
-        paymentMethod,
+        paymentMethod : paymentMethod || "CASH",
         status: paymentMethod === 'TOKEN' ? 'CLOSED' : 'OPEN',
-        saleProducts: {
+        saleProducts: sales.length > 0 ? {
           create: sales.map((sp) => ({
             product: { connect: { id: sp.productId } },
             quantity: sp.quantity,
             price: sp.uniquePrice,
             modifiers: sp.modifiers ,
           })),
-        },
+        } : undefined,
       },
       include: {
         store: { select: { id: true, name: true, businessId: true, address: true, createdAt: true } },
@@ -153,11 +156,13 @@ export class SaleService {
     });
 
     // Update quantity
-    await Promise.all(
-      saleProducts.map((sp) =>
-        this.productService.updateStock(sp.productId, { quantity: { decrement: sp.quantity } }),
-      ),
-    );
+    if (saleProducts) {
+      await Promise.all(
+        saleProducts.map((sp) =>
+          this.productService.updateStock(sp.productId, { quantity: { decrement: sp.quantity } }),
+        ),
+      );
+    }
 
     // Handle commissions for RepostedProduct and profit-sharing for ReOwnedProduct
     for (const sp of sale.saleProducts) {
@@ -195,7 +200,7 @@ export class SaleService {
 
     // Update business sales metrics
     await this.businessService.updateTotalProuctSold(worker.businessId, {
-      totalProductsSold: { increment: saleProducts.reduce((sum, sp) => sum + sp.quantity, 0) },
+      totalProductsSold: { increment: saleProducts ? saleProducts.reduce((sum, sp) => sum + sp.quantity, 0) : 0 },
     });
 
     // Award loyalty points if sale is CLOSED
@@ -748,11 +753,22 @@ export class SaleService {
         saleProducts: {
           include: { 
             product: { 
-              select: { id: true, title: true, price: true } 
+              select: { id: true, title: true, price: true,
+                medias :{
+                  select: { url : true}
+                }
+              } 
             } 
           }
         },
-        returns: true
+        returns: {
+          select: {
+            id: true,
+            reason: true,
+            status: true,
+            createdAt: true
+          }
+        }
       },
       orderBy: { createdAt: 'desc' }
     });
@@ -799,8 +815,14 @@ export class SaleService {
           saleProducts: {
             include: { 
               product: { 
-                select: { id: true, title: true, price: true } 
-              } 
+                select: { id: true, title: true, price: true, 
+                  medias: {
+                    select: {
+                      url : true
+                    }
+                  }
+                }
+              }
             }
           },
           returns: true
@@ -993,7 +1015,7 @@ export class SaleService {
       if (quantityDiff > 0 && saleProduct.product.quantity < quantityDiff) {
         throw new Error('Insufficient product quantity');
       }
-      
+
       updates.quantity = input.quantity;
       priceChange = saleProduct.product.price * quantityDiff;
       stockChange = -quantityDiff; // Negative because we're using more stock

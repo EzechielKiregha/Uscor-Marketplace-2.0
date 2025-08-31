@@ -167,8 +167,8 @@ export default function LoginPage() {
     } catch (err: any) {
       showToast(
         'error',
-        'Failed',
-        err.message,
+        'Login Failed',
+        'Wrong email or password',
         true,
         8000,
         'bottom-right'
