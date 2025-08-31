@@ -32,15 +32,19 @@ export class SaleResolver {
   ) {}
 // ============ QUERIES ============
 
-  @Query(() => [SaleEntity])
-  async activeSales(
-    @Args('storeId') storeId: string,
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Query(() => [SaleEntity], {name: "activeSales", description: 'Retrieves active sales for a store in a business.' })
+  async getActiveSales(
+    @Args('storeId', {type: () => String}) storeId: string,
     @Context() context: any
   ) {
     const user = context.req.user;
     return this.saleService.findActiveSales(storeId, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Query(() => SaleEntity, { name: 'sale'})
   async getSaleById(
     @Args('id', { type: () => String }) id: string,
@@ -50,7 +54,9 @@ export class SaleResolver {
     return this.saleService.findOne(id, user);
   }
 
-  @Query(() => PaginatedSalesResponse, { name: 'sales', description: 'Retrieves sales for a store in a business.' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Query(() => PaginatedSalesResponse, { name: 'salesHistory', description: 'Retrieves sales for a store in a business.' })
   async getSalesHistory(
     @Context() context: any,
     @Args('storeId', { nullable: true }) storeId?: string,
@@ -68,6 +74,8 @@ export class SaleResolver {
     );
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Query(() => SalesDashboard)
   async salesDashboard(
     @Args('storeId', { type: () => String }) storeId: string,
@@ -80,6 +88,8 @@ export class SaleResolver {
 
   // ============ MUTATIONS ============
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => SaleEntity)
   async createSale(
     @Args('input') createSaleInput: CreateSaleInput,
@@ -89,6 +99,8 @@ export class SaleResolver {
     return this.saleService.create(createSaleInput, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => SaleEntity)
   async updateSale(
     @Args('id') id: string,
@@ -99,6 +111,8 @@ export class SaleResolver {
     return this.saleService.update(id, updateSaleInput, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => SaleEntity)
   async closeSale(
     @Args('input') closeSaleInput: CloseSaleInput,
@@ -108,6 +122,8 @@ export class SaleResolver {
     return this.saleService.close(closeSaleInput, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => SaleEntity)
   async completeSale(
     @Args('id') id: string,
@@ -118,6 +134,8 @@ export class SaleResolver {
     return this.saleService.completeSale(id, paymentMethod, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => SaleProductEntity)
   async addSaleProduct(
     @Args('input') input: AddSaleProductInput,
@@ -127,6 +145,8 @@ export class SaleResolver {
     return this.saleService.addSaleProduct(input, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => SaleProductEntity)
   async updateSaleProduct(
     @Args('id') id: string,
@@ -137,6 +157,8 @@ export class SaleResolver {
     return this.saleService.updateSaleProduct(id, input, user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Mutation(() => DeleteResponse)
   async removeSaleProduct(
     @Args('id') id: string,
@@ -177,6 +199,8 @@ export class SaleResolver {
 
 // ============ SUBSCRIPTIONS ============
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Subscription(() => SaleEntity, {
     filter: (payload, variables) => {
       return payload.saleCreated.storeId === variables.storeId;
@@ -192,6 +216,8 @@ export class SaleResolver {
     return this.pubSub.asyncIterableIterator(`sale_created_${storeId}`);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
   @Subscription(() => SaleEntity, {
     filter: (payload, variables) => {
       return payload.saleUpdated.storeId === variables.storeId;

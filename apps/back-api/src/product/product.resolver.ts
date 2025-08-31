@@ -46,6 +46,10 @@ export class ProductResolver {
   async getProduct(@Args('id', { type: () => String }) id: string) {
     return this.productService.findOne(id);
   }
+  @Query(() => [ProductEntity], { name: 'productsByName', description: 'Retrieves a single product by name.' })
+  async getProductsByName(@Args('title', { type: () => String }) title: string) {
+    return this.productService.getFilteredProducts(title);
+  }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('business')

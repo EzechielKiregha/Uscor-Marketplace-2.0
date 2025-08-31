@@ -153,5 +153,24 @@ export class ProductService {
       orderBy: { createdAt: 'desc' }, // show newest first
     });
   }
+  async getFilteredProducts(title: string) {
+    return await this.prisma.product.findMany({
+      where: { 
+        title: {
+          contains: title, mode: 'insensitive'
+        }
+      }, // Limit to 4 related products
+      include: {
+        medias: { select: { id: true, url : true, type: true }},
+        business: { select: { id: true, name: true, email: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true, createdAt: true } },
+        store : { select: { id: true, name: true, address: true, createdAt: true  } },
+        orders: { select: { id: true, quantity: true, orderId: true } },
+        reposts: { select: { id: true, markupPercentage: true, createdAt: true } },
+        reOwnedProducts: { select: { id: true, oldPrice: true, newPrice: true, markupPercentage: true, createdAt: true } },
+      },
+      orderBy: { createdAt: 'desc' }, // show newest first
+    });
+  }
 }
 

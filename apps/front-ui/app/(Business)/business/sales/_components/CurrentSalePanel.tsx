@@ -24,7 +24,7 @@ import {
   ShoppingCart
 } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
-import { GET_PRODUCTS } from '@/graphql/product.gql';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_NAME } from '@/graphql/product.gql';
 import { ProductEntity } from '@/lib/types';
 
 interface CurrentSalePanelProps {
@@ -52,10 +52,10 @@ export default function CurrentSalePanel({
     data: productsData,
     loading: productsLoading,
     refetch: refetchProducts
-  } = useQuery(GET_PRODUCTS, {
+  } = useQuery(GET_PRODUCTS_BY_NAME, {
     variables: {
       storeId,
-      search: searchQuery
+      title: searchQuery
     },
     skip: !storeId
   });
@@ -261,6 +261,11 @@ export default function CurrentSalePanel({
                       src={product.medias[0].url}
                       alt={product.title}
                       className="absolute inset-0 w-full h-full object-cover"
+                      onError={
+                        (event) => {
+                          event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`;
+                        }
+                      }
                     />
                   ) : (
                     <div className="absolute inset-0 bg-muted flex items-center justify-center">

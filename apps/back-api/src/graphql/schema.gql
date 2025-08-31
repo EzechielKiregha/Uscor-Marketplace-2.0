@@ -215,6 +215,7 @@ type SaleProductEntity {
   id: String!
   quantity: Int!
   price: Float!
+  description: String
   modifiers: JSON
   createdAt: DateTime!
   product: ProductEntity!
@@ -375,17 +376,17 @@ type KnowYourCustomerEntity {
 }
 
 type WorkerEntity {
-  id: String!
-  email: String!
+  id: String
+  email: String
   fullName: String
   role: String
-  isVerified: Boolean!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  isVerified: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
   business: BusinessEntity
   kyc: KnowYourCustomerEntity
   freelanceServices: [FreelanceServiceEntity!]
-  chats: [ChatEntity!]!
+  chats: [ChatEntity!]
 }
 
 type FreelanceServiceEntity {
@@ -456,22 +457,22 @@ type FreelanceOrderBusinessEntity {
 }
 
 type ClientEntity {
-  id: String!
-  username: String!
-  email: String!
-  fullName: String!
+  id: String
+  username: String
+  email: String
+  fullName: String
   address: String
   phone: String
-  password: String!
-  isVerified: Boolean!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  orders: [OrderEntity!]!
-  reviews: [ReviewEntity!]!
-  recharges: [AccountRechargeEntity!]!
-  freelanceOrders: [FreelanceOrderEntity!]!
-  referralsMade: [ReferralEntity!]!
-  referralsReceived: [ReferralEntity!]!
+  password: String
+  isVerified: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+  orders: [OrderEntity!]
+  reviews: [ReviewEntity!]
+  recharges: [AccountRechargeEntity!]
+  freelanceOrders: [FreelanceOrderEntity!]
+  referralsMade: [ReferralEntity!]
+  referralsReceived: [ReferralEntity!]
 }
 
 type TokenTransactionEntity {
@@ -852,11 +853,13 @@ type Query {
 
   """Retrieves a single category by ID."""
   category(id: String!): CategoryEntity!
+
+  """Retrieves active sales for a store in a business."""
   activeSales(storeId: String!): [SaleEntity!]!
   sale(id: String!): SaleEntity!
 
   """Retrieves sales for a store in a business."""
-  sales(storeId: String, workerId: String, startDate: DateTime, endDate: DateTime, status: String, page: Float! = 1, limit: Float! = 20): PaginatedSalesResponse!
+  salesHistory(storeId: String, workerId: String, startDate: DateTime, endDate: DateTime, status: String, page: Float! = 1, limit: Float! = 20): PaginatedSalesResponse!
   salesDashboard(storeId: String!, period: String! = "day"): SalesDashboard!
 
   """Retrieves stores for a business."""

@@ -13,6 +13,9 @@ export class SaleProductEntity {
   @Field(() => Float)
   price: number;
 
+  @Field(() => String, {nullable: true})
+  description?: string;
+
   @Field(() => GraphQLJSON, { nullable: true })
   modifiers?: any;
 

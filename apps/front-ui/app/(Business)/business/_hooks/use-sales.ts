@@ -11,7 +11,6 @@ import {
   ON_SALE_UPDATED
 } from '@/graphql/sales.gql';
 import { useToast } from '@/components/toast-provider';
-import { useMe } from '@/lib/useMe';
 
 export const useSales = (storeId: string, wUserId: string) => {
   const [currentSaleId, setCurrentSaleId] = useState<string | null>(null);
@@ -33,7 +32,7 @@ export const useSales = (storeId: string, wUserId: string) => {
   } = useQuery(GET_SALES_HISTORY, {
     variables: { 
       storeId,
-      status: 'COMPLETED'
+      status: 'CLOSED'
     },
     skip: !storeId
   });

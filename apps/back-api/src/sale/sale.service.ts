@@ -20,6 +20,8 @@ import { createWriteStream, mkdir } from 'fs';
 import { subDays } from 'date-fns';
 import { PaymentMethod } from '../payment-transaction/dto/create-payment-transaction.input';
 import { PubSub } from 'graphql-subscriptions';
+import { AuthPayload } from 'src/auth/entities/auth-payload.entity';
+import { UpdateSaleProductInput } from './dto/update-sale-product.input';
 const execAsync = promisify(exec);
 const mkdirAsync = promisify(mkdir);
 // import PDFDocument from 'pdfkit';
@@ -40,7 +42,7 @@ export class SaleService {
     @Inject('PUB_SUB') private pubSub: PubSub,
   ) {}
 
-  async create(createSaleInput: CreateSaleInput, user: { id: string; role: string }) {
+  async create(createSaleInput: CreateSaleInput, user : AuthPayload) {
     const { storeId, workerId, clientId, totalAmount, discount, paymentMethod, saleProducts } = createSaleInput;
 
     // Validate store and access
@@ -49,8 +51,20 @@ export class SaleService {
     // Validate worker
     const worker = await this.workerService.findOne(workerId);
     if (!worker) throw new Error("Worker not found");
-    if (user.role === 'worker' && worker.id !== user.id) {
-      throw new Error('Workers can only create sales for themselves');
+    
+    // Check worker access based on user role
+    if (user.role === 'worker') {
+      // Workers can only create sales for themselves
+      if (worker.id !== user.id) {
+        throw new Error('Workers can only create sales for themselves');
+      }
+    } else if (user.role === 'business') {
+      // Business owners can create sales for any worker in their business
+      if (worker.businessId !== user.id) {
+        throw new Error('Business can only create sales for workers in their business');
+      }
+    } else {
+      throw new Error('Unauthorized to create sales');
     }
 
     // Validate client (if provided)
@@ -228,7 +242,7 @@ export class SaleService {
     return sale;
   }
 
-  async update(id: string, updateSaleInput: UpdateSaleInput, user: { id: string; role: string }) {
+  async update(id: string, updateSaleInput: UpdateSaleInput, user : AuthPayload) {
     const { clientId, totalAmount, discount, paymentMethod, saleProducts } = updateSaleInput;
 
     const sale = await this.prisma.sale.findUnique({
@@ -354,7 +368,7 @@ export class SaleService {
     return updatedSale;
   }
 
-  async close(closeSaleInput: CloseSaleInput, user: { id: string; role: string }) {
+  async close(closeSaleInput: CloseSaleInput, user : AuthPayload) {
     const { saleId, paymentMethod, status } = closeSaleInput;
 
     const sale = await this.prisma.sale.findUnique({
@@ -432,7 +446,7 @@ export class SaleService {
     return closedSale
   }
 
-  async createReturn(createReturnInput: CreateReturnInput, user: { id: string; role: string }) {
+  async createReturn(createReturnInput: CreateReturnInput, user : AuthPayload) {
     const { saleId, reason } = createReturnInput;
 
     const sale = await this.prisma.sale.findUnique({
@@ -491,33 +505,120 @@ export class SaleService {
     return returnRecord;
   }
 
-  async findAll(storeId: string, user: { id: string; role: string }) {
+  async findAll(storeId: string, user : AuthPayload) {
     await this.storeService.verifyStoreAccess(storeId, user);
     return this.prisma.sale.findMany({
       where: { storeId },
       include: {
-        store: { select: { id: true, name: true, address: true, createdAt: true } },
-        worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
+        store: { 
+          select: { 
+            id: true, 
+            name: true, 
+            address: true,
+            createdAt: true 
+          } 
         },
-        returns: true,
+        worker: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            role: true 
+          } 
+        },
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true 
+          } 
+        },
+        saleProducts: {
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+            modifiers: true,
+            createdAt: true,
+            product: { 
+              select: { 
+                id: true, 
+                title: true, 
+                description: true,
+                price: true,
+                medias: {
+                  select: { url: true }
+                }
+              } 
+            } 
+          }
+        },
+        returns: {
+          select: {
+            id: true,
+            reason: true,
+            status: true,
+            createdAt: true
+          }
+        }
       },
+      orderBy: { createdAt: 'desc' }
     });
   }
 
-  async findOne(id: string, user: { id: string; role: string }) {
+  async findOne(id: string, user : AuthPayload) {
     const sale = await this.prisma.sale.findUnique({
       where: { id },
       include: {
-        store: { select: { id: true, name: true, address: true, createdAt: true } },
-        worker: { select: { id: true, fullName: true, email: true, createdAt: true } },
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        saleProducts: {
-          include: { product: { select: { id: true, title: true, price: true, quantity: true, createdAt: true } } },
+        store: { 
+          select: { 
+            id: true, 
+            name: true, 
+            address: true,
+            createdAt: true 
+          } 
         },
-        returns: true,
+        worker: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            role: true 
+          } 
+        },
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true 
+          } 
+        },
+        saleProducts: {
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+            modifiers: true,
+            createdAt: true,
+            product: { 
+              select: { 
+                id: true, 
+                title: true, 
+                description: true,
+                price: true,
+                medias: {
+                  select: { url: true }
+                }
+              } 
+            } 
+          }
+        },
+        returns: {
+          select: {
+            id: true,
+            reason: true,
+            status: true,
+            createdAt: true
+          }
+        }
       },
     });
     if (!sale) {
@@ -530,7 +631,7 @@ export class SaleService {
     return sale;
   }
 
-  async generateReceipt(input: GenerateReceiptInput, user: { id: string; role: string }) {
+  async generateReceipt(input: GenerateReceiptInput, user : AuthPayload) {
     const { saleId, email } = input;
 
     const sale = await this.prisma.sale.findUnique({
@@ -634,7 +735,7 @@ export class SaleService {
     return { filePath: `${outputDir}/receipt_${sale.id}.pdf`, emailSent };
   }
 
-  async generateReceiptWithPDFKit(input: GenerateReceiptInput, user: { id: string; role: string }) {
+  async generateReceiptWithPDFKit(input: GenerateReceiptInput, user : AuthPayload) {
     const { saleId, email } = input;
   
     const sale = await this.prisma.sale.findUnique({
@@ -732,7 +833,7 @@ export class SaleService {
 
   // Add these methods to your existing SaleService class
 
-  async findActiveSales(storeId: string, user: { id: string; role: string }) {
+  async findActiveSales(storeId: string, user : AuthPayload) {
     await this.storeService.verifyStoreAccess(storeId, user);
     
     const whereClause: any = { 
@@ -747,15 +848,43 @@ export class SaleService {
     return this.prisma.sale.findMany({
       where: whereClause,
       include: {
-        store: { select: { id: true, name: true, address: true } },
-        worker: { select: { id: true, fullName: true, role: true } },
-        client: { select: { id: true, fullName: true, email: true } },
+        store: { 
+          select: { 
+            id: true, 
+            name: true, 
+            address: true,
+            createdAt: true 
+          } 
+        },
+        worker: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            role: true 
+          } 
+        },
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true 
+          } 
+        },
         saleProducts: {
-          include: { 
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+            modifiers: true,
+            createdAt: true,
             product: { 
-              select: { id: true, title: true, price: true,
-                medias :{
-                  select: { url : true}
+              select: { 
+                id: true, 
+                title: true, 
+                description: true,
+                price: true,
+                medias: {
+                  select: { url: true }
                 }
               } 
             } 
@@ -782,7 +911,7 @@ export class SaleService {
     status?: string;
     page?: number;
     limit?: number;
-  }, user: { id: string; role: string }) {
+  }, user : AuthPayload) {
     
     const { storeId, workerId, startDate, endDate, status, page = 1, limit = 20 } = params;
     
@@ -809,23 +938,56 @@ export class SaleService {
       this.prisma.sale.findMany({
         where: whereClause,
         include: {
-          store: { select: { id: true, name: true, address: true } },
-          worker: { select: { id: true, fullName: true, role: true } },
-          client: { select: { id: true, fullName: true, email: true } },
+          store: { 
+            select: { 
+              id: true, 
+              name: true, 
+              address: true,
+              createdAt: true 
+            } 
+          },
+          worker: { 
+            select: { 
+              id: true, 
+              fullName: true, 
+              role: true 
+            } 
+          },
+          client: { 
+            select: { 
+              id: true, 
+              fullName: true, 
+              email: true 
+            } 
+          },
           saleProducts: {
-            include: { 
+            select: {
+              id: true,
+              quantity: true,
+              price: true,
+              modifiers: true,
+              createdAt: true,
               product: { 
-                select: { id: true, title: true, price: true, 
+                select: { 
+                  id: true, 
+                  title: true, 
+                  description: true,
+                  price: true,
                   medias: {
-                    select: {
-                      url : true
-                    }
+                    select: { url: true }
                   }
-                }
-              }
+                } 
+              } 
             }
           },
-          returns: true
+          returns: {
+            select: {
+              id: true,
+              reason: true,
+              status: true,
+              createdAt: true
+            }
+          }
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
@@ -837,7 +999,7 @@ export class SaleService {
     return { items, total, page, limit };
   }
 
-  async getSalesDashboard(storeId: string, period: string = 'day', user: { id: string; role: string }) {
+  async getSalesDashboard(storeId: string, period: string = 'day', user : AuthPayload) {
     await this.storeService.verifyStoreAccess(storeId, user);
     
     const now = new Date();
@@ -923,7 +1085,7 @@ export class SaleService {
     productId: string;
     quantity: number;
     modifiers?: any;
-  }, user: { id: string; role: string }) {
+  }, user : AuthPayload) {
     
     const sale = await this.prisma.sale.findUnique({
       where: { id: input.saleId },
@@ -981,10 +1143,7 @@ export class SaleService {
     return saleProduct;
   }
 
-  async updateSaleProduct(id: string, input: {
-    quantity?: number;
-    modifiers?: any;
-  }, user: { id: string; role: string }) {
+  async updateSaleProduct(id: string, input: UpdateSaleProductInput, user : AuthPayload) {
     
     const saleProduct = await this.prisma.saleProduct.findUnique({
       where: { id },
@@ -1029,7 +1188,9 @@ export class SaleService {
       where: { id },
       data: updates,
       include: {
-        product: { select: { id: true, title: true, description: true, price: true } }
+        product: { select: { id: true, title: true, description: true, price: true, medias:{
+          select: { url : true}
+        } } }
       }
     });
 
@@ -1056,7 +1217,7 @@ export class SaleService {
     return updatedSaleProduct;
   }
 
-  async removeSaleProduct(id: string, user: { id: string; role: string }) {
+  async removeSaleProduct(id: string, user : AuthPayload) {
     const saleProduct = await this.prisma.saleProduct.findUnique({
       where: { id },
       include: { 
@@ -1098,7 +1259,7 @@ export class SaleService {
     return { id };
   }
 
-  async completeSale(id: string, paymentMethod: PaymentMethod, user: { id: string; role: string }) {
+  async completeSale(id: string, paymentMethod: PaymentMethod, user : AuthPayload) {
     return this.close({ saleId: id, paymentMethod, status: 'CLOSED' }, user);
   }
 

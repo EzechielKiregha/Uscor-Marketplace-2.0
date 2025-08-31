@@ -6,11 +6,11 @@ import { KnowYourCustomerEntity } from '../../know-your-customer/entities/know-y
 
 @ObjectType()
 export class WorkerEntity {
-  @Field()
-  id: string;
+  @Field({ nullable: true })
+  id?: string;
 
-  @Field()
-  email: string;
+  @Field({ nullable: true })
+  email?: string;
 
   @Field({ nullable: true })
   fullName?: string;
@@ -18,14 +18,14 @@ export class WorkerEntity {
   @Field({ nullable: true })
   role?: string;
 
-  @Field()
-  isVerified: boolean;
+  @Field({ nullable: true })
+  isVerified?: boolean;
 
-  @Field()
-  createdAt: Date;
+  @Field({ nullable: true })
+  createdAt?: Date;
 
-  @Field()
-  updatedAt: Date;
+  @Field({ nullable: true })
+  updatedAt?: Date;
 
   @Field(() => BusinessEntity, { nullable: true })
   business?: BusinessEntity;
@@ -36,6 +36,6 @@ export class WorkerEntity {
   @Field(() => [FreelanceServiceEntity], { nullable: true })
   freelanceServices?: FreelanceServiceEntity[];
 
-  @Field(() => [ChatEntity]) // Chats associated with the worker
-  chats: ChatEntity[];
+  @Field(() => [ChatEntity], { nullable: true }) // Chats associated with the worker
+  chats?: ChatEntity[];
 }

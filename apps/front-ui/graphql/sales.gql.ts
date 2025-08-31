@@ -83,19 +83,107 @@ export const SALE_PRODUCT_ENTITY = gql`
 export const GET_ACTIVE_SALES = gql`
   query GetActiveSales($storeId: String!) {
     activeSales(storeId: $storeId) {
-      ...SaleEntity
+      id
+      storeId
+      store {
+        id
+        name
+        address
+        createdAt
+      }
+      workerId
+      worker {
+        id
+        fullName
+        role
+      }
+      clientId
+      client {
+        id
+        fullName
+        email
+      }
+      totalAmount
+      discount
+      paymentMethod
+      status
+      createdAt
+      updatedAt
+      saleProducts {
+        id
+        quantity
+        price
+        modifiers
+        createdAt
+        product {
+          id
+          title
+          price
+          medias {
+            url  
+          }
+        }
+      }
+      returns {
+        id
+        reason
+        status
+        createdAt
+      }
     }
   }
-  ${SALE_ENTITY}
 `;
 
 export const GET_SALE_BY_ID = gql`
   query GetSaleById($id: String!) {
     sale(id: $id) {
-      ...SaleEntity
+      id
+      storeId
+      store {
+        id
+        name
+        address
+      }
+      workerId
+      worker {
+        id
+        fullName
+        role
+      }
+      clientId
+      client {
+        id
+        fullName
+        email
+      }
+      totalAmount
+      discount
+      paymentMethod
+      status
+      createdAt
+      updatedAt
+      saleProducts {
+        id
+        quantity
+        price
+        modifiers
+        product {
+          id
+          title
+          price
+          medias {
+            url  
+          }
+        }
+      }
+      returns {
+        id
+        reason
+        status
+        createdAt
+      }
     }
   }
-  ${SALE_ENTITY}
 `;
 
 export const GET_SALES_HISTORY = gql`
@@ -104,11 +192,11 @@ export const GET_SALES_HISTORY = gql`
     $workerId: String
     $startDate: DateTime
     $endDate: DateTime
-    $status: SaleStatus
-    $page: Int = 1
-    $limit: Int = 20
+    $status: String
+    $page: Float = 1
+    $limit: Float = 20
   ) {
-    sales(
+    salesHistory(
       storeId: $storeId
       workerId: $workerId
       startDate: $startDate
@@ -118,14 +206,57 @@ export const GET_SALES_HISTORY = gql`
       limit: $limit
     ) {
       items {
-        ...SaleEntity
+        id
+        storeId
+        store {
+          id
+          name
+          address
+        }
+        workerId
+        worker {
+          id
+          fullName
+          role
+        }
+        clientId
+        client {
+          id
+          fullName
+          email
+        }
+        totalAmount
+        discount
+        paymentMethod
+        status
+        createdAt
+        updatedAt
+        saleProducts {
+          id
+          quantity
+          price
+          modifiers
+          product {
+            id
+            title
+            price
+            medias {
+              url  
+            }
+          }
+        }
+        returns {
+          id
+          reason
+          status
+          createdAt
+        }
       }
       total
       page
       limit
     }
   }
-  ${SALE_ENTITY}
 `;
 
 export const GET_SALES_DASHBOARD = gql`

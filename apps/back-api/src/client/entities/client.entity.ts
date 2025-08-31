@@ -8,17 +8,17 @@ import { ReviewEntity } from '../../review/entities/review.entity';
 
 @ObjectType()
 export class ClientEntity {
-  @Field()
-  id: string;
+  @Field({ nullable: true })
+  id?: string;
 
-  @Field()
-  username: string;
+  @Field({ nullable: true })
+  username?: string;
 
-  @Field()
-  email: string;
+  @Field({ nullable: true })
+  email?: string;
 
-  @Field()
-  fullName: string ;
+  @Field({ nullable: true })
+  fullName?: string;
 
   @Field({ nullable: true })
   address?: string;
@@ -26,37 +26,37 @@ export class ClientEntity {
   @Field({ nullable: true })
   phone?: string;
 
-  @Field()
-  password: string; // This should be hashed and not exposed in the GraphQL schema
+  @Field({ nullable: true })
+  password?: string; // This should be hashed and not exposed in the GraphQL schema
 
-  @Field()
-  isVerified: boolean;
+  @Field({ nullable: true })
+  isVerified?: boolean;
 
-  @Field()
-  createdAt: Date;
+  @Field({ nullable: true })
+  createdAt?: Date;
 
-  @Field()
-  updatedAt: Date;
+  @Field({ nullable: true })
+  updatedAt?: Date;
 
   // Relations
-  @Field(() => [OrderEntity]) // Orders made by the client
-  orders: OrderEntity[];
+  @Field(() => [OrderEntity], { nullable: true }) // Orders made by the client
+  orders?: OrderEntity[];
 
-  @Field(() => [ReviewEntity]) // Reviews written by the client
-  reviews: ReviewEntity[];
+  @Field(() => [ReviewEntity], { nullable: true }) // Reviews written by the client
+  reviews?: ReviewEntity[];
 
   // @Field(() => [ChatEntity]) // Chats associated with the client
   // chats: ChatEntity[];
 
-  @Field(() => [AccountRechargeEntity]) // Recharges made by the client
-  recharges: AccountRechargeEntity[];
+  @Field(() => [AccountRechargeEntity], { nullable: true }) // Recharges made by the client
+  recharges?: AccountRechargeEntity[];
 
-  @Field(() => [FreelanceOrderEntity]) // Freelance orders made by the client
-  freelanceOrders: FreelanceOrderEntity[];
+  @Field(() => [FreelanceOrderEntity], { nullable: true }) // Freelance orders made by the client
+  freelanceOrders?: FreelanceOrderEntity[];
 
-  @Field(() => [ReferralEntity]) // Referrals made by the client
-  referralsMade: ReferralEntity[];
+  @Field(() => [ReferralEntity], { nullable: true }) // Referrals made by the client
+  referralsMade?: ReferralEntity[];
 
-  @Field(() => [ReferralEntity]) // Referrals received by the client
-  referralsReceived: ReferralEntity[];
+  @Field(() => [ReferralEntity], { nullable: true }) // Referrals received by the client
+  referralsReceived?: ReferralEntity[];
 }

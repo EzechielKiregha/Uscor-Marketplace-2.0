@@ -91,6 +91,35 @@ export const GET_PRODUCTS = gql`
     }
   }
 `;
+export const GET_PRODUCTS_BY_NAME = gql`
+  query GetProductsByName(storeId: String!, title: String!) {
+    productsByName(storeId: $storeId, title: $title) {
+      id
+      title
+      description
+      price
+      quantity
+      featured
+      createdAt
+      updatedAt
+      category {
+        id
+        name
+        description
+      }
+      medias {
+        id
+        url
+        type
+      }
+      business {
+        id
+        name
+        avatar
+      }
+    }
+  }
+`;
 
 export const GET_PRODUCT_BY_ID = gql`
   query GetProduct($id: String!) {

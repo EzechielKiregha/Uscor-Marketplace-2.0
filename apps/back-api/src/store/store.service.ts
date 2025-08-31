@@ -4,6 +4,7 @@ import { UpdateStoreInput } from './dto/update-store.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { BusinessService } from '../business/business.service';
 import { WorkerService } from '../worker/worker.service';
+import { AuthPayload } from 'src/auth/entities/auth-payload.entity';
 
 // Service
 @Injectable()
@@ -196,7 +197,7 @@ export class StoreService {
     return store;
   }
 
-  async verifyStoreAccess(storeId: string , user: { id: string; role: string }) {
+  async verifyStoreAccess(storeId: string , user: AuthPayload) {
     const store = await this.findOne(storeId);
     if (user.role === 'business' && store.businessId !== user.id) {
       throw new Error('Business can only access their own stores');
@@ -213,7 +214,7 @@ export class StoreService {
     return store;
   }
 
-  async verifyBusinessAccess( user: { id: string; role: string }) {
+  async verifyBusinessAccess( user: AuthPayload) {
     
     const worker = await this.workerService.findOne(user.id);
     
