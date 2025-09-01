@@ -45,7 +45,7 @@ export default function StockManagement({
 
   const {
     data: productsData,
-    loading: productsLoading
+    loading: productsLoading,
   } = useQuery(GET_PRODUCTS, {
     variables: {
       storeId
@@ -56,7 +56,7 @@ export default function StockManagement({
   const [createInventoryAdjustment] = useMutation(CREATE_INVENTORY_ADJUSTMENT);
 
   const filteredInventory = inventory.filter(item =>
-    item.product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.product.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.product.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

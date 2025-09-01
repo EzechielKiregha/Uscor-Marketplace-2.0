@@ -47,12 +47,22 @@ export class ProductResolver {
     return this.productService.findOne(id);
   }
   
-  @Query(() => [ProductEntity], { name: 'productsByName', description: 'Retrieves a single product by name.' })
+  @Query(() => [ProductEntity], { name: 'productsByName', description: 'Retrieves products by name.' })
   async getProductsByName(
     @Args('storeId', { type: () => String }) storeId: string,
     @Args('title', { type: () => String }) title: string
   ) {
     return this.productService.getFilteredProducts(storeId, title);
+  }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Query(() => [ProductEntity], { name: 'searchedProducts', description: 'Retrieves searched products.' })
+  async getSearchedProducts(
+    @Context() context: any,
+    @Args('title', { type: () => String }) title: string
+  ) {
+    const user = context.req.user;
+    return this.productService.getSearchedProducts(title, user);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -3603,6 +3603,7 @@ export const ProductScalarFieldEnum = {
   price: 'price',
   stock: 'stock',
   quantity: 'quantity',
+  minQuantity: 'minQuantity',
   isPhysical: 'isPhysical',
   businessId: 'businessId',
   storeId: 'storeId',

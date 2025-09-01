@@ -158,13 +158,32 @@ type PurchaseOrderEntity {
   expectedDelivery: DateTime
   createdAt: DateTime
   updatedAt: DateTime
-  products: [PurchaseOrderProductEntity!]!
+  products: [PurchaseOrderProductEntity!]
 }
 
 enum PurchaseOrderStatus {
   PENDING
   COMPLETED
   CANCELLED
+}
+
+type PaginatedPurchaseOrderResponse {
+  items: [PurchaseOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type InventoryEntity {
+  id: String
+  productId: String
+  product: ProductEntity
+  storeId: String
+  store: StoreEntity
+  quantity: Int
+  minQuantity: Int
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type InventoryAdjustmentEntity {
@@ -184,6 +203,13 @@ enum AdjustmentType {
   REMOVE
 }
 
+type PaginatedInventoryResponse {
+  items: [InventoryEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
 type TransferOrderProductEntity {
   id: String!
   productId: String!
@@ -201,7 +227,7 @@ type TransferOrderEntity {
   status: TransferOrderStatus
   createdAt: DateTime
   updatedAt: DateTime
-  products: [TransferOrderProductEntity!]!
+  products: [TransferOrderProductEntity!]
 }
 
 enum TransferOrderStatus {
@@ -209,6 +235,13 @@ enum TransferOrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+type PaginatedTransferOrderResponse {
+  items: [TransferOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type SaleProductEntity {
@@ -772,8 +805,11 @@ type Query {
   """Retrieves a single product by ID."""
   product(id: String!): ProductEntity!
 
-  """Retrieves a single product by name."""
+  """Retrieves products by name."""
   productsByName(storeId: String!, title: String!): [ProductEntity!]!
+
+  """Retrieves searched products."""
+  searchedProducts(title: String!): [ProductEntity!]!
 
   """Retrieves orders."""
   orders: [OrderEntity!]!
@@ -884,6 +920,15 @@ type Query {
 
   """Retrieves total points for a client."""
   clientPointsBalance(clientId: String!): ClientPointsBalanceEntity!
+
+  """Retrieves inventory for a store."""
+  inventory(storeId: String, productId: String, lowStockOnly: Boolean, page: Float! = 1, limit: Float! = 20): PaginatedInventoryResponse!
+
+  """Retrieves purchase orders for a business."""
+  purchaseOrders(businessId: String!, storeId: String, status: String, startDate: DateTime, endDate: DateTime, page: Float! = 1, limit: Float! = 20): PaginatedPurchaseOrderResponse!
+
+  """Retrieves transfer orders."""
+  transferOrders(fromStoreId: String, toStoreId: String, status: String, startDate: DateTime, endDate: DateTime, page: Float! = 1, limit: Float! = 20): PaginatedTransferOrderResponse!
 
   """Retrieves low stock alerts for a store."""
   lowStockAlerts(lowStockAlertInput: LowStockAlertInput!): [LowStockAlertEntity!]!
@@ -1081,19 +1126,19 @@ type Mutation {
   createPointsTransaction(createPointsTransactionInput: CreatePointsTransactionInput!): PointsTransactionEntity!
 
   """Creates a new purchase order."""
-  createPurchaseOrder(createPurchaseOrderInput: CreatePurchaseOrderInput!): PurchaseOrderEntity!
+  createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrderEntity!
 
   """Updates a purchase order."""
-  updatePurchaseOrder(id: String!, updatePurchaseOrderInput: UpdatePurchaseOrderInput!): PurchaseOrderEntity!
+  updatePurchaseOrder(id: String!, input: UpdatePurchaseOrderInput!): PurchaseOrderEntity!
 
   """Creates a new transfer order."""
-  createTransferOrder(createTransferOrderInput: CreateTransferOrderInput!): TransferOrderEntity!
+  createTransferOrder(input: CreateTransferOrderInput!): TransferOrderEntity!
 
   """Updates a transfer order."""
-  updateTransferOrder(id: String!, updateTransferOrderInput: UpdateTransferOrderInput!): TransferOrderEntity!
+  updateTransferOrder(id: String!, input: UpdateTransferOrderInput!): TransferOrderEntity!
 
   """Creates an inventory adjustment."""
-  createInventoryAdjustment(createInventoryAdjustmentInput: CreateInventoryAdjustmentInput!): InventoryAdjustmentEntity!
+  createInventoryAdjustment(input: CreateInventoryAdjustmentInput!): InventoryAdjustmentEntity!
 
   """Imports products in bulk."""
   bulkImportProducts(storeId: String!, products: [PurchaseOrderProductInput!]!): BulkImportResultEntity!
@@ -1544,4 +1589,8 @@ input UpdateShiftInput {
 type Subscription {
   saleCreated(storeId: String!): SaleEntity!
   saleUpdated(storeId: String!): SaleEntity!
+  purchaseOrderCreated(storeId: String!, businessId: String!): PurchaseOrderEntity!
+  purchaseOrderUpdated(storeId: String!, businessId: String!): PurchaseOrderEntity!
+  transferOrderCreated(fromStoreId: String!, toStoreId: String!): TransferOrderEntity!
+  transferOrderUpdated(fromStoreId: String!): TransferOrderEntity!
 }

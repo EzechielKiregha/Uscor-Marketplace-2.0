@@ -55,7 +55,9 @@ export const PURCHASE_ORDER_ENTITY = gql`
         id
         title
         price
-        imageUrl
+        medias {
+          url
+        }
       }
     }
   }
@@ -85,7 +87,9 @@ export const TRANSFER_ORDER_ENTITY = gql`
         id
         title
         price
-        imageUrl
+        medias {
+          url
+        }
       }
     }
   }
@@ -120,8 +124,8 @@ export const GET_INVENTORY = gql`
     $storeId: String
     $productId: String
     $lowStockOnly: Boolean
-    $page: Int = 1
-    $limit: Int = 20
+    $page: Float = 1
+    $limit: Float = 20
   ) {
     inventory(
       storeId: $storeId
@@ -131,25 +135,44 @@ export const GET_INVENTORY = gql`
       limit: $limit
     ) {
       items {
-        ...InventoryEntity
+        id
+        productId
+        storeId
+        quantity
+        minQuantity
+        createdAt
+        updatedAt
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+          quantity
+        }
+        store {
+          id
+          name
+          address
+        }
       }
       total
       page
       limit
     }
   }
-  ${INVENTORY_ENTITY}
 `;
 
 export const GET_PURCHASE_ORDERS = gql`
   query GetPurchaseOrders(
     $businessId: String!
     $storeId: String
-    $status: PurchaseOrderStatus
+    $status: String
     $startDate: DateTime
     $endDate: DateTime
-    $page: Int = 1
-    $limit: Int = 20
+    $page: Float = 1
+    $limit: Float = 20
   ) {
     purchaseOrders(
       businessId: $businessId
@@ -161,25 +184,52 @@ export const GET_PURCHASE_ORDERS = gql`
       limit: $limit
     ) {
       items {
-        ...PurchaseOrderEntity
+        id
+        businessId
+        storeId
+        supplierId
+        status
+        expectedDelivery
+        createdAt
+        updatedAt
+        business {
+          id
+          name
+        }
+        store {
+          id
+          name
+        }
+        products {
+          id
+          productId
+          quantity
+          product {
+            id
+            title
+            price
+            medias {
+              url
+            }
+          }
+        }
       }
       total
       page
       limit
     }
   }
-  ${PURCHASE_ORDER_ENTITY}
 `;
 
 export const GET_TRANSFER_ORDERS = gql`
   query GetTransferOrders(
     $fromStoreId: String
     $toStoreId: String
-    $status: TransferOrderStatus
+    $status: String
     $startDate: DateTime
     $endDate: DateTime
-    $page: Int = 1
-    $limit: Int = 20
+    $page: Float = 1
+    $limit: Float = 20
   ) {
     transferOrders(
       fromStoreId: $fromStoreId
@@ -191,14 +241,39 @@ export const GET_TRANSFER_ORDERS = gql`
       limit: $limit
     ) {
       items {
-        ...TransferOrderEntity
+        id
+        fromStoreId
+        toStoreId
+        status
+        createdAt
+        updatedAt
+        fromStore {
+          id
+          name
+        }
+        toStore {
+          id
+          name
+        }
+        products {
+          id
+          productId
+          quantity
+          product {
+            id
+            title
+            price
+            medias {
+              url
+            }
+          }
+        }
       }
       total
       page
       limit
     }
   }
-  ${TRANSFER_ORDER_ENTITY}
 `;
 
 export const GET_INVENTORY_ADJUSTMENTS = gql`
@@ -207,8 +282,8 @@ export const GET_INVENTORY_ADJUSTMENTS = gql`
     $productId: String
     $startDate: DateTime
     $endDate: DateTime
-    $page: Int = 1
-    $limit: Int = 20
+    $page: Float = 1
+    $limit: Float = 20
   ) {
     inventoryAdjustments(
       storeId: $storeId
@@ -219,14 +294,27 @@ export const GET_INVENTORY_ADJUSTMENTS = gql`
       limit: $limit
     ) {
       items {
-        ...InventoryAdjustmentEntity
+        id
+        productId
+        storeId
+        adjustmentType
+        quantity
+        reason
+        createdAt
+        product {
+          id
+          title
+        }
+        store {
+          id
+          name
+        }
       }
       total
       page
       limit
     }
   }
-  ${INVENTORY_ADJUSTMENT_ENTITY}
 `;
 
 // ======================
@@ -236,64 +324,233 @@ export const GET_INVENTORY_ADJUSTMENTS = gql`
 export const CREATE_PURCHASE_ORDER = gql`
   mutation CreatePurchaseOrder($input: CreatePurchaseOrderInput!) {
     createPurchaseOrder(input: $input) {
-      ...PurchaseOrderEntity
+      id
+      businessId
+      storeId
+      supplierId
+      status
+      expectedDelivery
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      store {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${PURCHASE_ORDER_ENTITY}
 `;
 
 export const UPDATE_PURCHASE_ORDER = gql`
   mutation UpdatePurchaseOrder($id: String!, $input: UpdatePurchaseOrderInput!) {
     updatePurchaseOrder(id: $id, input: $input) {
-      ...PurchaseOrderEntity
+      id
+      businessId
+      storeId
+      supplierId
+      status
+      expectedDelivery
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      store {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${PURCHASE_ORDER_ENTITY}
 `;
 
 export const MARK_PURCHASE_ORDER_RECEIVED = gql`
   mutation MarkPurchaseOrderReceived($id: String!, $receivedItems: [ReceivedItemInput!]!) {
-    markPurchaseOrderReceived(id: $id, receivedItems: $receivedItems) {
-      ...PurchaseOrderEntity
+    markPurchaseOrderReceived(id: $id, receivedItems: $receivedItems){
+      id
+      businessId
+      storeId
+      supplierId
+      status
+      expectedDelivery
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      store {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${PURCHASE_ORDER_ENTITY}
 `;
 
 export const CREATE_TRANSFER_ORDER = gql`
   mutation CreateTransferOrder($input: CreateTransferOrderInput!) {
     createTransferOrder(input: $input) {
-      ...TransferOrderEntity
+      id
+      fromStoreId
+      toStoreId
+      status
+      createdAt
+      updatedAt
+      fromStore {
+        id
+        name
+      }
+      toStore {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${TRANSFER_ORDER_ENTITY}
 `;
 
 export const UPDATE_TRANSFER_ORDER = gql`
   mutation UpdateTransferOrder($id: String!, $input: UpdateTransferOrderInput!) {
     updateTransferOrder(id: $id, input: $input) {
-      ...TransferOrderEntity
+      id
+      fromStoreId
+      toStoreId
+      status
+      createdAt
+      updatedAt
+      fromStore {
+        id
+        name
+      }
+      toStore {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${TRANSFER_ORDER_ENTITY}
 `;
 
 export const MARK_TRANSFER_ORDER_RECEIVED = gql`
   mutation MarkTransferOrderReceived($id: String!) {
     markTransferOrderReceived(id: $id) {
-      ...TransferOrderEntity
+      id
+      fromStoreId
+      toStoreId
+      status
+      createdAt
+      updatedAt
+      fromStore {
+        id
+        name
+      }
+      toStore {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${TRANSFER_ORDER_ENTITY}
 `;
 
 export const CREATE_INVENTORY_ADJUSTMENT = gql`
   mutation CreateInventoryAdjustment($input: CreateInventoryAdjustmentInput!) {
     createInventoryAdjustment(input: $input) {
-      ...InventoryAdjustmentEntity
+      id
+      productId
+      storeId
+      adjustmentType
+      quantity
+      reason
+      createdAt
+      product {
+        id
+        title
+      }
+      store {
+        id
+        name
+      }
     }
   }
-  ${INVENTORY_ADJUSTMENT_ENTITY}
 `;
 
 // ======================
@@ -301,37 +558,141 @@ export const CREATE_INVENTORY_ADJUSTMENT = gql`
 // ======================
 
 export const ON_PURCHASE_ORDER_CREATED = gql`
-  subscription OnPurchaseOrderCreated($businessId: String!) {
-    purchaseOrderCreated(businessId: $businessId) {
-      ...PurchaseOrderEntity
+  subscription OnPurchaseOrderCreated($businessId: String!, $storeId: String!) {
+    purchaseOrderCreated(businessId: $businessId, storeId: $storeId) {
+      id
+      businessId
+      storeId
+      supplierId
+      status
+      expectedDelivery
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      store {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${PURCHASE_ORDER_ENTITY}
 `;
 
 export const ON_PURCHASE_ORDER_UPDATED = gql`
-  subscription OnPurchaseOrderUpdated($businessId: String!) {
-    purchaseOrderUpdated(businessId: $businessId) {
-      ...PurchaseOrderEntity
+  subscription OnPurchaseOrderUpdated($businessId: String!, $storeId: String!) {
+    purchaseOrderUpdated(businessId: $businessId, storeId: $storeId) {
+      id
+      businessId
+      storeId
+      supplierId
+      status
+      expectedDelivery
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+      }
+      store {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${PURCHASE_ORDER_ENTITY}
 `;
 
 export const ON_TRANSFER_ORDER_CREATED = gql`
-  subscription OnTransferOrderCreated($fromStoreId: String!) {
-    transferOrderCreated(fromStoreId: $fromStoreId) {
-      ...TransferOrderEntity
+  subscription OnTransferOrderCreated($fromStoreId: String!, $toStoreId: String!) {
+    transferOrderCreated(fromStoreId: $fromStoreId, toStoreId: $toStoreId) {
+      id
+      fromStoreId
+      toStoreId
+      status
+      createdAt
+      updatedAt
+      fromStore {
+        id
+        name
+      }
+      toStore {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${TRANSFER_ORDER_ENTITY}
 `;
 
 export const ON_TRANSFER_ORDER_UPDATED = gql`
   subscription OnTransferOrderUpdated($fromStoreId: String!) {
     transferOrderUpdated(fromStoreId: $fromStoreId) {
-      ...TransferOrderEntity
+      id
+      fromStoreId
+      toStoreId
+      status
+      createdAt
+      updatedAt
+      fromStore {
+        id
+        name
+      }
+      toStore {
+        id
+        name
+      }
+      products {
+        id
+        productId
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
+        }
+      }
     }
   }
-  ${TRANSFER_ORDER_ENTITY}
 `;

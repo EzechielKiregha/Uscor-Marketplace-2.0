@@ -6,12 +6,15 @@ import { GET_INVENTORY } from '@/graphql/inventory.gql';
 import Loader from '@/components/seraui/Loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Package, AlertTriangle, ArrowRightLeft, ShoppingCart } from 'lucide-react';
+import { useMe } from '@/lib/useMe';
+import { useInventory } from '../../_hooks/use-inventory';
 
 interface InventorySummaryProps {
   storeId: string;
+  businessId: string;
 }
 
-export default function InventorySummary({ storeId }: InventorySummaryProps) {
+export default function InventorySummary({ businessId, storeId }: InventorySummaryProps) {
   const {
     data,
     loading,
@@ -24,6 +27,10 @@ export default function InventorySummary({ storeId }: InventorySummaryProps) {
     },
     skip: !storeId
   });
+
+  const {
+    getInventory,
+  } = useInventory(storeId || '', businessId || '');
 
   if (loading) return (
     <Card>
@@ -49,7 +56,8 @@ export default function InventorySummary({ storeId }: InventorySummaryProps) {
     </Card>
   );
 
-  const inventoryItems = data?.inventory?.items || [];
+  const inventoryItems = getInventory() || [];
+  console.log(data?.inventory);
   const totalItems = inventoryItems.length;
   const lowStockItems = inventoryItems.filter((item: any) => item.quantity < item.minQuantity).length;
   const outOfStockItems = inventoryItems.filter((item: any) => item.quantity === 0).length;

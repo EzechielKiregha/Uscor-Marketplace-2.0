@@ -10,6 +10,7 @@ import { StoreModule } from '../store/store.module';
 import { ProductModule } from '../product/product.module';
 import { BusinessModule } from '../business/business.module';
 import { WorkerModule } from '../worker/worker.module';
+import { PubSub } from 'graphql-subscriptions';
 
 
 // Module
@@ -22,6 +23,10 @@ import { WorkerModule } from '../worker/worker.module';
     ProductService,
     BusinessService,
     WorkerService,
+    {
+      provide: 'PUB_SUB',
+      useValue: new PubSub(),
+    },
   ],
   imports: [StoreModule, ProductModule, BusinessModule, WorkerModule],
 })

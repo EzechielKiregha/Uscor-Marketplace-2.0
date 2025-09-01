@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuthPayload } from 'src/auth/entities/auth-payload.entity';
 
 // Service
 @Injectable()
@@ -161,6 +162,29 @@ export class ProductService {
           contains: title, mode: 'insensitive'
         }
       }, // Limit to 4 related products
+      include: {
+        medias: { select: { id: true, url : true, type: true }},
+        business: { select: { id: true, name: true, email: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true, createdAt: true } },
+        store : { select: { id: true, name: true, address: true, createdAt: true  } },
+        orders: { select: { id: true, quantity: true, orderId: true } },
+        reposts: { select: { id: true, markupPercentage: true, createdAt: true } },
+        reOwnedProducts: { select: { id: true, oldPrice: true, newPrice: true, markupPercentage: true, createdAt: true } },
+      },
+      orderBy: { createdAt: 'desc' }, // show newest first
+    });
+  }
+  async getSearchedProducts( title: string, user: AuthPayload) {
+
+    if  (user.role !== "business")
+      return new Error("You are not allowed to search for products");
+
+    return await this.prisma.product.findMany({
+      where: {
+        title: {
+          contains: title, mode: 'insensitive'
+        }
+      },
       include: {
         medias: { select: { id: true, url : true, type: true }},
         business: { select: { id: true, name: true, email: true, avatar: true } },

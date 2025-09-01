@@ -1,4 +1,6 @@
 'use client'
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 // SVG Logo Components (as provided in the user request)
@@ -61,6 +63,140 @@ const VueLogo = () => (
   </svg>
 );
 
+// Helper components
+export const SunIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2" />
+    <path d="M12 20v2" />
+    <path d="m4.93 4.93 1.41 1.41" />
+    <path d="m17.66 17.66 1.41 1.41" />
+    <path d="M2 12h2" />
+    <path d="M20 12h2" />
+    <path d="m6.34 17.66-1.41 1.41" />
+    <path d="m19.07 4.93-1.41 1.41" />
+  </svg>
+);
+
+export const MoonIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </svg>
+);
+
+interface SearchIconProps {
+  size?: number;
+}
+
+export const SearchIcon: React.FC<SearchIconProps> = ({ size = 16, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+);
+
+export const MenuIcon: React.FC = () => (
+  <svg
+    className="pointer-events-none"
+    width={16}
+    height={16}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M4 12L20 12"
+      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+    />
+    <path
+      d="M4 12H20"
+      className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
+    />
+    <path
+      d="M4 12H20"
+      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+    />
+  </svg>
+);
+
+export const Logo: React.FC = () => {
+  const path = usePathname()
+  return (
+    <div className="flex items-center justify-center gap-1">
+      <Image alt='logo' src='/logo.png' width={50} height={40} />
+      <span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">Uscor {' '}
+        {path.includes('/marketplace') ? (
+          <span className='hidden font-bold lg:block'>
+            MarketPlace
+          </span>
+        ) : path.includes('/freelance-gigs') ? (
+          <span className='hidden font-bold lg:block'>
+            Freelance / Jobs
+          </span>
+        ) : path.includes('/') && (
+          <span className='hidden font-bold lg:block'>
+            Intelligent POS
+          </span>
+        )}
+      </span>
+    </div>
+  );
+}
+
+
+interface InputProps {
+  className?: string;
+  id?: string;
+  placeholder?: string;
+  type?: string;
+  autoFocus?: boolean;
+}
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
+  <input
+    className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-950 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    ref={ref}
+    {...props}
+  />
+));
+Input.displayName = 'Input';
 
 export const logos1 = [
   { id: 1, component: <ReactLogo /> },

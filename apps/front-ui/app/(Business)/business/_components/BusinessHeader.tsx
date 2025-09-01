@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 import { useMe } from '@/lib/useMe';
 import { Button } from '@/components/ui/button';
 import { Menu, Search, Bell, Settings } from 'lucide-react';
@@ -10,6 +10,8 @@ import { useOpenCreateProductModal } from '../_hooks/use-open-create-product-mod
 import CreateProductModal from './modals/CreateProductModal';
 import { sidebarItems } from './BusinessSidebar';
 import { useOpenCreateServiceModal } from '../_hooks/use-open-create-service-modal';
+import UserDropdown from '@/components/seraui/UserDrodown';
+import { MoonIcon, SunIcon } from '@/components/icons/Logos';
 
 interface BusinessHeaderProps {
   business: any; // Replace with actual BusinessEntity type
@@ -20,6 +22,11 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const { isOpen: isProductModalOpen, setIsOpen: setIsProductModalOpen } = useOpenCreateProductModal();
   const { isOpen: isServiceModalOpen, setIsOpen: setIsServiceModalOpen } = useOpenCreateServiceModal();
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <header className="border-b border-border bg-card h-16 flex items-center px-4 md:px-6">
@@ -51,37 +58,39 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
           <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full"></span>
         </Button>
+        <Button
+          onClick={toggleTheme}
+          variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? (
+            <SunIcon className="h-5 w-5" />
+          ) : (
+            <MoonIcon className="h-5 w-5" />
+          )}
+        </Button>
 
         <div className="hidden sm:flex items-center gap-2">
-          {business.avatar ? (
-            <img
-              src={business.avatar}
-              alt={business.name}
-              className="w-8 h-8 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm">
-              {business.name.charAt(0)}
-            </div>
-          )}
-          <span className="hidden md:block text-sm font-medium">{business.name}</span>
+          <UserDropdown />
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsProductModalOpen(true)}
-        >
-          Add Product
-        </Button>
+        <div className="hidden lg:flex items-center justify-between flex-raw gap-1.5">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsProductModalOpen(true)}
+          >
+            Add Product
+          </Button>
 
-        <Button
-          variant="default"
-          size="sm"
-          onClick={() => setIsServiceModalOpen(true)}
-        >
-          Add Service
-        </Button>
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setIsServiceModalOpen(true)}
+          >
+            Add Service
+          </Button>
+        </div>
       </div>
 
       {/* Modals */}

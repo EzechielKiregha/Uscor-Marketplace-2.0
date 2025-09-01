@@ -258,6 +258,7 @@ model Product {
   price                Float                 @default(0)
   stock                Int                   @default(0)
   quantity             Int                   @default(0) // New field for stock quantity
+  minQuantity             Int                   @default(10) // New field for stock quantity
   isPhysical           Boolean               @default(false)  // New field to flag physical products
   business             Business              @relation(fields: [businessId], references: [id])
   businessId           String

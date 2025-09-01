@@ -1,4 +1,3 @@
-// app/business/_hooks/use-open-create-product-modal.ts
 import { useState, useCallback } from 'react';
 
 export const useOpenCreateProductModal = () => {

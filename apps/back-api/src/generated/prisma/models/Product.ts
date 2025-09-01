@@ -29,12 +29,14 @@ export type ProductAvgAggregateOutputType = {
   price: number | null
   stock: number | null
   quantity: number | null
+  minQuantity: number | null
 }
 
 export type ProductSumAggregateOutputType = {
   price: number | null
   stock: number | null
   quantity: number | null
+  minQuantity: number | null
 }
 
 export type ProductMinAggregateOutputType = {
@@ -44,6 +46,7 @@ export type ProductMinAggregateOutputType = {
   price: number | null
   stock: number | null
   quantity: number | null
+  minQuantity: number | null
   isPhysical: boolean | null
   businessId: string | null
   storeId: string | null
@@ -61,6 +64,7 @@ export type ProductMaxAggregateOutputType = {
   price: number | null
   stock: number | null
   quantity: number | null
+  minQuantity: number | null
   isPhysical: boolean | null
   businessId: string | null
   storeId: string | null
@@ -78,6 +82,7 @@ export type ProductCountAggregateOutputType = {
   price: number
   stock: number
   quantity: number
+  minQuantity: number
   isPhysical: number
   businessId: number
   storeId: number
@@ -95,12 +100,14 @@ export type ProductAvgAggregateInputType = {
   price?: true
   stock?: true
   quantity?: true
+  minQuantity?: true
 }
 
 export type ProductSumAggregateInputType = {
   price?: true
   stock?: true
   quantity?: true
+  minQuantity?: true
 }
 
 export type ProductMinAggregateInputType = {
@@ -110,6 +117,7 @@ export type ProductMinAggregateInputType = {
   price?: true
   stock?: true
   quantity?: true
+  minQuantity?: true
   isPhysical?: true
   businessId?: true
   storeId?: true
@@ -127,6 +135,7 @@ export type ProductMaxAggregateInputType = {
   price?: true
   stock?: true
   quantity?: true
+  minQuantity?: true
   isPhysical?: true
   businessId?: true
   storeId?: true
@@ -144,6 +153,7 @@ export type ProductCountAggregateInputType = {
   price?: true
   stock?: true
   quantity?: true
+  minQuantity?: true
   isPhysical?: true
   businessId?: true
   storeId?: true
@@ -249,6 +259,7 @@ export type ProductGroupByOutputType = {
   price: number
   stock: number
   quantity: number
+  minQuantity: number
   isPhysical: boolean
   businessId: string
   storeId: string | null
@@ -290,6 +301,7 @@ export type ProductWhereInput = {
   price?: Prisma.FloatFilter<"Product"> | number
   stock?: Prisma.IntFilter<"Product"> | number
   quantity?: Prisma.IntFilter<"Product"> | number
+  minQuantity?: Prisma.IntFilter<"Product"> | number
   isPhysical?: Prisma.BoolFilter<"Product"> | boolean
   businessId?: Prisma.StringFilter<"Product"> | string
   storeId?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -323,6 +335,7 @@ export type ProductOrderByWithRelationInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
   isPhysical?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   storeId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -359,6 +372,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.FloatFilter<"Product"> | number
   stock?: Prisma.IntFilter<"Product"> | number
   quantity?: Prisma.IntFilter<"Product"> | number
+  minQuantity?: Prisma.IntFilter<"Product"> | number
   isPhysical?: Prisma.BoolFilter<"Product"> | boolean
   businessId?: Prisma.StringFilter<"Product"> | string
   storeId?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -392,6 +406,7 @@ export type ProductOrderByWithAggregationInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
   isPhysical?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   storeId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -418,6 +433,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   price?: Prisma.FloatWithAggregatesFilter<"Product"> | number
   stock?: Prisma.IntWithAggregatesFilter<"Product"> | number
   quantity?: Prisma.IntWithAggregatesFilter<"Product"> | number
+  minQuantity?: Prisma.IntWithAggregatesFilter<"Product"> | number
   isPhysical?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   businessId?: Prisma.StringWithAggregatesFilter<"Product"> | string
   storeId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -436,6 +452,7 @@ export type ProductCreateInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -466,6 +483,7 @@ export type ProductUncheckedCreateInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -496,6 +514,7 @@ export type ProductUpdateInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -526,6 +545,7 @@ export type ProductUncheckedUpdateInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -556,6 +576,7 @@ export type ProductCreateManyInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -574,6 +595,7 @@ export type ProductUpdateManyMutationInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -589,6 +611,7 @@ export type ProductUncheckedUpdateManyInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -617,6 +640,7 @@ export type ProductCountOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
   isPhysical?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   storeId?: Prisma.SortOrder
@@ -632,6 +656,7 @@ export type ProductAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
 }
 
 export type ProductMaxOrderByAggregateInput = {
@@ -641,6 +666,7 @@ export type ProductMaxOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
   isPhysical?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   storeId?: Prisma.SortOrder
@@ -658,6 +684,7 @@ export type ProductMinOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
   isPhysical?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   storeId?: Prisma.SortOrder
@@ -672,6 +699,7 @@ export type ProductSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  minQuantity?: Prisma.SortOrder
 }
 
 export type ProductScalarRelationFilter = {
@@ -995,6 +1023,7 @@ export type ProductCreateWithoutBusinessInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1024,6 +1053,7 @@ export type ProductUncheckedCreateWithoutBusinessInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   storeId?: string | null
   categoryId: string
@@ -1082,6 +1112,7 @@ export type ProductScalarWhereInput = {
   price?: Prisma.FloatFilter<"Product"> | number
   stock?: Prisma.IntFilter<"Product"> | number
   quantity?: Prisma.IntFilter<"Product"> | number
+  minQuantity?: Prisma.IntFilter<"Product"> | number
   isPhysical?: Prisma.BoolFilter<"Product"> | boolean
   businessId?: Prisma.StringFilter<"Product"> | string
   storeId?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -1100,6 +1131,7 @@ export type ProductCreateWithoutCategoryInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1129,6 +1161,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1184,6 +1217,7 @@ export type ProductCreateWithoutMediasInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1213,6 +1247,7 @@ export type ProductUncheckedCreateWithoutMediasInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1258,6 +1293,7 @@ export type ProductUpdateWithoutMediasInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1287,6 +1323,7 @@ export type ProductUncheckedUpdateWithoutMediasInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1316,6 +1353,7 @@ export type ProductCreateWithoutOrdersInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1345,6 +1383,7 @@ export type ProductUncheckedCreateWithoutOrdersInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1390,6 +1429,7 @@ export type ProductUpdateWithoutOrdersInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1419,6 +1459,7 @@ export type ProductUncheckedUpdateWithoutOrdersInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1448,6 +1489,7 @@ export type ProductCreateWithoutReviewsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1477,6 +1519,7 @@ export type ProductUncheckedCreateWithoutReviewsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1522,6 +1565,7 @@ export type ProductUpdateWithoutReviewsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1551,6 +1595,7 @@ export type ProductUncheckedUpdateWithoutReviewsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1580,6 +1625,7 @@ export type ProductCreateWithoutChatsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1609,6 +1655,7 @@ export type ProductUncheckedCreateWithoutChatsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1654,6 +1701,7 @@ export type ProductUpdateWithoutChatsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1683,6 +1731,7 @@ export type ProductUncheckedUpdateWithoutChatsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1712,6 +1761,7 @@ export type ProductCreateWithoutRepostsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1741,6 +1791,7 @@ export type ProductUncheckedCreateWithoutRepostsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1786,6 +1837,7 @@ export type ProductUpdateWithoutRepostsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1815,6 +1867,7 @@ export type ProductUncheckedUpdateWithoutRepostsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1844,6 +1897,7 @@ export type ProductCreateWithoutNewReOwnedProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1873,6 +1927,7 @@ export type ProductUncheckedCreateWithoutNewReOwnedProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1907,6 +1962,7 @@ export type ProductCreateWithoutReOwnedProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -1936,6 +1992,7 @@ export type ProductUncheckedCreateWithoutReOwnedProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -1981,6 +2038,7 @@ export type ProductUpdateWithoutNewReOwnedProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2010,6 +2068,7 @@ export type ProductUncheckedUpdateWithoutNewReOwnedProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2050,6 +2109,7 @@ export type ProductUpdateWithoutReOwnedProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2079,6 +2139,7 @@ export type ProductUncheckedUpdateWithoutReOwnedProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2108,6 +2169,7 @@ export type ProductCreateWithoutAdsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -2137,6 +2199,7 @@ export type ProductUncheckedCreateWithoutAdsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -2182,6 +2245,7 @@ export type ProductUpdateWithoutAdsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2211,6 +2275,7 @@ export type ProductUncheckedUpdateWithoutAdsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2240,6 +2305,7 @@ export type ProductCreateWithoutStoreInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -2269,6 +2335,7 @@ export type ProductUncheckedCreateWithoutStoreInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   categoryId: string
@@ -2324,6 +2391,7 @@ export type ProductCreateWithoutSaleProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -2353,6 +2421,7 @@ export type ProductUncheckedCreateWithoutSaleProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -2398,6 +2467,7 @@ export type ProductUpdateWithoutSaleProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2427,6 +2497,7 @@ export type ProductUncheckedUpdateWithoutSaleProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2456,6 +2527,7 @@ export type ProductCreateWithoutPurchaseOrderProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -2485,6 +2557,7 @@ export type ProductUncheckedCreateWithoutPurchaseOrderProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -2530,6 +2603,7 @@ export type ProductUpdateWithoutPurchaseOrderProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2559,6 +2633,7 @@ export type ProductUncheckedUpdateWithoutPurchaseOrderProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2588,6 +2663,7 @@ export type ProductCreateWithoutTransferOrderProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -2617,6 +2693,7 @@ export type ProductUncheckedCreateWithoutTransferOrderProductsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -2662,6 +2739,7 @@ export type ProductUpdateWithoutTransferOrderProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2691,6 +2769,7 @@ export type ProductUncheckedUpdateWithoutTransferOrderProductsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2720,6 +2799,7 @@ export type ProductCreateWithoutInventoryAdjustmentsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: boolean
@@ -2749,6 +2829,7 @@ export type ProductUncheckedCreateWithoutInventoryAdjustmentsInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -2794,6 +2875,7 @@ export type ProductUpdateWithoutInventoryAdjustmentsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2823,6 +2905,7 @@ export type ProductUncheckedUpdateWithoutInventoryAdjustmentsInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2852,6 +2935,7 @@ export type ProductCreateManyBusinessInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   storeId?: string | null
   categoryId: string
@@ -2869,6 +2953,7 @@ export type ProductUpdateWithoutBusinessInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2898,6 +2983,7 @@ export type ProductUncheckedUpdateWithoutBusinessInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2927,6 +3013,7 @@ export type ProductUncheckedUpdateManyWithoutBusinessInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2944,6 +3031,7 @@ export type ProductCreateManyCategoryInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   storeId?: string | null
@@ -2961,6 +3049,7 @@ export type ProductUpdateWithoutCategoryInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2990,6 +3079,7 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3019,6 +3109,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3036,6 +3127,7 @@ export type ProductCreateManyStoreInput = {
   price?: number
   stock?: number
   quantity?: number
+  minQuantity?: number
   isPhysical?: boolean
   businessId: string
   categoryId: string
@@ -3053,6 +3145,7 @@ export type ProductUpdateWithoutStoreInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   variants?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3082,6 +3175,7 @@ export type ProductUncheckedUpdateWithoutStoreInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3111,6 +3205,7 @@ export type ProductUncheckedUpdateManyWithoutStoreInput = {
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   isPhysical?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3258,6 +3353,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   price?: boolean
   stock?: boolean
   quantity?: boolean
+  minQuantity?: boolean
   isPhysical?: boolean
   businessId?: boolean
   storeId?: boolean
@@ -3292,6 +3388,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   price?: boolean
   stock?: boolean
   quantity?: boolean
+  minQuantity?: boolean
   isPhysical?: boolean
   businessId?: boolean
   storeId?: boolean
@@ -3313,6 +3410,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   price?: boolean
   stock?: boolean
   quantity?: boolean
+  minQuantity?: boolean
   isPhysical?: boolean
   businessId?: boolean
   storeId?: boolean
@@ -3334,6 +3432,7 @@ export type ProductSelectScalar = {
   price?: boolean
   stock?: boolean
   quantity?: boolean
+  minQuantity?: boolean
   isPhysical?: boolean
   businessId?: boolean
   storeId?: boolean
@@ -3345,7 +3444,7 @@ export type ProductSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "stock" | "quantity" | "isPhysical" | "businessId" | "storeId" | "categoryId" | "variants" | "featured" | "approvedForSale" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "stock" | "quantity" | "minQuantity" | "isPhysical" | "businessId" | "storeId" | "categoryId" | "variants" | "featured" | "approvedForSale" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   store?: boolean | Prisma.Product$storeArgs<ExtArgs>
@@ -3401,6 +3500,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     price: number
     stock: number
     quantity: number
+    minQuantity: number
     isPhysical: boolean
     businessId: string
     storeId: string | null
@@ -3854,6 +3954,7 @@ export interface ProductFieldRefs {
   readonly price: Prisma.FieldRef<"Product", 'Float'>
   readonly stock: Prisma.FieldRef<"Product", 'Int'>
   readonly quantity: Prisma.FieldRef<"Product", 'Int'>
+  readonly minQuantity: Prisma.FieldRef<"Product", 'Int'>
   readonly isPhysical: Prisma.FieldRef<"Product", 'Boolean'>
   readonly businessId: Prisma.FieldRef<"Product", 'String'>
   readonly storeId: Prisma.FieldRef<"Product", 'String'>

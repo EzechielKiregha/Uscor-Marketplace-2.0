@@ -29,6 +29,21 @@ export class TransferOrderEntity {
   @Field({nullable: true})
   updatedAt?: Date;
 
-  @Field(() => [TransferOrderProductEntity, {nullable: true}])
+  @Field(() => [TransferOrderProductEntity], {nullable: true})
   products?: TransferOrderProductEntity[];
+}
+
+@ObjectType()
+export class PaginatedTransferOrderResponse {
+  @Field(() => [TransferOrderEntity])
+  items: TransferOrderEntity[];
+
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => Int)
+  limit: number;
 }

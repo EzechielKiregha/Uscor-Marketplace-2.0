@@ -37,7 +37,22 @@ export class PurchaseOrderEntity {
   @Field({nullable : true})
   updatedAt?: Date;
 
-  @Field(() => [PurchaseOrderProductEntity, {nullable: true}])
+  @Field(() => [PurchaseOrderProductEntity], {nullable: true})
   products?: PurchaseOrderProductEntity[];
+}
+
+@ObjectType()
+export class PaginatedPurchaseOrderResponse {
+  @Field(() => [PurchaseOrderEntity])
+  items: PurchaseOrderEntity[];
+
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => Int)
+  limit: number;
 }
 

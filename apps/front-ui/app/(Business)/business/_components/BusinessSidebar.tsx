@@ -57,16 +57,16 @@ export default function BusinessSidebar({ business }: BusinessSidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                "flex items-center px-4 py-2 gap-1.5 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]",
                 isActive
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted"
+                  : "text-muted-foreground"
               )}
             >
               <item.icon className="w-4 h-4" />
               <span>{item.label}</span>
               {item.badge && (
-                <span className="ml-auto bg-destructive text-destructive-foreground text-xs rounded-full px-2 py-0.5">
+                <span className="ml-auto bg-primary text-xs rounded-full px-2 py-0.5">
                   3
                 </span>
               )}

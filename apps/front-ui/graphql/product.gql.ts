@@ -120,6 +120,35 @@ export const GET_PRODUCTS_BY_NAME = gql`
     }
   }
 `;
+export const SEARCHED_PRODUCTS = gql`
+  query GetSearchedProducts($title: String!) {
+    searchedProducts(title: $title) {
+      id
+      title
+      description
+      price
+      quantity
+      featured
+      createdAt
+      updatedAt
+      category {
+        id
+        name
+        description
+      }
+      medias {
+        id
+        url
+        type
+      }
+      business {
+        id
+        name
+        avatar
+      }
+    }
+  }
+`;
 
 export const GET_PRODUCT_BY_ID = gql`
   query GetProduct($id: String!) {

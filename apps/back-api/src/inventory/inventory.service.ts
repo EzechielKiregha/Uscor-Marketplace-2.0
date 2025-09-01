@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { UpdatePurchaseOrderInput } from './dto/update-purchase-order.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { StoreService } from '../store/store.service';
@@ -9,7 +9,9 @@ import { LowStockAlertInput } from './dto/low-stock-alert.input';
 import { CreateTransferOrderInput } from './dto/create-transfer-order.input';
 import { UpdateTransferOrderInput } from './dto/update-transfer-order.input';
 import { CreateInventoryAdjustmentInput } from './dto/create-inventory.input';
-import { PurchaseOrderStatus } from '../generated/prisma/enums';
+import { PurchaseOrderStatus, TransferOrderStatus } from '../generated/prisma/enums';
+import { AuthPayload } from '../auth/entities/auth-payload.entity';
+import { PubSub } from 'graphql-subscriptions';
 // Service
 @Injectable()
 export class InventoryService {
@@ -18,9 +20,10 @@ export class InventoryService {
     private storeService: StoreService,
     private productService: ProductService,
     private businessService: BusinessService,
+    @Inject('PUB_SUB') private pubSub: PubSub,
   ) {}
 
-  async createPurchaseOrder(input: CreatePurchaseOrderInput, user: { id: string; role: string }) {
+  async createPurchaseOrder(input: CreatePurchaseOrderInput, user: AuthPayload) {
     const { businessId, storeId, supplierId, expectedDelivery, products } = input;
 
     // Validate business and store
@@ -38,7 +41,7 @@ export class InventoryService {
       }
     }
 
-    return this.prisma.purchaseOrder.create({
+    const purchaseOrder = await this.prisma.purchaseOrder.create({
       data: {
         business: { connect: { id: businessId } },
         store: { connect: { id: storeId } },
@@ -60,6 +63,13 @@ export class InventoryService {
         },
       },
     });
+
+    // Publish subscription event
+    await this.pubSub.publish(`purchase_order_created_${storeId}`, { 
+      purchaseOrderCreated: purchaseOrder 
+    });
+
+    return purchaseOrder;
   }
 
   async updatePurchaseOrder(id: string, input: UpdatePurchaseOrderInput, user: { id: string; role: string }) {
@@ -95,7 +105,7 @@ export class InventoryService {
       );
     }
 
-    return this.prisma.purchaseOrder.update({
+    const updatedPurchaseOrder = await this.prisma.purchaseOrder.update({
       where: { id },
       data: {
         supplierId: input.supplierId,
@@ -119,6 +129,13 @@ export class InventoryService {
         },
       },
     });
+
+    // Publish subscription event
+    await this.pubSub.publish(`purchase_order_updated_${updatedPurchaseOrder.storeId}`, { 
+      purchaseOrderUpdated: updatedPurchaseOrder 
+    });
+
+    return updatedPurchaseOrder;
   }
 
   async createTransferOrder(input: CreateTransferOrderInput, user: { id: string; role: string }) {
@@ -145,11 +162,11 @@ export class InventoryService {
       }
     }
 
-    return this.prisma.transferOrder.create({
+    const transferOrder = await this.prisma.transferOrder.create({
       data: {
         fromStore: { connect: { id: fromStoreId } },
         toStore: { connect: { id: toStoreId } },
-        status: PurchaseOrderStatus.PENDING,
+        status: TransferOrderStatus.PENDING,
         products: {
           create: products.map((p) => ({
             product: { connect: { id: p.productId } },
@@ -165,6 +182,13 @@ export class InventoryService {
         },
       },
     });
+
+    // Publish subscription events for both stores
+    await this.pubSub.publish(`transfer_order_created_${fromStoreId}-${toStoreId}`, { 
+      transferOrderCreated: transferOrder 
+    });
+
+    return transferOrder;
   }
 
   async updateTransferOrder(id: string, input: UpdateTransferOrderInput, user: { id: string; role: string }) {
@@ -236,7 +260,7 @@ export class InventoryService {
       );
     }
 
-    return this.prisma.transferOrder.update({
+    const updatedTransferOrder = await this.prisma.transferOrder.update({
       where: { id },
       data: {
         status: input.status,
@@ -258,6 +282,16 @@ export class InventoryService {
         },
       },
     });
+
+    // Publish subscription events for both stores
+    await this.pubSub.publish(`transfer_order_updated_${updatedTransferOrder.fromStoreId}`, { 
+      transferOrderUpdated: updatedTransferOrder 
+    });
+    await this.pubSub.publish(`transfer_order_updated_${updatedTransferOrder.toStoreId}`, { 
+      transferOrderUpdated: updatedTransferOrder 
+    });
+
+    return updatedTransferOrder;
   }
 
   async createInventoryAdjustment(input: CreateInventoryAdjustmentInput, user: { id: string; role: string }) {
@@ -362,5 +396,255 @@ export class InventoryService {
       select: { id: true, title: true, quantity: true },
     });
     return products.map((p) => ({ productId: p.id, title: p.title, quantity: p.quantity }));
+  }
+
+  // Query methods for frontend
+  async getInventory(params: {
+    storeId?: string;
+    productId?: string;
+    lowStockOnly?: boolean;
+    page?: number;
+    limit?: number;
+  }, user: { id: string; role: string }) {
+    const { storeId, productId, lowStockOnly, page = 1, limit = 20 } = params;
+
+    if (storeId) {
+      await this.storeService.verifyStoreAccess(storeId, user);
+    }
+
+    const whereClause: any = {};
+    
+    if (storeId) whereClause.storeId = storeId;
+    if (productId) whereClause.id = productId;
+    
+    // For low stock, we'll filter after the query since Prisma doesn't support field comparisons easily
+
+    const [items, total] = await Promise.all([
+      this.prisma.product.findMany({
+        where: whereClause,
+        include: {
+          store: {
+            select: {
+              id: true,
+              name: true,
+              address: true
+            }
+          },
+          medias: {
+            select: {
+              url: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit
+      }),
+      this.prisma.product.count({ 
+        where: whereClause
+      })
+    ]);
+
+    // console.log("Returned Products from inventory service: ",items);
+
+    // Transform products to inventory format
+    let inventoryItems = items.map(product => ({
+      id: `${product.storeId}-${product.id}`, // Create a composite ID
+      productId: product.id,
+      storeId: product.storeId,
+      quantity: product.quantity,
+      minQuantity: product.minQuantity,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      product: {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        medias: product.medias || null,
+        quantity: product.quantity
+      },
+      store: product.store
+    }));
+
+    // console.log("Returned Products from inventory service after transformation: ",inventoryItems);
+    // Filter for low stock if requested
+    if (lowStockOnly) {
+      inventoryItems = inventoryItems.filter(item => 
+        item.quantity <= (item.minQuantity || 0)
+      );
+    }
+
+    return { 
+      items: inventoryItems, 
+      total: lowStockOnly ? inventoryItems.length : total,
+      page, 
+      limit 
+    };
+  }
+
+  async getPurchaseOrders(params: {
+    businessId: string;
+    storeId?: string;
+    status?: string;
+    startDate?: Date;
+    endDate?: Date;
+    page?: number;
+    limit?: number;
+  }, user: { id: string; role: string }) {
+    const { businessId, storeId, status, startDate, endDate, page = 1, limit = 20 } = params;
+
+    // Verify business access
+    await this.businessService.verifyBusinessAccess(businessId,user);
+    
+    if (storeId) {
+      await this.storeService.verifyStoreAccess(storeId, user);
+    }
+
+    const whereClause: any = { businessId };
+    
+    if (storeId) whereClause.storeId = storeId;
+    if (status) whereClause.status = status;
+    if (startDate || endDate) {
+      whereClause.createdAt = {};
+      if (startDate) whereClause.createdAt.gte = startDate;
+      if (endDate) whereClause.createdAt.lte = endDate;
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.purchaseOrder.findMany({
+        where: whereClause,
+        include: {
+          business: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          store: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          products: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  title: true,
+                  price: true,
+                  medias: {
+                    select: {
+                      url: true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit
+      }),
+      this.prisma.purchaseOrder.count({ where: whereClause })
+    ]);
+
+    // Transform products to match frontend expectations
+    const transformedItems = items.map(order => ({
+      ...order,
+      products: order.products.map(p => ({
+        ...p,
+        product: {
+          ...p.product,
+          imageUrl: p.product.medias?.[0]?.url || null
+        }
+      }))
+    }));
+
+    return { items: transformedItems, total, page, limit };
+  }
+
+  async getTransferOrders(params: {
+    fromStoreId?: string;
+    toStoreId?: string;
+    status?: string;
+    startDate?: Date;
+    endDate?: Date;
+    page?: number;
+    limit?: number;
+  }, user: { id: string; role: string }) {
+    const { fromStoreId, toStoreId, status, startDate, endDate, page = 1, limit = 20 } = params;
+
+    const whereClause: any = {};
+    
+    if (fromStoreId) {
+      await this.storeService.verifyStoreAccess(fromStoreId, user);
+      whereClause.fromStoreId = fromStoreId;
+    }
+    if (toStoreId) {
+      await this.storeService.verifyStoreAccess(toStoreId, user);
+      whereClause.toStoreId = toStoreId;
+    }
+    if (status) whereClause.status = status;
+    if (startDate || endDate) {
+      whereClause.createdAt = {};
+      if (startDate) whereClause.createdAt.gte = startDate;
+      if (endDate) whereClause.createdAt.lte = endDate;
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.transferOrder.findMany({
+        where: whereClause,
+        include: {
+          fromStore: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          toStore: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          products: {
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  title: true,
+                  price: true,
+                  medias: {
+                    select: {
+                      url: true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit
+      }),
+      this.prisma.transferOrder.count({ where: whereClause })
+    ]);
+
+    // Transform products to match frontend expectations
+    const transformedItems = items.map(order => ({
+      ...order,
+      products: order.products.map(p => ({
+        ...p,
+        product: {
+          ...p.product,
+          imageUrl: p.product.medias?.[0]?.url || null
+        }
+      }))
+    }));
+
+    return { items: transformedItems, total, page, limit };
   }
 }

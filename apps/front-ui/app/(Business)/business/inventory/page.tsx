@@ -1,4 +1,3 @@
-// app/business/inventory/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -33,10 +32,7 @@ export default function InventoryManagementPage() {
     data: storesData,
     loading: storesLoading,
     error: storesError
-  } = useQuery(GET_STORES, {
-    variables: { businessId: user?.id },
-    skip: !user?.id
-  });
+  } = useQuery(GET_STORES);
 
   const {
     getInventory,
@@ -135,7 +131,7 @@ export default function InventoryManagementPage() {
       </div>
 
       {/* Inventory Summary */}
-      <InventorySummary storeId={selectedStoreId || ''} />
+      <InventorySummary businessId={user?.id || ''} storeId={selectedStoreId || ''} />
 
       {/* Main Content */}
       <div className="space-y-6">

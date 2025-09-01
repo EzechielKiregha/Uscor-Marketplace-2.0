@@ -1,4 +1,3 @@
-// app/business/inventory/_hooks/use-inventory.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useSubscription } from '@apollo/client';
 import { 
@@ -39,7 +38,7 @@ export const useInventory = (storeId: string, businessId: string) => {
     loading: inventoryLoading,
     refetch: refetchInventory
   } = useQuery(GET_INVENTORY, {
-    variables: { 
+    variables: {
       storeId,
       lowStockOnly: inventoryFilter.lowStockOnly,
       productId: inventoryFilter.productId || undefined
@@ -85,7 +84,7 @@ export const useInventory = (storeId: string, businessId: string) => {
   const { showToast } = useToast()
   // Handle real-time updates
   useSubscription(ON_PURCHASE_ORDER_CREATED, {
-    variables: { businessId },
+    variables: { businessId, storeId },
     onData: ({ data }) => {
       refetchPurchaseOrders();
       refetchInventory();
@@ -93,7 +92,7 @@ export const useInventory = (storeId: string, businessId: string) => {
   });
 
   useSubscription(ON_PURCHASE_ORDER_UPDATED, {
-    variables: { businessId },
+    variables: { businessId, storeId },
     onData: ({ data }) => {
       refetchPurchaseOrders();
       refetchInventory();

@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_PRODUCTS, DELETE_PRODUCT } from '@/graphql/product.gql';
+import { GET_PRODUCTS, DELETE_PRODUCT, SEARCHED_PRODUCTS } from '@/graphql/product.gql';
 import Loader from '@/components/seraui/Loader';
 import { Button } from '@/components/ui/button';
 import { Trash2, Edit, Plus, Search, Filter, Package } from 'lucide-react';
@@ -18,7 +18,11 @@ export default function BusinessProductsPage() {
   const showToast = useToast().showToast
   const bUser = useMe()
 
-  const { data, loading, error, refetch } = useQuery(GET_PRODUCTS);
+  const { data: productsData, loading, error, refetch } = useQuery(SEARCHED_PRODUCTS, {
+    variables: {
+      title: searchTerm,
+    }
+  });
   // 1
 
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
@@ -40,7 +44,12 @@ export default function BusinessProductsPage() {
     }
   };
 
-  if (loading) return <Loader loading={true} />;
+  const filteredProducts = productsData?.searchedProducts?.filter((product: ProductEntity) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
+
+  if (loading && searchTerm.trim() === '') return <Loader loading={true} />;
   if (error) return <div>Error loading products</div>;
 
   return (
@@ -85,20 +94,19 @@ export default function BusinessProductsPage() {
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {data.products.items.map((product: ProductEntity) => (
+        {filteredProducts.map((product: ProductEntity) => (
           <div key={product.id} className="border border-border rounded-lg overflow-hidden bg-card">
             <div className="relative pt-[100%]">
-              {product.medias?.[0] ? (
-                <img
-                  src={product.medias[0].url}
-                  alt={product.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              ) : (
-                <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground">No image</span>
-                </div>
-              )}
+              <img
+                src={product.medias && product.medias.length > 0 ? product.medias[0].url : 'image.png'}
+                alt={product.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={
+                  (event) => {
+                    event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`;
+                  }
+                }
+              />
             </div>
 
             <div className="p-4">
@@ -116,6 +124,13 @@ export default function BusinessProductsPage() {
                   {product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock'}
                 </span>
               </div>
+
+              {product.store && (
+                <div className="mt-3 flex items-start">
+                  <span className="mr-2 text-muted-foreground">Store:</span>
+                  <span>{product?.store.name} {product.store.address ? `• ${product.store.address}` : ''}</span>
+                </div>
+              )}
 
               <div className="mt-4 flex gap-2">
                 <Button
@@ -144,7 +159,7 @@ export default function BusinessProductsPage() {
       </div>
 
       {/* Empty State */}
-      {data.products.items.length === 0 && (
+      {filteredProducts.length === 0 && (
         <div className="text-center py-12 bg-card rounded-lg border border-border">
           <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium mb-2">No products yet</h3>
