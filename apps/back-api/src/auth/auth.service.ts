@@ -4,12 +4,33 @@ import { verify } from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthJwtPayload } from './types/auth-jwtpayload';
 import { Business, Client, Worker } from '../generated/prisma/client';
+import { UserPayload } from './entities/auth-payload.entity';
 
 @Injectable()
 export class AuthService {
 
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
+  async getUserRole(email: string, password: string) {
+    // Check each role in order and return as soon as we find a match
+    const client = await this.prisma.client.findUnique({ where: { email } });
+    if (client) {
+      return { role: 'Client' };
+    }
+    
+    const business = await this.prisma.business.findUnique({ where: { email } });
+    if (business) {
+      return { role: 'Business' };
+    }
+    
+    const worker = await this.prisma.worker.findUnique({ where: { email } });
+    if (worker) {
+      return { role: 'Worker' };
+    }
+    
+    // If no user found, throw an error instead of returning a string
+    throw new UnauthorizedException('User not found');
+  }
   async validateUser(email: string, password: string, role: string) {
     let user;
     if (role === 'client') {

@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { ClientService } from './client.service';
 import { ClientEntity } from './entities/client.entity';
-import { CreateClientInput } from './dto/create-client.input';
+import { CreateClientInput, CreateClientForPOSInput } from './dto/create-client.input';
 import { UpdateClientInput } from './dto/update-client.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
@@ -15,6 +15,13 @@ export class ClientResolver {
   @Mutation(() => ClientEntity, { description: 'Creates a new client with hashed password.' })
   async createClient(@Args('createClientInput') createClientInput: CreateClientInput) {
     return this.clientService.create(createClientInput);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Mutation(() => ClientEntity, { description: 'Creates a new client for POS with minimal info.' })
+  async createClientForPOS(@Args('createClientInput') createClientInput: CreateClientForPOSInput) {
+    return this.clientService.createForPOS(createClientInput);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -35,6 +42,20 @@ export class ClientResolver {
       throw new Error('Clients can only access their own data');
     }
     return this.clientService.findOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Query(() => ClientEntity, { name: 'clientByEmail', nullable: true, description: 'Find client by email.' })
+  async getClientByEmail(@Args('email', { type: () => String }) email: string) {
+    return this.clientService.findByEmail(email);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Query(() => [ClientEntity], { name: 'searchClients', description: 'Search clients by query.' })
+  async searchClients(@Args('query', { type: () => String }) query: string) {
+    return this.clientService.searchClients(query);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

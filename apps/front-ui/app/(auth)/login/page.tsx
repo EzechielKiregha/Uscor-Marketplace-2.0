@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useMutation } from '@apollo/client';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getUserRole, setAuthToken } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
@@ -10,8 +10,8 @@ import { GlowButton } from '@/components/seraui/GlowButton';
 import { useToast } from '@/components/toast-provider';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getLoginMutation } from '@/graphql/auth.gql';
-import { removeTypename } from '@/graphql/client.gql';
+import { GET_ROLE_IF_USER_EXIST, getLoginMutation } from '@/graphql/auth.gql';
+import { removeTypename } from '@/lib/removeTypeName';
 
 // SVG Icons (reused from provided Login)
 const UserIcon = () => (
@@ -112,7 +112,6 @@ const XIcon = () => (
 
 // Zod Schema
 const schema = z.object({
-  role: z.enum(['Client', 'Business', 'Worker'], { message: 'Please select a role' }),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
@@ -125,18 +124,56 @@ export default function LoginPage() {
   const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { role: 'Client' },
   });
-  const { handleSubmit, watch } = form;
-  const [signIn, { loading }] = useMutation(getLoginMutation(watch('role')));
+  const { handleSubmit } = form;
   const { showToast } = useToast();
+  const [UserRole, setRole] = useState<string>('Client');
 
-  const onSubmit = async (data: FormData) => {
+  const [getRoleQuery, { loading: roleLoading }] = useLazyQuery(GET_ROLE_IF_USER_EXIST);
+
+  // Create mutations for all possible roles
+  const [signInClient, { loading: clientLoading }] = useMutation(getLoginMutation('Client'));
+  const [signInBusiness, { loading: businessLoading }] = useMutation(getLoginMutation('Business'));
+  const [signInWorker, { loading: workerLoading }] = useMutation(getLoginMutation('Worker'));
+
+  const loading = roleLoading || clientLoading || businessLoading || workerLoading;
+
+  const onSubmit = async (formData: FormData) => {
     try {
-      const mutation = getLoginMutation(data.role);
-      let { data: { [`sign${data.role}In`]: result } } = await signIn({
-        mutation: mutation,
-        variables: { SignInInput: { email: data.email, password: data.password } },
+      // First, get the user role
+      const { data: res } = await getRoleQuery({
+        variables: { SignInInput: { email: formData.email, password: formData.password } },
+      });
+
+      if (!res?.whatIsUserRole) {
+        throw new Error("No user found");
+      }
+
+      let userRole: string;
+      let signInMutation: any;
+
+      switch (res.whatIsUserRole.role) {
+        case 'Client':
+          userRole = 'Client';
+          signInMutation = signInClient;
+          break;
+        case 'Business':
+          userRole = 'Business';
+          signInMutation = signInBusiness;
+          break;
+        case 'Worker':
+          userRole = 'Worker';
+          signInMutation = signInWorker;
+          break;
+        default:
+          throw new Error(`Unknown UserRole ${res.whatIsUserRole.role}`);
+      }
+
+      setRole(userRole);
+
+      // Now sign in with the correct role
+      let { data: { [`sign${userRole}In`]: result } } = await signInMutation({
+        variables: { SignInInput: { email: formData.email, password: formData.password } },
       });
       showToast(
         'success',
@@ -168,7 +205,7 @@ export default function LoginPage() {
       showToast(
         'error',
         'Login Failed',
-        'Wrong email or password',
+        err.message,
         true,
         8000,
         'bottom-right'
@@ -217,34 +254,6 @@ export default function LoginPage() {
         {/* Form */}
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem className="form-item justify-center items-center w-full">
-                  <FormLabel>Account Type</FormLabel>
-                  <FormControl>
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      defaultValue="Client"
-                    >
-                      <FormControl>
-                        <SelectTrigger className="form-field">
-                          <SelectValue placeholder="Select role" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="form-field">
-                        <SelectItem value="Client">Client</SelectItem>
-                        <SelectItem value="Business">Business</SelectItem>
-                        <SelectItem value="Worker">Worker</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <FormField
               control={form.control}

@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { SignInInput } from './dto/signin.input';
-import { AuthPayload, AuthPayloadBusiness, AuthPayloadClient, AuthPayloadWorker } from './entities/auth-payload.entity';
+import { AuthPayload, AuthPayloadBusiness, AuthPayloadClient, AuthPayloadWorker, UserPayload } from './entities/auth-payload.entity';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
 
@@ -9,6 +9,10 @@ import { UnauthorizedException } from '@nestjs/common';
 export class AuthResolver {
   constructor(private readonly authService: AuthService, private jwtService: JwtService) {}
 
+  @Query(() => UserPayload)
+  async whatIsUserRole(@Args('SignInInput') signInInput: SignInInput) {
+    return await this.authService.getUserRole(signInInput.email, signInInput.password);;
+  }
   @Mutation(() => AuthPayloadClient)
   async signClientIn(@Args('SignInInput') signInInput: SignInInput) {
     const client = await this.authService.validateUser(signInInput.email, signInInput.password, "client");

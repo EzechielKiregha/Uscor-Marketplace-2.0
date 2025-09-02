@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Inject, UseGuards } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { CloseSaleInput } from './dto/close-sale.input';
+import { CloseSaleInput, PaymentDetailsInput } from './dto/close-sale.input';
 import { CreateReturnInput } from './dto/create-return.input';
 import { ReturnEntity } from './entities/return.entity';
 import { StoreService } from '../store/store.service';
@@ -126,12 +126,20 @@ export class SaleResolver {
   @Roles('business', 'worker')
   @Mutation(() => SaleEntity)
   async completeSale(
+    @Context() context: any,
     @Args('id') id: string,
     @Args('paymentMethod') paymentMethod: PaymentMethod,
-    @Context() context: any
+    @Args('paymentDetails', { nullable: true }) paymentDetails?: PaymentDetailsInput,
   ) {
     const user = context.req.user;
-    return this.saleService.completeSale(id, paymentMethod, user);
+    // Create CloseSaleInput from individual parameters
+    const closeSaleInput: CloseSaleInput = {
+      saleId: id,
+      paymentMethod,
+      paymentDetails,
+      status: 'CLOSED'
+    };
+    return this.saleService.close(closeSaleInput, user);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -23,11 +23,13 @@ import { StoreEntity } from '@/lib/types';
 import CurrentSalePanel from './_components/CurrentSalePanel';
 import SalesDashboard from './_components/SalesDashboard';
 import SalesHistoryPanel from './_components/SalesHistoryPanel';
+import NewSaleModal from './_components/NewSaleModal';
 
 export default function SalesManagementPage() {
   const { user, role, loading: authLoading } = useMe();
   const { isOpen, setIsOpen } = useOpenCreateStoreModal();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+  const [showNewSaleModal, setShowNewSaleModal] = useState(false);
 
   const {
     data: storesData,
@@ -41,7 +43,7 @@ export default function SalesManagementPage() {
     createSale,
     activeSalesLoading,
     salesHistoryLoading
-  } = useSales(selectedStoreId || '', user?.id || '');
+  } = useSales(selectedStoreId || '', user?.id || '', role || '');
 
   // Auto-select first store if none selected
   useEffect(() => {
@@ -112,29 +114,41 @@ export default function SalesManagementPage() {
           <Button
             variant="default"
             size="sm"
-            onClick={() => createSale()}
+            onClick={() => setShowNewSaleModal(true)}
             disabled={!selectedStoreId}
           >
             <Plus className="h-4 w-4 mr-2" />
-            New Sale
+            New
           </Button>
         </div>
       </div>
 
+      {/* New Sale Modal */}
+      <NewSaleModal
+        isOpen={showNewSaleModal}
+        onClose={() => setShowNewSaleModal(false)}
+        onCreateSale={createSale}
+        storeId={selectedStoreId || ''}
+        userRole={role || ''}
+        userId={user?.id || ''}
+      />
+
       {/* Main POS Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
         {/* Left: Current Sale Panel */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <CurrentSalePanel
             storeId={selectedStoreId || ''}
             currentSale={getCurrentSale()}
             onNewSale={createSale}
+            userRole={role || ''}
+            userId={user?.id || ''}
           />
+          <SalesDashboard storeId={selectedStoreId || ''} />
         </div>
 
         {/* Right: Dashboard & History */}
         <div className="space-y-6">
-          <SalesDashboard storeId={selectedStoreId || ''} />
           <SalesHistoryPanel
             storeId={selectedStoreId || ''}
             salesHistory={getSalesHistory()}

@@ -33,3 +33,25 @@ export class CreateClientInput {
   @IsBoolean()
   isVerified: boolean;
 }
+
+@InputType()
+export class CreateClientForPOSInput {
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  fullName?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  address?: string;
+}

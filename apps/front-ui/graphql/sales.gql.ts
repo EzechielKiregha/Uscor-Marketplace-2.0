@@ -275,6 +275,11 @@ export const GET_SALES_DASHBOARD = gql`
         count
         amount
       }
+      chartData {
+        name
+        sales
+        transactions
+      }
     }
   }
 `;
@@ -286,10 +291,53 @@ export const GET_SALES_DASHBOARD = gql`
 export const CREATE_SALE = gql`
   mutation CreateSale($input: CreateSaleInput!) {
     createSale(input: $input) {
-      ...SaleEntity
+      id
+      storeId
+      store {
+        id
+        name
+        address
+      }
+      workerId
+      worker {
+        id
+        fullName
+        role
+      }
+      clientId
+      client {
+        id
+        fullName
+        email
+      }
+      totalAmount
+      discount
+      paymentMethod
+      status
+      createdAt
+      updatedAt
+      saleProducts {
+        id
+        quantity
+        price
+        modifiers
+        product {
+          id
+          title
+          price
+          medias {
+            url  
+          }
+        }
+      }
+      returns {
+        id
+        reason
+        status
+        createdAt
+      }
     }
   }
-  ${SALE_ENTITY}
 `;
 
 export const ADD_SALE_PRODUCT = gql`
@@ -347,12 +395,55 @@ export const REMOVE_SALE_PRODUCT = gql`
 `;
 
 export const COMPLETE_SALE = gql`
-  mutation CompleteSale($id: String!, $paymentMethod: PaymentMethod!) {
-    completeSale(id: $id, paymentMethod: $paymentMethod) {
-      ...SaleEntity
+  mutation CompleteSale($id: String!, $paymentMethod: String!, $paymentDetails: PaymentDetailsInput) {
+    completeSale(id: $id, paymentMethod: $paymentMethod, paymentDetails: $paymentDetails) {
+      id
+      storeId
+      store {
+        id
+        name
+        address
+      }
+      workerId
+      worker {
+        id
+        fullName
+        role
+      }
+      clientId
+      client {
+        id
+        fullName
+        email
+      }
+      totalAmount
+      discount
+      paymentMethod
+      status
+      createdAt
+      updatedAt
+      saleProducts {
+        id
+        quantity
+        price
+        modifiers
+        product {
+          id
+          title
+          price
+          medias {
+            url  
+          }
+        }
+      }
+      returns {
+        id
+        reason
+        status
+        createdAt
+      }
     }
   }
-  ${SALE_ENTITY}
 `;
 
 export const CREATE_RETURN = gql`
@@ -383,17 +474,103 @@ export const GENERATE_RECEIPT = gql`
 export const ON_SALE_CREATED = gql`
   subscription OnSaleCreated($storeId: String!) {
     saleCreated(storeId: $storeId) {
-      ...SaleEntity
+      id
+      storeId
+      store {
+        id
+        name
+        address
+      }
+      workerId
+      worker {
+        id
+        fullName
+        role
+      }
+      clientId
+      client {
+        id
+        fullName
+        email
+      }
+      totalAmount
+      discount
+      paymentMethod
+      status
+      createdAt
+      updatedAt
+      saleProducts {
+        id
+        quantity
+        price
+        modifiers
+        product {
+          id
+          title
+          price
+          medias {
+            url  
+          }
+        }
+      }
+      returns {
+        id
+        reason
+        status
+        createdAt
+      }
     }
   }
-  ${SALE_ENTITY}
 `;
 
 export const ON_SALE_UPDATED = gql`
   subscription OnSaleUpdated($storeId: String!) {
     saleUpdated(storeId: $storeId) {
-      ...SaleEntity
+    id
+    storeId
+    store {
+      id
+      name
+      address
+    }
+    workerId
+    worker {
+      id
+      fullName
+      role
+    }
+    clientId
+    client {
+      id
+      fullName
+      email
+    }
+    totalAmount
+    discount
+    paymentMethod
+    status
+    createdAt
+    updatedAt
+    saleProducts {
+      id
+      quantity
+      price
+      modifiers
+      product {
+        id
+        title
+        price
+        medias {
+          url  
+        }
+      }
+    }
+    returns {
+      id
+      reason
+      status
+      createdAt
     }
   }
-  ${SALE_ENTITY}
+  }
 `;

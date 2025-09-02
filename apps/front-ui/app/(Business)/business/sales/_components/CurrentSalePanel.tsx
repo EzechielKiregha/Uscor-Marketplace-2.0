@@ -21,22 +21,30 @@ import {
   CreditCard,
   ArrowRightLeft,
   Receipt,
-  ShoppingCart
+  ShoppingCart,
+  User,
+  Mail
 } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
 import { GET_PRODUCTS, GET_PRODUCTS_BY_NAME } from '@/graphql/product.gql';
 import { ProductEntity } from '@/lib/types';
+import ClientSelectionModal from './ClientSelectionModal';
+import NewSaleModal from './NewSaleModal';
 
 interface CurrentSalePanelProps {
   storeId: string;
   currentSale: any; // Replace with SaleEntity type
-  onNewSale: () => void;
+  onNewSale: (workerId?: string, clientId?: string) => Promise<void>;
+  userRole: string;
+  userId: string;
 }
 
 export default function CurrentSalePanel({
   storeId,
   currentSale,
-  onNewSale
+  onNewSale,
+  userRole,
+  userId
 }: CurrentSalePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -45,6 +53,11 @@ export default function CurrentSalePanel({
   const [modifiers, setModifiers] = useState<any>({});
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [isCompleting, setIsCompleting] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState<any>({});
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
+  const [showClientModal, setShowClientModal] = useState(false);
+  const [showNewSaleModal, setShowNewSaleModal] = useState(false);
   const { showToast } = useToast()
 
   // Get products for the store
@@ -158,16 +171,31 @@ export default function CurrentSalePanel({
       await completeSale({
         variables: {
           id: currentSaleDetails.id,
-          paymentMethod
+          paymentMethod,
+          paymentDetails: Object.keys(paymentDetails).length > 0 ? paymentDetails : undefined
         }
       });
       showToast('success', 'Sale Completed', 'Payment processed successfully');
       onNewSale();
-    } catch (error) {
-      showToast('error', 'Error', 'Failed to complete sale');
+    } catch (error: any) {
+      showToast('error', 'Error', error.message);
     } finally {
       setIsCompleting(false);
       setPaymentMethod(null);
+      setPaymentDetails({});
+      setShowPaymentForm(false);
+    }
+  };
+
+  const handlePaymentMethodSelect = (method: string) => {
+    setPaymentMethod(method);
+    setPaymentDetails({});
+    if (method === 'MOBILE_MONEY' || method === 'CARD' || method === 'TOKEN' || method === 'CASH') {
+      setShowPaymentForm(true);
+    } else {
+      setShowPaymentForm(false);
+      setPaymentDetails({});
+      setShowPaymentForm(false);
     }
   };
 
@@ -193,7 +221,7 @@ export default function CurrentSalePanel({
           </p>
           <Button
             size="lg"
-            onClick={onNewSale}
+            onClick={() => setShowNewSaleModal(true)}
             className="bg-primary hover:bg-accent text-primary-foreground"
           >
             <Plus className="h-5 w-5 mr-2" />
@@ -205,7 +233,7 @@ export default function CurrentSalePanel({
   }
 
   return (
-    <div className="border border-border rounded-lg bg-card overflow-hidden h-[600px] flex flex-col">
+    <div className="border border-border rounded-lg bg-card h-[900px] overflow-hidden flex flex-col">
       {/* Sale Header */}
       <div className="border-b border-border p-4 flex items-center justify-between">
         <div>
@@ -217,10 +245,52 @@ export default function CurrentSalePanel({
         <Button
           variant="ghost"
           size="icon"
-          onClick={onNewSale}
+          onClick={() => setShowNewSaleModal(true)}
         >
           <ArrowRightLeft className="h-5 w-5" />
         </Button>
+      </div>
+
+      {/* Client Selection */}
+      <div className="border-b border-border p-4">
+        {selectedClient || currentSaleDetails?.client ? (
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                <User className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="font-medium text-sm">
+                  {(selectedClient || currentSaleDetails?.client)?.fullName ||
+                    (selectedClient || currentSaleDetails?.client)?.username || 'Unknown Client'}
+                </p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Mail className="h-3 w-3" />
+                  {(selectedClient || currentSaleDetails?.client)?.email}
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSelectedClient(null);
+                setShowClientModal(true);
+              }}
+            >
+              Change
+            </Button>
+          </div>
+        ) : (
+          <Button
+            variant="outline"
+            onClick={() => setShowClientModal(true)}
+            className="w-full"
+          >
+            <User className="h-4 w-4 mr-2" />
+            Select Client (Optional)
+          </Button>
+        )}
       </div>
 
       {/* Product Search */}
@@ -418,7 +488,7 @@ export default function CurrentSalePanel({
               <Button
                 variant="outline"
                 className="flex items-center justify-center gap-2"
-                onClick={() => setPaymentMethod('CASH')}
+                onClick={() => handlePaymentMethodSelect('CASH')}
               >
                 <CreditCard className="h-4 w-4" />
                 Cash
@@ -426,15 +496,148 @@ export default function CurrentSalePanel({
               <Button
                 variant="outline"
                 className="flex items-center justify-center gap-2"
-                onClick={() => setPaymentMethod('CARD')}
+                onClick={() => handlePaymentMethodSelect('CARD')}
               >
                 <CreditCard className="h-4 w-4" />
                 Card
+                {/* Payment Form */}
+                {showPaymentForm && paymentMethod && (
+                  <div className="border border-border rounded-lg p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium">Payment Details</h3>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setPaymentMethod(null);
+                          setShowPaymentForm(false);
+                          setPaymentDetails({});
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    {paymentMethod === 'MOBILE_MONEY' && (
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium">Mobile Money Provider</label>
+                          <select
+                            className="w-full mt-1 p-2 border border-border rounded-md"
+                            value={paymentDetails.mobileMoneyMethod || ''}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, mobileMoneyMethod: e.target.value })}
+                          >
+                            <option value="">Select Provider</option>
+                            <option value="MTN_MONEY">MTN Money</option>
+                            <option value="AIRTEL_MONEY">Airtel Money</option>
+                            <option value="ORANGE_MONEY">Orange Money</option>
+                            <option value="MPESA">M-Pesa</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Country</label>
+                          <select
+                            className="w-full mt-1 p-2 border border-border rounded-md"
+                            value={paymentDetails.country || ''}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, country: e.target.value })}
+                          >
+                            <option value="">Select Country</option>
+                            <option value="DRC">DRC</option>
+                            <option value="KENYA">Kenya</option>
+                            <option value="UGANDA">Uganda</option>
+                            <option value="RWANDA">Rwanda</option>
+                            <option value="BURUNDI">Burundi</option>
+                            <option value="TANZANIA">Tanzania</option>
+                          </select>
+                        </div>
+                        {paymentDetails.mobileMoneyMethod && paymentDetails.country && (
+                          <div className="bg-muted p-3 rounded-md">
+                            <p className="text-sm font-medium mb-2">Payment Code:</p>
+                            <code className="text-lg font-mono bg-background p-2 rounded border">
+                              *{paymentDetails.mobileMoneyMethod?.substring(0, 3)}*{paymentDetails.country?.substring(0, 2)}*{Math.random().toString(36).substring(2, 8).toUpperCase()}#
+                            </code>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              Dial this code on your mobile phone to complete payment
+                            </p>
+                          </div>
+                        )}
+                        <div>
+                          <label className="text-sm font-medium">Transaction ID (Optional)</label>
+                          <Input
+                            placeholder="Enter operator transaction ID"
+                            value={paymentDetails.operatorTransactionId || ''}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, operatorTransactionId: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {paymentMethod === 'CARD' && (
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium">Card Number</label>
+                          <Input
+                            placeholder="1234 5678 9012 3456"
+                            value={paymentDetails.cardNumber || ''}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Cardholder Name</label>
+                          <Input
+                            placeholder="John Doe"
+                            value={paymentDetails.cardHolderName || ''}
+                            onChange={(e) => setPaymentDetails({ ...paymentDetails, cardHolderName: e.target.value })}
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-sm font-medium">Expiry Date</label>
+                            <Input
+                              placeholder="MM/YY"
+                              value={paymentDetails.expiryDate || ''}
+                              onChange={(e) => setPaymentDetails({ ...paymentDetails, expiryDate: e.target.value })}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium">CVV</label>
+                            <Input
+                              placeholder="123"
+                              value={paymentDetails.cvv || ''}
+                              onChange={(e) => setPaymentDetails({ ...paymentDetails, cvv: e.target.value })}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {paymentMethod === 'TOKEN' && (
+                      <div className="space-y-3">
+                        <div className="bg-muted p-3 rounded-md">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">Total Amount:</span>
+                            <span className="text-lg font-bold">${calculateTotal().toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between items-center mt-2">
+                            <span className="text-sm font-medium">Token Amount:</span>
+                            <span className="text-lg font-bold text-primary">
+                              {(calculateTotal() / 10).toFixed(2)} uTn
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            1 uTn = $10.00 USD
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               </Button>
               <Button
                 variant="outline"
                 className="flex items-center justify-center gap-2"
-                onClick={() => setPaymentMethod('MOBILE_MONEY')}
+                onClick={() => handlePaymentMethodSelect('MOBILE_MONEY')}
               >
                 <CreditCard className="h-4 w-4" />
                 Mobile
@@ -442,11 +645,145 @@ export default function CurrentSalePanel({
               <Button
                 variant="outline"
                 className="flex items-center justify-center gap-2"
-                onClick={() => setPaymentMethod('TOKEN')}
+                onClick={() => handlePaymentMethodSelect('TOKEN')}
               >
                 <CreditCard className="h-4 w-4" />
                 Token
+                {paymentMethod === 'TOKEN' && ` (${(calculateTotal() / 10).toFixed(2)} uTn)`}
               </Button>
+            </div>
+          )}
+
+          {/* Payment Form */}
+          {showPaymentForm && paymentMethod && (
+            <div className="border border-border rounded-lg p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium">Payment Details</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    setPaymentMethod(null);
+                    setShowPaymentForm(false);
+                    setPaymentDetails({});
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {paymentMethod === 'MOBILE_MONEY' && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium">Mobile Money Provider</label>
+                    <select
+                      className="w-full mt-1 p-2 border border-border rounded-md"
+                      value={paymentDetails.mobileMoneyMethod || ''}
+                      onChange={(e) => setPaymentDetails({ ...paymentDetails, mobileMoneyMethod: e.target.value })}
+                    >
+                      <option value="">Select Provider</option>
+                      <option value="MTN_MONEY">MTN Money</option>
+                      <option value="AIRTEL_MONEY">Airtel Money</option>
+                      <option value="ORANGE_MONEY">Orange Money</option>
+                      <option value="MPESA">M-Pesa</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Country</label>
+                    <select
+                      className="w-full mt-1 p-2 border border-border rounded-md"
+                      value={paymentDetails.country || ''}
+                      onChange={(e) => setPaymentDetails({ ...paymentDetails, country: e.target.value })}
+                    >
+                      <option value="">Select Country</option>
+                      <option value="DRC">DRC</option>
+                      <option value="KENYA">Kenya</option>
+                      <option value="UGANDA">Uganda</option>
+                      <option value="RWANDA">Rwanda</option>
+                      <option value="BURUNDI">Burundi</option>
+                      <option value="TANZANIA">Tanzania</option>
+                    </select>
+                  </div>
+                  {paymentDetails.mobileMoneyMethod && paymentDetails.country && (
+                    <div className="bg-muted p-3 rounded-md">
+                      <p className="text-sm font-medium mb-2">Payment Code:</p>
+                      <code className="text-lg font-mono bg-background p-2 rounded border">
+                        *{paymentDetails.mobileMoneyMethod?.substring(0, 3)}*{paymentDetails.country?.substring(0, 2)}*{Math.random().toString(36).substring(2, 8).toUpperCase()}#
+                      </code>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Dial this code on your mobile phone to complete payment
+                      </p>
+                    </div>
+                  )}
+                  <div>
+                    <label className="text-sm font-medium">Transaction ID (Optional)</label>
+                    <Input
+                      placeholder="Enter operator transaction ID"
+                      value={paymentDetails.operatorTransactionId || ''}
+                      onChange={(e) => setPaymentDetails({ ...paymentDetails, operatorTransactionId: e.target.value })}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'CARD' && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium">Card Number</label>
+                    <Input
+                      placeholder="1234 5678 9012 3456"
+                      value={paymentDetails.cardNumber || ''}
+                      onChange={(e) => setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Cardholder Name</label>
+                    <Input
+                      placeholder="John Doe"
+                      value={paymentDetails.cardHolderName || ''}
+                      onChange={(e) => setPaymentDetails({ ...paymentDetails, cardHolderName: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-sm font-medium">Expiry Date</label>
+                      <Input
+                        placeholder="MM/YY"
+                        value={paymentDetails.expiryDate || ''}
+                        onChange={(e) => setPaymentDetails({ ...paymentDetails, expiryDate: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">CVV</label>
+                      <Input
+                        placeholder="123"
+                        value={paymentDetails.cvv || ''}
+                        onChange={(e) => setPaymentDetails({ ...paymentDetails, cvv: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'TOKEN' && (
+                <div className="space-y-3">
+                  <div className="bg-muted p-3 rounded-md">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium">Total Amount:</span>
+                      <span className="text-lg font-bold">${calculateTotal().toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="text-sm font-medium">Token Amount:</span>
+                      <span className="text-lg font-bold text-primary">
+                        {(calculateTotal() / 10).toFixed(2)} uTn
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      1 uTn = $10.00 USD
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -462,12 +799,33 @@ export default function CurrentSalePanel({
               ) : (
                 <>
                   Complete Sale • ${calculateTotal().toFixed(2)}
+                  {paymentMethod === 'TOKEN' && ` (${(calculateTotal() / 10).toFixed(2)} uTn)`}
                 </>
               )}
             </Button>
           )}
         </div>
       </div>
+
+      {/* New Sale Modal */}
+      <NewSaleModal
+        isOpen={showNewSaleModal}
+        onClose={() => setShowNewSaleModal(false)}
+        onCreateSale={onNewSale}
+        storeId={storeId}
+        userRole={userRole}
+        userId={userId}
+      />
+
+      {/* Client Selection Modal */}
+      <ClientSelectionModal
+        isOpen={showClientModal}
+        onClose={() => setShowClientModal(false)}
+        onClientSelected={(client) => {
+          setSelectedClient(client);
+          setShowClientModal(false);
+        }}
+      />
     </div>
   );
 }

@@ -11,6 +11,11 @@ export class AuthPayload {
   @Field(() => String, { nullable: true })
   email?: string;
 }
+@ObjectType()
+export class UserPayload {
+  @Field(() => String)
+  role: string;
+}
 
 @ObjectType()
 export class AuthPayloadClient {

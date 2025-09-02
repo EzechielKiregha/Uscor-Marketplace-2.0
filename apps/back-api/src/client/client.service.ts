@@ -1,6 +1,6 @@
 import { hash } from "argon2";
 import { UpdateClientInput } from "./dto/update-client.input";
-import { CreateClientInput } from "./dto/create-client.input";
+import { CreateClientInput, CreateClientForPOSInput } from "./dto/create-client.input";
 import { PrismaService } from "../prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 
@@ -16,6 +16,37 @@ export class ClientService {
       data: {
         ...clientData,
         password: hashedPassword,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        fullName: true,
+        address: true,
+        phone: true,
+        avatar: true,
+        isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async createForPOS(createClientInput: CreateClientForPOSInput) {
+    // Generate a temporary password and username for POS clients
+    const tempPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await hash(tempPassword);
+    const username = createClientInput.email.split('@')[0] + '_' + Date.now();
+
+    return this.prisma.client.create({
+      data: {
+        username,
+        email: createClientInput.email,
+        fullName: createClientInput.fullName || '',
+        phone: createClientInput.phone || '',
+        address: createClientInput.address || '',
+        password: hashedPassword,
+        isVerified: false, // POS clients start unverified
       },
       select: {
         id: true,
@@ -65,6 +96,50 @@ export class ClientService {
         kyc: { select: { id: true, status: true, submittedAt: true } },
         postTransactions: { select: { id: true, status: true, amount: true } },
       },
+    });
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.client.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        fullName: true,
+        address: true,
+        phone: true,
+        avatar: true,
+        isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async searchClients(query: string) {
+    return this.prisma.client.findMany({
+      where: {
+        OR: [
+          { email: { contains: query, mode: 'insensitive' } },
+          { fullName: { contains: query, mode: 'insensitive' } },
+          { username: { contains: query, mode: 'insensitive' } },
+          { phone: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        fullName: true,
+        address: true,
+        phone: true,
+        avatar: true,
+        isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      take: 10, // Limit results
     });
   }
 

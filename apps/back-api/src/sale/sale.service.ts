@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateSaleInput } from './dto/create-sale.input';
 import { UpdateSaleInput } from './dto/update-sale.input';
-import { CloseSaleInput } from './dto/close-sale.input';
 import { CreateReturnInput } from './dto/create-return.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { AccountRechargeService } from '../account-recharge/account-recharge.service';
@@ -11,6 +10,7 @@ import { TokenTransactionType } from '../token-transaction/dto/create-token-tran
 import { StoreService } from '../store/store.service';
 import { WorkerService } from '../worker/worker.service';
 import { BusinessService } from '../business/business.service';
+import { PaymentTransactionService } from '../payment-transaction/payment-transaction.service';
 import { ProductService } from '../product/product.service';
 import { LoyaltyService } from '../loyalty-program/loyalty-program.service';
 import { GenerateReceiptInput } from './dto/receipt.input';
@@ -18,14 +18,40 @@ import { promisify } from 'util';
 import { exec } from 'child_process';
 import { createWriteStream, mkdir } from 'fs';
 import { subDays } from 'date-fns';
-import { PaymentMethod } from '../payment-transaction/dto/create-payment-transaction.input';
+import { PaymentMethod, PaymentStatus } from '../payment-transaction/dto/create-payment-transaction.input';
 import { PubSub } from 'graphql-subscriptions';
-import { AuthPayload } from 'src/auth/entities/auth-payload.entity';
+import { AuthPayload } from '../auth/entities/auth-payload.entity';
 import { UpdateSaleProductInput } from './dto/update-sale-product.input';
+import { CloseSaleInput, PaymentDetailsInput } from './dto/close-sale.input';
+import { Worker } from '../generated/prisma/client';
+import { WorkerEntity } from 'src/worker/entities/worker.entity';
 const execAsync = promisify(exec);
 const mkdirAsync = promisify(mkdir);
 // import PDFDocument from 'pdfkit';
 const PDFDocument = require('pdfkit');
+
+// Chart data point types
+interface DailyChartPoint {
+  name: string;
+  startHour: number;
+  endHour: number;
+}
+
+interface PeriodChartPoint {
+  name: string;
+  date: Date;
+}
+
+type ChartDataPoint = DailyChartPoint | PeriodChartPoint;
+
+// Type guards
+function isDailyChartPoint(point: ChartDataPoint): point is DailyChartPoint {
+  return 'startHour' in point && 'endHour' in point;
+}
+
+function isPeriodChartPoint(point: ChartDataPoint): point is PeriodChartPoint {
+  return 'date' in point;
+}
 
 // Service
 @Injectable()
@@ -38,6 +64,7 @@ export class SaleService {
     private productService: ProductService,
     private accountRechargeService: AccountRechargeService,
     private tokenTransactionService: TokenTransactionService,
+    private paymentTransactionService: PaymentTransactionService,
     private loyaltyService: LoyaltyService,
     @Inject('PUB_SUB') private pubSub: PubSub,
   ) {}
@@ -48,20 +75,27 @@ export class SaleService {
     // Validate store and access
     await this.storeService.verifyStoreAccess(storeId, user);
 
-    // Validate worker
-    const worker = await this.workerService.findOne(workerId);
-    if (!worker) throw new Error("Worker not found");
-    
-    // Check worker access based on user role
+    let worker: Worker | null = null;
+    let actualWorkerId: string | undefined = workerId;
+
+    // Handle worker validation based on user role
     if (user.role === 'worker') {
       // Workers can only create sales for themselves
-      if (worker.id !== user.id) {
-        throw new Error('Workers can only create sales for themselves');
-      }
+      worker = await this.workerService.findOne(user.id);
+      if (!worker) throw new Error("Worker not found");
+      actualWorkerId = user.id;
     } else if (user.role === 'business') {
-      // Business owners can create sales for any worker in their business
-      if (worker.businessId !== user.id) {
-        throw new Error('Business can only create sales for workers in their business');
+      // Business owners can create sales with or without a specific worker
+      if (workerId) {
+        worker = await this.workerService.findOne(workerId);
+        if (!worker) throw new Error("Worker not found");
+        if (worker.businessId !== user.id) {
+          throw new Error('Business can only create sales for workers in their business');
+        }
+        actualWorkerId = workerId;
+      } else {
+        // Business sale without specific worker
+        actualWorkerId = undefined;
       }
     } else {
       throw new Error('Unauthorized to create sales');
@@ -122,19 +156,22 @@ export class SaleService {
 
     // Handle token payment
     if (paymentMethod === 'TOKEN') {
-      const balance = await this.accountRechargeService.getBalance(clientId || worker.businessId, clientId ? 'client' : 'business');
+      let bId = ''
+      if (worker) bId = worker.businessId
+      else bId = user.id
+      const balance = await this.accountRechargeService.getBalance(clientId || bId, clientId ? 'client' : 'business');
       if (balance < finalTotal) {
         throw new Error('Insufficient balance for token payment');
       }
       await this.accountRechargeService.create(
         {
           clientId: clientId || undefined,
-          businessId: clientId ? undefined : worker.businessId,
+          businessId: clientId ? undefined : bId,
           amount: -finalTotal,
           method: RechargeMethod.TOKEN,
           origin: Country.DRC,
         },
-        clientId || worker.businessId,
+        clientId || bId,
         clientId ? 'client' : 'business',
       );
     }
@@ -213,7 +250,8 @@ export class SaleService {
     }
 
     // Update business sales metrics
-    await this.businessService.updateTotalProuctSold(worker.businessId, {
+    const businessId = worker ? worker.businessId : user.id;
+    await this.businessService.updateTotalProuctSold(businessId, {
       totalProductsSold: { increment: saleProducts ? saleProducts.reduce((sum, sp) => sum + sp.quantity, 0) : 0 },
     });
 
@@ -369,7 +407,7 @@ export class SaleService {
   }
 
   async close(closeSaleInput: CloseSaleInput, user : AuthPayload) {
-    const { saleId, paymentMethod, status } = closeSaleInput;
+    const { saleId, paymentMethod, status, paymentDetails } = closeSaleInput;
 
     const sale = await this.prisma.sale.findUnique({
       where: { id: saleId },
@@ -379,33 +417,19 @@ export class SaleService {
       throw new Error('Sale not found');
     }
     await this.storeService.verifyStoreAccess(sale.storeId, user);
+    
+    // Allow business role to perform all operations
+    // Only restrict workers to their own sales
     if (user.role === 'worker' && sale.workerId !== user.id) {
       throw new Error('Workers can only close their own sales');
     }
+    // Business users can close any sale in their business (already verified by verifyStoreAccess)
     if (sale.status !== 'OPEN') {
       throw new Error('Sale is not OPEN');
     }
 
-    // Handle payment
-    if (paymentMethod === 'TOKEN' && sale.paymentMethod !== 'TOKEN') {
-      const worker = await this.workerService.findOne(sale.workerId);
-      if (!worker) throw new Error("Worker not found");
-      const balance = await this.accountRechargeService.getBalance(sale.clientId || worker.businessId, sale.clientId ? 'client' : 'business');
-      if (balance < sale.totalAmount) {
-        throw new Error('Insufficient balance for token payment');
-      }
-      await this.accountRechargeService.create(
-        {
-          clientId: sale.clientId || undefined,
-          businessId: sale.clientId ? undefined : worker.businessId,
-          amount: -sale.totalAmount,
-          method: RechargeMethod.TOKEN,
-          origin: Country.DRC,
-        },
-        sale.clientId || worker.businessId,
-        sale.clientId ? 'client' : 'business',
-      );
-    }
+    // Handle different payment methods
+    await this.processPayment(sale, paymentMethod, paymentDetails, user);
 
     // Award loyalty points if closing to CLOSED
     if ((status || 'CLOSED') === 'CLOSED' && sale.clientId) {
@@ -444,6 +468,186 @@ export class SaleService {
     });
 
     return closedSale
+  }
+
+  private async processPayment(sale: any, paymentMethod: string, paymentDetails: PaymentDetailsInput | undefined, user: AuthPayload) {
+    // Get worker info if sale has workerId, otherwise use business info
+    let worker: Worker | null;
+    let businessId = '';
+
+    if (sale.workerId) {
+      worker = await this.workerService.findOne(sale.workerId);
+      if (!worker) throw new Error("Worker not found");
+      businessId = worker.businessId;
+    } else {
+      // If no worker, get business from store
+      businessId = sale.store.businessId;
+    }
+
+    // If current user is business, they can process any sale in their business
+    if (user.role === 'business' && user.id !== businessId) {
+      throw new Error('Business can only process payments for their own sales');
+    }
+
+    switch (paymentMethod) {
+      case 'TOKEN':
+        await this.processTokenPayment(sale, { businessId }, user);
+        break;
+      case 'MOBILE_MONEY':
+        await this.processMobileMoneyPayment(sale, paymentDetails, { businessId }, user);
+        break;
+      case 'CARD':
+        await this.processCardPayment(sale, paymentDetails, { businessId }, user);
+        break;
+      case 'CASH':
+        // Cash payment doesn't require additional processing
+        break;
+      default:
+        throw new Error(`Unsupported payment method: ${paymentMethod}`);
+    }
+  }
+
+  private async processTokenPayment(sale: any, workerInfo: any, user: AuthPayload) {
+    // Calculate token amount (1 uTn = $10)
+    const tokenAmount = sale.totalAmount / 10;
+    
+    // Check if client or business is paying
+    const payerId = sale.clientId || user.id;
+    const payerType = sale.clientId ? 'client' : 'business';
+    
+    const balance = await this.accountRechargeService.getBalance(payerId, payerType);
+    if (balance < sale.totalAmount) {
+      throw new Error('Insufficient token balance for payment');
+    }
+
+    // Deduct from payer (client or business)
+    await this.accountRechargeService.create(
+      {
+        clientId: sale.clientId || undefined,
+        businessId: sale.clientId ? undefined : workerInfo.businessId,
+        amount: -sale.totalAmount,
+        method: RechargeMethod.TOKEN,
+        origin: Country.DRC,
+      },
+      payerId,
+      payerType,
+    );
+
+    // Credit to business (if client paid) or worker's business (if business paid)
+    if (sale.clientId) {
+      // Client paid, credit business
+      await this.accountRechargeService.create(
+        {
+          businessId: workerInfo.businessId,
+          amount: sale.totalAmount,
+          method: RechargeMethod.TOKEN,
+          origin: Country.DRC,
+        },
+        workerInfo.businessId,
+        'business',
+      );
+    }
+  }
+
+  private async processMobileMoneyPayment(sale: any, paymentDetails: PaymentDetailsInput | undefined, workerInfo: any, user: AuthPayload) {
+    if (!paymentDetails?.mobileMoneyMethod || !paymentDetails?.country) {
+      throw new Error('Mobile money method and country are required for mobile money payments');
+    }
+
+    // Generate mock payment code based on mobile money type and country
+    const paymentCode = this.generateMobileMoneyCode(paymentDetails.mobileMoneyMethod, paymentDetails.country);
+    
+    // Create payment transaction record
+    await this.paymentTransactionService.create({
+      amount: sale.totalAmount,
+      method: PaymentMethod.MOBILE_MONEY,
+      status: paymentDetails.operatorTransactionId ? PaymentStatus.COMPLETED : PaymentStatus.PENDING,
+      qrCode: paymentCode,
+    }, sale.clientId);
+
+    // If operator transaction ID is provided, mark as completed
+    if (paymentDetails.operatorTransactionId) {
+      // Credit business account
+      await this.accountRechargeService.create(
+        {
+          businessId: workerInfo.businessId,
+          amount: sale.totalAmount,
+          method: paymentDetails.mobileMoneyMethod,
+          origin: paymentDetails.country,
+        },
+        workerInfo.businessId,
+        'business',
+      );
+    }
+  }
+
+  private async processCardPayment(sale: any, paymentDetails: PaymentDetailsInput | undefined, workerInfo: any, user: AuthPayload) {
+    if (!paymentDetails?.cardNumber || !paymentDetails?.cardHolderName || 
+        !paymentDetails?.expiryDate || !paymentDetails?.cvv) {
+      throw new Error('Complete card information is required for card payments');
+    }
+
+    // Simulate card processing
+    const isValidCard = this.validateCardDetails(paymentDetails);
+    if (!isValidCard) {
+      throw new Error('Invalid card details');
+    }
+
+    // Create payment transaction record
+    await this.paymentTransactionService.create({
+      amount: sale.totalAmount,
+      method: PaymentMethod.CARD,
+      status: PaymentStatus.COMPLETED,
+    }, sale.clientId);
+
+    // Credit business account
+    await this.accountRechargeService.create(
+      {
+        businessId: workerInfo.businessId,
+        amount: sale.totalAmount,
+        method: RechargeMethod.TOKEN, // Convert to platform tokens
+        origin: Country.DRC,
+      },
+      workerInfo.businessId,
+      'business',
+    );
+  }
+
+  private generateMobileMoneyCode(method: RechargeMethod, country: Country): string {
+    const prefixes = {
+      [RechargeMethod.MTN_MONEY]: 'MTN',
+      [RechargeMethod.AIRTEL_MONEY]: 'AIR',
+      [RechargeMethod.ORANGE_MONEY]: 'ORA',
+      [RechargeMethod.MPESA]: 'MPE',
+    };
+
+    const countryCode = country.substring(0, 2);
+    const prefix = prefixes[method] || 'MOB';
+    const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    return `*${prefix}*${countryCode}*${randomCode}#`;
+  }
+
+  private validateCardDetails(paymentDetails: PaymentDetailsInput): boolean {
+    // Basic card validation (in real implementation, use proper card validation)
+    const cardNumber = paymentDetails.cardNumber?.replace(/\s/g, '');
+    if (!cardNumber || cardNumber.length < 13 || cardNumber.length > 19) {
+      return false;
+    }
+
+    // Check expiry date format (MM/YY)
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!paymentDetails.expiryDate || !expiryRegex.test(paymentDetails.expiryDate)) {
+      return false;
+    }
+
+    // Check CVV (3-4 digits)
+    const cvvRegex = /^\d{3,4}$/;
+    if (!paymentDetails.cvv || !cvvRegex.test(paymentDetails.cvv)) {
+      return false;
+    }
+
+    return true;
   }
 
   async createReturn(createReturnInput: CreateReturnInput, user : AuthPayload) {
@@ -1004,16 +1208,20 @@ export class SaleService {
     
     const now = new Date();
     let startDate: Date;
+    let chartDataPoints: ChartDataPoint[] = [];
     
     switch (period) {
       case 'week':
         startDate = subDays(now, 7);
+        chartDataPoints = this.generateWeeklyChartPoints();
         break;
       case 'month':
         startDate = subDays(now, 30);
+        chartDataPoints = this.generateMonthlyChartPoints();
         break;
       default:
         startDate = subDays(now, 1);
+        chartDataPoints = this.generateDailyChartPoints();
     }
 
     const whereClause: any = {
@@ -1067,6 +1275,9 @@ export class SaleService {
       })
     );
 
+    // Generate chart data with actual sales data
+    const chartData = await this.generateChartData(storeId, period, user, chartDataPoints);
+
     return {
       totalSales: salesMetrics._count,
       totalRevenue: salesMetrics._sum.totalAmount || 0,
@@ -1076,8 +1287,105 @@ export class SaleService {
         method: pm.paymentMethod,
         count: pm._count,
         amount: pm._sum.totalAmount || 0
-      }))
+      })),
+      chartData
     };
+  }
+
+  private generateDailyChartPoints(): DailyChartPoint[] {
+    const hours: DailyChartPoint[] = [];
+    for (let i = 0; i < 24; i++) {
+      hours.push({
+        name: `${i}:00`,
+        startHour: i,
+        endHour: i + 1
+      });
+    }
+    return hours;
+  }
+
+  private generateWeeklyChartPoints(): PeriodChartPoint[] {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const now = new Date();
+    const weekData: PeriodChartPoint[] = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = subDays(now, i);
+      weekData.push({
+        name: days[date.getDay() === 0 ? 6 : date.getDay() - 1],
+        date: date
+      });
+    }
+    return weekData;
+  }
+
+  private generateMonthlyChartPoints(): PeriodChartPoint[] {
+    const now = new Date();
+    const monthData: PeriodChartPoint[] = [];
+    
+    for (let i = 29; i >= 0; i--) {
+      const date = subDays(now, i);
+      monthData.push({
+        name: `${date.getDate()}/${date.getMonth() + 1}`,
+        date: date
+      });
+    }
+    return monthData;
+  }
+
+  private async generateChartData(storeId: string, period: string, user: AuthPayload, chartDataPoints: ChartDataPoint[]) {
+    const whereClause: any = {
+      storeId,
+      status: { not: 'REFUNDED' }
+    };
+    
+    if (user.role === 'worker') {
+      whereClause.workerId = user.id;
+    }
+
+    const chartData = await Promise.all(
+      chartDataPoints.map(async (point) => {
+        let periodWhereClause = { ...whereClause };
+        
+        if (period === 'day' && isDailyChartPoint(point)) {
+          // For daily view, group by hours
+          const startOfDay = new Date();
+          startOfDay.setHours(point.startHour, 0, 0, 0);
+          const endOfDay = new Date();
+          endOfDay.setHours(point.endHour, 0, 0, 0);
+          
+          periodWhereClause.createdAt = {
+            gte: startOfDay,
+            lt: endOfDay
+          };
+        } else if (isPeriodChartPoint(point)) {
+          // For weekly and monthly views, group by days
+          const startOfDay = new Date(point.date);
+          startOfDay.setHours(0, 0, 0, 0);
+          const endOfDay = new Date(point.date);
+          endOfDay.setHours(23, 59, 59, 999);
+          
+          periodWhereClause.createdAt = {
+            gte: startOfDay,
+            lte: endOfDay
+          };
+        }
+
+        const salesData = await this.prisma.sale.aggregate({
+          where: periodWhereClause,
+          _count: true,
+          _sum: { totalAmount: true }
+        });
+
+        return {
+          name: point.name,
+          sales: salesData._sum.totalAmount || 0,
+          transactions: salesData._count || 0
+        };
+      })
+    );
+
+    return chartData;
   }
 
   async addSaleProduct(input: {

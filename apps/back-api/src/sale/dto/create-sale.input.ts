@@ -9,9 +9,10 @@ export class CreateSaleInput {
   @IsString()
   storeId: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsString()
-  workerId: string;
+  workerId?: string;
 
   @Field({ nullable: true })
   @IsOptional()

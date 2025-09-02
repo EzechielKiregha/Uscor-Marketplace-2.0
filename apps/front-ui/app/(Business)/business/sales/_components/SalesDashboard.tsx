@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import { GET_SALES_DASHBOARD } from '@/graphql/sales.gql';
 import Loader from '@/components/seraui/Loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ComposedChart, Line, LineChart } from 'recharts';
 import { DollarSign, TrendingUp, Package, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
@@ -61,15 +61,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   );
 
   const dashboardData = data?.salesDashboard;
-  const chartData = [
-    { name: 'Mon', sales: 4000 },
-    { name: 'Tue', sales: 3000 },
-    { name: 'Wed', sales: 2000 },
-    { name: 'Thu', sales: 2780 },
-    { name: 'Fri', sales: 1890 },
-    { name: 'Sat', sales: 2390 },
-    { name: 'Sun', sales: 3490 },
-  ];
+  const chartData = dashboardData?.chartData || [];
 
   return (
     <Card>
@@ -121,16 +113,35 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
           </div>
         </div>
 
-        <div className="h-[200px] mb-6">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="sales" fill="hsl(var(--primary))" />
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="mb-6">
+          <div className="flex items-center gap-4 mb-2 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(var(--primary))' }}></div>
+              <span>Sales ($)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded bg-muted-foreground opacity-60"></div>
+              <span>Transactions</span>
+            </div>
+          </div>
+          <div className="h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
+                <Tooltip
+                  formatter={(value, name) => [
+                    name === 'sales' ? `$${Number(value).toFixed(2)}` : `${value} transactions`,
+                    name === 'sales' ? 'Sales' : 'Transactions'
+                  ]}
+                />
+                <Bar yAxisId="left" dataKey="sales" fill="hsl(var(--primary))" />
+                <Bar yAxisId="right" dataKey="transactions" fill="hsl(var(--muted-foreground))" opacity={0.6} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
         <div>

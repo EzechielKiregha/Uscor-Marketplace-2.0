@@ -20,10 +20,13 @@ export class WorkerResolver {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('worker', 'business') // Allow workers to view their own data, businesses to view their workers
   @Query(() => [WorkerEntity], { name: 'workers', description: 'Retrieves all workers with their relations.' })
-  async getWorkers(@Context() context) {
+  async getWorkers(
+    @Context() context,
+    @Args('storeId', { type: () => String, nullable: true }) storeId?: string,
+  ) {
     const user = context.req.user;
     console.log('Authenticated user:', user); // Debugging
-    return this.workerService.findAll();
+    return this.workerService.findAll(storeId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -41,9 +44,9 @@ export class WorkerResolver {
   @Roles('worker')
   @Mutation(() => WorkerEntity, { description: 'Updates a worker’s details.' })
   async updateWorker(
+    @Context() context,
     @Args('id', { type: () => String }) id: string,
     @Args('updateWorkerInput') updateWorkerInput: UpdateWorkerInput,
-    @Context() context,
   ) {
     const user = context.req.user;
     if (user.id !== id) {

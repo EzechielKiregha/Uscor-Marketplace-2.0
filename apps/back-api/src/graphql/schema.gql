@@ -663,6 +663,10 @@ type AuthPayload {
   email: String
 }
 
+type UserPayload {
+  role: String!
+}
+
 type AuthPayloadClient {
   id: String!
   email: String!
@@ -717,12 +721,19 @@ type PaymentMethodStat {
   amount: Float!
 }
 
+type ChartDataPoint {
+  name: String!
+  sales: Float!
+  transactions: Int!
+}
+
 type SalesDashboard {
   totalSales: Int!
   totalRevenue: Float!
   averageTicket: Float!
   topProducts: [TopProduct!]!
   paymentMethods: [PaymentMethodStat!]!
+  chartData: [ChartDataPoint!]!
 }
 
 type DeleteResponse {
@@ -845,8 +856,14 @@ type Query {
   """Retrieves a single client by ID."""
   client(id: String!): ClientEntity!
 
+  """Find client by email."""
+  clientByEmail(email: String!): ClientEntity
+
+  """Search clients by query."""
+  searchClients(query: String!): [ClientEntity!]!
+
   """Retrieves all workers with their relations."""
-  workers: [WorkerEntity!]!
+  workers(storeId: String): [WorkerEntity!]!
 
   """Retrieves a single worker by ID."""
   worker(id: String!): WorkerEntity!
@@ -886,6 +903,7 @@ type Query {
 
   """Retrieves a single freelance order by ID."""
   freelanceOrder(id: String!): FreelanceOrderEntity!
+  whatIsUserRole(SignInInput: SignInInput!): UserPayload!
   verifyCurrentUser: AuthPayload!
   postOfSale(id: Int!): PostOfSaleEntity!
 
@@ -946,6 +964,11 @@ type Query {
   shiftsByWorker(workerId: String!): [ShiftEntity!]!
 }
 
+input SignInInput {
+  email: String!
+  password: String!
+}
+
 input LowStockAlertInput {
   storeId: String!
   threshold: Int!
@@ -999,6 +1022,9 @@ type Mutation {
 
   """Creates a new client with hashed password."""
   createClient(createClientInput: CreateClientInput!): ClientEntity!
+
+  """Creates a new client for POS with minimal info."""
+  createClientForPOS(createClientInput: CreateClientForPOSInput!): ClientEntity!
 
   """Updates a client’s details."""
   updateClient(id: String!, updateClientInput: UpdateClientInput!): ClientEntity!
@@ -1093,7 +1119,7 @@ type Mutation {
   createSale(input: CreateSaleInput!): SaleEntity!
   updateSale(id: String!, input: UpdateSaleInput!): SaleEntity!
   closeSale(input: CloseSaleInput!): SaleEntity!
-  completeSale(id: String!, paymentMethod: String!): SaleEntity!
+  completeSale(id: String!, paymentMethod: String!, paymentDetails: PaymentDetailsInput): SaleEntity!
   addSaleProduct(input: AddSaleProductInput!): SaleProductEntity!
   updateSaleProduct(id: String!, input: UpdateSaleProductInput!): SaleProductEntity!
   removeSaleProduct(id: String!): DeleteResponse!
@@ -1286,6 +1312,13 @@ input CreateClientInput {
   isVerified: Boolean!
 }
 
+input CreateClientForPOSInput {
+  email: String!
+  fullName: String
+  phone: String
+  address: String
+}
+
 input UpdateClientInput {
   username: String
   email: String
@@ -1419,11 +1452,6 @@ input AssignBusinessesInput {
   businessIds: [String!]!
 }
 
-input SignInInput {
-  email: String!
-  password: String!
-}
-
 input CreatePostOfSaleInput {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -1448,7 +1476,7 @@ input UpdateCategoryInput {
 
 input CreateSaleInput {
   storeId: String!
-  workerId: String!
+  workerId: String
   clientId: String
   totalAmount: Float
   discount: Float
@@ -1475,6 +1503,19 @@ input CloseSaleInput {
   saleId: String!
   paymentMethod: PaymentMethod!
   status: SaleStatus
+  paymentDetails: PaymentDetailsInput
+}
+
+input PaymentDetailsInput {
+  mobileMoneyMethod: RechargeMethod
+  country: Country
+  operatorTransactionId: String
+  screenshotUrl: String
+  cardNumber: String
+  cardHolderName: String
+  expiryDate: String
+  cvv: String
+  tokenAmount: String
 }
 
 input AddSaleProductInput {

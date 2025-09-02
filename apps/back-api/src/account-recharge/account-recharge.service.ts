@@ -59,8 +59,8 @@ export class AccountRechargeService {
     const recharges = await this.prisma.accountRecharge.findMany({
       where: {
         OR: [
-          { clientId: userRole === 'client' ? userId : undefined },
           { businessId: userRole === 'business' ? userId : undefined },
+          { clientId: userRole === 'client' ? userId : undefined },
         ],
       },
       select: { amount: true },

@@ -15,6 +15,14 @@ export const getLoginMutation = (role: string) => gql`
   }
 `;
 
+export const GET_ROLE_IF_USER_EXIST = gql`
+  query WhatIsUserRole($SignInInput: SignInInput!) {
+    whatIsUserRole(SignInInput: $SignInInput) {
+      role
+    }
+  }
+`;
+
 // GraphQL Mutations
 export const CREATE_CLIENT = gql`
   mutation CreateClient($createClientInput: CreateClientInput!) {

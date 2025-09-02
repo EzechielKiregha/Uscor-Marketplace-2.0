@@ -12,7 +12,7 @@ import {
 } from '@/graphql/sales.gql';
 import { useToast } from '@/components/toast-provider';
 
-export const useSales = (storeId: string, wUserId: string) => {
+export const useSales = (storeId: string, wUserId: string, role?: string) => {
   const [currentSaleId, setCurrentSaleId] = useState<string | null>(null);
   const {showToast} = useToast()
   
@@ -59,13 +59,13 @@ export const useSales = (storeId: string, wUserId: string) => {
   });
 
   // Create a new sale
-  const createSale = useCallback(async (clientId?: string) => {
+  const createSale = useCallback(async (workerId?: string, clientId?: string) => {
     try {
       const { data } = await createSaleMutation({
         variables: { 
           input: { 
             storeId,
-            workerId: wUserId,
+            workerId: workerId, // Use provided workerId (can be undefined for business sales)
             clientId: clientId || undefined, // Optional client
             totalAmount: 0,
             discount: 0,
@@ -79,17 +79,19 @@ export const useSales = (storeId: string, wUserId: string) => {
       setCurrentSaleId(newSaleId);
       showToast('success', 'New Sale', 'Sale created successfully');
       return newSaleId;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Create sale error:', error);
-      showToast('error', 'Error', 'Failed to create sale');
+      showToast('error', 'Error', error.message || 'Failed to create sale');
       throw error;
     }
-  }, [storeId, createSaleMutation, wUserId]);
+  }, [storeId, createSaleMutation]);
 
   // Add product to current sale
   const addProductToSale = useCallback(async (productId: string, quantity: number = 1, modifiers?: any) => {
     if (!currentSaleId) {
-      await createSale();
+      // For auto-creating sales when adding products, use current user as worker if they're a worker
+      const workerId = role === 'worker' ? wUserId : undefined;
+      await createSale(workerId);
     }
     
     try {

@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 // 📦 Get All Workers
 export const GET_WORKERS = gql`
-  query GetWorkers {
-    workers {
+  query GetWorkers($storeId: String) {
+    workers(storeId: $storeId) {
       id
       email
       fullName

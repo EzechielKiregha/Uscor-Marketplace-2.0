@@ -39,8 +39,22 @@ export class WorkerService {
     });
   }
 
-  async findAll() {
+  async findAll(storeId?: string) {
+    const whereClause: any = {};
+    
+    if (storeId) {
+      // Filter workers by store - workers belong to a business that owns the store
+      whereClause.business = {
+        stores: {
+          some: {
+            id: storeId
+          }
+        }
+      };
+    }
+
     return this.prisma.worker.findMany({
+      where: whereClause,
       include: {
         business: { select: { id: true, name: true, email: true, description: true, createdAt: true } },
         kyc: { select: { id: true, status: true, submittedAt: true, verifiedAt: true } },

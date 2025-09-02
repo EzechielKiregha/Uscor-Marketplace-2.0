@@ -25,6 +25,18 @@ export class PaymentMethodStat {
 }
 
 @ObjectType()
+export class ChartDataPoint {
+  @Field()
+  name: string;
+
+  @Field(() => Float)
+  sales: number;
+
+  @Field(() => Int)
+  transactions: number;
+}
+
+@ObjectType()
 export class SalesDashboard {
   @Field(() => Int)
   totalSales: number;
@@ -40,4 +52,7 @@ export class SalesDashboard {
 
   @Field(() => [PaymentMethodStat])
   paymentMethods: PaymentMethodStat[];
+
+  @Field(() => [ChartDataPoint])
+  chartData: ChartDataPoint[];
 }
