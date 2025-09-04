@@ -17,7 +17,7 @@ export const sidebarItems = [
   { href: '/business/inventory', icon: Package, label: 'Inventory' },
   { href: '/business/products', icon: Package, label: 'Products' },
   { href: '/business/dashboard/orders', icon: ShoppingCart, label: 'Orders' },
-  { href: '/business/services', icon: BriefcaseBusiness, label: 'Services' },
+  { href: '/business/freelance-services', icon: BriefcaseBusiness, label: 'Services' },
   { href: '/business/dashboard/chats', icon: MessageSquare, label: 'Messages', badge: true },
   { href: '/business/reposts', icon: Star, label: 'Reposts & Reowns' },
   { href: '/business/loyalty', icon: Star, label: 'Loyalty Program' },

@@ -16,7 +16,6 @@ export default function BusinessStoresPage() {
   const { isOpen, setIsOpen } = useOpenCreateStoreModal();
   const [searchTerm, setSearchTerm] = useState('');
   const { showToast } = useToast()
-  const bUser = useMe()
 
   const { data, loading, error, refetch } = useQuery(GET_STORES);
 
@@ -72,7 +71,7 @@ export default function BusinessStoresPage() {
           const totalSales = store.sales?.length || 0;
           const totalProducts = store.products?.length || 0;
           const totalRevenue = store.sales?.reduce((sum, sale) => sum + (sale.totalAmount || 0), 0) || 0;
-          const lowStockProducts = store.products?.filter(product => product.quantity < 10).length || 0;
+          const lowStockProducts = store.products?.filter(product => product.quantity < product.minQuantity).length || 0;
 
           return (
             <div key={store.id} className="border border-border rounded-lg overflow-hidden bg-card">

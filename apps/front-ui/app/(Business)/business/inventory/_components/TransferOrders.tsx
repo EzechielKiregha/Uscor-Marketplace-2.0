@@ -28,6 +28,7 @@ import { GET_STORES } from '@/graphql/store.gql';
 import { GET_PRODUCTS } from '@/graphql/product.gql';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Loader from '@/components/seraui/Loader';
+import { useMe } from '@/lib/useMe';
 
 interface TransferOrdersProps {
   storeId: string;
@@ -47,13 +48,14 @@ export default function TransferOrders({
   const [toStoreId, setToStoreId] = useState('');
   const [fromStoreId, setFromStoreId] = useState(storeId);
   const { showToast } = useToast()
+  const user = useMe();
 
   const {
     data: storesData,
     loading: storesLoading
   } = useQuery(GET_STORES, {
     variables: {
-      businessId: 'current-business-id'
+      businessId: user?.id
     },
     skip: !storeId
   });

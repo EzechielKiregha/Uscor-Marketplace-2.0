@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { CREATE_STORE, UPDATE_STORE } from '@/graphql/store.gql';
 import Loader from '@/components/seraui/Loader';
 import { useToast } from '@/components/toast-provider';
+import { useMe } from '@/lib/useMe';
 
 interface StoreFormProps {
   initialData?: any | null;
@@ -24,6 +25,7 @@ export default function StoreForm({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
+  const user = useMe();
 
   const [createStore] = useMutation(CREATE_STORE);
   const [updateStore] = useMutation(UPDATE_STORE);
@@ -43,7 +45,7 @@ export default function StoreForm({
     try {
       const storeData = {
         ...formData,
-        businessId: 'current-business-id' // In real app, get from useMe()
+        businessId: user?.id // In real app, get from useMe()
       };
 
       if (initialData) {

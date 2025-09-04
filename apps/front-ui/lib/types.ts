@@ -148,6 +148,7 @@ export interface ProductEntity {
   description?: string;
   price: number;
   quantity: number;
+  minQuantity: number;
   businessId: string;
   storeId: string;
   isPhysical: boolean;
@@ -207,9 +208,20 @@ export interface WorkerEntity {
   createdAt: Date;
   updatedAt: Date;
   business?: BusinessEntity;
+  workerServiceAssignments: WorkerServiceAssignmentEntity[];
   kyc?: KnowYourCustomerEntity;
   freelanceServices?: FreelanceServiceEntity[];
   chats: ChatEntity[];
+}
+
+export interface WorkerServiceAssignmentEntity {
+  id : string;
+  workerId : string;
+  freelanceServiceId : string;
+  freelanceService : FreelanceServiceEntity;
+  worker : WorkerEntity;
+  role?: string;
+  assignedAt: Date
 }
 
 export interface OrderEntity {

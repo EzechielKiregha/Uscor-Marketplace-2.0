@@ -25,6 +25,7 @@ import {
 import { useToast } from '@/components/toast-provider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Loader from '@/components/seraui/Loader';
+import { useMe } from '@/lib/useMe';
 
 interface RedemptionProcessProps {
   programId: string;
@@ -43,6 +44,7 @@ export default function RedemptionProcess({
   const [redemptionReason, setRedemptionReason] = useState('');
   const [transactionAmount, setTransactionAmount] = useState(0);
   const { showToast } = useToast()
+  const user = useMe();
 
   const {
     data: customersData,
@@ -50,7 +52,7 @@ export default function RedemptionProcess({
     refetch
   } = useQuery(GET_CUSTOMER_POINTS, {
     variables: {
-      businessId: 'current-business-id',
+      businessId: user?.id,
       clientId: 'current-client-id'
     },
     skip: !programId
@@ -74,7 +76,7 @@ export default function RedemptionProcess({
       await redeemPoints({
         variables: {
           input: {
-            businessId: 'current-business-id',
+            businessId: user?.id,
             clientId: selectedCustomer.clientId,
             points: pointsToRedeem,
             reason: redemptionReason || 'Redeemed reward'

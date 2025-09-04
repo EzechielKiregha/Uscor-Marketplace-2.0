@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { Users, Star, TrendingUp, Gift, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useMe } from '@/lib/useMe';
 
 interface LoyaltyProgramOverviewProps {
   program: any; // Replace with LoyaltyProgramEntity
@@ -23,6 +24,7 @@ export default function LoyaltyProgramOverview({
 }: LoyaltyProgramOverviewProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month'>('month');
   const [customerSearch, setCustomerSearch] = useState('');
+  const user = useMe();
 
   const {
     data: customersData,
@@ -30,7 +32,7 @@ export default function LoyaltyProgramOverview({
     refetch: refetchCustomers
   } = useQuery(GET_CUSTOMER_POINTS, {
     variables: {
-      businessId: 'current-business-id',
+      businessId: user?.id,
       clientId: 'current-client-id'
     },
     skip: !program?.id

@@ -73,21 +73,21 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
             size="sm"
             onClick={() => setPeriod('day')}
           >
-            Day
+            Today
           </Button>
           <Button
             variant={period === 'week' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setPeriod('week')}
           >
-            Week
+            Past 7 days
           </Button>
           <Button
             variant={period === 'month' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setPeriod('month')}
           >
-            Month
+            Past 30 days
           </Button>
         </div>
       </CardHeader>

@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMe } from '@/lib/useMe';
 
 interface ProgramConfigurationProps {
   program: any; // Replace with LoyaltyProgramEntity
@@ -40,6 +41,7 @@ export default function ProgramConfiguration({
   const [isCreating, setIsCreating] = useState(!program);
   const [validationErrors, setValidationErrors] = useState<any>({});
   const { showToast } = useToast()
+  const user = useMe();
 
   const [createProgram] = useMutation(CREATE_LOYALTY_PROGRAM, {
     refetchQueries: [GET_LOYALTY_PROGRAMS]
@@ -105,7 +107,7 @@ export default function ProgramConfiguration({
         await createProgram({
           variables: {
             input: {
-              businessId: 'current-business-id',
+              businessId: user?.id,
               name: formData.name,
               description: formData.description,
               pointsPerPurchase: formData.pointsPerPurchase,

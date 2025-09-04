@@ -329,30 +329,13 @@ export class BusinessService {
 
   private async getDashboardStats(businessId: string): Promise<DashboardStats> {
     const today = new Date();
-    const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 });
-    const endOfCurrentWeek = endOfWeek(today, { weekStartsOn: 1 });
-    const startOfPreviousWeek = startOfWeek(subDays(today, 7), { weekStartsOn: 1 });
-    const endOfPreviousWeek = endOfWeek(subDays(today, 7), { weekStartsOn: 1 });
+    const startOfCurrentMonth = startOfMonth(today);
+    const endOfCurrentMonth = endOfMonth(today);
     const startOfPreviousMonth = startOfMonth(subDays(today, 30));
     const endOfPreviousMonth = endOfMonth(subDays(today, 30));
 
-    const whereClauseCurrent: any = {
-      store: {
-        businessId
-      },
-      createdAt: { gte: startOfPreviousMonth, lte: endOfPreviousMonth },
-      status: { not: 'REFUNDED' }
-    };
-    const whereClausePrevious: any = {
-      store: {
-        businessId
-      },
-      createdAt: { gte: startOfPreviousMonth, lte: endOfPreviousMonth },
-      status: { not: 'REFUNDED' }
-    };
-
     // Single query for all order-related metrics
-    const [currentWeekMetrics, currentWeekSalesMetrics, previousWeekMetrics, previousWeekSalesMetrics, productMetrics, messageMetrics] = 
+    const [currentWeekMetrics, previousWeekMetrics, productMetrics, messageMetrics] = 
       await Promise.all([
         // Current week revenue and order count in one query
         this.prisma.order.aggregate({
@@ -362,18 +345,11 @@ export class BusinessService {
                 product: { businessId }
               }
             },
-            // payment: { status: "COMPLETED" },
-            createdAt: { gte: startOfCurrentWeek, lte: endOfCurrentWeek }
+            payment: { status: "COMPLETED" },
+            // createdAt: { gte: startOfCurrentMonth, lte: endOfCurrentMonth }
           },
           _sum: { totalAmount: true },
           _count: true
-        }),
-
-        this.prisma.sale.aggregate({
-          where: whereClauseCurrent,
-          _count: true,
-          _sum: { totalAmount: true },
-          _avg: { totalAmount: true }
         }),
 
         // Previous week revenue and order count in one query  
@@ -384,18 +360,11 @@ export class BusinessService {
                 product: { businessId }
               }
             },
-            // payment: { status: "COMPLETED" },
-            createdAt: { gte: startOfPreviousWeek, lte: endOfPreviousWeek }
+            payment: { status: "COMPLETED" },
+            // createdAt: { gte: startOfPreviousMonth, lte: endOfPreviousMonth }
           },
           _sum: { totalAmount: true },
           _count: true
-        }),
-
-        this.prisma.sale.aggregate({
-          where: whereClausePrevious,
-          _count: true,
-          _sum: { totalAmount: true },
-          _avg: { totalAmount: true }
         }),
 
         // Product metrics in one query
@@ -426,12 +395,10 @@ export class BusinessService {
 
     // Calculate changes
     const current_week_metrics = currentWeekMetrics._sum.totalAmount || 0;
-    const current_week_sales_metrics = currentWeekSalesMetrics._sum.totalAmount || 0;
     const previous_week_metrics = previousWeekMetrics._sum.totalAmount || 0;
-    const previous_week_sales_metrics = previousWeekSalesMetrics._sum.totalAmount || 0;
 
-    const totalRevenue = current_week_metrics + current_week_sales_metrics;
-    const previousRevenue = previous_week_metrics + previous_week_sales_metrics;
+    const totalRevenue = current_week_metrics ;
+    const previousRevenue = previous_week_metrics ;
     const revenueChange = previousRevenue ? 
       ((totalRevenue - previousRevenue) / previousRevenue) * 100 : 100;
 

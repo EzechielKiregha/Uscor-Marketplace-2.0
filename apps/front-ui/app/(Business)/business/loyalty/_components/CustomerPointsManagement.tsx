@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMe } from '@/lib/useMe';
 
 interface CustomerPointsManagementProps {
   programId: string;
@@ -41,7 +42,8 @@ export default function CustomerPointsManagement({
   const [pointsToAdd, setPointsToAdd] = useState(0);
   const [pointsToRedeem, setPointsToRedeem] = useState(0);
   const [redemptionReason, setRedemptionReason] = useState('');
-  const { showToast } = useToast()
+  const { showToast } = useToast();
+  const user = useMe();
 
   const {
     data: customersData,
@@ -49,7 +51,7 @@ export default function CustomerPointsManagement({
     refetch
   } = useQuery(GET_CUSTOMER_POINTS, {
     variables: {
-      businessId: 'current-business-id',
+      businessId: user?.id,
       clientId: 'current-client-id'
     },
     skip: !programId
@@ -74,7 +76,7 @@ export default function CustomerPointsManagement({
       await earnPoints({
         variables: {
           input: {
-            businessId: 'current-business-id',
+            businessId: user?.id,
             clientId: selectedCustomer.clientId,
             points: pointsToAdd,
             reason: 'Manual adjustment'
@@ -98,7 +100,7 @@ export default function CustomerPointsManagement({
       await redeemPoints({
         variables: {
           input: {
-            businessId: 'current-business-id',
+            businessId: user?.id,
             clientId: selectedCustomer.clientId,
             points: pointsToRedeem,
             reason: redemptionReason || 'Redeemed reward'

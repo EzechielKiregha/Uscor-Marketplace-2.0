@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { DollarSign, Package, ShoppingCart, MessageSquare, Plus, Search } from 'lucide-react';
 import { GET_BUSINESS_DASHBOARD } from '@/graphql/business.gql';
-import { OrderEntity, StoreEntity } from '@/lib/types';
+import { OrderEntity, ProductEntity, SaleEntity, StoreEntity } from '@/lib/types';
 import { useMe } from '@/lib/useMe';
 import { useOpenOrderDetailsModal } from '../_hooks/use-open-order-details-modal';
 import { useEffect, useState } from 'react';
@@ -27,9 +27,13 @@ export default function BusinessDashboardPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+  // Calculate store statistics
+  const [totalSales, setTotalSales] = useState<number>(0)
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+  const [totalRevenue, setTotalRevenue] = useState<number>(0);
+  const [lowStockProducts, setLowStockProducts] = useState<number>(0);
   const user = useMe();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
-
 
   const {
     data: storesData,
@@ -54,6 +58,47 @@ export default function BusinessDashboardPage() {
     }
   }, [storesData, selectedStoreId]);
 
+  // Calculate statistics for all stores combined
+  useEffect(() => {
+    if (storesData?.stores && businessData?.businessDashboard) {
+      let totalSalesCount = 0;
+      let totalRevenueAmount = 0;
+      let totalProductsCount = 0;
+      let lowStockCount = 0;
+
+      // Loop through all stores to aggregate data
+      storesData.stores.forEach((store: StoreEntity) => {
+        // Aggregate sales
+        totalSalesCount += store.sales?.length || 0;
+
+        // Aggregate revenue
+        const storeRevenue = store.sales?.reduce((sum: number, sale: SaleEntity) =>
+          sum + (sale.totalAmount || 0), 0) || 0;
+        totalRevenueAmount += storeRevenue;
+
+        // Aggregate products
+        totalProductsCount += store.products?.length || 0;
+
+        // Aggregate low stock products
+        const storeLowStock = store.products?.filter((product: ProductEntity) =>
+          product.quantity < product.minQuantity).length || 0;
+        lowStockCount += storeLowStock;
+      });
+
+      // Update state with aggregated values
+      setTotalSales(totalSalesCount);
+      setTotalProducts(totalProductsCount);
+      setTotalRevenue(totalRevenueAmount);
+      setLowStockProducts(lowStockCount);
+    }
+
+  }, [storesData, businessData]);
+
+  useEffect(() => {
+    if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
+      setSelectedStoreId(storesData.stores[0].id);
+    }
+  }, [storesData, selectedStoreId]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -74,7 +119,7 @@ export default function BusinessDashboardPage() {
   if (error || businessDataErro || storesError) return <div>Error loading dashboard</div>;
 
   const stats = businessData.businessDashboard.stats;
-  const salesData = businessData.businessDashboard.salesData;
+  // const salesData = businessData.businessDashboard.salesData;
 
   return (
     <div className="space-y-6">
@@ -91,9 +136,9 @@ export default function BusinessDashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">
-              +{stats.revenueChange}% from last month
+              +{((totalRevenue / totalSales) * 100).toFixed(2)}% from last month
             </p>
           </CardContent>
         </Card>
@@ -117,9 +162,9 @@ export default function BusinessDashboardPage() {
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalProducts}</div>
+            <div className="text-2xl font-bold">{totalProducts}</div>
             <p className="text-xs text-muted-foreground">
-              {stats.lowStockProducts} low stock items
+              {lowStockProducts} low stock items
             </p>
           </CardContent>
         </Card>
@@ -152,15 +197,6 @@ export default function BusinessDashboardPage() {
           ))}
         </select>
 
-        {/* <div className="relative w-full sm:w-64">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-          />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        </div> */}
-
         <Button
           variant="default"
           size="sm"
@@ -171,7 +207,7 @@ export default function BusinessDashboardPage() {
           disabled={!selectedStoreId}
         >
           <Plus className="h-4 w-4 mr-2" />
-          New
+          New Sale
         </Button>
       </div>
 

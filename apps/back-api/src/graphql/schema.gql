@@ -694,7 +694,7 @@ type MarkAsReadResponse {
 }
 
 type DashboardStats {
-  totalRevenue: Int!
+  totalRevenue: Float!
   revenueChange: Int!
   totalOrders: Int!
   ordersChange: Int!

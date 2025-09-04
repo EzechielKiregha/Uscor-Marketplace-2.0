@@ -27,6 +27,7 @@ import {
 import { useToast } from '@/components/toast-provider';
 import { GET_PRODUCTS } from '@/graphql/product.gql';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMe } from '@/lib/useMe';
 
 interface PurchaseOrdersProps {
   storeId: string;
@@ -46,6 +47,7 @@ export default function PurchaseOrders({
   const [supplierId, setSupplierId] = useState('');
   const [expectedDelivery, setExpectedDelivery] = useState('');
   const { showToast } = useToast()
+  const user = useMe();
 
   const {
     data: productsData,
@@ -62,7 +64,7 @@ export default function PurchaseOrders({
   //   loading: suppliersLoading
   // } = useQuery(GET_SUPPLIERS, {
   //   variables: {
-  //     businessId: 'current-business-id'
+  //     businessId: user?.id
   //   },
   //   skip: !storeId
   // });
@@ -99,7 +101,7 @@ export default function PurchaseOrders({
       await createPurchaseOrder({
         variables: {
           input: {
-            businessId: 'current-business-id',
+            businessId: user?.id,
             storeId,
             supplierId,
             expectedDelivery,
