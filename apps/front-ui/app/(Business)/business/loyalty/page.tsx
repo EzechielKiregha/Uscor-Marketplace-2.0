@@ -27,7 +27,7 @@ import { StoreEntity } from '@/lib/types';
 
 export default function LoyaltyProgramPage() {
   const { user, role, loading: authLoading } = useMe();
-  const { isOpen, setIsOpen } = useOpenCreateStoreModal();
+  // const { isOpen, setIsOpen } = useOpenCreateStoreModal();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'configuration' | 'customers' | 'redemption'>('overview');
 

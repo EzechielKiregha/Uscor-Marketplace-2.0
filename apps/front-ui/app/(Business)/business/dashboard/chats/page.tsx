@@ -4,20 +4,25 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { GET_CHATS, ON_MESSAGE_RECEIVED } from '@/graphql/chat.gql';
 import Loader from '@/components/seraui/Loader';
-import { MessageSquare, Search, MoreVertical, User, Package } from 'lucide-react';
+import { MessageSquare, Search, MoreVertical, User, Package, ArrowLeft } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import ChatThread from './_components/ChatThread';
 import { useOpenChatThreadModal } from '../../_hooks/use-open-chat-thread-modal';
+import { useMe } from '@/lib/useMe';
+import { Button } from '@/components/ui/button';
 
 export default function BusinessChatsPage() {
-  const { isOpen, setIsOpen } = useOpenChatThreadModal();
+  // const { isOpen, setIsOpen } = useOpenChatThreadModal();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [chats, setChats] = useState<any[]>([]);
+  const [showChatList, setShowChatList] = useState(true);
+
+  const user = useMe()
 
   const { data, loading, error, refetch } = useQuery(GET_CHATS, {
     variables: {
-      businessId: 'current-business-id',
+      businessId: user?.id,
       search: searchTerm
     }
   });
@@ -53,7 +58,14 @@ export default function BusinessChatsPage() {
 
   const handleChatSelect = (chatId: string) => {
     setActiveChatId(chatId);
-    setIsOpen({ openChatThreadModal: true, chatId });
+    // setIsOpen({ openChatThreadModal: true, chatId });
+    // On mobile, hide chat list when a chat is selected
+    setShowChatList(false);
+  };
+
+  const handleBackToList = () => {
+    setShowChatList(true);
+    setActiveChatId(null);
   };
 
   if (loading) return <Loader loading={true} />;
@@ -62,7 +74,7 @@ export default function BusinessChatsPage() {
   return (
     <div className="flex h-[calc(100vh-120px)] max-h-[calc(100vh-120px)] overflow-hidden">
       {/* Chat List */}
-      <div className="w-80 border-r border-border flex flex-col">
+      <div className={`${showChatList ? 'flex' : 'hidden'} md:flex w-full md:w-80 border-r border-border flex-col`}>
         <div className="p-4 border-b border-border">
           <div className="relative">
             <input
@@ -80,26 +92,25 @@ export default function BusinessChatsPage() {
           {chats.map(chat => (
             <div
               key={chat.id}
-              className={`p-4 border-b border-border cursor-pointer hover:bg-muted/50 ${activeChatId === chat.id ? 'bg-muted' : ''
+              className={`p-3 md:p-4 border-b border-border cursor-pointer hover:bg-muted/50 ${activeChatId === chat.id ? 'bg-muted' : ''
                 }`}
               onClick={() => handleChatSelect(chat.id)}
             >
               <div className="flex items-start gap-3">
-                {chat.client.avatar ? (
-                  <img
-                    src={chat.client.avatar}
-                    alt={chat.client.fullName}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm">
-                    {chat.client.fullName.charAt(0)}
-                  </div>
-                )}
+                <img
+                  src={chat.client ? chat.client.avatar : "avatar.png"}
+                  alt={chat.client ? chat.client.fullName : "avatar.png"}
+                  className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                  onError={
+                    (event) => {
+                      event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(chat.client ? chat.client.fullName.charAt(0) : "A")}`;
+                    }
+                  }
+                />
 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start">
-                    <h3 className="font-medium truncate">{chat.client.fullName}</h3>
+                    <h3 className="font-medium truncate text-sm md:text-base">{chat.client ? chat.client.fullName : "Anonymous"}</h3>
                     <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
                       {new Date(chat.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -144,14 +155,14 @@ export default function BusinessChatsPage() {
       </div>
 
       {/* Chat Thread */}
-      <div className="flex-1 flex flex-col">
+      <div className={`${!showChatList ? 'flex' : 'hidden'} md:flex flex-1 flex-col`}>
         {activeChatId ? (
-          <ChatThread chatId={activeChatId} />
+          <ChatThread chatId={activeChatId} onBack={handleBackToList} />
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center bg-muted/50">
-            <MessageSquare className="h-16 w-16 text-muted-foreground mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Select a conversation</h2>
-            <p className="text-muted-foreground">Click on a conversation to view messages</p>
+          <div className="flex-1 flex flex-col items-center justify-center bg-muted/50 p-4">
+            <MessageSquare className="h-12 md:h-16 w-12 md:w-16 text-muted-foreground mb-4" />
+            <h2 className="text-lg md:text-xl font-semibold mb-2 text-center">Select a conversation</h2>
+            <p className="text-muted-foreground text-center text-sm md:text-base">Click on a conversation to view messages</p>
           </div>
         )}
       </div>

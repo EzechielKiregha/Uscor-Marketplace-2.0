@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Package, Truck, CreditCard } from 'lucide-react';
 import { useOpenOrderDetailsModal } from '../../../_hooks/use-open-order-details-modal';
 import ResponsiveModal from '@/app/(Business)/business/_components/responsive-modal';
-import { OrderEntity } from '@/lib/types';
 
 export default function OrderDetailsModal() {
   const { isOpen, setIsOpen, orderId } = useOpenOrderDetailsModal();
@@ -88,7 +87,7 @@ export default function OrderDetailsModal() {
                 <Truck className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Shipping</h3>
               </div>
-              <p className="text-sm">Delivery Fee: ${data.order.deliveryFee.toFixed(2)}</p>
+              <p className="text-sm">Delivery Fee: ${data.order.deliveryFee ? data.order.deliveryFee : 0}</p>
               {data.order.shipping && (
                 <>
                   <p className="text-sm">Carrier: {data.order.shipping.carrier}</p>
@@ -104,7 +103,7 @@ export default function OrderDetailsModal() {
               </div>
               <p className="text-sm">Method: {data.order.payment?.method}</p>
               <p className="text-sm">Status: {data.order.payment?.status}</p>
-              <p className="font-medium mt-2">Total: ${data.order.totalAmount.toFixed(2)}</p>
+              <p className="font-medium mt-2">Total: {data.order.payment?.method === "TOKEN" ? (data.order.payment?.amount / 10).toFixed(2) : data.order.payment?.amount || 0} {data.order.payment?.method === "TOKEN" ? 'uTns' : '$'}</p>
             </div>
           </div>
 
@@ -113,23 +112,22 @@ export default function OrderDetailsModal() {
             <div className="space-y-3">
               {data.order.products.map((item: any) => (
                 <div key={item.id} className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                  {item.product.imageUrl ? (
-                    <img
-                      src={item.product.imageUrl}
-                      alt={item.product.title}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
-                      <span className="text-muted-foreground">No image</span>
-                    </div>
-                  )}
+                  <img
+                    src={item.product.medias && item.product.medias.length > 0 ? item.product.medias[0].url : 'image.png'}
+                    alt={item.product.title}
+                    className="w-16 h-16 bg-muted rounded flex items-center justify-center object-cover"
+                    onError={
+                      (event) => {
+                        event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}`;
+                      }
+                    }
+                  />
                   <div className="flex-1">
                     <h4 className="font-medium">{item.product.title}</h4>
-                    <p className="text-sm text-muted-foreground">${item.product.price.toFixed(2)} x {item.quantity}</p>
+                    <p className="text-sm text-muted-foreground">${item.product.price} x {item.quantity}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">${(item.product.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium">${(item.product.price * item.quantity)}</p>
                   </div>
                 </div>
               ))}

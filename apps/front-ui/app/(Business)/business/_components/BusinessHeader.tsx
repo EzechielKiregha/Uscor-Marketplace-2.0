@@ -12,6 +12,7 @@ import { sidebarItems } from './BusinessSidebar';
 import { useOpenCreateServiceModal } from '../_hooks/use-open-create-service-modal';
 import UserDropdown from '@/components/seraui/UserDrodown';
 import { MoonIcon, SunIcon } from '@/components/icons/Logos';
+import CreateServiceModal from './modals/CreateServiceModal';
 
 interface BusinessHeaderProps {
   business: any; // Replace with actual BusinessEntity type
@@ -78,7 +79,7 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsProductModalOpen(true)}
+            onClick={() => setIsProductModalOpen({ openCreateProductModal: true, initialProductData: null })}
           >
             Add Product
           </Button>
@@ -86,7 +87,7 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
           <Button
             variant="default"
             size="sm"
-            onClick={() => setIsServiceModalOpen(true)}
+            onClick={() => setIsServiceModalOpen({ openCreateServiceModal: true, initialServiceData: null })}
           >
             Add Service
           </Button>
@@ -95,7 +96,7 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
 
       {/* Modals */}
       <CreateProductModal />
-      {/* <CreateServiceModal /> */}
+      <CreateServiceModal />
 
       {/* Mobile menu overlay */}
       {showMobileMenu && (

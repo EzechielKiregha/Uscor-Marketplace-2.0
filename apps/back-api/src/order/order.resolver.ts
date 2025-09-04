@@ -1,16 +1,20 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context, Subscription } from '@nestjs/graphql';
 import { OrderService } from './order.service';
-import { OrderEntity } from './entities/order.entity';
+import { OrderEntity, PaginatedOrdersResponse } from './entities/order.entity';
 import { CreateOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
-import { UseGuards } from '@nestjs/common';
+import { ProcessPaymentInput } from './dto/process-payment.input';
+import { UseGuards, Inject } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { PubSub } from 'graphql-subscriptions';
 
 // Resolver
 @Resolver(() => OrderEntity)
 export class OrderResolver {
+  private pubSub = new PubSub();
+
   constructor(private readonly orderService: OrderService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -24,7 +28,12 @@ export class OrderResolver {
     if (user.id !== createOrderInput.clientId) {
       throw new Error('Clients can only create orders for themselves');
     }
-    return this.orderService.create(createOrderInput);
+    const order = await this.orderService.create(createOrderInput);
+    
+    // Publish subscription event
+    this.pubSub.publish('orderCreated', { orderCreated: order });
+    
+    return order;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -43,6 +52,33 @@ export class OrderResolver {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Query(() => PaginatedOrdersResponse, { name: 'businessOrders', description: 'Retrieves orders for a business.' })
+  async getBusinessOrders(
+    @Args('businessId', { type: () => String }) businessId: string,
+    @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
+    @Args('limit', { type: () => Int, defaultValue: 20 }) limit: number,
+    @Args('search', { type: () => String, nullable: true }) search?: string,
+    @Args('status', { type: () => String, nullable: true }) status?: string,
+    @Args('date', { type: () => String, nullable: true }) date?: string,
+    @Context() context?: any
+  ) {
+    return this.orderService.findBusinessOrders(businessId, page, limit, search, status, date);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Query(() => PaginatedOrdersResponse, { name: 'clientOrders', description: 'Retrieves orders for a client.' })
+  async getClientOrders(
+    @Args('clientId', { type: () => String }) clientId: string,
+    @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
+    @Args('limit', { type: () => Int, defaultValue: 20 }) limit: number,
+    @Context() context?: any
+  ) {
+    return this.orderService.findClientOrders(clientId, page, limit);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('client')
   @Mutation(() => OrderEntity, { description: 'Updates an order.' })
   async updateOrder(
@@ -58,7 +94,12 @@ export class OrderResolver {
     if (order.clientId !== user.id) {
       throw new Error('Clients can only update their own orders');
     }
-    return this.orderService.update(id, updateOrderInput);
+    const updatedOrder = await this.orderService.update(id, updateOrderInput);
+    
+    // Publish subscription event
+    this.pubSub.publish('orderUpdated', { orderUpdated: updatedOrder });
+    
+    return updatedOrder;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -74,5 +115,59 @@ export class OrderResolver {
       throw new Error('Clients can only delete their own orders');
     }
     return this.orderService.remove(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Mutation(() => OrderEntity, { description: 'Process payment for an order.' })
+  async processOrderPayment(
+    @Args('orderId', { type: () => String }) orderId: string,
+    @Args('input') input: ProcessPaymentInput,
+    @Context() context
+  ) {
+    const processedOrder = await this.orderService.processPayment(orderId, input);
+    
+    // Publish subscription event
+    this.pubSub.publish('orderPaymentProcessed', { orderPaymentProcessed: processedOrder });
+    
+    return processedOrder;
+  }
+
+  // Subscriptions
+  @Subscription(() => OrderEntity, {
+    filter: (payload, variables) => {
+      return payload.orderCreated.clientId === variables.clientId || 
+             payload.orderCreated.products?.some((p: any) => p.product.businessId === variables.businessId);
+    }
+  })
+  orderCreated(
+    @Args('clientId', { type: () => String }) clientId: string,
+    @Args('businessId', { type: () => String }) businessId: string
+  ) {
+    return this.pubSub.asyncIterableIterator('orderCreated');
+  }
+
+  @Subscription(() => OrderEntity, {
+    filter: (payload, variables) => {
+      return payload.orderUpdated.clientId === variables.clientId || 
+             payload.orderUpdated.products?.some((p: any) => p.product.businessId === variables.businessId);
+    }
+  })
+  orderUpdated(
+    @Args('clientId', { type: () => String }) clientId: string,
+    @Args('businessId', { type: () => String }) businessId: string
+  ) {
+    return this.pubSub.asyncIterableIterator('orderUpdated');
+  }
+
+  @Subscription(() => OrderEntity, {
+    filter: (payload, variables) => {
+      return payload.orderPaymentProcessed.id === variables.orderId;
+    }
+  })
+  orderPaymentProcessed(
+    @Args('orderId', { type: () => String }) orderId: string
+  ) {
+    return this.pubSub.asyncIterableIterator('orderPaymentProcessed');
   }
 }

@@ -27,17 +27,21 @@ export type AggregateLoyaltyProgram = {
 
 export type LoyaltyProgramAvgAggregateOutputType = {
   pointsPerPurchase: number | null
+  minimumPointsToRedeem: number | null
 }
 
 export type LoyaltyProgramSumAggregateOutputType = {
   pointsPerPurchase: number | null
+  minimumPointsToRedeem: number | null
 }
 
 export type LoyaltyProgramMinAggregateOutputType = {
   id: string | null
   businessId: string | null
   name: string | null
+  description: string | null
   pointsPerPurchase: number | null
+  minimumPointsToRedeem: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,7 +50,9 @@ export type LoyaltyProgramMaxAggregateOutputType = {
   id: string | null
   businessId: string | null
   name: string | null
+  description: string | null
   pointsPerPurchase: number | null
+  minimumPointsToRedeem: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,7 +61,9 @@ export type LoyaltyProgramCountAggregateOutputType = {
   id: number
   businessId: number
   name: number
+  description: number
   pointsPerPurchase: number
+  minimumPointsToRedeem: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -64,17 +72,21 @@ export type LoyaltyProgramCountAggregateOutputType = {
 
 export type LoyaltyProgramAvgAggregateInputType = {
   pointsPerPurchase?: true
+  minimumPointsToRedeem?: true
 }
 
 export type LoyaltyProgramSumAggregateInputType = {
   pointsPerPurchase?: true
+  minimumPointsToRedeem?: true
 }
 
 export type LoyaltyProgramMinAggregateInputType = {
   id?: true
   businessId?: true
   name?: true
+  description?: true
   pointsPerPurchase?: true
+  minimumPointsToRedeem?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -83,7 +95,9 @@ export type LoyaltyProgramMaxAggregateInputType = {
   id?: true
   businessId?: true
   name?: true
+  description?: true
   pointsPerPurchase?: true
+  minimumPointsToRedeem?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,7 +106,9 @@ export type LoyaltyProgramCountAggregateInputType = {
   id?: true
   businessId?: true
   name?: true
+  description?: true
   pointsPerPurchase?: true
+  minimumPointsToRedeem?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -188,7 +204,9 @@ export type LoyaltyProgramGroupByOutputType = {
   id: string
   businessId: string
   name: string
+  description: string | null
   pointsPerPurchase: number
+  minimumPointsToRedeem: number | null
   createdAt: Date
   updatedAt: Date
   _count: LoyaltyProgramCountAggregateOutputType | null
@@ -220,7 +238,9 @@ export type LoyaltyProgramWhereInput = {
   id?: Prisma.StringFilter<"LoyaltyProgram"> | string
   businessId?: Prisma.StringFilter<"LoyaltyProgram"> | string
   name?: Prisma.StringFilter<"LoyaltyProgram"> | string
+  description?: Prisma.StringNullableFilter<"LoyaltyProgram"> | string | null
   pointsPerPurchase?: Prisma.FloatFilter<"LoyaltyProgram"> | number
+  minimumPointsToRedeem?: Prisma.FloatNullableFilter<"LoyaltyProgram"> | number | null
   createdAt?: Prisma.DateTimeFilter<"LoyaltyProgram"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LoyaltyProgram"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -231,7 +251,9 @@ export type LoyaltyProgramOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
@@ -245,7 +267,9 @@ export type LoyaltyProgramWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LoyaltyProgramWhereInput | Prisma.LoyaltyProgramWhereInput[]
   businessId?: Prisma.StringFilter<"LoyaltyProgram"> | string
   name?: Prisma.StringFilter<"LoyaltyProgram"> | string
+  description?: Prisma.StringNullableFilter<"LoyaltyProgram"> | string | null
   pointsPerPurchase?: Prisma.FloatFilter<"LoyaltyProgram"> | number
+  minimumPointsToRedeem?: Prisma.FloatNullableFilter<"LoyaltyProgram"> | number | null
   createdAt?: Prisma.DateTimeFilter<"LoyaltyProgram"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LoyaltyProgram"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -256,7 +280,9 @@ export type LoyaltyProgramOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LoyaltyProgramCountOrderByAggregateInput
@@ -273,7 +299,9 @@ export type LoyaltyProgramScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"LoyaltyProgram"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"LoyaltyProgram"> | string
   name?: Prisma.StringWithAggregatesFilter<"LoyaltyProgram"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"LoyaltyProgram"> | string | null
   pointsPerPurchase?: Prisma.FloatWithAggregatesFilter<"LoyaltyProgram"> | number
+  minimumPointsToRedeem?: Prisma.FloatNullableWithAggregatesFilter<"LoyaltyProgram"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LoyaltyProgram"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LoyaltyProgram"> | Date | string
 }
@@ -281,7 +309,9 @@ export type LoyaltyProgramScalarWhereWithAggregatesInput = {
 export type LoyaltyProgramCreateInput = {
   id?: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutLoyaltyProgramsInput
@@ -292,7 +322,9 @@ export type LoyaltyProgramUncheckedCreateInput = {
   id?: string
   businessId: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutLoyaltyProgramInput
@@ -301,7 +333,9 @@ export type LoyaltyProgramUncheckedCreateInput = {
 export type LoyaltyProgramUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutLoyaltyProgramsNestedInput
@@ -312,7 +346,9 @@ export type LoyaltyProgramUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutLoyaltyProgramNestedInput
@@ -322,7 +358,9 @@ export type LoyaltyProgramCreateManyInput = {
   id?: string
   businessId: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -330,7 +368,9 @@ export type LoyaltyProgramCreateManyInput = {
 export type LoyaltyProgramUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -339,7 +379,9 @@ export type LoyaltyProgramUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -358,20 +400,25 @@ export type LoyaltyProgramCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type LoyaltyProgramAvgOrderByAggregateInput = {
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrder
 }
 
 export type LoyaltyProgramMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -380,13 +427,16 @@ export type LoyaltyProgramMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type LoyaltyProgramSumOrderByAggregateInput = {
   pointsPerPurchase?: Prisma.SortOrder
+  minimumPointsToRedeem?: Prisma.SortOrder
 }
 
 export type LoyaltyProgramScalarRelationFilter = {
@@ -436,6 +486,14 @@ export type LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput = {
   deleteMany?: Prisma.LoyaltyProgramScalarWhereInput | Prisma.LoyaltyProgramScalarWhereInput[]
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type LoyaltyProgramCreateNestedOneWithoutPointsTransactionsInput = {
   create?: Prisma.XOR<Prisma.LoyaltyProgramCreateWithoutPointsTransactionsInput, Prisma.LoyaltyProgramUncheckedCreateWithoutPointsTransactionsInput>
   connectOrCreate?: Prisma.LoyaltyProgramCreateOrConnectWithoutPointsTransactionsInput
@@ -453,7 +511,9 @@ export type LoyaltyProgramUpdateOneRequiredWithoutPointsTransactionsNestedInput 
 export type LoyaltyProgramCreateWithoutBusinessInput = {
   id?: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutLoyaltyProgramInput
@@ -462,7 +522,9 @@ export type LoyaltyProgramCreateWithoutBusinessInput = {
 export type LoyaltyProgramUncheckedCreateWithoutBusinessInput = {
   id?: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutLoyaltyProgramInput
@@ -501,7 +563,9 @@ export type LoyaltyProgramScalarWhereInput = {
   id?: Prisma.StringFilter<"LoyaltyProgram"> | string
   businessId?: Prisma.StringFilter<"LoyaltyProgram"> | string
   name?: Prisma.StringFilter<"LoyaltyProgram"> | string
+  description?: Prisma.StringNullableFilter<"LoyaltyProgram"> | string | null
   pointsPerPurchase?: Prisma.FloatFilter<"LoyaltyProgram"> | number
+  minimumPointsToRedeem?: Prisma.FloatNullableFilter<"LoyaltyProgram"> | number | null
   createdAt?: Prisma.DateTimeFilter<"LoyaltyProgram"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LoyaltyProgram"> | Date | string
 }
@@ -509,7 +573,9 @@ export type LoyaltyProgramScalarWhereInput = {
 export type LoyaltyProgramCreateWithoutPointsTransactionsInput = {
   id?: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutLoyaltyProgramsInput
@@ -519,7 +585,9 @@ export type LoyaltyProgramUncheckedCreateWithoutPointsTransactionsInput = {
   id?: string
   businessId: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -543,7 +611,9 @@ export type LoyaltyProgramUpdateToOneWithWhereWithoutPointsTransactionsInput = {
 export type LoyaltyProgramUpdateWithoutPointsTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutLoyaltyProgramsNestedInput
@@ -553,7 +623,9 @@ export type LoyaltyProgramUncheckedUpdateWithoutPointsTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -561,7 +633,9 @@ export type LoyaltyProgramUncheckedUpdateWithoutPointsTransactionsInput = {
 export type LoyaltyProgramCreateManyBusinessInput = {
   id?: string
   name: string
+  description?: string | null
   pointsPerPurchase?: number
+  minimumPointsToRedeem?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -569,7 +643,9 @@ export type LoyaltyProgramCreateManyBusinessInput = {
 export type LoyaltyProgramUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutLoyaltyProgramNestedInput
@@ -578,7 +654,9 @@ export type LoyaltyProgramUpdateWithoutBusinessInput = {
 export type LoyaltyProgramUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutLoyaltyProgramNestedInput
@@ -587,7 +665,9 @@ export type LoyaltyProgramUncheckedUpdateWithoutBusinessInput = {
 export type LoyaltyProgramUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointsPerPurchase?: Prisma.FloatFieldUpdateOperationsInput | number
+  minimumPointsToRedeem?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -627,7 +707,9 @@ export type LoyaltyProgramSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   businessId?: boolean
   name?: boolean
+  description?: boolean
   pointsPerPurchase?: boolean
+  minimumPointsToRedeem?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -639,7 +721,9 @@ export type LoyaltyProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   businessId?: boolean
   name?: boolean
+  description?: boolean
   pointsPerPurchase?: boolean
+  minimumPointsToRedeem?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -649,7 +733,9 @@ export type LoyaltyProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   businessId?: boolean
   name?: boolean
+  description?: boolean
   pointsPerPurchase?: boolean
+  minimumPointsToRedeem?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -659,12 +745,14 @@ export type LoyaltyProgramSelectScalar = {
   id?: boolean
   businessId?: boolean
   name?: boolean
+  description?: boolean
   pointsPerPurchase?: boolean
+  minimumPointsToRedeem?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LoyaltyProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "name" | "pointsPerPurchase" | "createdAt" | "updatedAt", ExtArgs["result"]["loyaltyProgram"]>
+export type LoyaltyProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "name" | "description" | "pointsPerPurchase" | "minimumPointsToRedeem" | "createdAt" | "updatedAt", ExtArgs["result"]["loyaltyProgram"]>
 export type LoyaltyProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   pointsTransactions?: boolean | Prisma.LoyaltyProgram$pointsTransactionsArgs<ExtArgs>
@@ -687,7 +775,9 @@ export type $LoyaltyProgramPayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     businessId: string
     name: string
+    description: string | null
     pointsPerPurchase: number
+    minimumPointsToRedeem: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["loyaltyProgram"]>
@@ -1118,7 +1208,9 @@ export interface LoyaltyProgramFieldRefs {
   readonly id: Prisma.FieldRef<"LoyaltyProgram", 'String'>
   readonly businessId: Prisma.FieldRef<"LoyaltyProgram", 'String'>
   readonly name: Prisma.FieldRef<"LoyaltyProgram", 'String'>
+  readonly description: Prisma.FieldRef<"LoyaltyProgram", 'String'>
   readonly pointsPerPurchase: Prisma.FieldRef<"LoyaltyProgram", 'Float'>
+  readonly minimumPointsToRedeem: Prisma.FieldRef<"LoyaltyProgram", 'Float'>
   readonly createdAt: Prisma.FieldRef<"LoyaltyProgram", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"LoyaltyProgram", 'DateTime'>
 }

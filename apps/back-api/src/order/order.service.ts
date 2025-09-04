@@ -79,9 +79,47 @@ export class OrderService {
         qrCode: true,
         createdAt: true,
         updatedAt: true,
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        payment: { select: { id: true, amount: true, method: true, status: true, transactionDate: true, qrCode: true, createdAt: true } },
-        products: { select: { id: true, quantity: true, createdAt: true, product: { select: { id: true, businessId: true, title: true, price: true, stock: true, createdAt: true } } } },
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true, 
+            createdAt: true 
+          } 
+        },
+        payment: { 
+          select: { 
+            id: true, 
+            amount: true, 
+            method: true, 
+            status: true, 
+            transactionDate: true, 
+            qrCode: true, 
+            createdAt: true 
+          } 
+        },
+        products: { 
+          select: { 
+            id: true, 
+            quantity: true, 
+            createdAt: true, 
+            product: { 
+              select: { 
+                id: true, 
+                businessId: true, 
+                title: true, 
+                price: true, 
+                createdAt: true,
+                medias: {
+                  select: {
+                    url: true
+                  },
+                  take: 1
+                }
+              } 
+            } 
+          } 
+        },
       },
     });
 
@@ -152,51 +190,195 @@ export class OrderService {
       )
     );
 
-    return order;
+    // Transform the data to match frontend expectations
+    return {
+      ...order,
+      status: order.payment?.status || 'PENDING',
+      products: order.products?.map(op => ({
+        ...op,
+      }))
+    };
   }
 
   async findAll() {
-    return this.prisma.order.findMany({
+    const orders = await this.prisma.order.findMany({
       include: {
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        payment: { select: { id: true, amount: true, method: true, status: true, transactionDate: true, qrCode: true, createdAt: true } },
-        products: { select: { id: true, quantity: true, createdAt: true, product: { select: { id: true, businessId: true, title: true, price: true, stock: true, createdAt: true } } } },
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true, 
+            createdAt: true 
+          } 
+        },
+        payment: { 
+          select: { 
+            id: true, 
+            amount: true, 
+            method: true, 
+            status: true, 
+            transactionDate: true, 
+            qrCode: true, 
+            createdAt: true 
+          } 
+        },
+        products: { 
+          select: { 
+            id: true, 
+            quantity: true, 
+            createdAt: true, 
+            product: { 
+              select: { 
+                id: true, 
+                businessId: true, 
+                title: true, 
+                price: true, 
+                createdAt: true,
+                medias: {
+                  select: {
+                    url: true
+                  },
+                  take: 1
+                }
+              } 
+            } 
+          } 
+        },
       },
     });
+
+    // Transform the data to match frontend expectations
+    return orders.map(order => ({
+      ...order,
+      status: order.payment?.status || 'PENDING',
+      products: order.products?.map(op => ({
+        ...op,
+      }))
+    }));
   }
 
   async findOne(id: string) {
-    return this.prisma.order.findUnique({
+    const order = await this.prisma.order.findUnique({
       where: { id },
       include: {
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        payment: { select: { id: true, amount: true, method: true, status: true, transactionDate: true, qrCode: true, createdAt: true } },
-        products: { select: { id: true, quantity: true, createdAt: true, product: { select: { id: true, businessId: true, title: true, price: true, stock: true, createdAt: true } } } },
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true, 
+            createdAt: true 
+          } 
+        },
+        payment: { 
+          select: { 
+            id: true, 
+            amount: true, 
+            method: true, 
+            status: true, 
+            transactionDate: true, 
+            qrCode: true, 
+            createdAt: true 
+          } 
+        },
+        products: { 
+          select: { 
+            id: true, 
+            quantity: true, 
+            createdAt: true, 
+            product: { 
+              select: { 
+                id: true, 
+                businessId: true, 
+                title: true, 
+                price: true, 
+                createdAt: true,
+                medias: {
+                  select: {
+                    url: true
+                  },
+                  take: 1
+                }
+              } 
+            } 
+          } 
+        },
       },
     });
+
+    if (!order) return null;
+
+    // Transform the data to match frontend expectations
+    return {
+      ...order,
+      status: order.payment?.status || 'PENDING',
+      products: order.products?.map(op => ({
+        ...op,
+      }))
+    };
   }
 
   async update(id: string, updateOrderInput: UpdateOrderInput) {
     const { ...orderData } = updateOrderInput;
-    return this.prisma.order.update({
+    const order = await this.prisma.order.update({
       where: { id },
       data: {
         deliveryAddress: orderData.deliveryAddress,
         qrCode: orderData.qrCode,
         deliveryFee: orderData.deliveryFee,
       },
-      select: {
-        id: true,
-        deliveryFee: true,
-        deliveryAddress: true,
-        qrCode: true,
-        createdAt: true,
-        updatedAt: true,
-        client: { select: { id: true, username: true, email: true } },
-        payment: { select: { id: true, amount: true, method: true, status: true } },
-        products: { select: { id: true, quantity: true, createdAt: true, product: { select: { id: true, businessId: true, title: true } } } },
+      include: {
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true, 
+            createdAt: true 
+          } 
+        },
+        payment: { 
+          select: { 
+            id: true, 
+            amount: true, 
+            method: true, 
+            status: true, 
+            transactionDate: true, 
+            qrCode: true, 
+            createdAt: true 
+          } 
+        },
+        products: { 
+          select: { 
+            id: true, 
+            quantity: true, 
+            createdAt: true, 
+            product: { 
+              select: { 
+                id: true, 
+                businessId: true, 
+                title: true, 
+                price: true, 
+                createdAt: true,
+                medias: {
+                  select: {
+                    url: true
+                  },
+                  take: 1
+                }
+              } 
+            } 
+          } 
+        },
       },
     });
+
+    // Transform the data to match frontend expectations
+    return {
+      ...order,
+      status: order.payment?.status || 'PENDING',
+      products: order.products?.map(op => ({
+        ...op,
+      }))
+    };
   }
 
   async remove(id: string) {
@@ -207,5 +389,311 @@ export class OrderService {
         deliveryFee: true,
       },
     });
+  }
+
+  async findBusinessOrders(
+    businessId: string,
+    page: number = 1,
+    limit: number = 20,
+    search?: string,
+    status?: string,
+    date?: string
+  ) {
+    const skip = (page - 1) * limit;
+    
+    // Build where clause
+    const where: any = {
+      products: {
+        some: {
+          product: {
+            businessId: businessId
+          }
+        }
+      }
+    };
+
+    // Add search filter
+    if (search) {
+      where.OR = [
+        {
+          client: {
+            fullName: {
+              contains: search,
+              mode: 'insensitive'
+            }
+          }
+        },
+        {
+          id: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        }
+      ];
+    }
+
+    // Add status filter
+    if (status) {
+      where.payment = {
+        status: status
+      };
+    }
+
+    // Add date filter
+    if (date) {
+      const now = new Date();
+      let startDate: Date;
+      let endDate: Date = now;
+
+      switch (date) {
+        case 'TODAY':
+          startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          break;
+        case 'THIS_WEEK':
+          const dayOfWeek = now.getDay();
+          startDate = new Date(now.getTime() - dayOfWeek * 24 * 60 * 60 * 1000);
+          startDate.setHours(0, 0, 0, 0);
+          break;
+        case 'THIS_MONTH':
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+          break;
+        case 'THIS_YEAR':
+          startDate = new Date(now.getFullYear(), 0, 1);
+          break;
+        default:
+          startDate = new Date(0);
+      }
+
+      where.createdAt = {
+        gte: startDate,
+        lte: endDate
+      };
+    }
+
+    const [orders, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          client: { 
+            select: { 
+              id: true, 
+              fullName: true, 
+              email: true, 
+              createdAt: true 
+            } 
+          },
+          payment: { 
+            select: { 
+              id: true, 
+              amount: true, 
+              method: true, 
+              status: true, 
+              transactionDate: true, 
+              qrCode: true, 
+              createdAt: true 
+            } 
+          },
+          products: { 
+            select: { 
+              id: true, 
+              quantity: true, 
+              createdAt: true, 
+              product: { 
+                select: { 
+                  id: true, 
+                  businessId: true, 
+                  title: true, 
+                  price: true, 
+                  createdAt: true,
+                  medias: {
+                    select: {
+                      url: true
+                    },
+                    take: 1
+                  }
+                } 
+              } 
+            } 
+          },
+        },
+      }),
+      this.prisma.order.count({ where })
+    ]);
+
+    // Transform the data to match frontend expectations
+    const transformedOrders = orders.map(order => ({
+      ...order,
+      status: order.payment?.status || 'PENDING',
+      products: order.products?.map(op => ({
+        ...op,
+      }))
+    }));
+
+    return {
+      items: transformedOrders,
+      total,
+      page,
+      limit
+    };
+  }
+
+  async findClientOrders(
+    clientId: string,
+    page: number = 1,
+    limit: number = 20
+  ) {
+    const skip = (page - 1) * limit;
+    
+    const [orders, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where: { clientId },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          client: { 
+            select: { 
+              id: true, 
+              fullName: true, 
+              email: true, 
+              createdAt: true 
+            } 
+          },
+          payment: { 
+            select: { 
+              id: true, 
+              amount: true, 
+              method: true, 
+              status: true, 
+              transactionDate: true, 
+              qrCode: true, 
+              createdAt: true 
+            } 
+          },
+          products: { 
+            select: { 
+              id: true, 
+              quantity: true, 
+              createdAt: true, 
+              product: { 
+                select: { 
+                  id: true, 
+                  businessId: true, 
+                  title: true, 
+                  price: true, 
+                  createdAt: true,
+                  medias: {
+                    select: {
+                      url: true
+                    },
+                    take: 1
+                  }
+                } 
+              } 
+            } 
+          },
+        },
+      }),
+      this.prisma.order.count({ where: { clientId } })
+    ]);
+
+    // Transform the data to match frontend expectations
+    const transformedOrders = orders.map(order => ({
+      ...order,
+      status: order.payment?.status || 'PENDING',
+      products: order.products?.map(op => ({
+        ...op,
+      }))
+    }));
+
+    return {
+      items: transformedOrders,
+      total,
+      page,
+      limit
+    };
+  }
+
+  async processPayment(orderId: string, input: any) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { payment: true }
+    });
+
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+    if (!order.payment) {
+      throw new Error('No payment found for this order');
+    }
+
+    // Update payment status
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: {
+        payment: {
+          update: {
+            status: input.status || 'COMPLETED',
+            transactionDate: new Date()
+          }
+        }
+      },
+      include: {
+        client: { 
+          select: { 
+            id: true, 
+            fullName: true, 
+            email: true, 
+            createdAt: true 
+          } 
+        },
+        payment: { 
+          select: { 
+            id: true, 
+            amount: true, 
+            method: true, 
+            status: true, 
+            transactionDate: true, 
+            qrCode: true, 
+            createdAt: true 
+          } 
+        },
+        products: { 
+          select: { 
+            id: true, 
+            quantity: true, 
+            createdAt: true, 
+            product: { 
+              select: { 
+                id: true, 
+                businessId: true, 
+                title: true, 
+                price: true, 
+                createdAt: true,
+                medias: {
+                  select: {
+                    url: true
+                  },
+                  take: 1
+                }
+              } 
+            } 
+          } 
+        },
+      },
+    });
+
+    // Transform the data to match frontend expectations
+    return {
+      ...updatedOrder,
+      status: updatedOrder.payment?.status || 'PENDING',
+      products: updatedOrder.products?.map(op => ({
+        ...op,
+      }))
+    };
   }
 }

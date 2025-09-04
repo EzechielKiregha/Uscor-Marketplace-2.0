@@ -43,8 +43,8 @@ export const FREELANCE_ORDER_ENTITY = gql`
       fullName
       avatar
     }
-    totalAmount
     quantity
+    totalAmount
     escrowAmount
     platformCommissionPercentage
     status

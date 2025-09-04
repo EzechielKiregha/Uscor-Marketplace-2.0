@@ -56,3 +56,43 @@ export class CreateChatMessageInput {
   message: string;
 }
 
+@InputType()
+export class SendMessageInput {
+  @Field()
+  @IsString()
+  chatId: string;
+
+  @Field()
+  @IsString()
+  content: string;
+
+  @Field()
+  @IsString()
+  senderType: string;
+
+  @Field()
+  @IsString()
+  senderId: string;
+}
+
+@InputType()
+export class StartNegotiationInput {
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  productId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  serviceId?: string;
+
+  @Field(() => [String])
+  @IsArray()
+  participantIds: string[];
+
+  @Field(() => NegotiationType, { defaultValue: NegotiationType.GENERAL })
+  @IsEnum(NegotiationType)
+  negotiationType: NegotiationType;
+}
+

@@ -5,8 +5,10 @@
 type ChatMessageEntity {
   id: String!
   chatId: String!
-  message: String!
-  senderId: String!
+  content: String!
+  senderType: String!
+  senderId: String
+  sender: ChatUserInfo
   createdAt: DateTime!
 }
 
@@ -14,6 +16,136 @@ type ChatMessageEntity {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  createdAt: DateTime!
+}
+
+type ChatProductInfo {
+  id: String!
+  title: String!
+  price: Float!
+  businessId: String
+  isPhysical: Boolean
+}
+
+type ChatUserInfo {
+  id: String!
+  fullName: String
+  name: String
+  avatar: String
+}
+
+type chatNotification {
+  id: String!
+  chatId: String!
+  userId: String!
+  lastReadAt: DateTime!
+  unreadCount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ChatEntity {
+  id: String!
+  status: ChatStatus!
+  isSecure: Boolean!
+  negotiationType: NegotiationType
+  productId: String
+  product: ChatProductInfo
+  serviceId: String
+  service: FreelanceServiceEntity
+  clientId: String
+  client: ChatUserInfo
+  businessId: String
+  business: ChatUserInfo
+  workerId: String
+  worker: ChatUserInfo
+  participants: [ChatParticipantEntity!]!
+  messages: [ChatMessageEntity!]!
+  unreadCount: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum ChatStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+enum NegotiationType {
+  REOWNERSHIP
+  FREELANCEORDER
+  PURCHASE
+  GENERAL
+}
+
+type KnowYourCustomerEntity {
+  id: String!
+  status: String!
+  documentUrl: String!
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+  businessId: String
+  clientId: String
+  workerId: String
+  business: BusinessEntity
+  client: ClientEntity
+  worker: WorkerEntity
+}
+
+type WorkerEntity {
+  id: String
+  email: String
+  fullName: String
+  role: String
+  isVerified: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+  business: BusinessEntity
+  kyc: KnowYourCustomerEntity
+  freelanceServices: [FreelanceServiceEntity!]
+  chats: [ChatEntity!]
+}
+
+type FreelanceServiceEntity {
+  id: String!
+  title: String!
+  description: String
+  isHourly: Boolean!
+  rate: Float!
+  category: FreelanceServiceCategory!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity!
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
+}
+
+enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+type WorkerServiceAssignmentEntity {
+  id: String!
+  worker: WorkerEntity!
+  role: String!
+  assignedAt: DateTime!
+}
 
 type AdEntity {
   id: String!
@@ -42,47 +174,6 @@ type MediaEntity {
   type: String!
   productId: String!
   createdAt: DateTime!
-  product: ProductEntity!
-}
-
-type PaymentTransactionEntity {
-  id: String!
-  amount: Float!
-  method: String!
-  status: String!
-  transactionDate: DateTime!
-  qrCode: String
-  createdAt: DateTime!
-  order: OrderEntity!
-  PostTransaction: [PostTransactionEntity!]
-}
-
-type PostTransactionEntity {
-  id: String!
-  amount: Float!
-  status: String!
-  createdAt: DateTime!
-}
-
-type OrderEntity {
-  id: String!
-  deliveryFee: Float!
-  deliveryAddress: String
-  qrCode: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  clientId: String!
-  client: ClientEntity!
-  payment: PaymentTransactionEntity
-  products: [OrderProductEntity!]
-}
-
-type OrderProductEntity {
-  id: String!
-  orderId: String!
-  productId: String!
-  quantity: Int!
-  order: OrderEntity!
   product: ProductEntity!
 }
 
@@ -356,102 +447,54 @@ type ProductEntity {
   ads: [AdEntity!]!
 }
 
-type ChatParticipantEntity {
+type OrderProductEntity {
   id: String!
-  chatId: String!
-  clientId: String
-  client: ClientEntity
-  businessId: String
-  business: BusinessEntity
-  workerId: String
-  worker: WorkerEntity
-  createdAt: DateTime!
+  orderId: String!
+  productId: String!
+  quantity: Int!
+  order: OrderEntity!
+  product: ProductEntity!
 }
 
-type ChatEntity {
+type OrderEntity {
   id: String!
-  status: ChatStatus!
-  isSecure: Boolean!
-  negotiationType: NegotiationType
-  productId: String
-  product: ProductEntity
-  serviceId: String
-  service: FreelanceServiceEntity
-  participants: [ChatParticipantEntity!]!
-  messages: [ChatMessageEntity!]!
+  deliveryFee: Float!
+  deliveryAddress: String
+  qrCode: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  clientId: String!
+  client: ClientEntity!
+  payment: PaymentTransactionEntity
+  products: [OrderProductEntity!]
+  status: String
+  totalAmount: Float
 }
 
-enum ChatStatus {
-  PENDING
-  ACTIVE
-  CLOSED
+type PaginatedOrdersResponse {
+  items: [OrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
-enum NegotiationType {
-  REOWNERSHIP
-  FREELANCEORDER
-  PURCHASE
-  GENERAL
-}
-
-type KnowYourCustomerEntity {
+type PaymentTransactionEntity {
   id: String!
+  amount: Float!
+  method: String!
   status: String!
-  documentUrl: String!
-  submittedAt: DateTime!
-  verifiedAt: DateTime
-  businessId: String
-  clientId: String
-  workerId: String
-  business: BusinessEntity
-  client: ClientEntity
-  worker: WorkerEntity
-}
-
-type WorkerEntity {
-  id: String
-  email: String
-  fullName: String
-  role: String
-  isVerified: Boolean
-  createdAt: DateTime
-  updatedAt: DateTime
-  business: BusinessEntity
-  kyc: KnowYourCustomerEntity
-  freelanceServices: [FreelanceServiceEntity!]
-  chats: [ChatEntity!]
-}
-
-type FreelanceServiceEntity {
-  id: String!
-  title: String!
-  description: String
-  isHourly: Boolean!
-  rate: Float!
-  category: FreelanceServiceCategory!
+  transactionDate: DateTime!
+  qrCode: String
   createdAt: DateTime!
-  updatedAt: DateTime!
-  business: BusinessEntity!
-  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
+  order: OrderEntity!
+  PostTransaction: [PostTransactionEntity!]
 }
 
-enum FreelanceServiceCategory {
-  PLUMBER
-  ELECTRICIAN
-  CARPENTER
-  MECHANIC
-  TUTOR
-  CLEANER
-  OTHER
-}
-
-type WorkerServiceAssignmentEntity {
+type PostTransactionEntity {
   id: String!
-  worker: WorkerEntity!
-  role: String!
-  assignedAt: DateTime!
+  amount: Float!
+  status: String!
+  createdAt: DateTime!
 }
 
 type FreelanceOrderEntity {
@@ -622,6 +665,34 @@ type ReferralEntity {
   referredClient: ClientEntity
 }
 
+type PaginatedChatsResponse {
+  items: [ChatEntity!]!
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
+type PaginatedMessagesResponse {
+  items: [ChatMessageEntity!]!
+  hasMore: Boolean!
+  cursor: String
+}
+
+type UnreadCountResponse {
+  totalUnread: Float!
+  chatsWithUnread: [ChatUnreadInfo!]!
+}
+
+type ChatUnreadInfo {
+  chatId: String!
+  unreadCount: Float!
+}
+
+type MarkAsReadResponse {
+  success: Boolean!
+  unreadCount: Float!
+}
+
 type DashboardStats {
   totalRevenue: Int!
   revenueChange: Int!
@@ -763,16 +834,6 @@ type StoreStatistics {
   products: ProductStats!
 }
 
-type LoyaltyProgramEntity {
-  id: String!
-  businessId: String!
-  business: BusinessEntity!
-  name: String!
-  pointsPerPurchase: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type PointsTransactionEntity {
   id: String!
   clientId: String!
@@ -783,10 +844,59 @@ type PointsTransactionEntity {
   createdAt: DateTime!
 }
 
+type LoyaltyProgramEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  name: String!
+  description: String
+  pointsPerPurchase: Float!
+  minimumPointsToRedeem: Float
+  pointsTransactions: [PointsTransactionEntity!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type ClientPointsBalanceEntity {
   clientId: String!
   client: ClientEntity!
   totalPoints: Float!
+}
+
+type TopCustomerEntity {
+  clientId: String!
+  clientName: String!
+  totalPoints: Float!
+  totalSpent: Float!
+}
+
+type PointsByDayEntity {
+  date: String!
+  earned: Float!
+  redeemed: Float!
+}
+
+type LoyaltyAnalyticsEntity {
+  totalMembers: Int!
+  activeMembers: Int!
+  pointsEarned: Float!
+  pointsRedeemed: Float!
+  redemptionRate: Float!
+  topCustomers: [TopCustomerEntity!]!
+  pointsByDay: [PointsByDayEntity!]!
+}
+
+type PointsTransactionSummaryEntity {
+  id: String!
+  points: Float!
+  createdAt: DateTime!
+  type: String!
+}
+
+type CustomerPointsEntity {
+  totalPoints: Float!
+  program: LoyaltyProgramEntity!
+  transactions: [PointsTransactionSummaryEntity!]!
 }
 
 type BulkImportResultEntity {
@@ -828,6 +938,12 @@ type Query {
   """Retrieves a single order by ID."""
   order(id: String!): OrderEntity!
 
+  """Retrieves orders for a business."""
+  businessOrders(businessId: String!, page: Int! = 1, limit: Int! = 20, search: String, status: String, date: String): PaginatedOrdersResponse!
+
+  """Retrieves orders for a client."""
+  clientOrders(clientId: String!, page: Int! = 1, limit: Int! = 20): PaginatedOrdersResponse!
+
   """Retrieves token transactions for a business."""
   tokenTransactions: [TokenTransactionEntity!]!
 
@@ -868,11 +984,23 @@ type Query {
   """Retrieves a single worker by ID."""
   worker(id: String!): WorkerEntity!
 
-  """Retrieves chats for the user."""
-  chats: [ChatEntity!]!
+  """Retrieves chats for the user with pagination."""
+  chats(productId: String, clientId: String, businessId: String, workerId: String, status: String, search: String, page: Float! = 1, limit: Float! = 20): PaginatedChatsResponse!
 
   """Retrieves a single chat by ID."""
   chat(id: String!): ChatEntity!
+
+  """Retrieves messages for a chat."""
+  chatMessages(chatId: String!, after: String, before: String, limit: Int! = 20): PaginatedMessagesResponse!
+
+  """Gets unread message count for user."""
+  unreadChatCount(userId: String!): UnreadCountResponse!
+
+  """Gets chats by participant ID."""
+  chatsByParticipant(participantId: String!): [ChatEntity!]!
+
+  """Gets chat notifications for user."""
+  chatNotifications(userId: String!): [chatNotification!]!
 
   """Retrieves reposted products for a business."""
   repostedProducts: [RepostedProductEntity!]!
@@ -939,6 +1067,18 @@ type Query {
   """Retrieves total points for a client."""
   clientPointsBalance(clientId: String!): ClientPointsBalanceEntity!
 
+  """Retrieves loyalty programs for a business."""
+  loyaltyPrograms(businessId: String!): [LoyaltyProgramEntity!]!
+
+  """Retrieves a loyalty program by ID."""
+  loyaltyProgram(id: String!): LoyaltyProgramEntity!
+
+  """Retrieves customer points and transactions."""
+  customerPoints(businessId: String!, clientId: String!): CustomerPointsEntity!
+
+  """Retrieves loyalty program analytics."""
+  loyaltyAnalytics(businessId: String!, period: String! = "month"): LoyaltyAnalyticsEntity!
+
   """Retrieves inventory for a store."""
   inventory(storeId: String, productId: String, lowStockOnly: Boolean, page: Float! = 1, limit: Float! = 20): PaginatedInventoryResponse!
 
@@ -992,6 +1132,9 @@ type Mutation {
 
   """Deletes an order."""
   deleteOrder(id: String!): OrderEntity!
+
+  """Process payment for an order."""
+  processOrderPayment(orderId: String!, input: ProcessPaymentInput!): OrderEntity!
 
   """Creates a token transaction."""
   createTokenTransaction(createTokenTransactionInput: CreateTokenTransactionInput!): TokenTransactionEntity!
@@ -1052,6 +1195,21 @@ type Mutation {
 
   """Deletes a chat."""
   deleteChat(id: String!): ChatEntity!
+
+  """Sends a message in a chat."""
+  sendMessage(input: SendMessageInput!): ChatMessageEntity!
+
+  """Marks messages as read."""
+  markMessagesAsRead(chatId: String!, userId: String!): MarkAsReadResponse!
+
+  """Updates chat status."""
+  updateChatStatus(id: String!, status: String!): ChatEntity!
+
+  """Starts a negotiation chat."""
+  startNegotiation(input: StartNegotiationInput!): ChatEntity!
+
+  """Accepts a negotiation."""
+  acceptNegotiation(negotiationId: String!): ChatEntity!
 
   """Creates a reposted product."""
   createRepostedProduct(createRepostedProductInput: CreateRepostedProductInput!): RepostedProductEntity!
@@ -1143,13 +1301,22 @@ type Mutation {
   deleteStore(id: String!): StoreEntity!
 
   """Creates a new loyalty program."""
-  createLoyaltyProgram(createLoyaltyProgramInput: CreateLoyaltyProgramInput!): LoyaltyProgramEntity!
+  createLoyaltyProgram(input: CreateLoyaltyProgramInput!): LoyaltyProgramEntity!
 
   """Updates a loyalty program."""
-  updateLoyaltyProgram(id: String!, updateLoyaltyProgramInput: UpdateLoyaltyProgramInput!): LoyaltyProgramEntity!
+  updateLoyaltyProgram(id: String!, input: UpdateLoyaltyProgramInput!): LoyaltyProgramEntity!
 
   """Creates a points transaction."""
   createPointsTransaction(createPointsTransactionInput: CreatePointsTransactionInput!): PointsTransactionEntity!
+
+  """Awards points to a customer."""
+  earnPoints(input: EarnPointsInput!): PointsTransactionEntity!
+
+  """Redeems points for a customer."""
+  redeemPoints(input: RedeemPointsInput!): PointsTransactionEntity!
+
+  """Deletes a loyalty program."""
+  deleteLoyaltyProgram(id: String!): Boolean!
 
   """Creates a new purchase order."""
   createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrderEntity!
@@ -1238,6 +1405,12 @@ input UpdateOrderInput {
   deliveryAddress: String
   qrCode: String
   deliveryFee: Float
+}
+
+input ProcessPaymentInput {
+  status: String
+  transactionId: String
+  method: String
 }
 
 input CreateTokenTransactionInput {
@@ -1377,6 +1550,20 @@ input UpdateChatInput {
   status: ChatStatus
   isSecure: Boolean
   negotiationType: NegotiationType
+}
+
+input SendMessageInput {
+  chatId: String!
+  content: String!
+  senderType: String!
+  senderId: String!
+}
+
+input StartNegotiationInput {
+  productId: String
+  serviceId: String
+  participantIds: [String!]!
+  negotiationType: NegotiationType! = GENERAL
 }
 
 input CreateRepostedProductInput {
@@ -1554,18 +1741,36 @@ input UpdateStoreInput {
 input CreateLoyaltyProgramInput {
   businessId: String!
   name: String!
+  description: String
   pointsPerPurchase: Float!
+  minimumPointsToRedeem: Float
 }
 
 input UpdateLoyaltyProgramInput {
   name: String
+  description: String
   pointsPerPurchase: Float
+  minimumPointsToRedeem: Float
 }
 
 input CreatePointsTransactionInput {
   clientId: String!
   loyaltyProgramId: String!
   points: Float!
+}
+
+input EarnPointsInput {
+  clientId: String!
+  loyaltyProgramId: String!
+  points: Float!
+  orderId: String
+}
+
+input RedeemPointsInput {
+  clientId: String!
+  loyaltyProgramId: String!
+  points: Float!
+  rewardDescription: String
 }
 
 input CreatePurchaseOrderInput {
@@ -1628,8 +1833,18 @@ input UpdateShiftInput {
 }
 
 type Subscription {
+  orderCreated(clientId: String!, businessId: String!): OrderEntity!
+  orderUpdated(clientId: String!, businessId: String!): OrderEntity!
+  orderPaymentProcessed(orderId: String!): OrderEntity!
+  messageReceived(chatId: String!): ChatMessageEntity!
+  chatCreated(userId: String!): ChatEntity!
+  chatStatusUpdated(userId: String!): ChatEntity!
   saleCreated(storeId: String!): SaleEntity!
   saleUpdated(storeId: String!): SaleEntity!
+  loyaltyProgramCreated(businessId: String!): LoyaltyProgramEntity!
+  loyaltyProgramUpdated(businessId: String!): LoyaltyProgramEntity!
+  pointsEarned(businessId: String!): PointsTransactionEntity!
+  pointsRedeemed(businessId: String!): PointsTransactionEntity!
   purchaseOrderCreated(storeId: String!, businessId: String!): PurchaseOrderEntity!
   purchaseOrderUpdated(storeId: String!, businessId: String!): PurchaseOrderEntity!
   transferOrderCreated(fromStoreId: String!, toStoreId: String!): TransferOrderEntity!

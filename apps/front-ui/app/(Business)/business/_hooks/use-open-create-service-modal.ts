@@ -1,21 +1,26 @@
-import { useState, useCallback } from 'react';
+import { create } from 'zustand';
+
+interface CreateServiceModalState {
+  openCreateServiceModal: boolean;
+  initialServiceData: any;
+  setIsOpen: (newState: { openCreateServiceModal: boolean; initialServiceData: any }) => void;
+}
+
+const useCreateServiceModalStore = create<CreateServiceModalState>((set) => ({
+  openCreateServiceModal: false,
+  initialServiceData: null,
+  setIsOpen: (newState) => {
+    console.log('CreateServiceModal state change:', newState);
+    set(newState);
+  },
+}));
 
 export const useOpenCreateServiceModal = () => {
-  const [state, setState] = useState({
-    openCreateServiceModal: false,
-    initialServiceData: null
-  });
-
-  const setIsOpen = useCallback((newState: any) => {
-    setState(prev => ({
-      ...prev,
-      ...newState
-    }));
-  }, []);
-
+  const { openCreateServiceModal, initialServiceData, setIsOpen } = useCreateServiceModalStore();
+  
   return {
-    isOpen: state.openCreateServiceModal,
+    isOpen: openCreateServiceModal,
     setIsOpen,
-    initialServiceData: state.initialServiceData
+    initialServiceData
   };
 };

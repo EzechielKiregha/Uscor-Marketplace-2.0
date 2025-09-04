@@ -24,6 +24,7 @@ import CurrentSalePanel from './_components/CurrentSalePanel';
 import SalesDashboard from './_components/SalesDashboard';
 import SalesHistoryPanel from './_components/SalesHistoryPanel';
 import NewSaleModal from './_components/NewSaleModal';
+import CreateStoreModal from '../_components/modals/CreateStoreModal';
 
 export default function SalesManagementPage() {
   const { user, role, loading: authLoading } = useMe();
@@ -156,6 +157,9 @@ export default function SalesManagementPage() {
           />
         </div>
       </div>
+
+      {/* Create Store Modal */}
+      <CreateStoreModal />
     </div>
   );
 }

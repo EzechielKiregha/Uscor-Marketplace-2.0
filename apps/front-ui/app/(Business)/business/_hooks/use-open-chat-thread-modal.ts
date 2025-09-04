@@ -1,21 +1,26 @@
-import { useState, useCallback } from 'react';
+import { create } from 'zustand';
+
+interface ChatThreadModalState {
+  openChatThreadModal: boolean;
+  initialProductData: any;
+  setIsOpen: (newState: { openChatThreadModal: boolean; initialProductData: any }) => void;
+}
+
+const useChatThreadModalStore = create<ChatThreadModalState>((set) => ({
+  openChatThreadModal: false,
+  initialProductData: null,
+  setIsOpen: (newState) => {
+    console.log('ChatThreadModal state change:', newState);
+    set(newState);
+  },
+}));
 
 export const useOpenChatThreadModal = () => {
-  const [state, setState] = useState({
-    openChatThreadModal: false,
-    initialProductData: null
-  });
-
-  const setIsOpen = useCallback((newState: any) => {
-    setState(prev => ({
-      ...prev,
-      ...newState
-    }));
-  }, []);
-
+  const { openChatThreadModal, initialProductData, setIsOpen } = useChatThreadModalStore();
+  
   return {
-    isOpen: state.openChatThreadModal,
+    isOpen: openChatThreadModal,
     setIsOpen,
-    initialProductData: state.initialProductData
+    initialProductData
   };
 };

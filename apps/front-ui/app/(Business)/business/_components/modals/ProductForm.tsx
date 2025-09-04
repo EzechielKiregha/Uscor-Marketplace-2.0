@@ -113,7 +113,7 @@ export default function ProductForm({
             name="description"
             value={formData.description}
             onChange={handleChange}
-            rows={4}
+            rows={2}
             className="w-full p-2 border border-border rounded-md"
             required
           />

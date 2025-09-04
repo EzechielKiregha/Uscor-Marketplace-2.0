@@ -51,6 +51,11 @@ import GraphQLJSON from 'graphql-type-json'
       ), // Path to the generated schema file, 
       resolvers: { JSON: GraphQLJSON },
       csrfPrevention: false,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
+      installSubscriptionHandlers: true,
     }),
     ConfigModule.forRoot({
       isGlobal: true,

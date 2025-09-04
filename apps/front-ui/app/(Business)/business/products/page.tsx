@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { ProductEntity } from '@/lib/types';
 import { useToast } from '@/components/toast-provider';
 import { useMe } from '@/lib/useMe';
+import CreateProductModal from '../_components/modals/CreateProductModal';
 
 export default function BusinessProductsPage() {
   const { isOpen, setIsOpen } = useOpenCreateProductModal();
@@ -170,6 +171,9 @@ export default function BusinessProductsPage() {
           </Button>
         </div>
       )}
+
+      {/* Create Product Modal */}
+      <CreateProductModal />
     </div>
   );
 }

@@ -229,6 +229,7 @@ model Worker {
   password             String
   business             Business              @relation(fields: [businessId], references: [id])
   businessId           String
+  avatar               String?
   kyc                  KYC?                  @relation("WorkerKYC")
   isVerified           Boolean               @default(false)
   createdAt            DateTime              @default(now())
@@ -808,14 +809,16 @@ model Shift {
 }
 
 model LoyaltyProgram {
-  id              String            @id @default(uuid())
-  businessId      String
-  business        Business          @relation(fields: [businessId], references: [id])
-  name            String
-  pointsPerPurchase Float           @default(0) // Points earned per unit of currency spent
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  pointsTransactions PointsTransaction[]
+  id                     String            @id @default(uuid())
+  businessId             String
+  business               Business          @relation(fields: [businessId], references: [id])
+  name                   String
+  description            String?
+  pointsPerPurchase      Float             @default(0) // Points earned per unit of currency spent
+  minimumPointsToRedeem  Float?            @default(0) // Minimum points required for redemption
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  pointsTransactions     PointsTransaction[]
 }
 
 model PointsTransaction {

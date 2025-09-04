@@ -10,6 +10,7 @@ import { useToast } from '@/components/toast-provider';
 import { useOpenCreateStoreModal } from '../_hooks/use-open-create-store-modal';
 import { StoreEntity } from '@/lib/types';
 import { useMe } from '@/lib/useMe';
+import CreateStoreModal from '../_components/modals/CreateStoreModal';
 
 export default function BusinessStoresPage() {
   const { isOpen, setIsOpen } = useOpenCreateStoreModal();
@@ -166,6 +167,9 @@ export default function BusinessStoresPage() {
           </Button>
         </div>
       )}
+
+      {/* Create Store Modal */}
+      <CreateStoreModal />
     </div>
   );
 }

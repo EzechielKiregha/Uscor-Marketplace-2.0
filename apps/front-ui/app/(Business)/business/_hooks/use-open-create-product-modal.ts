@@ -1,21 +1,26 @@
-import { useState, useCallback } from 'react';
+import { create } from 'zustand';
+
+interface CreateProductModalState {
+  openCreateProductModal: boolean;
+  initialProductData: any;
+  setIsOpen: (newState: { openCreateProductModal: boolean; initialProductData: any }) => void;
+}
+
+const useCreateProductModalStore = create<CreateProductModalState>((set) => ({
+  openCreateProductModal: false,
+  initialProductData: null,
+  setIsOpen: (newState) => {
+    console.log('CreateProductModal state change:', newState);
+    set(newState);
+  },
+}));
 
 export const useOpenCreateProductModal = () => {
-  const [state, setState] = useState({
-    openCreateProductModal: false,
-    initialProductData: null
-  });
-
-  const setIsOpen = useCallback((newState: any) => {
-    setState(prev => ({
-      ...prev,
-      ...newState
-    }));
-  }, []);
-
+  const { openCreateProductModal, initialProductData, setIsOpen } = useCreateProductModalStore();
+  
   return {
-    isOpen: state.openCreateProductModal,
+    isOpen: openCreateProductModal,
     setIsOpen,
-    initialProductData: state.initialProductData
+    initialProductData
   };
 };

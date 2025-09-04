@@ -1,63 +1,6 @@
 import { gql } from '@apollo/client';
 
 // ======================
-// ORDER ENTITIES
-// ======================
-
-export const ORDER_ENTITY = gql`
-  fragment OrderEntity on Order {
-    id
-    deliveryFee
-    deliveryAddress
-    qrCode
-    createdAt
-    updatedAt
-    clientId
-    client {
-      id
-      fullName
-      email
-    }
-    payment {
-      id
-      amount
-      method
-      status
-    }
-    products {
-      id
-      quantity
-      product {
-        id
-        title
-        price
-        imageUrl
-      }
-    }
-    status
-  }
-`;
-
-export const ORDER_PRODUCT_ENTITY = gql`
-  fragment OrderProductEntity on OrderProduct {
-    id
-    orderId
-    productId
-    quantity
-    order {
-      id
-      createdAt
-    }
-    product {
-      id
-      title
-      price
-      imageUrl
-    }
-  }
-`;
-
-// ======================
 // QUERIES
 // ======================
 
@@ -85,51 +28,171 @@ export const GET_ORDERS = gql`
       limit: $limit
     ) {
       items {
-        ...OrderEntity
+        id
+        deliveryFee
+        deliveryAddress
+        qrCode
+        createdAt
+        updatedAt
+        clientId
+        client {
+          id
+          fullName
+          email
+        }
+        payment {
+          id
+          amount
+          method
+          status
+        }
+        products {
+          id
+          quantity
+          product {
+            id
+            title
+            price
+            medias {
+              url
+            }
+          }
+        }
+        status
       }
       total
       page
       limit
     }
   }
-  ${ORDER_ENTITY}
+  
 `;
 
 export const GET_ORDER_BY_ID = gql`
   query GetOrderById($id: String!) {
     order(id: $id) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 
 export const GET_CLIENT_ORDERS = gql`
   query GetClientOrders($clientId: String!, $page: Int = 1, $limit: Int = 20) {
     clientOrders(clientId: $clientId, page: $page, limit: $limit) {
       items {
-        ...OrderEntity
+        id
+        deliveryFee
+        deliveryAddress
+        qrCode
+        createdAt
+        updatedAt
+        clientId
+        client {
+          id
+          fullName
+          email
+        }
+        payment {
+          id
+          amount
+          method
+          status
+        }
+        products {
+          id
+          quantity
+          product {
+            id
+            title
+            price
+            medias {
+              url
+            }
+          }
+        }
+        status
       }
       total
       page
       limit
     }
   }
-  ${ORDER_ENTITY}
+  
 `;
 
 export const GET_BUSINESS_ORDERS = gql`
   query GetBusinessOrders($businessId: String!, $page: Int = 1, $limit: Int = 20) {
     businessOrders(businessId: $businessId, page: $page, limit: $limit) {
       items {
-        ...OrderEntity
+        id
+        deliveryFee
+        deliveryAddress
+        qrCode
+        createdAt
+        updatedAt
+        clientId
+        client {
+          id
+          fullName
+          email
+        }
+        payment {
+          id
+          amount
+          method
+          status
+        }
+        products {
+          id
+          quantity
+          product {
+            id
+            title
+            price
+            medias {
+              url
+            }
+          }
+        }
+        status
       }
       total
       page
       limit
     }
   }
-  ${ORDER_ENTITY}
+  
 `;
 
 // ======================
@@ -139,37 +202,127 @@ export const GET_BUSINESS_ORDERS = gql`
 export const CREATE_ORDER = gql`
   mutation CreateOrder($input: CreateOrderInput!) {
     createOrder(input: $input) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 
 export const UPDATE_ORDER = gql`
   mutation UpdateOrder($id: String!, $input: UpdateOrderInput!) {
     updateOrder(id: $id, input: $input) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 
 export const ADD_ORDER_PRODUCT = gql`
   mutation AddOrderProduct($orderId: String!, $input: AddOrderProductInput!) {
     addOrderProduct(orderId: $orderId, input: $input) {
-      ...OrderProductEntity
+    id
+    orderId
+    productId
+    quantity
+    order {
+      id
+      createdAt
+    }
+    product {
+      id
+      title
+      price
+      medias {
+        url
+      }
     }
   }
-  ${ORDER_PRODUCT_ENTITY}
+  }
+  
 `;
 
 export const UPDATE_ORDER_PRODUCT = gql`
   mutation UpdateOrderProduct($id: String!, $input: UpdateOrderProductInput!) {
     updateOrderProduct(id: $id, input: $input) {
-      ...OrderProductEntity
+    id
+    orderId
+    productId
+    quantity
+    order {
+      id
+      createdAt
+    }
+    product {
+      id
+      title
+      price
+      medias {
+        url
+      }
     }
   }
-  ${ORDER_PRODUCT_ENTITY}
+  }
+  
 `;
 
 export const REMOVE_ORDER_PRODUCT = gql`
@@ -183,10 +336,40 @@ export const REMOVE_ORDER_PRODUCT = gql`
 export const PROCESS_ORDER_PAYMENT = gql`
   mutation ProcessOrderPayment($orderId: String!, $input: ProcessPaymentInput!) {
     processOrderPayment(orderId: $orderId, input: $input) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 
 // ======================
@@ -196,28 +379,118 @@ export const PROCESS_ORDER_PAYMENT = gql`
 export const ON_ORDER_CREATED = gql`
   subscription OnOrderCreated($clientId: String!, $businessId: String!) {
     orderCreated(clientId: $clientId, businessId: $businessId) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 
 export const ON_ORDER_UPDATED = gql`
   subscription OnOrderUpdated($clientId: String!, $businessId: String!) {
     orderUpdated(clientId: $clientId, businessId: $businessId) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 
 export const ON_ORDER_PAYMENT_PROCESSED = gql`
   subscription OnOrderPaymentProcessed($orderId: String!) {
     orderPaymentProcessed(orderId: $orderId) {
-      ...OrderEntity
+    id
+    deliveryFee
+    deliveryAddress
+    qrCode
+    createdAt
+    updatedAt
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    payment {
+      id
+      amount
+      method
+      status
+    }
+    products {
+      id
+      quantity
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+    status
   }
-  ${ORDER_ENTITY}
+  }
+  
 `;
 /**
  * Utility function to remove __typename from objects.

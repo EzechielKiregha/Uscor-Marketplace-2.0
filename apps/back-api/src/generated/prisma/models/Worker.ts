@@ -31,6 +31,7 @@ export type WorkerMinAggregateOutputType = {
   phone: string | null
   password: string | null
   businessId: string | null
+  avatar: string | null
   isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -44,6 +45,7 @@ export type WorkerMaxAggregateOutputType = {
   phone: string | null
   password: string | null
   businessId: string | null
+  avatar: string | null
   isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,6 +59,7 @@ export type WorkerCountAggregateOutputType = {
   phone: number
   password: number
   businessId: number
+  avatar: number
   isVerified: number
   createdAt: number
   updatedAt: number
@@ -72,6 +75,7 @@ export type WorkerMinAggregateInputType = {
   phone?: true
   password?: true
   businessId?: true
+  avatar?: true
   isVerified?: true
   createdAt?: true
   updatedAt?: true
@@ -85,6 +89,7 @@ export type WorkerMaxAggregateInputType = {
   phone?: true
   password?: true
   businessId?: true
+  avatar?: true
   isVerified?: true
   createdAt?: true
   updatedAt?: true
@@ -98,6 +103,7 @@ export type WorkerCountAggregateInputType = {
   phone?: true
   password?: true
   businessId?: true
+  avatar?: true
   isVerified?: true
   createdAt?: true
   updatedAt?: true
@@ -184,6 +190,7 @@ export type WorkerGroupByOutputType = {
   phone: string | null
   password: string
   businessId: string
+  avatar: string | null
   isVerified: boolean
   createdAt: Date
   updatedAt: Date
@@ -218,6 +225,7 @@ export type WorkerWhereInput = {
   phone?: Prisma.StringNullableFilter<"Worker"> | string | null
   password?: Prisma.StringFilter<"Worker"> | string
   businessId?: Prisma.StringFilter<"Worker"> | string
+  avatar?: Prisma.StringNullableFilter<"Worker"> | string | null
   isVerified?: Prisma.BoolFilter<"Worker"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
@@ -237,6 +245,7 @@ export type WorkerOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -259,6 +268,7 @@ export type WorkerWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"Worker"> | string | null
   password?: Prisma.StringFilter<"Worker"> | string
   businessId?: Prisma.StringFilter<"Worker"> | string
+  avatar?: Prisma.StringNullableFilter<"Worker"> | string | null
   isVerified?: Prisma.BoolFilter<"Worker"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
@@ -278,6 +288,7 @@ export type WorkerOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -297,6 +308,7 @@ export type WorkerScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"Worker"> | string | null
   password?: Prisma.StringWithAggregatesFilter<"Worker"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"Worker"> | string
+  avatar?: Prisma.StringNullableWithAggregatesFilter<"Worker"> | string | null
   isVerified?: Prisma.BoolWithAggregatesFilter<"Worker"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Worker"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Worker"> | Date | string
@@ -309,6 +321,7 @@ export type WorkerCreateInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -328,6 +341,7 @@ export type WorkerUncheckedCreateInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -345,6 +359,7 @@ export type WorkerUpdateInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -364,6 +379,7 @@ export type WorkerUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -382,6 +398,7 @@ export type WorkerCreateManyInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -394,6 +411,7 @@ export type WorkerUpdateManyMutationInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -407,6 +425,7 @@ export type WorkerUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +449,7 @@ export type WorkerCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -443,6 +463,7 @@ export type WorkerMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -456,6 +477,7 @@ export type WorkerMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -598,6 +620,7 @@ export type WorkerCreateWithoutBusinessInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -615,6 +638,7 @@ export type WorkerUncheckedCreateWithoutBusinessInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -662,6 +686,7 @@ export type WorkerScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"Worker"> | string | null
   password?: Prisma.StringFilter<"Worker"> | string
   businessId?: Prisma.StringFilter<"Worker"> | string
+  avatar?: Prisma.StringNullableFilter<"Worker"> | string | null
   isVerified?: Prisma.BoolFilter<"Worker"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
@@ -674,6 +699,7 @@ export type WorkerCreateWithoutChatParticipantsInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -692,6 +718,7 @@ export type WorkerUncheckedCreateWithoutChatParticipantsInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -724,6 +751,7 @@ export type WorkerUpdateWithoutChatParticipantsInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -742,6 +770,7 @@ export type WorkerUncheckedUpdateWithoutChatParticipantsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -758,6 +787,7 @@ export type WorkerCreateWithoutKycInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -776,6 +806,7 @@ export type WorkerUncheckedCreateWithoutKycInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -808,6 +839,7 @@ export type WorkerUpdateWithoutKycInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -826,6 +858,7 @@ export type WorkerUncheckedUpdateWithoutKycInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -842,6 +875,7 @@ export type WorkerCreateWithoutWorkerServiceAssignmentsInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -860,6 +894,7 @@ export type WorkerUncheckedCreateWithoutWorkerServiceAssignmentsInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -892,6 +927,7 @@ export type WorkerUpdateWithoutWorkerServiceAssignmentsInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -910,6 +946,7 @@ export type WorkerUncheckedUpdateWithoutWorkerServiceAssignmentsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -926,6 +963,7 @@ export type WorkerCreateWithoutSalesInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -944,6 +982,7 @@ export type WorkerUncheckedCreateWithoutSalesInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -976,6 +1015,7 @@ export type WorkerUpdateWithoutSalesInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -994,6 +1034,7 @@ export type WorkerUncheckedUpdateWithoutSalesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1010,6 +1051,7 @@ export type WorkerCreateWithoutShiftsInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1028,6 +1070,7 @@ export type WorkerUncheckedCreateWithoutShiftsInput = {
   phone?: string | null
   password: string
   businessId: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1060,6 +1103,7 @@ export type WorkerUpdateWithoutShiftsInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1078,6 +1122,7 @@ export type WorkerUncheckedUpdateWithoutShiftsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1094,6 +1139,7 @@ export type WorkerCreateManyBusinessInput = {
   role?: $Enums.WorkerRole
   phone?: string | null
   password: string
+  avatar?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1106,6 +1152,7 @@ export type WorkerUpdateWithoutBusinessInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1123,6 +1170,7 @@ export type WorkerUncheckedUpdateWithoutBusinessInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1140,6 +1188,7 @@ export type WorkerUncheckedUpdateManyWithoutBusinessInput = {
   role?: Prisma.EnumWorkerRoleFieldUpdateOperationsInput | $Enums.WorkerRole
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1211,6 +1260,7 @@ export type WorkerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   phone?: boolean
   password?: boolean
   businessId?: boolean
+  avatar?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1231,6 +1281,7 @@ export type WorkerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   phone?: boolean
   password?: boolean
   businessId?: boolean
+  avatar?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1245,6 +1296,7 @@ export type WorkerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   phone?: boolean
   password?: boolean
   businessId?: boolean
+  avatar?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1259,12 +1311,13 @@ export type WorkerSelectScalar = {
   phone?: boolean
   password?: boolean
   businessId?: boolean
+  avatar?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type WorkerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "fullName" | "role" | "phone" | "password" | "businessId" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["worker"]>
+export type WorkerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "fullName" | "role" | "phone" | "password" | "businessId" | "avatar" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["worker"]>
 export type WorkerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   kyc?: boolean | Prisma.Worker$kycArgs<ExtArgs>
@@ -1299,6 +1352,7 @@ export type $WorkerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     phone: string | null
     password: string
     businessId: string
+    avatar: string | null
     isVerified: boolean
     createdAt: Date
     updatedAt: Date
@@ -1738,6 +1792,7 @@ export interface WorkerFieldRefs {
   readonly phone: Prisma.FieldRef<"Worker", 'String'>
   readonly password: Prisma.FieldRef<"Worker", 'String'>
   readonly businessId: Prisma.FieldRef<"Worker", 'String'>
+  readonly avatar: Prisma.FieldRef<"Worker", 'String'>
   readonly isVerified: Prisma.FieldRef<"Worker", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Worker", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Worker", 'DateTime'>

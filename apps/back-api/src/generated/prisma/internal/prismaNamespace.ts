@@ -3577,6 +3577,7 @@ export const WorkerScalarFieldEnum = {
   phone: 'phone',
   password: 'password',
   businessId: 'businessId',
+  avatar: 'avatar',
   isVerified: 'isVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -4046,7 +4047,9 @@ export const LoyaltyProgramScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   name: 'name',
+  description: 'description',
   pointsPerPurchase: 'pointsPerPurchase',
+  minimumPointsToRedeem: 'minimumPointsToRedeem',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

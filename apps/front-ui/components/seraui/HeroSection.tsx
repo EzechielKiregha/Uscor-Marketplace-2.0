@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'; // or use your own Button
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full py-20 md:py-32 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+    <section className="relative w-full py-12 md:py-24 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
       {/* Background gradients (themed with --accent / --primary) */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/10 dark:bg-primary/20 blur-3xl"></div>

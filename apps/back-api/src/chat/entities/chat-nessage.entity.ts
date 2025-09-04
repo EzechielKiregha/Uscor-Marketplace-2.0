@@ -1,4 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
+import { ChatUserInfo } from './chat.entity';
 
 @ObjectType()
 export class ChatMessageEntity {
@@ -9,10 +10,16 @@ export class ChatMessageEntity {
   chatId: string;
 
   @Field()
-  message: string;
+  content: string;
 
   @Field()
-  senderId: string;
+  senderType: string;
+
+  @Field(() => String, {nullable: true })
+  senderId?: string | null;
+
+  @Field(() => ChatUserInfo, { nullable: true })
+  sender?: ChatUserInfo;
 
   @Field()
   createdAt: Date;

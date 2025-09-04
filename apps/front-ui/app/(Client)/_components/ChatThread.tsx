@@ -5,11 +5,12 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { GET_CHAT_BY_ID, removeTypename } from '@/graphql/chat.gql';
+import { GET_CHAT_BY_ID } from '@/graphql/chat.gql';
 import { CREATE_CHAT_MESSAGE, GET_CHAT_MESSAGES_BY_CHAT } from '@/graphql/chat-message.gql';
 import ChatMessage from './ChatMessage';
 import { GlowButton } from '@/components/seraui/GlowButton';
 import { useToast } from '@/components/toast-provider';
+import { useMe } from '@/lib/useMe';
 
 interface ChatThreadProps {
   id: string
@@ -20,6 +21,7 @@ const messageSchema = z.object({
 });
 
 export default function ChatThread({ id }: ChatThreadProps) {
+  const user = useMe()
   const { loading, error, data } = useQuery(GET_CHAT_BY_ID, {
     variables: { id: id },
   });
@@ -60,11 +62,11 @@ export default function ChatThread({ id }: ChatThreadProps) {
   const onSubmit = (data: any) => {
     createMessage({
       variables: {
-        createChatMessageInput: removeTypename({
+        createChatMessageInput: {
           chatId: id,
           message: data.message,
-          senderId: 'current-user-id', // Replace with actual user ID from auth
-        }),
+          senderId: user?.id, // Replace with actual user ID from auth
+        },
       },
     });
   };
@@ -84,7 +86,7 @@ export default function ChatThread({ id }: ChatThreadProps) {
             message={msg.message}
             senderId={msg.senderId}
             createdAt={msg.createdAt}
-            className={msg.senderId === 'current-user-id' ? 'ml-auto bg-orange-100 dark:bg-orange-900 text-right' : 'mr-auto bg-gray-100 dark:bg-gray-700'}
+            className={msg.senderId === user?.id ? 'ml-auto bg-orange-100 dark:bg-orange-900 text-right' : 'mr-auto bg-gray-100 dark:bg-gray-700'}
           />
         ))}
         <Form {...form}>

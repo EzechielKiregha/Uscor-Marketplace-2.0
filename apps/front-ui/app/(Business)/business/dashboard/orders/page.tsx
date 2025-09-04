@@ -10,16 +10,18 @@ import { useState } from 'react';
 import { useOpenOrderDetailsModal } from '../../_hooks/use-open-order-details-modal';
 import OrderDetailsModal from './_components/OrderDetailsModal';
 import { OrderEntity } from '@/lib/types';
+import { useMe } from '@/lib/useMe';
 
 export default function BusinessOrdersPage() {
   const { isOpen, setIsOpen } = useOpenOrderDetailsModal();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+  const user = useMe();
 
   const { data, loading, error, refetch } = useQuery(GET_BUSINESS_ORDERS, {
     variables: {
-      businessId: 'current-business-id',
+      businessId: user?.id,
       search: searchTerm,
       status: statusFilter || undefined,
       date: dateFilter || undefined
@@ -112,7 +114,7 @@ export default function BusinessOrdersPage() {
             {data.businessOrders.items.map((order: OrderEntity) => (
               <tr key={order.id} className="border-b border-border hover:bg-muted/50">
                 <td className="py-3">{order.id.substring(0, 8)}...</td>
-                <td className="py-3">{order.client.fullName}</td>
+                <td className="py-3">{order.client.email}</td>
                 <td className="py-3">{new Date(order.createdAt).toLocaleDateString()}</td>
                 <td className="py-3">${order.payment?.amount.toFixed(2)}</td>
                 <td className="py-3">{getStatusBadge(order.payment?.status ?? 'Undefined')}</td>

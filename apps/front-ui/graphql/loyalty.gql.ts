@@ -58,19 +58,59 @@ export const POINTS_TRANSACTION_ENTITY = gql`
 export const GET_LOYALTY_PROGRAMS = gql`
   query GetLoyaltyPrograms($businessId: String!) {
     loyaltyPrograms(businessId: $businessId) {
-      ...LoyaltyProgramEntity
+    id
+    name
+    description
+    pointsPerPurchase
+    minimumPointsToRedeem
+    createdAt
+    updatedAt
+    business {
+      id
+      name
+    }
+    pointsTransactions {
+      id
+      clientId
+      points
+      createdAt
+      client {
+        id
+        fullName
+        email
+      }
     }
   }
-  ${LOYALTY_PROGRAM_ENTITY}
+  }
 `;
 
 export const GET_LOYALTY_PROGRAM_BY_ID = gql`
   query GetLoyaltyProgramById($id: String!) {
     loyaltyProgram(id: $id) {
-      ...LoyaltyProgramEntity
+    id
+    name
+    description
+    pointsPerPurchase
+    minimumPointsToRedeem
+    createdAt
+    updatedAt
+    business {
+      id
+      name
+    }
+    pointsTransactions {
+      id
+      clientId
+      points
+      createdAt
+      client {
+        id
+        fullName
+        email
+      }
     }
   }
-  ${LOYALTY_PROGRAM_ENTITY}
+  }
 `;
 
 export const GET_CUSTOMER_POINTS = gql`
@@ -123,19 +163,59 @@ export const GET_LOYALTY_ANALYTICS = gql`
 export const CREATE_LOYALTY_PROGRAM = gql`
   mutation CreateLoyaltyProgram($input: CreateLoyaltyProgramInput!) {
     createLoyaltyProgram(input: $input) {
-      ...LoyaltyProgramEntity
+    id
+    name
+    description
+    pointsPerPurchase
+    minimumPointsToRedeem
+    createdAt
+    updatedAt
+    business {
+      id
+      name
+    }
+    pointsTransactions {
+      id
+      clientId
+      points
+      createdAt
+      client {
+        id
+        fullName
+        email
+      }
     }
   }
-  ${LOYALTY_PROGRAM_ENTITY}
+  }
 `;
 
 export const UPDATE_LOYALTY_PROGRAM = gql`
   mutation UpdateLoyaltyProgram($id: String!, $input: UpdateLoyaltyProgramInput!) {
     updateLoyaltyProgram(id: $id, input: $input) {
-      ...LoyaltyProgramEntity
+    id
+    name
+    description
+    pointsPerPurchase
+    minimumPointsToRedeem
+    createdAt
+    updatedAt
+    business {
+      id
+      name
+    }
+    pointsTransactions {
+      id
+      clientId
+      points
+      createdAt
+      client {
+        id
+        fullName
+        email
+      }
     }
   }
-  ${LOYALTY_PROGRAM_ENTITY}
+  }
 `;
 
 export const DELETE_LOYALTY_PROGRAM = gql`
@@ -149,19 +229,43 @@ export const DELETE_LOYALTY_PROGRAM = gql`
 export const EARN_POINTS = gql`
   mutation EarnPoints($input: EarnPointsInput!) {
     earnPoints(input: $input) {
-      ...PointsTransactionEntity
+    id
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    loyaltyProgramId
+    loyaltyProgram {
+      id
+      name
+    }
+    points
+    createdAt
   }
-  ${POINTS_TRANSACTION_ENTITY}
+  }
 `;
 
 export const REDEEM_POINTS = gql`
   mutation RedeemPoints($input: RedeemPointsInput!) {
     redeemPoints(input: $input) {
-      ...PointsTransactionEntity
+    id
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    loyaltyProgramId
+    loyaltyProgram {
+      id
+      name
+    }
+    points
+    createdAt
   }
-  ${POINTS_TRANSACTION_ENTITY}
+  }
 `;
 
 // ======================
@@ -171,35 +275,99 @@ export const REDEEM_POINTS = gql`
 export const ON_LOYALTY_PROGRAM_CREATED = gql`
   subscription OnLoyaltyProgramCreated($businessId: String!) {
     loyaltyProgramCreated(businessId: $businessId) {
-      ...LoyaltyProgramEntity
+    id
+    name
+    description
+    pointsPerPurchase
+    minimumPointsToRedeem
+    createdAt
+    updatedAt
+    business {
+      id
+      name
+    }
+    pointsTransactions {
+      id
+      clientId
+      points
+      createdAt
+      client {
+        id
+        fullName
+        email
+      }
     }
   }
-  ${LOYALTY_PROGRAM_ENTITY}
+  }
 `;
 
 export const ON_LOYALTY_PROGRAM_UPDATED = gql`
   subscription OnLoyaltyProgramUpdated($businessId: String!) {
     loyaltyProgramUpdated(businessId: $businessId) {
-      ...LoyaltyProgramEntity
+    id
+    name
+    description
+    pointsPerPurchase
+    minimumPointsToRedeem
+    createdAt
+    updatedAt
+    business {
+      id
+      name
+    }
+    pointsTransactions {
+      id
+      clientId
+      points
+      createdAt
+      client {
+        id
+        fullName
+        email
+      }
     }
   }
-  ${LOYALTY_PROGRAM_ENTITY}
+  }
 `;
 
 export const ON_POINTS_EARNED = gql`
   subscription OnPointsEarned($businessId: String!) {
     pointsEarned(businessId: $businessId) {
-      ...PointsTransactionEntity
+    id
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    loyaltyProgramId
+    loyaltyProgram {
+      id
+      name
+    }
+    points
+    createdAt
   }
-  ${POINTS_TRANSACTION_ENTITY}
+  }
 `;
 
 export const ON_POINTS_REDEEMED = gql`
   subscription OnPointsRedeemed($businessId: String!) {
     pointsRedeemed(businessId: $businessId) {
-      ...PointsTransactionEntity
+    id
+    clientId
+    client {
+      id
+      fullName
+      email
     }
+    loyaltyProgramId
+    loyaltyProgram {
+      id
+      name
+    }
+    points
+    createdAt
   }
-  ${POINTS_TRANSACTION_ENTITY}
+  }
 `;

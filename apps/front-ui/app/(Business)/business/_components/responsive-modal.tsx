@@ -39,14 +39,14 @@ export default function ResponsiveModal({
         <DialogContent className={`w-full p-0 border-none overflow-y-auto ${sizeClasses[size]}`}>
           <DialogTitle className="hidden">{title}</DialogTitle>
           <div className="relative">
-            <Button
+            {/* <Button
               variant="ghost"
               size="icon"
               className="absolute -top-2 -right-2 z-10"
               onClick={() => setIsOpen(false)}
             >
               <X className="h-4 w-4" />
-            </Button>
+            </Button> */}
             {title && (
               <div className="border-b border-border px-6 py-4">
                 <h2 className="text-lg font-semibold">{title}</h2>

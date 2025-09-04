@@ -1,23 +1,26 @@
-// app/business/orders/_hooks/use-open-order-details-modal.ts
-import { ClientEntity, OrderProductEntity, PaymentTransactionEntity } from '@/lib/types';
-import { useState, useCallback } from 'react';
+import { create } from 'zustand';
+
+interface OrderDetailsModalState {
+  openOrderDetailsModal: boolean;
+  orderId: string | null;
+  setIsOpen: (newState: { openOrderDetailsModal: boolean; orderId: string | null }) => void;
+}
+
+const useOrderDetailsModalStore = create<OrderDetailsModalState>((set) => ({
+  openOrderDetailsModal: false,
+  orderId: null,
+  setIsOpen: (newState) => {
+    console.log('OrderDetailsModal state change:', newState);
+    set(newState);
+  },
+}));
 
 export const useOpenOrderDetailsModal = () => {
-  const [state, setState] = useState({
-    openOrderDetailsModal: false,
-    orderId: ''
-  });
-
-  const setIsOpen = useCallback((newState: any) => {
-    setState(prev => ({
-      ...prev,
-      ...newState
-    }));
-  }, []);
-
+  const { openOrderDetailsModal, orderId, setIsOpen } = useOrderDetailsModalStore();
+  
   return {
-    isOpen: state.openOrderDetailsModal,
+    isOpen: openOrderDetailsModal,
     setIsOpen,
-    orderId: state.orderId
+    orderId
   };
 };
