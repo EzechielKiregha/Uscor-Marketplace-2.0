@@ -16,6 +16,7 @@ This implementation delivers a comprehensive Loyalty Program Management system t
   Add points manually for special promotions
   Redeem points for discounts or free products
 4. In-Store Redemption Process:
+  let's make a change
   Scan loyalty cards for quick customer identification
   Calculate points earned from transactions
   Apply discounts based on redeemed points
