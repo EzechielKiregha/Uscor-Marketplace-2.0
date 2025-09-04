@@ -3,7 +3,7 @@ import { CreateBusinessInput } from './dto/create-business.input';
 import { UpdateBusinessInput } from './dto/update-business.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { hash } from 'argon2';
-import { format, subDays, startOfDay, endOfDay, isAfter, isBefore, startOfWeek, endOfWeek, addDays } from 'date-fns';
+import { format, subDays, startOfDay, endOfDay, isAfter, isBefore, startOfWeek, endOfWeek, addDays, startOfMonth, endOfMonth } from 'date-fns';
 import { BusinessDashboardResponse } from './entities/business-dashboard.entity';
 import { DashboardStats } from './entities/business-dashboard-stats.entity';
 import { SalesDataPoint } from './entities/sales-data-points.entity';
@@ -333,9 +333,26 @@ export class BusinessService {
     const endOfCurrentWeek = endOfWeek(today, { weekStartsOn: 1 });
     const startOfPreviousWeek = startOfWeek(subDays(today, 7), { weekStartsOn: 1 });
     const endOfPreviousWeek = endOfWeek(subDays(today, 7), { weekStartsOn: 1 });
+    const startOfPreviousMonth = startOfMonth(subDays(today, 30));
+    const endOfPreviousMonth = endOfMonth(subDays(today, 30));
+
+    const whereClauseCurrent: any = {
+      store: {
+        businessId
+      },
+      createdAt: { gte: startOfPreviousMonth, lte: endOfPreviousMonth },
+      status: { not: 'REFUNDED' }
+    };
+    const whereClausePrevious: any = {
+      store: {
+        businessId
+      },
+      createdAt: { gte: startOfPreviousMonth, lte: endOfPreviousMonth },
+      status: { not: 'REFUNDED' }
+    };
 
     // Single query for all order-related metrics
-    const [currentWeekMetrics, previousWeekMetrics, productMetrics, messageMetrics] = 
+    const [currentWeekMetrics, currentWeekSalesMetrics, previousWeekMetrics, previousWeekSalesMetrics, productMetrics, messageMetrics] = 
       await Promise.all([
         // Current week revenue and order count in one query
         this.prisma.order.aggregate({
@@ -345,11 +362,18 @@ export class BusinessService {
                 product: { businessId }
               }
             },
-            payment: { status: "COMPLETED" },
+            // payment: { status: "COMPLETED" },
             createdAt: { gte: startOfCurrentWeek, lte: endOfCurrentWeek }
           },
           _sum: { totalAmount: true },
           _count: true
+        }),
+
+        this.prisma.sale.aggregate({
+          where: whereClauseCurrent,
+          _count: true,
+          _sum: { totalAmount: true },
+          _avg: { totalAmount: true }
         }),
 
         // Previous week revenue and order count in one query  
@@ -360,11 +384,18 @@ export class BusinessService {
                 product: { businessId }
               }
             },
-            payment: { status: "COMPLETED" },
+            // payment: { status: "COMPLETED" },
             createdAt: { gte: startOfPreviousWeek, lte: endOfPreviousWeek }
           },
           _sum: { totalAmount: true },
           _count: true
+        }),
+
+        this.prisma.sale.aggregate({
+          where: whereClausePrevious,
+          _count: true,
+          _sum: { totalAmount: true },
+          _avg: { totalAmount: true }
         }),
 
         // Product metrics in one query
@@ -394,8 +425,13 @@ export class BusinessService {
       ]);
 
     // Calculate changes
-    const totalRevenue = currentWeekMetrics._sum.totalAmount || 0;
-    const previousRevenue = previousWeekMetrics._sum.totalAmount || 0;
+    const current_week_metrics = currentWeekMetrics._sum.totalAmount || 0;
+    const current_week_sales_metrics = currentWeekSalesMetrics._sum.totalAmount || 0;
+    const previous_week_metrics = previousWeekMetrics._sum.totalAmount || 0;
+    const previous_week_sales_metrics = previousWeekSalesMetrics._sum.totalAmount || 0;
+
+    const totalRevenue = current_week_metrics + current_week_sales_metrics;
+    const previousRevenue = previous_week_metrics + previous_week_sales_metrics;
     const revenueChange = previousRevenue ? 
       ((totalRevenue - previousRevenue) / previousRevenue) * 100 : 100;
 
@@ -404,7 +440,10 @@ export class BusinessService {
     const ordersChange = previousOrders ? 
       ((totalOrders - previousOrders) / previousOrders) * 100 : 100;
 
-    
+    console.log("Revenues: ", {
+      totalRevenue,
+      previousOrders
+    })
 
     return {
       totalRevenue,

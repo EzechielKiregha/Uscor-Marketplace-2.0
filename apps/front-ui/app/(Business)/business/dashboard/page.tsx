@@ -4,22 +4,77 @@ import { useQuery } from '@apollo/client';
 import Loader from '@/components/seraui/Loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { DollarSign, Package, ShoppingCart, MessageSquare } from 'lucide-react';
+import { DollarSign, Package, ShoppingCart, MessageSquare, Plus, Search } from 'lucide-react';
 import { GET_BUSINESS_DASHBOARD } from '@/graphql/business.gql';
-import { OrderEntity } from '@/lib/types';
+import { OrderEntity, StoreEntity } from '@/lib/types';
 import { useMe } from '@/lib/useMe';
+import { useOpenOrderDetailsModal } from '../_hooks/use-open-order-details-modal';
+import { useEffect, useState } from 'react';
+import { GET_BUSINESS_ORDERS } from '@/graphql/order.gql';
+import { Button } from '@/components/ui/button';
+import SalesDashboard from '../sales/_components/SalesDashboard';
+import { GET_STORES } from '@/graphql/store.gql';
+import CreateStoreModal from '../_components/modals/CreateStoreModal';
+import { useOpenCreateStoreModal } from '../_hooks/use-open-create-store-modal';
+import OrderDetailsModal from './orders/_components/OrderDetailsModal';
+import { useToast } from '@/components/toast-provider';
+import { useRouter } from 'next/navigation';
 
 export default function BusinessDashboardPage() {
+  const { isOpen: isOpenOrder, setIsOpen: setIsOpenOrder } = useOpenOrderDetailsModal();
+  const { isOpen, setIsOpen } = useOpenCreateStoreModal();
+  const { showToast } = useToast()
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+  const user = useMe();
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
 
-  const bUser = useMe()
 
-  const { data, loading, error } = useQuery(GET_BUSINESS_DASHBOARD);
+  const {
+    data: storesData,
+    loading: storesLoading,
+    error: storesError
+  } = useQuery(GET_STORES);
 
-  if (loading) return <Loader loading={true} />;
-  if (error) return <div>Error loading dashboard</div>;
+  const { data, loading, error, refetch } = useQuery(GET_BUSINESS_ORDERS, {
+    variables: {
+      businessId: user?.id,
+      search: searchTerm,
+      status: statusFilter || undefined,
+      date: dateFilter || undefined
+    }
+  });
+  const { data: businessData, loading: businessDataLoading, error: businessDataErro } = useQuery(GET_BUSINESS_DASHBOARD);
 
-  const stats = data.businessDashboard.stats;
-  const salesData = data.businessDashboard.salesData;
+  // Auto-select first store if none selected
+  useEffect(() => {
+    if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
+      setSelectedStoreId(storesData.stores[0].id);
+    }
+  }, [storesData, selectedStoreId]);
+
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'COMPLETED':
+        return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Completed</span>;
+      case 'PROCESSING':
+        return <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Processing</span>;
+      case 'SHIPPED':
+        return <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Shipped</span>;
+      case 'CANCELLED':
+        return <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Cancelled</span>;
+      default:
+        return <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">{status}</span>;
+    }
+  };
+
+  if (loading || businessDataLoading || storesLoading) return <Loader loading={true} />;
+  if (error || businessDataErro || storesError) return <div>Error loading dashboard</div>;
+
+  const stats = businessData.businessDashboard.stats;
+  const salesData = businessData.businessDashboard.salesData;
 
   return (
     <div className="space-y-6">
@@ -83,8 +138,69 @@ export default function BusinessDashboardPage() {
         </Card>
       </div>
 
+      <div className="flex flex-col justify-between sm:flex-row gap-3 w-full sm:w-auto">
+        <select
+          title='selected store ID'
+          value={selectedStoreId || ''}
+          onChange={(e) => setSelectedStoreId(e.target.value)}
+          className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+        >
+          {storesData.stores.map((store: StoreEntity) => (
+            <option key={store.id} value={store.id}>
+              {store.name} {store.address ? `• ${store.address}` : ''}
+            </option>
+          ))}
+        </select>
+
+        {/* <div className="relative w-full sm:w-64">
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        </div> */}
+
+        <Button
+          variant="default"
+          size="sm"
+          onClick={() => {
+            showToast('success', 'Redirecting to new sale page', 'You are now redirecting to the point of sale page', false, 9000);
+            useRouter().push("/dashboard/sales")
+          }}
+          disabled={!selectedStoreId}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          New
+        </Button>
+      </div>
+
       {/* Sales Chart */}
-      <Card>
+      {!storesData?.stores || storesData.stores.length === 0 ? (
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] p-6">
+          <div className="text-center max-w-md">
+            <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+              <ShoppingCart className="h-10 w-10 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold mb-2">No Stores Found</h2>
+            <p className="text-muted-foreground mb-6">
+              You need to create at least one store before you can process sales
+            </p>
+            <Button
+              onClick={() => {
+                showToast('success', 'Redirecting to store page', 'You are now redirecting to the store page', false, 9000);
+                useRouter().push("/dashboard/stores")
+              }}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Create Your First Store
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <SalesDashboard storeId={selectedStoreId || ''} />
+      )}
+      {/* <Card>
         <CardHeader>
           <CardTitle>Sales Overview</CardTitle>
         </CardHeader>
@@ -99,47 +215,47 @@ export default function BusinessDashboardPage() {
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
-      </Card>
+      </Card> */}
 
-      {/* Recent Orders */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Orders</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left text-muted-foreground">
-                  <th className="pb-3 font-medium">Order ID</th>
-                  <th className="pb-3 font-medium">Customer</th>
-                  <th className="pb-3 font-medium">Date</th>
-                  <th className="pb-3 font-medium">Amount</th>
-                  <th className="pb-3 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.businessDashboard.recentOrders.map((order: OrderEntity) => (
-                  <tr key={order.id} className="border-t border-border">
-                    <td className="py-3">{order.id.substring(0, 8)}...</td>
-                    <td className="py-3">{order.client.fullName}</td>
-                    <td className="py-3">{new Date(order.createdAt).toLocaleDateString()}</td>
-                    <td className="py-3">${order.payment?.amount.toFixed(2)}</td>
-                    <td className="py-3">
-                      <span className={`px-2 py-1 rounded-full text-xs ${order.payment?.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                        order.payment?.status === 'PENDING' ? 'bg-blue-100 text-blue-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>
-                        {order.payment?.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Orders Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="text-left text-muted-foreground border-b border-border">
+              <th className="py-3 font-medium">Order ID</th>
+              <th className="py-3 font-medium">Customer</th>
+              <th className="py-3 font-medium">Date</th>
+              <th className="py-3 font-medium">Amount</th>
+              <th className="py-3 font-medium">Status</th>
+              <th className="py-3 font-medium">Items</th>
+              <th className="py-3 font-medium">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.businessOrders.items.map((order: OrderEntity) => (
+              <tr key={order.id} className="border-b border-border hover:bg-muted/50">
+                <td className="py-3">{order.id.substring(0, 8)}...</td>
+                <td className="py-3">{order.client.email}</td>
+                <td className="py-3">{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td className="py-3">${order.payment?.amount.toFixed(2)}</td>
+                <td className="py-3">{getStatusBadge(order.payment?.status ?? 'Undefined')}</td>
+                <td className="py-3">{order.products?.length}</td>
+                <td className="py-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsOpenOrder({ openOrderDetailsModal: true, orderId: order.id })}
+                  >
+                    View Details
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Order Details Modal */}
+      <OrderDetailsModal />
     </div>
   );
 }
