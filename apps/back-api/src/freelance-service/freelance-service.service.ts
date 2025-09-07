@@ -3,6 +3,23 @@ import { AssignWorkersInput, CreateFreelanceServiceInput, FreelanceServiceCatego
 import { UpdateFreelanceServiceInput } from './dto/update-freelance-service.input';
 import { PrismaService } from '../prisma/prisma.service';
 
+interface FindAllFilters {
+  category?: string;
+  minRate?: number;
+  maxRate?: number;
+  isHourly?: boolean;
+  businessId?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+interface AssignWorkerToServiceInput {
+  serviceId: string;
+  workerId: string;
+  role?: string;
+}
+
 // Service
 @Injectable()
 export class FreelanceServiceService {
@@ -25,38 +42,92 @@ export class FreelanceServiceService {
         },
       },
       include: {
-        business: { select: { id: true, name: true, email: true, createdAt: true } },
-        workerServiceAssignments: { include: { worker: true } },
+        business: { select: { id: true, name: true, avatar: true, email: true, createdAt: true } },
+        workerServiceAssignments: { 
+          include: { 
+            worker: { 
+              select: { id: true, fullName: true, email: true } 
+            } 
+          } 
+        },
       },
     });
   }
 
-  async findAll(category?: FreelanceServiceCategory) {
-
-    if (category && !Object.values(FreelanceServiceCategory).includes(category)) {
-      return this.prisma.freelanceService.findMany({
-        include: {
-          business: { select: { id: true, name: true, avatar:true, email: true, createdAt: true } },
-          workerServiceAssignments: { include: { worker: true } },
-      }
-      });
+  async findAll(filters: FindAllFilters) {
+    const { category, minRate, maxRate, isHourly, businessId, search, page = 1, limit = 20 } = filters;
+    
+    const skip = (page - 1) * limit;
+    
+    const where: any = {};
+    
+    if (category && Object.values(FreelanceServiceCategory).includes(category as FreelanceServiceCategory)) {
+      where.category = category;
+    }
+    
+    if (minRate !== undefined) {
+      where.rate = { ...where.rate, gte: minRate };
+    }
+    
+    if (maxRate !== undefined) {
+      where.rate = { ...where.rate, lte: maxRate };
+    }
+    
+    if (isHourly !== undefined) {
+      where.isHourly = isHourly;
+    }
+    
+    if (businessId) {
+      where.businessId = businessId;
+    }
+    
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
     }
 
-    return this.prisma.freelanceService.findMany({
-      where: { ...(category ? { category } : {}) },
-      include: {
-        business: { select: { id: true, name: true, email: true, createdAt: true } },
-        workerServiceAssignments: { include: { worker: true } },
-      },
-    });
+    const [items, total] = await Promise.all([
+      this.prisma.freelanceService.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          business: { select: { id: true, name: true, avatar: true, email: true, createdAt: true } },
+          workerServiceAssignments: { 
+            include: { 
+              worker: { 
+                select: { id: true, fullName: true, email: true } 
+              } 
+            } 
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.freelanceService.count({ where }),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string) {
     const service = await this.prisma.freelanceService.findUnique({
       where: { id },
       include: {
-        business: { select: { id: true, name: true, email: true, createdAt: true } },
-        workerServiceAssignments: { include: { worker: true } },
+        business: { select: { id: true, name: true, avatar: true, email: true, createdAt: true } },
+        workerServiceAssignments: { 
+          include: { 
+            worker: { 
+              select: { id: true, fullName: true, email: true } 
+            } 
+          } 
+        },
       },
     });
     if (!service) {
@@ -88,8 +159,14 @@ export class FreelanceServiceService {
           : undefined,
       },
       include: {
-        business: { select: { id: true, name: true, email: true } },
-        workerServiceAssignments: { include: { worker: true } },
+        business: { select: { id: true, name: true, avatar: true, email: true } },
+        workerServiceAssignments: { 
+          include: { 
+            worker: { 
+              select: { id: true, fullName: true, email: true } 
+            } 
+          } 
+        },
       },
     });
   }
@@ -111,8 +188,57 @@ export class FreelanceServiceService {
         },
       },
       include: {
-        business: { select: { id: true, name: true, email: true } },
-        workerServiceAssignments: { include: { worker: true } },
+        business: { select: { id: true, name: true, avatar: true, email: true } },
+        workerServiceAssignments: { 
+          include: { 
+            worker: { 
+              select: { id: true, fullName: true, email: true } 
+            } 
+          } 
+        },
+      },
+    });
+  }
+
+  async assignWorkerToService(input: AssignWorkerToServiceInput, businessId: string) {
+    const { serviceId, workerId, role } = input;
+    const service = await this.findOne(serviceId);
+    if (service.businessId !== businessId) {
+      throw new Error('Businesses can only assign workers to their own services');
+    }
+
+    return this.prisma.workerServiceAssignment.create({
+      data: {
+        freelanceService: { connect: { id: serviceId } },
+        worker: { connect: { id: workerId } },
+        role,
+      },
+      include: {
+        worker: { 
+          select: { id: true, fullName: true, email: true } 
+        },
+        freelanceService: {
+          select: { id: true, title: true }
+        }
+      },
+    });
+  }
+
+  async getWorkerAssignments(workerId: string, serviceId?: string) {
+    const where: any = { workerId };
+    if (serviceId) {
+      where.freelanceServiceId = serviceId;
+    }
+
+    return this.prisma.workerServiceAssignment.findMany({
+      where,
+      include: {
+        worker: { 
+          select: { id: true, fullName: true, email: true } 
+        },
+        freelanceService: {
+          select: { id: true, title: true }
+        }
       },
     });
   }

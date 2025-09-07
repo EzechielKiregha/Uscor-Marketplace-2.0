@@ -1,4 +1,4 @@
-import { ObjectType, Field, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
 import { IsEnum } from 'class-validator';
 import { BusinessEntity } from '../../business/entities/business.entity';
 import { WorkerEntity } from '../../worker/entities/worker.entity';
@@ -43,14 +43,35 @@ export class WorkerServiceAssignmentEntity {
   @Field()
   id: string;
 
+  @Field()
+  serviceId: string;
+
+  @Field()
+  workerId: string;
+
   @Field(() => WorkerEntity)
   worker: WorkerEntity;
 
-  @Field()
+  @Field({ nullable: true })
   role?: string;
 
   @Field()
   assignedAt: Date;
+}
+
+@ObjectType()
+export class PaginatedFreelanceServicesResponse {
+  @Field(() => [FreelanceServiceEntity])
+  items: FreelanceServiceEntity[];
+
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => Int)
+  limit: number;
 }
 
 

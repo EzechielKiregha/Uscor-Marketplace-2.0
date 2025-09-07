@@ -10,8 +10,17 @@ export class FreelanceOrderEntity {
   @Field()
   id: string;
 
-  @Field(() => FreelanceStatus)
-  status: FreelanceStatus;
+  @Field()
+  serviceId: string;
+
+  @Field(() => FreelanceServiceEntity)
+  service: FreelanceServiceEntity;
+
+  @Field()
+  clientId: string;
+
+  @Field(() => ClientEntity)
+  client: ClientEntity;
 
   @Field(() => Int)
   quantity: number;
@@ -23,30 +32,20 @@ export class FreelanceOrderEntity {
   escrowAmount: number;
 
   @Field(() => Float)
-  commissionPercent: number;
+  platformCommissionPercentage: number;
 
-  @Field(() => EscrowStatus, { nullable: true })
-  escrowStatus?: EscrowStatus;
+  @Field(() => FreelanceStatus)
+  status: FreelanceStatus;
 
   @Field()
   createdAt: Date;
 
   @Field()
-  escrowReleasedAt: Date;
-
-  @Field(() => ClientEntity)
-  client: ClientEntity;
-
-  @Field(() => FreelanceServiceEntity)
-  service: FreelanceServiceEntity;
-
-  @Field(() => [FreelanceOrderBusinessEntity])
-  freelanceOrderBusiness: FreelanceOrderBusinessEntity[];
+  updatedAt: Date;
 
   @Field(() => PaymentTransactionEntity, { nullable: true })
-  payment?: PaymentTransactionEntity;
+  paymentTransaction?: PaymentTransactionEntity;
 }
-
 
 @ObjectType()
 export class FreelanceOrderBusinessEntity {
@@ -56,9 +55,24 @@ export class FreelanceOrderBusinessEntity {
   @Field(() => BusinessEntity)
   business: BusinessEntity;
 
-  @Field()
+  @Field({ nullable: true })
   role?: string;
 
   @Field()
   assignedAt: Date;
+}
+
+@ObjectType()
+export class PaginatedFreelanceOrdersResponse {
+  @Field(() => [FreelanceOrderEntity])
+  items: FreelanceOrderEntity[];
+
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Int)
+  page: number;
+
+  @Field(() => Int)
+  limit: number;
 }

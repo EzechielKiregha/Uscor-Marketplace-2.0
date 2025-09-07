@@ -142,9 +142,18 @@ enum FreelanceServiceCategory {
 
 type WorkerServiceAssignmentEntity {
   id: String!
+  serviceId: String!
+  workerId: String!
   worker: WorkerEntity!
-  role: String!
+  role: String
   assignedAt: DateTime!
+}
+
+type PaginatedFreelanceServicesResponse {
+  items: [FreelanceServiceEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type AdEntity {
@@ -499,18 +508,18 @@ type PostTransactionEntity {
 
 type FreelanceOrderEntity {
   id: String!
-  status: FreelanceStatus!
+  serviceId: String!
+  service: FreelanceServiceEntity!
+  clientId: String!
+  client: ClientEntity!
   quantity: Int!
   totalAmount: Float!
   escrowAmount: Float!
-  commissionPercent: Float!
-  escrowStatus: EscrowStatus
+  platformCommissionPercentage: Float!
+  status: FreelanceStatus!
   createdAt: DateTime!
-  escrowReleasedAt: DateTime!
-  client: ClientEntity!
-  service: FreelanceServiceEntity!
-  freelanceOrderBusiness: [FreelanceOrderBusinessEntity!]!
-  payment: PaymentTransactionEntity
+  updatedAt: DateTime!
+  paymentTransaction: PaymentTransactionEntity
 }
 
 enum FreelanceStatus {
@@ -519,19 +528,6 @@ enum FreelanceStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
-}
-
-enum EscrowStatus {
-  HELD
-  RELEASED
-  DISPUTED
-}
-
-type FreelanceOrderBusinessEntity {
-  id: String!
-  business: BusinessEntity!
-  role: String!
-  assignedAt: DateTime!
 }
 
 type ClientEntity {
@@ -1020,11 +1016,14 @@ type Query {
   """Retrieves a single payment transaction by ID."""
   paymentTransaction(id: String!): PaymentTransactionEntity!
 
-  """Retrieves freelance services, optionally filtered by category."""
-  freelanceServices(category: FreelanceServiceCategory): [FreelanceServiceEntity!]!
+  """Retrieves freelance services with pagination and filters."""
+  freelanceServices(category: String, minRate: Float, maxRate: Float, isHourly: Boolean, businessId: String, search: String, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceServicesResponse!
 
   """Retrieves a single freelance service by ID."""
   freelanceService(id: String!): FreelanceServiceEntity!
+
+  """Get worker assignments for a service or worker."""
+  workerServiceAssignments(workerId: String!, serviceId: String): [WorkerServiceAssignmentEntity!]!
 
   """Retrieves freelance orders based on user role."""
   freelanceOrders: [FreelanceOrderEntity!]!
@@ -1236,13 +1235,13 @@ type Mutation {
   deletePaymentTransaction(id: String!): PaymentTransactionEntity!
 
   """Creates a new freelance service."""
-  createFreelanceService(createFreelanceServiceInput: CreateFreelanceServiceInput!): FreelanceServiceEntity!
+  createFreelanceService(input: CreateFreelanceServiceInput!): FreelanceServiceEntity!
 
   """Updates a freelance service."""
-  updateFreelanceService(id: String!, updateFreelanceServiceInput: UpdateFreelanceServiceInput!): FreelanceServiceEntity!
+  updateFreelanceService(id: String!, input: UpdateFreelanceServiceInput!): FreelanceServiceEntity!
 
-  """Assigns workers to a freelance service."""
-  assignWorkersToService(assignWorkersInput: AssignWorkersInput!): FreelanceServiceEntity!
+  """Assigns a worker to a freelance service."""
+  assignWorkerToService(input: AssignWorkerToServiceInput!): WorkerServiceAssignmentEntity!
 
   """Deletes a freelance service."""
   deleteFreelanceService(id: String!): FreelanceServiceEntity!
@@ -1615,9 +1614,10 @@ input UpdateFreelanceServiceInput {
   workerIds: [String!]
 }
 
-input AssignWorkersInput {
+input AssignWorkerToServiceInput {
   serviceId: String!
-  workerIds: [String!]!
+  workerId: String!
+  role: String
 }
 
 input CreateFreelanceOrderInput {
@@ -1632,6 +1632,12 @@ input UpdateFreelanceOrderInput {
   status: FreelanceStatus
   escrowStatus: EscrowStatus
   commissionPercent: Float
+}
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  DISPUTED
 }
 
 input AssignBusinessesInput {
@@ -1839,6 +1845,8 @@ type Subscription {
   messageReceived(chatId: String!): ChatMessageEntity!
   chatCreated(userId: String!): ChatEntity!
   chatStatusUpdated(userId: String!): ChatEntity!
+  freelanceServiceCreated(businessId: String!): FreelanceServiceEntity!
+  freelanceServiceUpdated(businessId: String!): FreelanceServiceEntity!
   saleCreated(storeId: String!): SaleEntity!
   saleUpdated(storeId: String!): SaleEntity!
   loyaltyProgramCreated(businessId: String!): LoyaltyProgramEntity!
