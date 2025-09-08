@@ -1,6 +1,4 @@
-// app/business/_components/modals/CreateProductModal.tsx
 "use client";
-
 import { useOpenCreateProductModal } from "../../_hooks/use-open-create-product-modal";
 import ResponsiveModal from "../responsive-modal";
 import ProductForm from "./ProductForm";

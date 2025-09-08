@@ -39,6 +39,9 @@ export class CreateProductInput {
   @IsString()
   categoryId: string;
 
+  @Field(() => String, { nullable: true })
+  image?: string;
+
   @Field(() => Boolean, { defaultValue: false })
   @IsOptional()
   featured?: boolean;

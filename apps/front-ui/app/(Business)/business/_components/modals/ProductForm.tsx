@@ -1,12 +1,17 @@
 // app/business/_components/modals/ProductForm.tsx
 "use client";
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@apollo/client';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@/graphql/product.gql';
 import Loader from '@/components/seraui/Loader';
 import { useToast } from '@/components/toast-provider';
+import { ImageIcon, Trash2, Upload, User } from 'lucide-react';
+import { useMe } from '@/lib/useMe';
+import Image from 'next/image';
+import { put } from '@vercel/blob';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface ProductFormProps {
   initialData?: any | null;
@@ -19,14 +24,21 @@ export default function ProductForm({
   onSuccess,
   onCancel
 }: ProductFormProps) {
+  const user = useMe();
+
   const [formData, setFormData] = useState(initialData || {
     title: '',
     description: '',
     price: '',
-    stock: '',
+    quantity: '',
+    isPhysical: true,
+    businessId: user?.id,
+    approvedForSale: true,
     categoryId: '',
-    isFeatured: false
+    isFeatured: false,
+    image: ''
   });
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
@@ -57,27 +69,31 @@ export default function ProductForm({
       const productData = {
         ...formData,
         price: parseFloat(formData.price),
-        stock: parseInt(formData.stock)
+        quantity: parseInt(formData.quantity)
       };
 
-      if (initialData) {
-        await updateProduct({
-          variables: {
-            id: initialData.id,
-            input: productData
-          }
-        });
-        showToast('success', 'Success', 'Product updated successfully');
+      // Handle image uploads if any
+      if (imageFiles.length === 1) {
+        // In a real app, you'd upload images here
+        const blobToken = process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN;
+        if (!blobToken && imageFiles[0] instanceof File) {
+          throw new Error('Vercel Blob token is missing. Please configure NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN.');
+        }
+        if (imageFiles[0] instanceof File) {
+          const blob = await put(`business/products/medias/${Date.now()}-${imageFiles[0]}`, imageFiles[0], {
+            access: 'public',
+            token: blobToken,
+          });
+
+        }
+        showToast('info', 'Info', 'Uploading product images...');
+      } else if (imageFiles.length > 1) {
+        showToast('warning', 'Warning', 'Please select only one image.');
       } else {
-        await createProduct({ variables: { input: productData } });
-        showToast('success', 'Success', 'Product created successfully');
+        showToast('info', 'Info', 'No images selected.');
       }
 
-      // Handle image uploads if any
-      if (imageFiles.length > 0) {
-        // In a real app, you'd upload images here
-        showToast('info', 'Info', 'Uploading product images...');
-      }
+
 
       onSuccess();
     } catch (error: any) {
@@ -145,7 +161,7 @@ export default function ProductForm({
               type="number"
               id="stock"
               name="stock"
-              value={formData.stock}
+              value={formData.quantity}
               onChange={handleChange}
               min="0"
               className="w-full p-2 border border-border rounded-md"
@@ -175,17 +191,42 @@ export default function ProductForm({
         </div>
 
         <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="isFeatured"
-            name="isFeatured"
-            checked={formData.isFeatured}
-            onChange={handleChange}
-            className="h-4 w-4 text-primary border-border rounded"
-          />
-          <label htmlFor="isFeatured" className="ml-2 text-sm">
-            Featured Product
-          </label>
+          <div className="flex flex-row items-center space-x-2">
+            <input
+              type="checkbox"
+              id="isFeatured"
+              name="isFeatured"
+              checked={formData.isFeatured}
+              onChange={handleChange}
+              className="h-4 w-4 text-primary border-border rounded"
+            />
+            <label htmlFor="isFeatured" className="ml-2 text-sm">
+              Featured Product
+            </label>
+            <input
+              type="checkbox"
+              id="isFeatured"
+              name="isFeatured"
+              checked={formData.approvedForSale}
+              onChange={handleChange}
+              className="h-4 w-4 text-primary border-border rounded"
+            />
+            <label htmlFor="isFeatured" className="ml-2 text-sm">
+              Approve for Sale
+            </label>
+            <input
+              type="checkbox"
+              id="isFeatured"
+              name="isFeatured"
+              checked={formData.isPhysical}
+              onChange={handleChange}
+              className="h-4 w-4 text-primary border-border rounded"
+            />
+            <label htmlFor="isFeatured" className="ml-2 text-sm">
+              Is Physical Product
+            </label>
+          </div>
+
         </div>
 
         <div>
@@ -200,6 +241,72 @@ export default function ProductForm({
             onChange={handleImageUpload}
             className="w-full"
           />
+          <div className="flex items-center gap-4">
+            {imageFiles.length > 0 ? (
+              <div className="relative size-20 rounded-full">
+                <Image
+                  alt="Logo"
+                  src={
+                    imageFiles[0] instanceof File
+                      ? URL.createObjectURL(imageFiles[0])
+                      : imageFiles[0]
+                  }
+                  fill
+                  className="object-cover rounded-full"
+                />
+              </div>
+            ) : (
+              <div>
+                <Avatar className="size-20">
+                  <AvatarFallback>
+                    <ImageIcon className="size-10 text-neutral-500" />
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            )}
+            <div>
+              <p className="font-semibold">Project Icon</p>
+              <p className="text-sm text-muted-foreground">
+                JPG, PNG, SVG or JPEG, max 1MB
+              </p>
+              <input
+                title="file"
+                // disabled={isPending}
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+              {imageFiles[0] ? (
+                <Button
+                  variant={"destructive"}
+                  type="button"
+                  size={"sm"}
+                  className="mt-2"
+                  onClick={() => {
+                    formData.image.onChange("");
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+                  }}
+                >
+                  <Trash2 />
+                </Button>
+              ) : (
+                <Button
+                  variant={"outline"}
+                  type="button"
+                  size={"sm"}
+                  className="mt-2"
+                  onClick={() => {
+                    fileInputRef?.current?.click();
+                  }}
+                >
+                  <Upload />
+                </Button>
+              )}
+            </div>
+          </div>
           {imageFiles.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {imageFiles.map((file, index) => (
