@@ -34,6 +34,7 @@ export default function BusinessDashboardPage() {
   const [lowStockProducts, setLowStockProducts] = useState<number>(0);
   const user = useMe();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+  const route = useRouter()
 
   const {
     data: storesData,
@@ -119,7 +120,8 @@ export default function BusinessDashboardPage() {
   if (error || businessDataErro || storesError) return <div>Error loading dashboard</div>;
 
   const stats = businessData.businessDashboard.stats;
-  // const salesData = businessData.businessDashboard.salesData;
+  const salesData = businessData.businessDashboard.salesData;
+  localStorage.setItem("unreadMessages", stats.unreadMessages)
 
   return (
     <div className="space-y-6">
@@ -201,8 +203,8 @@ export default function BusinessDashboardPage() {
           variant="default"
           size="sm"
           onClick={() => {
+            route.push("/business/sales")
             showToast('success', 'Redirecting to new sale page', 'You are now redirecting to the point of sale page', false, 9000);
-            useRouter().push("/dashboard/sales")
           }}
           disabled={!selectedStoreId}
         >
@@ -234,24 +236,26 @@ export default function BusinessDashboardPage() {
           </div>
         </div>
       ) : (
-        <SalesDashboard storeId={selectedStoreId || ''} />
+        <>
+          {/* <Card>
+            <CardHeader>
+              <CardTitle>Sales Overview</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={salesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="sales" fill="hsl(var(--primary))" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card> */}
+          <SalesDashboard storeId={selectedStoreId || ''} />
+        </>
       )}
-      {/* <Card>
-        <CardHeader>
-          <CardTitle>Sales Overview</CardTitle>
-        </CardHeader>
-        <CardContent className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={salesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="sales" fill="hsl(var(--primary))" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card> */}
 
       {/* Orders Table */}
       <div className="overflow-x-auto">

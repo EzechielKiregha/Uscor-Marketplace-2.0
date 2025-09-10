@@ -23,17 +23,17 @@ export class SaleEntity {
   @Field({ nullable: true })
   id?: string
 
-  @Field()
-  storeId: string
+  @Field({nullable: true })
+  storeId?: string
 
-  @Field(() => StoreEntity)
-  store: StoreEntity
+  @Field(() => StoreEntity, {nullable: true })
+  store?: StoreEntity
 
-  @Field()
-  workerId: string
+  @Field({nullable: true })
+  workerId?: string
 
-  @Field(() => WorkerEntity)
-  worker: WorkerEntity
+  @Field(() => WorkerEntity, {nullable: true })
+  worker?: WorkerEntity
 
   @Field({ nullable: true })
   clientId?: string
@@ -47,11 +47,11 @@ export class SaleEntity {
   @Field(() => Float, { nullable: true })
   discount?: number
 
-  @Field(() => PaymentMethod)
-  paymentMethod: PaymentMethod
+  @Field(() => PaymentMethod, {nullable: true })
+  paymentMethod?: PaymentMethod
 
-  @Field(() => SaleStatus)
-  status: SaleStatus
+  @Field(() => SaleStatus, {nullable: true })
+  status?: SaleStatus
 
   @Field({ nullable: true })
   createdAt?: Date
@@ -59,9 +59,9 @@ export class SaleEntity {
   @Field({ nullable: true })
   updatedAt?: Date
 
-  @Field(() => [SaleProductEntity])
-  saleProducts: SaleProductEntity[]
+  @Field(() => [SaleProductEntity], {nullable: true })
+  saleProducts?: SaleProductEntity[]
 
-  @Field(() => [ReturnEntity])
-  returns: ReturnEntity[]
+  @Field(() => [ReturnEntity], {nullable: true })
+  returns?: ReturnEntity[]
 }

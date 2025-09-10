@@ -141,7 +141,7 @@ export const useSales = (storeId: string, wUserId: string, role?: string) => {
 
   // Get sales history
   const getSalesHistory = useCallback(() => {
-    return salesHistoryData?.sales?.items || [];
+    return salesHistoryData?.salesHistory?.items || [];
   }, [salesHistoryData]);
 
   return {

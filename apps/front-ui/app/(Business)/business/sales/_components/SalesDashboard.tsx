@@ -15,7 +15,7 @@ interface SalesDashboardProps {
 }
 
 export default function SalesDashboard({ storeId }: SalesDashboardProps) {
-  const [period, setPeriod] = useState<'day' | 'week' | 'month'>('month');
+  const [period, setPeriod] = useState<'day' | 'week' | 'month'>('day');
 
   const {
     data,

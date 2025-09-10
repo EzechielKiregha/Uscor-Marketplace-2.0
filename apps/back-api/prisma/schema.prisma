@@ -307,6 +307,8 @@ model Media {
   id                   String                @id @default(uuid())
   url                  String
   type                 MediaType
+  size                 BigInt?
+  pathname           String?
   product              Product?               @relation(fields: [productId], references: [id])
   productId            String?
   service              FreelanceService?     @relation(fields: [serviceId], references: [id])

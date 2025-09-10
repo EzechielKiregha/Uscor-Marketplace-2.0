@@ -41,6 +41,7 @@ export class ProductResolver {
   })
   async createProduct(
     @Args('input') input: CreateProductInput,
+    @Args('mediaInput', { nullable: true }) mediaInput: AddMediaInput,
     @Context() context,
   ) {
     const user = context.req.user
@@ -52,9 +53,14 @@ export class ProductResolver {
         'Businesses can only create products for their own account',
       )
     }
-    const product =
-      await this.productService.create(input)
+    const product = await this.productService.create(input)
 
+    if (mediaInput) {
+        await this.mediaService.addToProduct(
+          product.id,
+          mediaInput,
+        )
+      }
     // Publish subscription event
     pubSub.publish('productCreated', {
       productCreated: product,

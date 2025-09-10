@@ -35,7 +35,7 @@ export default function ProductForm({
     businessId: user?.id,
     approvedForSale: true,
     categoryId: '',
-    isFeatured: false,
+    featured: false,
     image: ''
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,6 +68,7 @@ export default function ProductForm({
       // Convert price and stock to numbers
       const productData = {
         ...formData,
+        businessId: user.id,
         price: parseFloat(formData.price),
         quantity: parseInt(formData.quantity)
       };
@@ -89,15 +90,27 @@ export default function ProductForm({
               variables: {
                 id: initialData.id,
                 input: productData,
-                url: blob.url,
-                pathname: blob.pathname,
-                contentType: imageFiles[0].type,
-                size: imageFiles[0].size,
+                mediaInput: {
+                  url: blob.url,
+                  pathname: blob.pathname,
+                  type: imageFiles[0].type,
+                  size: imageFiles[0].size,
+                }
               }
             });
             showToast('success', 'Success', 'Product updated successfully');
           } else {
-            await createProduct({ variables: { input: productData } });
+            await createProduct({
+              variables: {
+                input: productData,
+                mediaInput: {
+                  url: blob.url,
+                  pathname: blob.pathname,
+                  type: imageFiles[0].type,
+                  size: imageFiles[0].size,
+                }
+              }
+            });
             showToast('success', 'Success', 'Product created successfully');
           }
         }
@@ -169,13 +182,13 @@ export default function ProductForm({
           </div>
 
           <div>
-            <label htmlFor="stock" className="block text-sm font-medium mb-1">
+            <label htmlFor="quantity" className="block text-sm font-medium mb-1">
               Stock Quantity
             </label>
             <input
               type="number"
-              id="stock"
-              name="stock"
+              id="quantity"
+              name="quantity"
               value={formData.quantity}
               onChange={handleChange}
               min="0"
@@ -209,35 +222,35 @@ export default function ProductForm({
           <div className="flex flex-row items-center space-x-2">
             <input
               type="checkbox"
-              id="isFeatured"
-              name="isFeatured"
-              checked={formData.isFeatured}
+              id="featured"
+              name="featured"
+              checked={formData.featured}
               onChange={handleChange}
               className="h-4 w-4 text-primary border-border rounded"
             />
-            <label htmlFor="isFeatured" className="ml-2 text-sm">
+            <label htmlFor="featured" className="ml-2 text-sm">
               Featured Product
             </label>
             <input
               type="checkbox"
-              id="isFeatured"
-              name="isFeatured"
+              id="approvedForSale"
+              name="approvedForSale"
               checked={formData.approvedForSale}
               onChange={handleChange}
               className="h-4 w-4 text-primary border-border rounded"
             />
-            <label htmlFor="isFeatured" className="ml-2 text-sm">
+            <label htmlFor="approvedForSale" className="ml-2 text-sm">
               Approve for Sale
             </label>
             <input
               type="checkbox"
-              id="isFeatured"
-              name="isFeatured"
+              id="isPhysical"
+              name="isPhysical"
               checked={formData.isPhysical}
               onChange={handleChange}
               className="h-4 w-4 text-primary border-border rounded"
             />
-            <label htmlFor="isFeatured" className="ml-2 text-sm">
+            <label htmlFor="isPhysical" className="ml-2 text-sm">
               Is Physical Product
             </label>
           </div>
@@ -245,7 +258,7 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
+          {/* <label className="block text-sm font-medium mb-1">
             Product Images
           </label>
           <input
@@ -255,7 +268,7 @@ export default function ProductForm({
             accept="image/*"
             onChange={handleImageUpload}
             className="w-full"
-          />
+          /> */}
           <div className="flex items-center gap-4">
             {imageFiles.length > 0 ? (
               <div className="relative size-20 rounded-full">
@@ -280,7 +293,7 @@ export default function ProductForm({
               </div>
             )}
             <div>
-              <p className="font-semibold">Project Icon</p>
+              <p className="font-semibold">Product Images</p>
               <p className="text-sm text-muted-foreground">
                 JPG, PNG, SVG or JPEG, max 1MB
               </p>
@@ -322,7 +335,7 @@ export default function ProductForm({
               )}
             </div>
           </div>
-          {imageFiles.length > 0 && (
+          {/* {imageFiles.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {imageFiles.map((file, index) => (
                 <div key={index} className="relative">
@@ -334,7 +347,7 @@ export default function ProductForm({
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
@@ -352,7 +365,7 @@ export default function ProductForm({
           className="bg-primary hover:bg-accent text-primary-foreground"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <Loader loading={true} /> : initialData ? 'Update Product' : 'Create Product'}
+          {isSubmitting ? "Submitting..." : initialData ? 'Update Product' : 'Create Product'}
         </Button>
       </div>
     </form>

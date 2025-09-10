@@ -188,8 +188,8 @@ export const GET_RELATED_PRODUCTS = gql`
 // ======================
 
 export const CREATE_PRODUCT = gql`
-  mutation CreateProduct($input: CreateProductInput!) {
-    createProduct(input: $input) {
+  mutation CreateProduct($input: CreateProductInput!, $mediaInput: AddMediaInput) {
+    createProduct(input: $input, mediaInput: $mediaInput) {
       id
       title
       description
@@ -218,8 +218,8 @@ export const CREATE_PRODUCT = gql`
 `;
 
 export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($id: String!, $input: UpdateProductInput!) {
-    updateProduct(id: $id, input: $input) {
+  mutation UpdateProduct($id: String!, $input: UpdateProductInput!, $mediaInput: AddMediaInput) {
+    updateProduct(id: $id, input: $input, mediaInput: $mediaInput) {
     id
     title
     description

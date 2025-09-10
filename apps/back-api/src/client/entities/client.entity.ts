@@ -28,6 +28,9 @@ export class ClientEntity {
 
   @Field({ nullable: true })
   phone?: string
+  
+  @Field({ nullable: true })
+  avatar?: string
 
   @Field({ nullable: true })
   password?: string // This should be hashed and not exposed in the GraphQL schema

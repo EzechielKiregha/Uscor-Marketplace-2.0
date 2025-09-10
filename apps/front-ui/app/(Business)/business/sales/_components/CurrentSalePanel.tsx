@@ -810,7 +810,7 @@ export default function CurrentSalePanel({
       {/* New Sale Modal */}
       <NewSaleModal
         isOpen={showNewSaleModal}
-        onClose={() => setShowNewSaleModal(false)}
+        onClose={() => setShowNewSaleModal(!showNewSaleModal)}
         onCreateSale={onNewSale}
         storeId={storeId}
         userRole={userRole}

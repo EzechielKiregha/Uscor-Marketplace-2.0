@@ -378,20 +378,20 @@ enum SaleStatus {
 
 type SaleEntity {
   id: String
-  storeId: String!
-  store: StoreEntity!
-  workerId: String!
-  worker: WorkerEntity!
+  storeId: String
+  store: StoreEntity
+  workerId: String
+  worker: WorkerEntity
   clientId: String
   client: ClientEntity
   totalAmount: Float
   discount: Float
-  paymentMethod: PaymentMethod!
-  status: SaleStatus!
+  paymentMethod: PaymentMethod
+  status: SaleStatus
   createdAt: DateTime
   updatedAt: DateTime
-  saleProducts: [SaleProductEntity!]!
-  returns: [ReturnEntity!]!
+  saleProducts: [SaleProductEntity!]
+  returns: [ReturnEntity!]
 }
 
 enum PaymentMethod {
@@ -544,6 +544,7 @@ type ClientEntity {
   fullName: String
   address: String
   phone: String
+  avatar: String
   password: String
   isVerified: Boolean
   createdAt: DateTime
@@ -1122,7 +1123,7 @@ input LowStockAlertInput {
 
 type Mutation {
   """Creates a new product for a business."""
-  createProduct(input: CreateProductInput!): ProductEntity!
+  createProduct(input: CreateProductInput!, mediaInput: AddMediaInput): ProductEntity!
 
   """Updates a product's details."""
   updateProduct(id: String!, input: UpdateProductInput!): ProductEntity!
@@ -1372,6 +1373,13 @@ input CreateProductInput {
   approvedForSale: Boolean! = true
 }
 
+input AddMediaInput {
+  url: String!
+  type: String!
+  size: Int
+  pathname: String
+}
+
 input UpdateProductInput {
   title: String
   description: String
@@ -1385,11 +1393,6 @@ input UpdateProductInput {
   featured: Boolean = false
   approvedForSale: Boolean = true
   id: String!
-}
-
-input AddMediaInput {
-  url: String!
-  type: String!
 }
 
 input CreateOrderInput {

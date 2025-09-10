@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { CreateMediaInput } from './dto/create-media.input'
 import { UpdateMediaInput } from './dto/update-media.input'
 import { PrismaService } from '../prisma/prisma.service'
+import { AddMediaInput } from './dto/add-media.input'
+import { MediaType } from '../generated/prisma/enums'
 
 @Injectable()
 export class MediaService {
@@ -127,11 +129,13 @@ export class MediaService {
 
   async addToProduct(
     productId: string,
-    input: any,
+    input: AddMediaInput,
   ) {
+
     return this.prisma.media.create({
       data: {
         ...input,
+        type: MediaType.IMAGE,
         product: { connect: { id: productId } },
       },
       select: {

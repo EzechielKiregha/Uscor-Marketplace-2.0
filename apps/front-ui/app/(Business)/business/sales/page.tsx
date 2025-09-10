@@ -119,7 +119,7 @@ export default function SalesManagementPage() {
             disabled={!selectedStoreId}
           >
             <Plus className="h-4 w-4 mr-2" />
-            New
+            New Sale
           </Button>
         </div>
       </div>

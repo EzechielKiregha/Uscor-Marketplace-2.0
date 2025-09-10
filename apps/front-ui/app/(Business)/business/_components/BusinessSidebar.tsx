@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Users, ShoppingCart, MessageSquare, BarChart, Settings, Package, Star, BriefcaseBusiness, Building } from 'lucide-react';
+import { use, useEffect, useState } from 'react';
 
 interface BusinessSidebarProps {
   business: any; // Replace with actual BusinessEntity type
@@ -26,6 +27,12 @@ export const sidebarItems = [
 
 export default function BusinessSidebar({ business }: BusinessSidebarProps) {
   const pathname = usePathname();
+  const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    const unread = localStorage.getItem('unread');
+    console.log('unread messages:', unread);
+  })
 
   return (
     <aside className="hidden md:block w-64 bg-card border-r border-border h-screen sticky top-0">
@@ -67,7 +74,7 @@ export default function BusinessSidebar({ business }: BusinessSidebarProps) {
               <span>{item.label}</span>
               {item.badge && (
                 <span className="ml-auto bg-primary text-xs rounded-full px-2 py-0.5">
-                  3
+                  {count}
                 </span>
               )}
             </Link>

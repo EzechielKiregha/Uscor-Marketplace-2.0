@@ -1,4 +1,4 @@
-import { InputType, Field } from '@nestjs/graphql'
+import { InputType, Field, Int } from '@nestjs/graphql'
 
 @InputType()
 export class AddMediaInput {
@@ -7,4 +7,10 @@ export class AddMediaInput {
 
   @Field(() => String)
   type: string
+
+  @Field(() => Int, {nullable: true})
+  size?: number
+
+  @Field({nullable: true})
+  pathname: string
 }
