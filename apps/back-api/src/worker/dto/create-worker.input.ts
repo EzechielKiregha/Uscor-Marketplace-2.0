@@ -1,45 +1,58 @@
-import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
-import { IsBoolean, IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import {
+  InputType,
+  Int,
+  Field,
+  registerEnumType,
+} from '@nestjs/graphql'
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 
 export enum WorkerRole {
   ADMIN = 'ADMIN',
   STAFF = 'STAFF',
   MANAGER = 'MANAGER',
-  FREELANCER = 'FREELANCER'
+  FREELANCER = 'FREELANCER',
 }
 
-registerEnumType(WorkerRole, {name : "WorkerRole"})
+registerEnumType(WorkerRole, {
+  name: 'WorkerRole',
+})
 
 @InputType()
 export class CreateWorkerInput {
   @Field()
   @IsEmail()
-  email: string;
+  email: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  fullName?: string;
+  fullName?: string
 
-  @Field( () => WorkerRole)
+  @Field(() => WorkerRole)
   @IsEnum(WorkerRole)
-  role: WorkerRole;
+  role: WorkerRole
 
   @Field()
   @IsString()
-  password: string;
+  password: string
 
   @Field({ defaultValue: false })
   @IsBoolean()
-  isVerified: boolean;
+  isVerified: boolean
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  businessId?: string;
+  businessId?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  kycId?: string;
+  kycId?: string
 }

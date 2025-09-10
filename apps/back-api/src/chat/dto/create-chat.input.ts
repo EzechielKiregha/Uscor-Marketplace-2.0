@@ -1,5 +1,15 @@
-import { InputType, Field, registerEnumType } from '@nestjs/graphql';
-import { IsArray, IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
+import {
+  InputType,
+  Field,
+  registerEnumType,
+} from '@nestjs/graphql'
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 
 // Enums
 export enum ChatStatus {
@@ -15,8 +25,12 @@ export enum NegotiationType {
   GENERAL = 'GENERAL',
 }
 
-registerEnumType(ChatStatus, { name: 'ChatStatus' });
-registerEnumType(NegotiationType, { name: 'NegotiationType' });
+registerEnumType(ChatStatus, {
+  name: 'ChatStatus',
+})
+registerEnumType(NegotiationType, {
+  name: 'NegotiationType',
+})
 
 // DTOs
 @InputType()
@@ -24,55 +38,57 @@ export class CreateChatInput {
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  productId?: string;
+  productId?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  serviceId?: string;
+  serviceId?: string
 
   @Field(() => [String])
   @IsArray()
-  participantIds: string[];
+  participantIds: string[]
 
   @Field(() => Boolean, { defaultValue: false })
   @IsBoolean()
-  isSecure: boolean;
+  isSecure: boolean
 
-  @Field(() => NegotiationType, { nullable: true })
+  @Field(() => NegotiationType, {
+    nullable: true,
+  })
   @IsOptional()
   @IsEnum(NegotiationType)
-  negotiationType?: NegotiationType;
+  negotiationType?: NegotiationType
 }
 
 @InputType()
 export class CreateChatMessageInput {
   @Field()
   @IsString()
-  chatId: string;
+  chatId: string
 
   @Field()
   @IsString()
-  message: string;
+  message: string
 }
 
 @InputType()
 export class SendMessageInput {
   @Field()
   @IsString()
-  chatId: string;
+  chatId: string
 
   @Field()
   @IsString()
-  content: string;
+  content: string
 
   @Field()
   @IsString()
-  senderType: string;
+  senderType: string
 
   @Field()
   @IsString()
-  senderId: string;
+  senderId: string
 }
 
 @InputType()
@@ -80,19 +96,20 @@ export class StartNegotiationInput {
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  productId?: string;
+  productId?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  serviceId?: string;
+  serviceId?: string
 
   @Field(() => [String])
   @IsArray()
-  participantIds: string[];
+  participantIds: string[]
 
-  @Field(() => NegotiationType, { defaultValue: NegotiationType.GENERAL })
+  @Field(() => NegotiationType, {
+    defaultValue: NegotiationType.GENERAL,
+  })
   @IsEnum(NegotiationType)
-  negotiationType: NegotiationType;
+  negotiationType: NegotiationType
 }
-

@@ -16,7 +16,7 @@ const AddToCartButton = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsSuccess(false)
-    }, 2000)
+    }, 3000)
 
     return () => clearTimeout(timeout)
   }, [isSuccess])
@@ -28,7 +28,7 @@ const AddToCartButton = ({
         setIsSuccess(true)
       }}
       className={buttonVariants({
-        className: 'bg-primary hover:bg-blue-100  text-white w-full'
+        className: 'bg-primary hover:bg-primary/90  text-white w-full cursor-pointer'
       })}
       size='lg'>
       {isSuccess ? "Done" : 'Add to Cart'}

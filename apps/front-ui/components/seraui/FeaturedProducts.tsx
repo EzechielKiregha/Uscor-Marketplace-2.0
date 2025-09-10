@@ -28,7 +28,7 @@ export default function FeaturedProducts({
 
   useEffect(() => {
     if (data) {
-      const formatted = data.products.map((product: any) => ({
+      const formatted = data.featuredProducts.map((product: any) => ({
         id: product.id,
         title: product.title,
         price: product.price,

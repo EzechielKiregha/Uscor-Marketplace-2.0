@@ -1,14 +1,21 @@
+'use client'
 import { PRODUCT_CATEGORIES } from '@/config/product-categories'
 import { useCart } from '@/hooks/use-cart'
 import { ProductEntity } from '@/lib/types'
 import { formatPrice } from '@/lib/utils'
 import { ImageIcon, X } from 'lucide-react'
 import Image from 'next/image'
+import { useState } from 'react'
 
 const CartItem = ({ product }: { product: ProductEntity }) => {
-  const { url } = product.medias[0]
+  const url = product.medias[0]
 
   const { removeItem } = useCart()
+  const [imgSrc, setImgSrc] = useState(url ? url.url : 'prod.png');
+
+  const handleImageError = () => {
+    setImgSrc(`https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title.charAt(0))}`);
+  };
 
   const label = PRODUCT_CATEGORIES.find(
     ({ value }) => value === product.category?.name
@@ -19,21 +26,13 @@ const CartItem = ({ product }: { product: ProductEntity }) => {
       <div className='flex items-start justify-between gap-4'>
         <div className='flex items-center space-x-4'>
           <div className='relative aspect-square h-16 w-16 min-w-fit overflow-hidden rounded'>
-            {typeof url !== 'string' && url ? (
-              <Image
-                src={url}
-                alt={product.title}
-                fill
-                className='absolute object-cover'
-              />
-            ) : (
-              <div className='flex h-full items-center justify-center bg-secondary'>
-                <ImageIcon
-                  aria-hidden='true'
-                  className='h-4 w-4 text-muted-foreground'
-                />
-              </div>
-            )}
+
+            <img
+              src={imgSrc}
+              alt={product.title}
+              className="hidden absolute object-cover h-4 w-4 text-muted-foreground transition-transform duration-500 group-hover:scale-105"
+              onError={handleImageError}
+            />
           </div>
 
           <div className='flex flex-col self-start'>

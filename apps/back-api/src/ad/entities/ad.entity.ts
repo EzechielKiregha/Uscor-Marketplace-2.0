@@ -1,34 +1,39 @@
-import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
-import { BusinessEntity } from '../../business/entities/business.entity';
-import { ProductEntity } from '../../product/entities/product.entity';
+import {
+  ObjectType,
+  Field,
+  Float,
+  Int,
+} from '@nestjs/graphql'
+import { BusinessEntity } from '../../business/entities/business.entity'
+import { ProductEntity } from '../../product/entities/product.entity'
 
 @ObjectType()
 export class AdEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  businessId: string;
+  businessId: string
 
   @Field()
-  productId: string;
+  productId: string
 
   @Field(() => Float)
-  price: number;
+  price: number
 
   @Field(() => Int)
-  periodDays: number;
+  periodDays: number
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   @Field({ nullable: true })
-  endedAt?: Date;
+  endedAt?: Date
 
   // Relations
   @Field(() => BusinessEntity) // Business associated with the ad
-  business: BusinessEntity;
+  business: BusinessEntity
 
   @Field(() => ProductEntity) // Product being advertised
-  product: ProductEntity;
+  product: ProductEntity
 }

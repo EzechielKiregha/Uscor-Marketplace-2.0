@@ -1,17 +1,21 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { SaleEntity } from './sale.entity';
+import {
+  ObjectType,
+  Field,
+  Int,
+} from '@nestjs/graphql'
+import { SaleEntity } from './sale.entity'
 
 @ObjectType()
 export class PaginatedSalesResponse {
   @Field(() => [SaleEntity])
-  items: SaleEntity[];
+  items: SaleEntity[]
 
   @Field(() => Int)
-  total: number;
+  total: number
 
   @Field(() => Int)
-  page: number;
+  page: number
 
   @Field(() => Int)
-  limit: number;
+  limit: number
 }

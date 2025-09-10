@@ -1,38 +1,43 @@
-import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
-import { BusinessEntity } from '../../business/entities/business.entity';
-import { PointsTransactionEntity } from './points-transaction.entity';
+import {
+  ObjectType,
+  Field,
+  Int,
+  Float,
+} from '@nestjs/graphql'
+import { BusinessEntity } from '../../business/entities/business.entity'
+import { PointsTransactionEntity } from './points-transaction.entity'
 
 @ObjectType()
 export class LoyaltyProgramEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  businessId: string;
+  businessId: string
 
   @Field(() => BusinessEntity)
-  business: BusinessEntity;
+  business: BusinessEntity
 
   @Field()
-  name: string;
+  name: string
 
   @Field({ nullable: true })
-  description?: string;
+  description?: string
 
   @Field(() => Float)
-  pointsPerPurchase: number;
+  pointsPerPurchase: number
 
   @Field(() => Float, { nullable: true })
-  minimumPointsToRedeem?: number;
+  minimumPointsToRedeem?: number
 
-  @Field(() => [PointsTransactionEntity], { nullable: true })
-  pointsTransactions?: PointsTransactionEntity[];
+  @Field(() => [PointsTransactionEntity], {
+    nullable: true,
+  })
+  pointsTransactions?: PointsTransactionEntity[]
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   @Field()
-  updatedAt: Date;
+  updatedAt: Date
 }
-
-

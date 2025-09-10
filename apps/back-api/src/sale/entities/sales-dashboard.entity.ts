@@ -1,58 +1,63 @@
-import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Float,
+  Int,
+} from '@nestjs/graphql'
 
 @ObjectType()
 export class TopProduct {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  title: string;
+  title: string
 
   @Field(() => Int)
-  quantitySold: number;
+  quantitySold: number
 }
 
 @ObjectType()
 export class PaymentMethodStat {
   @Field()
-  method: string;
+  method: string
 
   @Field(() => Int)
-  count: number;
+  count: number
 
   @Field(() => Float)
-  amount: number;
+  amount: number
 }
 
 @ObjectType()
 export class ChartDataPoint {
   @Field()
-  name: string;
+  name: string
 
   @Field(() => Float)
-  sales: number;
+  sales: number
 
   @Field(() => Int)
-  transactions: number;
+  transactions: number
 }
 
 @ObjectType()
 export class SalesDashboard {
   @Field(() => Int)
-  totalSales: number;
+  totalSales: number
 
   @Field(() => Float)
-  totalRevenue: number;
+  totalRevenue: number
 
   @Field(() => Float)
-  averageTicket: number;
+  averageTicket: number
 
   @Field(() => [TopProduct])
-  topProducts: TopProduct[];
+  topProducts: TopProduct[]
 
   @Field(() => [PaymentMethodStat])
-  paymentMethods: PaymentMethodStat[];
+  paymentMethods: PaymentMethodStat[]
 
   @Field(() => [ChartDataPoint])
-  chartData: ChartDataPoint[];
+  chartData: ChartDataPoint[]
 }

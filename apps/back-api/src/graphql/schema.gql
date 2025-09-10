@@ -530,6 +530,13 @@ enum FreelanceStatus {
   CANCELLED
 }
 
+type PaginatedFreelanceOrdersResponse {
+  items: [FreelanceOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
 type ClientEntity {
   id: String
   username: String
@@ -1025,8 +1032,8 @@ type Query {
   """Get worker assignments for a service or worker."""
   workerServiceAssignments(workerId: String!, serviceId: String): [WorkerServiceAssignmentEntity!]!
 
-  """Retrieves freelance orders based on user role."""
-  freelanceOrders: [FreelanceOrderEntity!]!
+  """Retrieves freelance orders with pagination and filters."""
+  freelanceOrders(serviceId: String, clientId: String, businessId: String, status: FreelanceStatus, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceOrdersResponse!
 
   """Retrieves a single freelance order by ID."""
   freelanceOrder(id: String!): FreelanceOrderEntity!
@@ -1115,13 +1122,19 @@ input LowStockAlertInput {
 
 type Mutation {
   """Creates a new product for a business."""
-  createProduct(createProductInput: CreateProductInput!): ProductEntity!
+  createProduct(input: CreateProductInput!): ProductEntity!
 
-  """Updates a product’s details."""
-  updateProduct(id: String!, updateProductInput: UpdateProductInput!): ProductEntity!
+  """Updates a product's details."""
+  updateProduct(id: String!, input: UpdateProductInput!): ProductEntity!
 
   """Deletes a product."""
   deleteProduct(id: String!): ProductEntity!
+
+  """Adds media to a product."""
+  addProductMedia(productId: String!, input: AddMediaInput!): MediaEntity!
+
+  """Removes media from a product."""
+  removeProductMedia(mediaId: String!): MediaEntity!
 
   """Creates an order for a product."""
   createOrder(createOrderInput: CreateOrderInput!): OrderEntity!
@@ -1247,16 +1260,16 @@ type Mutation {
   deleteFreelanceService(id: String!): FreelanceServiceEntity!
 
   """Creates a new freelance order."""
-  createFreelanceOrder(createFreelanceOrderInput: CreateFreelanceOrderInput!): FreelanceOrderEntity!
+  createFreelanceOrder(input: CreateFreelanceOrderInput!): FreelanceOrderEntity!
 
-  """Updates a freelance order’s status or escrow status."""
-  updateFreelanceOrder(id: String!, updateFreelanceOrderInput: UpdateFreelanceOrderInput!): FreelanceOrderEntity!
+  """Updates a freelance order."""
+  updateFreelanceOrder(id: String!, input: UpdateFreelanceOrderInput!): FreelanceOrderEntity!
 
-  """Assigns businesses to a freelance order."""
-  assignBusinessesToOrder(assignBusinessesInput: AssignBusinessesInput!): FreelanceOrderEntity!
+  """Complete a freelance order."""
+  completeFreelanceOrder(id: String!): FreelanceOrderEntity!
 
-  """Deletes a freelance order."""
-  deleteFreelanceOrder(id: String!): FreelanceOrderEntity!
+  """Release escrow for a freelance order."""
+  releaseEscrow(orderId: String!): FreelanceOrderEntity!
   signClientIn(SignInInput: SignInInput!): AuthPayloadClient!
   signBusinessIn(SignInInput: SignInInput!): AuthPayloadBusiness!
   signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
@@ -1268,7 +1281,7 @@ type Mutation {
   """Creates a new category."""
   createCategory(createCategoryInput: CreateCategoryInput!): CategoryEntity!
 
-  """Updates a category’s details."""
+  """Updates a category's details."""
   updateCategory(id: String!, updateCategoryInput: UpdateCategoryInput!): CategoryEntity!
 
   """Deletes a category."""
@@ -1354,6 +1367,7 @@ input CreateProductInput {
   isPhysical: Boolean!
   businessId: String!
   categoryId: String!
+  image: String
   featured: Boolean! = false
   approvedForSale: Boolean! = true
 }
@@ -1367,9 +1381,15 @@ input UpdateProductInput {
   isPhysical: Boolean
   businessId: String
   categoryId: String
+  image: String
   featured: Boolean = false
   approvedForSale: Boolean = true
   id: String!
+}
+
+input AddMediaInput {
+  url: String!
+  type: String!
 }
 
 input CreateOrderInput {
@@ -1640,11 +1660,6 @@ enum EscrowStatus {
   DISPUTED
 }
 
-input AssignBusinessesInput {
-  orderId: String!
-  businessIds: [String!]!
-}
-
 input CreatePostOfSaleInput {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -1839,6 +1854,8 @@ input UpdateShiftInput {
 }
 
 type Subscription {
+  productCreated(businessId: String!): ProductEntity!
+  productUpdated(businessId: String!): ProductEntity!
   orderCreated(clientId: String!, businessId: String!): OrderEntity!
   orderUpdated(clientId: String!, businessId: String!): OrderEntity!
   orderPaymentProcessed(orderId: String!): OrderEntity!
@@ -1847,6 +1864,8 @@ type Subscription {
   chatStatusUpdated(userId: String!): ChatEntity!
   freelanceServiceCreated(businessId: String!): FreelanceServiceEntity!
   freelanceServiceUpdated(businessId: String!): FreelanceServiceEntity!
+  freelanceOrderCreated(clientId: String!): FreelanceOrderEntity!
+  freelanceOrderUpdated(businessId: String!): FreelanceOrderEntity!
   saleCreated(storeId: String!): SaleEntity!
   saleUpdated(storeId: String!): SaleEntity!
   loyaltyProgramCreated(businessId: String!): LoyaltyProgramEntity!

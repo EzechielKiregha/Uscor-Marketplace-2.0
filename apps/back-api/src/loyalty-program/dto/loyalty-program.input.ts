@@ -1,87 +1,92 @@
-import { InputType, Field, Float } from '@nestjs/graphql';
-import { IsNumber, IsString, Min } from 'class-validator';
+import {
+  InputType,
+  Field,
+  Float,
+} from '@nestjs/graphql'
+import {
+  IsNumber,
+  IsString,
+  Min,
+} from 'class-validator'
 
 // DTOs
 @InputType()
 export class CreateLoyaltyProgramInput {
   @Field()
   @IsString()
-  businessId: string;
+  businessId: string
 
   @Field()
   @IsString()
-  name: string;
+  name: string
 
   @Field({ nullable: true })
   @IsString()
-  description?: string;
+  description?: string
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  pointsPerPurchase: number;
+  pointsPerPurchase: number
 
   @Field(() => Float, { nullable: true })
   @IsNumber()
   @Min(0)
-  minimumPointsToRedeem?: number;
+  minimumPointsToRedeem?: number
 }
-
-
 
 @InputType()
 export class CreatePointsTransactionInput {
   @Field()
   @IsString()
-  clientId: string;
+  clientId: string
 
   @Field()
   @IsString()
-  loyaltyProgramId: string;
+  loyaltyProgramId: string
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  points: number;
+  points: number
 }
 
 @InputType()
 export class EarnPointsInput {
   @Field()
   @IsString()
-  clientId: string;
+  clientId: string
 
   @Field()
   @IsString()
-  loyaltyProgramId: string;
+  loyaltyProgramId: string
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  points: number;
+  points: number
 
   @Field({ nullable: true })
   @IsString()
-  orderId?: string;
+  orderId?: string
 }
 
 @InputType()
 export class RedeemPointsInput {
   @Field()
   @IsString()
-  clientId: string;
+  clientId: string
 
   @Field()
   @IsString()
-  loyaltyProgramId: string;
+  loyaltyProgramId: string
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  points: number;
+  points: number
 
   @Field({ nullable: true })
   @IsString()
-  rewardDescription?: string;
+  rewardDescription?: string
 }
-

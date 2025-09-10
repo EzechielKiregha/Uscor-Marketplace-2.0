@@ -1,27 +1,33 @@
-import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
-import { SaleStatus } from '../../generated/prisma/enums';
-import { SaleEntity } from './sale.entity';
+import {
+  ObjectType,
+  Field,
+  registerEnumType,
+} from '@nestjs/graphql'
+import { SaleStatus } from '../../generated/prisma/enums'
+import { SaleEntity } from './sale.entity'
 
 // Enums
-registerEnumType(SaleStatus, { name: 'SaleStatus' });
+registerEnumType(SaleStatus, {
+  name: 'SaleStatus',
+})
 
 @ObjectType()
 export class ReturnEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  saleId: string;
+  saleId: string
 
   @Field({ nullable: true })
-  reason?: string;
+  reason?: string
 
   @Field(() => SaleStatus)
-  status: SaleStatus;
+  status: SaleStatus
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   @Field(() => SaleEntity)
-    sale: SaleEntity;
+  sale: SaleEntity
 }

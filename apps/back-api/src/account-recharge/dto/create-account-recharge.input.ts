@@ -1,5 +1,16 @@
-import { InputType, Field, registerEnumType, Float } from '@nestjs/graphql';
-import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  InputType,
+  Field,
+  registerEnumType,
+  Float,
+} from '@nestjs/graphql'
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator'
 
 // Enums
 export enum RechargeMethod {
@@ -7,7 +18,7 @@ export enum RechargeMethod {
   AIRTEL_MONEY = 'AIRTEL_MONEY',
   ORANGE_MONEY = 'ORANGE_MONEY',
   MPESA = 'MPESA',
-  TOKEN = 'TOKEN'
+  TOKEN = 'TOKEN',
 }
 
 export enum Country {
@@ -20,8 +31,10 @@ export enum Country {
 }
 
 // Register enums with GraphQL
-registerEnumType(RechargeMethod, { name: 'RechargeMethod' });
-registerEnumType(Country, { name: 'Country' });
+registerEnumType(RechargeMethod, {
+  name: 'RechargeMethod',
+})
+registerEnumType(Country, { name: 'Country' })
 
 // DTOs
 @InputType()
@@ -29,29 +42,28 @@ export class CreateAccountRechargeInput {
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount: number
 
   @Field(() => RechargeMethod)
   @IsEnum(RechargeMethod)
-  method: RechargeMethod;
+  method: RechargeMethod
 
   @Field(() => Country)
   @IsEnum(Country)
-  origin: Country;
+  origin: Country
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  clientId?: string;
+  clientId?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  businessId?: string;
+  businessId?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  tokenTransactionId?: string;
+  tokenTransactionId?: string
 }
-

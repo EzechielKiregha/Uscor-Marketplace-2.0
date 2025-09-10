@@ -1,54 +1,62 @@
-import { ProductEntity } from 'src/product/entities/product.entity';
-import { CreateMediaInput } from './create-media.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
-import { BusinessEntity } from 'src/business/entities/business.entity';
-import { ClientEntity } from 'src/client/entities/client.entity';
-import { WorkerEntity } from 'src/worker/entities/worker.entity';
-import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity';
-import { StoreEntity } from 'src/store/entities/store.entity';
+import { ProductEntity } from 'src/product/entities/product.entity'
+import { CreateMediaInput } from './create-media.input'
+import {
+  InputType,
+  Field,
+  Int,
+  PartialType,
+} from '@nestjs/graphql'
+import { BusinessEntity } from 'src/business/entities/business.entity'
+import { ClientEntity } from 'src/client/entities/client.entity'
+import { WorkerEntity } from 'src/worker/entities/worker.entity'
+import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity'
+import { StoreEntity } from 'src/store/entities/store.entity'
 
 @InputType()
-export class UpdateMediaInput extends PartialType(CreateMediaInput) {
+export class UpdateMediaInput extends PartialType(
+  CreateMediaInput,
+) {
+  @Field(() => String)
+  url: string
 
   @Field(() => String)
-  url: string;
+  type: string
 
-  @Field(() => String)
-  type: string;
-
-  @Field(() => ProductEntity)  
-  product?: ProductEntity;
+  @Field(() => ProductEntity)
+  product?: ProductEntity
 
   @Field(() => String, { nullable: true })
-  productId?: string;
-
-  @Field(() => String, { nullable: true})
-  businessId?: string;
-
-  @Field(() => BusinessEntity, { nullable: true})
-  business?: BusinessEntity;
+  productId?: string
 
   @Field(() => String, { nullable: true })
-  storeId?: string;
+  businessId?: string
+
+  @Field(() => BusinessEntity, { nullable: true })
+  business?: BusinessEntity
+
+  @Field(() => String, { nullable: true })
+  storeId?: string
 
   @Field(() => StoreEntity, { nullable: true })
-  store?: StoreEntity;
+  store?: StoreEntity
 
   @Field(() => String, { nullable: true })
-  clientId?: string;
+  clientId?: string
 
   @Field(() => ClientEntity, { nullable: true })
-  client?: ClientEntity;
+  client?: ClientEntity
 
   @Field(() => WorkerEntity, { nullable: true })
-  worker?: WorkerEntity;
+  worker?: WorkerEntity
 
   @Field(() => String, { nullable: true })
-  workerId?: string;
+  workerId?: string
 
   @Field(() => String, { nullable: true })
-  serviceId?: string;
+  serviceId?: string
 
-  @Field(() => FreelanceServiceEntity, { nullable: true })
-  service?: FreelanceServiceEntity;
+  @Field(() => FreelanceServiceEntity, {
+    nullable: true,
+  })
+  service?: FreelanceServiceEntity
 }

@@ -1,69 +1,72 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { ChatEntity } from '../entities/chat.entity';
-import { ChatMessageEntity } from '../entities/chat-nessage.entity';
+import {
+  ObjectType,
+  Field,
+} from '@nestjs/graphql'
+import { ChatEntity } from '../entities/chat.entity'
+import { ChatMessageEntity } from '../entities/chat-nessage.entity'
 
 @ObjectType()
 export class PaginatedChatsResponse {
   @Field(() => [ChatEntity])
-  items: ChatEntity[];
+  items: ChatEntity[]
 
   @Field()
-  total: number;
+  total: number
 
   @Field()
-  page: number;
+  page: number
 
   @Field()
-  limit: number;
+  limit: number
 }
 
 @ObjectType()
 export class PaginatedMessagesResponse {
   @Field(() => [ChatMessageEntity])
-  items: ChatMessageEntity[];
+  items: ChatMessageEntity[]
 
   @Field()
-  hasMore: boolean;
+  hasMore: boolean
 
   @Field({ nullable: true })
-  cursor?: string;
+  cursor?: string
 }
 
 @ObjectType()
 export class UnreadCountResponse {
   @Field()
-  totalUnread: number;
+  totalUnread: number
 
   @Field(() => [ChatUnreadInfo])
-  chatsWithUnread: ChatUnreadInfo[];
+  chatsWithUnread: ChatUnreadInfo[]
 }
 
 @ObjectType()
 export class ChatUnreadInfo {
   @Field()
-  chatId: string;
+  chatId: string
 
   @Field()
-  unreadCount: number;
+  unreadCount: number
 }
 
 @ObjectType()
 export class MarkAsReadResponse {
   @Field()
-  success: boolean;
+  success: boolean
 
   @Field()
-  unreadCount: number;
+  unreadCount: number
 }
 
 @ObjectType()
 export class UnreadCountUpdate {
   @Field()
-  totalUnread: number;
+  totalUnread: number
 
   @Field()
-  chatId: string;
+  chatId: string
 
   @Field()
-  unreadCount: number;
+  unreadCount: number
 }

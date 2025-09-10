@@ -1,20 +1,24 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { DashboardClientDto } from './business-client.entity ';
+import {
+  Field,
+  Int,
+  ObjectType,
+} from '@nestjs/graphql'
+import { DashboardClientDto } from './business-client.entity '
 
 @ObjectType()
 export class RecentOrder {
   @Field()
-  id: string;
-  
+  id: string
+
   @Field(() => DashboardClientDto)
-  client: DashboardClientDto;
-  
+  client: DashboardClientDto
+
   @Field()
-  createdAt: Date;
-  
-  @Field(()=> Int)
-  totalAmount: number;
-  
+  createdAt: Date
+
+  @Field(() => Int)
+  totalAmount: number
+
   @Field()
-  status: string;
+  status: string
 }

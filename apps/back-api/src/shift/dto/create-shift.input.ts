@@ -1,27 +1,29 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsDate, IsString } from 'class-validator';
+import {
+  InputType,
+  Int,
+  Field,
+} from '@nestjs/graphql'
+import { IsDate, IsString } from 'class-validator'
 
 // DTOs
 @InputType()
 export class CreateShiftInput {
   @Field()
   @IsString()
-  storeId: string;
+  storeId: string
 
   @Field()
   @IsDate()
-  startTime: Date;
+  startTime: Date
 }
 
 @InputType()
 export class EndShiftInput {
   @Field()
   @IsString()
-  shiftId: string;
+  shiftId: string
 
   @Field()
   @IsDate()
-  endTime: Date;
+  endTime: Date
 }
-
-

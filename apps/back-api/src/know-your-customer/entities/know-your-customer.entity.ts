@@ -1,41 +1,44 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { BusinessEntity } from '../../business/entities/business.entity';
-import { ClientEntity } from '../../client/entities/client.entity';
-import { WorkerEntity } from '../../worker/entities/worker.entity';
+import {
+  ObjectType,
+  Field,
+} from '@nestjs/graphql'
+import { BusinessEntity } from '../../business/entities/business.entity'
+import { ClientEntity } from '../../client/entities/client.entity'
+import { WorkerEntity } from '../../worker/entities/worker.entity'
 
 @ObjectType()
 export class KnowYourCustomerEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  status: string; // KycStatus (e.g., PENDING, VERIFIED, REJECTED)
+  status: string // KycStatus (e.g., PENDING, VERIFIED, REJECTED)
 
   @Field()
-  documentUrl: string;
+  documentUrl: string
 
   @Field()
-  submittedAt: Date;
+  submittedAt: Date
 
   @Field({ nullable: true })
-  verifiedAt?: Date;
+  verifiedAt?: Date
 
   @Field({ nullable: true })
-  businessId?: string;
+  businessId?: string
 
   @Field({ nullable: true })
-  clientId?: string;
+  clientId?: string
 
   @Field({ nullable: true })
-  workerId?: string;
+  workerId?: string
 
   // Relations
   @Field(() => BusinessEntity, { nullable: true }) // Business associated with the KYC
-  business: BusinessEntity;
+  business: BusinessEntity
 
   @Field(() => ClientEntity, { nullable: true }) // Client associated with the KYC
-  client: ClientEntity;
+  client: ClientEntity
 
   @Field(() => WorkerEntity, { nullable: true }) // Worker associated with the KYC
-  worker: WorkerEntity;
+  worker: WorkerEntity
 }

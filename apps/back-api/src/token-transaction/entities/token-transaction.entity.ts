@@ -1,45 +1,53 @@
-import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
-import { TokenTransactionType } from '../dto/create-token-transaction.input';
-import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-product.entity';
-import { BusinessEntity } from '../../business/entities/business.entity';
-import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity';
-
+import {
+  ObjectType,
+  Field,
+  Int,
+  Float,
+} from '@nestjs/graphql'
+import { TokenTransactionType } from '../dto/create-token-transaction.input'
+import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-product.entity'
+import { BusinessEntity } from '../../business/entities/business.entity'
+import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity'
 
 @ObjectType()
 export class TokenTransactionEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  businessId: string;
+  businessId: string
 
   @Field(() => BusinessEntity)
-  business: BusinessEntity;
+  business: BusinessEntity
 
   @Field({ nullable: true })
-  reOwnedProductId?: string;
+  reOwnedProductId?: string
 
-  @Field(() => ReOwnedProductEntity, { nullable: true })
-  reOwnedProduct?: ReOwnedProductEntity;
+  @Field(() => ReOwnedProductEntity, {
+    nullable: true,
+  })
+  reOwnedProduct?: ReOwnedProductEntity
 
   @Field({ nullable: true })
-  repostedProductId?: string;
+  repostedProductId?: string
 
-  @Field(() => RepostedProductEntity, { nullable: true })
-  repostedProduct?: RepostedProductEntity;
+  @Field(() => RepostedProductEntity, {
+    nullable: true,
+  })
+  repostedProduct?: RepostedProductEntity
 
   @Field(() => Float)
-  amount: number;
+  amount: number
 
   @Field(() => TokenTransactionType)
-  type: TokenTransactionType;
+  type: TokenTransactionType
 
   @Field()
-  isRedeemed: boolean;
+  isRedeemed: boolean
 
   @Field()
-  isReleased: boolean;
+  isReleased: boolean
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }

@@ -1,12 +1,16 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Int,
+} from '@nestjs/graphql'
 @ObjectType()
 export class SalesStats {
   @Field(() => Int)
-  total: number;
+  total: number
 
   @Field(() => Int)
-  monthly: number;
+  monthly: number
 
   @Field(() => Int)
-  weekly: number;
+  weekly: number
 }

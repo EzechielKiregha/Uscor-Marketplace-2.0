@@ -1,21 +1,24 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ProductEntity } from '../../product/entities/product.entity';
+import {
+  ObjectType,
+  Field,
+  Int,
+} from '@nestjs/graphql'
+import { ProductEntity } from '../../product/entities/product.entity'
 
 @ObjectType()
 export class TransferOrderProductEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  productId: string;
+  productId: string
 
   @Field(() => Int)
-  quantity: number;
+  quantity: number
 
   @Field(() => ProductEntity)
-  product: ProductEntity;
+  product: ProductEntity
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }
-

@@ -1,5 +1,10 @@
-import { ObjectType, Field, Float, registerEnumType } from '@nestjs/graphql';
-import { OrderEntity } from '../../order/entities/order.entity';
+import {
+  ObjectType,
+  Field,
+  Float,
+  registerEnumType,
+} from '@nestjs/graphql'
+import { OrderEntity } from '../../order/entities/order.entity'
 
 // Enums
 enum PaymentStatus {
@@ -14,52 +19,57 @@ enum PaymentMethod {
 }
 
 // Register enums with GraphQL
-registerEnumType(PaymentStatus, { name: 'PaymentStatus' });
-registerEnumType(PaymentMethod, { name: 'PaymentMethod' });
+registerEnumType(PaymentStatus, {
+  name: 'PaymentStatus',
+})
+registerEnumType(PaymentMethod, {
+  name: 'PaymentMethod',
+})
 
 @ObjectType()
 export class PaymentTransactionEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field(() => Float)
-  amount: number;
+  amount: number
 
   @Field()
-  method: PaymentMethod;
+  method: PaymentMethod
 
   @Field()
-  status: PaymentStatus;
+  status: PaymentStatus
 
   @Field()
-  transactionDate: Date;
+  transactionDate: Date
 
   @Field({ nullable: true })
-  qrCode?: string;
+  qrCode?: string
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   // Relations
   @Field(() => OrderEntity) // Order associated with the payment transaction
-  order: OrderEntity;
+  order: OrderEntity
 
-  @Field(() => [PostTransactionEntity], { nullable: true })
-  PostTransaction?: PostTransactionEntity[];
+  @Field(() => [PostTransactionEntity], {
+    nullable: true,
+  })
+  PostTransaction?: PostTransactionEntity[]
 }
-
 
 @ObjectType()
 export class PostTransactionEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field(() => Float)
-  amount: number;
+  amount: number
 
   @Field()
-  status: string;
+  status: string
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }

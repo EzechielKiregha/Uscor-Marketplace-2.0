@@ -1,6 +1,10 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsNumber, IsOptional, Min } from 'class-validator';
-import GraphQLJSON from 'graphql-type-json';
+import { InputType, Field } from '@nestjs/graphql'
+import {
+  IsNumber,
+  IsOptional,
+  Min,
+} from 'class-validator'
+import GraphQLJSON from 'graphql-type-json'
 
 @InputType()
 export class UpdateSaleProductInput {
@@ -8,9 +12,9 @@ export class UpdateSaleProductInput {
   @IsOptional()
   @IsNumber()
   @Min(1)
-  quantity?: number;
+  quantity?: number
 
   @Field(() => GraphQLJSON, { nullable: true })
   @IsOptional()
-  modifiers?: any;
+  modifiers?: any
 }

@@ -1,52 +1,57 @@
-import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Int,
+  Float,
+} from '@nestjs/graphql'
 
 @ObjectType()
 export class TopCustomerEntity {
   @Field()
-  clientId: string;
+  clientId: string
 
   @Field()
-  clientName: string;
+  clientName: string
 
   @Field(() => Float)
-  totalPoints: number;
+  totalPoints: number
 
   @Field(() => Float)
-  totalSpent: number;
+  totalSpent: number
 }
 
 @ObjectType()
 export class PointsByDayEntity {
   @Field()
-  date: string;
+  date: string
 
   @Field(() => Float)
-  earned: number;
+  earned: number
 
   @Field(() => Float)
-  redeemed: number;
+  redeemed: number
 }
 
 @ObjectType()
 export class LoyaltyAnalyticsEntity {
   @Field(() => Int)
-  totalMembers: number;
+  totalMembers: number
 
   @Field(() => Int)
-  activeMembers: number;
+  activeMembers: number
 
   @Field(() => Float)
-  pointsEarned: number;
+  pointsEarned: number
 
   @Field(() => Float)
-  pointsRedeemed: number;
+  pointsRedeemed: number
 
   @Field(() => Float)
-  redemptionRate: number;
+  redemptionRate: number
 
   @Field(() => [TopCustomerEntity])
-  topCustomers: TopCustomerEntity[];
+  topCustomers: TopCustomerEntity[]
 
   @Field(() => [PointsByDayEntity])
-  pointsByDay: PointsByDayEntity[];
+  pointsByDay: PointsByDayEntity[]
 }

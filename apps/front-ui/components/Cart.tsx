@@ -22,10 +22,9 @@ import { useNavigation } from '@/hooks/useNavigation'
 
 const Cart = () => {
   const { items } = useCart()
-  const itemCount = 0
+  const itemCount = items.length
 
   const [isMounted, setIsMounted] = useState<boolean>(false)
-  const nav = useNavigation()
 
   useEffect(() => {
     setIsMounted(true)
@@ -36,7 +35,7 @@ const Cart = () => {
     0
   )
 
-  const fee = 1
+  const fee = (cartTotal / itemCount * 0.008).toFixed(2)
 
   return (
     <Sheet>
@@ -59,17 +58,17 @@ const Cart = () => {
           <>
             <div className='flex w-full flex-col pr-6'>
               <ScrollArea>
-                {items.map(({ product }) => (
+                {items.map(({ product }, index) => (
                   <CartItem
                     product={product}
-                    key={product.id}
+                    key={index}
                   />
                 ))}
               </ScrollArea>
             </div>
-            <div className='space-y-4 pr-6'>
+            <div className='space-y-4 pr-6 '>
               <Separator />
-              <div className='space-y-1.5 text-sm'>
+              <div className='space-y-1.5 mx-1 text-sm'>
                 <div className='flex'>
                   <span className='flex-1'>Shipping</span>
                   <span>fee</span>
@@ -92,7 +91,6 @@ const Cart = () => {
                 <SheetTrigger asChild>
                   <Link
                     href='/cart'
-                    onClick={() => nav()}
                     className={buttonVariants({
                       className: 'w-full',
 
@@ -120,7 +118,6 @@ const Cart = () => {
             <SheetTrigger asChild>
               <Link
                 href='/marketplace/products'
-                onClick={() => nav()}
                 className={buttonVariants({
                   variant: 'link',
                   size: 'sm',

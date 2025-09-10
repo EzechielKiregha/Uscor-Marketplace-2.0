@@ -1,53 +1,63 @@
-import { InputType, Int, Field, Float } from '@nestjs/graphql';
-import { IsBoolean, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  InputType,
+  Int,
+  Field,
+  Float,
+} from '@nestjs/graphql'
+import {
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator'
 
 @InputType()
 export class CreateProductInput {
   @Field()
   @IsString()
-  title: string;
+  title: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  description?: string;
+  description?: string
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  price: number;
+  price: number
 
   @Field(() => Int)
   @IsNumber()
   @Min(1)
-  quantity: number;
+  quantity: number
 
-  @Field({nullable : true})
+  @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  storeId?: string;
+  storeId?: string
 
   @Field()
   @IsBoolean()
-  isPhysical: boolean;
+  isPhysical: boolean
 
   @Field()
   @IsString()
-  businessId: string;
+  businessId: string
 
   @Field()
   @IsString()
-  categoryId: string;
+  categoryId: string
 
   @Field(() => String, { nullable: true })
-  image?: string;
+  image?: string
 
   @Field(() => Boolean, { defaultValue: false })
   @IsOptional()
-  featured?: boolean;
+  featured?: boolean
 
   @Field(() => Boolean, { defaultValue: true })
   @IsOptional()
-  approvedForSale?: boolean;
+  approvedForSale?: boolean
 }
-

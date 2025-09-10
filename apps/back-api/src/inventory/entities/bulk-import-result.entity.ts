@@ -1,10 +1,14 @@
-import { ObjectType, Field, Int } from "@nestjs/graphql";
+import {
+  ObjectType,
+  Field,
+  Int,
+} from '@nestjs/graphql'
 
 @ObjectType()
 export class BulkImportResultEntity {
   @Field()
-  success: boolean;
+  success: boolean
 
   @Field(() => Int)
-  count: number;
+  count: number
 }

@@ -1,26 +1,29 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { ChatUserInfo } from './chat.entity';
+import {
+  ObjectType,
+  Field,
+} from '@nestjs/graphql'
+import { ChatUserInfo } from './chat.entity'
 
 @ObjectType()
 export class ChatMessageEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  chatId: string;
+  chatId: string
 
   @Field()
-  content: string;
+  content: string
 
   @Field()
-  senderType: string;
+  senderType: string
 
-  @Field(() => String, {nullable: true })
-  senderId?: string | null;
+  @Field(() => String, { nullable: true })
+  senderId?: string | null
 
   @Field(() => ChatUserInfo, { nullable: true })
-  sender?: ChatUserInfo;
+  sender?: ChatUserInfo
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }

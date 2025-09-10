@@ -122,45 +122,11 @@ export const GET_PRODUCT_BY_ID = gql`
   }
 `;
 
-export const GET_CATEGORIES = gql`
-  query GetCategories {
-    categories {
-      id
-      name
-      description
-      createdAt
-      updatedAt
-      products {
-        id
-        title
-        price
-        quantity
-      }
-    }
-  }
-`;
 
-export const GET_CATEGORY_BY_ID = gql`
-  query GetCategoryById($id: String!) {
-    category(id: $id) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    products {
-      id
-      title
-      price
-      quantity
-    }
-  }
-  }
-`;
 
 export const GET_FEATURED_PRODUCTS = gql`
   query GetFeaturedProducts {
-    products {
+    featuredProducts {
       id
       title
       description
@@ -289,41 +255,7 @@ export const DELETE_PRODUCT = gql`
   }
 `;
 
-export const CREATE_CATEGORY = gql`
-  mutation CreateCategory($input: CreateCategoryInput!) {
-    createCategory(input: $input) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    products {
-      id
-      title
-      price
-      quantity
-    }
-  }
-  }
-`;
 
-export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($id: String!, $input: UpdateCategoryInput!) {
-    updateCategory(id: $id, input: $input) {
-    id
-    name
-    description
-    createdAt
-    updatedAt
-    products {
-      id
-      title
-      price
-      quantity
-    }
-  }
-  }
-`;
 
 export const ADD_PRODUCT_MEDIA = gql`
   mutation AddProductMedia($productId: String!, $input: AddMediaInput!) {

@@ -1,46 +1,55 @@
-import { InputType, Int, Field, Float } from '@nestjs/graphql';
-import { IsBoolean, IsInt, IsNumber, IsString, Min } from 'class-validator';
+import {
+  InputType,
+  Int,
+  Field,
+  Float,
+} from '@nestjs/graphql'
+import {
+  IsBoolean,
+  IsInt,
+  IsNumber,
+  IsString,
+  Min,
+} from 'class-validator'
 
 // DTOs
 @InputType()
 export class CreateReOwnedProductInput {
   @Field()
   @IsString()
-  originalProductId: string;
+  originalProductId: string
 
   @Field()
   @IsString()
-  newOwnerId: string;
+  newOwnerId: string
 
   @Field(() => Int)
   @IsInt()
   @Min(1)
-  quantity: number;
+  quantity: number
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  newPrice: number;
+  newPrice: number
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  markupPercentage: number;
+  markupPercentage: number
 }
-
 
 @InputType()
 export class ApproveReOwnedProductInput {
   @Field()
   @IsString()
-  reOwnedProductId: string;
+  reOwnedProductId: string
 
   @Field()
   @IsString()
-  chatId: string;
+  chatId: string
 
   @Field(() => Boolean)
   @IsBoolean()
-  isApproved: boolean;
+  isApproved: boolean
 }
-

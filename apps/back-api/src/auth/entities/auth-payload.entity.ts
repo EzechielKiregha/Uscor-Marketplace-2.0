@@ -1,91 +1,92 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import {
+  Field,
+  ObjectType,
+} from '@nestjs/graphql'
 
 @ObjectType()
 export class AuthPayload {
   @Field(() => String)
-  id: string;
+  id: string
 
   @Field(() => String)
-  role: string;
+  role: string
 
   @Field(() => String, { nullable: true })
-  email?: string;
+  email?: string
 }
 @ObjectType()
 export class UserPayload {
   @Field(() => String)
-  role: string;
+  role: string
 }
 
 @ObjectType()
 export class AuthPayloadClient {
+  @Field(() => String)
+  id: string
 
   @Field(() => String)
-  id : string;
+  email: string
 
   @Field(() => String)
-  email : string;
+  fullname: string
 
   @Field(() => String)
-  fullname : string;
+  phone: string
+
+  @Field(() => String, { nullable: true })
+  avatar?: string
 
   @Field(() => String)
-  phone : string;
-
-  @Field(() => String, {nullable:true})
-  avatar? : string;
+  accessToken: string
 
   @Field(() => String)
-  accessToken: string;
-  
-  @Field(() => String)
-  refreshToken: string;
+  refreshToken: string
 }
 @ObjectType()
 export class AuthPayloadWorker {
+  @Field(() => String)
+  id: string
 
   @Field(() => String)
-  id : string;
+  email: string
 
   @Field(() => String)
-  email : string;
+  fullname: string
 
   @Field(() => String)
-  fullname : string;
+  phone: string
 
   @Field(() => String)
-  phone : string;
+  accessToken: string
 
   @Field(() => String)
-  accessToken: string;
-  
-  @Field(() => String)
-  refreshToken: string;
+  refreshToken: string
 }
 
 @ObjectType()
 export class AuthPayloadBusiness {
   @Field(() => String)
-  id : string;
+  id: string
 
   @Field(() => String)
-  email : string;
+  email: string
 
   @Field(() => String)
-  name : string;
+  name: string
 
   @Field(() => String)
-  phone : string;
+  phone: string
 
   @Field(() => String, { nullable: true })
-  avatar? : string;
+  avatar?: string
 
   @Field(() => String, { nullable: true })
-  coverImage? : string;
+  coverImage?: string
 
   @Field(() => String)
-  accessToken: string;
-  
+  accessToken: string
+
   @Field(() => String)
-  refreshToken: string;
+  refreshToken: string
 }

@@ -1,6 +1,18 @@
-import { InputType, Int, Field, registerEnumType } from '@nestjs/graphql';
-import { IsArray, IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
-import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input';
+import {
+  InputType,
+  Int,
+  Field,
+  registerEnumType,
+} from '@nestjs/graphql'
+import {
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator'
+import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input'
 
 // Enums
 export enum FreelanceStatus {
@@ -17,33 +29,37 @@ export enum EscrowStatus {
   DISPUTED = 'DISPUTED',
 }
 
-
-registerEnumType(FreelanceStatus, { name: 'FreelanceStatus' });
-registerEnumType(EscrowStatus, { name: 'EscrowStatus' });
+registerEnumType(FreelanceStatus, {
+  name: 'FreelanceStatus',
+})
+registerEnumType(EscrowStatus, {
+  name: 'EscrowStatus',
+})
 
 // DTOs
 @InputType()
 export class CreateFreelanceOrderInput {
   @Field()
   @IsString()
-  serviceId: string;
+  serviceId: string
 
   @Field()
   @IsString()
-  clientId: string;
+  clientId: string
 
   @Field(() => Int, { defaultValue: 1 })
   @IsInt()
   @Min(1)
-  quantity: number;
+  quantity: number
 
   @Field(() => [String], { nullable: true })
   @IsOptional()
   @IsArray()
-  businessIds?: string[];
+  businessIds?: string[]
 
-  @Field(() => PaymentMethod, { defaultValue: PaymentMethod.TOKEN })
+  @Field(() => PaymentMethod, {
+    defaultValue: PaymentMethod.TOKEN,
+  })
   @IsEnum(PaymentMethod)
-  paymentMethod: PaymentMethod;
+  paymentMethod: PaymentMethod
 }
-

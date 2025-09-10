@@ -1,61 +1,67 @@
-import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
-import { ClientEntity } from '../../client/entities/client.entity';
-import { OrderProductEntity } from '../../order-product/entities/order-product.entity';
-import { PaymentTransactionEntity } from '../../payment-transaction/entities/payment-transaction.entity';
+import {
+  ObjectType,
+  Field,
+  Float,
+  Int,
+} from '@nestjs/graphql'
+import { ClientEntity } from '../../client/entities/client.entity'
+import { OrderProductEntity } from '../../order-product/entities/order-product.entity'
+import { PaymentTransactionEntity } from '../../payment-transaction/entities/payment-transaction.entity'
 
 @ObjectType()
 export class OrderEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field(() => Float)
-  deliveryFee: number;
+  deliveryFee: number
 
   @Field({ nullable: true })
-  deliveryAddress?: string;
+  deliveryAddress?: string
 
   @Field({ nullable: true })
-  qrCode?: string;
+  qrCode?: string
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   @Field()
-  updatedAt: Date;
+  updatedAt: Date
 
   @Field()
-  clientId: string;
+  clientId: string
 
   @Field(() => ClientEntity)
-  client: ClientEntity;
+  client: ClientEntity
 
-  @Field(() => PaymentTransactionEntity, { nullable: true })
-  payment?: PaymentTransactionEntity;
+  @Field(() => PaymentTransactionEntity, {
+    nullable: true,
+  })
+  payment?: PaymentTransactionEntity
 
-  @Field(() => [OrderProductEntity], { nullable: true })
-  products?: OrderProductEntity[];
+  @Field(() => [OrderProductEntity], {
+    nullable: true,
+  })
+  products?: OrderProductEntity[]
 
   @Field({ nullable: true })
-  status?: string;
+  status?: string
 
   @Field(() => Float, { nullable: true })
-  totalAmount?: number;
-
+  totalAmount?: number
 }
 
 @ObjectType()
 export class PaginatedOrdersResponse {
   @Field(() => [OrderEntity])
-  items: OrderEntity[];
+  items: OrderEntity[]
 
   @Field(() => Int)
-  total: number;
+  total: number
 
   @Field(() => Int)
-  page: number;
+  page: number
 
   @Field(() => Int)
-  limit: number;
+  limit: number
 }
-
-

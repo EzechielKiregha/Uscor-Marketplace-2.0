@@ -1,57 +1,62 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsOptional, IsString, IsBoolean } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql'
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsBoolean,
+} from 'class-validator'
 
 @InputType()
 export class CreateClientInput {
   @Field()
   @IsString()
-  username: string;
+  username: string
 
   @Field()
   @IsEmail()
-  email: string;
+  email: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  fullName?: string;
+  fullName?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  address?: string;
+  address?: string
 
   @Field({ nullable: true })
   @IsOptional()
-  phone?: string;
+  phone?: string
 
   @Field()
   @IsString()
-  password: string;
+  password: string
 
   @Field()
   @IsBoolean()
-  isVerified: boolean;
+  isVerified: boolean
 }
 
 @InputType()
 export class CreateClientForPOSInput {
   @Field()
   @IsEmail()
-  email: string;
+  email: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  fullName?: string;
+  fullName?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  phone?: string;
+  phone?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  address?: string;
+  address?: string
 }

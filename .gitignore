@@ -23,6 +23,7 @@ build/
 # Ignore system files
 .DS_Store
 Thumbs.db
+opencode.exe
 
 # Ignore IDE/editor config files
 .vscode/

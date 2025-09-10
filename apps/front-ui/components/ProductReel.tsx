@@ -29,12 +29,11 @@ export default function ProductReel({
   limit = FALLBACK_LIMIT,
 }: ProductReelProps) {
   const { data, loading, error } = useQuery(query, { variables });
-  const productsData: ProductEntity[] = []
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
     if (data) {
-      const formatted = data.products.map((product: any) => ({
+      const formatted = data.relatedProducts.map((product: any) => ({
         id: product.id,
         title: product.title,
         price: product.price,
@@ -73,7 +72,7 @@ export default function ProductReel({
       ) : !loading && (
         <div className="flex flex-col justify-center mt-20 items-center">
           <AlertTriangle />
-          <h3 className='font-medium text-gray-700 text-xl'>No Services Displayed</h3>
+          <h3 className='font-medium text-gray-700 text-xl'>No Items Displayed</h3>
         </div>
       )}
     </div>

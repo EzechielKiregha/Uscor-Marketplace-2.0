@@ -1,16 +1,17 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsOptional, IsString } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql'
+import {
+  IsOptional,
+  IsString,
+} from 'class-validator'
 
 @InputType()
 export class GenerateReceiptInput {
   @Field()
   @IsString()
-  saleId: string;
+  saleId: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  email?: string;
+  email?: string
 }
-
-

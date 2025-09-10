@@ -1,5 +1,17 @@
-import { InputType, Int, Field, registerEnumType, Float } from '@nestjs/graphql';
-import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  InputType,
+  Int,
+  Field,
+  registerEnumType,
+  Float,
+} from '@nestjs/graphql'
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator'
 
 // Enums
 export enum TokenTransactionType {
@@ -8,31 +20,33 @@ export enum TokenTransactionType {
   REPOST_COMMISSION = 'REPOST_COMMISSION',
 }
 
-registerEnumType(TokenTransactionType, { name: 'TokenTransactionType' });
+registerEnumType(TokenTransactionType, {
+  name: 'TokenTransactionType',
+})
 
 // DTOs
 @InputType()
 export class CreateTokenTransactionInput {
   @Field()
   @IsString()
-  businessId: string;
+  businessId: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  reOwnedProductId?: string;
+  reOwnedProductId?: string
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  repostedProductId?: string;
+  repostedProductId?: string
 
   @Field(() => Float)
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount: number
 
   @Field(() => TokenTransactionType)
   @IsEnum(TokenTransactionType)
-  type: TokenTransactionType;
+  type: TokenTransactionType
 }

@@ -1,16 +1,20 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Int,
+} from '@nestjs/graphql'
 
 @ObjectType()
 export class TokenEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field({ nullable: true })
-  name?: string;
+  name?: string
 
   @Field(() => Int)
-  value: number;
+  value: number
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }

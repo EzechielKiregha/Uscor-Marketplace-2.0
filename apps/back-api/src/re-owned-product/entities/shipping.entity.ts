@@ -1,30 +1,31 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+} from '@nestjs/graphql'
 
 @ObjectType()
 export class ShippingEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  reOwnedProductId: string;
+  reOwnedProductId: string
 
   @Field()
-  status: string;
+  status: string
 
   @Field({ nullable: true })
-  trackingNumber?: string;
+  trackingNumber?: string
 
   @Field({ nullable: true })
-  carrier?: string;
+  carrier?: string
 
   @Field({ nullable: true })
-  shippedAt?: Date;
+  shippedAt?: Date
 
   @Field({ nullable: true })
-  deliveredAt?: Date;
+  deliveredAt?: Date
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }
-
-

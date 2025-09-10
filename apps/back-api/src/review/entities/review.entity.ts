@@ -1,31 +1,35 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { ClientEntity } from '../../client/entities/client.entity';
-import { ProductEntity } from '../../product/entities/product.entity';
+import {
+  ObjectType,
+  Field,
+  Int,
+} from '@nestjs/graphql'
+import { ClientEntity } from '../../client/entities/client.entity'
+import { ProductEntity } from '../../product/entities/product.entity'
 
 @ObjectType()
 export class ReviewEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  clientId: string;
+  clientId: string
 
   @Field()
-  productId: string;
+  productId: string
 
   @Field(() => Int)
-  rating: number;
+  rating: number
 
   @Field({ nullable: true })
-  comment?: string;
+  comment?: string
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 
   // Relations
   @Field(() => ClientEntity) // Client who wrote the review
-  client: ClientEntity;
+  client: ClientEntity
 
   @Field(() => ProductEntity) // Product being reviewed
-  product: ProductEntity;
+  product: ProductEntity
 }

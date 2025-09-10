@@ -1,27 +1,31 @@
-import { ObjectType, Field, Float } from '@nestjs/graphql';
-import { BusinessEntity } from '../../business/entities/business.entity';
-import { ProductEntity } from '../../product/entities/product.entity';
+import {
+  ObjectType,
+  Field,
+  Float,
+} from '@nestjs/graphql'
+import { BusinessEntity } from '../../business/entities/business.entity'
+import { ProductEntity } from '../../product/entities/product.entity'
 
 @ObjectType()
 export class RepostedProductEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  productId: string;
+  productId: string
 
   @Field(() => ProductEntity)
-  product: ProductEntity;
+  product: ProductEntity
 
   @Field()
-  businessId: string;
+  businessId: string
 
   @Field(() => BusinessEntity)
-  business: BusinessEntity;
+  business: BusinessEntity
 
   @Field(() => Float)
-  markupPercentage: number;
+  markupPercentage: number
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }

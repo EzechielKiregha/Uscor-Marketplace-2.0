@@ -1,5 +1,17 @@
-import { InputType, Int, Field, Float, registerEnumType } from '@nestjs/graphql';
-import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  InputType,
+  Int,
+  Field,
+  Float,
+  registerEnumType,
+} from '@nestjs/graphql'
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator'
 
 // Enums
 export enum PaymentStatus {
@@ -12,36 +24,40 @@ export enum PaymentMethod {
   TOKEN = 'TOKEN',
   MOBILE_MONEY = 'MOBILE_MONEY',
   CASH = 'CASH',
-  CARD = 'CARD'
+  CARD = 'CARD',
 }
 
 // Register enums with GraphQL
-registerEnumType(PaymentStatus, { name: 'PaymentStatus' });
-registerEnumType(PaymentMethod, { name: 'PaymentMethod' });
+registerEnumType(PaymentStatus, {
+  name: 'PaymentStatus',
+})
+registerEnumType(PaymentMethod, {
+  name: 'PaymentMethod',
+})
 
 @InputType()
 export class CreatePaymentTransactionInput {
-  @Field({nullable: true})
+  @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  orderId?: string;
+  orderId?: string
 
-  @Field(() => Float, {nullable: true})
+  @Field(() => Float, { nullable: true })
   @IsOptional()
   @IsNumber()
   @Min(0)
-  amount?: number;
+  amount?: number
 
   @Field(() => PaymentMethod)
   @IsEnum(PaymentMethod)
-  method: PaymentMethod;
+  method: PaymentMethod
 
   @Field(() => PaymentStatus)
   @IsEnum(PaymentStatus)
-  status: PaymentStatus;
+  status: PaymentStatus
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  qrCode?: string;
+  qrCode?: string
 }

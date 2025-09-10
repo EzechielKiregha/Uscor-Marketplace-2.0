@@ -1,61 +1,65 @@
-import { ObjectType, Field, Float, Int } from '@nestjs/graphql';
-import { ProductEntity } from '../../product/entities/product.entity';
-import { ShippingEntity } from './shipping.entity';
+import {
+  ObjectType,
+  Field,
+  Float,
+  Int,
+} from '@nestjs/graphql'
+import { ProductEntity } from '../../product/entities/product.entity'
+import { ShippingEntity } from './shipping.entity'
 
 @ObjectType()
 export class ReOwnedProductEntity {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  newProductId: string;
+  newProductId: string
 
   @Field(() => ProductEntity)
-  newProduct: ProductEntity;
+  newProduct: ProductEntity
 
   @Field()
-  originalProductId: string;
+  originalProductId: string
 
   @Field(() => ProductEntity)
-  originalProduct: ProductEntity;
+  originalProduct: ProductEntity
 
   @Field()
-  oldOwnerId: string;
+  oldOwnerId: string
 
   @Field()
-  newOwnerId: string;
+  newOwnerId: string
 
   @Field(() => Int)
-  quantity: number;
+  quantity: number
 
   @Field(() => Float)
-  oldPrice: number;
+  oldPrice: number
 
   @Field(() => Float)
-  newPrice: number;
+  newPrice: number
 
   @Field(() => Float)
-  markupPercentage: number;
+  markupPercentage: number
 
   @Field()
-  agreedViaChatId: string;
+  agreedViaChatId: string
 
   @Field()
-  agreementDate: Date;
+  agreementDate: Date
 
   @Field(() => Boolean)
-  isOriginalApproved: boolean;
+  isOriginalApproved: boolean
 
   @Field(() => Boolean)
-  isNewOwnerApproved: boolean;
+  isNewOwnerApproved: boolean
 
   @Field({ nullable: true })
-  shippingId?: string;
+  shippingId?: string
 
   @Field(() => ShippingEntity, { nullable: true })
-  shipping?: ShippingEntity;
+  shipping?: ShippingEntity
 
   @Field()
-  createdAt: Date;
+  createdAt: Date
 }
-
