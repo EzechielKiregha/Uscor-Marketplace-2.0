@@ -84,7 +84,22 @@ export default function ProductForm({
             access: 'public',
             token: blobToken,
           });
-
+          if (initialData) {
+            await updateProduct({
+              variables: {
+                id: initialData.id,
+                input: productData,
+                url: blob.url,
+                pathname: blob.pathname,
+                contentType: imageFiles[0].type,
+                size: imageFiles[0].size,
+              }
+            });
+            showToast('success', 'Success', 'Product updated successfully');
+          } else {
+            await createProduct({ variables: { input: productData } });
+            showToast('success', 'Success', 'Product created successfully');
+          }
         }
         showToast('info', 'Info', 'Uploading product images...');
       } else if (imageFiles.length > 1) {

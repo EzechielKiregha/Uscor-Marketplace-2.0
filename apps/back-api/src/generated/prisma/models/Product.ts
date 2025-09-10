@@ -702,14 +702,14 @@ export type ProductSumOrderByAggregateInput = {
   minQuantity?: Prisma.SortOrder
 }
 
-export type ProductScalarRelationFilter = {
-  is?: Prisma.ProductWhereInput
-  isNot?: Prisma.ProductWhereInput
-}
-
 export type ProductNullableScalarRelationFilter = {
   is?: Prisma.ProductWhereInput | null
   isNot?: Prisma.ProductWhereInput | null
+}
+
+export type ProductScalarRelationFilter = {
+  is?: Prisma.ProductWhereInput
+  isNot?: Prisma.ProductWhereInput
 }
 
 export type ProductCreateNestedManyWithoutBusinessInput = {
@@ -810,10 +810,12 @@ export type ProductCreateNestedOneWithoutMediasInput = {
   connect?: Prisma.ProductWhereUniqueInput
 }
 
-export type ProductUpdateOneRequiredWithoutMediasNestedInput = {
+export type ProductUpdateOneWithoutMediasNestedInput = {
   create?: Prisma.XOR<Prisma.ProductCreateWithoutMediasInput, Prisma.ProductUncheckedCreateWithoutMediasInput>
   connectOrCreate?: Prisma.ProductCreateOrConnectWithoutMediasInput
   upsert?: Prisma.ProductUpsertWithoutMediasInput
+  disconnect?: Prisma.ProductWhereInput | boolean
+  delete?: Prisma.ProductWhereInput | boolean
   connect?: Prisma.ProductWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutMediasInput, Prisma.ProductUpdateWithoutMediasInput>, Prisma.ProductUncheckedUpdateWithoutMediasInput>
 }

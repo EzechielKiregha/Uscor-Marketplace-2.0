@@ -16,31 +16,31 @@ export class CategoryResolver {
   @Roles('business')
   @Mutation(() => CategoryEntity, { description: 'Creates a new category.' })
   async createCategory(
-    @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
     @Context() context,
+    @Args('input') input: CreateCategoryInput,
   ) {
-    return this.categoryService.create(createCategoryInput);
+    return this.categoryService.create(input);
   }
 
   @Query(() => [CategoryEntity], { name: 'categories', description: 'Retrieves all categories with their products.' })
-  async getCategories() {
+  async categories() {
     return this.categoryService.findAll();
   }
 
   @Query(() => CategoryEntity, { name: 'category', description: 'Retrieves a single category by ID.' })
-  async getCategory(@Args('id', { type: () => String }) id: string) {
+  async category(@Args('id', { type: () => String }) id: string) {
     return this.categoryService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('business')
-  @Mutation(() => CategoryEntity, { description: 'Updates a category’s details.' })
+  @Mutation(() => CategoryEntity, { description: 'Updates a category\'s details.' })
   async updateCategory(
-    @Args('id', { type: () => String }) id: string,
-    @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
     @Context() context,
+    @Args('id', { type: () => String }) id: string,
+    @Args('input') input: UpdateCategoryInput,
   ) {
-    return this.categoryService.update(id, updateCategoryInput);
+    return this.categoryService.update(id, input);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

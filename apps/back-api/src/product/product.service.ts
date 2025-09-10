@@ -18,18 +18,11 @@ export class ProductService {
         business: { connect: { id: businessId } },
         category: { connect: { id: categoryId } },
       },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        price: true,
-        quantity: true,
-        approvedForSale: true,
-        createdAt: true,
-        updatedAt: true,
-        business: { select: { id: true, name: true, email: true } },
-        category: { select: { id: true, name: true } },
-        store : { select: { id: true, name: true  } }
+      include: {
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } }
       },
     });
   }
@@ -81,19 +74,11 @@ export class ProductService {
     return this.prisma.product.update({
       where: { id },
       data,
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        price: true,
-        quantity: true,
-        approvedForSale: true,
-        createdAt: true,
-        updatedAt: true,
-        medias: {select:{url:true}},
-        business: { select: { id: true, name: true, email: true } },
-        category: { select: { id: true, name: true } },
-        store : { select: { id: true, name: true, address: true, createdAt: true  } },
+      include: {
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } }
       },
     });
   }
@@ -111,16 +96,11 @@ export class ProductService {
   async getFeaturedProducts() {
     return await this.prisma.product.findMany({
       where: { featured: true },
-      select: {
-        id: true,
-        title: true,
-        price: true,
-        quantity: true,
-        description: true,
-        medias: {select:{url:true}},
-        approvedForSale: true,
-        category: { select: { name: true } },
-        business: { select: { name: true, avatar: true } },
+      include: {
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } }
       },
       orderBy: { createdAt: 'desc' }, // show newest first
     });
@@ -140,16 +120,11 @@ export class ProductService {
     return await this.prisma.product.findMany({
       where: { categoryId: cat.id },
       take: 4, // Limit to 4 related products
-      select: {
-        id: true,
-        title: true,
-        price: true,
-        quantity: true,
-        description: true,
-        medias: {select:{url:true}},
-        approvedForSale: true,
-        category: { select: { name: true } },
-        business: { select: { name: true, avatar: true } },
+      include: {
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } }
       },
       orderBy: { createdAt: 'desc' }, // show newest first
     });
@@ -161,23 +136,20 @@ export class ProductService {
         title: {
           contains: title, mode: 'insensitive'
         }
-      }, // Limit to 4 related products
+      },
       include: {
-        medias: { select: { id: true, url : true, type: true }},
-        business: { select: { id: true, name: true, email: true, avatar: true } },
-        category: { select: { id: true, name: true, description: true, createdAt: true } },
-        store : { select: { id: true, name: true, address: true, createdAt: true  } },
-        orders: { select: { id: true, quantity: true, orderId: true } },
-        reposts: { select: { id: true, markupPercentage: true, createdAt: true } },
-        reOwnedProducts: { select: { id: true, oldPrice: true, newPrice: true, markupPercentage: true, createdAt: true } },
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } }
       },
       orderBy: { createdAt: 'desc' }, // show newest first
     });
   }
-  async getSearchedProducts( title: string, user: AuthPayload) {
-
-    if  (user.role !== "business")
-      return new Error("You are not allowed to search for products");
+  async getSearchedProducts(title: string, user: AuthPayload) {
+    if (user.role !== "business") {
+      throw new Error("You are not allowed to search for products");
+    }
 
     return await this.prisma.product.findMany({
       where: {
@@ -186,13 +158,10 @@ export class ProductService {
         }
       },
       include: {
-        medias: { select: { id: true, url : true, type: true }},
-        business: { select: { id: true, name: true, email: true, avatar: true } },
-        category: { select: { id: true, name: true, description: true, createdAt: true } },
-        store : { select: { id: true, name: true, address: true, createdAt: true  } },
-        orders: { select: { id: true, quantity: true, orderId: true } },
-        reposts: { select: { id: true, markupPercentage: true, createdAt: true } },
-        reOwnedProducts: { select: { id: true, oldPrice: true, newPrice: true, markupPercentage: true, createdAt: true } },
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } }
       },
       orderBy: { createdAt: 'desc' }, // show newest first
     });

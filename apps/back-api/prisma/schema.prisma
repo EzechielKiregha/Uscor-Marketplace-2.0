@@ -179,6 +179,7 @@ model Business {
   stores Store[]
   purchaseOrders PurchaseOrder[]
   loyaltyPrograms LoyaltyProgram[]
+  medias Media[]
 
   // Index to speed up listing businesses by creation date
   @@index([createdAt])
@@ -212,6 +213,7 @@ model Client {
   chatParticipants ChatParticipant[]
   sales Sale[]
   pointsTransactions PointsTransaction[]
+  medias Media[]
 
   // Common lookup
   @@index([createdAt])
@@ -241,6 +243,7 @@ model Worker {
 
   @@index([id])
   @@index([email])
+  Media Media[]
 }
 
 model Category {
@@ -304,9 +307,20 @@ model Media {
   id                   String                @id @default(uuid())
   url                  String
   type                 MediaType
-  product              Product               @relation(fields: [productId], references: [id])
-  productId            String
+  product              Product?               @relation(fields: [productId], references: [id])
+  productId            String?
+  service              FreelanceService?     @relation(fields: [serviceId], references: [id])
+  serviceId            String?
+  business             Business?             @relation(fields: [businessId], references: [id])
+  businessId           String?
+  client             Client?               @relation(fields: [clientId], references: [id])
+  clientId           String?
+  store                Store?               @relation(fields: [storeId], references: [id])
+  storeId            String?
+  worker               Worker?               @relation(fields: [workerId], references: [id])
+  workerId            String?
   createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
 
   postOfSales PostOfSale[]
 }
@@ -569,6 +583,7 @@ model FreelanceService {
   updatedAt            DateTime              @updatedAt
   workerServiceAssignments WorkerServiceAssignment[]
   chats Chat[]
+  medias Media[]
 
   @@index([createdAt])
   @@index([businessId])
@@ -686,6 +701,8 @@ model Store {
   inventoryAdjustments InventoryAdjustment[]
   shifts       Shift[]
   products     Product[]
+
+  medias Media[]
 }
 
 model Sale {

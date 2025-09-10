@@ -6,6 +6,15 @@ import { PaymentTransactionService } from '../payment-transaction/payment-transa
 import { AccountRechargeService } from '../account-recharge/account-recharge.service';
 import { PaymentMethod, PaymentStatus } from '../payment-transaction/dto/create-payment-transaction.input';
 import { Country, RechargeMethod } from '../account-recharge/dto/create-account-recharge.input';
+
+interface FindAllFilters {
+  serviceId?: string;
+  clientId?: string;
+  businessId?: string;
+  status?: FreelanceStatus;
+  page?: number;
+  limit?: number;
+}
 // Service
 @Injectable()
 export class FreelanceOrderService {
@@ -112,38 +121,190 @@ export class FreelanceOrderService {
     });
   }
 
-  async findAll(userId: string, userRole: string) {
-    return this.prisma.freelanceOrder.findMany({
-      where: {
-        OR: [
-          { clientId: userRole === 'client' ? userId : undefined },
-          { service: { businessId: userRole === 'business' ? userId : undefined } },
-          { freelanceOrderBusiness: { some: { businessId: userRole === 'business' ? userId : undefined } } },
-        ],
-      },
-      include: {
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        service: { select: { id: true, title: true, rate: true, isHourly: true, businessId: true } },
-        freelanceOrderBusiness: { include: { business: true } },
-        payment: true,
-      },
-    });
+  async findAll(filters: FindAllFilters) {
+    const { serviceId, clientId, businessId, status, page = 1, limit = 20 } = filters;
+    
+    const skip = (page - 1) * limit;
+    
+    const where: any = {};
+    
+    if (serviceId) {
+      where.serviceId = serviceId;
+    }
+    
+    if (clientId) {
+      where.clientId = clientId;
+    }
+    
+    if (businessId) {
+      where.OR = [
+        { service: { businessId } },
+        { freelanceOrderBusiness: { some: { businessId } } },
+      ];
+    }
+    
+    if (status) {
+      where.status = status;
+    }
+
+    const [items, total] = await Promise.all([
+      this.prisma.freelanceOrder.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          client: { select: { id: true, fullName: true, avatar: true } },
+          service: { 
+            select: { 
+              id: true, 
+              title: true, 
+              rate: true, 
+              isHourly: true 
+            } 
+          },
+          payment: {
+            select: {
+              id: true,
+              amount: true,
+              method: true,
+              status: true
+            }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.freelanceOrder.count({ where }),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string) {
     const order = await this.prisma.freelanceOrder.findUnique({
       where: { id },
       include: {
-        client: { select: { id: true, username: true, email: true, createdAt: true } },
-        service: { select: { id: true, title: true, rate: true, isHourly: true, businessId: true } },
-        freelanceOrderBusiness: { include: { business: true } },
-        payment: true,
+        client: { select: { id: true, fullName: true, avatar: true } },
+        service: { 
+          select: { 
+            id: true, 
+            title: true, 
+            rate: true, 
+            isHourly: true,
+            businessId: true
+          } 
+        },
+        payment: {
+          select: {
+            id: true,
+            amount: true,
+            method: true,
+            status: true
+          }
+        },
+        freelanceOrderBusiness: true
       },
     });
     if (!order) {
       throw new Error('Freelance order not found');
     }
     return order;
+  }
+
+  async completeOrder(id: string, businessId: string) {
+    const order = await this.findOne(id);
+    
+    // Verify business can complete this order
+    if (order.service.businessId !== businessId) {
+      throw new Error('Only the service owner can complete this order');
+    }
+    
+    if (order.status === FreelanceStatus.COMPLETED) {
+      throw new Error('Order is already completed');
+    }
+
+    return this.prisma.freelanceOrder.update({
+      where: { id },
+      data: { 
+        status: FreelanceStatus.COMPLETED,
+        updatedAt: new Date()
+      },
+      include: {
+        client: { select: { id: true, fullName: true, avatar: true } },
+        service: { 
+          select: { 
+            id: true, 
+            title: true, 
+            rate: true, 
+            isHourly: true 
+          } 
+        },
+        payment: {
+          select: {
+            id: true,
+            amount: true,
+            method: true,
+            status: true
+          }
+        }
+      },
+    });
+  }
+
+  async releaseEscrow(orderId: string, userId: string, userRole: string) {
+    const order = await this.findOne(orderId);
+    
+    // Verify user can release escrow
+    if (userRole === 'client' && order.clientId !== userId) {
+      throw new Error('Only the client can release escrow for their order');
+    }
+    
+    if (userRole === 'business' && order.service.businessId !== userId) {
+      throw new Error('Only the service owner can release escrow');
+    }
+
+    if (order.status !== FreelanceStatus.COMPLETED) {
+      throw new Error('Order must be completed before releasing escrow');
+    }
+
+    return this.prisma.$transaction(async (prisma) => {
+      // Update order to mark escrow as released
+      const updatedOrder = await prisma.freelanceOrder.update({
+        where: { id: orderId },
+        data: { 
+          escrowReleasedAt: new Date(),
+          updatedAt: new Date()
+        },
+        include: {
+          client: { select: { id: true, fullName: true, avatar: true } },
+          service: { 
+            select: { 
+              id: true, 
+              title: true, 
+              rate: true, 
+              isHourly: true,
+              businessId: true
+            } 
+          },
+          payment: {
+            select: {
+              id: true,
+              amount: true,
+              method: true,
+              status: true
+            }
+          }
+        },
+      });
+
+      // Handle actual payment processing here if needed
+      // For now, just return the updated order
+      return updatedOrder;
+    });
   }
 
   async update(id: string, updateFreelanceOrderInput: UpdateFreelanceOrderInput, userId: string, userRole: string) {
@@ -162,7 +323,7 @@ export class FreelanceOrderService {
       throw new Error('Businesses can only update orders for their services or assigned orders');
     }
 
-    if (!order) return new Error("Freelance order was not found")
+    if (!order) throw new Error("Freelance order was not found")
       
     // Handle escrow release and payment on COMPLETED status
     if (status === FreelanceStatus.COMPLETED && order.status !== FreelanceStatus.COMPLETED) {
@@ -230,7 +391,7 @@ export class FreelanceOrderService {
       });
     }
 
-    return this.prisma.freelanceOrder.update({
+    const updatedorder = this.prisma.freelanceOrder.update({
       where: { id },
       data: { status, escrowStatus, commissionPercent },
       include: {
@@ -240,6 +401,10 @@ export class FreelanceOrderService {
         payment: true,
       },
     });
+
+    if (!updatedorder) throw new Error("Freelance order was not found")
+
+    return updatedorder
   }
 
   async assignBusinesses(assignBusinessesInput: AssignBusinessesInput, userId: string) {

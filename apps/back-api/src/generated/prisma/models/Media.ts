@@ -28,7 +28,12 @@ export type MediaMinAggregateOutputType = {
   url: string | null
   type: $Enums.MediaType | null
   productId: string | null
+  serviceId: string | null
+  businessId: string | null
+  clientId: string | null
+  storeId: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type MediaMaxAggregateOutputType = {
@@ -36,7 +41,12 @@ export type MediaMaxAggregateOutputType = {
   url: string | null
   type: $Enums.MediaType | null
   productId: string | null
+  serviceId: string | null
+  businessId: string | null
+  clientId: string | null
+  storeId: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type MediaCountAggregateOutputType = {
@@ -44,7 +54,12 @@ export type MediaCountAggregateOutputType = {
   url: number
   type: number
   productId: number
+  serviceId: number
+  businessId: number
+  clientId: number
+  storeId: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -54,7 +69,12 @@ export type MediaMinAggregateInputType = {
   url?: true
   type?: true
   productId?: true
+  serviceId?: true
+  businessId?: true
+  clientId?: true
+  storeId?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type MediaMaxAggregateInputType = {
@@ -62,7 +82,12 @@ export type MediaMaxAggregateInputType = {
   url?: true
   type?: true
   productId?: true
+  serviceId?: true
+  businessId?: true
+  clientId?: true
+  storeId?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type MediaCountAggregateInputType = {
@@ -70,7 +95,12 @@ export type MediaCountAggregateInputType = {
   url?: true
   type?: true
   productId?: true
+  serviceId?: true
+  businessId?: true
+  clientId?: true
+  storeId?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -150,8 +180,13 @@ export type MediaGroupByOutputType = {
   id: string
   url: string
   type: $Enums.MediaType
-  productId: string
+  productId: string | null
+  serviceId: string | null
+  businessId: string | null
+  clientId: string | null
+  storeId: string | null
   createdAt: Date
+  updatedAt: Date
   _count: MediaCountAggregateOutputType | null
   _min: MediaMinAggregateOutputType | null
   _max: MediaMaxAggregateOutputType | null
@@ -179,9 +214,18 @@ export type MediaWhereInput = {
   id?: Prisma.StringFilter<"Media"> | string
   url?: Prisma.StringFilter<"Media"> | string
   type?: Prisma.EnumMediaTypeFilter<"Media"> | $Enums.MediaType
-  productId?: Prisma.StringFilter<"Media"> | string
+  productId?: Prisma.StringNullableFilter<"Media"> | string | null
+  serviceId?: Prisma.StringNullableFilter<"Media"> | string | null
+  businessId?: Prisma.StringNullableFilter<"Media"> | string | null
+  clientId?: Prisma.StringNullableFilter<"Media"> | string | null
+  storeId?: Prisma.StringNullableFilter<"Media"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
-  product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
+  updatedAt?: Prisma.DateTimeFilter<"Media"> | Date | string
+  product?: Prisma.XOR<Prisma.ProductNullableScalarRelationFilter, Prisma.ProductWhereInput> | null
+  service?: Prisma.XOR<Prisma.FreelanceServiceNullableScalarRelationFilter, Prisma.FreelanceServiceWhereInput> | null
+  business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
+  client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
+  store?: Prisma.XOR<Prisma.StoreNullableScalarRelationFilter, Prisma.StoreWhereInput> | null
   postOfSales?: Prisma.PostOfSaleListRelationFilter
 }
 
@@ -189,9 +233,18 @@ export type MediaOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  productId?: Prisma.SortOrder
+  productId?: Prisma.SortOrderInput | Prisma.SortOrder
+  serviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  clientId?: Prisma.SortOrderInput | Prisma.SortOrder
+  storeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
+  service?: Prisma.FreelanceServiceOrderByWithRelationInput
+  business?: Prisma.BusinessOrderByWithRelationInput
+  client?: Prisma.ClientOrderByWithRelationInput
+  store?: Prisma.StoreOrderByWithRelationInput
   postOfSales?: Prisma.PostOfSaleOrderByRelationAggregateInput
 }
 
@@ -202,9 +255,18 @@ export type MediaWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MediaWhereInput | Prisma.MediaWhereInput[]
   url?: Prisma.StringFilter<"Media"> | string
   type?: Prisma.EnumMediaTypeFilter<"Media"> | $Enums.MediaType
-  productId?: Prisma.StringFilter<"Media"> | string
+  productId?: Prisma.StringNullableFilter<"Media"> | string | null
+  serviceId?: Prisma.StringNullableFilter<"Media"> | string | null
+  businessId?: Prisma.StringNullableFilter<"Media"> | string | null
+  clientId?: Prisma.StringNullableFilter<"Media"> | string | null
+  storeId?: Prisma.StringNullableFilter<"Media"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
-  product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
+  updatedAt?: Prisma.DateTimeFilter<"Media"> | Date | string
+  product?: Prisma.XOR<Prisma.ProductNullableScalarRelationFilter, Prisma.ProductWhereInput> | null
+  service?: Prisma.XOR<Prisma.FreelanceServiceNullableScalarRelationFilter, Prisma.FreelanceServiceWhereInput> | null
+  business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
+  client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
+  store?: Prisma.XOR<Prisma.StoreNullableScalarRelationFilter, Prisma.StoreWhereInput> | null
   postOfSales?: Prisma.PostOfSaleListRelationFilter
 }, "id">
 
@@ -212,8 +274,13 @@ export type MediaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  productId?: Prisma.SortOrder
+  productId?: Prisma.SortOrderInput | Prisma.SortOrder
+  serviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  clientId?: Prisma.SortOrderInput | Prisma.SortOrder
+  storeId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.MediaCountOrderByAggregateInput
   _max?: Prisma.MediaMaxOrderByAggregateInput
   _min?: Prisma.MediaMinOrderByAggregateInput
@@ -226,8 +293,13 @@ export type MediaScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Media"> | string
   url?: Prisma.StringWithAggregatesFilter<"Media"> | string
   type?: Prisma.EnumMediaTypeWithAggregatesFilter<"Media"> | $Enums.MediaType
-  productId?: Prisma.StringWithAggregatesFilter<"Media"> | string
+  productId?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
+  serviceId?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
+  businessId?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
+  clientId?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
+  storeId?: Prisma.StringNullableWithAggregatesFilter<"Media"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Media"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Media"> | Date | string
 }
 
 export type MediaCreateInput = {
@@ -235,7 +307,12 @@ export type MediaCreateInput = {
   url: string
   type: $Enums.MediaType
   createdAt?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutMediasInput
+  updatedAt?: Date | string
+  product?: Prisma.ProductCreateNestedOneWithoutMediasInput
+  service?: Prisma.FreelanceServiceCreateNestedOneWithoutMediasInput
+  business?: Prisma.BusinessCreateNestedOneWithoutMediasInput
+  client?: Prisma.ClientCreateNestedOneWithoutMediasInput
+  store?: Prisma.StoreCreateNestedOneWithoutMediasInput
   postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutMediaInput
 }
 
@@ -243,8 +320,13 @@ export type MediaUncheckedCreateInput = {
   id?: string
   url: string
   type: $Enums.MediaType
-  productId: string
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutMediaInput
 }
 
@@ -253,7 +335,12 @@ export type MediaUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutMediasNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  product?: Prisma.ProductUpdateOneWithoutMediasNestedInput
+  service?: Prisma.FreelanceServiceUpdateOneWithoutMediasNestedInput
+  business?: Prisma.BusinessUpdateOneWithoutMediasNestedInput
+  client?: Prisma.ClientUpdateOneWithoutMediasNestedInput
+  store?: Prisma.StoreUpdateOneWithoutMediasNestedInput
   postOfSales?: Prisma.PostOfSaleUpdateManyWithoutMediaNestedInput
 }
 
@@ -261,8 +348,13 @@ export type MediaUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput
 }
 
@@ -270,8 +362,13 @@ export type MediaCreateManyInput = {
   id?: string
   url: string
   type: $Enums.MediaType
-  productId: string
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MediaUpdateManyMutationInput = {
@@ -279,14 +376,20 @@ export type MediaUpdateManyMutationInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MediaUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MediaListRelationFilter = {
@@ -304,7 +407,12 @@ export type MediaCountOrderByAggregateInput = {
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
   productId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  storeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type MediaMaxOrderByAggregateInput = {
@@ -312,7 +420,12 @@ export type MediaMaxOrderByAggregateInput = {
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
   productId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  storeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type MediaMinOrderByAggregateInput = {
@@ -320,7 +433,96 @@ export type MediaMinOrderByAggregateInput = {
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
   productId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
+  storeId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type MediaCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutBusinessInput, Prisma.MediaUncheckedCreateWithoutBusinessInput> | Prisma.MediaCreateWithoutBusinessInput[] | Prisma.MediaUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutBusinessInput | Prisma.MediaCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.MediaCreateManyBusinessInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUncheckedCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutBusinessInput, Prisma.MediaUncheckedCreateWithoutBusinessInput> | Prisma.MediaCreateWithoutBusinessInput[] | Prisma.MediaUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutBusinessInput | Prisma.MediaCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.MediaCreateManyBusinessInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutBusinessInput, Prisma.MediaUncheckedCreateWithoutBusinessInput> | Prisma.MediaCreateWithoutBusinessInput[] | Prisma.MediaUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutBusinessInput | Prisma.MediaCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutBusinessInput | Prisma.MediaUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.MediaCreateManyBusinessInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutBusinessInput | Prisma.MediaUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutBusinessInput | Prisma.MediaUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
+export type MediaUncheckedUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutBusinessInput, Prisma.MediaUncheckedCreateWithoutBusinessInput> | Prisma.MediaCreateWithoutBusinessInput[] | Prisma.MediaUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutBusinessInput | Prisma.MediaCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutBusinessInput | Prisma.MediaUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.MediaCreateManyBusinessInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutBusinessInput | Prisma.MediaUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutBusinessInput | Prisma.MediaUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
+export type MediaCreateNestedManyWithoutClientInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutClientInput, Prisma.MediaUncheckedCreateWithoutClientInput> | Prisma.MediaCreateWithoutClientInput[] | Prisma.MediaUncheckedCreateWithoutClientInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutClientInput | Prisma.MediaCreateOrConnectWithoutClientInput[]
+  createMany?: Prisma.MediaCreateManyClientInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUncheckedCreateNestedManyWithoutClientInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutClientInput, Prisma.MediaUncheckedCreateWithoutClientInput> | Prisma.MediaCreateWithoutClientInput[] | Prisma.MediaUncheckedCreateWithoutClientInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutClientInput | Prisma.MediaCreateOrConnectWithoutClientInput[]
+  createMany?: Prisma.MediaCreateManyClientInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUpdateManyWithoutClientNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutClientInput, Prisma.MediaUncheckedCreateWithoutClientInput> | Prisma.MediaCreateWithoutClientInput[] | Prisma.MediaUncheckedCreateWithoutClientInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutClientInput | Prisma.MediaCreateOrConnectWithoutClientInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutClientInput | Prisma.MediaUpsertWithWhereUniqueWithoutClientInput[]
+  createMany?: Prisma.MediaCreateManyClientInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutClientInput | Prisma.MediaUpdateWithWhereUniqueWithoutClientInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutClientInput | Prisma.MediaUpdateManyWithWhereWithoutClientInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
+export type MediaUncheckedUpdateManyWithoutClientNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutClientInput, Prisma.MediaUncheckedCreateWithoutClientInput> | Prisma.MediaCreateWithoutClientInput[] | Prisma.MediaUncheckedCreateWithoutClientInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutClientInput | Prisma.MediaCreateOrConnectWithoutClientInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutClientInput | Prisma.MediaUpsertWithWhereUniqueWithoutClientInput[]
+  createMany?: Prisma.MediaCreateManyClientInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutClientInput | Prisma.MediaUpdateWithWhereUniqueWithoutClientInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutClientInput | Prisma.MediaUpdateManyWithWhereWithoutClientInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
 }
 
 export type MediaCreateNestedManyWithoutProductInput = {
@@ -369,6 +571,48 @@ export type EnumMediaTypeFieldUpdateOperationsInput = {
   set?: $Enums.MediaType
 }
 
+export type MediaCreateNestedManyWithoutServiceInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutServiceInput, Prisma.MediaUncheckedCreateWithoutServiceInput> | Prisma.MediaCreateWithoutServiceInput[] | Prisma.MediaUncheckedCreateWithoutServiceInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutServiceInput | Prisma.MediaCreateOrConnectWithoutServiceInput[]
+  createMany?: Prisma.MediaCreateManyServiceInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUncheckedCreateNestedManyWithoutServiceInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutServiceInput, Prisma.MediaUncheckedCreateWithoutServiceInput> | Prisma.MediaCreateWithoutServiceInput[] | Prisma.MediaUncheckedCreateWithoutServiceInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutServiceInput | Prisma.MediaCreateOrConnectWithoutServiceInput[]
+  createMany?: Prisma.MediaCreateManyServiceInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUpdateManyWithoutServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutServiceInput, Prisma.MediaUncheckedCreateWithoutServiceInput> | Prisma.MediaCreateWithoutServiceInput[] | Prisma.MediaUncheckedCreateWithoutServiceInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutServiceInput | Prisma.MediaCreateOrConnectWithoutServiceInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutServiceInput | Prisma.MediaUpsertWithWhereUniqueWithoutServiceInput[]
+  createMany?: Prisma.MediaCreateManyServiceInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutServiceInput | Prisma.MediaUpdateWithWhereUniqueWithoutServiceInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutServiceInput | Prisma.MediaUpdateManyWithWhereWithoutServiceInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
+export type MediaUncheckedUpdateManyWithoutServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutServiceInput, Prisma.MediaUncheckedCreateWithoutServiceInput> | Prisma.MediaCreateWithoutServiceInput[] | Prisma.MediaUncheckedCreateWithoutServiceInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutServiceInput | Prisma.MediaCreateOrConnectWithoutServiceInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutServiceInput | Prisma.MediaUpsertWithWhereUniqueWithoutServiceInput[]
+  createMany?: Prisma.MediaCreateManyServiceInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutServiceInput | Prisma.MediaUpdateWithWhereUniqueWithoutServiceInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutServiceInput | Prisma.MediaUpdateManyWithWhereWithoutServiceInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
 export type MediaCreateNestedManyWithoutPostOfSalesInput = {
   create?: Prisma.XOR<Prisma.MediaCreateWithoutPostOfSalesInput, Prisma.MediaUncheckedCreateWithoutPostOfSalesInput> | Prisma.MediaCreateWithoutPostOfSalesInput[] | Prisma.MediaUncheckedCreateWithoutPostOfSalesInput[]
   connectOrCreate?: Prisma.MediaCreateOrConnectWithoutPostOfSalesInput | Prisma.MediaCreateOrConnectWithoutPostOfSalesInput[]
@@ -407,11 +651,178 @@ export type MediaUncheckedUpdateManyWithoutPostOfSalesNestedInput = {
   deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
 }
 
+export type MediaCreateNestedManyWithoutStoreInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutStoreInput, Prisma.MediaUncheckedCreateWithoutStoreInput> | Prisma.MediaCreateWithoutStoreInput[] | Prisma.MediaUncheckedCreateWithoutStoreInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutStoreInput | Prisma.MediaCreateOrConnectWithoutStoreInput[]
+  createMany?: Prisma.MediaCreateManyStoreInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUncheckedCreateNestedManyWithoutStoreInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutStoreInput, Prisma.MediaUncheckedCreateWithoutStoreInput> | Prisma.MediaCreateWithoutStoreInput[] | Prisma.MediaUncheckedCreateWithoutStoreInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutStoreInput | Prisma.MediaCreateOrConnectWithoutStoreInput[]
+  createMany?: Prisma.MediaCreateManyStoreInputEnvelope
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+}
+
+export type MediaUpdateManyWithoutStoreNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutStoreInput, Prisma.MediaUncheckedCreateWithoutStoreInput> | Prisma.MediaCreateWithoutStoreInput[] | Prisma.MediaUncheckedCreateWithoutStoreInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutStoreInput | Prisma.MediaCreateOrConnectWithoutStoreInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutStoreInput | Prisma.MediaUpsertWithWhereUniqueWithoutStoreInput[]
+  createMany?: Prisma.MediaCreateManyStoreInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutStoreInput | Prisma.MediaUpdateWithWhereUniqueWithoutStoreInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutStoreInput | Prisma.MediaUpdateManyWithWhereWithoutStoreInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
+export type MediaUncheckedUpdateManyWithoutStoreNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutStoreInput, Prisma.MediaUncheckedCreateWithoutStoreInput> | Prisma.MediaCreateWithoutStoreInput[] | Prisma.MediaUncheckedCreateWithoutStoreInput[]
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutStoreInput | Prisma.MediaCreateOrConnectWithoutStoreInput[]
+  upsert?: Prisma.MediaUpsertWithWhereUniqueWithoutStoreInput | Prisma.MediaUpsertWithWhereUniqueWithoutStoreInput[]
+  createMany?: Prisma.MediaCreateManyStoreInputEnvelope
+  set?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  disconnect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  delete?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  connect?: Prisma.MediaWhereUniqueInput | Prisma.MediaWhereUniqueInput[]
+  update?: Prisma.MediaUpdateWithWhereUniqueWithoutStoreInput | Prisma.MediaUpdateWithWhereUniqueWithoutStoreInput[]
+  updateMany?: Prisma.MediaUpdateManyWithWhereWithoutStoreInput | Prisma.MediaUpdateManyWithWhereWithoutStoreInput[]
+  deleteMany?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+}
+
+export type MediaCreateWithoutBusinessInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  product?: Prisma.ProductCreateNestedOneWithoutMediasInput
+  service?: Prisma.FreelanceServiceCreateNestedOneWithoutMediasInput
+  client?: Prisma.ClientCreateNestedOneWithoutMediasInput
+  store?: Prisma.StoreCreateNestedOneWithoutMediasInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutMediaInput
+}
+
+export type MediaUncheckedCreateWithoutBusinessInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  serviceId?: string | null
+  clientId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutMediaInput
+}
+
+export type MediaCreateOrConnectWithoutBusinessInput = {
+  where: Prisma.MediaWhereUniqueInput
+  create: Prisma.XOR<Prisma.MediaCreateWithoutBusinessInput, Prisma.MediaUncheckedCreateWithoutBusinessInput>
+}
+
+export type MediaCreateManyBusinessInputEnvelope = {
+  data: Prisma.MediaCreateManyBusinessInput | Prisma.MediaCreateManyBusinessInput[]
+  skipDuplicates?: boolean
+}
+
+export type MediaUpsertWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.MediaWhereUniqueInput
+  update: Prisma.XOR<Prisma.MediaUpdateWithoutBusinessInput, Prisma.MediaUncheckedUpdateWithoutBusinessInput>
+  create: Prisma.XOR<Prisma.MediaCreateWithoutBusinessInput, Prisma.MediaUncheckedCreateWithoutBusinessInput>
+}
+
+export type MediaUpdateWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.MediaWhereUniqueInput
+  data: Prisma.XOR<Prisma.MediaUpdateWithoutBusinessInput, Prisma.MediaUncheckedUpdateWithoutBusinessInput>
+}
+
+export type MediaUpdateManyWithWhereWithoutBusinessInput = {
+  where: Prisma.MediaScalarWhereInput
+  data: Prisma.XOR<Prisma.MediaUpdateManyMutationInput, Prisma.MediaUncheckedUpdateManyWithoutBusinessInput>
+}
+
+export type MediaScalarWhereInput = {
+  AND?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+  OR?: Prisma.MediaScalarWhereInput[]
+  NOT?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
+  id?: Prisma.StringFilter<"Media"> | string
+  url?: Prisma.StringFilter<"Media"> | string
+  type?: Prisma.EnumMediaTypeFilter<"Media"> | $Enums.MediaType
+  productId?: Prisma.StringNullableFilter<"Media"> | string | null
+  serviceId?: Prisma.StringNullableFilter<"Media"> | string | null
+  businessId?: Prisma.StringNullableFilter<"Media"> | string | null
+  clientId?: Prisma.StringNullableFilter<"Media"> | string | null
+  storeId?: Prisma.StringNullableFilter<"Media"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Media"> | Date | string
+}
+
+export type MediaCreateWithoutClientInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  product?: Prisma.ProductCreateNestedOneWithoutMediasInput
+  service?: Prisma.FreelanceServiceCreateNestedOneWithoutMediasInput
+  business?: Prisma.BusinessCreateNestedOneWithoutMediasInput
+  store?: Prisma.StoreCreateNestedOneWithoutMediasInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutMediaInput
+}
+
+export type MediaUncheckedCreateWithoutClientInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutMediaInput
+}
+
+export type MediaCreateOrConnectWithoutClientInput = {
+  where: Prisma.MediaWhereUniqueInput
+  create: Prisma.XOR<Prisma.MediaCreateWithoutClientInput, Prisma.MediaUncheckedCreateWithoutClientInput>
+}
+
+export type MediaCreateManyClientInputEnvelope = {
+  data: Prisma.MediaCreateManyClientInput | Prisma.MediaCreateManyClientInput[]
+  skipDuplicates?: boolean
+}
+
+export type MediaUpsertWithWhereUniqueWithoutClientInput = {
+  where: Prisma.MediaWhereUniqueInput
+  update: Prisma.XOR<Prisma.MediaUpdateWithoutClientInput, Prisma.MediaUncheckedUpdateWithoutClientInput>
+  create: Prisma.XOR<Prisma.MediaCreateWithoutClientInput, Prisma.MediaUncheckedCreateWithoutClientInput>
+}
+
+export type MediaUpdateWithWhereUniqueWithoutClientInput = {
+  where: Prisma.MediaWhereUniqueInput
+  data: Prisma.XOR<Prisma.MediaUpdateWithoutClientInput, Prisma.MediaUncheckedUpdateWithoutClientInput>
+}
+
+export type MediaUpdateManyWithWhereWithoutClientInput = {
+  where: Prisma.MediaScalarWhereInput
+  data: Prisma.XOR<Prisma.MediaUpdateManyMutationInput, Prisma.MediaUncheckedUpdateManyWithoutClientInput>
+}
+
 export type MediaCreateWithoutProductInput = {
   id?: string
   url: string
   type: $Enums.MediaType
   createdAt?: Date | string
+  updatedAt?: Date | string
+  service?: Prisma.FreelanceServiceCreateNestedOneWithoutMediasInput
+  business?: Prisma.BusinessCreateNestedOneWithoutMediasInput
+  client?: Prisma.ClientCreateNestedOneWithoutMediasInput
+  store?: Prisma.StoreCreateNestedOneWithoutMediasInput
   postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutMediaInput
 }
 
@@ -419,7 +830,12 @@ export type MediaUncheckedCreateWithoutProductInput = {
   id?: string
   url: string
   type: $Enums.MediaType
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutMediaInput
 }
 
@@ -449,15 +865,56 @@ export type MediaUpdateManyWithWhereWithoutProductInput = {
   data: Prisma.XOR<Prisma.MediaUpdateManyMutationInput, Prisma.MediaUncheckedUpdateManyWithoutProductInput>
 }
 
-export type MediaScalarWhereInput = {
-  AND?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
-  OR?: Prisma.MediaScalarWhereInput[]
-  NOT?: Prisma.MediaScalarWhereInput | Prisma.MediaScalarWhereInput[]
-  id?: Prisma.StringFilter<"Media"> | string
-  url?: Prisma.StringFilter<"Media"> | string
-  type?: Prisma.EnumMediaTypeFilter<"Media"> | $Enums.MediaType
-  productId?: Prisma.StringFilter<"Media"> | string
-  createdAt?: Prisma.DateTimeFilter<"Media"> | Date | string
+export type MediaCreateWithoutServiceInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  product?: Prisma.ProductCreateNestedOneWithoutMediasInput
+  business?: Prisma.BusinessCreateNestedOneWithoutMediasInput
+  client?: Prisma.ClientCreateNestedOneWithoutMediasInput
+  store?: Prisma.StoreCreateNestedOneWithoutMediasInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutMediaInput
+}
+
+export type MediaUncheckedCreateWithoutServiceInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutMediaInput
+}
+
+export type MediaCreateOrConnectWithoutServiceInput = {
+  where: Prisma.MediaWhereUniqueInput
+  create: Prisma.XOR<Prisma.MediaCreateWithoutServiceInput, Prisma.MediaUncheckedCreateWithoutServiceInput>
+}
+
+export type MediaCreateManyServiceInputEnvelope = {
+  data: Prisma.MediaCreateManyServiceInput | Prisma.MediaCreateManyServiceInput[]
+  skipDuplicates?: boolean
+}
+
+export type MediaUpsertWithWhereUniqueWithoutServiceInput = {
+  where: Prisma.MediaWhereUniqueInput
+  update: Prisma.XOR<Prisma.MediaUpdateWithoutServiceInput, Prisma.MediaUncheckedUpdateWithoutServiceInput>
+  create: Prisma.XOR<Prisma.MediaCreateWithoutServiceInput, Prisma.MediaUncheckedCreateWithoutServiceInput>
+}
+
+export type MediaUpdateWithWhereUniqueWithoutServiceInput = {
+  where: Prisma.MediaWhereUniqueInput
+  data: Prisma.XOR<Prisma.MediaUpdateWithoutServiceInput, Prisma.MediaUncheckedUpdateWithoutServiceInput>
+}
+
+export type MediaUpdateManyWithWhereWithoutServiceInput = {
+  where: Prisma.MediaScalarWhereInput
+  data: Prisma.XOR<Prisma.MediaUpdateManyMutationInput, Prisma.MediaUncheckedUpdateManyWithoutServiceInput>
 }
 
 export type MediaCreateWithoutPostOfSalesInput = {
@@ -465,15 +922,25 @@ export type MediaCreateWithoutPostOfSalesInput = {
   url: string
   type: $Enums.MediaType
   createdAt?: Date | string
-  product: Prisma.ProductCreateNestedOneWithoutMediasInput
+  updatedAt?: Date | string
+  product?: Prisma.ProductCreateNestedOneWithoutMediasInput
+  service?: Prisma.FreelanceServiceCreateNestedOneWithoutMediasInput
+  business?: Prisma.BusinessCreateNestedOneWithoutMediasInput
+  client?: Prisma.ClientCreateNestedOneWithoutMediasInput
+  store?: Prisma.StoreCreateNestedOneWithoutMediasInput
 }
 
 export type MediaUncheckedCreateWithoutPostOfSalesInput = {
   id?: string
   url: string
   type: $Enums.MediaType
-  productId: string
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MediaCreateOrConnectWithoutPostOfSalesInput = {
@@ -497,11 +964,168 @@ export type MediaUpdateManyWithWhereWithoutPostOfSalesInput = {
   data: Prisma.XOR<Prisma.MediaUpdateManyMutationInput, Prisma.MediaUncheckedUpdateManyWithoutPostOfSalesInput>
 }
 
-export type MediaCreateManyProductInput = {
+export type MediaCreateWithoutStoreInput = {
   id?: string
   url: string
   type: $Enums.MediaType
   createdAt?: Date | string
+  updatedAt?: Date | string
+  product?: Prisma.ProductCreateNestedOneWithoutMediasInput
+  service?: Prisma.FreelanceServiceCreateNestedOneWithoutMediasInput
+  business?: Prisma.BusinessCreateNestedOneWithoutMediasInput
+  client?: Prisma.ClientCreateNestedOneWithoutMediasInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutMediaInput
+}
+
+export type MediaUncheckedCreateWithoutStoreInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutMediaInput
+}
+
+export type MediaCreateOrConnectWithoutStoreInput = {
+  where: Prisma.MediaWhereUniqueInput
+  create: Prisma.XOR<Prisma.MediaCreateWithoutStoreInput, Prisma.MediaUncheckedCreateWithoutStoreInput>
+}
+
+export type MediaCreateManyStoreInputEnvelope = {
+  data: Prisma.MediaCreateManyStoreInput | Prisma.MediaCreateManyStoreInput[]
+  skipDuplicates?: boolean
+}
+
+export type MediaUpsertWithWhereUniqueWithoutStoreInput = {
+  where: Prisma.MediaWhereUniqueInput
+  update: Prisma.XOR<Prisma.MediaUpdateWithoutStoreInput, Prisma.MediaUncheckedUpdateWithoutStoreInput>
+  create: Prisma.XOR<Prisma.MediaCreateWithoutStoreInput, Prisma.MediaUncheckedCreateWithoutStoreInput>
+}
+
+export type MediaUpdateWithWhereUniqueWithoutStoreInput = {
+  where: Prisma.MediaWhereUniqueInput
+  data: Prisma.XOR<Prisma.MediaUpdateWithoutStoreInput, Prisma.MediaUncheckedUpdateWithoutStoreInput>
+}
+
+export type MediaUpdateManyWithWhereWithoutStoreInput = {
+  where: Prisma.MediaScalarWhereInput
+  data: Prisma.XOR<Prisma.MediaUpdateManyMutationInput, Prisma.MediaUncheckedUpdateManyWithoutStoreInput>
+}
+
+export type MediaCreateManyBusinessInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  serviceId?: string | null
+  clientId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MediaUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  product?: Prisma.ProductUpdateOneWithoutMediasNestedInput
+  service?: Prisma.FreelanceServiceUpdateOneWithoutMediasNestedInput
+  client?: Prisma.ClientUpdateOneWithoutMediasNestedInput
+  store?: Prisma.StoreUpdateOneWithoutMediasNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateManyWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MediaCreateManyClientInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MediaUpdateWithoutClientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  product?: Prisma.ProductUpdateOneWithoutMediasNestedInput
+  service?: Prisma.FreelanceServiceUpdateOneWithoutMediasNestedInput
+  business?: Prisma.BusinessUpdateOneWithoutMediasNestedInput
+  store?: Prisma.StoreUpdateOneWithoutMediasNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateWithoutClientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateManyWithoutClientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MediaCreateManyProductInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MediaUpdateWithoutProductInput = {
@@ -509,6 +1133,11 @@ export type MediaUpdateWithoutProductInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  service?: Prisma.FreelanceServiceUpdateOneWithoutMediasNestedInput
+  business?: Prisma.BusinessUpdateOneWithoutMediasNestedInput
+  client?: Prisma.ClientUpdateOneWithoutMediasNestedInput
+  store?: Prisma.StoreUpdateOneWithoutMediasNestedInput
   postOfSales?: Prisma.PostOfSaleUpdateManyWithoutMediaNestedInput
 }
 
@@ -516,7 +1145,12 @@ export type MediaUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput
 }
 
@@ -524,7 +1158,62 @@ export type MediaUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MediaCreateManyServiceInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  storeId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MediaUpdateWithoutServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  product?: Prisma.ProductUpdateOneWithoutMediasNestedInput
+  business?: Prisma.BusinessUpdateOneWithoutMediasNestedInput
+  client?: Prisma.ClientUpdateOneWithoutMediasNestedInput
+  store?: Prisma.StoreUpdateOneWithoutMediasNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateWithoutServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateManyWithoutServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MediaUpdateWithoutPostOfSalesInput = {
@@ -532,23 +1221,88 @@ export type MediaUpdateWithoutPostOfSalesInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  product?: Prisma.ProductUpdateOneRequiredWithoutMediasNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  product?: Prisma.ProductUpdateOneWithoutMediasNestedInput
+  service?: Prisma.FreelanceServiceUpdateOneWithoutMediasNestedInput
+  business?: Prisma.BusinessUpdateOneWithoutMediasNestedInput
+  client?: Prisma.ClientUpdateOneWithoutMediasNestedInput
+  store?: Prisma.StoreUpdateOneWithoutMediasNestedInput
 }
 
 export type MediaUncheckedUpdateWithoutPostOfSalesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MediaUncheckedUpdateManyWithoutPostOfSalesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MediaCreateManyStoreInput = {
+  id?: string
+  url: string
+  type: $Enums.MediaType
+  productId?: string | null
+  serviceId?: string | null
+  businessId?: string | null
+  clientId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MediaUpdateWithoutStoreInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  product?: Prisma.ProductUpdateOneWithoutMediasNestedInput
+  service?: Prisma.FreelanceServiceUpdateOneWithoutMediasNestedInput
+  business?: Prisma.BusinessUpdateOneWithoutMediasNestedInput
+  client?: Prisma.ClientUpdateOneWithoutMediasNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateWithoutStoreInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateManyWithoutStoreInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -587,8 +1341,17 @@ export type MediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   url?: boolean
   type?: boolean
   productId?: boolean
+  serviceId?: boolean
+  businessId?: boolean
+  clientId?: boolean
+  storeId?: boolean
   createdAt?: boolean
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  product?: boolean | Prisma.Media$productArgs<ExtArgs>
+  service?: boolean | Prisma.Media$serviceArgs<ExtArgs>
+  business?: boolean | Prisma.Media$businessArgs<ExtArgs>
+  client?: boolean | Prisma.Media$clientArgs<ExtArgs>
+  store?: boolean | Prisma.Media$storeArgs<ExtArgs>
   postOfSales?: boolean | Prisma.Media$postOfSalesArgs<ExtArgs>
   _count?: boolean | Prisma.MediaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["media"]>
@@ -598,8 +1361,17 @@ export type MediaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   url?: boolean
   type?: boolean
   productId?: boolean
+  serviceId?: boolean
+  businessId?: boolean
+  clientId?: boolean
+  storeId?: boolean
   createdAt?: boolean
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  product?: boolean | Prisma.Media$productArgs<ExtArgs>
+  service?: boolean | Prisma.Media$serviceArgs<ExtArgs>
+  business?: boolean | Prisma.Media$businessArgs<ExtArgs>
+  client?: boolean | Prisma.Media$clientArgs<ExtArgs>
+  store?: boolean | Prisma.Media$storeArgs<ExtArgs>
 }, ExtArgs["result"]["media"]>
 
 export type MediaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -607,8 +1379,17 @@ export type MediaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   url?: boolean
   type?: boolean
   productId?: boolean
+  serviceId?: boolean
+  businessId?: boolean
+  clientId?: boolean
+  storeId?: boolean
   createdAt?: boolean
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  product?: boolean | Prisma.Media$productArgs<ExtArgs>
+  service?: boolean | Prisma.Media$serviceArgs<ExtArgs>
+  business?: boolean | Prisma.Media$businessArgs<ExtArgs>
+  client?: boolean | Prisma.Media$clientArgs<ExtArgs>
+  store?: boolean | Prisma.Media$storeArgs<ExtArgs>
 }, ExtArgs["result"]["media"]>
 
 export type MediaSelectScalar = {
@@ -616,34 +1397,60 @@ export type MediaSelectScalar = {
   url?: boolean
   type?: boolean
   productId?: boolean
+  serviceId?: boolean
+  businessId?: boolean
+  clientId?: boolean
+  storeId?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "type" | "productId" | "createdAt", ExtArgs["result"]["media"]>
+export type MediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "type" | "productId" | "serviceId" | "businessId" | "clientId" | "storeId" | "createdAt" | "updatedAt", ExtArgs["result"]["media"]>
 export type MediaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.Media$productArgs<ExtArgs>
+  service?: boolean | Prisma.Media$serviceArgs<ExtArgs>
+  business?: boolean | Prisma.Media$businessArgs<ExtArgs>
+  client?: boolean | Prisma.Media$clientArgs<ExtArgs>
+  store?: boolean | Prisma.Media$storeArgs<ExtArgs>
   postOfSales?: boolean | Prisma.Media$postOfSalesArgs<ExtArgs>
   _count?: boolean | Prisma.MediaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MediaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.Media$productArgs<ExtArgs>
+  service?: boolean | Prisma.Media$serviceArgs<ExtArgs>
+  business?: boolean | Prisma.Media$businessArgs<ExtArgs>
+  client?: boolean | Prisma.Media$clientArgs<ExtArgs>
+  store?: boolean | Prisma.Media$storeArgs<ExtArgs>
 }
 export type MediaIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
+  product?: boolean | Prisma.Media$productArgs<ExtArgs>
+  service?: boolean | Prisma.Media$serviceArgs<ExtArgs>
+  business?: boolean | Prisma.Media$businessArgs<ExtArgs>
+  client?: boolean | Prisma.Media$clientArgs<ExtArgs>
+  store?: boolean | Prisma.Media$storeArgs<ExtArgs>
 }
 
 export type $MediaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Media"
   objects: {
-    product: Prisma.$ProductPayload<ExtArgs>
+    product: Prisma.$ProductPayload<ExtArgs> | null
+    service: Prisma.$FreelanceServicePayload<ExtArgs> | null
+    business: Prisma.$BusinessPayload<ExtArgs> | null
+    client: Prisma.$ClientPayload<ExtArgs> | null
+    store: Prisma.$StorePayload<ExtArgs> | null
     postOfSales: Prisma.$PostOfSalePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     url: string
     type: $Enums.MediaType
-    productId: string
+    productId: string | null
+    serviceId: string | null
+    businessId: string | null
+    clientId: string | null
+    storeId: string | null
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["media"]>
   composites: {}
 }
@@ -1038,7 +1845,11 @@ readonly fields: MediaFieldRefs;
  */
 export interface Prisma__MediaClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  product<T extends Prisma.ProductDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductDefaultArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  product<T extends Prisma.Media$productArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$productArgs<ExtArgs>>): Prisma.Prisma__ProductClient<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  service<T extends Prisma.Media$serviceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$serviceArgs<ExtArgs>>): Prisma.Prisma__FreelanceServiceClient<runtime.Types.Result.GetResult<Prisma.$FreelanceServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  business<T extends Prisma.Media$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$businessArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  client<T extends Prisma.Media$clientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$clientArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  store<T extends Prisma.Media$storeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$storeArgs<ExtArgs>>): Prisma.Prisma__StoreClient<runtime.Types.Result.GetResult<Prisma.$StorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   postOfSales<T extends Prisma.Media$postOfSalesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$postOfSalesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostOfSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1073,7 +1884,12 @@ export interface MediaFieldRefs {
   readonly url: Prisma.FieldRef<"Media", 'String'>
   readonly type: Prisma.FieldRef<"Media", 'MediaType'>
   readonly productId: Prisma.FieldRef<"Media", 'String'>
+  readonly serviceId: Prisma.FieldRef<"Media", 'String'>
+  readonly businessId: Prisma.FieldRef<"Media", 'String'>
+  readonly clientId: Prisma.FieldRef<"Media", 'String'>
+  readonly storeId: Prisma.FieldRef<"Media", 'String'>
   readonly createdAt: Prisma.FieldRef<"Media", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Media", 'DateTime'>
 }
     
 
@@ -1467,6 +2283,101 @@ export type MediaDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Media to delete.
    */
   limit?: number
+}
+
+/**
+ * Media.product
+ */
+export type Media$productArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Product
+   */
+  select?: Prisma.ProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Product
+   */
+  omit?: Prisma.ProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductInclude<ExtArgs> | null
+  where?: Prisma.ProductWhereInput
+}
+
+/**
+ * Media.service
+ */
+export type Media$serviceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FreelanceService
+   */
+  select?: Prisma.FreelanceServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FreelanceService
+   */
+  omit?: Prisma.FreelanceServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FreelanceServiceInclude<ExtArgs> | null
+  where?: Prisma.FreelanceServiceWhereInput
+}
+
+/**
+ * Media.business
+ */
+export type Media$businessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Business
+   */
+  select?: Prisma.BusinessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Business
+   */
+  omit?: Prisma.BusinessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BusinessInclude<ExtArgs> | null
+  where?: Prisma.BusinessWhereInput
+}
+
+/**
+ * Media.client
+ */
+export type Media$clientArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+}
+
+/**
+ * Media.store
+ */
+export type Media$storeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Store
+   */
+  select?: Prisma.StoreSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Store
+   */
+  omit?: Prisma.StoreOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoreInclude<ExtArgs> | null
+  where?: Prisma.StoreWhereInput
 }
 
 /**

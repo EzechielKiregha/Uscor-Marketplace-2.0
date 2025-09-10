@@ -31,8 +31,8 @@ export class FreelanceOrderEntity {
   @Field(() => Float)
   escrowAmount: number;
 
-  @Field(() => Float)
-  platformCommissionPercentage: number;
+  @Field(() => Float, { name: 'platformCommissionPercentage' })
+  commissionPercent: number;
 
   @Field(() => FreelanceStatus)
   status: FreelanceStatus;
@@ -43,8 +43,8 @@ export class FreelanceOrderEntity {
   @Field()
   updatedAt: Date;
 
-  @Field(() => PaymentTransactionEntity, { nullable: true })
-  paymentTransaction?: PaymentTransactionEntity;
+  @Field(() => PaymentTransactionEntity, { nullable: true, name: 'paymentTransaction' })
+  payment?: PaymentTransactionEntity;
 }
 
 @ObjectType()

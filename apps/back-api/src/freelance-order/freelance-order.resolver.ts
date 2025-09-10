@@ -1,13 +1,16 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context, Subscription, Float } from '@nestjs/graphql';
 import { FreelanceOrderService } from './freelance-order.service';
-import { FreelanceOrderEntity } from './entities/freelance-order.entity';
-import { CreateFreelanceOrderInput } from './dto/create-freelance-order.input';
+import { FreelanceOrderEntity, PaginatedFreelanceOrdersResponse } from './entities/freelance-order.entity';
+import { CreateFreelanceOrderInput, FreelanceStatus } from './dto/create-freelance-order.input';
 import { AssignBusinessesInput, UpdateFreelanceOrderInput } from './dto/update-freelance-order.input';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 // Resolver
 @Resolver(() => FreelanceOrderEntity)
@@ -21,69 +24,121 @@ export class FreelanceOrderResolver {
   @Roles('client')
   @Mutation(() => FreelanceOrderEntity, { description: 'Creates a new freelance order.' })
   async createFreelanceOrder(
-    @Args('createFreelanceOrderInput') createFreelanceOrderInput: CreateFreelanceOrderInput,
+    @Args('input') input: CreateFreelanceOrderInput,
     @Context() context,
   ) {
     const user = context.req.user;
-    return this.freelanceOrderService.create(createFreelanceOrderInput, user.id);
+    const order = await this.freelanceOrderService.create(input, user.id);
+    
+    // Publish subscription event
+    pubSub.publish('freelanceOrderCreated', { 
+      freelanceOrderCreated: order,
+      clientId: user.id 
+    });
+    
+    return order;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client', 'business')
-  @Query(() => [FreelanceOrderEntity], { name: 'freelanceOrders', description: 'Retrieves freelance orders based on user role.' })
-  async getFreelanceOrders(@Context() context) {
-    const user = context.req.user;
-    return this.freelanceOrderService.findAll(user.id, user.role);
+  @Query(() => PaginatedFreelanceOrdersResponse, { name: 'freelanceOrders', description: 'Retrieves freelance orders with pagination and filters.' })
+  async freelanceOrders(
+    @Args('serviceId', { type: () => String, nullable: true }) serviceId?: string,
+    @Args('clientId', { type: () => String, nullable: true }) clientId?: string,
+    @Args('businessId', { type: () => String, nullable: true }) businessId?: string,
+    @Args('status', { type: () => FreelanceStatus, nullable: true }) status?: FreelanceStatus,
+    @Args('page', { type: () => Int, defaultValue: 1 }) page: number = 1,
+    @Args('limit', { type: () => Int, defaultValue: 20 }) limit: number = 20,
+  ) {
+    return this.freelanceOrderService.findAll({
+      serviceId,
+      clientId,
+      businessId,
+      status,
+      page,
+      limit
+    });
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client', 'business')
   @Query(() => FreelanceOrderEntity, { name: 'freelanceOrder', description: 'Retrieves a single freelance order by ID.' })
-  async getFreelanceOrder(@Args('id', { type: () => String }) id: string, @Context() context) {
+  async freelanceOrder(@Args('id', { type: () => String }) id: string) {
+    return this.freelanceOrderService.findOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client', 'business')
+  @Mutation(() => FreelanceOrderEntity, { description: 'Updates a freelance order.' })
+  async updateFreelanceOrder(
+    @Args('id', { type: () => String }) id: string,
+    @Args('input') input: UpdateFreelanceOrderInput,
+    @Context() context,
+  ) {
     const user = context.req.user;
-    const order = await this.freelanceOrderService.findOne(id);
-    if (user.role === 'client' && order.clientId !== user.id) {
-      throw new Error('Clients can only access their own orders');
-    }
-    if (
-      user.role === 'business' &&
-      order.service.businessId !== user.id &&
-      !order.freelanceOrderBusiness.some(b => b.businessId === user.id)
-    ) {
-      throw new Error('Businesses can only access orders for their services or assigned orders');
-    }
+    const order = await this.freelanceOrderService.update(id, input, user.id, user.role);
+
+    if (!order) throw new Error(`Failed to update freelance order ${id}.`);
+    
+    // Publish subscription event
+    pubSub.publish('freelanceOrderUpdated', { 
+      freelanceOrderUpdated: order,
+      userId: user.role === "bussiness" ? user.id : null
+    });
+    
+    return order;
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Mutation(() => FreelanceOrderEntity, { description: 'Complete a freelance order.' })
+  async completeFreelanceOrder(
+    @Args('id', { type: () => String }) id: string,
+    @Context() context,
+  ) {
+    const user = context.req.user;
+    const order = await this.freelanceOrderService.completeOrder(id, user.id);
+    
+    // Publish subscription event
+    pubSub.publish('freelanceOrderUpdated', { 
+      freelanceOrderUpdated: order,
+      businessId: user.id 
+    });
+    
     return order;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('client', 'business')
-  @Mutation(() => FreelanceOrderEntity, { description: 'Updates a freelance order’s status or escrow status.' })
-  async updateFreelanceOrder(
-    @Args('id', { type: () => String }) id: string,
-    @Args('updateFreelanceOrderInput') updateFreelanceOrderInput: UpdateFreelanceOrderInput,
+  @Mutation(() => FreelanceOrderEntity, { description: 'Release escrow for a freelance order.' })
+  async releaseEscrow(
+    @Args('orderId', { type: () => String }) orderId: string,
     @Context() context,
   ) {
     const user = context.req.user;
-    return this.freelanceOrderService.update(id, updateFreelanceOrderInput, user.id, user.role);
+    const order = await this.freelanceOrderService.releaseEscrow(orderId, user.id, user.role);
+    
+    // Publish subscription event
+    pubSub.publish('freelanceOrderUpdated', { 
+      freelanceOrderUpdated: order,
+      businessId: order.service.businessId 
+    });
+    
+    return order;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client')
-  @Mutation(() => FreelanceOrderEntity, { description: 'Assigns businesses to a freelance order.' })
-  async assignBusinessesToOrder(
-    @Args('assignBusinessesInput') assignBusinessesInput: AssignBusinessesInput,
-    @Context() context,
-  ) {
-    const user = context.req.user;
-    return this.freelanceOrderService.assignBusinesses(assignBusinessesInput, user.id);
+  // Subscriptions
+  @Subscription(() => FreelanceOrderEntity, {
+    filter: (payload, variables) => {
+      return payload.clientId === variables.clientId;
+    },
+  })
+  freelanceOrderCreated(@Args('clientId') clientId: string) {
+    return pubSub.asyncIterableIterator('freelanceOrderCreated');
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client', 'business')
-  @Mutation(() => FreelanceOrderEntity, { description: 'Deletes a freelance order.' })
-  async deleteFreelanceOrder(@Args('id', { type: () => String }) id: string, @Context() context) {
-    const user = context.req.user;
-    return this.freelanceOrderService.remove(id, user.id, user.role);
+  @Subscription(() => FreelanceOrderEntity, {
+    filter: (payload, variables) => {
+      return payload.businessId === variables.businessId;
+    },
+  })
+  freelanceOrderUpdated(@Args('businessId') businessId: string) {
+    return pubSub.asyncIterableIterator('freelanceOrderUpdated');
   }
 }
-

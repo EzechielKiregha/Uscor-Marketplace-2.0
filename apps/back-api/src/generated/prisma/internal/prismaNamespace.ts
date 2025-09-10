@@ -3624,7 +3624,12 @@ export const MediaScalarFieldEnum = {
   url: 'url',
   type: 'type',
   productId: 'productId',
-  createdAt: 'createdAt'
+  serviceId: 'serviceId',
+  businessId: 'businessId',
+  clientId: 'clientId',
+  storeId: 'storeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
