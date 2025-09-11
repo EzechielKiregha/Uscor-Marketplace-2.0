@@ -4,8 +4,6 @@ import { useCart } from '@/hooks/use-cart'
 import { ProductEntity } from '@/lib/types'
 import { formatPrice } from '@/lib/utils'
 import { ImageIcon, X } from 'lucide-react'
-import Image from 'next/image'
-import { useState } from 'react'
 
 const CartItem = ({ product }: { product: ProductEntity }) => {
 

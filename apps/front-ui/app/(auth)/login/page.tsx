@@ -189,14 +189,14 @@ export default function LoginPage() {
       const role = getUserRole();
       if (role && role === 'client') {
         console.log('Redirecting to client dashboard');
-        router.push('/client/dashboard');
+        router.push('/');
       } else if (role && role === 'business') {
         console.log('Redirecting to business dashboard');
         router.push('/business/dashboard');
       }
       else if (role && role === 'worker') {
         console.log('Redirecting to worker dashboard');
-        router.push('/worker/dashboard');
+        router.push('/');
       } else {
         console.warn('Unknown role, redirecting to home');
         router.push('/');
