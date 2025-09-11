@@ -136,7 +136,7 @@ export default function NewSaleModal({
                         </div>
                         <div>
                           <p className="font-medium text-sm">Business Sale</p>
-                          <p className="text-xs text-muted-foreground">Sale without specific worker</p>
+                          <p className="text-xs text-muted-foreground">Sale without specific worker (worker account is recommended)</p>
                         </div>
                       </div>
                     </div>

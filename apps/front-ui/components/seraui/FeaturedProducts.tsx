@@ -34,7 +34,7 @@ export default function FeaturedProducts({
         price: product.price,
         quantity: product.quantity,
         href: `/marketplace/products/${product.id}`,
-        imageUrl: product.medias?.url || `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`,
+        imageUrl: product.medias[0]?.url,
         categoryName: product.category?.name || 'Uncategorized',
         businessName: product.business?.name || 'Unknown Vendor',
         businessAvatarUrl: product.business?.avatar || null,

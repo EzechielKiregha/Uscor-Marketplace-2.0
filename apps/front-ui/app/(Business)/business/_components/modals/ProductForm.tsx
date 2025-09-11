@@ -108,6 +108,12 @@ export default function ProductForm({
   onCancel
 }: ProductFormProps) {
   const user = useMe();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageFile, setImageFile] = useState<File | string>(initialData && initialData.medias[0] ? initialData.medias[0].url : '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+  const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: initialData ? initialData.title : '',
@@ -131,12 +137,7 @@ export default function ProductForm({
     loading: catLoading,
     error: catError
   } = useQuery(GET_CATEGORIES);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imageFile, setImageFile] = useState<File | string>(initialData && initialData.medias[0] ? initialData.medias[0].url : '');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { showToast } = useToast();
-  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
-  const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
+
 
 
   const [createProduct] = useMutation(CREATE_PRODUCT);
@@ -440,19 +441,17 @@ export default function ProductForm({
                 className="hidden"
                 onChange={handleImageUpload}
               />
-              {imageFile && (
-                <Button
-                  variant={"outline"}
-                  type="button"
-                  size={"sm"}
-                  className="mt-2"
-                  onClick={() => {
-                    fileInputRef?.current?.click();
-                  }}
-                >
-                  <Upload />
-                </Button>
-              )}
+              <Button
+                variant={"outline"}
+                type="button"
+                size={"sm"}
+                className="mt-2"
+                onClick={() => {
+                  fileInputRef?.current?.click();
+                }}
+              >
+                <Upload />
+              </Button>
             </div>
           </div>
         </div>

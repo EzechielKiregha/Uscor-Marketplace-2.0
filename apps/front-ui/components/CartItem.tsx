@@ -8,14 +8,8 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 const CartItem = ({ product }: { product: ProductEntity }) => {
-  const url = product.medias[0]
 
   const { removeItem } = useCart()
-  const [imgSrc, setImgSrc] = useState(url ? url.url : 'prod.png');
-
-  const handleImageError = () => {
-    setImgSrc(`https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title.charAt(0))}`);
-  };
 
   const label = PRODUCT_CATEGORIES.find(
     ({ value }) => value === product.category?.name
@@ -28,10 +22,13 @@ const CartItem = ({ product }: { product: ProductEntity }) => {
           <div className='relative aspect-square h-16 w-16 min-w-fit overflow-hidden rounded'>
 
             <img
-              src={imgSrc}
+              src={product.medias[0].url}
               alt={product.title}
               className="hidden absolute object-cover h-4 w-4 text-muted-foreground transition-transform duration-500 group-hover:scale-105"
-              onError={handleImageError}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`
+              }
+              }
             />
           </div>
 

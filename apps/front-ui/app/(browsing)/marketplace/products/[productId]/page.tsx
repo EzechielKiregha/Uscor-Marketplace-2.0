@@ -158,6 +158,7 @@ export default function Page() {
         <ProductReel
           href="/marketplace/products"
           query={GET_RELATED_PRODUCTS}
+          field='relatedProducts'
           variables={{ category: cleanedProduct.category?.name }}
           title={`Similar to ${cleanedProduct.category?.name}`}
           subtitle={`Browse more ${cleanedProduct.category?.name} products of high quality, just like '${cleanedProduct.title}'`}

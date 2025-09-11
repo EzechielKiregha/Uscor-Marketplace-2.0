@@ -16,6 +16,7 @@ interface ProductReelProps {
   query: any; // Apollo query document
   variables?: Record<string, any>;
   limit?: number;
+  field?: 'relatedProducts' | 'products'; // specify which field to extract from the query result
 }
 
 const FALLBACK_LIMIT = 4;
@@ -27,24 +28,40 @@ export default function ProductReel({
   query,
   variables,
   limit = FALLBACK_LIMIT,
+  field = 'products',
 }: ProductReelProps) {
   const { data, loading, error } = useQuery(query, { variables });
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
     if (data) {
-      const formatted = data.relatedProducts.map((product: any) => ({
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        quantity: product.quantity,
-        href: `/marketplace/products/${product.id}`,
-        imageUrl: product.medias?.url || `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`,
-        categoryName: product.category?.name || 'Uncategorized',
-        businessName: product.business?.name || 'Unknown Vendor',
-        businessAvatarUrl: product.business?.avatar || null,
-      }));
-      setProducts(formatted);
+      if (field === 'relatedProducts' && data.relatedProducts) {
+        const formatted = data.relatedProducts.map((product: any) => ({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          quantity: product.quantity,
+          href: `/marketplace/products/${product.id}`,
+          imageUrl: product.medias[0]?.url,
+          categoryName: product.category?.name || 'Uncategorized',
+          businessName: product.business?.name || 'Unknown Vendor',
+          businessAvatarUrl: product.business?.avatar || null,
+        }));
+        setProducts(formatted);
+      } else if (field === 'products' && data.products) {
+        const formatted = data.products.map((product: any) => ({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          quantity: product.quantity,
+          href: `/marketplace/products/${product.id}`,
+          imageUrl: product.medias[0]?.url,
+          categoryName: product.category?.name || 'Uncategorized',
+          businessName: product.business?.name || 'Unknown Vendor',
+          businessAvatarUrl: product.business?.avatar || null,
+        }));
+        setProducts(formatted);
+      }
     }
   }, [data]);
 

@@ -77,10 +77,6 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: produc
   const [isHovered, setIsHovered] = useState(false);
   const [imgSrc, setImgSrc] = useState(product.imageUrl);
 
-  const handleImageError = () => {
-    setImgSrc(`https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`);
-  };
-
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -98,10 +94,12 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: produc
     >
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-lg bg-muted">
         <img
-          src={imgSrc}
+          src={product.imageUrl}
           alt={product.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={handleImageError}
+          onError={(e) => {
+            e.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(product.title)}`;
+          }}
         />
 
         <AnimatePresence>

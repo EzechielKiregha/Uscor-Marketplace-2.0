@@ -71,29 +71,29 @@ const BentoCard: FC<BentoCardProps> = ({ title, description, icon: Icon, hueA, h
       <div
         className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500"
         style={{
-          background: `linear-gradient(45deg, hsl(${hueA}, 60%, 40%), hsl(${hueB}, 75%, 65%))`,
+          background: `linear-gradient(45deg, hsl(${hueA}, 90%, 10%), hsl(${hueB}, 90%, 40%))`,
         }}
       />
 
       <div className="relative z-10 p-6">
         <div
-          className="h-12 w-12 mb-4 text-primary origin-left transform transition-transform duration-300 group-hover:scale-110"
+          className="h-14 w-12 mb-4 text-primary origin-left transform transition-transform duration-300 group-hover:scale-110"
           style={{ color: `hsl(${hueA}, 70%, 50%)` }}
         >
           <Icon aria-hidden="true" focusable="false" />
         </div>
-        <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
-        <p className=" text-muted-foreground leading-relaxed">{description}</p>
+        <h3 className="text-2xl font-semibold text-foreground mb-2">{title}</h3>
+        <p className="text-xl text-muted-foreground leading-relaxed">{description}</p>
       </div>
 
-      <Link href="/uscor-features">
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 transform translate-y-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 p-6">
+      <div className="absolute bottom-0 left-0 right-0 transform translate-y-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 p-6">
+        <Link href="/uscor-features">
           <span className="inline-flex items-center text-sm font-medium text-primary hover:text-accent transition-colors">
             Learn more
             <ArrowRightIcon className="ml-2 h-4 w-4" />
           </span>
-        </div>
-      </Link>
+        </Link>
+      </div>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/5 group-hover:to-black/8 transition-color-300" />
     </div>
   );

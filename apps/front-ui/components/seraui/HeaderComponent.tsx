@@ -99,12 +99,12 @@ function HeaderComponent() {
 
   // Define navigation links based on pathname
   const navLinks = [
-    { href: '/uscor-features', label: 'Features', target: '_blank', rel: 'noopener noreferrer' },
-    { href: '/hardware', label: 'Hardware', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/uscor-features', label: 'Features', target: '' },
+    { href: '/hardware', label: 'Hardware', target: '' },
     { href: '#', label: 'Business types', isPopover: true, popoverItems: businessTypes },
     { href: '/marketplace', label: 'Marketplace', target: '_blank', rel: 'noopener noreferrer' },
     { href: '/freelance-gigs', label: 'Freelance', target: '_blank', rel: 'noopener noreferrer' },
-    { href: '/help', label: 'FAQ', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/help', label: 'FAQ', target: '' },
   ];
 
   return (

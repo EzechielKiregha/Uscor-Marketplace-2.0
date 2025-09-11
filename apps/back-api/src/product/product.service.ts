@@ -234,7 +234,7 @@ export class ProductService {
     }
     return await this.prisma.product.findMany({
       where: { categoryId: cat.id },
-      take: 4, // Limit to 4 related products
+      take: 10, // Limit to 4 related products
       include: {
         medias: {
           select: {

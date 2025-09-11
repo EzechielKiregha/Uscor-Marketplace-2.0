@@ -56,7 +56,7 @@ export default function MarketplacePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
               <Button
-                onClick={() => nav('/products')}
+                onClick={() => nav('/merketplace/products')}
                 className={buttonVariants({
                   className: 'bg-primary hover:bg-accent hover:text-primary-foreground text-primary-foreground',
                 })}
@@ -65,7 +65,7 @@ export default function MarketplacePage() {
               </Button>
               <Button
                 onClick={() =>
-                  nav('/products?category=furniture_living&sort=desc')
+                  nav('/marketplace/products?category=furniture_living&sort=desc')
                 }
                 variant="ghost"
               >

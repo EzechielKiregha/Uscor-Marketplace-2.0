@@ -12,10 +12,11 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { formatPrice } from '@/lib/utils'
-import { Loader2, ArrowLeft, CreditCard, Smartphone, Banknote } from 'lucide-react'
+import { Loader2, ArrowLeft, CreditCard, Smartphone, Banknote, ShoppingCart, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useToast } from '@/components/toast-provider'
+import Loader from '@/components/seraui/Loader'
 
 const PAYMENT_METHODS = [
   { id: 'TOKEN', label: 'Token Payment', icon: CreditCard },
@@ -35,14 +36,6 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false)
 
   const [createOrder] = useMutation(CREATE_ORDER)
-
-  // Redirect if not authenticated or not a client
-  useEffect(() => {
-    if (!userLoading && (!user || role !== 'client')) {
-      showToast("error", "Redirecting", 'Please sign in as a client to checkout')
-      router.push('/sign-in')
-    }
-  }, [user, role, userLoading, router])
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -115,17 +108,34 @@ export default function CheckoutPage() {
   if (userLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader loading={true} />
       </div>
     )
   }
 
-  if (!user || role !== 'client') {
-    return null // Will redirect in useEffect
-  }
-
-  if (items.length === 0) {
-    return null // Will redirect in useEffect
+  if (!userLoading && (!user || role !== 'client')) {
+    // showToast("error", "Redirecting", 'Please sign in as a client to checkout', false, 5000)
+    return (
+      <div className="border border-border rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
+        <div className="text-center max-w-md">
+          <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+            <ShoppingCart className="h-10 w-10 text-primary" />
+          </div>
+          <h2 className="text-xl font-semibold mb-2">You Can't By Your Own Products</h2>
+          <p className="text-muted-foreground mb-6">
+            Want to buy something for a client? Create a new sale to begin processing transactions
+          </p>
+          <Button
+            size="lg"
+            onClick={() => router.push('/business/sales')}
+            className="bg-primary hover:bg-accent text-primary-foreground"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Go To Sales
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (

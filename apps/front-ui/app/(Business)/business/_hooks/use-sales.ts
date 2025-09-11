@@ -11,10 +11,12 @@ import {
   ON_SALE_UPDATED
 } from '@/graphql/sales.gql';
 import { useToast } from '@/components/toast-provider';
+import { useRouter } from 'next/navigation';
 
 export const useSales = (storeId: string, wUserId: string, role?: string) => {
   const [currentSaleId, setCurrentSaleId] = useState<string | null>(null);
   const {showToast} = useToast()
+  const router = useRouter();
   
   const { 
     data: activeSalesData, 
@@ -78,6 +80,7 @@ export const useSales = (storeId: string, wUserId: string, role?: string) => {
       const newSaleId = data.createSale.id;
       setCurrentSaleId(newSaleId);
       showToast('success', 'New Sale', 'Sale created successfully');
+      router.refresh(); // Refresh to update any dependent data
       return newSaleId;
     } catch (error: any) {
       console.error('Create sale error:', error);
