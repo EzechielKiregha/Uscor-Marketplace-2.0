@@ -35,8 +35,7 @@ export class CreateProductInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsString()
-  storeId?: string
+  storeId: string
 
   @Field()
   @IsBoolean()
@@ -49,9 +48,6 @@ export class CreateProductInput {
   @Field()
   @IsString()
   categoryId: string
-
-  @Field(() => String, { nullable: true })
-  image?: string
 
   @Field(() => Boolean, { defaultValue: false })
   @IsOptional()

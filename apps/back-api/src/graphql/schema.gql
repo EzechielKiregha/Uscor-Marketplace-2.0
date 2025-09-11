@@ -1123,10 +1123,10 @@ input LowStockAlertInput {
 
 type Mutation {
   """Creates a new product for a business."""
-  createProduct(input: CreateProductInput!, mediaInput: AddMediaInput): ProductEntity!
+  createProduct(input: CreateProductInput!, mediaInput: AddMediaInput!): ProductEntity!
 
   """Updates a product's details."""
-  updateProduct(id: String!, input: UpdateProductInput!): ProductEntity!
+  updateProduct(id: String!, input: UpdateProductInput!, mediaInput: AddMediaInput!): ProductEntity!
 
   """Deletes a product."""
   deleteProduct(id: String!): ProductEntity!
@@ -1368,31 +1368,28 @@ input CreateProductInput {
   isPhysical: Boolean!
   businessId: String!
   categoryId: String!
-  image: String
   featured: Boolean! = false
   approvedForSale: Boolean! = true
 }
 
 input AddMediaInput {
   url: String!
+  pathname: String!
   type: String!
-  size: Int
-  pathname: String
+  size: Int!
 }
 
 input UpdateProductInput {
-  title: String
+  title: String!
   description: String
-  price: Float
-  quantity: Int
+  price: Float!
+  quantity: Int!
   storeId: String
-  isPhysical: Boolean
-  businessId: String
-  categoryId: String
-  image: String
-  featured: Boolean = false
-  approvedForSale: Boolean = true
-  id: String!
+  isPhysical: Boolean!
+  businessId: String!
+  categoryId: String!
+  featured: Boolean! = false
+  approvedForSale: Boolean! = true
 }
 
 input CreateOrderInput {

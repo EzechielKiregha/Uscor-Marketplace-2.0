@@ -3,12 +3,12 @@ import {
   Int,
   Field,
 } from '@nestjs/graphql'
-import { BusinessEntity } from 'src/business/entities/business.entity'
-import { ClientEntity } from 'src/client/entities/client.entity'
-import { FreelanceServiceEntity } from 'src/freelance-service/entities/freelance-service.entity'
-import { ProductEntity } from 'src/product/entities/product.entity'
-import { StoreEntity } from 'src/store/entities/store.entity'
-import { WorkerEntity } from 'src/worker/entities/worker.entity'
+import { BusinessEntity } from '../../business/entities/business.entity'
+import { ClientEntity } from '../../client/entities/client.entity'
+import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity'
+import { ProductEntity } from '../../product/entities/product.entity'
+import { StoreEntity } from '../../store/entities/store.entity'
+import { WorkerEntity } from '../../worker/entities/worker.entity'
 
 @InputType()
 export class CreateMediaInput {

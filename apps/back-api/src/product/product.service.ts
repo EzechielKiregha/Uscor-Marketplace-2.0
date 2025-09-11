@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateProductInput } from './dto/create-product.input'
 import { UpdateProductInput } from './dto/update-product.input'
 import { PrismaService } from '../prisma/prisma.service'
-import { AuthPayload } from 'src/auth/entities/auth-payload.entity'
+import { AuthPayload } from '../auth/entities/auth-payload.entity'
 
 // Service
 @Injectable()
@@ -21,9 +21,9 @@ export class ProductService {
     return this.prisma.product.create({
       data: {
         ...productData,
-        store: { connect: { id: storeId } },
-        business: { connect: { id: businessId } },
-        category: { connect: { id: categoryId } },
+        storeId,
+        businessId,
+        categoryId,
       },
       include: {
         medias: {
@@ -119,60 +119,13 @@ export class ProductService {
     return this.prisma.product.findUnique({
       where: { id },
       include: {
-        medias: {
-          select: {
-            id: true,
-            url: true,
-            type: true,
-          },
-        },
-        business: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            avatar: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            createdAt: true,
-          },
-        },
-        store: {
-          select: {
-            id: true,
-            name: true,
-            address: true,
-            createdAt: true,
-          },
-        },
-        orders: {
-          select: {
-            id: true,
-            quantity: true,
-            orderId: true,
-          },
-        },
-        reposts: {
-          select: {
-            id: true,
-            markupPercentage: true,
-            createdAt: true,
-          },
-        },
-        reOwnedProducts: {
-          select: {
-            id: true,
-            oldPrice: true,
-            newPrice: true,
-            markupPercentage: true,
-            createdAt: true,
-          },
-        },
+        medias: true,
+        business: true,
+        category: true,
+        store: true,
+        orders: true,
+        reposts: true,
+        reOwnedProducts: true
       },
     })
   }
@@ -192,51 +145,33 @@ export class ProductService {
     })
   }
 
-  async update(
-    id: string,
-    updateProductInput: UpdateProductInput,
-  ) {
-    const { categoryId, ...productData } =
-      updateProductInput
+  async update(id: string, input: UpdateProductInput) {
+    const { categoryId, storeId, businessId, ...productData } = input
+  
     const data: any = { ...productData }
-
+  
     if (categoryId) {
-      data.category = {
-        connect: { id: categoryId },
-      }
+      data.category = { connect: { id: categoryId } }
     }
-
+    if (storeId) {
+      data.store = { connect: { id: storeId } }
+    }
+    if (businessId) {
+      data.business = { connect: { id: businessId } }
+    }
+  
     return this.prisma.product.update({
       where: { id },
       data,
       include: {
-        medias: {
-          select: {
-            id: true,
-            url: true,
-            type: true,
-          },
-        },
-        business: {
-          select: {
-            id: true,
-            name: true,
-            avatar: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-          },
-        },
-        store: {
-          select: { id: true, name: true },
-        },
+        medias: { select: { id: true, url: true, type: true } },
+        business: { select: { id: true, name: true, avatar: true } },
+        category: { select: { id: true, name: true, description: true } },
+        store: { select: { id: true, name: true } },
       },
     })
   }
+  
 
   async remove(id: string) {
     return this.prisma.product.delete({

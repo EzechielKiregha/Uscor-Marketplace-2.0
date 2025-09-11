@@ -40,9 +40,9 @@ export class ProductResolver {
       'Creates a new product for a business.',
   })
   async createProduct(
-    @Args('input') input: CreateProductInput,
-    @Args('mediaInput', { nullable: true }) mediaInput: AddMediaInput,
     @Context() context,
+    @Args('input') input: CreateProductInput,
+    @Args('mediaInput') mediaInput: AddMediaInput,
   ) {
     const user = context.req.user
     if (
@@ -158,13 +158,12 @@ export class ProductResolver {
     @Args('id', { type: () => String })
     id: string,
     @Args('input') input: UpdateProductInput,
+    @Args('mediaInput') mediaInput: AddMediaInput,
   ) {
     const user = context.req.user
-    const product =
-      await this.productService.findOne(id)
+    let product = await this.productService.findOne(id)
 
-    if (!product)
-      throw new NotFoundException(
+    if (!product) throw new NotFoundException(
         'No product found',
       )
 
@@ -176,9 +175,11 @@ export class ProductResolver {
         'Businesses can only update their own products',
       )
     }
-
-    const updatedProduct =
-      await this.productService.update(id, input)
+    if (mediaInput) {
+      await this.mediaService.addToProduct(id, mediaInput)
+    }
+    
+    const updatedProduct = this.productService.update(id, input)
 
     // Publish subscription event
     pubSub.publish('productUpdated', {

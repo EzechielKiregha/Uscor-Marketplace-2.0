@@ -1,9 +1,9 @@
 // app/business/_components/modals/ProductForm.tsx
 "use client";
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@/graphql/product.gql';
 import Loader from '@/components/seraui/Loader';
 import { useToast } from '@/components/toast-provider';
@@ -12,6 +12,89 @@ import { useMe } from '@/lib/useMe';
 import Image from 'next/image';
 import { put } from '@vercel/blob';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { GET_STORES } from '@/graphql/store.gql';
+import { ProductEntity, StoreEntity } from '@/lib/types';
+import { CREATE_CATEGORY, GET_CATEGORIES } from '@/graphql/category.gql';
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+function CategoryPopover() {
+
+  const { showToast } = useToast();
+  const [createCategory] = useMutation(CREATE_CATEGORY);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // In a real app, you'd get these values from form inputs
+      const name = (e.target as any).name.value;
+      const description = (e.target as any).description.value;
+      if (!name.trim()) {
+        showToast("error", "Name Required", 'Please enter a category name');
+        return;
+      }
+      await createCategory({
+        variables: {
+          createCategoryInput: {
+            name,
+            description,
+          },
+        },
+        refetchQueries: [{ query: GET_CATEGORIES }],
+      });
+      showToast("success", "Success", 'Category created successfully');
+    } catch (error: any) {
+      showToast("error", "Error", error.message || 'Failed to create category');
+    }
+  };
+
+  return (
+    <Dialog>
+      <form onSubmit={handleSubmit}>
+        <DialogTrigger asChild>
+          <Button variant="outline">Create Category</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>create product category</DialogTitle>
+            <DialogDescription>
+              Create your product category here. Click save when you&apos;re
+              done.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Label htmlFor="name-1">Name</Label>
+              <Input id="name-1" name="name" defaultValue="Electronics" />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="description-1">Description</Label>
+              <Input id="description-1" name="description" defaultValue="Electronics products and accessories" />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" >Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
+  )
+}
+
 
 interface ProductFormProps {
   initialData?: any | null;
@@ -26,22 +109,35 @@ export default function ProductForm({
 }: ProductFormProps) {
   const user = useMe();
 
-  const [formData, setFormData] = useState(initialData || {
-    title: '',
-    description: '',
-    price: '',
-    quantity: '',
-    isPhysical: true,
+  const [formData, setFormData] = useState({
+    title: initialData ? initialData.title : '',
+    description: initialData ? initialData.description : '',
+    price: initialData ? initialData.price : '',
+    quantity: initialData ? initialData.quantity : '',
+    isPhysical: initialData ? initialData.isPhysical : true,
     businessId: user?.id,
-    approvedForSale: true,
-    categoryId: '',
-    featured: false,
-    image: ''
+    approvedForSale: initialData ? initialData.approvedForSale : true,
+    categoryId: initialData ? initialData.categoryId : '',
+    featured: initialData ? initialData.featured : false,
+    storeId: initialData ? initialData.storeId : '',
   });
+  const {
+    data: storesData,
+    loading: storesLoading,
+    error: storesError
+  } = useQuery(GET_STORES);
+  const {
+    data: catData,
+    loading: catLoading,
+    error: catError
+  } = useQuery(GET_CATEGORIES);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageFile, setImageFile] = useState<File | string>(initialData && initialData.medias[0] ? initialData.medias[0].url : '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+  const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
+
 
   const [createProduct] = useMutation(CREATE_PRODUCT);
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
@@ -56,9 +152,19 @@ export default function ProductForm({
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImageFiles(Array.from(e.target.files));
+      setImageFile(e.target.files[0]);
     }
   };
+
+  // Auto-select first store if none selected
+  useEffect(() => {
+    if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
+      setSelectedStoreId(storesData.stores[0].id);
+    }
+    if (catData?.categories && catData.categories.length > 0 && !selectedCatId) {
+      setSelectedCatId(catData.categories[0].id);
+    }
+  }, [storesData, catData, selectedStoreId, setSelectedCatId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,60 +175,70 @@ export default function ProductForm({
       const productData = {
         ...formData,
         businessId: user.id,
+        isPhysical: formData.isPhysical || true,
+        approvedForSale: formData.approvedForSale || true,
+        featured: formData.featured || false,
+        storeId: selectedStoreId || formData.storeId,
+        categoryId: selectedCatId || formData.categoryId,
         price: parseFloat(formData.price),
         quantity: parseInt(formData.quantity)
       };
 
       // Handle image uploads if any
-      if (imageFiles.length === 1) {
+      if (imageFile) {
         // In a real app, you'd upload images here
         const blobToken = process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN;
-        if (!blobToken && imageFiles[0] instanceof File) {
+        if (!blobToken && imageFile instanceof File) {
           throw new Error('Vercel Blob token is missing. Please configure NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN.');
         }
-        if (imageFiles[0] instanceof File) {
-          const blob = await put(`business/products/medias/${Date.now()}-${imageFiles[0]}`, imageFiles[0], {
+        let blob: any = {
+          url: '',
+          pathname: '',
+          size: 0,
+          type: 'IMAGE'
+        }
+        if (imageFile instanceof File) {
+          blob = await put(`business/products/medias/${Date.now()}-${imageFile}`, imageFile, {
             access: 'public',
             token: blobToken,
           });
-          if (initialData) {
-            await updateProduct({
-              variables: {
-                id: initialData.id,
-                input: productData,
-                mediaInput: {
-                  url: blob.url,
-                  pathname: blob.pathname,
-                  type: imageFiles[0].type,
-                  size: imageFiles[0].size,
-                }
-              }
-            });
-            showToast('success', 'Success', 'Product updated successfully');
-          } else {
-            await createProduct({
-              variables: {
-                input: productData,
-                mediaInput: {
-                  url: blob.url,
-                  pathname: blob.pathname,
-                  type: imageFiles[0].type,
-                  size: imageFiles[0].size,
-                }
-              }
-            });
-            showToast('success', 'Success', 'Product created successfully');
-          }
         }
+
+        if (initialData) {
+          await updateProduct({
+            variables: {
+              id: initialData.id,
+              input: productData,
+              mediaInput: {
+                url: blob.url || imageFile,
+                pathname: blob.pathname || (imageFile as string).split('.com/')[1],
+                type: imageFile instanceof File ? imageFile.type : 'image/jpeg',
+                size: imageFile instanceof File ? imageFile.size : 0,
+              }
+            }
+          });
+          showToast('success', 'Success', 'Product updated successfully');
+        } else {
+          await createProduct({
+            variables: {
+              input: productData,
+              mediaInput: {
+                url: blob.url,
+                pathname: blob.pathname,
+                type: imageFile instanceof File ? imageFile.type : 'image/jpeg',
+                size: imageFile instanceof File ? imageFile.size : 0,
+              }
+            }
+          });
+          showToast('success', 'Success', 'Product created successfully');
+        }
+
         showToast('info', 'Info', 'Uploading product images...');
-      } else if (imageFiles.length > 1) {
+      } else if (imageFile === '') {
         showToast('warning', 'Warning', 'Please select only one image.');
       } else {
         showToast('info', 'Info', 'No images selected.');
       }
-
-
-
       onSuccess();
     } catch (error: any) {
       showToast('error', 'Error', error.message);
@@ -210,12 +326,42 @@ export default function ProductForm({
             className="w-full p-2 border border-border rounded-md"
             required
           >
-            <option value="">Select a category</option>
+            {!catData && !catLoading && <option>No categories found</option>}
             {/* In a real app, you'd fetch categories from the server */}
-            <option value="1">Electronics</option>
-            <option value="2">Clothing</option>
-            <option value="3">Home & Kitchen</option>
+            {catData && catData.categories.length > 0 && catData.categories.map((cat: any) => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
           </select>
+          {catData && catData.categories.length === 0 && (
+            <>
+              <p className="text-sm text-muted-foreground mt-1">No categories available. Please create a category first.</p>
+              <CategoryPopover />
+            </>
+          )}
+        </div>
+        <div>
+          <label htmlFor="storeId" className="block text-sm font-medium mb-1">
+            Store
+          </label>
+          <select
+            id="storeId"
+            name="storeId"
+            value={formData.storeId}
+            // onChange={handleChange}
+            // className="w-full p-2 border border-border rounded-md"
+            required
+            title='selected store ID'
+            onChange={(e) => setSelectedStoreId(e.target.value)}
+            className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            {!storesData && !storesLoading && <option>No stores found</option>}
+            {storesData && storesData.stores.map((store: StoreEntity) => (
+              <option key={store.id} value={store.id}>
+                {store.name} {store.address ? `• ${store.address}` : ''}
+              </option>
+            ))}
+          </select>
+
         </div>
 
         <div className="flex items-center">
@@ -258,26 +404,15 @@ export default function ProductForm({
         </div>
 
         <div>
-          {/* <label className="block text-sm font-medium mb-1">
-            Product Images
-          </label>
-          <input
-            title='file'
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="w-full"
-          /> */}
           <div className="flex items-center gap-4">
-            {imageFiles.length > 0 ? (
+            {imageFile ? (
               <div className="relative size-20 rounded-full">
                 <Image
                   alt="Logo"
                   src={
-                    imageFiles[0] instanceof File
-                      ? URL.createObjectURL(imageFiles[0])
-                      : imageFiles[0]
+                    imageFile instanceof File
+                      ? URL.createObjectURL(imageFile)
+                      : imageFile
                   }
                   fill
                   className="object-cover rounded-full"
@@ -305,22 +440,7 @@ export default function ProductForm({
                 className="hidden"
                 onChange={handleImageUpload}
               />
-              {imageFiles[0] ? (
-                <Button
-                  variant={"destructive"}
-                  type="button"
-                  size={"sm"}
-                  className="mt-2"
-                  onClick={() => {
-                    formData.image.onChange("");
-                    if (fileInputRef.current) {
-                      fileInputRef.current.value = "";
-                    }
-                  }}
-                >
-                  <Trash2 />
-                </Button>
-              ) : (
+              {imageFile && (
                 <Button
                   variant={"outline"}
                   type="button"
@@ -335,19 +455,6 @@ export default function ProductForm({
               )}
             </div>
           </div>
-          {/* {imageFiles.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {imageFiles.map((file, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index + 1}`}
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                </div>
-              ))}
-            </div>
-          )} */}
         </div>
       </div>
 

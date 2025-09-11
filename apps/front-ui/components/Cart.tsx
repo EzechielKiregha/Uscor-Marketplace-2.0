@@ -89,8 +89,8 @@ const Cart = () => {
 
               <SheetFooter>
                 <SheetTrigger asChild>
-                  <Link
-                    href='/marketplace/checkout?'
+                   <Link
+                    href='/marketplace/checkout'
                     className={buttonVariants({
                       className: 'w-full',
 

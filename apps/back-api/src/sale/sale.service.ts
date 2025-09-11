@@ -36,7 +36,6 @@ import {
   PaymentDetailsInput,
 } from './dto/close-sale.input'
 import { Worker } from '../generated/prisma/client'
-import { WorkerEntity } from 'src/worker/entities/worker.entity'
 const execAsync = promisify(exec)
 const mkdirAsync = promisify(mkdir)
 // import PDFDocument from 'pdfkit';

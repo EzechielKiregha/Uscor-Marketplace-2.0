@@ -138,13 +138,6 @@ export class MediaService {
         type: MediaType.IMAGE,
         product: { connect: { id: productId } },
       },
-      select: {
-        id: true,
-        url: true,
-        type: true,
-        productId: true,
-        createdAt: true,
-      },
     })
   }
 

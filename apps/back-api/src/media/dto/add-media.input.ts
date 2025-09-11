@@ -1,16 +1,21 @@
-import { InputType, Field, Int } from '@nestjs/graphql'
+import { InputType, Field, Int } from '@nestjs/graphql';
+import { IsString, IsInt, IsOptional } from 'class-validator';
 
 @InputType()
 export class AddMediaInput {
-  @Field(() => String)
-  url: string
+  @Field()
+  @IsString()
+  url: string;
 
-  @Field(() => String)
-  type: string
+  @Field()
+  @IsString()
+  pathname: string;
 
-  @Field(() => Int, {nullable: true})
-  size?: number
+  @Field()
+  @IsString()
+  type: string;
 
-  @Field({nullable: true})
-  pathname: string
+  @Field(() => Int)
+  @IsInt()
+  size: number;
 }

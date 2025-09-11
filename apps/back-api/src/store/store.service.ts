@@ -4,7 +4,7 @@ import { UpdateStoreInput } from './dto/update-store.input'
 import { PrismaService } from '../prisma/prisma.service'
 import { BusinessService } from '../business/business.service'
 import { WorkerService } from '../worker/worker.service'
-import { AuthPayload } from 'src/auth/entities/auth-payload.entity'
+import { AuthPayload } from '../auth/entities/auth-payload.entity'
 
 // Service
 @Injectable()

@@ -323,8 +323,6 @@ model Media {
   workerId            String?
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
-
-  postOfSales PostOfSale[]
 }
 
 model Order {
@@ -668,7 +666,7 @@ model PostOfSale {
   updatedAt    DateTime       @updatedAt
 
   // Optional relations
-  media        Media[]        // if you attach images/videos
+  // media        Media[]        // if you attach images/videos
   transactions PostTransaction[]
 }
 
