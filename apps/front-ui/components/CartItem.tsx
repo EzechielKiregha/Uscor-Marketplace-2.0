@@ -20,7 +20,7 @@ const CartItem = ({ product }: { product: ProductEntity }) => {
           <div className='relative aspect-square h-16 w-16 min-w-fit overflow-hidden rounded'>
 
             <img
-              src={(product.medias && product.medias[0].url !== undefined) ? product.medias[0].url : "prod.png"}
+              src={(product.medias && product.medias.length > 0) ? product.medias[0].url : "prod.png"}
               alt={product.title}
               className="hidden absolute object-cover h-4 w-4 text-muted-foreground transition-transform duration-500 group-hover:scale-105"
               onError={(e) => {

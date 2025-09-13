@@ -472,7 +472,7 @@ type OrderEntity {
   qrCode: String
   createdAt: DateTime!
   updatedAt: DateTime!
-  clientId: String!
+  clientId: String
   client: ClientEntity!
   payment: PaymentTransactionEntity
   products: [OrderProductEntity!]
@@ -1138,7 +1138,7 @@ type Mutation {
   removeProductMedia(mediaId: String!): MediaEntity!
 
   """Creates an order for a product."""
-  createOrder(createOrderInput: CreateOrderInput!): OrderEntity!
+  createOrder(input: CreateOrderInput!): OrderEntity!
 
   """Updates an order."""
   updateOrder(id: String!, updateOrderInput: UpdateOrderInput!): OrderEntity!
@@ -1393,7 +1393,7 @@ input UpdateProductInput {
 }
 
 input CreateOrderInput {
-  clientId: String!
+  clientId: String
   deliveryFee: Float!
   deliveryAddress: String
   qrCode: String

@@ -17,9 +17,10 @@ import { CreatePaymentTransactionInput } from '../../payment-transaction/dto/cre
 
 @InputType()
 export class CreateOrderInput {
-  @Field()
+  @Field({nullable: true})
+  @IsOptional()
   @IsString()
-  clientId: string
+  clientId?: string
 
   @Field(() => Float)
   @IsNumber()

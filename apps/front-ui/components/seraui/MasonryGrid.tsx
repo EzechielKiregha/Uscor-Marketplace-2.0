@@ -262,7 +262,9 @@ export default function MasonryGrid<T>({
 
   return (
     <div className="space-y-6">
-      <div className="columns-1 gap-6 sm:columns-2 md:columns-3 lg:columns-4">
+      {/* <div className="columns-1 gap-6 sm:columns-2 md:columns-3 lg:columns-4"> */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
         {items.map((item: any) => (
           <ItemComponent key={item.id} item={item} onLike={onLike} />
         ))}

@@ -37,18 +37,17 @@ export class OrderResolver {
       'Creates an order for a product.',
   })
   async createOrder(
-    @Args('createOrderInput')
-    createOrderInput: CreateOrderInput,
     @Context() context,
+    @Args('input') input: CreateOrderInput,
   ) {
     const user = context.req.user
-    if (user.id !== createOrderInput.clientId) {
+    if (user.id !== input.clientId) {
       throw new Error(
         'Clients can only create orders for themselves',
       )
     }
     const order = await this.orderService.create(
-      createOrderInput,
+      input,
     )
 
     // Publish subscription event

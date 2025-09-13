@@ -1,4 +1,5 @@
 'use client'
+import { GithubIcon, LinkedinIcon, TwitterIcon } from 'lucide-react';
 import React from 'react';
 
 // Add custom CSS for animations
@@ -32,11 +33,40 @@ type TeamMember = {
   name: string;
   role: string;
   imageUrl: string;
+  githubUrl?: string;
+  linkedInUrl?: string;
+  twitterUrl?: string;
 };
 
 // Data for the team members using the new images
+
+{/* <div className="flex space-x-4 pt-2">
+            <Link
+              href="https://github.com/EzechielKiregha"
+              className="text-muted-foreground hover:text-primary transition-transform hover:scale-110"
+            >
+              <GitHubIcon />
+            </Link>
+            <Link
+              href="https://twitter.com/EzechielKiregh1"
+              className="text-muted-foreground hover:text-primary transition-transform hover:scale-110"
+            >
+              <TwitterIcon />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/kambale-kiregha-125a60264"
+              className="text-muted-foreground hover:text-primary transition-transform hover:scale-110"
+            >
+              <LinkedInIcon />
+            </Link>
+          </div> */}
 const teamMembers: TeamMember[] = [
-  { name: 'Ezechiel Kiregha ', role: 'Founder & CEO', imageUrl: 'ME.jpeg' },
+  {
+    name: 'Ezechiel Kiregha ', role: 'Founder & CEO', imageUrl: 'ME.jpeg',
+    githubUrl: 'https://github.com/EzechielKiregha',
+    linkedInUrl: 'https://www.linkedin.com/in/kambale-kiregha-125a60264',
+    twitterUrl: 'https://twitter.com/EzechielKiregh1'
+  },
   { name: 'Emily Jonson', role: 'CEO', imageUrl: 'https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg' },
   { name: 'Harshita Patel', role: 'HR', imageUrl: 'https://i.pinimg.com/736x/6f/a3/6a/6fa36aa2c367da06b2a4c8ae1cf9ee02.jpg' },
   { name: 'Eleanor Morales', role: 'HR', imageUrl: 'https://i.pinimg.com/1200x/c2/4e/27/c24e271f2f992fd7e62e8c1e8d9b3e2f.jpg' },
@@ -94,17 +124,17 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{member.name}</h3>
       <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-4 px-3 py-1 bg-gray-50 dark:bg-gray-800 rounded-full">{member.role}</p>
       <div className="flex space-x-3">
-        <a href="#" className="p-2 text-gray-400 hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-600 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg" aria-label={`${member.name}'s Twitter profile`}>
-          <XIcon />
+        <a href={member.githubUrl} target='_blank' className="text-muted-foreground hover:text-primary transition-transform hover:scale-110" aria-label={`${member.name}'s GitHub profile`}>
+          <GithubIcon />
         </a>
-        <a href="#" className="p-2 text-gray-400 hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg" aria-label={`${member.name}'s Instagram profile`}>
-          <InstagramIcon />
+        <a href={member.twitterUrl} target='_blank' className="text-muted-foreground hover:text-primary transition-transform hover:scale-110" aria-label={`${member.name}'s Twitter profile`}>
+          <TwitterIcon />
         </a>
-        <a href="#" className="p-2 text-gray-400 hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-blue-600 dark:hover:bg-blue-700 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-lg" aria-label={`${member.name}'s Facebook profile`}>
-          <FacebookIcon />
+        <a href={member.linkedInUrl} target='_blank' className="text-muted-foreground hover:text-primary transition-transform hover:scale-110" aria-label={`${member.name}'s LinkedIn profile`}>
+          <LinkedinIcon />
         </a>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
