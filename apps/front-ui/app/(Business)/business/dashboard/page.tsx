@@ -35,6 +35,9 @@ export default function BusinessDashboardPage() {
   const user = useMe();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const route = useRouter()
+  const [ordersCount, setOdersCount] = useState<number>(0);
+  const [pendingOrdersCount, setPendingOrdersCount] = useState<number>(0);
+  const [completedOrdersCount, setCompletedOrdersCount] = useState<number>(0);
 
   const {
     data: storesData,
@@ -86,6 +89,16 @@ export default function BusinessDashboardPage() {
         lowStockCount += storeLowStock;
       });
 
+      // Calculate orders statistics
+      data?.businessOrders.items.forEach((order: OrderEntity) => {
+        if (order.payment?.status === 'PENDING') {
+          setPendingOrdersCount((prev) => prev + 1);
+        } else if (order.payment?.status === 'COMPLETED') {
+          setCompletedOrdersCount((prev) => prev + 1);
+        }
+        setOdersCount((prev) => prev + 1);
+      });
+
       // Update state with aggregated values
       setTotalSales(totalSalesCount);
       setTotalProducts(totalProductsCount);
@@ -93,7 +106,7 @@ export default function BusinessDashboardPage() {
       setLowStockProducts(lowStockCount);
     }
 
-  }, [storesData, businessData]);
+  }, [storesData, businessData, data]);
 
   useEffect(() => {
     if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
@@ -105,7 +118,7 @@ export default function BusinessDashboardPage() {
     switch (status) {
       case 'COMPLETED':
         return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Completed</span>;
-      case 'PROCESSING':
+      case 'PENDING':
         return <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Processing</span>;
       case 'SHIPPED':
         return <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Shipped</span>;
@@ -155,9 +168,9 @@ export default function BusinessDashboardPage() {
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            <div className="text-2xl font-bold">{ordersCount}</div>
             <p className="text-xs text-muted-foreground">
-              +{stats.ordersChange}% from last month
+              {pendingOrdersCount} pending, {completedOrdersCount} completed
             </p>
           </CardContent>
         </Card>

@@ -174,6 +174,8 @@ export class FreelanceServiceService {
       }),
     ])
 
+    console.log("Services: ",{ items, total })
+
     return {
       items,
       total,

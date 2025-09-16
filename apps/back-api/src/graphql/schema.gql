@@ -487,6 +487,13 @@ type PaginatedOrdersResponse {
   limit: Int!
 }
 
+type PostTransactionEntity {
+  id: String!
+  amount: Float!
+  status: String!
+  createdAt: DateTime!
+}
+
 type PaymentTransactionEntity {
   id: String!
   amount: Float!
@@ -496,14 +503,7 @@ type PaymentTransactionEntity {
   qrCode: String
   createdAt: DateTime!
   order: OrderEntity!
-  PostTransaction: [PostTransactionEntity!]
-}
-
-type PostTransactionEntity {
-  id: String!
-  amount: Float!
-  status: String!
-  createdAt: DateTime!
+  postTransaction: PostTransactionEntity
 }
 
 type FreelanceOrderEntity {
@@ -589,6 +589,9 @@ type AccountRechargeEntity {
   client: ClientEntity
   tokenTransactionId: String
   tokenTransaction: TokenTransactionEntity
+  status: String!
+  transactionDate: DateTime!
+  qrCode: String
   createdAt: DateTime!
 }
 
@@ -855,6 +858,7 @@ type LoyaltyProgramEntity {
   name: String!
   description: String
   pointsPerPurchase: Float!
+  pointsPerDollar: Float!
   minimumPointsToRedeem: Float
   pointsTransactions: [PointsTransactionEntity!]
   createdAt: DateTime!
@@ -1034,7 +1038,7 @@ type Query {
   workerServiceAssignments(workerId: String!, serviceId: String): [WorkerServiceAssignmentEntity!]!
 
   """Retrieves freelance orders with pagination and filters."""
-  freelanceOrders(serviceId: String, clientId: String, businessId: String, status: FreelanceStatus, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceOrdersResponse!
+  freelanceOrders(serviceId: String, clientId: String, businessId: String, status: String, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceOrdersResponse!
 
   """Retrieves a single freelance order by ID."""
   freelanceOrder(id: String!): FreelanceOrderEntity!

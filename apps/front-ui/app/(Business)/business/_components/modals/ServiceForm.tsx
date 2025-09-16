@@ -134,10 +134,22 @@ export default function ServiceForm({
               required
             >
               <option value="">Select a category</option>
-              {/* In a real app, you'd fetch categories */}
-              <option value="DESIGN">Design & Creative</option>
-              <option value="DEVELOPMENT">Development</option>
-              <option value="CONSULTING">Consulting</option>
+              {/* In a real app, you'd fetch categories
+              PLUMBER = 'PLUMBER',
+              ELECTRICIAN = 'ELECTRICIAN',
+              CARPENTER = 'CARPENTER',
+              MECHANIC = 'MECHANIC',
+              TUTOR = 'TUTOR',
+              CLEANER = 'CLEANER',
+              OTHER = 'OTHER',
+               */}
+              <option value="PLUMBER">Plumber Gig/Job</option>
+              <option value="ELECTRICIAN">Electrician Gig/Job</option>
+              <option value="CARPENTER">Carpenter Gig/Job</option>
+              <option value="MECHANIC">Mecanic Gig/Job</option>
+              <option value="TUTOR">Tutoring Gig/Job</option>
+              <option value="CLEANER">Cleaning Gig/Job</option>
+              <option value="OTHER">Other Gig/Job</option>
             </select>
           </div>
         </div>

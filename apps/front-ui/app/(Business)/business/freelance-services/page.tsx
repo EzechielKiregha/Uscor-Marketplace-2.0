@@ -24,21 +24,18 @@ import ServiceOverview from './_components/ServiceOverview';
 import ServiceManagement from './_components/ServiceManagement';
 import OrderManagement from './_components/OrderManagement';
 import WorkerAssignment from './_components/WorkerAssignment';
-import { FreelanceServiceEntity } from '@/lib/types';
+import { FreelanceServiceEntity, StoreEntity } from '@/lib/types';
 
 export default function FreelanceServicesPage() {
   const { user, role, loading: authLoading } = useMe();
   const { isOpen, setIsOpen } = useOpenCreateServiceModal();
   const [activeTab, setActiveTab] = useState<'overview' | 'management' | 'orders' | 'workers'>('overview');
-
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const {
     data: storesData,
     loading: storesLoading,
     error: storesError
-  } = useQuery(GET_STORES, {
-    variables: { businessId: user?.id },
-    skip: !user?.id
-  });
+  } = useQuery(GET_STORES);
 
   const {
     getServices,
@@ -59,6 +56,13 @@ export default function FreelanceServicesPage() {
   )
   if (storesError) return <div>Error loading stores: {storesError.message}</div>;
 
+  // Auto-select first store if none selected
+  useEffect(() => {
+    if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
+      setSelectedStoreId(storesData.stores[0].id);
+    }
+  }, [storesData, selectedStoreId]);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -69,6 +73,18 @@ export default function FreelanceServicesPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <select
+            title='selected store ID'
+            value={selectedStoreId || ''}
+            onChange={(e) => setSelectedStoreId(e.target.value)}
+            className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            {storesData.stores.map((store: StoreEntity) => (
+              <option key={store.id} value={store.id}>
+                {store.name} {store.address ? `• ${store.address}` : ''}
+              </option>
+            ))}
+          </select>
           <div className="relative w-full sm:w-64">
             <Input
               type="text"
@@ -202,6 +218,7 @@ export default function FreelanceServicesPage() {
             <WorkerAssignment
               serviceId={selectedService?.id || ''}
               loading={servicesLoading}
+              storeId={selectedStoreId}
             />
           )}
         </div>

@@ -12,8 +12,8 @@ export const GET_FREELANCE_SERVICES = gql`
     $isHourly: Boolean
     $businessId: String
     $search: String
-    $page: Float = 1
-    $limit: Float = 20
+    $page: Int = 1
+    $limit: Int = 20
   ) {
     freelanceServices(
       category: $category
@@ -83,8 +83,8 @@ export const GET_FREELANCE_ORDERS = gql`
     $clientId: String
     $businessId: String
     $status: String
-    $page: Float = 1
-    $limit: Float = 20
+    $page: Int = 1
+    $limit: Int = 20
   ) {
     freelanceOrders(
       serviceId: $serviceId
@@ -95,7 +95,33 @@ export const GET_FREELANCE_ORDERS = gql`
       limit: $limit
     ) {
       items {
-        ...FreelanceOrderEntity
+        id
+        serviceId
+        service {
+          id
+          title
+          rate
+          isHourly
+        }
+        clientId
+        client {
+          id
+          fullName
+          avatar
+        }
+        quantity
+        totalAmount
+        escrowAmount
+        platformCommissionPercentage
+        status
+        createdAt
+        updatedAt
+        paymentTransaction {
+          id
+          amount
+          method
+          status
+        }
       }
       total
       page

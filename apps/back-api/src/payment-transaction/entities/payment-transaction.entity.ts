@@ -27,6 +27,21 @@ registerEnumType(PaymentMethod, {
 })
 
 @ObjectType()
+export class PostTransactionEntity {
+  @Field()
+  id: string
+
+  @Field(() => Float)
+  amount: number
+
+  @Field()
+  status: string
+
+  @Field()
+  createdAt: Date
+}
+
+@ObjectType()
 export class PaymentTransactionEntity {
   @Field()
   id: string
@@ -56,19 +71,4 @@ export class PaymentTransactionEntity {
   // Expose single latest post transaction for frontend
   @Field(() => PostTransactionEntity, { nullable: true })
   postTransaction?: PostTransactionEntity
-}
-
-@ObjectType()
-export class PostTransactionEntity {
-  @Field()
-  id: string
-
-  @Field(() => Float)
-  amount: number
-
-  @Field()
-  status: string
-
-  @Field()
-  createdAt: Date
 }

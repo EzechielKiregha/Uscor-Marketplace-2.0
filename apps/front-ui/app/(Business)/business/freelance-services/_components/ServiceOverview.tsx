@@ -127,7 +127,8 @@ export default function ServiceOverview({
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {services
+              { /* sort a copy to avoid mutating props (props arrays can be readonly) */}
+              {[...services]
                 .sort((a, b) => {
                   const aOrders = serviceOrders.filter(o => o.serviceId === a.id).length;
                   const bOrders = serviceOrders.filter(o => o.serviceId === b.id).length;

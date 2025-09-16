@@ -86,10 +86,10 @@ export class FreelanceOrderResolver {
     })
     businessId?: string,
     @Args('status', {
-      type: () => FreelanceStatus,
+      type: () => String,
       nullable: true,
     })
-    status?: FreelanceStatus,
+    status?: string,
     @Args('page', {
       type: () => Int,
       defaultValue: 1,

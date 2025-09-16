@@ -28,11 +28,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 interface WorkerAssignmentProps {
   serviceId: string;
   loading: boolean;
+  storeId?: string | null;
 }
 
 export default function WorkerAssignment({
   serviceId,
-  loading
+  loading,
+  storeId
 }: WorkerAssignmentProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedWorker, setSelectedWorker] = useState<any>(null);
@@ -46,8 +48,8 @@ export default function WorkerAssignment({
     loading: workersLoading,
     refetch
   } = useQuery(GET_WORKERS, {
-    variables: { businessId: user?.id },
-    skip: !serviceId
+    variables: { storeId },
+    skip: !storeId
   });
 
   const [assignWorker] = useMutation(ASSIGN_WORKER_TO_SERVICE, {

@@ -25,7 +25,7 @@ export class PaymentTransactionResolver {
   ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client')
+  @Roles('client', 'business')
   @Mutation(() => PaymentTransactionEntity, {
     description:
       'Creates a new payment transaction.',
@@ -206,23 +206,20 @@ export class PaymentTransactionResolver {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client')
+  @Roles('client', 'business')
   @Mutation(() => PaymentTransactionEntity, {
     description:
       'Updates a payment transaction’s status or QR code.',
   })
   async updatePaymentTransaction(
+    @Context() context,
     @Args('id', { type: () => String })
     id: string,
     @Args('input')
     input: UpdatePaymentTransactionInput,
-    @Context() context,
   ) {
     const user = context.req.user
-    const transaction =
-      await this.paymentTransactionService.findOne(
-        id,
-      )
+    const transaction = await this.paymentTransactionService.findOne(id)
     if (!transaction?.orderId) {
       throw new Error(
         'Payment transaction not found',
@@ -253,7 +250,7 @@ export class PaymentTransactionResolver {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client')
+  @Roles('client', 'business')
   @Mutation(() => PaymentTransactionEntity, {
     description: 'Deletes a payment transaction.',
   })

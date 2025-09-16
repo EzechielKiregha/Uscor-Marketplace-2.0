@@ -32,7 +32,7 @@ export default function BusinessOrdersPage() {
     switch (status) {
       case 'COMPLETED':
         return <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Completed</span>;
-      case 'PROCESSING':
+      case 'PENDING':
         return <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Processing</span>;
       case 'SHIPPED':
         return <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Shipped</span>;
@@ -78,7 +78,7 @@ export default function BusinessOrdersPage() {
           >
             <option value="">All Statuses</option>
             <option value="PENDING">Pending</option>
-            <option value="PROCESSING">Processing</option>
+            <option value="PENDING">Processing</option>
             <option value="SHIPPED">Shipped</option>
             <option value="DELIVERED">Delivered</option>
             <option value="COMPLETED">Completed</option>

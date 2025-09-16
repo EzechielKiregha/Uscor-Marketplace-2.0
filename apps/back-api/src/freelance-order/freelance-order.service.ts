@@ -24,7 +24,7 @@ interface FindAllFilters {
   serviceId?: string
   clientId?: string
   businessId?: string
-  status?: FreelanceStatus
+  status?: String
   page?: number
   limit?: number
 }
