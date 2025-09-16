@@ -366,9 +366,6 @@ export default function CheckoutPage() {
 
       showToast('success', 'Success', 'Order created successfully!', true, 5000)
 
-      // Clear cart
-      clearCart()
-
       // Redirect to order confirmation or order details
       router.push(`/marketplace/orders/${data.createOrder.id}`)
     } catch (error: any) {
@@ -390,23 +387,51 @@ export default function CheckoutPage() {
 
   if (!userLoading && (!user || role !== 'client')) {
     return (
-      <div className="border border-border rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
-        <div className="text-center max-w-md">
-          <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-            <ShoppingCart className="h-10 w-10 text-primary" />
+      <div className="max-w-3xl mx-auto p-6">
+        <div className="border border-border rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
+          <div className="text-center max-w-md">
+            <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+              <ShoppingCart className="h-10 w-10 text-primary" />
+            </div>
+            <h2 className="text-xl font-semibold mb-2">You Can't Buy Yet, You Need An Account</h2>
+            <p className="text-muted-foreground mb-6">
+              2 minutes processing, get an client account to begin processing transactions
+            </p>
+            <Button
+              size="lg"
+              onClick={() => router.push('/login')}
+              className="bg-primary hover:bg-accent text-primary-foreground"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Go To Login
+            </Button>
           </div>
-          <h2 className="text-xl font-semibold mb-2">You Can't Buy Your Own Products</h2>
-          <p className="text-muted-foreground mb-6">
-            Want to buy something for a client? Create a new sale to begin processing transactions
-          </p>
-          <Button
-            size="lg"
-            onClick={() => router.push('/business/sales')}
-            className="bg-primary hover:bg-accent text-primary-foreground"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Go To Sales
-          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!userLoading && (user && role === 'business')) {
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+        <div className="border border-border rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
+          <div className="text-center max-w-md">
+            <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+              <ShoppingCart className="h-10 w-10 text-primary" />
+            </div>
+            <h2 className="text-xl font-semibold mb-2">You Can't Buy Your Own Products</h2>
+            <p className="text-muted-foreground mb-6">
+              Want to buy something for a client? Create a new sale to begin processing transactions
+            </p>
+            <Button
+              size="lg"
+              onClick={() => router.push('/business/sales')}
+              className="bg-primary hover:bg-accent text-primary-foreground"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Go To Sales
+            </Button>
+          </div>
         </div>
       </div>
     )

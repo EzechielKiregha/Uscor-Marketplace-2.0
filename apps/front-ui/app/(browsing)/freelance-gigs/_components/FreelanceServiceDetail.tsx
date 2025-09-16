@@ -53,7 +53,11 @@ export default function FreelanceServiceDetail({ id }: FreelanceServiceDetailPro
     });
   };
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   const { title, description, price, business } = data.freelanceService;

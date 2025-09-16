@@ -116,7 +116,11 @@ export default function BusinessDashboardPage() {
     }
   };
 
-  if (loading || businessDataLoading || storesLoading) return <Loader loading={true} />;
+  if (loading || businessDataLoading || storesLoading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
   if (error || businessDataErro || storesError) return <div>Error loading dashboard</div>;
 
   const stats = businessData.businessDashboard.stats;

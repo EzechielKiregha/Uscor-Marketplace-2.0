@@ -10,11 +10,14 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, CheckCircle2, Clock, Package, Truck, CreditCard } from 'lucide-react'
 import Loader from '@/components/seraui/Loader'
 import { formatPrice } from '@/lib/utils'
+import { useCart } from '@/hooks/use-cart'
 
 export default function OrderDetailsPage() {
   const params = useParams<{ id: string }>()
   const router = useRouter()
   const orderId = params?.id
+  const { clearCart } = useCart()
+
 
   const { data, loading, error } = useQuery(GET_ORDER_BY_ID, {
     variables: { id: orderId },
@@ -28,6 +31,8 @@ export default function OrderDetailsPage() {
       </div>
     )
   }
+
+  clearCart()
 
   if (error || !data?.order) {
     return (

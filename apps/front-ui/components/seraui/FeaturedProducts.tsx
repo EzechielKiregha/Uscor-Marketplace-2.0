@@ -43,8 +43,16 @@ export default function FeaturedProducts({
     }
   }, [data]);
 
-  if (loading) return <Loader loading={true} />;
-  if (error) return <Loader loading={true} />;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
+  if (error) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
 
   const handleLike = (id: string | number) => {
     console.log('Liked product:', id);

@@ -52,7 +52,11 @@ export default function FreelanceServicesPage() {
   const selectedService = getSelectedService();
   const serviceOrders = getServiceOrders();
 
-  if (authLoading || storesLoading) return <Loader loading={true} />;
+  if (authLoading || storesLoading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
   if (storesError) return <div>Error loading stores: {storesError.message}</div>;
 
   return (

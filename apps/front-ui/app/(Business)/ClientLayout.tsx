@@ -11,7 +11,11 @@ export default function ClientSideLayout({
 }) {
   const { user, role, loading, error } = useMe();
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
   if (error || role !== 'business') return <div>Unauthorized</div>;
 
   return (

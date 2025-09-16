@@ -50,7 +50,11 @@ export default function BusinessProductsPage() {
     product.description?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
-  if (loading && searchTerm.trim() === '') return <Loader loading={true} />;
+  if (loading && searchTerm.trim() === '') return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
   if (error) return <div>Error loading products</div>;
 
   return (

@@ -68,7 +68,11 @@ export default function BusinessChatsPage() {
     setActiveChatId(null);
   };
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
   if (error) return <div>Error loading chats</div>;
 
   return (
