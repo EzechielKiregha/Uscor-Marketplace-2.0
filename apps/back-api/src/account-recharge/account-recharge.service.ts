@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateAccountRechargeInput } from './dto/create-account-recharge.input'
 import { UpdateAccountRechargeInput } from './dto/update-account-recharge.input'
 import { PrismaService } from '../prisma/prisma.service'
+import { RechargeMethod } from '../generated/prisma/enums'
 
 // Service
 @Injectable()
@@ -127,9 +128,32 @@ export class AccountRechargeService {
   async getBalance(
     userId: string,
     userRole: string,
+    method?: RechargeMethod,
   ): Promise<number> {
-    const recharges =
-      await this.prisma.accountRecharge.findMany({
+    let recharges 
+    if (method) {
+      recharges = await this.prisma.accountRecharge.findMany({
+        where: {
+          OR: [
+            {
+              businessId:
+                userRole === 'business'
+                  ? userId
+                  : undefined,
+            },
+            {
+              clientId:
+                userRole === 'client'
+                  ? userId
+                  : undefined,
+            },
+          ],
+          method: method,
+        },
+        select: { amount: true },
+      })
+    } else {
+      recharges = await this.prisma.accountRecharge.findMany({
         where: {
           OR: [
             {
@@ -148,6 +172,7 @@ export class AccountRechargeService {
         },
         select: { amount: true },
       })
+    }
     return recharges.reduce(
       (sum, recharge) => sum + recharge.amount,
       0,

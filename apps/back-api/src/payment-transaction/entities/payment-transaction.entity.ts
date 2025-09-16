@@ -50,13 +50,12 @@ export class PaymentTransactionEntity {
   createdAt: Date
 
   // Relations
-  @Field(() => OrderEntity) // Order associated with the payment transaction
+  @Field(() => OrderEntity)
   order: OrderEntity
 
-  @Field(() => [PostTransactionEntity], {
-    nullable: true,
-  })
-  PostTransaction?: PostTransactionEntity[]
+  // Expose single latest post transaction for frontend
+  @Field(() => PostTransactionEntity, { nullable: true })
+  postTransaction?: PostTransactionEntity
 }
 
 @ObjectType()

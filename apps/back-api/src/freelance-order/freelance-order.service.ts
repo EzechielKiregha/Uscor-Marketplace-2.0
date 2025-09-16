@@ -45,6 +45,7 @@ export class FreelanceOrderService {
       await this.accountRechargeService.getBalance(
         clientId,
         'client',
+        RechargeMethod.TOKEN,
       )
     return balance >= amount
   }

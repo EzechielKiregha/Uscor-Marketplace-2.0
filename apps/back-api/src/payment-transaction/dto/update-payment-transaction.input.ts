@@ -8,10 +8,9 @@ import { InputType, Field } from '@nestjs/graphql'
 
 @InputType()
 export class UpdatePaymentTransactionInput {
-  @Field(() => PaymentStatus, { nullable: true })
+  @Field({ nullable: true })
   @IsOptional()
-  @IsEnum(PaymentStatus)
-  status?: PaymentStatus
+  status?: string
 
   @Field({ nullable: true })
   @IsOptional()

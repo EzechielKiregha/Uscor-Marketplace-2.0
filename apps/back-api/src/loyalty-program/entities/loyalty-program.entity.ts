@@ -27,6 +27,12 @@ export class LoyaltyProgramEntity {
   @Field(() => Float)
   pointsPerPurchase: number
 
+  // Alias for frontend compatibility
+  @Field(() => Float)
+  get pointsPerDollar(): number {
+    return this.pointsPerPurchase
+  }
+
   @Field(() => Float, { nullable: true })
   minimumPointsToRedeem?: number
 

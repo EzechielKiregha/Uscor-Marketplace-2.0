@@ -3796,6 +3796,9 @@ export const AccountRechargeScalarFieldEnum = {
   businessId: 'businessId',
   clientId: 'clientId',
   tokenTransactionId: 'tokenTransactionId',
+  status: 'status',
+  transactionDate: 'transactionDate',
+  qrCode: 'qrCode',
   createdAt: 'createdAt'
 } as const
 

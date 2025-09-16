@@ -46,6 +46,16 @@ export class AccountRechargeEntity {
   })
   tokenTransaction?: TokenTransactionEntity
 
+  // New fields to match frontend expectations
+  @Field()
+  status: string
+
+  @Field()
+  transactionDate: Date
+
+  @Field({ nullable: true })
+  qrCode?: string
+
   @Field()
   createdAt: Date
 }

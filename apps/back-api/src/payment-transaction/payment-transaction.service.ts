@@ -23,11 +23,36 @@ export class PaymentTransactionService {
   async validateTokenBalance(
     clientId: string,
     amount: number,
+    method : RechargeMethod,
   ): Promise<boolean> {
+
+    let mtd
+
+    switch (method) {
+      case RechargeMethod.MTN_MONEY:
+        mtd = RechargeMethod.MTN_MONEY
+        break
+      case RechargeMethod.AIRTEL_MONEY:
+        mtd = RechargeMethod.AIRTEL_MONEY
+        break
+      case RechargeMethod.MPESA:
+        mtd = RechargeMethod.MPESA
+        break
+      case RechargeMethod.ORANGE_MONEY:
+        mtd = RechargeMethod.ORANGE_MONEY
+        break
+      case RechargeMethod.TOKEN:
+        mtd = RechargeMethod.TOKEN
+        break
+      default:
+        throw new Error('Invalid recharge method')
+    }
+
     const balance =
       await this.accountRechargeService.getBalance(
         clientId,
         'client',
+        mtd,
       )
     return balance >= amount
   }
@@ -58,6 +83,7 @@ export class PaymentTransactionService {
         await this.validateTokenBalance(
           clientId,
           amount || 0,
+          RechargeMethod.TOKEN,
         )
       if (!hasEnoughTokens) {
         throw new Error(
@@ -117,17 +143,19 @@ export class PaymentTransactionService {
 
     // If status is changing to COMPLETED, validate and deduct balance
     if (
-      status === PaymentStatus.COMPLETED &&
+      status === "COMPLETED" &&
       transaction.status !==
         PaymentStatus.COMPLETED
     ) {
       if (
         transaction.method === PaymentMethod.TOKEN
       ) {
+
         const hasEnoughTokens =
           await this.validateTokenBalance(
             clientId,
             transaction.amount,
+            RechargeMethod.TOKEN,
           )
         if (!hasEnoughTokens) {
           throw new Error(
@@ -138,7 +166,7 @@ export class PaymentTransactionService {
         await this.accountRechargeService.create(
           {
             amount: -transaction.amount,
-            method: RechargeMethod.MTN_MONEY, // Placeholder; adjust as needed
+            method: RechargeMethod.TOKEN, // Placeholder; adjust as needed
             origin: Country.DRC, // Placeholder; adjust as needed
             clientId,
             businessId: undefined,
@@ -146,12 +174,69 @@ export class PaymentTransactionService {
           clientId,
           'client',
         )
+      } else if (transaction.method === PaymentMethod.MOBILE_MONEY ) {
+        let mtd = RechargeMethod.AIRTEL_MONEY
+        // Validate token balance
+
+        let hasEnoughBalance = await this.validateTokenBalance(
+          clientId,
+          transaction.amount,
+          mtd,
+        )
+
+        if (!hasEnoughBalance) {
+          mtd = RechargeMethod.MTN_MONEY
+          hasEnoughBalance = await this.validateTokenBalance(
+            clientId,
+            transaction.amount,
+            mtd,
+          )
+          if(!hasEnoughBalance){
+            mtd = RechargeMethod.ORANGE_MONEY
+            hasEnoughBalance = await this.validateTokenBalance(
+              clientId,
+              transaction.amount,
+              mtd,
+            )
+            if(!hasEnoughBalance){
+              mtd = RechargeMethod.MPESA
+              hasEnoughBalance = await this.validateTokenBalance(
+                clientId,
+                transaction.amount,
+                mtd,
+              )
+            }
+          }
+        }
+        // Deduct balance by creating a negative AccountRecharge
+        await this.accountRechargeService.create(
+          {
+            amount: -transaction.amount,
+            method: mtd, // Placeholder; adjust as needed
+            origin: Country.DRC, // Placeholder; adjust as needed
+            clientId,
+            businessId: undefined,
+          },
+          clientId,
+          'client',
+        )
+      } else if (transaction.method === PaymentMethod.CARD ) {
+        // For CARD payments, assume external processing is done
+        console.log('Card payment processed externally')
+
+      } else if (transaction.method === PaymentMethod.CASH ) {
+        // For CASH payments, no balance deduction needed
+        console.log('Cash payment - no balance deduction')
+      } else {
+        throw new Error(
+          'Unsupported payment method',
+        )
       }
     }
 
     return this.prisma.paymentTransaction.update({
       where: { id },
-      data: { status, qrCode },
+      data: { status: PaymentStatus.COMPLETED, qrCode },
       select: {
         id: true,
         amount: true,

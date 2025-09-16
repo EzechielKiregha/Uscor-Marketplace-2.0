@@ -1,13 +1,14 @@
 // app/business/orders/_components/OrderDetailsModal.tsx
 "use client";
 
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_ORDER_BY_ID } from '@/graphql/order.gql';
 import Loader from '@/components/seraui/Loader';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Package, Truck, CreditCard } from 'lucide-react';
 import { useOpenOrderDetailsModal } from '../../../_hooks/use-open-order-details-modal';
 import ResponsiveModal from '@/app/(Business)/business/_components/responsive-modal';
+import { UPDATE_PAYMENT_TRANSACTION } from '@/graphql/payment.gql';
 
 export default function OrderDetailsModal() {
   const { isOpen, setIsOpen, orderId } = useOpenOrderDetailsModal();
@@ -17,12 +18,26 @@ export default function OrderDetailsModal() {
     skip: !orderId
   });
 
+  const [updatePaymentTransaction] = useMutation(UPDATE_PAYMENT_TRANSACTION);
+
   const handleClose = () => {
     setIsOpen({
       openOrderDetailsModal: false,
       orderId: null
     });
   };
+
+  const handleOrderPayment = () => {
+    updatePaymentTransaction({
+      variables: {
+        id: data.order.payment.id,
+        input: {
+          status: 'COMPLETED'
+        }
+      }
+    }
+    )
+  }
 
   if (!orderId) return null;
 
@@ -141,12 +156,11 @@ export default function OrderDetailsModal() {
             >
               Close
             </Button>
-            {data.order.status === 'PROCESSING' && (
+            {data.order.status === 'PENDING' && (
               <Button
                 className="bg-green-600 hover:bg-green-700"
                 onClick={() => {
-                  // In a real app, you'd call a mutation to update order status
-                  alert('Order marked as completed');
+                  handleOrderPayment();
                   handleClose();
                 }}
               >

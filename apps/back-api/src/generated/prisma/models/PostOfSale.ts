@@ -240,7 +240,6 @@ export type PostOfSaleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"PostOfSale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PostOfSale"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  media?: Prisma.MediaListRelationFilter
   transactions?: Prisma.PostTransactionListRelationFilter
 }
 
@@ -254,7 +253,6 @@ export type PostOfSaleOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
-  media?: Prisma.MediaOrderByRelationAggregateInput
   transactions?: Prisma.PostTransactionOrderByRelationAggregateInput
 }
 
@@ -271,7 +269,6 @@ export type PostOfSaleWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"PostOfSale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PostOfSale"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  media?: Prisma.MediaListRelationFilter
   transactions?: Prisma.PostTransactionListRelationFilter
 }, "id">
 
@@ -314,7 +311,6 @@ export type PostOfSaleCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutPostOfSalesInput
-  media?: Prisma.MediaCreateNestedManyWithoutPostOfSalesInput
   transactions?: Prisma.PostTransactionCreateNestedManyWithoutPostInput
 }
 
@@ -327,7 +323,6 @@ export type PostOfSaleUncheckedCreateInput = {
   businessId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  media?: Prisma.MediaUncheckedCreateNestedManyWithoutPostOfSalesInput
   transactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPostInput
 }
 
@@ -340,7 +335,6 @@ export type PostOfSaleUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutPostOfSalesNestedInput
-  media?: Prisma.MediaUpdateManyWithoutPostOfSalesNestedInput
   transactions?: Prisma.PostTransactionUpdateManyWithoutPostNestedInput
 }
 
@@ -353,7 +347,6 @@ export type PostOfSaleUncheckedUpdateInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  media?: Prisma.MediaUncheckedUpdateManyWithoutPostOfSalesNestedInput
   transactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPostNestedInput
 }
 
@@ -487,44 +480,6 @@ export type PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput = {
   deleteMany?: Prisma.PostOfSaleScalarWhereInput | Prisma.PostOfSaleScalarWhereInput[]
 }
 
-export type PostOfSaleCreateNestedManyWithoutMediaInput = {
-  create?: Prisma.XOR<Prisma.PostOfSaleCreateWithoutMediaInput, Prisma.PostOfSaleUncheckedCreateWithoutMediaInput> | Prisma.PostOfSaleCreateWithoutMediaInput[] | Prisma.PostOfSaleUncheckedCreateWithoutMediaInput[]
-  connectOrCreate?: Prisma.PostOfSaleCreateOrConnectWithoutMediaInput | Prisma.PostOfSaleCreateOrConnectWithoutMediaInput[]
-  connect?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-}
-
-export type PostOfSaleUncheckedCreateNestedManyWithoutMediaInput = {
-  create?: Prisma.XOR<Prisma.PostOfSaleCreateWithoutMediaInput, Prisma.PostOfSaleUncheckedCreateWithoutMediaInput> | Prisma.PostOfSaleCreateWithoutMediaInput[] | Prisma.PostOfSaleUncheckedCreateWithoutMediaInput[]
-  connectOrCreate?: Prisma.PostOfSaleCreateOrConnectWithoutMediaInput | Prisma.PostOfSaleCreateOrConnectWithoutMediaInput[]
-  connect?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-}
-
-export type PostOfSaleUpdateManyWithoutMediaNestedInput = {
-  create?: Prisma.XOR<Prisma.PostOfSaleCreateWithoutMediaInput, Prisma.PostOfSaleUncheckedCreateWithoutMediaInput> | Prisma.PostOfSaleCreateWithoutMediaInput[] | Prisma.PostOfSaleUncheckedCreateWithoutMediaInput[]
-  connectOrCreate?: Prisma.PostOfSaleCreateOrConnectWithoutMediaInput | Prisma.PostOfSaleCreateOrConnectWithoutMediaInput[]
-  upsert?: Prisma.PostOfSaleUpsertWithWhereUniqueWithoutMediaInput | Prisma.PostOfSaleUpsertWithWhereUniqueWithoutMediaInput[]
-  set?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  disconnect?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  delete?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  connect?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  update?: Prisma.PostOfSaleUpdateWithWhereUniqueWithoutMediaInput | Prisma.PostOfSaleUpdateWithWhereUniqueWithoutMediaInput[]
-  updateMany?: Prisma.PostOfSaleUpdateManyWithWhereWithoutMediaInput | Prisma.PostOfSaleUpdateManyWithWhereWithoutMediaInput[]
-  deleteMany?: Prisma.PostOfSaleScalarWhereInput | Prisma.PostOfSaleScalarWhereInput[]
-}
-
-export type PostOfSaleUncheckedUpdateManyWithoutMediaNestedInput = {
-  create?: Prisma.XOR<Prisma.PostOfSaleCreateWithoutMediaInput, Prisma.PostOfSaleUncheckedCreateWithoutMediaInput> | Prisma.PostOfSaleCreateWithoutMediaInput[] | Prisma.PostOfSaleUncheckedCreateWithoutMediaInput[]
-  connectOrCreate?: Prisma.PostOfSaleCreateOrConnectWithoutMediaInput | Prisma.PostOfSaleCreateOrConnectWithoutMediaInput[]
-  upsert?: Prisma.PostOfSaleUpsertWithWhereUniqueWithoutMediaInput | Prisma.PostOfSaleUpsertWithWhereUniqueWithoutMediaInput[]
-  set?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  disconnect?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  delete?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  connect?: Prisma.PostOfSaleWhereUniqueInput | Prisma.PostOfSaleWhereUniqueInput[]
-  update?: Prisma.PostOfSaleUpdateWithWhereUniqueWithoutMediaInput | Prisma.PostOfSaleUpdateWithWhereUniqueWithoutMediaInput[]
-  updateMany?: Prisma.PostOfSaleUpdateManyWithWhereWithoutMediaInput | Prisma.PostOfSaleUpdateManyWithWhereWithoutMediaInput[]
-  deleteMany?: Prisma.PostOfSaleScalarWhereInput | Prisma.PostOfSaleScalarWhereInput[]
-}
-
 export type EnumPostStatusFieldUpdateOperationsInput = {
   set?: $Enums.PostStatus
 }
@@ -551,7 +506,6 @@ export type PostOfSaleCreateWithoutBusinessInput = {
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  media?: Prisma.MediaCreateNestedManyWithoutPostOfSalesInput
   transactions?: Prisma.PostTransactionCreateNestedManyWithoutPostInput
 }
 
@@ -563,7 +517,6 @@ export type PostOfSaleUncheckedCreateWithoutBusinessInput = {
   status?: $Enums.PostStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  media?: Prisma.MediaUncheckedCreateNestedManyWithoutPostOfSalesInput
   transactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPostInput
 }
 
@@ -607,51 +560,6 @@ export type PostOfSaleScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"PostOfSale"> | Date | string
 }
 
-export type PostOfSaleCreateWithoutMediaInput = {
-  id?: string
-  title: string
-  description?: string | null
-  price?: number
-  status?: $Enums.PostStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  business: Prisma.BusinessCreateNestedOneWithoutPostOfSalesInput
-  transactions?: Prisma.PostTransactionCreateNestedManyWithoutPostInput
-}
-
-export type PostOfSaleUncheckedCreateWithoutMediaInput = {
-  id?: string
-  title: string
-  description?: string | null
-  price?: number
-  status?: $Enums.PostStatus
-  businessId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  transactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPostInput
-}
-
-export type PostOfSaleCreateOrConnectWithoutMediaInput = {
-  where: Prisma.PostOfSaleWhereUniqueInput
-  create: Prisma.XOR<Prisma.PostOfSaleCreateWithoutMediaInput, Prisma.PostOfSaleUncheckedCreateWithoutMediaInput>
-}
-
-export type PostOfSaleUpsertWithWhereUniqueWithoutMediaInput = {
-  where: Prisma.PostOfSaleWhereUniqueInput
-  update: Prisma.XOR<Prisma.PostOfSaleUpdateWithoutMediaInput, Prisma.PostOfSaleUncheckedUpdateWithoutMediaInput>
-  create: Prisma.XOR<Prisma.PostOfSaleCreateWithoutMediaInput, Prisma.PostOfSaleUncheckedCreateWithoutMediaInput>
-}
-
-export type PostOfSaleUpdateWithWhereUniqueWithoutMediaInput = {
-  where: Prisma.PostOfSaleWhereUniqueInput
-  data: Prisma.XOR<Prisma.PostOfSaleUpdateWithoutMediaInput, Prisma.PostOfSaleUncheckedUpdateWithoutMediaInput>
-}
-
-export type PostOfSaleUpdateManyWithWhereWithoutMediaInput = {
-  where: Prisma.PostOfSaleScalarWhereInput
-  data: Prisma.XOR<Prisma.PostOfSaleUpdateManyMutationInput, Prisma.PostOfSaleUncheckedUpdateManyWithoutMediaInput>
-}
-
 export type PostOfSaleCreateWithoutTransactionsInput = {
   id?: string
   title: string
@@ -661,7 +569,6 @@ export type PostOfSaleCreateWithoutTransactionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutPostOfSalesInput
-  media?: Prisma.MediaCreateNestedManyWithoutPostOfSalesInput
 }
 
 export type PostOfSaleUncheckedCreateWithoutTransactionsInput = {
@@ -673,7 +580,6 @@ export type PostOfSaleUncheckedCreateWithoutTransactionsInput = {
   businessId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  media?: Prisma.MediaUncheckedCreateNestedManyWithoutPostOfSalesInput
 }
 
 export type PostOfSaleCreateOrConnectWithoutTransactionsInput = {
@@ -701,7 +607,6 @@ export type PostOfSaleUpdateWithoutTransactionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutPostOfSalesNestedInput
-  media?: Prisma.MediaUpdateManyWithoutPostOfSalesNestedInput
 }
 
 export type PostOfSaleUncheckedUpdateWithoutTransactionsInput = {
@@ -713,7 +618,6 @@ export type PostOfSaleUncheckedUpdateWithoutTransactionsInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  media?: Prisma.MediaUncheckedUpdateManyWithoutPostOfSalesNestedInput
 }
 
 export type PostOfSaleCreateManyBusinessInput = {
@@ -734,7 +638,6 @@ export type PostOfSaleUpdateWithoutBusinessInput = {
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  media?: Prisma.MediaUpdateManyWithoutPostOfSalesNestedInput
   transactions?: Prisma.PostTransactionUpdateManyWithoutPostNestedInput
 }
 
@@ -746,7 +649,6 @@ export type PostOfSaleUncheckedUpdateWithoutBusinessInput = {
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  media?: Prisma.MediaUncheckedUpdateManyWithoutPostOfSalesNestedInput
   transactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPostNestedInput
 }
 
@@ -760,53 +662,16 @@ export type PostOfSaleUncheckedUpdateManyWithoutBusinessInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PostOfSaleUpdateWithoutMediaInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneRequiredWithoutPostOfSalesNestedInput
-  transactions?: Prisma.PostTransactionUpdateManyWithoutPostNestedInput
-}
-
-export type PostOfSaleUncheckedUpdateWithoutMediaInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPostNestedInput
-}
-
-export type PostOfSaleUncheckedUpdateManyWithoutMediaInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 
 /**
  * Count Type PostOfSaleCountOutputType
  */
 
 export type PostOfSaleCountOutputType = {
-  media: number
   transactions: number
 }
 
 export type PostOfSaleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  media?: boolean | PostOfSaleCountOutputTypeCountMediaArgs
   transactions?: boolean | PostOfSaleCountOutputTypeCountTransactionsArgs
 }
 
@@ -818,13 +683,6 @@ export type PostOfSaleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
    * Select specific fields to fetch from the PostOfSaleCountOutputType
    */
   select?: Prisma.PostOfSaleCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * PostOfSaleCountOutputType without action
- */
-export type PostOfSaleCountOutputTypeCountMediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MediaWhereInput
 }
 
 /**
@@ -845,7 +703,6 @@ export type PostOfSaleSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  media?: boolean | Prisma.PostOfSale$mediaArgs<ExtArgs>
   transactions?: boolean | Prisma.PostOfSale$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.PostOfSaleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["postOfSale"]>
@@ -888,7 +745,6 @@ export type PostOfSaleSelectScalar = {
 export type PostOfSaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "status" | "businessId" | "createdAt" | "updatedAt", ExtArgs["result"]["postOfSale"]>
 export type PostOfSaleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  media?: boolean | Prisma.PostOfSale$mediaArgs<ExtArgs>
   transactions?: boolean | Prisma.PostOfSale$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.PostOfSaleCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -903,7 +759,6 @@ export type $PostOfSalePayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "PostOfSale"
   objects: {
     business: Prisma.$BusinessPayload<ExtArgs>
-    media: Prisma.$MediaPayload<ExtArgs>[]
     transactions: Prisma.$PostTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1310,7 +1165,6 @@ readonly fields: PostOfSaleFieldRefs;
 export interface Prisma__PostOfSaleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  media<T extends Prisma.PostOfSale$mediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostOfSale$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.PostOfSale$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostOfSale$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1742,30 +1596,6 @@ export type PostOfSaleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many PostOfSales to delete.
    */
   limit?: number
-}
-
-/**
- * PostOfSale.media
- */
-export type PostOfSale$mediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Media
-   */
-  select?: Prisma.MediaSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Media
-   */
-  omit?: Prisma.MediaOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MediaInclude<ExtArgs> | null
-  where?: Prisma.MediaWhereInput
-  orderBy?: Prisma.MediaOrderByWithRelationInput | Prisma.MediaOrderByWithRelationInput[]
-  cursor?: Prisma.MediaWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MediaScalarFieldEnum | Prisma.MediaScalarFieldEnum[]
 }
 
 /**

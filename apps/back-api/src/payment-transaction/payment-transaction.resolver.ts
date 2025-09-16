@@ -65,9 +65,9 @@ export class PaymentTransactionResolver {
     @Context() context,
   ) {
     const user = context.req.user
-    if (user.role === 'client') {
-      return this.prisma.paymentTransaction.findMany(
-        {
+    const items = await (async () => {
+      if (user.role === 'client') {
+        return this.prisma.paymentTransaction.findMany({
           where: {
             order: { clientId: user.id },
           },
@@ -81,6 +81,8 @@ export class PaymentTransactionResolver {
               },
             },
             postTransactions: {
+              orderBy: { createdAt: 'desc' },
+              take: 1,
               select: {
                 id: true,
                 amount: true,
@@ -89,19 +91,15 @@ export class PaymentTransactionResolver {
               },
             },
           },
-        },
-      )
-    }
-    if (user.role === 'business') {
-      return this.prisma.paymentTransaction.findMany(
-        {
+        })
+      }
+      if (user.role === 'business') {
+        return this.prisma.paymentTransaction.findMany({
           where: {
             order: {
               products: {
                 some: {
-                  product: {
-                    businessId: user.id,
-                  },
+                  product: { businessId: user.id },
                 },
               },
             },
@@ -116,6 +114,8 @@ export class PaymentTransactionResolver {
               },
             },
             postTransactions: {
+              orderBy: { createdAt: 'desc' },
+              take: 1,
               select: {
                 id: true,
                 amount: true,
@@ -124,10 +124,16 @@ export class PaymentTransactionResolver {
               },
             },
           },
-        },
-      )
-    }
-    throw new Error('Unauthorized role')
+        })
+      }
+      throw new Error('Unauthorized role')
+    })()
+
+    // Map latest postTransactions[0] to postTransaction
+    return items.map((t: any) => ({
+      ...t,
+      postTransaction: t.postTransactions?.[0] ?? null,
+    }))
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -208,8 +214,8 @@ export class PaymentTransactionResolver {
   async updatePaymentTransaction(
     @Args('id', { type: () => String })
     id: string,
-    @Args('updatePaymentTransactionInput')
-    updatePaymentTransactionInput: UpdatePaymentTransactionInput,
+    @Args('input')
+    input: UpdatePaymentTransactionInput,
     @Context() context,
   ) {
     const user = context.req.user
@@ -225,13 +231,13 @@ export class PaymentTransactionResolver {
     const order =
       await this.prisma.order.findUnique({
         where: { id: transaction.orderId },
-        select: { clientId: true, payment: true },
+        select: { clientId: true, payment: true, products: { select: { product: { select: { businessId: true } } } } },
       })
     if (!order) return new Error('Order no found')
 
-    if (order.clientId !== user.id) {
+    if ( !order.products.some((item) => item.product.businessId === user.id) && order.clientId !== user.id) {
       throw new Error(
-        'Clients can only update their own payment transactions',
+        'Businesses can only update their clients payment transactions',
       )
     }
     if (!order.payment)
@@ -241,7 +247,7 @@ export class PaymentTransactionResolver {
 
     return this.paymentTransactionService.update(
       id,
-      updatePaymentTransactionInput,
+      input,
       order.clientId,
     )
   }

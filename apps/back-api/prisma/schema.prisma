@@ -517,7 +517,11 @@ model AccountRecharge {
   client               Client?               @relation("ClientRecharges", fields: [clientId], references: [id])
   clientId             String?
   tokenTransaction     TokenTransaction?     @relation(fields: [tokenTransactionId], references: [id])
-  tokenTransactionId   String?               
+  tokenTransactionId   String?              
+  // New fields for UI expectations
+  status               PaymentStatus         @default(PENDING)
+  transactionDate      DateTime              @default(now())
+  qrCode               String?
   createdAt            DateTime              @default(now())
 
   @@index([createdAt])

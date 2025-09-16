@@ -41,6 +41,9 @@ export type AccountRechargeMinAggregateOutputType = {
   businessId: string | null
   clientId: string | null
   tokenTransactionId: string | null
+  status: $Enums.PaymentStatus | null
+  transactionDate: Date | null
+  qrCode: string | null
   createdAt: Date | null
 }
 
@@ -52,6 +55,9 @@ export type AccountRechargeMaxAggregateOutputType = {
   businessId: string | null
   clientId: string | null
   tokenTransactionId: string | null
+  status: $Enums.PaymentStatus | null
+  transactionDate: Date | null
+  qrCode: string | null
   createdAt: Date | null
 }
 
@@ -63,6 +69,9 @@ export type AccountRechargeCountAggregateOutputType = {
   businessId: number
   clientId: number
   tokenTransactionId: number
+  status: number
+  transactionDate: number
+  qrCode: number
   createdAt: number
   _all: number
 }
@@ -84,6 +93,9 @@ export type AccountRechargeMinAggregateInputType = {
   businessId?: true
   clientId?: true
   tokenTransactionId?: true
+  status?: true
+  transactionDate?: true
+  qrCode?: true
   createdAt?: true
 }
 
@@ -95,6 +107,9 @@ export type AccountRechargeMaxAggregateInputType = {
   businessId?: true
   clientId?: true
   tokenTransactionId?: true
+  status?: true
+  transactionDate?: true
+  qrCode?: true
   createdAt?: true
 }
 
@@ -106,6 +121,9 @@ export type AccountRechargeCountAggregateInputType = {
   businessId?: true
   clientId?: true
   tokenTransactionId?: true
+  status?: true
+  transactionDate?: true
+  qrCode?: true
   createdAt?: true
   _all?: true
 }
@@ -204,6 +222,9 @@ export type AccountRechargeGroupByOutputType = {
   businessId: string | null
   clientId: string | null
   tokenTransactionId: string | null
+  status: $Enums.PaymentStatus
+  transactionDate: Date
+  qrCode: string | null
   createdAt: Date
   _count: AccountRechargeCountAggregateOutputType | null
   _avg: AccountRechargeAvgAggregateOutputType | null
@@ -238,6 +259,9 @@ export type AccountRechargeWhereInput = {
   businessId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   clientId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   tokenTransactionId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
+  status?: Prisma.EnumPaymentStatusFilter<"AccountRecharge"> | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
+  qrCode?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
@@ -252,6 +276,9 @@ export type AccountRechargeOrderByWithRelationInput = {
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenTransactionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   client?: Prisma.ClientOrderByWithRelationInput
@@ -269,6 +296,9 @@ export type AccountRechargeWhereUniqueInput = Prisma.AtLeast<{
   businessId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   clientId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   tokenTransactionId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
+  status?: Prisma.EnumPaymentStatusFilter<"AccountRecharge"> | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
+  qrCode?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
@@ -283,6 +313,9 @@ export type AccountRechargeOrderByWithAggregationInput = {
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenTransactionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AccountRechargeCountOrderByAggregateInput
   _avg?: Prisma.AccountRechargeAvgOrderByAggregateInput
@@ -302,6 +335,9 @@ export type AccountRechargeScalarWhereWithAggregatesInput = {
   businessId?: Prisma.StringNullableWithAggregatesFilter<"AccountRecharge"> | string | null
   clientId?: Prisma.StringNullableWithAggregatesFilter<"AccountRecharge"> | string | null
   tokenTransactionId?: Prisma.StringNullableWithAggregatesFilter<"AccountRecharge"> | string | null
+  status?: Prisma.EnumPaymentStatusWithAggregatesFilter<"AccountRecharge"> | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeWithAggregatesFilter<"AccountRecharge"> | Date | string
+  qrCode?: Prisma.StringNullableWithAggregatesFilter<"AccountRecharge"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AccountRecharge"> | Date | string
 }
 
@@ -310,6 +346,9 @@ export type AccountRechargeCreateInput = {
   amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutRechargesInput
   client?: Prisma.ClientCreateNestedOneWithoutRechargesInput
@@ -324,6 +363,9 @@ export type AccountRechargeUncheckedCreateInput = {
   businessId?: string | null
   clientId?: string | null
   tokenTransactionId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -332,6 +374,9 @@ export type AccountRechargeUpdateInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   method?: Prisma.EnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutRechargesNestedInput
   client?: Prisma.ClientUpdateOneWithoutRechargesNestedInput
@@ -346,6 +391,9 @@ export type AccountRechargeUncheckedUpdateInput = {
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -357,6 +405,9 @@ export type AccountRechargeCreateManyInput = {
   businessId?: string | null
   clientId?: string | null
   tokenTransactionId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -365,6 +416,9 @@ export type AccountRechargeUpdateManyMutationInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   method?: Prisma.EnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -376,6 +430,9 @@ export type AccountRechargeUncheckedUpdateManyInput = {
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -397,6 +454,9 @@ export type AccountRechargeCountOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   tokenTransactionId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -412,6 +472,9 @@ export type AccountRechargeMaxOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   tokenTransactionId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -423,6 +486,9 @@ export type AccountRechargeMinOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   tokenTransactionId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -564,11 +630,18 @@ export type EnumCountryFieldUpdateOperationsInput = {
   set?: $Enums.Country
 }
 
+export type EnumPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentStatus
+}
+
 export type AccountRechargeCreateWithoutBusinessInput = {
   id?: string
   amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
   client?: Prisma.ClientCreateNestedOneWithoutRechargesInput
   tokenTransaction?: Prisma.TokenTransactionCreateNestedOneWithoutAccountRechargeInput
@@ -581,6 +654,9 @@ export type AccountRechargeUncheckedCreateWithoutBusinessInput = {
   origin: $Enums.Country
   clientId?: string | null
   tokenTransactionId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -621,6 +697,9 @@ export type AccountRechargeScalarWhereInput = {
   businessId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   clientId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   tokenTransactionId?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
+  status?: Prisma.EnumPaymentStatusFilter<"AccountRecharge"> | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
+  qrCode?: Prisma.StringNullableFilter<"AccountRecharge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AccountRecharge"> | Date | string
 }
 
@@ -629,6 +708,9 @@ export type AccountRechargeCreateWithoutClientInput = {
   amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutRechargesInput
   tokenTransaction?: Prisma.TokenTransactionCreateNestedOneWithoutAccountRechargeInput
@@ -641,6 +723,9 @@ export type AccountRechargeUncheckedCreateWithoutClientInput = {
   origin: $Enums.Country
   businessId?: string | null
   tokenTransactionId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -675,6 +760,9 @@ export type AccountRechargeCreateWithoutTokenTransactionInput = {
   amount?: number
   method: $Enums.RechargeMethod
   origin: $Enums.Country
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutRechargesInput
   client?: Prisma.ClientCreateNestedOneWithoutRechargesInput
@@ -687,6 +775,9 @@ export type AccountRechargeUncheckedCreateWithoutTokenTransactionInput = {
   origin: $Enums.Country
   businessId?: string | null
   clientId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -723,6 +814,9 @@ export type AccountRechargeCreateManyBusinessInput = {
   origin: $Enums.Country
   clientId?: string | null
   tokenTransactionId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -731,6 +825,9 @@ export type AccountRechargeUpdateWithoutBusinessInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   method?: Prisma.EnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneWithoutRechargesNestedInput
   tokenTransaction?: Prisma.TokenTransactionUpdateOneWithoutAccountRechargeNestedInput
@@ -743,6 +840,9 @@ export type AccountRechargeUncheckedUpdateWithoutBusinessInput = {
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -753,6 +853,9 @@ export type AccountRechargeUncheckedUpdateManyWithoutBusinessInput = {
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -763,6 +866,9 @@ export type AccountRechargeCreateManyClientInput = {
   origin: $Enums.Country
   businessId?: string | null
   tokenTransactionId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -771,6 +877,9 @@ export type AccountRechargeUpdateWithoutClientInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   method?: Prisma.EnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutRechargesNestedInput
   tokenTransaction?: Prisma.TokenTransactionUpdateOneWithoutAccountRechargeNestedInput
@@ -783,6 +892,9 @@ export type AccountRechargeUncheckedUpdateWithoutClientInput = {
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -793,6 +905,9 @@ export type AccountRechargeUncheckedUpdateManyWithoutClientInput = {
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -803,6 +918,9 @@ export type AccountRechargeCreateManyTokenTransactionInput = {
   origin: $Enums.Country
   businessId?: string | null
   clientId?: string | null
+  status?: $Enums.PaymentStatus
+  transactionDate?: Date | string
+  qrCode?: string | null
   createdAt?: Date | string
 }
 
@@ -811,6 +929,9 @@ export type AccountRechargeUpdateWithoutTokenTransactionInput = {
   amount?: Prisma.FloatFieldUpdateOperationsInput | number
   method?: Prisma.EnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutRechargesNestedInput
   client?: Prisma.ClientUpdateOneWithoutRechargesNestedInput
@@ -823,6 +944,9 @@ export type AccountRechargeUncheckedUpdateWithoutTokenTransactionInput = {
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -833,6 +957,9 @@ export type AccountRechargeUncheckedUpdateManyWithoutTokenTransactionInput = {
   origin?: Prisma.EnumCountryFieldUpdateOperationsInput | $Enums.Country
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -846,6 +973,9 @@ export type AccountRechargeSelect<ExtArgs extends runtime.Types.Extensions.Inter
   businessId?: boolean
   clientId?: boolean
   tokenTransactionId?: boolean
+  status?: boolean
+  transactionDate?: boolean
+  qrCode?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.AccountRecharge$businessArgs<ExtArgs>
   client?: boolean | Prisma.AccountRecharge$clientArgs<ExtArgs>
@@ -860,6 +990,9 @@ export type AccountRechargeSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   businessId?: boolean
   clientId?: boolean
   tokenTransactionId?: boolean
+  status?: boolean
+  transactionDate?: boolean
+  qrCode?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.AccountRecharge$businessArgs<ExtArgs>
   client?: boolean | Prisma.AccountRecharge$clientArgs<ExtArgs>
@@ -874,6 +1007,9 @@ export type AccountRechargeSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   businessId?: boolean
   clientId?: boolean
   tokenTransactionId?: boolean
+  status?: boolean
+  transactionDate?: boolean
+  qrCode?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.AccountRecharge$businessArgs<ExtArgs>
   client?: boolean | Prisma.AccountRecharge$clientArgs<ExtArgs>
@@ -888,10 +1024,13 @@ export type AccountRechargeSelectScalar = {
   businessId?: boolean
   clientId?: boolean
   tokenTransactionId?: boolean
+  status?: boolean
+  transactionDate?: boolean
+  qrCode?: boolean
   createdAt?: boolean
 }
 
-export type AccountRechargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "amount" | "method" | "origin" | "businessId" | "clientId" | "tokenTransactionId" | "createdAt", ExtArgs["result"]["accountRecharge"]>
+export type AccountRechargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "amount" | "method" | "origin" | "businessId" | "clientId" | "tokenTransactionId" | "status" | "transactionDate" | "qrCode" | "createdAt", ExtArgs["result"]["accountRecharge"]>
 export type AccountRechargeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.AccountRecharge$businessArgs<ExtArgs>
   client?: boolean | Prisma.AccountRecharge$clientArgs<ExtArgs>
@@ -923,6 +1062,9 @@ export type $AccountRechargePayload<ExtArgs extends runtime.Types.Extensions.Int
     businessId: string | null
     clientId: string | null
     tokenTransactionId: string | null
+    status: $Enums.PaymentStatus
+    transactionDate: Date
+    qrCode: string | null
     createdAt: Date
   }, ExtArgs["result"]["accountRecharge"]>
   composites: {}
@@ -1357,6 +1499,9 @@ export interface AccountRechargeFieldRefs {
   readonly businessId: Prisma.FieldRef<"AccountRecharge", 'String'>
   readonly clientId: Prisma.FieldRef<"AccountRecharge", 'String'>
   readonly tokenTransactionId: Prisma.FieldRef<"AccountRecharge", 'String'>
+  readonly status: Prisma.FieldRef<"AccountRecharge", 'PaymentStatus'>
+  readonly transactionDate: Prisma.FieldRef<"AccountRecharge", 'DateTime'>
+  readonly qrCode: Prisma.FieldRef<"AccountRecharge", 'String'>
   readonly createdAt: Prisma.FieldRef<"AccountRecharge", 'DateTime'>
 }
     

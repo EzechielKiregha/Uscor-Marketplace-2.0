@@ -1141,7 +1141,7 @@ type Mutation {
   createOrder(input: CreateOrderInput!): OrderEntity!
 
   """Updates an order."""
-  updateOrder(id: String!, updateOrderInput: UpdateOrderInput!): OrderEntity!
+  updateOrder(id: String!, input: UpdateOrderInput!): OrderEntity!
 
   """Deletes an order."""
   deleteOrder(id: String!): OrderEntity!
@@ -1243,7 +1243,7 @@ type Mutation {
   createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
 
   """Updates a payment transaction’s status or QR code."""
-  updatePaymentTransaction(id: String!, updatePaymentTransactionInput: UpdatePaymentTransactionInput!): PaymentTransactionEntity!
+  updatePaymentTransaction(id: String!, input: UpdatePaymentTransactionInput!): PaymentTransactionEntity!
 
   """Deletes a payment transaction."""
   deletePaymentTransaction(id: String!): PaymentTransactionEntity!
@@ -1612,7 +1612,7 @@ input CreateShippingInput {
 }
 
 input UpdatePaymentTransactionInput {
-  status: PaymentStatus
+  status: String
   qrCode: String
 }
 

@@ -224,6 +224,7 @@ export class SaleService {
         await this.accountRechargeService.getBalance(
           clientId || bId,
           clientId ? 'client' : 'business',
+          RechargeMethod.TOKEN,
         )
       if (balance < finalTotal) {
         throw new Error(
@@ -904,6 +905,7 @@ export class SaleService {
       await this.accountRechargeService.getBalance(
         payerId,
         payerType,
+        RechargeMethod.TOKEN,
       )
     if (balance < sale.totalAmount) {
       throw new Error(
@@ -918,7 +920,7 @@ export class SaleService {
         businessId: sale.clientId
           ? undefined
           : workerInfo.businessId,
-        amount: -sale.totalAmount,
+        amount: -tokenAmount,
         method: RechargeMethod.TOKEN,
         origin: Country.DRC,
       },

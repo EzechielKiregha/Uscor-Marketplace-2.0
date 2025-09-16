@@ -6,6 +6,8 @@ import {
   Int,
   Context,
   Subscription,
+  ResolveField,
+  Parent,
 } from '@nestjs/graphql'
 import { PubSub } from 'graphql-subscriptions'
 import { LoyaltyService } from './loyalty-program.service'

@@ -27,3 +27,24 @@ This implementation delivers a comprehensive Loyalty Program Management system t
   Best practices for local retailers
   Sample redemption structures tailored to small businesses
   This system fully integrates with your sales data, so points are automatically earned when sales are completed, and it's designed to be simple enough for local artisans and craftsmen to use without technical expertise
+
+
+
+  Proposed next steps
+I can implement minimal backend changes to match the frontend queries without breaking existing behavior:
+
+Add paginated response types and resolver methods for:
+paymentTransactions(filters) -> PaginatedPaymentTransactionsResponse with items, total, page, limit.
+recharges(filters) -> PaginatedRechargesResponse.
+pointsTransactions(clientId, page, limit) -> PaginatedPointsTransactionsResponse.
+Add alias/compute fields:
+LoyaltyProgramEntity: pointsPerDollar (alias of pointsPerPurchase).
+AccountRechargeEntity: status (string), transactionDate (Date), qrCode (string) via @ResolveField returning computed values for now.
+PaymentTransactionResolver: @ResolveField postTransaction to return the first/last postTransactions element and map to fields expected.
+Add alias mutations:
+createRecharge -> call service.create.
+processRecharge -> return same entity for now or adjust with a trivial “processed” change in-memory.
+Before I start, a quick confirm:
+
+Should I add temporary computed fields (status, transactionDate, qrCode) for AccountRecharge until DB migration, or do you want full DB changes now?
+For postTransaction, should I pick the latest by createdAt as the single item?

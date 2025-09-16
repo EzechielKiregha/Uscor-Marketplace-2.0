@@ -9,7 +9,7 @@ import {
 } from '@nestjs/graphql'
 import { AccountRechargeService } from './account-recharge.service'
 import { AccountRechargeEntity } from './entities/account-recharge.entity'
-import { CreateAccountRechargeInput } from './dto/create-account-recharge.input'
+import { CreateAccountRechargeInput, RechargeMethod } from './dto/create-account-recharge.input'
 import { UpdateAccountRechargeInput } from './dto/update-account-recharge.input'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'

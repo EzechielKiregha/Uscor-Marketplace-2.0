@@ -166,8 +166,8 @@ export class OrderResolver {
   async updateOrder(
     @Args('id', { type: () => String })
     id: string,
-    @Args('updateOrderInput')
-    updateOrderInput: UpdateOrderInput,
+    @Args('input')
+    input: UpdateOrderInput,
     @Context() context,
   ) {
     const user = context.req.user
@@ -184,7 +184,7 @@ export class OrderResolver {
     const updatedOrder =
       await this.orderService.update(
         id,
-        updateOrderInput,
+        input,
       )
 
     // Publish subscription event

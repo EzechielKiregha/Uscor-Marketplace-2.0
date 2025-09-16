@@ -323,12 +323,6 @@ export class BusinessService {
             price: true,
             status: true,
             createdAt: true,
-            media: {
-              take: 1,
-              select: {
-                url: true,
-              },
-            },
           },
         },
         kyc: {
