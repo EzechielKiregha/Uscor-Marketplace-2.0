@@ -19,9 +19,11 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { BusinessEntity, FreelanceServiceEntity } from '@/lib/types';
+import { useMe } from '@/lib/useMe';
 
 interface ServiceManagementProps {
-  service: any; // Replace with FreelanceServiceEntity
+  service: FreelanceServiceEntity; // Replace with FreelanceServiceEntity
   loading: boolean;
 }
 
@@ -38,6 +40,7 @@ export default function ServiceManagement({
   });
   const [validationErrors, setValidationErrors] = useState<any>({});
   const { showToast } = useToast();
+  const { user } = useMe();
 
   const [updateService] = useMutation(UPDATE_FREELANCE_SERVICE);
   const [deleteService] = useMutation(DELETE_FREELANCE_SERVICE);
@@ -46,12 +49,15 @@ export default function ServiceManagement({
     if (service) {
       setFormData({
         title: service.title,
-        description: service.description,
+        description: service.description || 'No Description',
         isHourly: service.isHourly,
         rate: service.rate.toString(),
         category: service.category
       });
     }
+
+    console.log('Service data loaded: ', service);
+
   }, [service]);
 
   const validateForm = () => {
@@ -126,6 +132,114 @@ export default function ServiceManagement({
       });
     }
   };
+
+  // Map business types to contextual benefits & tips
+  const businessBenefitsMap: Record<string, { title: string; items: string[]; tip?: string }> = {
+    artisan: {
+      title: 'Benefits for Artisans & Handcrafted Goods',
+      items: [
+        'Showcase custom work with dedicated service pages',
+        'Book consultations and custom orders easily',
+        'Manage bespoke requests and timelines per order',
+        'Upsell materials or maintenance services to customers'
+      ],
+      tip: 'Use Uscor to create service templates for recurring custom jobs and track progress per order.'
+    },
+    bookstore: {
+      title: 'Benefits for Bookstores & Stationery',
+      items: [
+        'Offer book-binding, gift-wrap and special order services',
+        'Schedule author signing or workshop slots',
+        'Bundle physical products with service add-ons',
+        'Easily set fixed or hourly rates for workshops'
+      ],
+      tip: 'Promote workshops and pre-orders through service listing to drive foot traffic.'
+    },
+    electronics: {
+      title: 'Benefits for Electronics & Gadgets',
+      items: [
+        'List repair, diagnostics and upgrade services',
+        'Track device intake and return dates per order',
+        'Define parts and labor pricing separately',
+        'Send automated status updates to customers'
+      ],
+      tip: 'Use Uscor’s order notes and status updates to build trust around repair timelines.'
+    },
+    hardware: {
+      title: 'Benefits for Hardware & Tools',
+      items: [
+        'Offer tool rentals, on-site installation, and repair services',
+        'Manage inventory-linked service availability',
+        'Set hourly or project rates for installations',
+        'Coordinate technicians and on-site visits'
+      ],
+      tip: 'Configure availability windows and worker assignments for smoother scheduling.'
+    },
+    grocery: {
+      title: 'Benefits for Grocery & Convenience',
+      items: [
+        'Provide delivery and grocery-picking services',
+        'Create subscription or recurring order services',
+        'Add special handling or packaging fees',
+        'Handle same-day delivery windows and cutoffs'
+      ],
+      tip: 'Use service-based pricing to offer premium delivery slots and increase order value.'
+    },
+    cafe: {
+      title: 'Benefits for Café & Coffee Shops',
+      items: [
+        'Offer catering, coffee subscription and event services',
+        'Take advance orders for pickup and large orders',
+        'Manage time-sloted pickups to reduce congestion',
+        'Upsell packages for meetings and events'
+      ],
+      tip: 'Use Uscor to accept advance group orders and manage pickup time windows.'
+    },
+    restaurant: {
+      title: 'Benefits for Restaurant & Dining',
+      items: [
+        'Accept catering and private dining bookings',
+        'Manage booking deposits and pre-orders',
+        'Coordinate kitchen prep and staffing per booking',
+        'Track special requests and dietary notes'
+      ],
+      tip: 'Leverage service bookings to smooth kitchen load and capture higher-value orders.'
+    },
+    retail: {
+      title: 'Benefits for Retail & General Stores',
+      items: [
+        'Offer installation, assembly or personalization services',
+        'Sell product+service bundles',
+        'Schedule in-store appointments for fittings or demos',
+        'Track service warranties and follow-up tasks'
+      ],
+      tip: 'Combine product SKUs with services to increase average order value.'
+    },
+    bar: {
+      title: 'Benefits for Bars & Pubs',
+      items: [
+        'Manage private event bookings and drink packages',
+        'Offer on-site bartending or service add-ons',
+        'Collect deposits and manage guest lists',
+        'Coordinate staff assignments for events'
+      ],
+      tip: 'Use Uscor to streamline event bookings and staff scheduling for private parties.'
+    },
+    clothing: {
+      title: 'Benefits for Clothing & Accessories',
+      items: [
+        'Offer alterations, custom tailoring and styling sessions',
+        'Schedule fittings and appointment slots',
+        'Bundle styling sessions with product purchases',
+        'Manage turnaround times and priority jobs'
+      ],
+      tip: 'Enable appointment-based services to deliver high-touch curated experiences.'
+    }
+  };
+
+  const rawType = ((user as BusinessEntity)?.businessType || '').toString().toLowerCase();
+  const typeKey = Object.keys(businessBenefitsMap).includes(rawType) ? rawType : 'artisan';
+  const benefits = businessBenefitsMap[typeKey];
 
   if (loading) return (
     <Card>
@@ -311,39 +425,29 @@ export default function ServiceManagement({
             </div>
           </div>
 
-          {/* Benefits for Local Artisans */}
+          {/* Contextual Benefits based on business type */}
           <div className="border border-border rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
-              Benefits for Local Artisans & Craftsmen
+              {benefits.title}
             </h3>
 
             <ul className="space-y-2">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
-                <span>Expand your offerings beyond physical products</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
-                <span>Perfect for wood workers, tool makers, and repair specialists</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
-                <span>Generate additional revenue from your skills and expertise</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
-                <span>Build stronger relationships with customers through personalized services</span>
-              </li>
+              {benefits.items.map((it, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+                  <span>{it}</span>
+                </li>
+              ))}
             </ul>
 
-            <div className="mt-4 p-3 bg-muted rounded-lg">
-              <p className="text-sm">
-                <strong>Pro Tip:</strong> For local artisans, consider offering
-                "consultation services" as a lower-barrier entry point for customers
-                to experience your expertise before committing to larger projects.
-              </p>
-            </div>
+            {benefits.tip && (
+              <div className="mt-4 p-3 bg-muted rounded-lg">
+                <p className="text-sm">
+                  <strong>Pro Tip:</strong> {benefits.tip} Uscor makes these services easy to customize, assign staff, set availability, and track orders so you can focus on delivering great experiences.
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-border">
@@ -354,7 +458,7 @@ export default function ServiceManagement({
                 // Reset form
                 setFormData({
                   title: service.title,
-                  description: service.description,
+                  description: service.description || 'No Description',
                   isHourly: service.isHourly,
                   rate: service.rate.toString(),
                   category: service.category

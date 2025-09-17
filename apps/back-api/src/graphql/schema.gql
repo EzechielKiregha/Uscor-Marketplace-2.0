@@ -113,7 +113,7 @@ type WorkerEntity {
   updatedAt: DateTime
   business: BusinessEntity
   kyc: KnowYourCustomerEntity
-  freelanceServices: [FreelanceServiceEntity!]
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]
   chats: [ChatEntity!]
 }
 
@@ -142,8 +142,9 @@ enum FreelanceServiceCategory {
 
 type WorkerServiceAssignmentEntity {
   id: String!
-  serviceId: String!
-  workerId: String!
+  freelanceServiceId: String
+  workerId: String
+  freelanceService: FreelanceServiceEntity
   worker: WorkerEntity!
   role: String
   assignedAt: DateTime!
@@ -631,9 +632,20 @@ type BusinessEntity {
   phone: String
   avatar: String
   coverImage: String
+  businessType: String
+  taxId: String
+  registrationNumber: String
+  website: String
+  socialLinks: JSON
+  notes: String
+  preferences: JSON
   isVerified: Boolean!
   kycStatus: KycStatus!
   totalProductsSold: Int!
+  totalClients: Int!
+  totalWorkers: Int!
+  totalSales: Int!
+  totalRevenueGenerated: Float!
   hasAgreedToTerms: Boolean!
   isB2BEnabled: Boolean!
   createdAt: DateTime!
@@ -1259,7 +1271,7 @@ type Mutation {
   updateFreelanceService(id: String!, input: UpdateFreelanceServiceInput!): FreelanceServiceEntity!
 
   """Assigns a worker to a freelance service."""
-  assignWorkerToService(input: AssignWorkerToServiceInput!): WorkerServiceAssignmentEntity!
+  assignWorkerToService(input: AssignWorkersInput!): WorkerServiceAssignmentEntity!
 
   """Deletes a freelance service."""
   deleteFreelanceService(id: String!): FreelanceServiceEntity!
@@ -1479,6 +1491,17 @@ input CreateBusinessInput {
   phone: String
   password: String!
   isVerified: Boolean! = false
+  businessType: String = "NA"
+  taxId: String = "NA"
+  registrationNumber: String = "NA"
+  website: String = "NA"
+  socialLinks: JSON
+  notes: String = "NA"
+  preferences: JSON
+  totalClients: Int = 0
+  totalWorkers: Int = 0
+  totalSales: Int = 0
+  totalRevenueGenerated: Float = 0
 }
 
 input UpdateBusinessInput {
@@ -1491,6 +1514,17 @@ input UpdateBusinessInput {
   phone: String
   password: String
   isVerified: Boolean
+  businessType: String
+  taxId: String
+  registrationNumber: String
+  website: String
+  socialLinks: JSON
+  notes: String
+  preferences: JSON
+  totalClients: Int
+  totalWorkers: Int
+  totalSales: Int
+  totalRevenueGenerated: Float
   kycId: String
   kycStatus: KycStatus!
   totalProductsSold: Int
@@ -1638,9 +1672,9 @@ input UpdateFreelanceServiceInput {
   workerIds: [String!]
 }
 
-input AssignWorkerToServiceInput {
+input AssignWorkersInput {
   serviceId: String!
-  workerId: String!
+  workerIds: [String!]!
   role: String
 }
 

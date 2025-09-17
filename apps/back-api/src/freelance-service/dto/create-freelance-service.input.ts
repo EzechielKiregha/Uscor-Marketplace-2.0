@@ -68,4 +68,8 @@ export class AssignWorkersInput {
   @Field(() => [String])
   @IsArray()
   workerIds: string[]
+
+  @Field({nullable: true})
+  @IsOptional()
+  role?: string
 }

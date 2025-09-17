@@ -185,6 +185,9 @@ export type AdjustmentType = (typeof AdjustmentType)[keyof typeof AdjustmentType
 export const WorkerRole = {
   ADMIN: 'ADMIN',
   STAFF: 'STAFF',
+  SUPERVISOR: 'SUPERVISOR',
+  PRIMARY: 'PRIMARY',
+  ASSISTANT: 'ASSISTANT',
   MANAGER: 'MANAGER',
   FREELANCER: 'FREELANCER'
 } as const

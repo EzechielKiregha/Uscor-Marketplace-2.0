@@ -30,19 +30,6 @@ import { PubSub } from 'graphql-subscriptions'
 
 const pubSub = new PubSub()
 
-// Input for worker assignment
-@InputType()
-export class AssignWorkerToServiceInput {
-  @Field()
-  serviceId: string
-
-  @Field()
-  workerId: string
-
-  @Field({ nullable: true })
-  role?: string
-}
-
 // Resolver
 @Resolver(() => FreelanceServiceEntity)
 export class FreelanceServiceResolver {
@@ -189,9 +176,9 @@ export class FreelanceServiceResolver {
       'Assigns a worker to a freelance service.',
   })
   async assignWorkerToService(
-    @Args('input')
-    input: AssignWorkerToServiceInput,
     @Context() context,
+    @Args('input')
+    input: AssignWorkersInput,
   ) {
     const user = context.req.user
     return this.freelanceServiceService.assignWorkerToService(

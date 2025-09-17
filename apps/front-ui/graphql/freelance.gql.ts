@@ -316,14 +316,14 @@ export const UPDATE_FREELANCE_ORDER = gql`
 `;
 
 export const ASSIGN_WORKER_TO_SERVICE = gql`
-  mutation AssignWorkerToService($input: AssignWorkerToServiceInput!) {
+  mutation AssignWorkerToService($input: AssignWorkersInput!) {
     assignWorkerToService(input: $input) {
     id
-    serviceId
-    workerId
     role
+    freelanceServiceId
+    workerId
     assignedAt
-    service {
+    freelanceService {
       id
       title
     }
@@ -331,6 +331,7 @@ export const ASSIGN_WORKER_TO_SERVICE = gql`
       id
       fullName
       email
+      role
     }
   }
   }

@@ -136,6 +136,9 @@ enum AdjustmentType {
 enum WorkerRole {
   ADMIN
   STAFF
+  SUPERVISOR
+  PRIMARY
+  ASSISTANT
   MANAGER
   FREELANCER
 }
@@ -154,6 +157,17 @@ model Business {
   password             String
   isVerified           Boolean               @default(false)
   kyc                  KYC?                  @relation("BusinessKYC")
+  businessType         String?               @default("NA") // e.g., "artisan", "retail", "service"
+  taxId                String?               @default("NA") // For tax purposes
+  registrationNumber   String?               @default("NA")// Business registration number
+  website              String?               @default("NA")// Business website
+  socialLinks          Json?                 // e.g., {"facebook": "...", "twitter": "..."}
+  notes                String?               @default("NA")// Internal notes for CRM
+  preferences          Json?                 // Business preferences/settings
+  totalClients         Int?           @default(0)        // Total clients served
+  totalWorkers         Int?             @default(0)        // Total workers employed
+  totalSales           Int?                @default(0)        // Total sales made
+  totalRevenueGenerated Float?               @default(0)        // Total revenue generated
   products             Product[]
   workers              Worker[]
   repostedItems        RepostedProduct[]

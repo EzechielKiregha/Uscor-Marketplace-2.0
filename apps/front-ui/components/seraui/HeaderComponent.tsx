@@ -74,16 +74,16 @@ const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({ href, className
 
 // ✅ Main business types for navigation
 export const businessTypes = [
-  { href: '/business-types/artisan', label: 'Artisan & Handcrafted Goods', icon: Palette },
-  { href: '/business-types/bookstore', label: 'Bookstore & Stationery', icon: BookOpen },
-  { href: '/business-types/electronics', label: 'Electronics & Gadgets', icon: Plug },
-  { href: '/business-types/hardware', label: 'Hardware & Tools', icon: Hammer },
-  { href: '/business-types/grocery', label: 'Grocery & Convenience', icon: ShoppingCart },
-  { href: '/business-types/cafe', label: 'Café & Coffee Shops', icon: Coffee },
-  { href: '/business-types/restaurant', label: 'Restaurant & Dining', icon: UtensilsCrossed },
-  { href: '/business-types/retail', label: 'Retail & General Stores', icon: Store },
-  { href: '/business-types/bar', label: 'Bar & Pub', icon: Wine },
-  { href: '/business-types/clothing', label: 'Clothing & Accessories', icon: Shirt },
+  { href: '/signup?businessType=artisan', label: 'Artisan & Handcrafted Goods', icon: Palette },
+  { href: '/signup?businessType=bookstore', label: 'Bookstore & Stationery', icon: BookOpen },
+  { href: '/signup?businessType=electronics', label: 'Electronics & Gadgets', icon: Plug },
+  { href: '/signup?businessType=hardware', label: 'Hardware & Tools', icon: Hammer },
+  { href: '/signup?businessType=grocery', label: 'Grocery & Convenience', icon: ShoppingCart },
+  { href: '/signup?businessType=cafe', label: 'Café & Coffee Shops', icon: Coffee },
+  { href: '/signup?businessType=restaurant', label: 'Restaurant & Dining', icon: UtensilsCrossed },
+  { href: '/signup?businessType=retail', label: 'Retail & General Stores', icon: Store },
+  { href: '/signup?businessType=bar', label: 'Bar & Pub', icon: Wine },
+  { href: '/signup?businessType=clothing', label: 'Clothing & Accessories', icon: Shirt },
 ];
 
 function HeaderComponent() {

@@ -40,6 +40,7 @@ export default function FreelanceServicesPage() {
   const {
     getServices,
     getSelectedService,
+    setSelectedServiceId,
     getServiceOrders,
     servicesLoading,
     ordersLoading
@@ -49,19 +50,26 @@ export default function FreelanceServicesPage() {
   const selectedService = getSelectedService();
   const serviceOrders = getServiceOrders();
 
-  if (authLoading || storesLoading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
-  )
-  if (storesError) return <div>Error loading stores: {storesError.message}</div>;
-
   // Auto-select first store if none selected
   useEffect(() => {
     if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
       setSelectedStoreId(storesData.stores[0].id);
     }
   }, [storesData, selectedStoreId]);
+
+  if (storesError) return <div>Error loading stores: {storesError.message}</div>;
+
+  useEffect(() => {
+    if (services.length > 0 && !selectedService) {
+      setSelectedServiceId(services[0].id);
+    }
+  }, [services, selectedService, setSelectedServiceId]);
+
+  if (authLoading || storesLoading) return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader loading={true} />
+    </div>
+  )
 
   return (
     <div className="space-y-6">
@@ -73,25 +81,27 @@ export default function FreelanceServicesPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <select
-            title='selected store ID'
-            value={selectedStoreId || ''}
-            onChange={(e) => setSelectedStoreId(e.target.value)}
-            className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            {storesData.stores.map((store: StoreEntity) => (
-              <option key={store.id} value={store.id}>
-                {store.name} {store.address ? `• ${store.address}` : ''}
-              </option>
-            ))}
-          </select>
-          <div className="relative w-full sm:w-64">
-            <Input
-              type="text"
-              placeholder="Search services..."
-              className="pl-9"
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <div className="flex flex-col space-y-2">
+            <select
+              title='selected store ID'
+              value={selectedStoreId || ''}
+              onChange={(e) => setSelectedStoreId(e.target.value)}
+              className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            >
+              {storesData.stores.map((store: StoreEntity) => (
+                <option key={store.id} value={store.id}>
+                  {store.name} {store.address ? `• ${store.address}` : ''}
+                </option>
+              ))}
+            </select>
+            <div className="relative w-full sm:w-64">
+              <Input
+                type="text"
+                placeholder="Search services..."
+                className="pl-9"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
           </div>
 
           <div className="flex gap-1">
@@ -141,7 +151,10 @@ export default function FreelanceServicesPage() {
                 key={service.id}
                 variant={selectedService?.id === service.id ? 'default' : 'outline'}
                 className="whitespace-nowrap"
-                onClick={() => setActiveTab('management')}
+                onClick={() => {
+                  setSelectedServiceId(service.id);
+                  setActiveTab('management')
+                }}
               >
                 {service.title}
               </Button>

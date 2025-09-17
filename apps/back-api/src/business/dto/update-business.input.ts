@@ -4,6 +4,8 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  IsObject,
+  IsNumber,
 } from 'class-validator'
 import { CreateBusinessInput } from './create-business.input'
 import {
@@ -12,7 +14,9 @@ import {
   Int,
   PartialType,
   registerEnumType,
+  Float,
 } from '@nestjs/graphql'
+import GraphQLJSON from 'graphql-type-json'
 
 export enum KycStatus {
   PENDING = 'PENDING',
@@ -60,4 +64,59 @@ export class UpdateBusinessInput extends PartialType(
   @IsOptional()
   @IsBoolean()
   isB2BEnabled?: boolean | undefined
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  businessType?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  taxId?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  registrationNumber?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  website?: string
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  @IsOptional()
+  @IsObject()
+  socialLinks?: any
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  notes?: string
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  @IsOptional()
+  @IsObject()
+  preferences?: any
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @IsInt()
+  totalClients?: number
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @IsInt()
+  totalWorkers?: number
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @IsInt()
+  totalSales?: number
+
+  @Field(() => Float, { nullable: true })
+  @IsOptional()
+  @IsNumber()
+  totalRevenueGenerated?: number
 }

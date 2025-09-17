@@ -174,7 +174,7 @@ export class FreelanceServiceService {
       }),
     ])
 
-    console.log("Services: ",{ items, total })
+    // console.log("Services: ",{ items, total })
 
     return {
       items,
@@ -330,10 +330,10 @@ export class FreelanceServiceService {
   }
 
   async assignWorkerToService(
-    input: AssignWorkerToServiceInput,
+    input: AssignWorkersInput,
     businessId: string,
   ) {
-    const { serviceId, workerId, role } = input
+    const { serviceId, workerIds, role } = input
     const service = await this.findOne(serviceId)
     if (service.businessId !== businessId) {
       throw new Error(
@@ -347,7 +347,7 @@ export class FreelanceServiceService {
           freelanceService: {
             connect: { id: serviceId },
           },
-          worker: { connect: { id: workerId } },
+          worker: { connect: { id: workerIds[0] } },
           role,
         },
         include: {
@@ -356,6 +356,7 @@ export class FreelanceServiceService {
               id: true,
               fullName: true,
               email: true,
+              role: true,
             },
           },
           freelanceService: {

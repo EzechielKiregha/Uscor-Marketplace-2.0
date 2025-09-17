@@ -26,10 +26,18 @@ export type AggregateBusiness = {
 }
 
 export type BusinessAvgAggregateOutputType = {
+  totalClients: number | null
+  totalWorkers: number | null
+  totalSales: number | null
+  totalRevenueGenerated: number | null
   totalProductsSold: number | null
 }
 
 export type BusinessSumAggregateOutputType = {
+  totalClients: number | null
+  totalWorkers: number | null
+  totalSales: number | null
+  totalRevenueGenerated: number | null
   totalProductsSold: number | null
 }
 
@@ -44,6 +52,15 @@ export type BusinessMinAggregateOutputType = {
   phone: string | null
   password: string | null
   isVerified: boolean | null
+  businessType: string | null
+  taxId: string | null
+  registrationNumber: string | null
+  website: string | null
+  notes: string | null
+  totalClients: number | null
+  totalWorkers: number | null
+  totalSales: number | null
+  totalRevenueGenerated: number | null
   createdAt: Date | null
   updatedAt: Date | null
   kycStatus: $Enums.KycStatus | null
@@ -64,6 +81,15 @@ export type BusinessMaxAggregateOutputType = {
   phone: string | null
   password: string | null
   isVerified: boolean | null
+  businessType: string | null
+  taxId: string | null
+  registrationNumber: string | null
+  website: string | null
+  notes: string | null
+  totalClients: number | null
+  totalWorkers: number | null
+  totalSales: number | null
+  totalRevenueGenerated: number | null
   createdAt: Date | null
   updatedAt: Date | null
   kycStatus: $Enums.KycStatus | null
@@ -84,6 +110,17 @@ export type BusinessCountAggregateOutputType = {
   phone: number
   password: number
   isVerified: number
+  businessType: number
+  taxId: number
+  registrationNumber: number
+  website: number
+  socialLinks: number
+  notes: number
+  preferences: number
+  totalClients: number
+  totalWorkers: number
+  totalSales: number
+  totalRevenueGenerated: number
   createdAt: number
   updatedAt: number
   kycStatus: number
@@ -96,10 +133,18 @@ export type BusinessCountAggregateOutputType = {
 
 
 export type BusinessAvgAggregateInputType = {
+  totalClients?: true
+  totalWorkers?: true
+  totalSales?: true
+  totalRevenueGenerated?: true
   totalProductsSold?: true
 }
 
 export type BusinessSumAggregateInputType = {
+  totalClients?: true
+  totalWorkers?: true
+  totalSales?: true
+  totalRevenueGenerated?: true
   totalProductsSold?: true
 }
 
@@ -114,6 +159,15 @@ export type BusinessMinAggregateInputType = {
   phone?: true
   password?: true
   isVerified?: true
+  businessType?: true
+  taxId?: true
+  registrationNumber?: true
+  website?: true
+  notes?: true
+  totalClients?: true
+  totalWorkers?: true
+  totalSales?: true
+  totalRevenueGenerated?: true
   createdAt?: true
   updatedAt?: true
   kycStatus?: true
@@ -134,6 +188,15 @@ export type BusinessMaxAggregateInputType = {
   phone?: true
   password?: true
   isVerified?: true
+  businessType?: true
+  taxId?: true
+  registrationNumber?: true
+  website?: true
+  notes?: true
+  totalClients?: true
+  totalWorkers?: true
+  totalSales?: true
+  totalRevenueGenerated?: true
   createdAt?: true
   updatedAt?: true
   kycStatus?: true
@@ -154,6 +217,17 @@ export type BusinessCountAggregateInputType = {
   phone?: true
   password?: true
   isVerified?: true
+  businessType?: true
+  taxId?: true
+  registrationNumber?: true
+  website?: true
+  socialLinks?: true
+  notes?: true
+  preferences?: true
+  totalClients?: true
+  totalWorkers?: true
+  totalSales?: true
+  totalRevenueGenerated?: true
   createdAt?: true
   updatedAt?: true
   kycStatus?: true
@@ -261,6 +335,17 @@ export type BusinessGroupByOutputType = {
   phone: string | null
   password: string
   isVerified: boolean
+  businessType: string | null
+  taxId: string | null
+  registrationNumber: string | null
+  website: string | null
+  socialLinks: runtime.JsonValue | null
+  notes: string | null
+  preferences: runtime.JsonValue | null
+  totalClients: number | null
+  totalWorkers: number | null
+  totalSales: number | null
+  totalRevenueGenerated: number | null
   createdAt: Date
   updatedAt: Date
   kycStatus: $Enums.KycStatus
@@ -304,6 +389,17 @@ export type BusinessWhereInput = {
   phone?: Prisma.StringNullableFilter<"Business"> | string | null
   password?: Prisma.StringFilter<"Business"> | string
   isVerified?: Prisma.BoolFilter<"Business"> | boolean
+  businessType?: Prisma.StringNullableFilter<"Business"> | string | null
+  taxId?: Prisma.StringNullableFilter<"Business"> | string | null
+  registrationNumber?: Prisma.StringNullableFilter<"Business"> | string | null
+  website?: Prisma.StringNullableFilter<"Business"> | string | null
+  socialLinks?: Prisma.JsonNullableFilter<"Business">
+  notes?: Prisma.StringNullableFilter<"Business"> | string | null
+  preferences?: Prisma.JsonNullableFilter<"Business">
+  totalClients?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalWorkers?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalSales?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalRevenueGenerated?: Prisma.FloatNullableFilter<"Business"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   kycStatus?: Prisma.EnumKycStatusFilter<"Business"> | $Enums.KycStatus
@@ -342,6 +438,17 @@ export type BusinessOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  businessType?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  registrationNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  socialLinks?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferences?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalClients?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalSales?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   kycStatus?: Prisma.SortOrder
@@ -383,6 +490,17 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"Business"> | string | null
   password?: Prisma.StringFilter<"Business"> | string
   isVerified?: Prisma.BoolFilter<"Business"> | boolean
+  businessType?: Prisma.StringNullableFilter<"Business"> | string | null
+  taxId?: Prisma.StringNullableFilter<"Business"> | string | null
+  registrationNumber?: Prisma.StringNullableFilter<"Business"> | string | null
+  website?: Prisma.StringNullableFilter<"Business"> | string | null
+  socialLinks?: Prisma.JsonNullableFilter<"Business">
+  notes?: Prisma.StringNullableFilter<"Business"> | string | null
+  preferences?: Prisma.JsonNullableFilter<"Business">
+  totalClients?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalWorkers?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalSales?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalRevenueGenerated?: Prisma.FloatNullableFilter<"Business"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   kycStatus?: Prisma.EnumKycStatusFilter<"Business"> | $Enums.KycStatus
@@ -421,6 +539,17 @@ export type BusinessOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  businessType?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  registrationNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  socialLinks?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferences?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalClients?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalSales?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   kycStatus?: Prisma.SortOrder
@@ -449,6 +578,17 @@ export type BusinessScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   password?: Prisma.StringWithAggregatesFilter<"Business"> | string
   isVerified?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
+  businessType?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  taxId?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  registrationNumber?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  website?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  socialLinks?: Prisma.JsonNullableWithAggregatesFilter<"Business">
+  notes?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  preferences?: Prisma.JsonNullableWithAggregatesFilter<"Business">
+  totalClients?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  totalWorkers?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  totalSales?: Prisma.IntNullableWithAggregatesFilter<"Business"> | number | null
+  totalRevenueGenerated?: Prisma.FloatNullableWithAggregatesFilter<"Business"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
   kycStatus?: Prisma.EnumKycStatusWithAggregatesFilter<"Business"> | $Enums.KycStatus
@@ -469,6 +609,17 @@ export type BusinessCreateInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -507,6 +658,17 @@ export type BusinessUncheckedCreateInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -545,6 +707,17 @@ export type BusinessUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -583,6 +756,17 @@ export type BusinessUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -621,6 +805,17 @@ export type BusinessCreateManyInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -641,6 +836,17 @@ export type BusinessUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -661,6 +867,17 @@ export type BusinessUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -681,6 +898,17 @@ export type BusinessCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  businessType?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  registrationNumber?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  socialLinks?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  preferences?: Prisma.SortOrder
+  totalClients?: Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrder
+  totalSales?: Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   kycStatus?: Prisma.SortOrder
@@ -691,6 +919,10 @@ export type BusinessCountOrderByAggregateInput = {
 }
 
 export type BusinessAvgOrderByAggregateInput = {
+  totalClients?: Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrder
+  totalSales?: Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrder
   totalProductsSold?: Prisma.SortOrder
 }
 
@@ -705,6 +937,15 @@ export type BusinessMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  businessType?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  registrationNumber?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  totalClients?: Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrder
+  totalSales?: Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   kycStatus?: Prisma.SortOrder
@@ -725,6 +966,15 @@ export type BusinessMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
+  businessType?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  registrationNumber?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  totalClients?: Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrder
+  totalSales?: Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   kycStatus?: Prisma.SortOrder
@@ -735,6 +985,10 @@ export type BusinessMinOrderByAggregateInput = {
 }
 
 export type BusinessSumOrderByAggregateInput = {
+  totalClients?: Prisma.SortOrder
+  totalWorkers?: Prisma.SortOrder
+  totalSales?: Prisma.SortOrder
+  totalRevenueGenerated?: Prisma.SortOrder
   totalProductsSold?: Prisma.SortOrder
 }
 
@@ -768,6 +1022,22 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -1089,6 +1359,17 @@ export type BusinessCreateWithoutWorkersInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1126,6 +1407,17 @@ export type BusinessUncheckedCreateWithoutWorkersInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1179,6 +1471,17 @@ export type BusinessUpdateWithoutWorkersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1216,6 +1519,17 @@ export type BusinessUncheckedUpdateWithoutWorkersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1253,6 +1567,17 @@ export type BusinessCreateWithoutProductsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1290,6 +1615,17 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1343,6 +1679,17 @@ export type BusinessUpdateWithoutProductsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1380,6 +1727,17 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1417,6 +1775,17 @@ export type BusinessCreateWithoutMediasInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1454,6 +1823,17 @@ export type BusinessUncheckedCreateWithoutMediasInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1507,6 +1887,17 @@ export type BusinessUpdateWithoutMediasInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1544,6 +1935,17 @@ export type BusinessUncheckedUpdateWithoutMediasInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1581,6 +1983,17 @@ export type BusinessCreateWithoutChatParticipantsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1618,6 +2031,17 @@ export type BusinessUncheckedCreateWithoutChatParticipantsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1671,6 +2095,17 @@ export type BusinessUpdateWithoutChatParticipantsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1708,6 +2143,17 @@ export type BusinessUncheckedUpdateWithoutChatParticipantsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1745,6 +2191,17 @@ export type BusinessCreateWithoutRepostedItemsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1782,6 +2239,17 @@ export type BusinessUncheckedCreateWithoutRepostedItemsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1835,6 +2303,17 @@ export type BusinessUpdateWithoutRepostedItemsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1872,6 +2351,17 @@ export type BusinessUncheckedUpdateWithoutRepostedItemsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -1909,6 +2399,17 @@ export type BusinessCreateWithoutReownedItemsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -1946,6 +2447,17 @@ export type BusinessUncheckedCreateWithoutReownedItemsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2007,6 +2519,17 @@ export type BusinessScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"Business"> | string | null
   password?: Prisma.StringFilter<"Business"> | string
   isVerified?: Prisma.BoolFilter<"Business"> | boolean
+  businessType?: Prisma.StringNullableFilter<"Business"> | string | null
+  taxId?: Prisma.StringNullableFilter<"Business"> | string | null
+  registrationNumber?: Prisma.StringNullableFilter<"Business"> | string | null
+  website?: Prisma.StringNullableFilter<"Business"> | string | null
+  socialLinks?: Prisma.JsonNullableFilter<"Business">
+  notes?: Prisma.StringNullableFilter<"Business"> | string | null
+  preferences?: Prisma.JsonNullableFilter<"Business">
+  totalClients?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalWorkers?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalSales?: Prisma.IntNullableFilter<"Business"> | number | null
+  totalRevenueGenerated?: Prisma.FloatNullableFilter<"Business"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   kycStatus?: Prisma.EnumKycStatusFilter<"Business"> | $Enums.KycStatus
@@ -2027,6 +2550,17 @@ export type BusinessCreateWithoutTokenTransactionsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2064,6 +2598,17 @@ export type BusinessUncheckedCreateWithoutTokenTransactionsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2117,6 +2662,17 @@ export type BusinessUpdateWithoutTokenTransactionsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2154,6 +2710,17 @@ export type BusinessUncheckedUpdateWithoutTokenTransactionsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2191,6 +2758,17 @@ export type BusinessCreateWithoutKycInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2228,6 +2806,17 @@ export type BusinessUncheckedCreateWithoutKycInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2281,6 +2870,17 @@ export type BusinessUpdateWithoutKycInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2318,6 +2918,17 @@ export type BusinessUncheckedUpdateWithoutKycInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2355,6 +2966,17 @@ export type BusinessCreateWithoutRechargesInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2392,6 +3014,17 @@ export type BusinessUncheckedCreateWithoutRechargesInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2445,6 +3078,17 @@ export type BusinessUpdateWithoutRechargesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2482,6 +3126,17 @@ export type BusinessUncheckedUpdateWithoutRechargesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2519,6 +3174,17 @@ export type BusinessCreateWithoutAdsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2556,6 +3222,17 @@ export type BusinessUncheckedCreateWithoutAdsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2609,6 +3286,17 @@ export type BusinessUpdateWithoutAdsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2646,6 +3334,17 @@ export type BusinessUncheckedUpdateWithoutAdsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2683,6 +3382,17 @@ export type BusinessCreateWithoutFreelanceServicesInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2720,6 +3430,17 @@ export type BusinessUncheckedCreateWithoutFreelanceServicesInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2773,6 +3494,17 @@ export type BusinessUpdateWithoutFreelanceServicesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2810,6 +3542,17 @@ export type BusinessUncheckedUpdateWithoutFreelanceServicesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2847,6 +3590,17 @@ export type BusinessCreateWithoutFreelanceOrderBusinessInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2884,6 +3638,17 @@ export type BusinessUncheckedCreateWithoutFreelanceOrderBusinessInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -2937,6 +3702,17 @@ export type BusinessUpdateWithoutFreelanceOrderBusinessInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -2974,6 +3750,17 @@ export type BusinessUncheckedUpdateWithoutFreelanceOrderBusinessInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3011,6 +3798,17 @@ export type BusinessCreateWithoutReferralsMadeInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3048,6 +3846,17 @@ export type BusinessUncheckedCreateWithoutReferralsMadeInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3090,6 +3899,17 @@ export type BusinessCreateWithoutReferralsReceivedInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3127,6 +3947,17 @@ export type BusinessUncheckedCreateWithoutReferralsReceivedInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3180,6 +4011,17 @@ export type BusinessUpdateWithoutReferralsMadeInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3217,6 +4059,17 @@ export type BusinessUncheckedUpdateWithoutReferralsMadeInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3265,6 +4118,17 @@ export type BusinessUpdateWithoutReferralsReceivedInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3302,6 +4166,17 @@ export type BusinessUncheckedUpdateWithoutReferralsReceivedInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3339,6 +4214,17 @@ export type BusinessCreateWithoutPostOfSalesInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3376,6 +4262,17 @@ export type BusinessUncheckedCreateWithoutPostOfSalesInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3429,6 +4326,17 @@ export type BusinessUpdateWithoutPostOfSalesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3466,6 +4374,17 @@ export type BusinessUncheckedUpdateWithoutPostOfSalesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3503,6 +4422,17 @@ export type BusinessCreateWithoutStoresInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3540,6 +4470,17 @@ export type BusinessUncheckedCreateWithoutStoresInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3593,6 +4534,17 @@ export type BusinessUpdateWithoutStoresInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3630,6 +4582,17 @@ export type BusinessUncheckedUpdateWithoutStoresInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3667,6 +4630,17 @@ export type BusinessCreateWithoutPurchaseOrdersInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3704,6 +4678,17 @@ export type BusinessUncheckedCreateWithoutPurchaseOrdersInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3757,6 +4742,17 @@ export type BusinessUpdateWithoutPurchaseOrdersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3794,6 +4790,17 @@ export type BusinessUncheckedUpdateWithoutPurchaseOrdersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3831,6 +4838,17 @@ export type BusinessCreateWithoutLoyaltyProgramsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3868,6 +4886,17 @@ export type BusinessUncheckedCreateWithoutLoyaltyProgramsInput = {
   phone?: string | null
   password: string
   isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   kycStatus?: $Enums.KycStatus
@@ -3921,6 +4950,17 @@ export type BusinessUpdateWithoutLoyaltyProgramsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3958,6 +4998,17 @@ export type BusinessUncheckedUpdateWithoutLoyaltyProgramsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -3995,6 +5046,17 @@ export type BusinessUpdateWithoutReownedItemsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -4032,6 +5094,17 @@ export type BusinessUncheckedUpdateWithoutReownedItemsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -4069,6 +5142,17 @@ export type BusinessUncheckedUpdateManyWithoutReownedItemsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
@@ -4264,6 +5348,17 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   phone?: boolean
   password?: boolean
   isVerified?: boolean
+  businessType?: boolean
+  taxId?: boolean
+  registrationNumber?: boolean
+  website?: boolean
+  socialLinks?: boolean
+  notes?: boolean
+  preferences?: boolean
+  totalClients?: boolean
+  totalWorkers?: boolean
+  totalSales?: boolean
+  totalRevenueGenerated?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   kycStatus?: boolean
@@ -4303,6 +5398,17 @@ export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   phone?: boolean
   password?: boolean
   isVerified?: boolean
+  businessType?: boolean
+  taxId?: boolean
+  registrationNumber?: boolean
+  website?: boolean
+  socialLinks?: boolean
+  notes?: boolean
+  preferences?: boolean
+  totalClients?: boolean
+  totalWorkers?: boolean
+  totalSales?: boolean
+  totalRevenueGenerated?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   kycStatus?: boolean
@@ -4323,6 +5429,17 @@ export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   phone?: boolean
   password?: boolean
   isVerified?: boolean
+  businessType?: boolean
+  taxId?: boolean
+  registrationNumber?: boolean
+  website?: boolean
+  socialLinks?: boolean
+  notes?: boolean
+  preferences?: boolean
+  totalClients?: boolean
+  totalWorkers?: boolean
+  totalSales?: boolean
+  totalRevenueGenerated?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   kycStatus?: boolean
@@ -4343,6 +5460,17 @@ export type BusinessSelectScalar = {
   phone?: boolean
   password?: boolean
   isVerified?: boolean
+  businessType?: boolean
+  taxId?: boolean
+  registrationNumber?: boolean
+  website?: boolean
+  socialLinks?: boolean
+  notes?: boolean
+  preferences?: boolean
+  totalClients?: boolean
+  totalWorkers?: boolean
+  totalSales?: boolean
+  totalRevenueGenerated?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   kycStatus?: boolean
@@ -4352,7 +5480,7 @@ export type BusinessSelectScalar = {
   termsAgreedAt?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "description" | "avatar" | "coverImage" | "address" | "phone" | "password" | "isVerified" | "createdAt" | "updatedAt" | "kycStatus" | "isB2BEnabled" | "totalProductsSold" | "hasAgreedToTerms" | "termsAgreedAt", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "description" | "avatar" | "coverImage" | "address" | "phone" | "password" | "isVerified" | "businessType" | "taxId" | "registrationNumber" | "website" | "socialLinks" | "notes" | "preferences" | "totalClients" | "totalWorkers" | "totalSales" | "totalRevenueGenerated" | "createdAt" | "updatedAt" | "kycStatus" | "isB2BEnabled" | "totalProductsSold" | "hasAgreedToTerms" | "termsAgreedAt", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kyc?: boolean | Prisma.Business$kycArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
@@ -4410,6 +5538,17 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     phone: string | null
     password: string
     isVerified: boolean
+    businessType: string | null
+    taxId: string | null
+    registrationNumber: string | null
+    website: string | null
+    socialLinks: runtime.JsonValue | null
+    notes: string | null
+    preferences: runtime.JsonValue | null
+    totalClients: number | null
+    totalWorkers: number | null
+    totalSales: number | null
+    totalRevenueGenerated: number | null
     createdAt: Date
     updatedAt: Date
     kycStatus: $Enums.KycStatus
@@ -4868,6 +6007,17 @@ export interface BusinessFieldRefs {
   readonly phone: Prisma.FieldRef<"Business", 'String'>
   readonly password: Prisma.FieldRef<"Business", 'String'>
   readonly isVerified: Prisma.FieldRef<"Business", 'Boolean'>
+  readonly businessType: Prisma.FieldRef<"Business", 'String'>
+  readonly taxId: Prisma.FieldRef<"Business", 'String'>
+  readonly registrationNumber: Prisma.FieldRef<"Business", 'String'>
+  readonly website: Prisma.FieldRef<"Business", 'String'>
+  readonly socialLinks: Prisma.FieldRef<"Business", 'Json'>
+  readonly notes: Prisma.FieldRef<"Business", 'String'>
+  readonly preferences: Prisma.FieldRef<"Business", 'Json'>
+  readonly totalClients: Prisma.FieldRef<"Business", 'Int'>
+  readonly totalWorkers: Prisma.FieldRef<"Business", 'Int'>
+  readonly totalSales: Prisma.FieldRef<"Business", 'Int'>
+  readonly totalRevenueGenerated: Prisma.FieldRef<"Business", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Business", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Business", 'DateTime'>
   readonly kycStatus: Prisma.FieldRef<"Business", 'KycStatus'>

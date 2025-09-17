@@ -77,7 +77,8 @@ export default function WorkerAssignment({
   const assignedWorkers = useMemo(() => {
     if (!workersData?.workers) return [];
     return workersData.workers.filter((worker: WorkerEntity) =>
-      worker.workerServiceAssignments.some(assignment =>
+      // guard against undefined assignments by falling back to an empty array
+      (worker.workerServiceAssignments ?? []).some(assignment =>
         assignment.freelanceServiceId === serviceId
       )
     );
@@ -90,7 +91,7 @@ export default function WorkerAssignment({
       variables: {
         input: {
           serviceId,
-          workerId: selectedWorker.id,
+          workerIds: [selectedWorker.id],
           role
         }
       }
@@ -158,8 +159,9 @@ export default function WorkerAssignment({
               </thead>
               <tbody>
                 {assignedWorkers.map((worker: WorkerEntity) => {
-                  const assignment = worker.workerServiceAssignments.find(
-                    (a: any) => a.serviceId === serviceId
+                  // safe-find: guard with fallback array and accept either field name
+                  const assignment = (worker.workerServiceAssignments ?? []).find(
+                    (a: any) => (a.freelanceServiceId ?? a.serviceId) === serviceId
                   );
                   return (
                     <tr key={worker.id} className="border-b border-border hover:bg-muted/50">
@@ -304,7 +306,7 @@ export default function WorkerAssignment({
                       Service Assignment
                     </h3>
                     <p className="text-sm">
-                      {selectedWorker.fullName} will be assigned as a {role.toLowerCase()}
+                      {selectedWorker.fullName} will be assigned as a {role.toLowerCase()} {' '}
                       for this service. They will be able to manage service orders and
                       interact with customers.
                     </p>

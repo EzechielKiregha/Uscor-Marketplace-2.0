@@ -21,16 +21,58 @@ export default function ServiceOverview({
 }: ServiceOverviewProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month'>('month');
 
-  // Sample data for charts - in real app, this would come from analytics
-  const ordersByDay = [
-    { name: 'Mon', orders: 5 },
-    { name: 'Tue', orders: 8 },
-    { name: 'Wed', orders: 6 },
-    { name: 'Thu', orders: 10 },
-    { name: 'Fri', orders: 12 },
-    { name: 'Sat', orders: 15 },
-    { name: 'Sun', orders: 7 },
-  ];
+  // Build chart data from real orders by selected period
+  const ordersByDay = useMemo(() => {
+    const now = new Date();
+    const orders = serviceOrders ?? [];
+    const toDateOnly = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    if (selectedPeriod === 'day') {
+      // Today: 24 hours buckets
+      const buckets = Array.from({ length: 24 }, (_, h) => ({ name: String(h).padStart(2, '0'), orders: 0 }));
+      for (const o of orders) {
+        const dt = new Date(o.createdAt);
+        if (dt.toDateString() === now.toDateString()) {
+          buckets[dt.getHours()].orders += 1;
+        }
+      }
+      return buckets;
+    }
+
+    if (selectedPeriod === 'week') {
+      // Last 7 days buckets (Mon-Sun style short labels)
+      const days: { name: string; date: Date; orders: number }[] = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(now.getDate() - i);
+        const dateOnly = toDateOnly(d);
+        const name = d.toLocaleDateString(undefined, { weekday: 'short' });
+        days.push({ name, date: dateOnly, orders: 0 });
+      }
+      for (const o of orders) {
+        const dt = toDateOnly(new Date(o.createdAt));
+        const entry = days.find((x) => x.date.getTime() === dt.getTime());
+        if (entry) entry.orders += 1;
+      }
+      return days.map(({ name, orders }) => ({ name, orders }));
+    }
+
+    // Month: last 30 days buckets (MM/DD labels)
+    const days: { name: string; date: Date; orders: number }[] = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(now.getDate() - i);
+      const dateOnly = toDateOnly(d);
+      const name = `${d.getMonth() + 1}/${d.getDate()}`;
+      days.push({ name, date: dateOnly, orders: 0 });
+    }
+    for (const o of orders) {
+      const dt = toDateOnly(new Date(o.createdAt));
+      const entry = days.find((x) => x.date.getTime() === dt.getTime());
+      if (entry) entry.orders += 1;
+    }
+    return days.map(({ name, orders }) => ({ name, orders }));
+  }, [selectedPeriod, serviceOrders]);
 
   const calculateStats = useMemo(() => {
     const totalServices = services.length;

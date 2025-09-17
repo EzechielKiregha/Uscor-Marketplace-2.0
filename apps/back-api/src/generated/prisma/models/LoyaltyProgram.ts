@@ -486,14 +486,6 @@ export type LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput = {
   deleteMany?: Prisma.LoyaltyProgramScalarWhereInput | Prisma.LoyaltyProgramScalarWhereInput[]
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type LoyaltyProgramCreateNestedOneWithoutPointsTransactionsInput = {
   create?: Prisma.XOR<Prisma.LoyaltyProgramCreateWithoutPointsTransactionsInput, Prisma.LoyaltyProgramUncheckedCreateWithoutPointsTransactionsInput>
   connectOrCreate?: Prisma.LoyaltyProgramCreateOrConnectWithoutPointsTransactionsInput

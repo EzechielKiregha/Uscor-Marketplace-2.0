@@ -4,14 +4,14 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useMutation, gql } from '@apollo/client';
 import { setAuthToken } from '@/lib/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/components/toast-provider';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { GlowButton } from '@/components/seraui/GlowButton';
 import { Select } from '@radix-ui/react-select';
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CREATE_BUSINESS, CREATE_CLIENT, CREATE_WORKER } from '@/graphql/auth.gql';
+import { CREATE_BUSINESS, CREATE_CLIENT, CREATE_WORKER, getLoginMutation } from '@/graphql/auth.gql';
 
 // SVG Icons (reused from Signin1)
 const UserIcon: React.FC = () => (
@@ -70,6 +70,20 @@ const ArrowLeftIcon: React.FC = () => (
   </svg>
 );
 
+// ✅ Main business types for navigation (added)
+const businessTypes = [
+  { href: '/signup?businessType=artisan', label: 'Artisan & Handcrafted Goods' },
+  { href: '/signup?businessType=bookstore', label: 'Bookstore & Stationery' },
+  { href: '/signup?businessType=electronics', label: 'Electronics & Gadgets' },
+  { href: '/signup?businessType=hardware', label: 'Hardware & Tools' },
+  { href: '/signup?businessType=grocery', label: 'Grocery & Convenience' },
+  { href: '/signup?businessType=cafe', label: 'Café & Coffee Shops' },
+  { href: '/signup?businessType=restaurant', label: 'Restaurant & Dining' },
+  { href: '/signup?businessType=retail', label: 'Retail & General Stores' },
+  { href: '/signup?businessType=bar', label: 'Bar & Pub' },
+  { href: '/signup?businessType=clothing', label: 'Clothing & Accessories' },
+];
+
 // Zod Schema
 const schema = z.object({
   role: z.enum(['Client', 'Business', 'Worker'], { message: 'Please select a role' }),
@@ -79,6 +93,7 @@ const schema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   workerRole: z.enum(['ADMIN', 'STAFF', 'MANAGER', 'FREELANCER']).optional(),
   businessId: z.string().optional(),
+  businessType: z.string().optional(),
 }).refine((data) => data.role !== 'Worker' || (data.workerRole && data.businessId), {
   message: 'Worker role and business ID are required for Worker accounts',
   path: ['workerRole'],
@@ -95,10 +110,14 @@ export default function SignupPage() {
     defaultValues: { role: 'Client' },
   });
 
+  const params = useSearchParams();
+  const businessType = params.get('businessType');
+
   const { handleSubmit, watch, setValue } = form;
   const [createClient, { loading: clientLoading, error: clientError }] = useMutation(CREATE_CLIENT);
   const [createBusiness, { loading: businessLoading, error: businessError }] = useMutation(CREATE_BUSINESS);
   const [createWorker, { loading: workerLoading, error: workerError }] = useMutation(CREATE_WORKER);
+  const [signInBusiness] = useMutation(getLoginMutation('Business'));
   const role = watch('role');
 
   const loading = clientLoading || businessLoading || workerLoading;
@@ -134,10 +153,19 @@ export default function SignupPage() {
               password: data.password,
               name: data.fullName,
               phone: data.phone,
+              businessType: data.businessType || businessType || 'NA',
             },
           },
         });
-        result = result.data.createBusiness;
+        const createdBusiness = result.data.createBusiness;
+        // Auto-login the business so we can fetch preferences and proceed to setup
+        const { data: signIn } = await signInBusiness({
+          variables: { SignInInput: { email: data.email, password: data.password } },
+        });
+        if (signIn?.signBusinessIn?.accessToken && signIn?.signBusinessIn?.refreshToken) {
+          setAuthToken(signIn.signBusinessIn.accessToken, signIn.signBusinessIn.refreshToken);
+        }
+        result = createdBusiness;
       } else if (data.role === 'Worker') {
         result = await createWorker({
           variables: {
@@ -161,7 +189,11 @@ export default function SignupPage() {
         8000,
         'bottom-right'
       )
-      router.push('/login');
+      if (data.role === 'Business') {
+        router.push('/business/create');
+      } else {
+        router.push('/login');
+      }
     } catch (err: any) {
       showToast(
         'error',
@@ -291,6 +323,42 @@ export default function SignupPage() {
                       </FormItem>
                     )}
                   />
+
+                  {role === 'Business' && !businessType && (
+                    <FormField
+                      control={form.control}
+                      name="businessType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Business Type</FormLabel>
+                          <FormControl>
+                            <Select
+                              value={field.value ?? ''}
+                              onValueChange={(val) => {
+                                field.onChange(val)
+                                setValue('businessType', val)
+                              }}
+                            >
+                              <SelectTrigger className="form-field w-full">
+                                <SelectValue placeholder="Select business type" />
+                              </SelectTrigger>
+                              <SelectContent className="form-field w-full">
+                                {businessTypes.map((bt) => {
+                                  const value = bt.href.split('=')[1] ?? bt.label
+                                  return (
+                                    <SelectItem key={value} value={value}>
+                                      {bt.label}
+                                    </SelectItem>
+                                  )
+                                })}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
                   {role === 'Worker' && (
                     <>

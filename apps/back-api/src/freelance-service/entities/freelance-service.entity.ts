@@ -48,14 +48,17 @@ export class WorkerServiceAssignmentEntity {
   @Field()
   id: string
 
-  @Field()
-  serviceId: string
+  @Field({nullable: true})
+  freelanceServiceId?: string
 
-  @Field()
-  workerId: string
+  @Field({nullable: true})
+  workerId?: string
+
+  @Field(() => FreelanceServiceEntity,{ nullable: true })
+  freelanceService?: FreelanceServiceEntity
 
   @Field(() => WorkerEntity)
-  worker: WorkerEntity
+  worker?: WorkerEntity
 
   @Field({ nullable: true })
   role?: string

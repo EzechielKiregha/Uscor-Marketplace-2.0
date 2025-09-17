@@ -180,6 +180,17 @@ export interface BusinessEntity {
   password: string; 
   isVerified: boolean;
   kycStatus : KycStatus;
+  businessType?: string;
+  taxId? : string;              // For tax purposes
+  registrationNumber? : string;              // Business registration number
+  website? : string;               // Business website
+  socialLinks? : JSON                 // e.g., {"facebook": "...", "twitter": "..."}
+  notes? : string                // Internal notes for CRM
+  preferences? : JSON                  // Business preferences/settings
+  totalClients? : number;
+  totalWorkers? : number;
+  totalSales? : number;
+  totalRevenueGenerated? : number;
   totalProductsSold : number;
   hasAgreedToTerms: boolean;
   isB2BEnabled: boolean;

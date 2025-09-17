@@ -3,7 +3,7 @@ import {
   Int,
   ObjectType,
 } from '@nestjs/graphql'
-import { DashboardClientDto } from './business-client.entity '
+import { DashboardClientDto } from './business-client.entity'
 
 @ObjectType()
 export class RecentOrder {

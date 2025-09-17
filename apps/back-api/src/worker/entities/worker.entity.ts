@@ -4,7 +4,7 @@ import {
 } from '@nestjs/graphql'
 import { BusinessEntity } from '../../business/entities/business.entity'
 import { ChatEntity } from '../../chat/entities/chat.entity'
-import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity'
+import { WorkerServiceAssignmentEntity } from '../../freelance-service/entities/freelance-service.entity'
 import { KnowYourCustomerEntity } from '../../know-your-customer/entities/know-your-customer.entity'
 
 @ObjectType()
@@ -38,10 +38,10 @@ export class WorkerEntity {
   })
   kyc?: KnowYourCustomerEntity
 
-  @Field(() => [FreelanceServiceEntity], {
+  @Field(() => [WorkerServiceAssignmentEntity], {
     nullable: true,
   })
-  freelanceServices?: FreelanceServiceEntity[]
+  workerServiceAssignments?: WorkerServiceAssignmentEntity[]
 
   @Field(() => [ChatEntity], { nullable: true }) // Chats associated with the worker
   chats?: ChatEntity[]

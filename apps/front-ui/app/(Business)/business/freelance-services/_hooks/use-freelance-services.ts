@@ -143,11 +143,14 @@ export const useFreelanceServices = (businessId: string) => {
     return servicesData?.freelanceServices?.items || [];
   }, [servicesData]);
 
+
   // Get selected service
   const getSelectedService = useCallback(() => {
     if (!selectedServiceId || !servicesData?.freelanceServices?.items) return null;
     return servicesData.freelanceServices.items.find((s : FreelanceServiceEntity) => s.id === selectedServiceId);
   }, [selectedServiceId, servicesData]);
+
+  console.log('Selected Service ID:', selectedServiceId);
 
   // Get service orders
   const getServiceOrders = useCallback(() => {

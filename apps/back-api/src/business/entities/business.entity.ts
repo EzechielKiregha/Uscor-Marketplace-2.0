@@ -2,7 +2,9 @@ import {
   ObjectType,
   Field,
   Int,
+  Float,
 } from '@nestjs/graphql'
+import GraphQLJSON from 'graphql-type-json'
 import { AccountRechargeEntity } from '../../account-recharge/entities/account-recharge.entity'
 import { AdEntity } from '../../ad/entities/ad.entity'
 import { ChatEntity } from '../../chat/entities/chat.entity'
@@ -42,6 +44,28 @@ export class BusinessEntity {
   @Field({ nullable: true })
   coverImage?: string
 
+  // New fields from Prisma schema
+  @Field({ nullable: true })
+  businessType?: string
+
+  @Field({ nullable: true })
+  taxId?: string
+
+  @Field({ nullable: true })
+  registrationNumber?: string
+
+  @Field({ nullable: true })
+  website?: string
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  socialLinks?: any
+
+  @Field({ nullable: true })
+  notes?: string
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  preferences?: any
+
   @Field()
   isVerified: boolean
 
@@ -50,6 +74,18 @@ export class BusinessEntity {
 
   @Field(() => Int)
   totalProductsSold: number
+
+  @Field(() => Int)
+  totalClients: number
+
+  @Field(() => Int)
+  totalWorkers: number
+
+  @Field(() => Int)
+  totalSales: number
+
+  @Field(() => Float)
+  totalRevenueGenerated: number
 
   @Field(() => Boolean)
   hasAgreedToTerms: boolean

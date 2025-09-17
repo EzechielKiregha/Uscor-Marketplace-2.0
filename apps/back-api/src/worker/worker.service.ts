@@ -102,6 +102,9 @@ export class WorkerService {
         workerServiceAssignments: {
           select: {
             id: true,
+            freelanceServiceId: true,
+            role: true,
+            assignedAt: true,
             freelanceService: {
               select: {
                 id: true,
