@@ -190,7 +190,7 @@ export default function SignupPage() {
         'bottom-right'
       )
       if (data.role === 'Business') {
-        router.push('/business/create');
+        router.push('/create-business-setup');
       } else {
         router.push('/login');
       }
