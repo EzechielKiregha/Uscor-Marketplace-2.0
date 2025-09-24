@@ -41,6 +41,8 @@ export default function BusinessCreatePage() {
     return null;
   }, [role, user]);
 
+  const businessTypeFromStorage = typeof window !== "undefined" ? localStorage.getItem("businessType") : null;
+
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -48,7 +50,7 @@ export default function BusinessCreatePage() {
       phone: meBusiness?.phone || "",
       address: meBusiness?.address || "",
       website: "",
-      businessType: (meBusiness as any)?.businessType || "",
+      businessType: (meBusiness as any)?.businessType || businessTypeFromStorage || "",
       isB2BEnabled: (meBusiness as any)?.isB2BEnabled ?? false,
       hasAgreedToTerms: (meBusiness as any)?.hasAgreedToTerms ?? false,
       preferences: (meBusiness as any)?.preferences || {},
@@ -59,7 +61,7 @@ export default function BusinessCreatePage() {
         phone: meBusiness.phone || "",
         address: meBusiness.address || "",
         website: "",
-        businessType: (meBusiness as any)?.businessType || "",
+        businessType: (meBusiness as any)?.businessType || businessTypeFromStorage || "",
         isB2BEnabled: (meBusiness as any)?.isB2BEnabled ?? false,
         hasAgreedToTerms: (meBusiness as any)?.hasAgreedToTerms ?? false,
         preferences: (meBusiness as any)?.preferences || {},

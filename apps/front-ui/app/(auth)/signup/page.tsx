@@ -112,6 +112,7 @@ export default function SignupPage() {
 
   const params = useSearchParams();
   const businessType = params.get('businessType');
+  localStorage.setItem('businessType', businessType || 'NA');
 
   const { handleSubmit, watch, setValue } = form;
   const [createClient, { loading: clientLoading, error: clientError }] = useMutation(CREATE_CLIENT);

@@ -70,8 +70,6 @@ const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({ href, className
   </a>
 );
 
-
-
 // ✅ Main business types for navigation
 export const businessTypes = [
   { href: '/signup?businessType=artisan', label: 'Artisan & Handcrafted Goods', icon: Palette },
