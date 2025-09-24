@@ -29,9 +29,9 @@ export default function FreelanceServiceList() {
         setIsLoading(false);
       } else {
         setIsLoading(false);
-        console.log('Freelance services fetched successfully:', data.freelanceServices);
+        console.log('Freelance services fetched successfully:', data.freelanceServices.items);
         setError(undefined);
-        setFreelanceServices(data.freelanceServices || []);
+        setFreelanceServices(data.freelanceServices.items || []);
       }
     }
     fetchServices();

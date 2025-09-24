@@ -4,24 +4,29 @@ import { gql } from "@apollo/client";
 export const GET_FREELANCE_SERVICES = gql`
   query GetFreelanceServices($category: FreelanceServiceCategory) {
     freelanceServices(category: $category) {
-      id
-      title
-      description
-      isHourly
-      rate
-      category
-      createdAt
-      updatedAt
-      business {
+      items {
         id
-        name
-        avatar
+        title
+        description
+        isHourly
+        rate
+        category
+        createdAt
+        updatedAt
+        business {
+          id
+          name
+          avatar
+        }
+        workerServiceAssignments {
+          id
+          role
+          assignedAt
+        }
       }
-      workerServiceAssignments {
-        id
-        role
-        assignedAt
-      }
+      limit
+      total
+      page
     }
   }
 `;
