@@ -17,7 +17,7 @@ const features: Feature[] = [
     title: 'B2B Marketplace & E‑commerce',
     description:
       'Sell to businesses and consumers in one place. Custom catalogs, negotiated pricing, purchase orders, secure escrow, and global tax/currency support.',
-    imageSrc: '/nav/business.jpg', // existing asset
+    imageSrc: '/nav/businessHandshake.jpg', // existing asset
     imageAlt: 'Marketplace and e‑commerce showcase',
     href: '/uscor-features',
   },
@@ -35,6 +35,30 @@ const features: Feature[] = [
       'Fast in‑store checkout synced with your online catalog. Real‑time inventory, offline mode, multi‑payment support, and AI-powered sales insights.',
     imageSrc: '/nav/pos.jpg', // existing asset
     imageAlt: 'Point of sale experience',
+    href: '/uscor-features',
+  },
+  {
+    title: 'Freelance Marketplace',
+    description:
+      'Hire vetted professionals or sell services with milestones, contracts, escrow, and instant payouts powered by Uscor.',
+    imageSrc: '/nav/freelance.jpg', // existing asset
+    imageAlt: 'Freelance marketplace and gigs',
+    href: '/uscor-features',
+  },
+  {
+    title: 'Security & Fraud Prevention',
+    description:
+      'End‑to‑end encryption, device checks, rate limiting, and anomaly detection to keep accounts and transactions safe.',
+    imageSrc: '/nav/security.jpg', // existing asset
+    imageAlt: 'Secure technology background',
+    href: '/uscor-features',
+  },
+  {
+    title: 'KYC & Compliance',
+    description:
+      'Verify identities to unlock higher limits and trust badges, with automated checks to meet regional regulations.',
+    imageSrc: '/nav/kyc.png', // existing asset
+    imageAlt: 'Compliance and verification',
     href: '/uscor-features',
   },
 ];
