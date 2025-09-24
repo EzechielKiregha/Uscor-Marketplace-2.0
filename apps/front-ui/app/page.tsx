@@ -43,7 +43,7 @@ export default function HomePage() {
       {/* Featured Products */}
       <FeaturesSection />
 
-      <FeaturedProducts title='Featured Products' subtitle='' href='/marketplace/products' />
+      {/* <FeaturedProducts title='Featured Products' subtitle='' href='/marketplace/products' /> */}
       <section className=" bg-muted">
         <MaxWidthWrapper>
           <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
