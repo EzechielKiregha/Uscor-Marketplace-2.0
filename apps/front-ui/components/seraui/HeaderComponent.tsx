@@ -102,8 +102,8 @@ function HeaderComponent() {
     { href: '/uscor-features', label: 'Features', target: '' },
     { href: '/hardware', label: 'Hardware', target: '' },
     { href: '#', label: 'Business types', isPopover: true, popoverItems: businessTypes },
-    { href: '/marketplace', label: 'Marketplace', target: '_blank', rel: 'noopener noreferrer' },
-    { href: '/freelance-gigs', label: 'Freelance', target: '_blank', rel: 'noopener noreferrer' },
+    { href: '/marketplace', label: 'Marketplace', target: '' },
+    { href: '/freelance-gigs', label: 'Freelance', target: '', rel: '' },
     { href: '/help', label: 'FAQ', target: '' },
   ];
 
