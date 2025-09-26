@@ -11,11 +11,13 @@ import { useOpenCreateStoreModal } from '../_hooks/use-open-create-store-modal';
 import { StoreEntity } from '@/lib/types';
 import { useMe } from '@/lib/useMe';
 import CreateStoreModal from '../_components/modals/CreateStoreModal';
+import { useRouter } from 'next/navigation';
 
 export default function BusinessStoresPage() {
   const { isOpen, setIsOpen } = useOpenCreateStoreModal();
   const [searchTerm, setSearchTerm] = useState('');
   const { showToast } = useToast()
+  const router = useRouter()
 
   const { data, loading, error, refetch } = useQuery(GET_STORES);
 
@@ -135,10 +137,17 @@ export default function BusinessStoresPage() {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => setIsOpen({
-                          openCreateStoreModal: true,
-                          initialStoreData: store
-                        })}
+                        onClick={() => {
+                          setIsOpen({
+                            openCreateStoreModal: true,
+                            initialStoreData: {
+                              id: store.id,
+                              name: store.name,
+                              address: store.address || ''
+                            }
+                          })
+                          router.push("/business/stores?edit=true")
+                        }}
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -164,7 +173,10 @@ export default function BusinessStoresPage() {
           <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium mb-2">No stores yet</h3>
           <p className="text-muted-foreground mb-6">Get started by creating your first store location</p>
-          <Button onClick={() => setIsOpen({ openCreateStoreModal: true, initialStoreData: null })}>
+          <Button onClick={() => {
+            setIsOpen({ openCreateStoreModal: true, initialStoreData: null })
+            router.push("/business/stores?create=true")
+          }}>
             <Plus className="h-4 w-4 mr-2" />
             Create Store
           </Button>

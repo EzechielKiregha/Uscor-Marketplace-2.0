@@ -9,7 +9,11 @@ import { useToast } from '@/components/toast-provider';
 import { useMe } from '@/lib/useMe';
 
 interface StoreFormProps {
-  initialData?: any | null;
+  initialData?: {
+    id: string;
+    name: string;
+    address: string;
+  } | null;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -52,7 +56,10 @@ export default function StoreForm({
         await updateStore({
           variables: {
             id: initialData.id,
-            input: storeData
+            input: {
+              name: formData.name,
+              address: formData.address
+            }
           }
         });
         showToast('success', 'Success', 'Store updated successfully');
@@ -115,7 +122,7 @@ export default function StoreForm({
           className="bg-primary hover:bg-accent text-primary-foreground"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <Loader loading={true} /> : initialData ? 'Update Store' : 'Create Store'}
+          {isSubmitting ? initialData ? 'Updating...' : 'Creating...' : initialData ? 'Update Store' : 'Create Store'}
         </Button>
       </div>
     </form>

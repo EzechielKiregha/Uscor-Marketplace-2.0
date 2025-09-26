@@ -22,7 +22,7 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "C:\\Users\\ekire\\current projects\\uscor\\apps\\back-api\\src\\generated\\prisma",
+      "value": "C:\\Users\\thinkBIG\\Documents\\Corporation works\\Uscor-Marketplace-2.0\\apps\\back-api\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -36,7 +36,7 @@ const config: runtime.GetPrismaClientConfig = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\ekire\\current projects\\uscor\\apps\\back-api\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\thinkBIG\\Documents\\Corporation works\\Uscor-Marketplace-2.0\\apps\\back-api\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../../../prisma",
@@ -46,6 +46,7 @@ const config: runtime.GetPrismaClientConfig = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

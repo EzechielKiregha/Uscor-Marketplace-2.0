@@ -937,6 +937,9 @@ type Query {
   """Retrieves all products with their relations."""
   products: [ProductEntity!]!
 
+  """Retrieves all products with their relations."""
+  businessProducts: [ProductEntity!]!
+
   """Retrieves all featured products with their relations."""
   featuredProducts: [ProductEntity!]!
 
@@ -1321,10 +1324,10 @@ type Mutation {
   generateReceiptWithPDFKit(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
 
   """Creates a new store for a business."""
-  createStore(createStoreInput: CreateStoreInput!): StoreEntity!
+  createStore(input: CreateStoreInput!): StoreEntity!
 
   """Updates an existing store."""
-  updateStore(id: String!, updateStoreInput: UpdateStoreInput!): StoreEntity!
+  updateStore(id: String!, input: UpdateStoreInput!): StoreEntity!
 
   """Deletes a store."""
   deleteStore(id: String!): StoreEntity!

@@ -114,6 +114,67 @@ export class ProductService {
       },
     })
   }
+  async businessProducts(businessId: string) {
+    return this.prisma.product.findMany({
+      where: { businessId },
+      include: {
+        medias: {
+          select: {
+            id: true,
+            url: true,
+            type: true,
+          },
+        },
+        business: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatar: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            createdAt: true,
+          },
+        },
+        store: {
+          select: {
+            id: true,
+            name: true,
+            address: true,
+            createdAt: true,
+          },
+        },
+        orders: {
+          select: {
+            id: true,
+            quantity: true,
+            orderId: true,
+          },
+        },
+        reposts: {
+          select: {
+            id: true,
+            markupPercentage: true,
+            createdAt: true,
+          },
+        },
+        reOwnedProducts: {
+          select: {
+            id: true,
+            oldPrice: true,
+            newPrice: true,
+            markupPercentage: true,
+            createdAt: true,
+          },
+        },
+      },
+    })
+  }
 
   async findOne(id: string) {
     return this.prisma.product.findUnique({
@@ -321,6 +382,7 @@ export class ProductService {
           contains: title,
           mode: 'insensitive',
         },
+        businessId: user.id,
       },
       include: {
         medias: {

@@ -34,7 +34,7 @@ export class StoreResolver {
       'Creates a new store for a business.',
   })
   async createStore(
-    @Args('createStoreInput')
+    @Args('input')
     createStoreInput: CreateStoreInput,
     @Context() context,
   ) {
@@ -57,7 +57,7 @@ export class StoreResolver {
   async updateStore(
     @Args('id', { type: () => String })
     id: string,
-    @Args('updateStoreInput')
+    @Args('input')
     updateStoreInput: UpdateStoreInput,
     @Context() context,
   ) {

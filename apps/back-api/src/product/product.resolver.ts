@@ -79,6 +79,20 @@ export class ProductResolver {
     return this.productService.findAll()
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Query(() => [ProductEntity], {
+    name: 'businessProducts',
+    description:
+      'Retrieves all products with their relations.',
+    })
+      async businessProducts(
+  @Context() context: any,
+      ) {
+    const user = context.req.user
+    return this.productService.businessProducts(user.id)
+  }
+
   @Query(() => [ProductEntity], {
     name: 'featuredProducts',
     description:

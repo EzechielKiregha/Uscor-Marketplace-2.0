@@ -38,6 +38,7 @@ export default function BusinessDashboardPage() {
   const [ordersCount, setOdersCount] = useState<number>(0);
   const [pendingOrdersCount, setPendingOrdersCount] = useState<number>(0);
   const [completedOrdersCount, setCompletedOrdersCount] = useState<number>(0);
+  const router = useRouter()
 
   const {
     data: storesData,
@@ -244,7 +245,7 @@ export default function BusinessDashboardPage() {
             <Button
               onClick={() => {
                 showToast('success', 'Redirecting to store page', 'You are now redirecting to the store page', false, 9000);
-                useRouter().push("/dashboard/stores")
+                router.push("/business/stores?create=true")
               }}
             >
               <Plus className="h-4 w-4 mr-2" />

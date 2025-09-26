@@ -2,8 +2,8 @@
 
 import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@apollo/client";
-import { UPDATE_BUSINESS } from "@/graphql/business.gql";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_BUSINESS_BY_ID, UPDATE_BUSINESS } from "@/graphql/business.gql";
 import { useMe } from "@/lib/useMe";
 import { BusinessEntity } from "@/lib/types";
 import { useToast } from "@/components/toast-provider";
@@ -14,6 +14,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { GlowButton } from "@/components/seraui/GlowButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { removeTypename } from "@/lib/removeTypeName";
+import { setAuthToken } from "@/lib/auth";
 
 // Step schema
 const schema = z.object({
@@ -35,6 +37,7 @@ export default function BusinessCreatePage() {
   const { loading, user, role } = useMe();
   const [step, setStep] = useState(1);
   const [updateBusiness, { loading: saving }] = useMutation(UPDATE_BUSINESS);
+  let signInMutation: any;
 
   const meBusiness = useMemo(() => {
     if (role === "business" && user) return user as BusinessEntity;
@@ -42,7 +45,12 @@ export default function BusinessCreatePage() {
   }, [role, user]);
 
   const businessTypeFromStorage = typeof window !== "undefined" ? localStorage.getItem("businessType") : null;
-
+  const businessData = useQuery(GET_BUSINESS_BY_ID, {
+    variables: { id: meBusiness?.id },
+    skip: !meBusiness?.id,
+  });
+  const business = businessData?.data?.business;
+  // console.log("Business data:", business);
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -54,6 +62,7 @@ export default function BusinessCreatePage() {
       isB2BEnabled: (meBusiness as any)?.isB2BEnabled ?? false,
       hasAgreedToTerms: (meBusiness as any)?.hasAgreedToTerms ?? false,
       preferences: (meBusiness as any)?.preferences || {},
+
     },
     values: meBusiness
       ? {
@@ -95,11 +104,32 @@ export default function BusinessCreatePage() {
             isB2BEnabled: data.isB2BEnabled ?? false,
             hasAgreedToTerms: !!data.hasAgreedToTerms,
             preferences: data.preferences ?? {},
+            kycStatus: meBusiness.kycStatus || "PENDING",
           },
         },
       });
 
       showToast("success", "Saved", "Business profile updated", true, 6000, "bottom-right");
+
+      // Now sign in with the correct role
+      let { data: { [`signBusinessIn`]: result } } = await signInMutation({
+        variables: { SignInInput: { email: business.email, password: business.password } },
+      });
+
+      result = removeTypename(result);
+      setAuthToken(result.accessToken, result.refreshToken);
+      if (result.user.role !== 'business') {
+        showToast(
+          'error',
+          'Error',
+          'Invalid Role after sign in. Please log in again.',
+          true,
+          8000,
+          'bottom-right'
+        )
+        router.push('/login')
+        return;
+      }
       router.push("/business/dashboard");
     } catch (err: any) {
       showToast("error", "Failed", err.message || "Failed to save", true, 8000, "bottom-right");
