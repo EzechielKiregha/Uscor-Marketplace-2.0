@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@apollo/client';
-import { CREATE_STORE, UPDATE_STORE } from '@/graphql/store.gql';
+import { CREATE_STORE, GET_STORES, UPDATE_STORE } from '@/graphql/store.gql';
 import Loader from '@/components/seraui/Loader';
 import { useToast } from '@/components/toast-provider';
 import { useMe } from '@/lib/useMe';
@@ -64,7 +64,7 @@ export default function StoreForm({
         });
         showToast('success', 'Success', 'Store updated successfully');
       } else {
-        await createStore({ variables: { input: storeData } });
+        await createStore({ variables: { input: storeData }, refetchQueries: [GET_STORES] });
         showToast('success', 'Success', 'Store created successfully');
       }
 

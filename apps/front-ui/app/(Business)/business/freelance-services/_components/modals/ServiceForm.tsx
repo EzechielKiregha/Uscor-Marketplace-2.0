@@ -173,7 +173,7 @@ export default function ServiceForm({
           className="bg-primary hover:bg-accent text-primary-foreground"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <Loader loading={true} /> : initialData ? 'Update Service' : 'Create Service'}
+          {isSubmitting ? initialData ? 'Updating...' : 'Creating...' : initialData ? 'Update Service' : 'Create Service'}
         </Button>
       </div>
     </form>

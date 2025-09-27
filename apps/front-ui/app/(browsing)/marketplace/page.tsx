@@ -42,7 +42,7 @@ export default function MarketplacePage() {
       <main className="flex-1">
         <MaxWidthWrapper>
           {/* Hero */}
-          <div className="py-20 mx-auto text-center flex flex-col items-center max-w-3xl">
+          <div className="pt-14 mx-auto text-center flex flex-col items-center max-w-3xl">
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-foreground">
               Transform Your Space with{' '}
               <span className="text-primary">Modern World Furniture</span>

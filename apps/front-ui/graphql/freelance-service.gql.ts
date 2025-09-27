@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 // 📦 Get All Freelance Services
 export const GET_FREELANCE_SERVICES = gql`
-  query GetFreelanceServices($category: FreelanceServiceCategory) {
+  query GetFreelanceServices($category: String) {
     freelanceServices(category: $category) {
       items {
         id

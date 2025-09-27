@@ -33,22 +33,24 @@ function CategoryPopover() {
 
   const { showToast } = useToast();
   const [createCategory] = useMutation(CREATE_CATEGORY);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      // In a real app, you'd get these values from form inputs
-      const name = (e.target as any).name.value;
-      const description = (e.target as any).description.value;
-      if (!name.trim()) {
+      const form = e.target as HTMLFormElement;
+      const catName = (form.elements.namedItem('catName') as HTMLInputElement)?.value || '';
+      const catDesc = (form.elements.namedItem('catDesc') as HTMLInputElement)?.value || '';
+      if (!catName.trim()) {
         showToast("error", "Name Required", 'Please enter a category name');
         return;
       }
       await createCategory({
         variables: {
           createCategoryInput: {
-            name,
-            description,
+            name: catName,
+            description: catDesc,
           },
         },
         refetchQueries: [{ query: GET_CATEGORIES }],
@@ -56,41 +58,43 @@ function CategoryPopover() {
       showToast("success", "Success", 'Category created successfully');
     } catch (error: any) {
       showToast("error", "Error", error.message || 'Failed to create category');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <Dialog>
-      <form onSubmit={handleSubmit}>
-        <DialogTrigger asChild>
-          <Button variant="outline">Create Category</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>create product category</DialogTitle>
-            <DialogDescription>
-              Create your product category here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogTrigger>
+        <Button variant="link" className='underline underline-offset-2 cursor-pointer'>by clicking here</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>create product category</DialogTitle>
+          <DialogDescription>
+            Create your product category here. Click save when you&apos;re
+            done.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Electronics" />
+              <Label htmlFor="catName">Name</Label>
+              <Input id="catName" name="catName" defaultValue="Electronics" />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="description-1">Description</Label>
-              <Input id="description-1" name="description" defaultValue="Electronics products and accessories" />
+              <Label htmlFor="catDesc">Description</Label>
+              <Input id="catDesc" name="catDesc" defaultValue="Electronics products and accessories" />
             </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" type="button">Cancel</Button>
             </DialogClose>
-            <Button type="submit" >Save</Button>
+            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save'}</Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }
@@ -114,6 +118,7 @@ export default function ProductForm({
   const { showToast } = useToast();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [selectedCatId, setSelectedCatId] = useState<string | null>(null);
+  const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     title: initialData ? initialData.title : '',
@@ -316,29 +321,40 @@ export default function ProductForm({
         </div>
 
         <div>
-          <label htmlFor="categoryId" className="block text-sm font-medium mb-1">
-            Category
-          </label>
-          <select
-            id="categoryId"
-            name="categoryId"
-            value={formData.categoryId}
-            onChange={handleChange}
-            className="w-full p-2 border border-border rounded-md"
-            required
-          >
-            {!catData && !catLoading && <option>No categories found</option>}
-            {/* In a real app, you'd fetch categories from the server */}
-            {catData && catData.categories.length > 0 && catData.categories.map((cat: any) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </select>
+          <Button variant="link" className='underline underline-offset-2 cursor-pointer' onClick={() => setCreateCategoryOpen(!createCategoryOpen)}>{createCategoryOpen ? "Choose from available categories" : "Create Category"} </Button>
+          {!createCategoryOpen && catData && catData.categories.length > 0 && (
+            <>
+              <label htmlFor="categoryId" className="block text-sm font-medium mb-1">
+                Category
+              </label>
+              <select
+                id="categoryId"
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                className="w-full p-2 border border-border rounded-md"
+                required
+              >
+                {!catData && !catLoading && <option>No categories found</option>}
+                {/* In a real app, you'd fetch categories from the server */}
+                {catData && catData.categories.length > 0 && catData.categories.map((cat: any) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </>
+          )}
+          {createCategoryOpen && catData.categories.length !== 0 && (
+            <><p className="text-sm text-muted-foreground mt-1">or create a category for this product</p>
+              <CategoryPopover /></>
+
+          )}
           {catData && catData.categories.length === 0 && (
             <>
               <p className="text-sm text-muted-foreground mt-1">No categories available. Please create a category first.</p>
               <CategoryPopover />
             </>
           )}
+
         </div>
         <div>
           <label htmlFor="storeId" className="block text-sm font-medium mb-1">

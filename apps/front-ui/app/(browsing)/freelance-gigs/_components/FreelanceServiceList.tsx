@@ -38,7 +38,7 @@ export default function FreelanceServiceList() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 p-2 dark:text-gray-100 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
       {isloading && (
         <div className="flex flex-col bg-transparent justify-center items-center">
           <div className="w-8 h-8 bg-orange-600 rounded mt-20 animate-spin"></div>
