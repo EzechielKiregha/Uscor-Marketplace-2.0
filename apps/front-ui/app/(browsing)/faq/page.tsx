@@ -1,7 +1,26 @@
 "use client";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Footer from "@/components/seraui/FooterSection";
+import HeaderComponent from "@/components/seraui/HeaderComponent";
 import React, { useState } from "react";
 
-const faqs = [
+// --- Types ---
+interface AccordionItem {
+  question: string;
+  answer: string;
+}
+
+interface AccordionIconProps {
+  isOpen: boolean;
+}
+
+interface AccordionItemProps {
+  item: AccordionItem;
+  isOpen: boolean;
+  onClick: () => void;
+}
+
+const accordionData: AccordionItem[] = [
   {
     question: "What is Uscor Marketplace and who is it for?",
     answer:
@@ -54,48 +73,92 @@ const faqs = [
   }
 ];
 
-function AccordionItem({ question, answer, isOpen, onClick }: {
-  question: string;
-  answer: string;
-  isOpen: boolean;
-  onClick: () => void;
-}) {
+
+const AccordionIcon: React.FC<AccordionIconProps> = ({ isOpen }) => (
+  <svg
+    className={`w-6 h-6 text-zinc-500 dark:text-zinc-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M19 9l-7 7-7-7"
+    />
+  </svg>
+);
+
+const AccordionItem: React.FC<AccordionItemProps> = ({
+  item,
+  isOpen,
+  onClick,
+}) => {
   return (
-    <div className="border-b border-border">
+    <div className="border-b border-zinc-200 dark:border-zinc-700 last:border-b-0">
+      {/* Header part of the accordion item (Question and Icon) */}
       <button
-        className="w-full text-left py-4 px-2 font-semibold text-lg text-foreground focus:outline-none flex justify-between items-center"
-        aria-expanded={isOpen}
+        className="w-full flex justify-between items-center text-left py-4 px-5 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400 focus-visible:ring-opacity-75 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors duration-200"
         onClick={onClick}
+        aria-expanded={isOpen}
       >
-        {question}
-        <span className="ml-2 text-primary">{isOpen ? "−" : "+"}</span>
+        <span className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+          {item.question}
+        </span>
+        <AccordionIcon isOpen={isOpen} />
       </button>
-      {isOpen && (
-        <div className="pb-6 px-2 text-muted-foreground text-base leading-relaxed animate-fade-in">
-          {answer}
+
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-screen" : "max-h-0"
+          }`}
+      >
+        <div className="p-5 pt-0 text-zinc-600 dark:text-zinc-300">
+          <p>{item.answer}</p>
         </div>
-      )}
-    </div>
-  );
-}
-
-export default function FAQPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  return (
-    <div className="max-w-2xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-bold mb-8 text-center text-foreground">Frequently Asked Questions</h1>
-      <div className="rounded-xl border border-border bg-card shadow-md overflow-hidden">
-        {faqs.map((faq, idx) => (
-          <AccordionItem
-            key={faq.question}
-            question={faq.question}
-            answer={faq.answer}
-            isOpen={openIndex === idx}
-            onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-          />
-        ))}
       </div>
     </div>
   );
-}
+};
+
+const AccordionLast: React.FC = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const handleItemClick = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
+      <HeaderComponent />
+      <MaxWidthWrapper>
+        <div className="w-full max-w-2xl mx-auto bg-white dark:bg-zinc-900 rounded-2xl shadow-lg dark:shadow-zinc-900/20 border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+          <div className="py-8 mx-auto text-center flex flex-col items-center max-w-3xl">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-foreground">
+              Frequently Asked {' '}
+              <span className="text-primary">Questions</span>
+            </h1>
+            <p className="mt-6 text-lg max-w-prose text-muted-foreground">
+              Here are some of our most asked questions..
+            </p>
+          </div>
+
+          {accordionData.map((item, index) => (
+            <AccordionItem
+              key={index}
+              item={item}
+              isOpen={openIndex === index}
+              onClick={() => handleItemClick(index)}
+            />
+          ))}
+        </div>
+      </MaxWidthWrapper>
+      {/* Footer */}
+      <Footer />
+    </div >
+  );
+};
+
+export default AccordionLast;
+
