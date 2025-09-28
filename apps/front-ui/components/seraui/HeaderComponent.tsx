@@ -102,7 +102,7 @@ function HeaderComponent() {
     { href: '#', label: 'Business types', isPopover: true, popoverItems: businessTypes },
     { href: '/marketplace', label: 'Marketplace', target: '' },
     { href: '/freelance-gigs', label: 'Freelance', target: '', rel: '' },
-    { href: '/help', label: 'FAQ', target: '' },
+    { href: '/faq', label: 'FAQ', target: '' },
   ];
 
   return (
