@@ -73,17 +73,17 @@ export default function Footer() {
                 Home
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/about"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 About Us
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
-                href="/products"
+                href="/marketplace/products"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Products
@@ -91,20 +91,20 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/freelance"
+                href="/freelance-gigs"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Freelance Services
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/contact"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 
@@ -112,14 +112,14 @@ export default function Footer() {
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-foreground">Resources</h3>
           <ul className="space-y-2">
-            <li>
+            {/* <li>
               <Link
                 href="/support"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Support
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/faq"
@@ -130,7 +130,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/privacy"
+                href="/privacy-policy"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Privacy Policy
@@ -138,7 +138,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/terms"
+                href="/terms-of-service"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Terms of Service
@@ -146,7 +146,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/careers"
+                href="#"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 Careers
@@ -158,7 +158,7 @@ export default function Footer() {
         {/* Contact */}
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-foreground">Contact Us</h3>
-          <p className="text-muted-foreground text-sm">123 Marketplace Blvd, Digital City, 90210</p>
+          <p className="text-muted-foreground text-sm">IRIBA HOUSE, Kigali City, Gikondo</p>
           <p className="text-muted-foreground text-sm">Email: kireghacorp@gmail.com</p>
           <p className="text-muted-foreground text-sm">Phone: +1 (800) 555-USOR</p>
         </div>
