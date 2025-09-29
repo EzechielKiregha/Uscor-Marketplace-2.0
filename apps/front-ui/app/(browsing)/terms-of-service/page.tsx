@@ -12,23 +12,6 @@ import Image from "next/image";
 import Footer from "@/components/seraui/FooterSection";
 
 export default function TermsOfService() {
-  const solutions = [
-    { label: 'Marketplace', href: 'https://uscor-marketplace-2-0-front-ui.vercel.app/' },
-    { label: 'POS System', href: 'https://uscor-marketplace-2-0-front-ui.vercel.app/' },
-    { label: 'Multi-Store', href: 'https://uscor-marketplace-2-0-front-ui.vercel.app/' },
-    { label: 'Analytics', href: 'https://uscor-marketplace-2-0-front-ui.vercel.app/' },
-  ];
-  const companyLinks = [
-    { label: 'Features', href: 'https://uscor-marketplace-2-0-front-ui.vercel.app/uscor-features' },
-    { label: 'Contact us', href: 'mailto:support@uscor.com' },
-    { label: 'About Uscor', href: 'https://uscor-marketplace-2-0-front-ui.vercel.app/about' },
-  ];
-  const social = [
-    { icon: <Facebook className="w-5 h-5 text-primary" />, href: 'https://facebook.com/uscor' },
-    { icon: <Twitter className="w-5 h-5 text-primary" />, href: 'https://twitter.com/uscor' },
-    { icon: <Linkedin className="w-5 h-5 text-primary" />, href: 'https://linkedin.com/company/uscor' },
-    { icon: <Instagram className="w-5 h-5 text-primary" />, href: 'https://instagram.com/uscor' },
-  ];
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navigation */}

@@ -11,6 +11,7 @@ import PricingSection from '@/components/seraui/PricingSection';
 import TeamSection from '@/components/seraui/TeamMemberCard';
 import TestimonialSection from '@/components/seraui/TestimonialSection';
 import { ArrowDownToLine, DollarSign, Paintbrush } from 'lucide-react';
+import AccordionLast from './(browsing)/faq/accordion-last';
 
 // --- Perks Data (in English) ---
 const perks = [
@@ -86,6 +87,10 @@ export default function HomePage() {
 
       {/* Testimonials */}
       <TestimonialSection />
+
+      <div className="py-8">
+        <AccordionLast />
+      </div>
 
       {/* Footer */}
       <Footer />
