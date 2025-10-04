@@ -27,37 +27,46 @@ export const GET_CHATS = gql`
     ) {
       items {
         id
-        productId
-        clientId
-        businessId
-        workerId
         status
+        isSecure
+        negotiationType
         createdAt
         updatedAt
         product {
           id
           title
-          price
+          description
+          business { id name }
+          }
+          service {
+            id
+            title
+            description
+            business { id name }
         }
-        client {
+        participants {
           id
-          fullName
-          avatar
-        }
-        business {
-          id
-          name
-          avatar
-        }
-        worker {
-          id
-          fullName
-          avatar
+          clientId
+          client {
+            id
+            fullName
+            avatar
+          }
+          businessId
+          business {
+            id
+            name
+            avatar
+          }
+          workerId
+          worker {
+            id
+            fullName
+          }
         }
         messages {
           id
           content
-          senderType
           senderId
           createdAt
         }
@@ -70,13 +79,9 @@ export const GET_CHATS = gql`
 `;
 
 export const GET_CHAT_BY_ID = gql`
-  query GetChatById($id: String!) {
-      chat(id: $id) {
+  query GetChat($id: String!) {
+    chat(id: $id) {
       id
-      productId
-      clientId
-      businessId
-      workerId
       status
       createdAt
       updatedAt
@@ -84,6 +89,7 @@ export const GET_CHAT_BY_ID = gql`
         id
         title
         price
+        business { id name }
       }
       client {
         id
@@ -157,32 +163,43 @@ export const GET_UNREAD_COUNT = gql`
 
 export const GET_CHATS_BY_PARTICIPANT = gql`
   query GetChatsByParticipant($participantId: String!) {
-    chats(participantId: $participantId) {
+    chatsByParticipant(participantId: $participantId) {
       id
       status
       isSecure
       negotiationType
-      productId
-      serviceId
       createdAt
       updatedAt
       product {
         id
         title
-      }
-      service {
-        id
-        title
+        description
+        business { id name }
+        }
+        service {
+          id
+          title
+          description
+          business { id name }
       }
       participants {
         id
         clientId
+        client {
+          id
+        }
         businessId
+        business {
+          id
+        }
         workerId
+        worker {
+          id
+        }
       }
       messages {
         id
-        message
+        content
         senderId
         createdAt
       }
@@ -210,43 +227,39 @@ export const GET_CHAT_NOTIFICATIONS = gql`
 
 export const CREATE_CHAT = gql`
   mutation CreateChat($input: CreateChatInput!) {
-    createChat(input: $input) {
-    id
-    productId
-    clientId
-    businessId
-    workerId
-    status
-    createdAt
-    updatedAt
-    product {
+    createChat(createChatInput: $input) {
       id
-      title
-      price
-    }
-    client {
-      id
-      fullName
-      avatar
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    worker {
-      id
-      fullName
-      avatar
-    }
-    messages {
-      id
-      content
-      senderType
-      senderId
+      status
       createdAt
+      updatedAt
+      product {
+        id
+        title
+        price
+      }
+      client {
+        id
+        fullName
+        avatar
+      }
+      business {
+        id
+        name
+        avatar
+      }
+      worker {
+        id
+        fullName
+        avatar
+      }
+      messages {
+        id
+        content
+        senderType
+        senderId
+        createdAt
+      }
     }
-  }
   }
 `;
 
@@ -280,126 +293,114 @@ export const MARK_MESSAGES_AS_READ = gql`
 export const UPDATE_CHAT_STATUS = gql`
   mutation UpdateChatStatus($id: String!, $status: String!) {
     updateChatStatus(id: $id, status: $status) {
-    id
-    productId
-    clientId
-    businessId
-    workerId
-    status
-    createdAt
-    updatedAt
-    product {
       id
-      title
-      price
-    }
-    client {
-      id
-      fullName
-      avatar
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    worker {
-      id
-      fullName
-      avatar
-    }
-    messages {
-      id
-      content
-      senderType
-      senderId
+      status
       createdAt
+      updatedAt
+      product {
+        id
+        title
+        price
+      }
+      client {
+        id
+        fullName
+        avatar
+      }
+      business {
+        id
+        name
+        avatar
+      }
+      worker {
+        id
+        fullName
+        avatar
+      }
+      messages {
+        id
+        content
+        senderType
+        senderId
+        createdAt
+      }
     }
-  }
   }
 `;
 
 export const START_NEGOTIATION = gql`
   mutation StartNegotiation($input: StartNegotiationInput!) {
     startNegotiation(input: $input) {
-    id
-    productId
-    clientId
-    businessId
-    workerId
-    status
-    createdAt
-    updatedAt
-    product {
       id
-      title
-      price
-    }
-    client {
-      id
-      fullName
-      avatar
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    worker {
-      id
-      fullName
-      avatar
-    }
-    messages {
-      id
-      content
-      senderType
-      senderId
+      status
       createdAt
+      updatedAt
+      product {
+        id
+        title
+        price
+      }
+      client {
+        id
+        fullName
+        avatar
+      }
+      business {
+        id
+        name
+        avatar
+      }
+      worker {
+        id
+        fullName
+        avatar
+      }
+      messages {
+        id
+        content
+        senderType
+        senderId
+        createdAt
+      }
     }
-  }
   }
 `;
 
 export const ACCEPT_NEGOTIATION = gql`
   mutation AcceptNegotiation($negotiationId: String!) {
     acceptNegotiation(negotiationId: $negotiationId) {
-    id
-    productId
-    clientId
-    businessId
-    workerId
-    status
-    createdAt
-    updatedAt
-    product {
       id
-      title
-      price
-    }
-    client {
-      id
-      fullName
-      avatar
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    worker {
-      id
-      fullName
-      avatar
-    }
-    messages {
-      id
-      content
-      senderType
-      senderId
+      status
       createdAt
+      updatedAt
+      product {
+        id
+        title
+        price
+      }
+      client {
+        id
+        fullName
+        avatar
+      }
+      business {
+        id
+        name
+        avatar
+      }
+      worker {
+        id
+        fullName
+        avatar
+      }
+      messages {
+        id
+        content
+        senderType
+        senderId
+        createdAt
+      }
     }
-  }
   }
 `;
 
@@ -410,42 +411,38 @@ export const ACCEPT_NEGOTIATION = gql`
 export const ON_CHAT_CREATED = gql`
   subscription OnChatCreated($userId: String!) {
     chatCreated(userId: $userId) {
-    id
-    productId
-    clientId
-    businessId
-    workerId
-    status
-    createdAt
-    updatedAt
-    product {
       id
-      title
-      price
-    }
-    client {
-      id
-      fullName
-      avatar
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    worker {
-      id
-      fullName
-      avatar
-    }
-    messages {
-      id
-      content
-      senderType
-      senderId
+      status
       createdAt
+      updatedAt
+      product {
+        id
+        title
+        price
+      }
+      client {
+        id
+        fullName
+        avatar
+      }
+      business {
+        id
+        name
+        avatar
+      }
+      worker {
+        id
+        fullName
+        avatar
+      }
+      messages {
+        id
+        content
+        senderType
+        senderId
+        createdAt
+      }
     }
-  }
   }
 `;
 
@@ -470,42 +467,38 @@ export const ON_MESSAGE_RECEIVED = gql`
 export const ON_CHAT_STATUS_UPDATED = gql`
   subscription OnChatStatusUpdated($userId: String!) {
     chatStatusUpdated(userId: $userId) {
-    id
-    productId
-    clientId
-    businessId
-    workerId
-    status
-    createdAt
-    updatedAt
-    product {
       id
-      title
-      price
-    }
-    client {
-      id
-      fullName
-      avatar
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    worker {
-      id
-      fullName
-      avatar
-    }
-    messages {
-      id
-      content
-      senderType
-      senderId
+      status
       createdAt
+      updatedAt
+      product {
+        id
+        title
+        price
+      }
+      client {
+        id
+        fullName
+        avatar
+      }
+      business {
+        id
+        name
+        avatar
+      }
+      worker {
+        id
+        fullName
+        avatar
+      }
+      messages {
+        id
+        content
+        senderType
+        senderId
+        createdAt
+      }
     }
-  }
   }
 `;
 

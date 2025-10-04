@@ -144,7 +144,7 @@ export class ChatService {
       )
     }
 
-    return this.prisma.chat.create({
+    const chat = await this.prisma.chat.create({
       data: {
         product: productId
           ? { connect: { id: productId } }
@@ -159,58 +159,9 @@ export class ChatService {
           create: participantsData,
         },
       },
-      include: {
-        product: productId
-          ? {
-              select: {
-                id: true,
-                title: true,
-                businessId: true,
-                isPhysical: true,
-              },
-            }
-          : false,
-        service: serviceId
-          ? {
-              select: {
-                id: true,
-                title: true,
-                businessId: true,
-              },
-            }
-          : false,
-        participants: {
-          include: {
-            client: {
-              select: {
-                id: true,
-                username: true,
-                email: true,
-                createdAt: true,
-              },
-            },
-            business: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-                createdAt: true,
-              },
-            },
-            worker: {
-              select: {
-                id: true,
-                fullName: true,
-                email: true,
-                role: true,
-                createdAt: true,
-              },
-            },
-          },
-        },
-        messages: true,
-      },
-    })
+    });
+    // Return the transformed ChatEntity
+    return this.findOne(chat.id);
   }
 
   async createMessage(
@@ -361,8 +312,7 @@ export class ChatService {
     userId?: string,
     userRole?: string,
   ) {
-    const chat =
-      await this.prisma.chat.findUnique({
+    const chat = await this.prisma.chat.findUnique({
         where: { id },
         include: {
           product: {
@@ -370,6 +320,12 @@ export class ChatService {
               id: true,
               title: true,
               price: true,
+              business: {
+                select:{
+                  id: true,
+                  name: true,
+                }
+              }
             },
           },
           service: {
@@ -412,8 +368,9 @@ export class ChatService {
           },
         },
       })
+    
     if (!chat) {
-      throw new Error('Chat not found')
+      throw new Error('Chat not found, WHY')
     }
 
     // Only check participant access if userId is provided
@@ -464,6 +421,10 @@ export class ChatService {
             id: chat.product.id,
             title: chat.product.title,
             price: chat.product.price,
+            business:{
+              id: chat.product.business?.id,
+              name: chat.product.business?.name,
+            }
           }
         : undefined,
       serviceId: chat.serviceId,
@@ -522,75 +483,22 @@ export class ChatService {
     userId: string,
     userRole: string,
   ) {
-    const { status, isSecure, negotiationType } =
-      updateChatInput
-    const chat = await this.findOne(
-      id,
-      userId,
-      userRole,
-    )
+    const { status, isSecure, negotiationType } = updateChatInput;
+    const chat = await this.findOne(id, userId, userRole);
 
     if (
       chat.isSecure &&
-      (isSecure === false ||
-        negotiationType !== chat.negotiationType)
+      (isSecure === false || negotiationType !== chat.negotiationType)
     ) {
-      throw new Error(
-        'Cannot modify secure chat properties',
-      )
+      throw new Error('Cannot modify secure chat properties');
     }
 
-    return this.prisma.chat.update({
+    await this.prisma.chat.update({
       where: { id },
       data: { status, isSecure, negotiationType },
-      include: {
-        product: {
-          select: {
-            id: true,
-            title: true,
-            businessId: true,
-            isPhysical: true,
-          },
-        },
-        service: {
-          select: {
-            id: true,
-            title: true,
-            businessId: true,
-          },
-        },
-        participants: {
-          include: {
-            client: {
-              select: {
-                id: true,
-                username: true,
-                email: true,
-                createdAt: true,
-              },
-            },
-            business: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-                createdAt: true,
-              },
-            },
-            worker: {
-              select: {
-                id: true,
-                fullName: true,
-                email: true,
-                role: true,
-                createdAt: true,
-              },
-            },
-          },
-        },
-        messages: true,
-      },
-    })
+    });
+    // Return the transformed ChatEntity
+    return this.findOne(id, userId, userRole);
   }
 
   async remove(
@@ -598,23 +506,16 @@ export class ChatService {
     userId: string,
     userRole: string,
   ) {
-    const chat = await this.findOne(
-      id,
-      userId,
-      userRole,
-    )
+    const chat = await this.findOne(id, userId, userRole);
     if (
       chat.isSecure &&
       chat.negotiationType === 'REOWNERSHIP'
     ) {
-      throw new Error(
-        'Secure re-ownership chats cannot be deleted',
-      )
+      throw new Error('Secure re-ownership chats cannot be deleted');
     }
-    return this.prisma.chat.delete({
-      where: { id },
-      select: { id: true },
-    })
+    await this.prisma.chat.delete({ where: { id } });
+    // Optionally, return the deleted chat entity (or just the id)
+    return { id };
   }
 
   // New methods to match frontend expectations
@@ -704,8 +605,10 @@ export class ChatService {
               id: true,
               title: true,
               price: true,
+              description: true,
               businessId: true,
               isPhysical: true,
+              business:{ select:{ id: true, name: true } }
             },
           },
           service: {
@@ -737,8 +640,7 @@ export class ChatService {
             },
           },
           messages: {
-            orderBy: { createdAt: 'desc' },
-            take: 1,
+            orderBy: { createdAt: 'asc' },
             select: {
               id: true,
               message: true,
@@ -787,8 +689,10 @@ export class ChatService {
               id: chat.product.id,
               title: chat.product.title,
               price: chat.product.price,
+              description: chat.product.description,
               businessId: chat.product.businessId,
               isPhysical: chat.product.isPhysical,
+              business:{ id: chat.product.business?.id, name: chat.product.business?.name }
             }
           : undefined,
         serviceId: chat.serviceId,
@@ -1185,10 +1089,16 @@ export class ChatService {
         },
         include: {
           product: {
-            select: { id: true, title: true },
+            select: { id: true, title: true, description: true, business:{
+              select: { id: true, name: true } 
+              } 
+            },
           },
           service: {
-            select: { id: true, title: true },
+            select: { id: true, title: true, description: true, business:{
+              select: { id: true, name: true } 
+              }
+            },
           },
           participants: {
             include: {
@@ -1216,10 +1126,10 @@ export class ChatService {
             },
           },
           messages: {
-            orderBy: { createdAt: 'desc' },
-            take: 1,
+            orderBy: { createdAt: 'asc' },
             select: {
               id: true,
+              chatId: true,
               message: true,
               senderId: true,
               createdAt: true,
@@ -1262,7 +1172,8 @@ export class ChatService {
         ),
         messages: chat.messages.map((msg) => ({
           id: msg.id,
-          message: msg.message,
+          chatId: msg.chatId,
+          content: msg.message,
           senderId: msg.senderId,
           createdAt: msg.createdAt,
         })),

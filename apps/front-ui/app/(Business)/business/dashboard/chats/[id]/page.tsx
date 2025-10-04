@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from "next/navigation";
 import Loader from "@/components/seraui/Loader";
-import ChatThread from "@/app/(Business)/business/_components/ChatThread";
+import ChatThread from "@/app/(Business)/business/_components/FirstChatThread";
 
 export default function ChatThreadPage() {
   const params = useSearchParams();

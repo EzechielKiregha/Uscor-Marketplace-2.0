@@ -1,21 +1,25 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_PRODUCT_BY_ID, GET_RELATED_PRODUCTS } from '@/graphql/product.gql';
+import { CREATE_CHAT } from '@/graphql/chat.gql';
 import AddToCartButton from '@/components/AddToCartButton';
 import ImageSlider from '@/components/ImageSlider';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import ProductReel from '@/components/ProductReel';
 import { PRODUCT_CATEGORIES } from '@/config/product-categories';
 import { formatPrice } from '@/lib/utils';
-import { Check, Shield } from 'lucide-react';
+import { Check, Shield, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { toast } from 'sonner';
+import { notFound, useRouter } from 'next/navigation';
 import { useGetProductIdParam } from '@/hooks/use-get-product-params';
 import Footer from '@/components/seraui/FooterSection';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
 import { removeTypename } from '@/lib/removeTypeName';
+import { useMe } from '@/lib/useMe';
+import { GlowButton } from '@/components/seraui/GlowButton';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/toast-provider';
 
 const BREADCRUMBS = [
   { id: 1, name: 'Home', href: '/' },
@@ -26,9 +30,22 @@ const BREADCRUMBS = [
 export default function Page() {
 
   const productId = useGetProductIdParam();
+  const user = useMe();
+  const router = useRouter();
+  const { showToast } = useToast();
 
   const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
     variables: { id: productId },
+  });
+
+  const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
+    onCompleted: (data) => {
+      showToast("success", "Success", 'Chat started successfully', true, 5000);
+      router.push(`/marketplace/chat?currentId${data.createChat.id}`);
+    },
+    onError: (error) => {
+      showToast("error", "Failed", 'Failed to start chat: ' + error.message, true, 5000);
+    },
   });
 
   if (loading) return (
@@ -37,11 +54,11 @@ export default function Page() {
     </div>
   );
   if (error) {
-    toast.error('Failed to load product details');
+    showToast("error", "Failed", 'Failed to load product details', true, 5000);
     return <p className="text-center py-10 text-destructive">Error loading product</p>;
   }
   if (!productId) {
-    toast.error('Product ID is required');
+    showToast("error", "Failed", 'Product ID is required', true, 5000);
     return notFound();
   }
 
@@ -63,6 +80,23 @@ export default function Page() {
   if (BREADCRUMBS.length < 4) {
     BREADCRUMBS.push({ id: 4, name: cleanedProduct.title, href: '' });
   }
+
+  const handleChat = () => {
+    if (!user) {
+      showToast("error", "Failed", 'Please log in to start a chat.', true, 5000);
+      return;
+    }
+    createChat({
+      variables: {
+        input: {
+          productId: cleanedProduct.id,
+          participantIds: [user.id, cleanedProduct.business?.id],
+          isSecure: true,
+          negotiationType: 'PURCHASE',
+        },
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
@@ -142,7 +176,17 @@ export default function Page() {
             {/* Add to Cart */}
             <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
               <div className="space-y-6">
-                <AddToCartButton product={cleanedProduct} />
+                <div className="flex space-x-2">
+                  <AddToCartButton product={cleanedProduct} />
+                  <Button
+                    onClick={handleChat}
+                    className="bg-blue-500 hover:bg-blue-600 text-white flex items-center space-x-2"
+                    disabled={chatLoading}
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    <span>{chatLoading ? 'Starting...' : 'Chat'}</span>
+                  </Button>
+                </div>
                 <div className="text-center">
                   <div className="inline-flex items-center text-sm text-muted-foreground">
                     <Shield className="mr-2 h-5 w-5" aria-hidden="true" />

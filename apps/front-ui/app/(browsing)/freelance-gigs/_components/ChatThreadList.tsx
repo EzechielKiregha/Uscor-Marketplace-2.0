@@ -13,6 +13,10 @@ export default function ChatThreadList({ participantId }: ChatThreadListProps) {
     variables: { participantId },
   });
 
+  if (!data?.chats) {
+    return <p className="text-center text-gray-500 dark:text-gray-400">No chats found.</p>
+  }
+
   return (
     <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 p-4 sm:p-6 md:p-8">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Your Chats</h1>

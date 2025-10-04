@@ -10,6 +10,7 @@ import {
 } from '../dto/create-chat.input'
 import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity'
 import { ChatParticipantEntity } from './chat-participants.entity'
+import { BusinessEntity } from 'src/business/entities/business.entity'
 
 @ObjectType()
 export class ChatProductInfo {
@@ -20,10 +21,16 @@ export class ChatProductInfo {
   title: string
 
   @Field()
+  description: string
+
+  @Field()
   price: number
 
   @Field({ nullable: true })
   businessId?: string
+
+  @Field(() => BusinessEntity, { nullable: true })
+  business?: BusinessEntity
 
   @Field({ nullable: true })
   isPhysical?: boolean

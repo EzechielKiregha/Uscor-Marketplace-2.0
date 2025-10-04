@@ -46,6 +46,7 @@ export default function ProductReel({
           categoryName: product.category?.name || 'Uncategorized',
           businessName: product.business?.name || 'Unknown Vendor',
           businessAvatarUrl: product.business?.avatar || null,
+          businessId: product.business?.id || null,
         }));
         setProducts(formatted);
       } else if (field === 'products' && data.products) {
@@ -59,6 +60,7 @@ export default function ProductReel({
           categoryName: product.category?.name || 'Uncategorized',
           businessName: product.business?.name || 'Unknown Vendor',
           businessAvatarUrl: product.business?.avatar || null,
+          businessId: product.business?.id || null,
         }));
         setProducts(formatted);
       }

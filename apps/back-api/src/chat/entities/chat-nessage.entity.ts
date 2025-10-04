@@ -15,8 +15,8 @@ export class ChatMessageEntity {
   @Field()
   content: string
 
-  @Field()
-  senderType: string
+  @Field({nullable: true })
+  senderType?: string
 
   @Field(() => String, { nullable: true })
   senderId?: string | null

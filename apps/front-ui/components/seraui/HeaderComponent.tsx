@@ -106,7 +106,7 @@ function HeaderComponent() {
   ];
 
   return (
-    <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-white dark:bg-gray-950 w-full sticky top-0 z-50">
+    <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-white dark:bg-card w-full sticky top-0 z-50">
       {/* Mobile Search View */}
       {isMobileSearchVisible && (
         <div className="flex h-14 sm:h-16 items-center  lg:hidden px-4">

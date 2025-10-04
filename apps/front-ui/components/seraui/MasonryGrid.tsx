@@ -2,6 +2,12 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useMutation } from '@apollo/client';
+import { CREATE_CHAT } from '@/graphql/chat.gql';
+import { useToast } from '@/components/toast-provider';
+import { useMe } from '@/lib/useMe';
+import { MessageCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 // --- TypeScript Interfaces ---
 interface Product {
@@ -14,6 +20,7 @@ interface Product {
   categoryName?: string;
   businessName?: string;
   businessAvatarUrl?: string;
+  businessId?: string;
 }
 
 interface FreelanceService {
@@ -76,11 +83,43 @@ const HeartIcon = () => (
 export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: product, onLike }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imgSrc, setImgSrc] = useState(product.imageUrl);
+  const user = useMe();
+  const { showToast } = useToast();
+  const router = useRouter();
+
+  const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
+    onCompleted: (data) => {
+      showToast('success', 'Success', 'Chat started successfully', true, 5000, 'bottom-right');
+      router.push(`/marketplace/chat?currentId=${data.createChat.id}`);
+    },
+    onError: (error) => {
+      showToast('error', 'Failed', error.message, true, 8000, 'bottom-right');
+    },
+  });
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (onLike) onLike(product.id);
+  };
+
+  const handleChat = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      showToast('error', 'Please log in', 'You need to be logged in to start a chat.', true, 5000, 'bottom-right');
+      return;
+    }
+    createChat({
+      variables: {
+        input: {
+          productId: product.id,
+          participantIds: [user.id, product.businessId],
+          isSecure: false,
+          negotiationType: 'PURCHASE',
+        },
+      },
+    });
   };
 
   return (
@@ -111,14 +150,23 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: produc
               className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"
             >
               <div className="p-4 h-full flex flex-col justify-between pointer-events-auto">
-                <div className="flex justify-start">
+                <div className="flex justify-start space-x-2">
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     onClick={handleLike}
-                    className="p-2 bg-background dark:bg-gray-950/30 rounded-lg backdrop-blur-sm group"
+                    className="p-2 bg-primary dark:bg-gray-950/30 rounded-lg backdrop-blur-sm group"
                     aria-label={`Like ${product.title}`}
                   >
                     <HeartIcon />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    onClick={handleChat}
+                    disabled={chatLoading}
+                    className="p-2 bg-primary dark:bg-gray-950/30 rounded-lg backdrop-blur-sm group"
+                    aria-label={`Chat about ${product.title}`}
+                  >
+                    <MessageCircle className="h-5 w-5 text-white group-hover:text-blue-500 transition-colors duration-200" />
                   </motion.button>
                 </div>
 
@@ -178,11 +226,43 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: produc
 // --- GridItem for Freelance Services ---
 export const ServiceGridItem: React.FC<GridItemProps<FreelanceService>> = ({ item: service, onLike }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const user = useMe();
+  const { showToast } = useToast();
+  const router = useRouter();
+
+  const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
+    onCompleted: (data) => {
+      showToast('success', 'Success', 'Chat started successfully', true, 5000, 'bottom-right');
+      router.push(`/freelance-gigs/chat?currentId=${data.createChat.id}`);
+    },
+    onError: (error) => {
+      showToast('error', 'Failed', error.message, true, 8000, 'bottom-right');
+    },
+  });
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (onLike) onLike(service.id);
+  };
+
+  const handleChat = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      showToast('error', 'Please log in', 'You need to be logged in to start a chat.', true, 5000, 'bottom-right');
+      return;
+    }
+    createChat({
+      variables: {
+        input: {
+          serviceId: service.id,
+          participantIds: [user.id, service.business.id],
+          isSecure: false,
+          negotiationType: 'FREELANCEORDER',
+        },
+      },
+    });
   };
 
   return (
@@ -215,14 +295,25 @@ export const ServiceGridItem: React.FC<GridItemProps<FreelanceService>> = ({ ite
               className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center"
             >
               <div className="p-6 text-center">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  onClick={handleLike}
-                  className="p-2 bg-white dark:bg-gray-950 rounded-full mb-4 group"
-                  aria-label={`Like ${service.title}`}
-                >
-                  <HeartIcon />
-                </motion.button>
+                <div className="flex justify-center space-x-2 mb-4">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    onClick={handleLike}
+                    className="p-2 bg-card dark:bg-gray-950 rounded-full group"
+                    aria-label={`Like ${service.title}`}
+                  >
+                    <HeartIcon />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    onClick={handleChat}
+                    disabled={chatLoading}
+                    className="p-2 bg-card dark:bg-gray-950 rounded-full group"
+                    aria-label={`Chat about ${service.title}`}
+                  >
+                    <MessageCircle className="h-5 w-5 text-gray-900 dark:text-gray-100 group-hover:text-blue-500 transition-colors duration-200" />
+                  </motion.button>
+                </div>
                 <h3 className="text-white font-bold text-base">{service.title}</h3>
                 <p className="text-white/90 text-sm">${service.rate.toFixed(2)} {service.isHourly ? '/hr' : 'fixed'}</p>
                 <p className="text-white/75 text-xs mt-1">{service.business.name}</p>

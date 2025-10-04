@@ -6,7 +6,7 @@ type ChatMessageEntity {
   id: String!
   chatId: String!
   content: String!
-  senderType: String!
+  senderType: String
   senderId: String
   sender: ChatUserInfo
   createdAt: DateTime!
@@ -32,8 +32,10 @@ type ChatParticipantEntity {
 type ChatProductInfo {
   id: String!
   title: String!
+  description: String!
   price: Float!
   businessId: String
+  business: BusinessEntity
   isPhysical: Boolean
 }
 
