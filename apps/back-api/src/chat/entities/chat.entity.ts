@@ -10,7 +10,7 @@ import {
 } from '../dto/create-chat.input'
 import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity'
 import { ChatParticipantEntity } from './chat-participants.entity'
-import { BusinessEntity } from 'src/business/entities/business.entity'
+import { BusinessEntity } from '../../business/entities/business.entity'
 
 @ObjectType()
 export class ChatProductInfo {

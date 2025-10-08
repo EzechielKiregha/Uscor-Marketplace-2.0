@@ -42,11 +42,11 @@ export class ClientService {
     createClientInput: CreateClientForPOSInput,
   ) {
     // Generate a temporary password and username for POS clients
-    const tempPassword = Math.random()
-      .toString(36)
-      .slice(-8)
-    const hashedPassword =
-      await hash(tempPassword)
+    // const tempPassword = Math.random()
+    //   .toString(36)
+    //   .slice(-8)
+    const tempPassword = 'password123' // In production, generate a secure random password
+    const hashedPassword = await hash(tempPassword) 
     const username =
       createClientInput.email.split('@')[0] +
       '_' +
