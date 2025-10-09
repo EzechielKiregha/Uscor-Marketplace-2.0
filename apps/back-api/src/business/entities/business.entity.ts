@@ -17,6 +17,10 @@ import { ReferralEntity } from '../../referral/entities/referral.entity'
 import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity'
 import { WorkerEntity } from '../../worker/entities/worker.entity'
 import { KycStatus } from '../dto/update-business.input'
+import { PaymentConfigEntity } from '../../settings/entities/payment-config.entity'
+import { HardwareConfigEntity } from '../../settings/entities/hardware-config.entity'
+import { KycDocumentEntity } from '../../settings/entities/kyc-document.entity'
+import { StoreEntity } from '../../store/entities/store.entity'
 
 @ObjectType()
 export class BusinessEntity {
@@ -117,6 +121,18 @@ export class BusinessEntity {
 
   @Field(() => [AdEntity]) // Ads created by the business
   ads: AdEntity[]
+
+  @Field(() => PaymentConfigEntity, { nullable: true })
+  paymentConfig?: PaymentConfigEntity
+
+  @Field(() => HardwareConfigEntity, { nullable: true })
+  hardwareConfig?: HardwareConfigEntity
+
+  @Field(() => [KycDocumentEntity], { nullable: true })
+  kyc?: KycDocumentEntity[]
+
+  @Field(() => [StoreEntity], { nullable: true })
+  stores?: StoreEntity[]
 
   @Field(() => [FreelanceServiceEntity]) // Freelance services offered by the business
   freelanceServices: FreelanceServiceEntity[]

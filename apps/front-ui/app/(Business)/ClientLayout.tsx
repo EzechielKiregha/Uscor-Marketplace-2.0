@@ -23,7 +23,7 @@ export default function ClientSideLayout({
       <BusinessSidebar business={user} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <BusinessHeader business={user} />
-        <main>
+        <main className='p-4'>
           {children}
         </main>
       </div>

@@ -39,6 +39,7 @@ import { StoreModule } from './store/store.module'
 import { InventoryModule } from './inventory/inventory.module'
 import { ShiftModule } from './shift/shift.module'
 import { LoyaltyProgramModule } from './loyalty-program/loyalty-program.module'
+import { SettingsModule } from './settings/settings.module';
 import GraphQLJSON from 'graphql-type-json'
 
 @Module({
@@ -93,6 +94,7 @@ import GraphQLJSON from 'graphql-type-json'
     InventoryModule,
     ShiftModule,
     LoyaltyProgramModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

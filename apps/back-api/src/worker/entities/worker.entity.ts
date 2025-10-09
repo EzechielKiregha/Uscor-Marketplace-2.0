@@ -17,6 +17,9 @@ export class WorkerEntity {
 
   @Field({ nullable: true })
   fullName?: string
+  
+  @Field({ nullable: true })
+  avatar?: string
 
   @Field({ nullable: true })
   role?: string

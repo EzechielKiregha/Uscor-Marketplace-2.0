@@ -109,6 +109,7 @@ type WorkerEntity {
   id: String
   email: String
   fullName: String
+  avatar: String
   role: String
   isVerified: Boolean
   createdAt: DateTime
@@ -125,7 +126,7 @@ type FreelanceServiceEntity {
   description: String
   isHourly: Boolean!
   rate: Float!
-  category: FreelanceServiceCategory!
+  category: FreelanceServiceCategory
   createdAt: DateTime!
   updatedAt: DateTime!
   business: BusinessEntity!
@@ -625,6 +626,35 @@ type PostOfSaleEntity {
   updatedAt: DateTime!
 }
 
+type PaymentConfigEntity {
+  id: String!
+  mtnCode: String
+  airtelCode: String
+  orangeCode: String
+  mpesaCode: String
+  bankAccount: String
+  mobileMoneyEnabled: Boolean!
+}
+
+type HardwareConfigEntity {
+  id: String!
+  receiptPrinter: String
+  barcodeScanner: String
+  cashDrawer: String
+  cardReader: String
+}
+
+type KycDocumentEntity {
+  id: String!
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
+  status: String!
+  rejectionReason: String
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+}
+
 type BusinessEntity {
   id: String!
   name: String!
@@ -658,6 +688,10 @@ type BusinessEntity {
   reownedItems: [ReOwnedProductEntity!]!
   recharges: [AccountRechargeEntity!]!
   ads: [AdEntity!]!
+  paymentConfig: PaymentConfigEntity
+  hardwareConfig: HardwareConfigEntity
+  kyc: [KycDocumentEntity!]
+  stores: [StoreEntity!]
   freelanceServices: [FreelanceServiceEntity!]!
   freelanceOrders: [FreelanceOrderEntity!]!
   referralsMade: [ReferralEntity!]!
@@ -712,6 +746,13 @@ type ChatUnreadInfo {
 type MarkAsReadResponse {
   success: Boolean!
   unreadCount: Float!
+}
+
+type PaginatedReviews {
+  items: [ReviewEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type DashboardStats {
@@ -935,12 +976,57 @@ type LowStockAlertEntity {
   threshold: Int!
 }
 
+type BusinessSettingsEntity {
+  id: String!
+  name: String!
+  email: String!
+  description: String
+  avatar: String
+  coverImage: String
+  address: String
+  phone: String
+  country: String
+  businessType: String
+  kycStatus: String!
+  isB2BEnabled: Boolean!
+  isVerified: Boolean!
+  totalProductsSold: Float!
+  hasAgreedToTerms: Boolean!
+  termsAgreedAt: DateTime
+  paymentConfig: PaymentConfigEntity
+  hardwareConfig: HardwareConfigEntity
+  kyc: [KycDocumentEntity!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  taxId: String
+  registrationNumber: String
+  website: String
+  socialLinks: JSON
+  notes: String
+  preferences: JSON
+  totalClients: Int!
+  totalWorkers: Int!
+  totalSales: Int!
+  totalRevenueGenerated: Float!
+  products: [ProductEntity!]!
+  workers: [WorkerEntity!]!
+  repostedItems: [RepostedProductEntity!]!
+  reownedItems: [ReOwnedProductEntity!]!
+  recharges: [AccountRechargeEntity!]!
+  ads: [AdEntity!]!
+  stores: [StoreEntity!]
+  freelanceServices: [FreelanceServiceEntity!]!
+  freelanceOrders: [FreelanceOrderEntity!]!
+  referralsMade: [ReferralEntity!]!
+  referralsReceived: [ReferralEntity!]!
+  chats: [ChatEntity!]!
+  postOfSales: [PostOfSaleEntity!]
+}
+
 type Query {
   """Retrieves all products with their relations."""
   products: [ProductEntity!]!
-
-  """Retrieves all products with their relations."""
-  businessProducts: [ProductEntity!]!
+  businessProducts(businessId: String!, storeId: String, category: String, search: String, page: Int, limit: Int): [ProductEntity!]!
 
   """Retrieves all featured products with their relations."""
   featuredProducts: [ProductEntity!]!
@@ -986,10 +1072,10 @@ type Query {
 
   """Retrieves all businesses with their relations."""
   businesses: [BusinessEntity!]!
-
-  """Retrieves a single business by ID."""
-  business(id: String!): BusinessEntity!
+  business(id: String!): BusinessSettingsEntity!
+  businessServices(businessId: String!, category: String, search: String, page: Int, limit: Int): [FreelanceServiceEntity!]!
   businessDashboard: BusinessDashboardResponse!
+  businessReviews(businessId: String!, page: Int, limit: Int): PaginatedReviews!
 
   """Retrieves all clients with their relations."""
   clients: [ClientEntity!]!
@@ -1190,9 +1276,7 @@ type Mutation {
 
   """Creates a new business with hashed password."""
   createBusiness(createBusinessInput: CreateBusinessInput!): BusinessEntity!
-
-  """Updates a business’s details."""
-  updateBusiness(id: String!, updateBusinessInput: UpdateBusinessInput!): BusinessEntity!
+  updateBusiness(id: String!, input: UpdateBusinessInput!): BusinessSettingsEntity!
 
   """Deletes a business."""
   deleteBusiness(id: String!): BusinessEntity!
@@ -1378,6 +1462,11 @@ type Mutation {
 
   """Updates shift details (business only)."""
   updateShift(id: String!, updateShiftInput: UpdateShiftInput!): ShiftEntity!
+  updatePaymentConfig(businessId: String!, input: UpdatePaymentConfigInput!): BusinessSettingsEntity!
+  updateHardwareConfig(businessId: String!, input: UpdateHardwareConfigInput!): BusinessSettingsEntity!
+  uploadKycDocument(input: UploadKycDocumentInput!): KycDocumentEntity!
+  submitKyc(businessId: String!): BusinessSettingsEntity!
+  agreeToTerms(businessId: String!): BusinessSettingsEntity!
 }
 
 input CreateProductInput {
@@ -1517,21 +1606,21 @@ input UpdateBusinessInput {
   coverImage: String
   address: String
   phone: String
-  password: String
-  isVerified: Boolean
-  businessType: String
-  taxId: String
-  registrationNumber: String
-  website: String
+  isVerified: Boolean! = false
+  businessType: String = "NA"
+  taxId: String = "NA"
+  registrationNumber: String = "NA"
+  website: String = "NA"
+  country: String = "NA"
   socialLinks: JSON
-  notes: String
+  notes: String = "NA"
   preferences: JSON
-  totalClients: Int
-  totalWorkers: Int
-  totalSales: Int
-  totalRevenueGenerated: Float
+  totalClients: Int = 0
+  totalWorkers: Int = 0
+  totalSales: Int = 0
+  totalRevenueGenerated: Float = 0
   kycId: String
-  kycStatus: KycStatus!
+  kycStatus: KycStatus = PENDING
   totalProductsSold: Int
   hasAgreedToTerms: Boolean
   isB2BEnabled: Boolean
@@ -1896,12 +1985,35 @@ input UpdateShiftInput {
   endTime: DateTime
 }
 
+input UpdatePaymentConfigInput {
+  mtnCode: String
+  airtelCode: String
+  orangeCode: String
+  mpesaCode: String
+  bankAccount: String
+  mobileMoneyEnabled: Boolean
+}
+
+input UpdateHardwareConfigInput {
+  receiptPrinter: String
+  barcodeScanner: String
+  cashDrawer: String
+  cardReader: String
+}
+
+input UploadKycDocumentInput {
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
+}
+
 type Subscription {
   productCreated(businessId: String!): ProductEntity!
   productUpdated(businessId: String!): ProductEntity!
   orderCreated(clientId: String!, businessId: String!): OrderEntity!
   orderUpdated(clientId: String!, businessId: String!): OrderEntity!
   orderPaymentProcessed(orderId: String!): OrderEntity!
+  businessUpdated: BusinessEntity!
   messageReceived(chatId: String!): ChatMessageEntity!
   chatCreated(userId: String!): ChatEntity!
   chatStatusUpdated(userId: String!): ChatEntity!
@@ -1919,4 +2031,6 @@ type Subscription {
   purchaseOrderUpdated(storeId: String!, businessId: String!): PurchaseOrderEntity!
   transferOrderCreated(fromStoreId: String!, toStoreId: String!): TransferOrderEntity!
   transferOrderUpdated(fromStoreId: String!): TransferOrderEntity!
+  settingsUpdated: BusinessSettingsEntity!
+  kycUpdated: BusinessSettingsEntity!
 }

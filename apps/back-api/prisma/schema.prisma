@@ -161,6 +161,7 @@ model Business {
   taxId                String?               @default("NA") // For tax purposes
   registrationNumber   String?               @default("NA")// Business registration number
   website              String?               @default("NA")// Business website
+  country              String?               @default("NA") // Country of operation
   socialLinks          Json?                 // e.g., {"facebook": "...", "twitter": "..."}
   notes                String?               @default("NA")// Internal notes for CRM
   preferences          Json?                 // Business preferences/settings
@@ -188,6 +189,12 @@ model Business {
   hasAgreedToTerms     Boolean               @default(false)    // Terms compliance
   termsAgreedAt        DateTime?             // Timestamp of agreement
 
+  // Settings related
+  paymentConfig        PaymentConfig?
+  hardwareConfig       HardwareConfig?
+  kycDocuments         KycDocument[]
+
+
   chatParticipants ChatParticipant[]
   tokenTransactions TokenTransaction[]
   stores Store[]
@@ -199,6 +206,92 @@ model Business {
   @@index([createdAt])
   @@index([email])
 
+}
+
+model PaymentConfig {
+  id                 String   @id @default(uuid())
+  business           Business @relation(fields: [businessId], references: [id])
+  businessId         String   @unique
+
+  mtnCode            String?
+  airtelCode         String?
+  orangeCode         String?
+  mpesaCode          String?
+  bankAccount        String?
+  mobileMoneyEnabled Boolean  @default(false)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model HardwareConfig {
+  id               String   @id @default(uuid())
+  business         Business @relation(fields: [businessId], references: [id])
+  businessId       String   @unique
+
+  receiptPrinter   String?
+  barcodeScanner   String?
+  cashDrawer       String?
+  cardReader       String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model KycDocument {
+  id             String   @id @default(uuid())
+  business       Business @relation(fields: [businessId], references: [id])
+  businessId     String
+
+  documentType   String
+  documentUrl    String
+  status         KycStatus @default(PENDING)
+  rejectionReason String?
+  submittedAt    DateTime @default(now())
+  verifiedAt     DateTime?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PricingPlan {
+  id        String   @id @default(uuid())
+  name      String
+  description String?
+  price     Float
+  features  PricingFeature[]
+  isCurrentPlan Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PricingFeature {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  plan        PricingPlan @relation(fields: [planId], references: [id])
+  planId      String
+}
+
+model HardwareRecommendation {
+  id          String   @id @default(uuid())
+  type        String
+  model       String?
+  description String?
+  priceRange  String?
+  localSupplier String?
+  setupGuideUrl String?
+  businessType String?
+  country     Country?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BusinessType {
+  id          String @id @default(uuid())
+  name        String
+  description String?
+  icon        String?
 }
 
 model Client {

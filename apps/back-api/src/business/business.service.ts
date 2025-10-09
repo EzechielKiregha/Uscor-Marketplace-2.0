@@ -146,6 +146,38 @@ export class BusinessService {
             },
           },
         },
+        // Include payment & hardware config for frontend settings
+        paymentConfig: true,
+        hardwareConfig: true,
+        // Include KYC documents (multiple) as frontend expects 'kyc' list
+        kycDocuments: {
+          select: {
+            id: true,
+            documentUrl: true,
+            documentType: true,
+            status: true,
+            submittedAt: true,
+            verifiedAt: true,
+          },
+        },
+        // Include stores with nested products and product medias
+        stores: {
+          select: {
+            id: true,
+            name: true,
+            address: true,
+            products: {
+              select: {
+                id: true,
+                title: true,
+                price: true,
+                medias: {
+                  select: { url: true },
+                },
+              },
+            },
+          },
+        },
         postOfSales: {
           select: {
             id: true,
@@ -163,7 +195,7 @@ export class BusinessService {
             verifiedAt: true,
           },
         },
-      },
+      } as any,
     })
   }
 
@@ -186,6 +218,7 @@ export class BusinessService {
             id: true,
             email: true,
             fullName: true,
+            avatar: true,
             role: true,
             createdAt: true,
           },
@@ -350,7 +383,7 @@ export class BusinessService {
             createdAt: true,
           },
         },
-      },
+      } as any,
     })
   }
 
@@ -444,6 +477,80 @@ export class BusinessService {
       ])
 
     return { stats, salesData, recentOrders }
+  }
+
+  // New API: get products for a business with optional store/category/search filters
+  async getProducts(opts: {
+    businessId: string
+    storeId?: string
+    category?: string
+    search?: string
+    page?: number
+    limit?: number
+  }) {
+    const { businessId, storeId, category, search, page = 1, limit = 50 } = opts
+    const where: any = { businessId }
+    if (storeId) where.storeId = storeId
+    if (category) where.category = category
+    if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { description: { contains: search, mode: 'insensitive' } }]
+
+    const products = await this.prisma.product.findMany({
+      where,
+      include: {
+        medias: { select: { url: true, type: true } },
+        store: { select: { id: true, name: true } },
+      } as any,
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    return products
+  }
+
+  // New API: get freelance services for a business (with optional filters)
+  async getServices(opts: { businessId: string; category?: string; search?: string; page?: number; limit?: number }) {
+    const { businessId, category, search, page = 1, limit = 50 } = opts
+    const where: any = { businessId }
+    if (category) where.category = category
+    if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { description: { contains: search, mode: 'insensitive' } }]
+
+    const services = await this.prisma.freelanceService.findMany({
+      where,
+      include: {
+        workerServiceAssignments: { include: { worker: { select: { fullName: true, avatar: true } } } },
+      } as any,
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    return services
+  }
+
+  // New API: get reviews for a business with pagination
+  async getReviews(businessId: string, page = 1, limit = 10) {
+    // Reviews are linked to products; fetch product ids then reviews
+    const productIds = await this.prisma.product.findMany({ where: { businessId }, select: { id: true } })
+    const ids = productIds.map((p) => p.id)
+
+    const [items, total] = await Promise.all([
+      this.prisma.review.findMany({
+        where: { productId: { in: ids } },
+        include: { client: { select: { id: true, fullName: true, avatar: true } } } as any,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.prisma.review.count({ where: { productId: { in: ids } } }),
+    ])
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+    }
   }
 
   private async getDashboardStats(

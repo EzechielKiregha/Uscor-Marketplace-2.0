@@ -1,258 +1,208 @@
-// import { faker } from '@faker-js/faker';
-// import { Country, FreelanceStatus, KycStatus, MediaType, PaymentMethod, PaymentStatus, PrismaClient, RechargeMethod } from '../src/generated/prisma/client';
+import { faker } from '@faker-js/faker';
+import {
+	Country,
+	KycStatus,
+	MediaType,
+	PaymentMethod,
+	PaymentStatus,
+  PrismaClient,
+} from '../src/generated/prisma/client';
 
-// const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
-// async function main(): Promise<void> {
-//   // 1. Create Tokens
-//   await prisma.token.createMany({
-//     data: Array.from({ length: 10 }).map(() => ({
-//       value: faker.number.int({ min: 1, max: 100 }),
-//     })),
-//   });
+// Pricing tiers copied from front-end pricing component
+const pricingTiers = [
+	{
+		name: 'Basic',
+		monthlyPrice: 9.99,
+		yearlyPrice: 59.99,
+		description: 'For shoppers and buyers',
+		features: [
+			'Up to 50 products',
+			'Basic sales tracking',
+			'1 store location',
+			'Standard customer support',
+			'Basic inventory management',
+			'Mobile POS app access',
+			'Basic reporting',
+		],
+	},
+	{
+		name: 'Pro',
+		monthlyPrice: 19.99,
+		yearlyPrice: 199.99,
+		description: 'Full access to Intelligent POS & marketplace',
+		features: [
+			'Unlimited products',
+			'Advanced sales analytics',
+			'Up to 5 store locations',
+			'Priority customer support',
+			'Advanced inventory management',
+			'Loyalty program',
+			'Freelance services marketplace access',
+			'Customizable POS interface',
+			'Advanced reporting & exports',
+			'Staff management & permissions',
+		],
+	},
+	{
+		name: 'Entreprise',
+		monthlyPrice: 39.99,
+		yearlyPrice: 249.99,
+		description: 'For creators, consultants, and service pros',
+		features: [
+			'Unlimited products',
+			'Custom analytics & reporting',
+			'Unlimited store locations',
+			'Dedicated account manager',
+			'Advanced inventory & supply chain',
+			'Custom loyalty program',
+			'Full marketplace access',
+			'API access & integrations',
+			'Custom branding',
+			'Priority technical support',
+			'Custom feature development',
+		],
+	},
+];
 
-//   // 2. Create Businesses
-//   const businesses = await prisma.business.createMany({
-//     data: Array.from({ length: 10 }).map(() => ({
-//       name: faker.company.name(),
-//       email: faker.internet.email(),
-//       description: faker.company.catchPhrase(),
-//       address: faker.location.streetAddress(),
-//       phone: faker.phone.number(),
-//       password: faker.internet.password(),
-//       isVerified: faker.datatype.boolean(),
-//       avatar: faker.image.avatar(), // Add avatar URL
-//       coverImage: faker.image.url(), // Add cover image URL
-//     })),
-//   });
-//   const businessRecords = await prisma.business.findMany();
+// Hardware items derived from HardwarePage.tsx
+const hardwareItems = [
+	{
+		title: 'Epson TM-T88VI-i',
+		model: 'TM-T88VI-i',
+		type: 'printer',
+		description: 'Offering fast print speeds and high reliability, with advanced features.',
+		image: '/images/hardware/epson-tmt88vi.jpg',
+	},
+	{ title: 'Epson TM-m30', model: 'TM-m30', type: 'printer', description: 'Small footprint receipt printer', image: '/images/hardware/epson-tmm30.jpg' },
+	{ title: 'XPrinter XP-Q800', model: 'XP-Q800', type: 'printer', description: 'Reliable quality at a low price', image: '/images/hardware/xprinter-xpq800.jpg' },
+	{ title: 'Star TSP143IIIU', model: 'TSP143IIIU', type: 'printer', description: 'USB communication with iPad charging', image: '/images/hardware/star-tsp143iiiu.jpg' },
+	{ title: 'Citizen CT-E651ET', model: 'CT-E651ET', type: 'printer', description: 'Stylish, high-performance 3-inch receipt printer', image: '/images/hardware/citizen-cte651et.jpg' },
+	{ title: 'SPRT SP-POS890', model: 'SP-POS890', type: 'printer', description: 'High speed receipt printer with auto cutter', image: '/images/hardware/sprt-sp-pos890.jpg' },
+	{ title: 'Star SM-T300i', model: 'SM-T300i', type: 'mobile-printer', description: 'Portable mobile Bluetooth thermal receipt printer', image: '/images/hardware/star-sm-t300i.jpg' },
+	{ title: 'Seiko MP-B20', model: 'MP-B20', type: 'mobile-printer', description: 'Compact and ultra-lightweight mobile printer', image: '/images/hardware/seiko-mp-b20.jpg' },
+	{ title: 'Zebra ZD410', model: 'ZD410', type: 'label-printer', description: 'Designed for the smallest of workspaces', image: '/images/hardware/zebra-zd410.jpg' },
+	{ title: 'Motorola CS3070', model: 'CS3070', type: 'scanner', description: 'Tiny device for batch scanning', image: '/images/hardware/motorola-cs3070.jpg' },
+	{ title: 'Datalogic QuickScan Lite QW2100', model: 'QW2100', type: 'scanner', description: 'Small, lightweight and ergonomic', image: '/images/hardware/datalogic-qw2100.jpg' },
+	{ title: 'Zebex Z-3250', model: 'Z-3250', type: 'scanner', description: 'Compact scanner with wireless communication', image: '/images/hardware/zebex-z3250.jpg' },
+	{ title: 'Volcora', model: 'Volcora-16', type: 'cash-drawer', description: '16" Drawer 5 Bill / 6 Coin Tray', image: '/images/hardware/volcora.jpg' },
+	{ title: 'Sunmi', model: 'Sunmi', type: 'terminal', description: 'Uscor compatible terminal with built-in printer', image: '/images/hardware/sunmi.jpg' },
+	{ title: 'BOXaPOS small printer stand', model: 'BOXaPOS-stand', type: 'stand', description: 'Spacing for a compact printer', image: '/images/hardware/boxapos-small-stand.jpg' },
+	{ title: 'Kensington Adjustable Kickstand', model: 'Kensington-kickstand', type: 'stand', description: 'Makes typing and viewing easier', image: '/images/hardware/kensington-kickstand.jpg' },
+	{ title: 'PayPal Zettle', model: 'Zettle', type: 'card-reader', description: 'PayPal Reader – Accept contactless, chip, and swipe payments', image: '/images/hardware/paypal-zettle.jpg' },
+];
 
-//   // 3. Create Clients
-//   const clients = await prisma.client.createMany({
-//     data: Array.from({ length: 50 }).map(() => ({
-//       username: faker.internet.username(),
-//       email: faker.internet.email(),
-//       fullName: faker.person.fullName(),
-//       address: faker.location.streetAddress(),
-//       phone: faker.phone.number(),
-//       password: faker.internet.password(),
-//       isVerified: faker.datatype.boolean(),
-//       avatar: faker.image.avatar(), // Add avatar URL
-//     })),
-//   });
-//   const clientRecords = await prisma.client.findMany();
+const countriesToSeed: Country[] = [Country.DRC, Country.KENYA, Country.UGANDA, Country.RWANDA];
 
-//   // 4. Create Workers
-//   await prisma.worker.createMany({
-//     data: Array.from({ length: 20 }).map(() => ({
-//       email: faker.internet.email(),
-//       fullName: faker.person.fullName(),
-//       role: faker.helpers.arrayElement(['Manager', 'Sales', 'Support']),
-//       phone: faker.phone.number(),
-//       password: faker.internet.password(),
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//     })),
-//   });
+const businessTypes = [
+	{ name: 'Retail', description: 'Stores selling physical products' },
+	{ name: 'Service', description: 'Service providers and professionals' },
+	{ name: 'Food & Beverage', description: 'Restaurants, cafes and food trucks' },
+	{ name: 'Artisan', description: 'Handmade goods and creators' },
+	{ name: 'Wholesale', description: 'Bulk sellers and distributors' },
+];
 
-//   // 5. Create Products
-//   const products = await prisma.product.createMany({
-//     data: Array.from({ length: 100 }).map(() => ({
-//       title: faker.commerce.productName(),
-//       description: faker.commerce.productDescription(),
-//       price: parseFloat(faker.commerce.price()),
-//       stock: faker.number.int({ min: 0, max: 100 }),
-//       category: faker.commerce.department(),
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//     })),
-//   });
-//   const productRecords = await prisma.product.findMany();
+async function seedPricingPlans() {
+	console.log('Seeding Pricing Plans...');
+	for (const tier of pricingTiers) {
+		// Upsert plan (we keep a single plan entry with monthly pricing in the PricingPlan model). We'll store monthly price as the "price" field and include a feature list in PricingFeature.
+		const existing = await prisma.pricingPlan.findFirst({ where: { name: tier.name } });
+		let plan;
+		if (!existing) {
+			plan = await prisma.pricingPlan.create({
+				data: {
+					name: tier.name,
+					description: tier.description,
+					price: tier.monthlyPrice,
+				},
+			});
+			console.log(`Created plan ${plan.name}`);
+		} else {
+			plan = await prisma.pricingPlan.update({ where: { id: existing.id }, data: { description: tier.description, price: tier.monthlyPrice } });
+			console.log(`Updated plan ${plan.name}`);
+		}
 
-//   // 6. Create Media
-//   await prisma.media.createMany({
-//     data: Array.from({ length: 300 }).map(() => ({
-//       url: faker.image.urlLoremFlickr(),
-//       type: faker.helpers.arrayElement([MediaType.IMAGE, MediaType.VIDEO]),
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//     })),
-//   });
+		// Sync features: remove any existing features that are not in the current list, and upsert those that are.
+		const existingFeatures = await prisma.pricingFeature.findMany({ where: { planId: plan.id } });
+		const existingNames = existingFeatures.map((f) => f.name);
 
-//   // 7. Create Orders
-//   const orders = await prisma.order.createMany({
-//     data: Array.from({ length: 200 }).map(() => ({
-//       clientId: faker.helpers.arrayElement(clientRecords).id,
-//       deliveryFee: faker.number.float({ min: 0, max: 50 }),
-//       deliveryAddress: faker.location.streetAddress(),
-//     })),
-//   });
-//   const orderRecords = await prisma.order.findMany();
+		// Create missing features
+		for (const feat of tier.features) {
+			if (!existingNames.includes(feat)) {
+			await prisma.pricingFeature.create({ data: { name: feat, description: feat, planId: plan.id } });
+				console.log(`  - Added feature: ${feat}`);
+			}
+		}
 
-//   // 8. Create OrderProduct relations
-//   await prisma.orderProduct.createMany({
-//     data: Array.from({ length: 500 }).map(() => ({
-//       orderId: faker.helpers.arrayElement(orderRecords).id,
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//       quantity: faker.number.int({ min: 1, max: 5 }),
-//     })),
-//   });
+		// Remove stale features
+		for (const f of existingFeatures) {
+			if (!tier.features.includes(f.name)) {
+			await prisma.pricingFeature.delete({ where: { id: f.id } });
+				console.log(`  - Removed stale feature: ${f.name}`);
+			}
+		}
+	}
+}
 
-//   // 9. Create Reviews
-//   await prisma.review.createMany({
-//     data: Array.from({ length: 150 }).map(() => ({
-//       clientId: faker.helpers.arrayElement(clientRecords).id,
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//       rating: faker.number.int({ min: 1, max: 5 }),
-//       comment: faker.lorem.sentence(),
-//     })),
-//   });
+async function seedHardwareRecommendations() {
+	console.log('Seeding Hardware Recommendations...');
 
-//   // 10. Create Chats
-//   const chats = await prisma.chat.createMany({
-//     data: Array.from({ length: 50 }).map(() => ({
-//       clientId: faker.helpers.arrayElement(clientRecords).id,
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//       status: faker.helpers.arrayElement(['PENDING', 'RESOLVED']),
-//     })),
-//   });
-//   const chatRecords = await prisma.chat.findMany();
+	for (const country of countriesToSeed) {
+		for (const item of hardwareItems) {
+			// Using businessType null for now; country-specific recommendations will be duplicated across countries
+			const existing = await prisma.hardwareRecommendation.findFirst({ where: { model: item.model, country } });
+			if (!existing) {
+			await prisma.hardwareRecommendation.create({
+					data: {
+						type: item.type,
+						model: item.model,
+						description: item.description,
+						localSupplier: faker.company.name(),
+						priceRange: `${Math.floor(Math.random() * 200) + 50}-${Math.floor(Math.random() * 600) + 200}`,
+						setupGuideUrl: item.image,
+						businessType: 'Retail',
+						country,
+					},
+				});
+				console.log(`  - Added ${item.model} for ${country}`);
+			} else {
+				// Optionally update basic fields
+			await prisma.hardwareRecommendation.update({ where: { id: existing.id }, data: { description: item.description, setupGuideUrl: item.image } });
+			}
+		}
+	}
+}
 
-//   // 11. Create Chat Messages
-//   await Promise.all(
-//     chatRecords.map(async (chat) => {
-//       const messages = Array.from({ length: faker.number.int({ min: 1, max: 10 }) }).map(() => ({
-//         chatId: chat.id,
-//         message: faker.lorem.sentence(),
-//         senderId: faker.helpers.arrayElement([chat.clientId, chat.businessId ?? null]),
-//         createdAt: faker.date.past(),
-//       }));
-//       await prisma.chatMessage.createMany({ data: messages });
-//     }),
-//   );
+async function seedBusinessTypes() {
+	console.log('Seeding Business Types...');
+	for (const bt of businessTypes) {
+		const existing = await prisma.businessType.findFirst({ where: { name: bt.name } });
+		if (!existing) {
+			await prisma.businessType.create({ data: { name: bt.name, description: bt.description } });
+			console.log(`  - Created business type ${bt.name}`);
+		}
+	}
+}
 
-//   // 12. Create KYC entries
-//   await prisma.kYC.createMany({
-//     data: Array.from({ length: 30 }).map(() => ({
-//       status: faker.helpers.arrayElement([KycStatus.PENDING, KycStatus.VERIFIED, KycStatus.REJECTED]),
-//       documentUrl: faker.internet.url(),
-//       submittedAt: faker.date.past(),
-//     })),
-//   });
+async function main() {
+	console.log('Starting seed...');
+	try {
+		await seedPricingPlans();
+		await seedHardwareRecommendations();
+		await seedBusinessTypes();
+		console.log('Seeding completed.');
+	} catch (err) {
+		console.error('Seeding error:', err);
+		process.exitCode = 1;
+	} finally {
+		await prisma.$disconnect();
+	}
+}
 
-//   // 13. Create Account Recharges
-//   await prisma.accountRecharge.createMany({
-//     data: Array.from({ length: 50 }).map(() => ({
-//       amount: faker.number.float({ min: 10, max: 1000 }),
-//       method: faker.helpers.arrayElement([RechargeMethod.MTN_MONEY, RechargeMethod.AIRTEL_MONEY, RechargeMethod.ORANGE_MONEY, RechargeMethod.MPESA]),
-//       origin: faker.helpers.arrayElement([Country.DRC, Country.KENYA, Country.UGANDA, Country.RWANDA, Country.BURUNDI, Country.TANZANIA]),
-//     })),
-//   });
+// Execute when run with `ts-node` or `node` (compiled)
+if (require.main === module) {
+	main();
+}
 
-//   // 14. Create Payment Transactions
-//   await Promise.all(
-//     orderRecords.map(async (order) => {
-//       await prisma.paymentTransaction.create({
-//         data: {
-//           orderId: order.id,
-//           status: faker.helpers.arrayElement([PaymentStatus.PENDING, PaymentStatus.COMPLETED, PaymentStatus.FAILED]),
-//           method: faker.helpers.arrayElement([PaymentMethod.TOKEN, PaymentMethod.MOBILE_MONEY]),
-//           amount: faker.number.float({ min: 10, max: 500 }),
-//           transactionDate: faker.date.past(),
-//         },
-//       });
-//     }),
-//   );
-
-//   // 15. Create Reposted Products
-//   await prisma.repostedProduct.createMany({
-//     data: Array.from({ length: 20 }).map(() => ({
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//       earnPercentage: faker.number.float({ min: 0.001, max: 0.01 }),
-//     })),
-//   });
-
-//   // 16. Create ReOwned Products
-//   await prisma.reOwnedProduct.createMany({
-//     data: Array.from({ length: 20 }).map(() => ({
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//       oldOwnerId: faker.helpers.arrayElement(businessRecords).id,
-//       oldPrice: faker.number.float({ min: 10, max: 100 }),
-//       newPrice: faker.number.float({ min: 20, max: 200 }),
-//       markupPercentage: faker.number.float({ min: 0.1, max: 0.5 }),
-//       agreedViaChatId: faker.helpers.arrayElement(chatRecords).id,
-//     })),
-//   });
-
-//   // 17. Create Ads
-//   await prisma.ad.createMany({
-//     data: Array.from({ length: 20 }).map(() => ({
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//       productId: faker.helpers.arrayElement(productRecords).id,
-//       price: faker.number.float({ min: 50, max: 500 }),
-//       periodDays: faker.number.int({ min: 7, max: 30 }),
-//     })),
-//   });
-
-//   // 18. Create Freelance Services
-//   const freelanceServices = await prisma.freelanceService.createMany({
-//     data: Array.from({ length: 10 }).map(() => ({
-//       title: faker.commerce.productName(),
-//       description: faker.commerce.productDescription(),
-//       isHourly: faker.datatype.boolean(),
-//       rate: faker.number.float({ min: 10, max: 100 }),
-//       businessId: faker.helpers.arrayElement(businessRecords).id,
-//     })),
-//   });
-//   const freelanceServiceRecords = await prisma.freelanceService.findMany();
-
-//   // 19. Create Freelance Orders
-//   await prisma.freelanceOrder.createMany({
-//     data: Array.from({ length: 20 }).map(() => ({
-//       clientId: faker.helpers.arrayElement(clientRecords).id,
-//       serviceId: faker.helpers.arrayElement(freelanceServiceRecords).id,
-//       status: faker.helpers.arrayElement([FreelanceStatus.PENDING, FreelanceStatus.IN_PROGRESS, FreelanceStatus.COMPLETED, FreelanceStatus.CANCELLED]),
-//       quantity: faker.number.int({ min: 1, max: 10 }),
-//       totalAmount: faker.number.float({ min: 50, max: 1000 }),
-//       escrowAmount: faker.number.float({ min: 10, max: 500 }),
-//       commissionPercent: faker.number.float({ min: 0.05, max: 0.2 }),
-//     })),
-//   });
-
-//   // 20. Create Referrals
-//   await prisma.referral.createMany({
-//     data: Array.from({ length: 30 }).map(() => {
-//       const isClientReferral = faker.datatype.boolean(); // Randomly decide if it's a client referral
-//       if (isClientReferral) {
-//         // Client refers another Client
-//         return {
-//           affiliateClientId: faker.helpers.arrayElement(clientRecords).id,
-//           referredClientId: faker.helpers.arrayElement(clientRecords).id,
-//           affiliateBusinessId: null,
-//           referredBusinessId: null,
-//           verifiedPurchase: faker.datatype.boolean(),
-//         };
-//       } else {
-//         // Business refers another Business
-//         return {
-//           affiliateBusinessId: faker.helpers.arrayElement(businessRecords).id,
-//           referredBusinessId: faker.helpers.arrayElement(businessRecords).id,
-//           affiliateClientId: null,
-//           referredClientId: null,
-//           verifiedPurchase: faker.datatype.boolean(),
-//         };
-//       }
-//     }),
-//   });
-// }
-
-// main()
-//   .then(async () => {
-//     console.log('Seeding completed.');
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (error) => {
-//     console.error('Error seeding database:', error);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
+export default main;

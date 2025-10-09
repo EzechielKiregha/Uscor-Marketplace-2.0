@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useMe } from '@/lib/useMe';
 import { Button } from '@/components/ui/button';
-import { Menu, Search, Bell, Settings } from 'lucide-react';
+import { Menu, Search, Bell, Settings, X } from 'lucide-react';
 import { useOpenCreateProductModal } from '../_hooks/use-open-create-product-modal';
 import CreateProductModal from './modals/CreateProductModal';
 import { sidebarItems } from './BusinessSidebar';
@@ -30,7 +30,7 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
   };
 
   return (
-    <header className="border-b border-border bg-card h-16 flex items-center px-4 md:px-6">
+    <header className="border-b border-border bg-card h-16 flex items-center justify-between px-4 md:px-6">
       {/* Mobile menu button */}
       <Button
         variant="ghost"
@@ -75,7 +75,7 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
           <UserDropdown />
         </div>
 
-        <div className="hidden lg:flex items-center justify-between flex-raw gap-1.5">
+        {/* <div className="hidden lg:flex items-center justify-between flex-raw gap-1.5">
           <Button
             variant="outline"
             size="sm"
@@ -91,12 +91,12 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
           >
             Add Service
           </Button>
-        </div>
+        </div> */}
       </div>
 
-      {/* Modals */}
+      {/* Modals
       <CreateProductModal />
-      <CreateServiceModal />
+      <CreateServiceModal /> */}
 
       {/* Mobile menu overlay */}
       {showMobileMenu && (
@@ -120,7 +120,7 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
               </div>
             </div>
             <Button variant="ghost" size="icon" onClick={() => setShowMobileMenu(false)}>
-              <Settings className="h-5 w-5" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
 

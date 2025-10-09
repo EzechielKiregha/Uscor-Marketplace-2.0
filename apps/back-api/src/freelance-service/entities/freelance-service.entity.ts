@@ -26,9 +26,9 @@ export class FreelanceServiceEntity {
   @Field(() => Float)
   rate: number
 
-  @Field(() => FreelanceServiceCategory)
+  @Field(() => FreelanceServiceCategory, { nullable: true })
   @IsEnum(FreelanceServiceCategory)
-  category: FreelanceServiceCategory
+  category?: FreelanceServiceCategory
 
   @Field()
   createdAt: Date

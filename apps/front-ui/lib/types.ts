@@ -1,4 +1,8 @@
-// Enums
+// ======================
+// ENUMS & TYPES
+// ======================
+
+// Enums from knowledge base
 export enum RechargeMethod {
   MTN_MONEY = 'MTN_MONEY',
   AIRTEL_MONEY = 'AIRTEL_MONEY',
@@ -13,13 +17,33 @@ export enum Country {
   UGANDA = 'UGANDA',
   RWANDA = 'RWANDA',
   BURUNDI = 'BURUNDI',
-  TANZANIA = 'TANZANIA',
+  TANZANIA = 'TANZANIA'
 }
 
 export enum KycStatus {
   PENDING = 'PENDING',
   VERIFIED = 'VERIFIED',
   REJECTED = 'REJECTED'
+}
+
+export enum BusinessType {
+  ARTISAN = 'ARTISAN',
+  BOOKSTORE = 'BOOKSTORE',
+  ELECTRONICS = 'ELECTRONICS',
+  HARDWARE = 'HARDWARE',
+  GROCERY = 'GROCERY',
+  CAFE = 'CAFE',
+  RESTAURANT = 'RESTAURANT',
+  RETAIL = 'RETAIL',
+  BAR = 'BAR',
+  CLOTHING = 'CLOTHING'
+}
+
+export enum HardwareType {
+  RECEIPT_PRINTER = 'RECEIPT_PRINTER',
+  BARCODE_SCANNER = 'BARCODE_SCANNER',
+  CASH_DRAWER = 'CASH_DRAWER',
+  CARD_READER = 'CARD_READER'
 }
 
 export enum SaleStatus {
@@ -551,4 +575,51 @@ export interface ReturnEntity {
 export interface ReceiptEntity {
   filePath: string;
   emailSent?: boolean;
+}
+
+export interface UpdateBusinessInput {
+  name: String
+  email: String
+  description: String
+  address: String
+  phone: String
+  country: String
+  businessType: String
+  avatar: String
+  coverImage: String
+}
+
+export interface PaymentConfigInput {
+  mobileMoneyEnabled: Boolean
+  mtnCode: String
+  airtelCode: String
+  orangeCode: String
+  mpesaCode: String
+  bankAccount: String
+}
+
+export interface HardwareConfigInput {
+  receiptPrinter: String
+  barcodeScanner: String
+  cashDrawer: String
+  cardReader: String
+}
+
+export interface UploadKycDocumentInput {
+  businessId: String
+  documentType: String
+  document: Document
+}
+
+export interface Document {
+  id: string
+  businessId : string
+  documentType  : string
+  documentUrl : string
+  status  : KycStatus
+  submittedAt : Date
+  verifiedAt    ?: Date
+  rejectionReason ?: string
+  createdAt : Date
+  updatedAt : Date
 }
