@@ -578,36 +578,36 @@ export interface ReceiptEntity {
 }
 
 export interface UpdateBusinessInput {
-  name: String
-  email: String
-  description: String
-  address: String
-  phone: String
-  country: String
-  businessType: String
-  avatar: String
-  coverImage: String
+  name: string
+  email: string
+  description: string
+  address: string
+  phone: string
+  country: string
+  businessType: string
+  avatar: string
+  coverImage: string
 }
 
 export interface PaymentConfigInput {
-  mobileMoneyEnabled: Boolean
-  mtnCode: String
-  airtelCode: String
-  orangeCode: String
-  mpesaCode: String
-  bankAccount: String
+  mobileMoneyEnabled: boolean
+  mtnCode: string
+  airtelCode: string
+  orangeCode: string
+  mpesaCode: string
+  bankAccount: string
 }
 
 export interface HardwareConfigInput {
-  receiptPrinter: String
-  barcodeScanner: String
-  cashDrawer: String
-  cardReader: String
+  receiptPrinter: string
+  barcodeScanner: string
+  cashDrawer: string
+  cardReader: string
 }
 
 export interface UploadKycDocumentInput {
-  businessId: String
-  documentType: String
+  businessId: string
+  documentType: string
   document: Document
 }
 
