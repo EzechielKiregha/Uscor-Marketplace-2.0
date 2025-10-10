@@ -33,6 +33,7 @@ import { Button } from '../ui/button';
 import Cart from '../Cart';
 import UserDropdown from './UserDrodown';
 import { Input, Logo, MenuIcon, MoonIcon, SearchIcon, SunIcon } from '../icons/Logos';
+import NotificationsPopover from './Notifications';
 // Type definitions
 
 interface NavigationMenuProps {
@@ -181,6 +182,7 @@ function HeaderComponent() {
                       <div role="separator" aria-orientation="horizontal" className="bg-background dark:bg-gray-950/20  -mx-1 my-1 h-px"></div>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="w-full">
+                      {/* Notifications Popover */}
                       <Button
                         onClick={toggleTheme}
                         variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
@@ -268,7 +270,8 @@ function HeaderComponent() {
             <Cart />
             <UserDropdown />
           </div>
-          <div className="hidden lg:flex">
+          <div className="hidden lg:flex gap-2">
+            <NotificationsPopover />
             <Button
               onClick={toggleTheme}
               variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"

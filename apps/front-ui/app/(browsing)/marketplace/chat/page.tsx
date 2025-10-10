@@ -19,6 +19,7 @@ export default function ChatThreadListPage() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const params = useSearchParams();
   const currentId = params.get('currentId');
+  const notifId = params.get('notif_chat_id');
   const { loading, error, data, refetch } = useQuery(GET_CHATS_BY_PARTICIPANT, {
     variables: { participantId: user?.id },
     skip: !user?.id,
@@ -34,9 +35,10 @@ export default function ChatThreadListPage() {
 
   React.useEffect(() => {
     if (data?.chatsByParticipant) setChats(data.chatsByParticipant);
-    if (currentId) setActiveChatId(currentId);
+    const selected = notifId ?? currentId;
+    if (selected) setActiveChatId(selected);
     if (chatData?.chat) setCurrentChat(chatData.chat);
-  }, [data, currentId, chatData]);
+  }, [data, currentId, chatData, notifId]);
 
   if (loading) {
     return <Loader loading={true} />;
@@ -48,9 +50,9 @@ export default function ChatThreadListPage() {
 
   // Responsive: show drawer on mobile, sidebar on desktop
   return (
-    <div className=" flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
+    <div className=" flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground overflow-x-hidden">
       <HeaderComponent />
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 overflow-hidden relative min-h-0">
         {/* Mobile Drawer Button */}
         <button
           className="lg:hidden absolute items-end top-4 left-4 z-20 bg-primary text-white p-2 rounded-full shadow-lg"
@@ -113,7 +115,7 @@ export default function ChatThreadListPage() {
         </div>
 
         {/* Chat Thread */}
-        <div className="flex-1 flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           {activeChatId ? (
             <ChatThread
               chat={chats.find(c => c.id === activeChatId) || currentChat}

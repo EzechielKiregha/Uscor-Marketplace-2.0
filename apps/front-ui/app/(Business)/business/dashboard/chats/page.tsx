@@ -56,6 +56,17 @@ export default function BusinessChatsPage() {
   useEffect(() => {
     if (data?.chats?.items) {
       setChats(data.chats.items);
+      // check for notif_chat_id in query string
+      try {
+        const url = new URL(window.location.href);
+        const notif = url.searchParams.get('notif_chat_id');
+        if (notif) {
+          setActiveChatId(notif);
+          return;
+        }
+      } catch (e) {
+        // ignore parsing errors
+      }
       setActiveChatId(data.chats.items[0]?.id || null); // Set the first chat as active by default
     }
   }, [data]);
@@ -85,10 +96,10 @@ export default function BusinessChatsPage() {
   )
 
   return (
-    <div className="flex min-h-screen max-h-screen overflow-auto">
+    <div className="flex min-h-[90vh] max-h-[90vh] overflow-hidden rounded-2xl">
       {/* Chat List */}
       <div className={`${showChatList ? 'flex' : 'hidden'} md:flex w-full md:w-auto md:max-w-md border-r border-border flex-col`}>
-        <div className="p-4 border-b border-border">
+        <div className="p-4 border-b border-border bg-background">
           <div className="relative">
             <input
               type="text"
@@ -108,7 +119,7 @@ export default function BusinessChatsPage() {
         />
       </div>
       {/* Chat Thread */}
-      <div className={`${!showChatList ? 'flex' : 'hidden'} md:flex flex-1 flex-col`}>
+      <div className={`${!showChatList ? 'flex' : 'hidden'} md:flex flex-1 flex flex-col min-h-0`}>
         {activeChatId ? (
           <ChatThread
             chat={chats.find(c => c.id === activeChatId)}

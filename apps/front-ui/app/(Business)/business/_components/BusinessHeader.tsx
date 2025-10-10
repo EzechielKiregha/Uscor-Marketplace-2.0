@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useMe } from '@/lib/useMe';
 import { Button } from '@/components/ui/button';
-import { Menu, Search, Bell, Settings, X } from 'lucide-react';
+import { Menu, Search, Bell, Settings, X, SidebarOpen, SidebarClose } from 'lucide-react';
 import { useOpenCreateProductModal } from '../_hooks/use-open-create-product-modal';
 import CreateProductModal from './modals/CreateProductModal';
 import { sidebarItems } from './BusinessSidebar';
@@ -13,16 +13,19 @@ import { useOpenCreateServiceModal } from '../_hooks/use-open-create-service-mod
 import UserDropdown from '@/components/seraui/UserDrodown';
 import { MoonIcon, SunIcon } from '@/components/icons/Logos';
 import CreateServiceModal from './modals/CreateServiceModal';
+import NotificationsPopover from '@/components/seraui/Notifications';
+
 
 interface BusinessHeaderProps {
   business: any; // Replace with actual BusinessEntity type
+  isSidebarOpen?: boolean;
+  toggleSidebar?: () => void;
 }
 
-export default function BusinessHeader({ business }: BusinessHeaderProps) {
-  const { user, role } = useMe();
+export default function BusinessHeader({ business, isSidebarOpen, toggleSidebar }: BusinessHeaderProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { isOpen: isProductModalOpen, setIsOpen: setIsProductModalOpen } = useOpenCreateProductModal();
-  const { isOpen: isServiceModalOpen, setIsOpen: setIsServiceModalOpen } = useOpenCreateServiceModal();
+  // const { isOpen: isProductModalOpen, setIsOpen: setIsProductModalOpen } = useOpenCreateProductModal();
+  // const { isOpen: isServiceModalOpen, setIsOpen: setIsServiceModalOpen } = useOpenCreateServiceModal();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -41,24 +44,36 @@ export default function BusinessHeader({ business }: BusinessHeaderProps) {
         <Menu className="h-5 w-5" />
       </Button>
 
-      {/* Search */}
-      <div className="relative flex-1 max-w-xl">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2">
-          <Search className="h-4 w-4 text-muted-foreground" />
+      {/* Desktop sidebar toggle */}
+      <div className="flex flex-row gap-3">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hidden md:inline-flex mr-2"
+          onClick={() => toggleSidebar && toggleSidebar()}
+          aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+        >
+          {isSidebarOpen ? <SidebarClose className="h-5 w-5" /> : <SidebarOpen className="h-5 w-5" />}
+        </Button>
+
+        {/* Search */}
+        <div className="relative flex-1 max-w-xl">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2">
+            <Search className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search products, orders, customers..."
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Search products, orders, customers..."
-          className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-        />
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-3 ml-4">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full"></span>
-        </Button>
+
+        {/* Notifications Popover */}
+        <NotificationsPopover />
         <Button
           onClick={toggleTheme}
           variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"

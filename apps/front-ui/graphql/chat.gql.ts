@@ -161,6 +161,20 @@ export const GET_UNREAD_COUNT = gql`
   }
 `;
 
+export const GET_CHAT_NOTIFICATIONS = gql`
+  query GetChatNotifications($userId: String!) {
+    chatNotifications(userId: $userId){
+      id
+      chatId
+      userId
+      lastReadAt
+      unreadCount
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const GET_CHATS_BY_PARTICIPANT = gql`
   query GetChatsByParticipant($participantId: String!) {
     chatsByParticipant(participantId: $participantId) {
@@ -203,20 +217,6 @@ export const GET_CHATS_BY_PARTICIPANT = gql`
         senderId
         createdAt
       }
-    }
-  }
-`;
-
-export const GET_CHAT_NOTIFICATIONS = gql`
-  query GetChatNotifications($userId: String!) {
-    chatNotifications(userId: $userId){
-      id
-      chatId
-      userId
-      lastReadAt
-      unreadCount
-      createdAt
-      updatedAt
     }
   }
 `;

@@ -1,8 +1,12 @@
+"use client"
 import React, { useRef, useEffect, useState } from 'react';
 import MessageBubble from './MessageBubble';
+import ScrollArea from '../ui/ScrollArea';
 import { Button } from '../ui/button';
 import Loader from '../seraui/Loader';
 import { ArrowLeft } from 'lucide-react';
+import { useMutation } from '@apollo/client';
+import { MARK_MESSAGES_AS_READ, GET_UNREAD_COUNT } from '@/graphql/chat.gql';
 
 interface ChatThreadProps {
   chat: any;
@@ -17,9 +21,39 @@ export default function ChatThread({ chat, userId, userRole, onSendMessage, load
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+
+  const [markMessagesAsRead] = useMutation(MARK_MESSAGES_AS_READ);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // mark messages as read for this user when opening/visiting a chat
+    if (!chat?.id || !userId) return;
+    try {
+      markMessagesAsRead({
+        variables: { chatId: chat.id, userId },
+        refetchQueries: userId ? [{ query: GET_UNREAD_COUNT, variables: { userId } }] : [],
+        awaitRefetchQueries: false,
+      }).catch(() => {
+        // ignore errors silently
+      });
+    } catch (e) {
+      // swallow
+    }
+  }, [chat?.id, userId, markMessagesAsRead]);
+
+  useEffect(() => {
+    // smooth scroll the scroll area to bottom when messages change
+    if (scrollAreaRef.current) {
+      // scroll the container to the bottom
+      try {
+        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+      } catch (e) {
+        // fallback
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [chat?.messages]);
 
   const handleSend = async () => {
@@ -45,14 +79,14 @@ export default function ChatThread({ chat, userId, userRole, onSendMessage, load
   )
 
   return (
-    <div className="flex flex-col h-full min-h-0 max-h-screen w-full overflow-x-hidden">
+    <div className="flex flex-col h-full w-full overflow-x-hidden">
       {/* Chat Header */}
       <div className="border-b border-border p-2 sm:p-3 md:p-4 flex items-center justify-between bg-background sticky top-0 z-10 w-full max-w-full overflow-x-hidden">
         <div className="flex items-center gap-2 sm:gap-3 w-full max-w-full overflow-x-hidden">
           {onBack && (
             <button onClick={onBack} className="md:hidden mr-2"><ArrowLeft /></button>
           )}
-          <div className="flex items-start gap-2 sm:gap-3 w-full max-w-full overflow-x-hidden">
+          <div className="flex items-start gap-2 sm:gap-3 w-full max-w-full">
             <img
               src={chat.product?.title || "avatar.png"}
               alt={chat.product?.title}
@@ -62,15 +96,30 @@ export default function ChatThread({ chat, userId, userRole, onSendMessage, load
               }}
             />
             <div className="min-w-0 flex-1">
-              <div className="font-semibold truncate text-sm sm:text-base md:text-lg">{chat.product?.business.name} <span className='text-orange-600 text-xs sm:text-sm'>{chat.product?.title}</span></div>
-              <div className="text-xs sm:text-sm text-gray-500 truncate">{chat.service?.description || chat.product?.description || ''}</div>
+              {/* Business name and product title: truncate, reduce size on small screens */}
+              <div className="flex items-center gap-2">
+                <div className="font-semibold truncate text-sm md:text-base lg:text-lg">
+                  {chat.product?.business.name}
+                </div>
+                {/* <div className="text-orange-600 text-xs sm:text-sm truncate max-w-[40%] md:max-w-[30%] hidden xs:block sm:block">
+                  {chat.product?.title}
+                </div> */}
+              </div>
+              {/* Description: hide on very small screens, truncate otherwise */}
+              {/* <div className="text-xs sm:text-sm text-gray-500 truncate hidden max-w-[60%] lg:max-w-[50%] xs:block sm:block">
+                {chat.service?.description || chat.product?.description || ''}
+              </div> */}
+              <div className="text-orange-600 text-xs sm:text-sm truncate max-w-[60%] md:max-w-[50%]">
+                {chat.product?.title}
+              </div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">{new Date(chat.createdAt).toLocaleDateString()}</div>
+            <div className="text-xs sm:text-sm text-gray-400 whitespace-nowrap ml-2">{new Date(chat.createdAt).toLocaleDateString()}</div>
           </div>
         </div>
       </div>
       {/* Messages */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-2 sm:p-3 md:p-4 space-y-2 sm:space-y-3 md:space-y-4 bg-card w-full max-w-full overflow-x-hidden">
+      {/* <div className="flex-1 h-90  w-full max-w-full"> */}
+      <ScrollArea className="flex-1 h-[68%] bg-card min-h-0 p-2 sm:p-3 md:p-4 space-y-2 sm:space-y-3 md:space-y-4" ref={scrollAreaRef}>
         {chat.messages.map((msg: any) => (
           <div key={msg.id} className="max-w-full break-words">
             <MessageBubble
@@ -84,7 +133,8 @@ export default function ChatThread({ chat, userId, userRole, onSendMessage, load
           </div>
         ))}
         <div ref={messagesEndRef} />
-      </div>
+      </ScrollArea>
+      {/* </div> */}
       {/* Message Input */}
       <div className="border-t border-border p-2 sm:p-3 md:p-4 bg-background sticky bottom-0 z-10 w-full max-w-full overflow-x-hidden">
         <div className="flex items-end gap-2">

@@ -369,8 +369,6 @@ export default function CheckoutPage() {
       // Redirect to order confirmation or order details
       router.push(`/marketplace/orders/${data.createOrder.id}`)
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.log('Order creation error:', error)
       showToast('error', 'Error', error.message || 'Failed to create order')
     } finally {
       setIsProcessing(false)
