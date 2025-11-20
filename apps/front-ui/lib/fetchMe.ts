@@ -29,6 +29,8 @@ export const GET_BUSINESS_BY_ID = gql`
       email
       description
       address
+      website
+      businessType
       phone
       avatar
       coverImage
