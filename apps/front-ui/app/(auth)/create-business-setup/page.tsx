@@ -95,7 +95,7 @@ export default function BusinessCreatePage() {
       await updateBusiness({
         variables: {
           id: meBusiness.id,
-          updateBusinessInput: {
+          input: {
             name: data.name,
             phone: data.phone,
             address: data.address,

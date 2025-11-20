@@ -223,8 +223,8 @@ export const CREATE_BUSINESS = gql`
 
 // ✏ Update Business
 export const UPDATE_BUSINESS = gql`
-  mutation UpdateBusiness($id: String!, $updateBusinessInput: UpdateBusinessInput!) {
-    updateBusiness(id: $id, updateBusinessInput: $updateBusinessInput) {
+  mutation UpdateBusiness($id: String!, $input: UpdateBusinessInput!) {
+    updateBusiness(id: $id, input: $input) {
       id
       name
       email

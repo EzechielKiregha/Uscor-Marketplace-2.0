@@ -136,8 +136,8 @@ export class BusinessResolver {
   async updateBusiness(
     @Args('id', { type: () => String })
     id: string,
-    @Args('updateBusinessInput')
-    updateBusinessInput: UpdateBusinessInput,
+    @Args('input', { type: () => UpdateBusinessInput })
+    input: UpdateBusinessInput,
     @Context() context,
   ) {
     const user = context.req.user
@@ -148,7 +148,7 @@ export class BusinessResolver {
     }
     return this.businessService.update(
       id,
-      updateBusinessInput,
+      input,
     )
   }
 
