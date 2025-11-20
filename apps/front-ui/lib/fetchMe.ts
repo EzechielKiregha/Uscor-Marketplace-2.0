@@ -28,6 +28,7 @@ export const GET_BUSINESS_BY_ID = gql`
       name
       email
       description
+      password
       address
       website
       businessType

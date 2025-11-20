@@ -113,25 +113,25 @@ export default function BusinessCreatePage() {
 
       showToast("success", "Saved", "Business profile updated", true, 6000, "bottom-right");
 
-      // Now sign in with the correct role
-      let { data: { [`signBusinessIn`]: result } } = await signInBusiness({
-        variables: { SignInInput: { email: business.email, password: business.password } },
-      });
+      // // Now sign in with the correct role
+      // let { data: { [`signBusinessIn`]: result } } = await signInBusiness({
+      //   variables: { SignInInput: { email: business.email, password: business.password } },
+      // });
 
-      result = removeTypename(result);
-      setAuthToken(result.accessToken, result.refreshToken);
-      if (result.user.role !== 'business') {
-        showToast(
-          'error',
-          'Error',
-          'Invalid Role after sign in. Please log in again.',
-          true,
-          8000,
-          'bottom-right'
-        )
-        router.push('/login')
-        return;
-      }
+      // result = removeTypename(result);
+      // setAuthToken(result.accessToken, result.refreshToken);
+      // if (result.user.role !== 'business') {
+      //   showToast(
+      //     'error',
+      //     'Error',
+      //     'Invalid Role after sign in. Please log in again.',
+      //     true,
+      //     8000,
+      //     'bottom-right'
+      //   )
+      //   router.push('/login')
+      //   return;
+      // }
       router.push("/business/dashboard");
     } catch (err: any) {
       showToast("error", "Failed", err.message || "Failed to save", true, 8000, "bottom-right");
