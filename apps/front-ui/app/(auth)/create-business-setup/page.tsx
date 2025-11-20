@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { removeTypename } from "@/lib/removeTypeName";
 import { setAuthToken } from "@/lib/auth";
+import { getLoginMutation } from "@/graphql/auth.gql";
 
 // Step schema
 const schema = z.object({
@@ -37,7 +38,8 @@ export default function BusinessCreatePage() {
   const { loading, user, role } = useMe();
   const [step, setStep] = useState(1);
   const [updateBusiness, { loading: saving }] = useMutation(UPDATE_BUSINESS);
-  let signInMutation: any;
+
+  const [signInBusiness, { loading: businessLoading }] = useMutation(getLoginMutation('Business'));
 
   const meBusiness = useMemo(() => {
     if (role === "business" && user) return user as BusinessEntity;
@@ -58,7 +60,7 @@ export default function BusinessCreatePage() {
       phone: meBusiness?.phone || "",
       address: meBusiness?.address || "",
       website: "",
-      businessType: (meBusiness as any)?.businessType || businessTypeFromStorage || "",
+      businessType: businessTypeFromStorage || (meBusiness as any)?.businessType || "",
       isB2BEnabled: (meBusiness as any)?.isB2BEnabled ?? false,
       hasAgreedToTerms: (meBusiness as any)?.hasAgreedToTerms ?? false,
       preferences: (meBusiness as any)?.preferences || {},
@@ -70,7 +72,7 @@ export default function BusinessCreatePage() {
         phone: meBusiness.phone || "",
         address: meBusiness.address || "",
         website: "",
-        businessType: (meBusiness as any)?.businessType || businessTypeFromStorage || "",
+        businessType: businessTypeFromStorage || (meBusiness as any)?.businessType || "",
         isB2BEnabled: (meBusiness as any)?.isB2BEnabled ?? false,
         hasAgreedToTerms: (meBusiness as any)?.hasAgreedToTerms ?? false,
         preferences: (meBusiness as any)?.preferences || {},
@@ -112,7 +114,7 @@ export default function BusinessCreatePage() {
       showToast("success", "Saved", "Business profile updated", true, 6000, "bottom-right");
 
       // Now sign in with the correct role
-      let { data: { [`signBusinessIn`]: result } } = await signInMutation({
+      let { data: { [`signBusinessIn`]: result } } = await signInBusiness({
         variables: { SignInInput: { email: business.email, password: business.password } },
       });
 
