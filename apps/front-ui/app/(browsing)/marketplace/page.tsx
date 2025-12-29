@@ -31,6 +31,7 @@ import ProductCard from './_components/ProductCard';
 import ServiceCard from './_components/ServiceCard';
 import SearchModal from './_components/SearchModal';
 import { useSearchParams } from 'next/navigation';
+import { URLSearchParams } from 'node:url';
 
 interface MarketplacePageProps {
   sp: {
@@ -39,7 +40,7 @@ interface MarketplacePageProps {
     hasPromotion?: string;
     featured?: string;
     sort?: string;
-  };
+  } | URLSearchParams;
 }
 
 export default function MarketplacePage({ sp }: MarketplacePageProps) {

@@ -26,6 +26,7 @@ import {
 import { useMe } from '@/lib/useMe';
 import Loader from '@/components/seraui/Loader';
 import BusinessCard from './_components/BusinessCard';
+import { URLSearchParams } from 'node:url';
 
 interface BusinessListingPageProps {
   sp: {
@@ -35,7 +36,7 @@ interface BusinessListingPageProps {
     verified?: string;
     businessType?: string;
     sort?: string;
-  };
+  } | URLSearchParams;
 }
 
 export default function BusinessListingPage({ sp }: BusinessListingPageProps) {
