@@ -53,6 +53,7 @@ export default function SideBar({ isOpen = true, selectedSection }: SideBarProps
                 <Button
                   variant={isActive ? 'secondary' : 'ghost'}
                   className="w-full justify-start"
+                  key={item.label}
                   onClick={() => handleActiveSectionChange(item.label.toLowerCase() as any)}
                 >
                   <item.icon className="h-4 w-4 mr-2" />

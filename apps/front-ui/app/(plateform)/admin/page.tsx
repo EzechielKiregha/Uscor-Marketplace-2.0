@@ -219,6 +219,7 @@ export default function AdminDashboard() {
                   <Button
                     variant={isActive ? 'secondary' : 'ghost'}
                     className="w-full justify-start"
+                    key={item.label}
                     onClick={() => {
                       handleActiveSectionChange(item.label.toLowerCase() as any);
                       setShowMobileMenu(false);
