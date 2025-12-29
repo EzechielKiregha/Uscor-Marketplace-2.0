@@ -19,14 +19,15 @@ import {
   Palette,
   Box,
   Truck,
-  MessageSquare
+  MessageSquare,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
 import { Button } from '@/components/ui/button';
 import { FreelanceServiceEntity } from '@/lib/types';
 
 // Map service categories to icons (Lucide icons)
-const SERVICE_CATEGORY_ICONS: Record<string, React.ReactNode | React.ElementType> = {
+const SERVICE_CATEGORY_ICONS: Record<string, LucideIcon> = {
   WOODWORKING: Hammer,
   METALWORKING: Wrench,
   REPAIR: Wrench,
@@ -185,13 +186,7 @@ export default function ServicesSection({
             {filteredServices.map(service => {
               const CategoryIcon = SERVICE_CATEGORY_ICONS[service.category] || BriefcaseBusiness;
 
-              let iconElement: React.ReactNode = null;
-              if (React.isValidElement(CategoryIcon)) {
-                iconElement = CategoryIcon;
-              } else {
-                const IconComp = CategoryIcon as React.ElementType;
-                iconElement = <IconComp className="h-4 w-4 text-muted-foreground" />;
-              }
+              <CategoryIcon className="h-4 w-4 text-muted-foreground" />;
 
               return (
                 <div
@@ -200,7 +195,7 @@ export default function ServicesSection({
                 >
                   <div className="p-4 bg-muted border-b border-border">
                     <div className="flex items-center gap-2">
-                      {iconElement}
+                      {CategoryIcon && <CategoryIcon className="h-5 w-5 text-primary" />}
                       <h3 className="font-medium truncate">{service.title}</h3>
                     </div>
                   </div>
@@ -275,19 +270,13 @@ export default function ServicesSection({
           {filteredServices.map(service => {
             const CategoryIcon = SERVICE_CATEGORY_ICONS[service.category] || BriefcaseBusiness;
 
-            let iconElement: React.ReactNode;
-            if (React.isValidElement(CategoryIcon)) {
-              iconElement = CategoryIcon;
-            } else {
-              const IconComp = CategoryIcon as React.ElementType;
-              iconElement = <IconComp className="h-4 w-4 text-muted-foreground" />;
-            }
+            CategoryIcon && <CategoryIcon className="h-4 w-4 text-muted-foreground" />;
 
             return (
               <div key={service.id} className="p-4 hover:bg-muted/50">
                 <div className="flex gap-4">
                   <div className="w-16 h-16 flex-shrink-0 border border-border rounded-lg overflow-hidden flex items-center justify-center bg-muted">
-                    {iconElement}
+                    {CategoryIcon && <CategoryIcon className="h-8 w-8 text-primary" />}
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
