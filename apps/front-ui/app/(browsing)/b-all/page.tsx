@@ -26,32 +26,31 @@ import {
 import { useMe } from '@/lib/useMe';
 import Loader from '@/components/seraui/Loader';
 import BusinessCard from './_components/BusinessCard';
-import { URLSearchParams } from 'node:url';
 
-interface BusinessListingPageProps {
-  sp: {
-    loyalty?: string;
-    promotions?: string;
-    b2b?: string;
-    verified?: string;
-    businessType?: string;
-    sort?: string;
-  } | URLSearchParams;
+interface SearchParams {
+  loyalty?: string;
+  promotions?: string;
+  b2b?: string;
+  verified?: string;
+  businessType?: string;
+  sort?: string;
 }
 
-export default function BusinessListingPage({ sp }: BusinessListingPageProps) {
+export default async function BusinessListingPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const sp = await searchParams;
 
-  // const { user, loading: authLoading } = useMe();
-  // Unwrap Next.js `sp` proxy using React.use() per lint advice
-  const _searchParams = (React as any).use ? (React as any).use(sp) : sp;
   const [filters, setFilters] = useState({
     search: '',
-    businessType: _searchParams.businessType || '',
-    hasLoyalty: _searchParams.loyalty === 'true',
-    hasPromotions: _searchParams.promotions === 'true',
-    isB2BEnabled: _searchParams.b2b === 'true',
-    isVerified: _searchParams.verified === 'true',
-    sort: _searchParams.sort || 'relevance'
+    businessType: sp.businessType ?? '',
+    hasLoyalty: sp.loyalty === 'true',
+    hasPromotions: sp.promotions === 'true',
+    isB2BEnabled: sp.b2b === 'true',
+    isVerified: sp.verified === 'true',
+    sort: sp.sort ?? 'relevance',
   });
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [page, setPage] = useState(1);
@@ -136,14 +135,14 @@ export default function BusinessListingPage({ sp }: BusinessListingPageProps) {
     // Apply filters from URL params on initial load
     setFilters({
       search: '',
-      businessType: _searchParams.businessType || '',
-      hasLoyalty: _searchParams.loyalty === 'true',
-      hasPromotions: _searchParams.promotions === 'true',
-      isB2BEnabled: _searchParams.b2b === 'true',
-      isVerified: _searchParams.verified === 'true',
-      sort: _searchParams.sort || 'relevance'
+      businessType: sp.businessType || '',
+      hasLoyalty: sp.loyalty === 'true',
+      hasPromotions: sp.promotions === 'true',
+      isB2BEnabled: sp.b2b === 'true',
+      isVerified: sp.verified === 'true',
+      sort: sp.sort || 'relevance'
     });
-  }, [_searchParams]);
+  }, [sp]);
 
   if (businessesLoading || businessTypesLoading) return <Loader loading={true} />;
   if (businessesError) return <div>Error loading businesses: {businessesError.message}</div>;

@@ -31,22 +31,23 @@ import ProductCard from './_components/ProductCard';
 import ServiceCard from './_components/ServiceCard';
 import SearchModal from './_components/SearchModal';
 import { useSearchParams } from 'next/navigation';
-import { URLSearchParams } from 'node:url';
 
-interface MarketplacePageProps {
-  sp: {
-    category?: string;
-    businessType?: string;
-    hasPromotion?: string;
-    featured?: string;
-    sort?: string;
-  } | URLSearchParams;
-}
+interface SearchParams {
+  category?: string;
+  businessType?: string;
+  hasPromotion?: string;
+  featured?: string;
+  sort?: string;
+};
 
-export default function MarketplacePage({ sp }: MarketplacePageProps) {
+export default async function MarketplacePage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   // const { user, loading: authLoading } = useMe();
-  // Unwrap Next.js `sp` proxy using React.use() per lint advice
-  const _searchParams = (React as any).use ? (React as any).use(sp) : sp;
+  // Unwrap Next.js `searchParams` proxy using React.use() per lint advice
+  const _searchParams = await searchParams;
   const search_params = useSearchParams();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const tab = search_params.get('tab');
@@ -56,8 +57,8 @@ export default function MarketplacePage({ sp }: MarketplacePageProps) {
     search: '',
     category: _searchParams?.category || '',
     businessType: _searchParams?.businessType || '',
-    hasPromotion: _searchParams?.hasPromotion === true,
-    featured: _searchParams?.featured === true,
+    hasPromotion: _searchParams?.hasPromotion ? true : false,
+    featured: _searchParams?.featured ? true : false,
     minPrice: '',
     maxPrice: '',
     sort: _searchParams?.sort || 'relevance'
