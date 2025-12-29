@@ -55,7 +55,7 @@ export const StatsSection: React.FC = () => {
   }, [controls, inView, stats]);
 
   return (
-    <section ref={ref} className="py-4 bg-white dark:bg-gray-950">
+    <section ref={ref} className="py-4 bg-white ">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
         {stats.map((stat, index) => (
           <motion.div key={stat.label}>
@@ -167,7 +167,7 @@ export const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-950">
+    <section className="py-16 bg-white ">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-12">Comment ça marche</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">

@@ -21,17 +21,19 @@ import { PaymentConfigEntity } from '../../settings/entities/payment-config.enti
 import { HardwareConfigEntity } from '../../settings/entities/hardware-config.entity'
 import { KycDocumentEntity } from '../../settings/entities/kyc-document.entity'
 import { StoreEntity } from '../../store/entities/store.entity'
+import { LoyaltyProgramEntity } from '../../loyalty-program/entities/loyalty-program.entity'
+import { PromotionEntity } from '../../client/entities/promotion.entity'
 
 @ObjectType()
 export class BusinessEntity {
-  @Field()
-  id: string
+  @Field({nullable: true })
+  id?: string
 
-  @Field()
-  name: string
+  @Field({nullable: true })
+  name?: string
 
-  @Field()
-  email: string
+  @Field({ nullable: true })
+  email?: string
 
   @Field({ nullable: true })
   description?: string
@@ -73,8 +75,8 @@ export class BusinessEntity {
   @Field()
   isVerified: boolean
 
-  @Field(() => KycStatus)
-  kycStatus: KycStatus
+  @Field(() => KycStatus, { nullable: true })
+  kycStatus?: KycStatus
 
   @Field(() => Int)
   totalProductsSold: number
@@ -133,6 +135,12 @@ export class BusinessEntity {
 
   @Field(() => [StoreEntity], { nullable: true })
   stores?: StoreEntity[]
+
+  @Field(() => LoyaltyProgramEntity, { nullable: true })
+  loyaltyProgram?: LoyaltyProgramEntity
+
+  @Field(() => [PromotionEntity], { nullable: true })
+  promotions?: PromotionEntity[]
 
   @Field(() => [FreelanceServiceEntity]) // Freelance services offered by the business
   freelanceServices: FreelanceServiceEntity[]

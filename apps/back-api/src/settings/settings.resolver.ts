@@ -50,6 +50,16 @@ export class SettingsResolver {
   }
 
   @Mutation(() => BusinessSettingsEntity)
+  async verifyKyc(@Args('businessId') businessId: string, @Args('notes', { nullable: true }) notes?: string) {
+    return this.settingsService.verifyKyc(businessId, notes)
+  }
+
+  @Mutation(() => BusinessSettingsEntity)
+  async rejectKyc(@Args('businessId') businessId: string, @Args('rejectionReason') rejectionReason: string) {
+    return this.settingsService.rejectKyc(businessId, rejectionReason)
+  }
+
+  @Mutation(() => BusinessSettingsEntity)
   async agreeToTerms(@Args('businessId') businessId: string) {
     return this.settingsService.agreeToTerms(businessId)
   }
@@ -66,5 +76,12 @@ export class SettingsResolver {
   })
   kycUpdated() {
     return this.pubSub.asyncIterator('KYC_UPDATED')
+  }
+
+  @Subscription(() => BusinessSettingsEntity, {
+    resolve: (payload) => payload.kycSubmitted,
+  })
+  kycSubmitted() {
+    return this.pubSub.asyncIterableIterator('KYC_SUBMITTED')
   }
 }

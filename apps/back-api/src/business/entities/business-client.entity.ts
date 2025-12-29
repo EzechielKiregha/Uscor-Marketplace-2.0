@@ -1,4 +1,3 @@
-// src/business/dto/dashboard-client.dto.ts
 import {
   ObjectType,
   Field,

@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 
 export interface JwtPayload {
-  role: 'client' | 'business' | 'worker';
+  role: 'client' | 'business' | 'worker'| 'admin';
   id: string;
   email: string;
   isVerified: boolean;

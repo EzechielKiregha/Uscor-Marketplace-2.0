@@ -5,6 +5,8 @@ import {
   Args,
   Int,
   Context,
+  ResolveField,
+  Parent,
 } from '@nestjs/graphql'
 import { ClientService } from './client.service'
 import { ClientEntity } from './entities/client.entity'
@@ -17,6 +19,14 @@ import { UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
 import { Roles } from '../auth/decorators/roles.decorator'
+import { AddressInput } from './dto/address.input'
+import { AddressEntity } from './entities/address.entity'
+import { PaymentMethodInput } from './dto/payment-method.input'
+import { PaymentMethodEntity } from './entities/payment-method.entity'
+import { SuccessResponse } from '../common/dto/success.dto'
+import { PromotionEntity } from './entities/promotion.entity'
+import { RecommendationEntity } from './entities/recommendation.entity'
+import { PaginatedReviews } from '../business/entities/paginated-reviews.entity'
 
 @Resolver(() => ClientEntity)
 export class ClientResolver {
@@ -89,6 +99,102 @@ export class ClientResolver {
     return this.clientService.findOne(id)
   }
 
+  // Computed fields for front-end
+  @ResolveField('loyaltyPoints', () => Number)
+  async loyaltyPoints(@Parent() client: ClientEntity) {
+    if (!client.id) return 0
+    return this.clientService.getLoyaltyPoints(client.id)
+  }
+
+  @ResolveField('loyaltyTier', () => String, { nullable: true })
+  async loyaltyTier(@Parent() client: ClientEntity) {
+    if (!client.id) return null
+    return this.clientService.getLoyaltyTier(client.id)
+  }
+
+  @ResolveField('totalSpent', () => Number)
+  async totalSpent(@Parent() client: ClientEntity) {
+    if (!client.id) return 0
+    return this.clientService.getTotalSpent(client.id)
+  }
+
+  @ResolveField('totalOrders', () => Number)
+  async totalOrders(@Parent() client: ClientEntity) {
+    if (!client.id) return 0
+    return this.clientService.getTotalOrders(client.id)
+  }
+
+  // Address & payment mutations
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => ClientEntity)
+  async addClientAddress(
+    @Args('clientId', { type: () => String }) clientId: string,
+    @Args('input') input: AddressInput,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    if (user.id !== clientId) throw new Error('Clients can only add addresses to their own profile')
+    await this.clientService.addAddress(clientId, input)
+    return this.clientService.findOne(clientId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => AddressEntity)
+  async updateClientAddress(
+    @Args('addressId', { type: () => String }) addressId: string,
+    @Args('input') input: AddressInput,
+    @Context() context,
+  ) {
+    // ensure owner
+    const addr = await (this.clientService as any).prisma.address.findUnique({ where: { id: addressId } })
+    const user = context.req.user
+    if (!addr || addr.clientId !== user.id) throw new Error('Not authorized')
+    return this.clientService.updateAddress(addressId, input)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => SuccessResponse)
+  async deleteClientAddress(
+    @Args('addressId', { type: () => String }) addressId: string,
+    @Context() context,
+  ) {
+    const addr = await (this.clientService as any).prisma.address.findUnique({ where: { id: addressId } })
+    const user = context.req.user
+    if (!addr || addr.clientId !== user.id) throw new Error('Not authorized')
+    await this.clientService.deleteAddress(addressId)
+    return { success: true }
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => ClientEntity)
+  async addClientPaymentMethod(
+    @Args('clientId', { type: () => String }) clientId: string,
+    @Args('input') input: PaymentMethodInput,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    if (user.id !== clientId) throw new Error('Clients can only add payment methods to their own profile')
+    await this.clientService.addPaymentMethod(clientId, input)
+    return this.clientService.findOne(clientId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => PaymentMethodEntity)
+  async setDefaultPaymentMethod(
+    @Args('paymentMethodId', { type: () => String }) paymentMethodId: string,
+    @Context() context,
+  ) {
+    const pm = await (this.clientService as any).prisma.clientPaymentMethod.findUnique({ where: { id: paymentMethodId } })
+    const user = context.req.user
+    if (!pm || pm.clientId !== user.id) throw new Error('Not authorized')
+    return this.clientService.setDefaultPaymentMethod(paymentMethodId)
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('business', 'worker')
   @Query(() => ClientEntity, {
@@ -101,6 +207,57 @@ export class ClientResolver {
     email: string,
   ) {
     return this.clientService.findByEmail(email)
+  }
+
+  @Query(() => PaginatedReviews, {
+    name: 'clientReviews',
+  })
+  async getClientReviews(
+    @Args('clientId', { type: () => String }) clientId: string,
+    @Args('page', { type: () => Int, nullable: true }) page = 1,
+    @Args('limit', { type: () => Int, nullable: true }) limit = 10,
+  ) {
+    const skip = (page - 1) * limit
+    const items = await (this.clientService as any).prisma.review.findMany({
+      where: { clientId },
+      include: {
+        client: true,
+        product: {
+          select: {
+            id: true,
+            title: true,
+            business: { select: { id: true, name: true, avatar: true } },
+            medias: { select: { url: true } },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+    })
+    const total = await (this.clientService as any).prisma.review.count({ where: { clientId } })
+    return { items, total, page, limit }
+  }
+
+  @Query(() => [PromotionEntity], { name: 'clientPromotions' })
+  async getClientPromotions(
+    @Args('clientId', { type: () => String }) clientId: string,
+  ) {
+    // Minimal implementation: return empty list for now
+    return []
+  }
+
+  @Query(() => [RecommendationEntity], { name: 'clientRecommendations' })
+  async getClientRecommendations(
+    @Args('clientId', { type: () => String }) clientId: string,
+  ) {
+    // Simple logic: return latest products from businesses the client has ordered from
+    const orders = await (this.clientService as any).prisma.order.findMany({ where: { clientId }, select: { id: true, businessId: true } })
+    const businessIds = [...new Set(orders.map(o => o.businessId).filter(Boolean))]
+    if (!businessIds.length) return []
+    const items = await (this.clientService as any).prisma.product.findMany({ where: { businessId: { in: businessIds } }, take: 10, orderBy: { createdAt: 'desc' }, include: { medias: { select: { url: true } }, business: { select: { id: true, name: true } } } })
+    const recs = items.map(it => ({ id: it.id, type: 'product', title: it.title, description: it.description, items: [{ id: it.id, name: it.title, price: it.price, mediaUrl: it.medias?.[0]?.url }], reason: 'Based on your orders', createdAt: it.createdAt }))
+    return recs
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

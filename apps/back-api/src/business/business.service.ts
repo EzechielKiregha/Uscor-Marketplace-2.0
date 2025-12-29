@@ -200,7 +200,7 @@ export class BusinessService {
   }
 
   async findOne(id: string) {
-    return this.prisma.business.findUnique({
+    const business: any = await this.prisma.business.findUnique({
       where: { id },
       include: {
         products: {
@@ -211,6 +211,7 @@ export class BusinessService {
             quantity: true,
             // minQuantity: true,
             createdAt: true,
+            updatedAt: true,
           },
         },
         workers: {
@@ -372,6 +373,19 @@ export class BusinessService {
             name: true,
             address: true,
             createdAt: true,
+            products: {
+              select: {
+                id: true,
+                title: true,
+                price: true,
+                quantity: true,
+                medias: { select: { url: true, type: true } },
+                store: { select: { id: true, name: true } },
+                category: { select: { id: true, name: true } },
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
           },
         },
         loyaltyPrograms: {
@@ -385,6 +399,16 @@ export class BusinessService {
         },
       } as any,
     })
+
+    // Normalize store product shapes
+    if (business && business.stores) {
+      business.stores = business.stores.map((s: any) => ({
+        ...s,
+        products: (s.products || []).map((p: any) => this.normalizeProduct(p)),
+      }))
+    }
+
+    return business
   }
 
   async updateTotalProuctSold(
@@ -480,6 +504,23 @@ export class BusinessService {
   }
 
   // New API: get products for a business with optional store/category/search filters
+  // Normalizes a product returned from Prisma to the shape expected by the frontend
+  private normalizeProduct(product: any) {
+    const media = product.medias && product.medias.length ? product.medias[0] : null
+    return {
+      id: product.id,
+      name: product.title || product.name || '',
+      description: product.description || null,
+      price: product.price || 0,
+      category: product.category || null,
+      stockQuantity: product.quantity ?? product.stock ?? 0,
+      media,
+      store: product.store ? { id: product.store.id, name: product.store.name } : null,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+    }
+  }
+
   async getProducts(opts: {
     businessId: string
     storeId?: string
@@ -499,13 +540,124 @@ export class BusinessService {
       include: {
         medias: { select: { url: true, type: true } },
         store: { select: { id: true, name: true } },
+        category: { select: { id: true, name: true } },
       } as any,
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
     })
 
-    return products
+    // Map to frontend shape (name, stockQuantity, media)
+    return products.map((p: any) => this.normalizeProduct(p))
+  }
+
+  // New API: paginated businesses listing with filters and optional promotion/loyalty enrichment
+  async getBusinesses(opts: {
+    search?: string
+    businessType?: string
+    hasLoyalty?: boolean
+    hasPromotions?: boolean
+    isB2BEnabled?: boolean
+    isVerified?: boolean
+    sort?: string
+    page?: number
+    limit?: number
+  }) {
+    const {
+      search,
+      businessType,
+      hasLoyalty,
+      hasPromotions,
+      isB2BEnabled,
+      isVerified,
+      sort,
+      page = 1,
+      limit = 12,
+    } = opts
+
+    const where: any = {}
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ]
+    }
+    if (businessType) where.businessType = businessType
+    if (typeof isB2BEnabled === 'boolean') where.isB2BEnabled = isB2BEnabled
+    if (typeof isVerified === 'boolean') where.isVerified = isVerified
+    if (typeof hasLoyalty === 'boolean' && hasLoyalty) where.loyaltyPrograms = { some: {} }
+
+    // If hasPromotions requested, resolve business ids that have promotions and filter by them
+    if (typeof hasPromotions === 'boolean' && hasPromotions) {
+      const promos = await this.prisma.promotion.findMany({
+        select: { applicableBusinesses: { select: { id: true } } },
+      })
+      const bizIds = new Set<string>()
+      for (const p of promos) {
+        for (const b of p.applicableBusinesses || []) bizIds.add(b.id)
+      }
+      if (bizIds.size === 0) {
+        // return empty page
+        return { items: [], total: 0, page, limit }
+      }
+      where.id = { in: Array.from(bizIds) }
+    }
+
+    // Sorting
+    let orderBy: any = { createdAt: 'desc' }
+    if (sort === 'newest') orderBy = { createdAt: 'desc' }
+    else if (sort === 'oldest') orderBy = { createdAt: 'asc' }
+    else if (sort === 'top') orderBy = { totalProductsSold: 'desc' }
+    else if (sort === 'revenue') orderBy = { totalRevenueGenerated: 'desc' }
+
+    const [total, items] = await Promise.all([
+      this.prisma.business.count({ where }),
+      this.prisma.business.findMany({
+        where,
+        orderBy,
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          stores: { select: { id: true, name: true, address: true } },
+          workers: { select: { id: true, fullName: true, avatar: true, role: true } },
+          freelanceServices: { select: { id: true, title: true, description: true, isHourly: true, rate: true, category: true } },
+          kyc: { select: { id: true, status: true, documentUrl: true, submittedAt: true, verifiedAt: true } },
+          loyaltyPrograms: { select: { id: true, name: true, pointsPerPurchase: true } },
+        } as any,
+      }),
+    ])
+
+    const businessIds = items.map((b: any) => b.id)
+
+    // Fetch promotions for these businesses in bulk to avoid N+1
+    let promotions: any[] = []
+    if (businessIds.length) {
+      promotions = await this.prisma.promotion.findMany({
+        where: { applicableBusinesses: { some: { id: { in: businessIds } } } },
+        select: { id: true, title: true, description: true, startDate: true, endDate: true, applicableBusinesses: { select: { id: true } } },
+      })
+    }
+
+    const promosByBusiness: Record<string, any[]> = {}
+    for (const p of promotions) {
+      for (const b of p.applicableBusinesses || []) {
+        promosByBusiness[b.id] = promosByBusiness[b.id] || []
+        promosByBusiness[b.id].push({ id: p.id, title: p.title, description: p.description, startDate: p.startDate, endDate: p.endDate })
+      }
+    }
+
+    // Map first loyaltyProgram to `loyaltyProgram` and attach promotions
+    const mapped = items.map((b: any) => ({
+      ...b,
+      loyaltyProgram: b.loyaltyPrograms && b.loyaltyPrograms.length ? { id: b.loyaltyPrograms[0].id, name: b.loyaltyPrograms[0].name, pointsPerDollar: b.loyaltyPrograms[0].pointsPerPurchase } : null,
+      promotions: promosByBusiness[b.id] || [],
+    }))
+
+    return { items: mapped, total, page, limit }
+  }
+
+  async getBusinessTypes() {
+    return this.prisma.businessType.findMany({ orderBy: { name: 'asc' } })
   }
 
   // New API: get freelance services for a business (with optional filters)

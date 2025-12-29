@@ -20,7 +20,7 @@ import { JwtStrategy } from './strategies/jwt.strategies'
         secret:
           configService.get<string>('JWT_SECRET'), // Use the secret from your environment variables
         signOptions: {
-          expiresIn: configService.get<string>(
+          expiresIn: configService.get<number>(
             'JWT_EXPIRES_IN',
           ),
         }, // Token expiration time

@@ -340,6 +340,36 @@ export class SettingsService {
   async submitKyc(businessId: string) {
     const updated = await this.prisma.business.update({ where: { id: businessId }, data: { kycStatus: 'PENDING' } })
     await this.pubSub.publish('KYC_UPDATED', { kycUpdated: { id: updated.id, kycStatus: updated.kycStatus } })
+    // also publish kycSubmitted for frontend compatibility
+    await this.pubSub.publish('KYC_SUBMITTED', { kycSubmitted: { id: updated.id, name: updated.name, kycStatus: updated.kycStatus } })
+    return updated
+  }
+
+  async verifyKyc(businessId: string, notes?: string) {
+    const client = this.prisma as any
+    // update business status
+    const updated = await client.business.update({ where: { id: businessId }, data: { kycStatus: 'VERIFIED', isVerified: true }, include: { kyc: true } })
+    // update most recent KYC document if exists
+    const doc = await client.kycDocument.findFirst({ where: { businessId }, orderBy: { submittedAt: 'desc' } })
+    if (doc) {
+      await client.kycDocument.update({ where: { id: doc.id }, data: { status: 'VERIFIED', verifiedAt: new Date() } })
+    }
+    // create audit log
+    await client.auditLog.create({ data: { action: 'VERIFY_KYC', entityType: 'Business', entityId: businessId, details: { notes: notes || '' } } })
+    await this.pubSub.publish('KYC_UPDATED', { kycUpdated: { id: updated.id, kycStatus: updated.kycStatus } })
+    return updated
+  }
+
+  async rejectKyc(businessId: string, rejectionReason: string) {
+    const client = this.prisma as any
+    const updated = await client.business.update({ where: { id: businessId }, data: { kycStatus: 'REJECTED', isVerified: false }, include: { kyc: true } })
+    // mark most recent doc rejected
+    const doc = await client.kycDocument.findFirst({ where: { businessId }, orderBy: { submittedAt: 'desc' } })
+    if (doc) {
+      await client.kycDocument.update({ where: { id: doc.id }, data: { status: 'REJECTED', rejectionReason } })
+    }
+    await client.auditLog.create({ data: { action: 'REJECT_KYC', entityType: 'Business', entityId: businessId, details: { rejectionReason } } })
+    await this.pubSub.publish('KYC_UPDATED', { kycUpdated: { id: updated.id, kycStatus: updated.kycStatus } })
     return updated
   }
 

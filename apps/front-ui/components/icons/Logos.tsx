@@ -63,98 +63,155 @@ const VueLogo = () => (
   </svg>
 );
 
-// Helper components
-export const SunIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <circle cx="12" cy="12" r="4" />
-    <path d="M12 2v2" />
-    <path d="M12 20v2" />
-    <path d="m4.93 4.93 1.41 1.41" />
-    <path d="m17.66 17.66 1.41 1.41" />
-    <path d="M2 12h2" />
-    <path d="M20 12h2" />
-    <path d="m6.34 17.66-1.41 1.41" />
-    <path d="m19.07 4.93-1.41 1.41" />
-  </svg>
-);
+// // SVG Icons (reused from Signin1)
+// export const UserIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+//     <circle cx="12" cy="7" r="4"></circle>
+//   </svg>
+// );
 
-export const MoonIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-  </svg>
-);
+// export const MailIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+//     <polyline points="22,6 12,13 2,6"></polyline>
+//   </svg>
+// );
 
-interface SearchIconProps {
-  size?: number;
-}
+// export const LockIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+//     <circle cx="12" cy="16" r="1"></circle>
+//     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+//   </svg>
+// );
 
-export const SearchIcon: React.FC<SearchIconProps> = ({ size = 16, ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
+// export const EyeIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+//     <circle cx="12" cy="12" r="3"></circle>
+//   </svg>
+// );
 
-export const MenuIcon: React.FC = () => (
-  <svg
-    className="pointer-events-none"
-    width={16}
-    height={16}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M4 12L20 12"
-      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
-    />
-    <path
-      d="M4 12H20"
-      className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
-    />
-    <path
-      d="M4 12H20"
-      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
-    />
-  </svg>
-);
+// export const EyeOffIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+//     <line x1="1" y1="1" x2="23" y2="23"></line>
+//   </svg>
+// );
+
+// export const CheckIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <polyline points="20,6 9,17 4,12"></polyline>
+//   </svg>
+// );
+
+// export const ArrowRightIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M5 12h14"></path>
+//     <path d="m12 5 7 7-7 7"></path>
+//   </svg>
+// );
+
+// export const ArrowLeftIcon: React.FC = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M19 12H5"></path>
+//     <path d="m12 19-7-7 7-7"></path>
+//   </svg>
+// );
+
+// // Helper components
+// export const SunIcon = ({ className }: { className?: string }) => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width="20"
+//     height="20"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//     className={className}
+//   >
+//     <circle cx="12" cy="12" r="4" />
+//     <path d="M12 2v2" />
+//     <path d="M12 20v2" />
+//     <path d="m4.93 4.93 1.41 1.41" />
+//     <path d="m17.66 17.66 1.41 1.41" />
+//     <path d="M2 12h2" />
+//     <path d="M20 12h2" />
+//     <path d="m6.34 17.66-1.41 1.41" />
+//     <path d="m19.07 4.93-1.41 1.41" />
+//   </svg>
+// );
+
+// export const MoonIcon = ({ className }: { className?: string }) => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width="20"
+//     height="20"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//     className={className}
+//   >
+//     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+//   </svg>
+// );
+
+// interface SearchIconProps {
+//   size?: number;
+// }
+
+// export const SearchIcon: React.FC<SearchIconProps> = ({ size = 16, ...props }) => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width={size}
+//     height={size}
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//     {...props}
+//   >
+//     <circle cx="11" cy="11" r="8" />
+//     <line x1="21" y1="21" x2="16.65" y2="16.65" />
+//   </svg>
+// );
+
+// export const MenuIcon: React.FC = () => (
+//   <svg
+//     className="pointer-events-none"
+//     width={16}
+//     height={16}
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//     xmlns="http://www.w3.org/2000/svg"
+//   >
+//     <path
+//       d="M4 12L20 12"
+//       className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+//     />
+//     <path
+//       d="M4 12H20"
+//       className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
+//     />
+//     <path
+//       d="M4 12H20"
+//       className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+//     />
+//   </svg>
+// );
 
 export const Logo: React.FC = () => {
   const path = usePathname()
@@ -181,22 +238,22 @@ export const Logo: React.FC = () => {
 }
 
 
-interface InputProps {
-  className?: string;
-  id?: string;
-  placeholder?: string;
-  type?: string;
-  autoFocus?: boolean;
-}
+// interface InputProps {
+//   className?: string;
+//   id?: string;
+//   placeholder?: string;
+//   type?: string;
+//   autoFocus?: boolean;
+// }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
-  <input
-    className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-950 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-    ref={ref}
-    {...props}
-  />
-));
-Input.displayName = 'Input';
+// export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className = '', ...props }, ref) => (
+//   <input
+//     className={`form-field flex h-9 sm:h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white  py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+//     ref={ref}
+//     {...props}
+//   />
+// ));
+// Input.displayName = 'Input';
 
 export const logos1 = [
   { id: 1, component: <ReactLogo /> },

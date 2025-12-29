@@ -14,7 +14,7 @@ const CategoryScrollArea = ({ type }: CategoryScrollAreaProps) => {
   const categories = type === 'products' ? PRODUCT_CATEGORIES : FREELANCE_SERVICE_CATEGORIES;
 
   return (
-    <ScrollArea className="h-[calc(100vh)] w-80 flex-shrink-0 hidden lg:block rounded-xl backdrop-blur-xl bg-white/95 dark:bg-gray-950/95 border border-orange-400/60 dark:border-orange-500/70 shadow-lg p-1">
+    <ScrollArea className="h-[calc(100vh)] w-80 flex-shrink-0 hidden lg:block rounded-xl backdrop-blur-xl bg-white/95 /95 border border-orange-400/60 dark:border-orange-500/70 shadow-lg p-1">
       <div className="space-y-4">
         {categories.map((category: any) => (
           <div key={category.label} className="pb-2">

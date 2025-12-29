@@ -25,10 +25,11 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "turbo": "^2.5.0",
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "turbo": "^2.5.0"
   },
   "dependencies": {
+    "@as-integrations/express5": "^1.1.2",
     "aws-lambda": "^1.0.7",
     "date-fns": "^4.1.0",
     "glob": "^11.0.3",

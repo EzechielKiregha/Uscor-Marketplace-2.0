@@ -141,8 +141,8 @@ export default function BusinessCreatePage() {
   const { control, handleSubmit } = form;
 
   return (
-    <div className="relative w-full flex items-center justify-center min-h-screen bg-white dark:bg-gray-950">
-      <div className="w-full max-w-lg p-6 space-y-6 bg-white dark:bg-gray-950 rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
+    <div className="relative w-full flex items-center justify-center min-h-screen bg-white ">
+      <div className="w-full max-w-lg p-6 space-y-6 bg-white  rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
         {/* Progress */}
         <div>
           <div className="flex justify-between items-center mb-3">

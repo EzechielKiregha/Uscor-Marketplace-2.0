@@ -13,7 +13,7 @@ import { useToast } from '@/components/toast-provider';
 import { useMe } from '@/lib/useMe';
 
 interface ChatThreadProps {
-  id: string
+  id: string | string[];
 }
 
 const messageSchema = z.object({

@@ -15,7 +15,7 @@ export default function TermsOfService() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navigation */}
-      <header className="fixed w-full border-b-3 border-primary dark:bg-gray-950 bg-gray-50 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 z-50">
+      <header className="fixed w-full border-b-3 border-primary  bg-gray-50 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 z-50">
         <div className="container mx-auto flex h-16 items-center justify-between">
           <Link href="/" className="text-xl items-center font-bold flex flex-row gap-1.5 ml-2 text-primary">
             <Image width={50} height={50} src="/logo.png" alt="Uscor Marketplace Logo" />

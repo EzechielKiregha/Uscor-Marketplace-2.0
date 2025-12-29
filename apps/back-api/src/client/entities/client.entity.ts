@@ -1,6 +1,7 @@
 import {
   ObjectType,
   Field,
+  Int,
 } from '@nestjs/graphql'
 import { AccountRechargeEntity } from '../../account-recharge/entities/account-recharge.entity'
 import { ChatEntity } from '../../chat/entities/chat.entity'
@@ -8,6 +9,8 @@ import { FreelanceOrderEntity } from '../../freelance-order/entities/freelance-o
 import { OrderEntity } from '../../order/entities/order.entity'
 import { ReferralEntity } from '../../referral/entities/referral.entity'
 import { ReviewEntity } from '../../review/entities/review.entity'
+import { AddressEntity } from './address.entity'
+import { PaymentMethodEntity } from './payment-method.entity'
 
 @ObjectType()
 export class ClientEntity {
@@ -33,10 +36,20 @@ export class ClientEntity {
   avatar?: string
 
   @Field({ nullable: true })
-  password?: string // This should be hashed and not exposed in the GraphQL schema
+  isVerified?: boolean
+
+  // Computed / derived fields
+  @Field(() => Number, { nullable: true })
+  loyaltyPoints?: number
 
   @Field({ nullable: true })
-  isVerified?: boolean
+  loyaltyTier?: string
+
+  @Field(() => Number, { nullable: true })
+  totalSpent?: number
+
+  @Field(() => Number, { nullable: true })
+  totalOrders?: number
 
   @Field({ nullable: true })
   createdAt?: Date
@@ -73,4 +86,27 @@ export class ClientEntity {
     nullable: true,
   }) // Referrals received by the client
   referralsReceived?: ReferralEntity[]
+
+  // Addresses & payment methods expected by front-end
+  @Field(() => [AddressEntity], { nullable: true })
+  addresses?: any
+
+  @Field(() => [PaymentMethodEntity], { nullable: true })
+  paymentMethods?: any
+
+}
+
+@ObjectType()
+export class PaginatedClientsResponse {
+  @Field(() => [ClientEntity])
+  items: ClientEntity[]
+
+  @Field(() => Int)
+  total: number
+
+  @Field(() => Int)
+  page: number
+
+  @Field(() => Int)
+  limit: number
 }

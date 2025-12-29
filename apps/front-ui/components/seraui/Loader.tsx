@@ -5,8 +5,11 @@ import React from 'react'
 function Loader(loading: { loading: boolean }) {
 
   if (loading.loading) return (
-    <div className="flex flex-col my-20 bg-background dark:bg-gray-950 justify-center items-center">
-      <div className="w-8 h-8 bg-orange-600 rounded animate-spin"></div>
+    <div className="flex justify-center bg-background items-center h-64">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-muted-foreground">Loading data...</p>
+      </div>
     </div>
   );
 }

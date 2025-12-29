@@ -25,16 +25,15 @@ import { UpdateFreelanceServiceInput } from './dto/update-freelance-service.inpu
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
 import { Roles } from '../auth/decorators/roles.decorator'
-import { UseGuards } from '@nestjs/common'
+import { UseGuards, Inject } from '@nestjs/common'
 import { PubSub } from 'graphql-subscriptions'
-
-const pubSub = new PubSub()
 
 // Resolver
 @Resolver(() => FreelanceServiceEntity)
 export class FreelanceServiceResolver {
   constructor(
     private readonly freelanceServiceService: FreelanceServiceService,
+    @Inject('PUB_SUB') private pubSub: any,
   ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -56,7 +55,7 @@ export class FreelanceServiceResolver {
       )
 
     // Publish subscription event
-    pubSub.publish('freelanceServiceCreated', {
+    this.pubSub.publish('freelanceServiceCreated', {
       freelanceServiceCreated: service,
       businessId: user.id,
     })
@@ -161,7 +160,7 @@ export class FreelanceServiceResolver {
       )
 
     // Publish subscription event
-    pubSub.publish('freelanceServiceUpdated', {
+    this.pubSub.publish('freelanceServiceUpdated', {
       freelanceServiceUpdated: service,
       businessId: user.id,
     })
@@ -236,9 +235,7 @@ export class FreelanceServiceResolver {
   freelanceServiceCreated(
     @Args('businessId') businessId: string,
   ) {
-    return pubSub.asyncIterableIterator(
-      'freelanceServiceCreated',
-    )
+    return this.pubSub.asyncIterator('freelanceServiceCreated')
   }
 
   @Subscription(() => FreelanceServiceEntity, {
@@ -252,8 +249,6 @@ export class FreelanceServiceResolver {
   freelanceServiceUpdated(
     @Args('businessId') businessId: string,
   ) {
-    return pubSub.asyncIterableIterator(
-      'freelanceServiceUpdated',
-    )
+    return this.pubSub.asyncIterator('freelanceServiceUpdated')
   }
 }

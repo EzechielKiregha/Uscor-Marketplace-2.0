@@ -131,7 +131,7 @@ const AccordionLast: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
+    <div className="flex flex-col min-h-screen bg-background  text-foreground">
       <div className="w-full max-w-2xl mx-auto bg-white dark:bg-zinc-900 rounded-2xl shadow-lg dark:shadow-zinc-900/20 border border-zinc-200 dark:border-zinc-800 overflow-hidden">
         {/* {path === '/' && (
           

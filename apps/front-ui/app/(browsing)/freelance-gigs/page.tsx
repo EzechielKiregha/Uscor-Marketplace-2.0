@@ -8,9 +8,7 @@ import FreelanceHero from './_components/FreelanceHero';
 
 export default function FreelanceGigsPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-foreground">
-      {/* Header */}
-      <HeaderComponent />
+    <div className="flex flex-col min-h-screen bg-white  text-foreground">
 
       {/* Hero */}
       <FreelanceHero />
@@ -29,9 +27,6 @@ export default function FreelanceGigsPage() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

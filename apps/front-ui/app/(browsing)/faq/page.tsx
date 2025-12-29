@@ -9,8 +9,7 @@ import Footer from "@/components/seraui/FooterSection";
 const FaqPage: React.FC = () => {
 
   return (
-    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
-      <HeaderComponent />
+    <div className="flex flex-col min-h-screen bg-background  text-foreground">
       <MaxWidthWrapper>
         <div className="py-8 mx-auto text-center flex flex-col items-center max-w-3xl">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-foreground">
@@ -23,7 +22,6 @@ const FaqPage: React.FC = () => {
         </div>
         <AccordionLast />
       </MaxWidthWrapper>
-      <Footer />
     </div >
   );
 };

@@ -11,7 +11,7 @@ import { MARK_MESSAGES_AS_READ, GET_UNREAD_COUNT } from '@/graphql/chat.gql';
 interface ChatThreadProps {
   chat: any;
   userId: string;
-  userRole: 'business' | 'client' | 'worker';
+  userRole: 'business' | 'client' | 'worker' | 'admin';
   onSendMessage: (content: string) => Promise<void>;
   loading?: boolean;
   onBack?: () => void;

@@ -58,7 +58,7 @@ export const PlatformFeatures: React.FC = () => {
             }}
             variants={splashVariants}
           />
-          <Card className="relative dark:bg-gray-950 bg-gray-100 shadow-2xl">
+          <Card className="relative  bg-gray-100 shadow-2xl">
             <CardHeader className="flex flex-col items-center pt-8">
               <feat.icon className="h-12 w-12 dark:text-white mb-4" />
               <CardTitle className="text-xl dark:text-white">

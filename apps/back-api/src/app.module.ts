@@ -8,6 +8,7 @@ import {
 } from '@nestjs/apollo'
 import { join } from 'path'
 import { PrismaModule } from './prisma/prisma.module'
+import { PubSub } from 'graphql-subscriptions'
 
 import { ReferralModule } from './referral/referral.module'
 import { FreelanceOrderModule } from './freelance-order/freelance-order.module'
@@ -40,6 +41,12 @@ import { InventoryModule } from './inventory/inventory.module'
 import { ShiftModule } from './shift/shift.module'
 import { LoyaltyProgramModule } from './loyalty-program/loyalty-program.module'
 import { SettingsModule } from './settings/settings.module';
+import { MarketplaceModule } from './marketplace/marketplace.module';
+import { AdminModule } from './admin/admin.module'
+import { PlatformModule } from './platform/platform.module';
+import { AnnouncementModule } from './announcement/announcement.module'
+import { DisputeModule } from './dispute/dispute.module'
+import { AuditModule } from './audit/audit.module'
 import GraphQLJSON from 'graphql-type-json'
 
 @Module({
@@ -95,8 +102,14 @@ import GraphQLJSON from 'graphql-type-json'
     ShiftModule,
     LoyaltyProgramModule,
     SettingsModule,
+    MarketplaceModule,
+    AdminModule,
+    AnnouncementModule,
+    DisputeModule,
+    AuditModule,
+    PlatformModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: 'PUB_SUB', useValue: new PubSub() }],
 })
 export class AppModule {}

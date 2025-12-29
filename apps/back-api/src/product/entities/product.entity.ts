@@ -14,7 +14,7 @@ import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-p
 import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity'
 import { ReviewEntity } from '../../review/entities/review.entity'
 import { StoreEntity } from '../../store/entities/store.entity'
-
+import { PromotionEntity } from '../../client/entities/promotion.entity'
 @ObjectType()
 export class ProductEntity {
   @Field()
@@ -23,14 +23,26 @@ export class ProductEntity {
   @Field()
   title: string
 
+  // Backwards-compatible 'name' field used by frontend queries
+  @Field({ nullable: true })
+  name?: string
+
   @Field({ nullable: true })
   description?: string
 
   @Field(() => Float)
   price: number
 
+  // Frontend expects 'stockQuantity'
+  @Field(() => Int)
+  stockQuantity: number
+
   @Field(() => Int)
   quantity: number
+
+  // A single primary media object for lists
+  @Field(() => MediaEntity, { nullable: true })
+  media?: MediaEntity
 
   @Field()
   businessId: string
@@ -83,4 +95,7 @@ export class ProductEntity {
 
   @Field(() => [AdEntity]) // Ads for the product
   ads: AdEntity[]
+
+  @Field(() => [PromotionEntity], { nullable: true })
+  promotions?: PromotionEntity[]
 }

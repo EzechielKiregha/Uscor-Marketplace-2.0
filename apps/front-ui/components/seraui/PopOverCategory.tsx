@@ -64,7 +64,7 @@ export const PopoverCategoryContent: React.FC<PopoverCategoryContentProps> = ({ 
   };
   if (!isOpen) return null;
   return (
-    <div className={`absolute top-full mt-2 w-screen z-20 rounded-xl backdrop-blur-xl bg-white/95 dark:bg-gray-950/95 border border-orange-400/60 dark:border-orange-500/70 p-2 shadow-lg ${alignmentClasses[align]} ${className}`}>
+    <div className={`absolute top-full mt-2 w-screen z-20 rounded-xl backdrop-blur-xl bg-white/95 /95 border border-orange-400/60 dark:border-orange-500/70 p-2 shadow-lg ${alignmentClasses[align]} ${className}`}>
       {children}
     </div>
   );

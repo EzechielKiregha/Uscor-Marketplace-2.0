@@ -1,11 +1,12 @@
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
+  
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 // Enums
@@ -180,6 +181,7 @@ model Business {
   referralsReceived    Referral[]            @relation("BusinessReferred")
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
+  lastLogin            DateTime?
   postOfSales          PostOfSale[]
   freelanceOrderBusiness FreelanceOrderBusiness[]
 
@@ -206,6 +208,8 @@ model Business {
   @@index([createdAt])
   @@index([email])
 
+  promotions Promotion[] @relation("BusinessPromotions")
+  disputes Dispute[]
 }
 
 model PaymentConfig {
@@ -313,8 +317,14 @@ model Client {
   freelanceOrders      FreelanceOrder[]      @relation("ClientOrders")
   referralsMade        Referral[]            @relation("ClientAffiliations")
   referralsReceived    Referral[]            @relation("ClientReferred")
+
+  // New relations used by the front-end
+  addresses            Address[]
+  paymentMethods       ClientPaymentMethod[]
+
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
+  lastLogin            DateTime?
 
   postTransactions PostTransaction[]
   chatParticipants ChatParticipant[]
@@ -343,6 +353,7 @@ model Worker {
   isVerified           Boolean               @default(false)
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
+  lastLogin            DateTime?
   workerServiceAssignments WorkerServiceAssignment[]
   chatParticipants ChatParticipant[]
   sales Sale[]
@@ -350,7 +361,31 @@ model Worker {
 
   @@index([id])
   @@index([email])
-  Media Media[]
+  medias Media[]
+  auditLogs AuditLog[]
+}
+
+enum AdminRole {
+  SUPERADMIN
+  ADMIN
+  SUPPORT
+}
+
+model Admin {
+  id         String    @id @default(uuid())
+  email      String    @unique
+  fullName   String?
+  password   String
+  role       AdminRole @default(ADMIN)
+  phone      String?
+  avatar     String?
+  isActive   Boolean   @default(true)
+  lastLogin  DateTime?
+  permissions Json?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([email])
 }
 
 model Category {
@@ -604,6 +639,8 @@ model KYC {
   id                   String                @id @default(uuid())
   status               KycStatus             @default(PENDING)
   documentUrl          String
+  notes                String?
+  rejectionReason      String?
   submittedAt          DateTime              @default(now())
   verifiedAt           DateTime?
   business             Business?             @relation("BusinessKYC", fields: [businessId], references: [id])
@@ -947,6 +984,73 @@ model LoyaltyProgram {
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
   pointsTransactions     PointsTransaction[]
+  tiers                  LoyaltyTier[]     // Loyalty tiers for this program
+}
+
+// Loyalty tier definitions (used by front-end)
+model LoyaltyTier {
+  id          String    @id @default(uuid())
+  loyaltyProgramId String
+  loyaltyProgram LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
+  name        String
+  minPoints   Float     @default(0)
+  benefits    LoyaltyTierBenefit[]
+}
+
+model LoyaltyTierBenefit {
+  id       String @id @default(uuid())
+  tierId   String
+  tier     LoyaltyTier @relation(fields: [tierId], references: [id])
+  description String
+}
+
+// Promotions and marketing offers
+model Promotion {
+  id                   String   @id @default(uuid())
+  title                String
+  description          String?
+  type                 String?
+  value                Float?
+  code                 String?
+  startDate            DateTime?
+  endDate              DateTime?
+  applicableBusinesses Business[] @relation("BusinessPromotions")
+  applicableCategories String[]
+  minimumPurchase      Float?
+  isRedeemed           Boolean?  @default(false)
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+}
+
+
+// Address model for clients (frontend expects addresses array)
+model Address {
+  id        String   @id @default(uuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  street    String
+  city      String
+  country   String?
+  postalCode String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+}
+
+// Client payment methods (cards, mobile money tokens etc.)
+model ClientPaymentMethod {
+  id        String   @id @default(uuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  type      PaymentMethod
+  last4     String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
 }
 
 model PointsTransaction {
@@ -976,3 +1080,96 @@ model StripeCustomer {
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Admin / Platform models
+
+enum AnnouncementStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  CANCELLED
+}
+
+enum AnnouncementPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED
+  REJECTED
+}
+
+model PlatformSettings {
+  id                     String   @id @default(uuid())
+  platformFeePercentage  Float    @default(0)
+  minTransactionAmount   Float?   @default(0)
+  maxTransactionAmount   Float?   @default(0)
+  currency               String   @default("USD")
+  tokenValue             Float?   @default(0)
+  tokenSymbol            String?
+  kycRequired            Boolean  @default(true)
+  b2bEnabled             Boolean  @default(false)
+  marketplaceEnabled     Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Announcement {
+  id              String            @id @default(uuid())
+  title           String
+  content         String
+  type            String?
+  priority        AnnouncementPriority? @default(LOW)
+  status          AnnouncementStatus @default(DRAFT)
+  scheduledFor    String?
+  sentAt          DateTime? @default(now())
+  targetUsers     String?
+  readCount       Int               @default(0)
+  totalRecipients Int?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  action     String
+  entityType String
+  entityId   String?
+  details    Json?
+  adminId    String?
+  admin      Worker?  @relation(fields: [adminId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Dispute {
+  id              String       @id @default(uuid())
+  title           String
+  description     String?
+  status          DisputeStatus @default(OPEN)
+  type            String?
+  reporterId      String?
+  reporterType    String?
+  businessId      String?
+  business        Business?     @relation(fields: [businessId], references: [id])
+  orderId         String?
+  resolutionNotes String?
+  refundAmount    Float?
+  compensation    Float?
+  createdAt       DateTime      @default(now())
+  resolvedAt      DateTime?
+  messages        DisputeMessage[]
+}
+
+model DisputeMessage {
+  id         String   @id @default(uuid())
+  disputeId  String
+  dispute    Dispute  @relation(fields: [disputeId], references: [id])
+  senderId   String?
+  senderType String?
+  content    String
+  createdAt  DateTime @default(now())
+}
+

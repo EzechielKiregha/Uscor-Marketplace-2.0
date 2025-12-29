@@ -17,13 +17,12 @@ import { Roles } from '../auth/decorators/roles.decorator'
 import {
   NotFoundException,
   UseGuards,
+  Inject,
 } from '@nestjs/common'
 import { PubSub } from 'graphql-subscriptions'
 import { MediaEntity } from '../media/entities/media.entity'
 import { MediaService } from '../media/media.service'
 import { AddMediaInput } from '../media/dto/add-media.input'
-
-const pubSub = new PubSub()
 
 // Resolver
 @Resolver(() => ProductEntity)
@@ -31,6 +30,7 @@ export class ProductResolver {
   constructor(
     private readonly productService: ProductService,
     private readonly mediaService: MediaService,
+    @Inject('PUB_SUB') private pubSub: any,
   ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -62,7 +62,7 @@ export class ProductResolver {
         )
       }
     // Publish subscription event
-    pubSub.publish('productCreated', {
+    this.pubSub.publish('productCreated', {
       productCreated: product,
       businessId: input.businessId,
     })
@@ -80,7 +80,7 @@ export class ProductResolver {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business')
+  @Roles('business', 'client')
   @Query(() => [ProductEntity], {
     name: 'businessProducts',
     description:
@@ -196,7 +196,7 @@ export class ProductResolver {
     const updatedProduct = this.productService.update(id, input)
 
     // Publish subscription event
-    pubSub.publish('productUpdated', {
+    this.pubSub.publish('productUpdated', {
       productUpdated: updatedProduct,
       businessId: product.businessId,
     })
@@ -327,9 +327,7 @@ export class ProductResolver {
   productCreated(
     @Args('businessId') businessId: string,
   ) {
-    return pubSub.asyncIterableIterator(
-      'productCreated',
-    )
+    return this.pubSub.asyncIterator('productCreated')
   }
 
   @Subscription(() => ProductEntity, {
@@ -343,8 +341,6 @@ export class ProductResolver {
   productUpdated(
     @Args('businessId') businessId: string,
   ) {
-    return pubSub.asyncIterableIterator(
-      'productUpdated',
-    )
+    return this.pubSub.asyncIterator('productUpdated')
   }
 }

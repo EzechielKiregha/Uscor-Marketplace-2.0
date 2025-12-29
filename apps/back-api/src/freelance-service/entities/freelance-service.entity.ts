@@ -8,6 +8,7 @@ import { IsEnum } from 'class-validator'
 import { BusinessEntity } from '../../business/entities/business.entity'
 import { WorkerEntity } from '../../worker/entities/worker.entity'
 import { FreelanceServiceCategory } from '../dto/create-freelance-service.input'
+import { MediaEntity } from '../../media/entities/media.entity'
 
 @ObjectType()
 export class FreelanceServiceEntity {
@@ -41,6 +42,9 @@ export class FreelanceServiceEntity {
 
   @Field(() => [WorkerServiceAssignmentEntity])
   workerServiceAssignments: WorkerServiceAssignmentEntity[]
+
+  @Field(() => [MediaEntity], { nullable: true }) // Media associated with the product
+  medias?: MediaEntity[]
 }
 
 @ObjectType()

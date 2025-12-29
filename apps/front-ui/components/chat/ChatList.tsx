@@ -10,7 +10,7 @@ interface ChatListProps {
   chats: any[];
   activeChatId: string | null;
   onSelect: (chatId: string) => void;
-  userRole: 'business' | 'client' | 'worker';
+  userRole: 'business' | 'client' | 'worker' | 'admin';
 }
 
 

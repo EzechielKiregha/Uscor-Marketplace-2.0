@@ -28,12 +28,17 @@ import {
   ChevronDown,
   ExternalLink,
   ArrowUpRight,
+  Search,
+  MenuIcon,
+  SunIcon,
+  MoonIcon,
 } from "lucide-react";
 import { Button } from '../ui/button';
 import Cart from '../Cart';
 import UserDropdown from './UserDrodown';
-import { Input, Logo, MenuIcon, MoonIcon, SearchIcon, SunIcon } from '../icons/Logos';
 import NotificationsPopover from './Notifications';
+import SearchModal from '@/app/(browsing)/marketplace/_components/SearchModal';
+import { Logo } from '../icons/Logos';
 // Type definitions
 
 interface NavigationMenuProps {
@@ -86,21 +91,31 @@ export const businessTypes = [
 ];
 
 function HeaderComponent() {
-  const id = useId();
-  const [isMobileSearchVisible, setIsMobileSearchVisible] = useState(false);
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const { theme, setTheme } = useTheme();
-  const pathname = usePathname();
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [filters, setFilters] = useState({
+    search: '',
+  });
+  const [page, setPage] = useState(1);
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleFilterChange = (name: string, value: any) => {
+    setFilters(prev => ({
+      ...prev,
+      [name]: value,
+      page: 1
+    }));
+    setPage(1);
   };
 
   // Define navigation links based on pathname
   const navLinks = [
     { href: '/uscor-features', label: 'Features', target: '' },
     { href: '/hardware', label: 'Hardware', target: '' },
-    { href: '#', label: 'Business types', isPopover: true, popoverItems: businessTypes },
+    { href: '#', label: 'Join as Business', isPopover: true, popoverItems: businessTypes },
     { href: '/marketplace', label: 'Marketplace', target: '' },
     { href: '/freelance-gigs', label: 'Freelance', target: '', rel: '' },
     { href: '/faq', label: 'FAQ', target: '' },
@@ -108,30 +123,8 @@ function HeaderComponent() {
 
   return (
     <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-white dark:bg-card w-full sticky top-0 z-50">
-      {/* Mobile Search View */}
-      {isMobileSearchVisible && (
-        <div className="flex h-14 sm:h-16 items-center  lg:hidden px-4">
-          <div className="relative flex-1">
-            <Input
-              id={id + "-mobile-search"}
-              className="form-field h-9 pl-9 pr-2 w-full"
-              placeholder="Search product..."
-              type="search"
-              autoFocus
-            />
-            <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
-              <SearchIcon size={16} />
-            </div>
-          </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsMobileSearchVisible(false)}>
-            Cancel
-          </Button>
-        </div>
-      )}
-
-
       {/* Default Header View */}
-      <div className={`flex h-14 sm:h-16 items-center justify-between gap-4 px-4 lg:px-6 ${isMobileSearchVisible ? 'hidden' : 'flex'}`}>
+      <div className={`flex h-14 sm:h-16 items-center justify-between gap-4 px-4 lg:px-6 `}>
         {/* Left side: Mobile Menu, Logo, Desktop Nav */}
         <div className="flex items-center  sm:gap-4">
           <div className="lg:hidden">
@@ -179,7 +172,7 @@ function HeaderComponent() {
                     )
                     )}
                     <NavigationMenuItem className="w-full" role="presentation" aria-hidden={true}>
-                      <div role="separator" aria-orientation="horizontal" className="bg-background dark:bg-gray-950/20  -mx-1 my-1 h-px"></div>
+                      <div role="separator" aria-orientation="horizontal" className="bg-background /20  -mx-1 my-1 h-px"></div>
                     </NavigationMenuItem>
                     <NavigationMenuItem className="w-full">
                       {/* Notifications Popover */}
@@ -252,21 +245,45 @@ function HeaderComponent() {
         {/* Right side: Search, Theme Toggle, and Sign In */}
         <div className="flex items-center gap-2">
           <div className="relative hidden lg:hidden">
-            <Input id={id} className="form-field h-9 pl-9 pr-2 w-64" placeholder="Search Product..." type="search" />
-            <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
-              <SearchIcon size={16} />
+            {/* <Input id={id} className="form-field h-9 pl-9 pr-2 w-64" placeholder="Search Product..." type="search" /> */}
+            <div className="relative w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Search products and services..."
+                value={filters.search}
+                onChange={(e) => handleFilterChange('search', e.target.value)}
+                className="pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => setShowSearchModal(true)}
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
           </div>
           <div className=" items-center lg:flex md:hidden hidden gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsSearchVisible(true)}>
-              <SearchIcon size={18} />
-            </Button>
+            <div className="relative w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Search products and services..."
+                value={filters.search}
+                onChange={(e) => handleFilterChange('search', e.target.value)}
+                className="pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => setShowSearchModal(true)}
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
 
           </div>
           <div className="flex items-center lg:hidden gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsMobileSearchVisible(true)}>
-              <SearchIcon size={18} />
-            </Button>
+            <div className="relative w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Search products and services..."
+                value={filters.search}
+                onChange={(e) => handleFilterChange('search', e.target.value)}
+                className="pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => setShowSearchModal(true)}
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
             <Cart />
             <UserDropdown />
           </div>
@@ -289,24 +306,15 @@ function HeaderComponent() {
           </div>
         </div>
       </div>
-      {isSearchVisible && (
-        <div className="flex h-14 sm:h-16 items-center gap-2 px-4">
-          <div className="relative flex-1">
-            <Input
-              id={id + "-mobile-search"}
-              className="form-field h-9 pl-9 pr-2 w-full"
-              placeholder="Search product..."
-              type="search"
-              autoFocus
-            />
-            <div className="text-orange-400/60 dark:text-orange-500/70 pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3">
-              <SearchIcon size={16} />
-            </div>
-          </div>
-          <Button variant="ghost" size="sm" onClick={() => setIsSearchVisible(false)}>
-            Cancel
-          </Button>
-        </div>
+      {/* Search Modal */}
+      {showSearchModal && (
+        <SearchModal
+          onClose={() => setShowSearchModal(false)}
+          onSearch={(query) => {
+            handleFilterChange('search', query);
+            setShowSearchModal(false);
+          }}
+        />
       )}
     </header>
   );

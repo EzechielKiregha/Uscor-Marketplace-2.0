@@ -19,6 +19,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles.guard'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { BusinessDashboardResponse } from './entities/business-dashboard.entity'
+import { PaginatedBusinesses } from './entities/paginated-businesses.entity'
+import { BusinessTypeEntity } from './entities/business-type.entity'
 import { Inject } from '@nestjs/common'
 import { PubSub } from 'graphql-subscriptions'
 
@@ -37,22 +39,48 @@ export class BusinessResolver {
     @Args('createBusinessInput')
     createBusinessInput: CreateBusinessInput,
   ) {
-    return this.businessService.create(
+    const created = await this.businessService.create(
       createBusinessInput,
     )
+
+    // publish businessAdded event for listing subscribers
+    try {
+      this.pubSub.publish('businessAdded', { businessAdded: created })
+    } catch (e) {
+      console.warn('Failed to publish businessAdded event', e)
+    }
+
+    return created
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'client') // Allow businesses to view their own data, clients to view businesses
-  @Query(() => [BusinessEntity], {
+  @Query(() => PaginatedBusinesses, {
     name: 'businesses',
-    description:
-      'Retrieves all businesses with their relations.',
+    description: 'Retrieve businesses with pagination and filtering.',
   })
-  async getBusinesses(@Context() context) {
-    const user = context.req.user
-    console.log('Authenticated user:', user) // Debugging
-    return this.businessService.findAll()
+  async getBusinesses(
+    @Args('search', { type: () => String, nullable: true }) search?: string,
+    @Args('businessType', { type: () => String, nullable: true }) businessType?: string,
+    @Args('hasLoyalty', { type: () => Boolean, nullable: true }) hasLoyalty?: boolean,
+    @Args('hasPromotions', { type: () => Boolean, nullable: true }) hasPromotions?: boolean,
+    @Args('isB2BEnabled', { type: () => Boolean, nullable: true }) isB2BEnabled?: boolean,
+    @Args('isVerified', { type: () => Boolean, nullable: true }) isVerified?: boolean,
+    @Args('sort', { type: () => String, nullable: true }) sort?: string,
+    @Args('page', { type: () => Int, nullable: true }) page?: number,
+    @Args('limit', { type: () => Int, nullable: true }) limit?: number,
+  ) {
+    return this.businessService.getBusinesses({ search, businessType, hasLoyalty, hasPromotions, isB2BEnabled, isVerified, sort, page, limit })
+  }
+
+  @Query(() => [ProductEntity], { name: 'businessProducts' })
+  async businessProducts(
+    @Args('businessId', { type: () => String }) businessId: string,
+    @Args('storeId', { type: () => String, nullable: true }) storeId?: string,
+    @Args('category', { type: () => String, nullable: true }) category?: string,
+    @Args('search', { type: () => String, nullable: true }) search?: string,
+    @Args('page', { type: () => Int, nullable: true }) page?: number,
+    @Args('limit', { type: () => Int, nullable: true }) limit?: number,
+  ) {
+    return this.businessService.getProducts({ businessId, storeId, category, search, page, limit })
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -79,17 +107,17 @@ export class BusinessResolver {
     return this.businessService.findOne(id)
   }
 
-  @Query(() => [ProductEntity], { name: 'businessProducts' })
-  async businessProducts(
-    @Args('businessId', { type: () => String }) businessId: string,
-    @Args('storeId', { type: () => String, nullable: true }) storeId?: string,
-    @Args('category', { type: () => String, nullable: true }) category?: string,
-    @Args('search', { type: () => String, nullable: true }) search?: string,
-    @Args('page', { type: () => Int, nullable: true }) page?: number,
-    @Args('limit', { type: () => Int, nullable: true }) limit?: number,
-  ) {
-    return this.businessService.getProducts({ businessId, storeId, category, search, page, limit })
-  }
+  // @Query(() => [ProductEntity], { name: 'businessProducts' })
+  // async businessProducts(
+  //   @Args('businessId', { type: () => String }) businessId: string,
+  //   @Args('storeId', { type: () => String, nullable: true }) storeId?: string,
+  //   @Args('category', { type: () => String, nullable: true }) category?: string,
+  //   @Args('search', { type: () => String, nullable: true }) search?: string,
+  //   @Args('page', { type: () => Int, nullable: true }) page?: number,
+  //   @Args('limit', { type: () => Int, nullable: true }) limit?: number,
+  // ) {
+  //   return this.businessService.getProducts({ businessId, storeId, category, search, page, limit })
+  // }
 
   @Query(() => [FreelanceServiceEntity], { name: 'businessServices' })
   async businessServices(
@@ -108,6 +136,12 @@ export class BusinessResolver {
     return this.getBusinessDashboard(context)
   }
 
+  @Query(() => [BusinessTypeEntity], { name: 'businessTypes' })
+  async businessTypes() {
+    const types = await this.businessService.getBusinessTypes()
+    return types.map((t: any) => ({ id: t.id, name: t.name, description: t.description, icon: t.icon }))
+  }
+
   @Query(() => PaginatedReviews, { name: 'businessReviews' })
   async businessReviews(
     @Args('businessId', { type: () => String }) businessId: string,
@@ -117,17 +151,23 @@ export class BusinessResolver {
     return this.businessService.getReviews(businessId, page, limit)
   }
 
-  // Subscription for business updates
+  // Subscription for business updates (filtered by businessId)
   @Subscription(() => BusinessEntity, {
     resolve: (payload) => payload.businessUpdated,
+    filter: (payload, variables) => {
+      return payload?.businessUpdated?.id === variables.businessId
+    },
   })
-  businessUpdated(payload: any, args: any) {
-    // payload will be { businessUpdated: Business }
-    if (!args || !args.businessId) return null
-    if (payload?.businessUpdated?.id !== args.businessId) return null
+  businessUpdated(@Args('businessId', { type: () => String }) businessId: string) {
     return this.pubSub.asyncIterableIterator('businessUpdated')
   }
-
+  // Subscription for newly added businesses (no filter)
+  @Subscription(() => BusinessEntity, {
+    resolve: (payload) => payload.businessAdded,
+  })
+  businessAdded() {
+    return this.pubSub.asyncIterableIterator('businessAdded')
+  }
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('business')
   @Mutation(() => BusinessEntity, {
@@ -146,10 +186,20 @@ export class BusinessResolver {
         'Businesses can only update their own data',
       )
     }
-    return this.businessService.update(
+    const updated = await this.businessService.update(
       id,
       input,
     )
+
+    // Publish update event for subscribers
+    try {
+      this.pubSub.publish('businessUpdated', { businessUpdated: updated })
+    } catch (e) {
+      // non-fatal: log and continue returning updated entity
+      console.warn('Failed to publish businessUpdated event', e)
+    }
+
+    return updated
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

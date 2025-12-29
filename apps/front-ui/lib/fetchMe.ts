@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import { client } from './apollo-client';
 import { getAccessToken, logout } from '@/lib/auth';
 import { gql } from '@apollo/client';
-import { BusinessEntity, ClientEntity, WorkerEntity } from './types';
+import { AdminEntity, BusinessEntity, ClientEntity, WorkerEntity } from './types';
 
 // GraphQL queries
 export const GET_CLIENT_BY_ID = gql`
@@ -60,16 +60,31 @@ export const GET_WORKER_BY_ID = gql`
   }
 `;
 
+export const GET_ADMIN_BY_ID = gql`
+  query GetAdminById($id: String!) {
+    admin(id: $id) {
+      id
+      email
+      fullName
+      role
+      isActive
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 // Align with backend's AuthJwtPayload and types.ts
 interface TokenPayload {
   sub: string; // Matches AuthJwtPayload.sub
-  role: 'client' | 'business' | 'worker';
+  role: 'client' | 'business' | 'worker' | 'admin'; // Matches AuthJwtPayload.role
 }
 
 type MeResult =
   | { role: 'client'; id: string; user: ClientEntity }
   | { role: 'business'; id: string; user: BusinessEntity }
   | { role: 'worker'; id: string; user: WorkerEntity }
+  | { role: 'admin'; id: string; user: AdminEntity }
   | null;
 
 /**
@@ -95,7 +110,9 @@ export async function fetchMe(): Promise<MeResult> {
   const id = payload.sub;
   const role = payload.role;
 
-  if (!id || !['client', 'business', 'worker'].includes(role)) {
+  console.log('fetchMe: decoded JWT payload: ', payload);
+
+  if (!id || !['client', 'business', 'worker', 'admin'].includes(role)) {
     console.warn('Invalid JWT payload: missing id or invalid role');
     return null;
   }
@@ -129,11 +146,23 @@ export async function fetchMe(): Promise<MeResult> {
         if (!data.worker) throw new Error('Worker not found');
         return { role: 'worker', id, user: data.worker };
       }
+      case 'admin': {
+        const { data } = await client.query({
+          query: GET_ADMIN_BY_ID,
+          variables: { id },
+          fetchPolicy: 'cache-first',
+        });
+
+        console.log('fetchMe: fetched admin data: ', data.admin);
+
+        if (!data.admin) throw new Error('Admin not found');
+        return { role: 'admin', id, user: data.admin };
+      }
       default:
         throw new Error('Invalid role');
     }
   } catch (err: any) {
-    console.error('fetchMe: failed to fetch profile', err);
+    console.error('FETCH ME ERROR: --failed to fetch profile: ', err);
     if (err.message.includes('UNAUTHENTICATED')) {
       logout(); // Trigger logout to redirect to /login
     }

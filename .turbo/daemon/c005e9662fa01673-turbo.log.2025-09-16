@@ -1,4 +1,0 @@
-2025-09-16T11:23:46.818000Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running
-2025-09-16T15:11:44.138757Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running
-2025-09-16T15:11:44.360875Z  WARN turborepo_filewatch: failed to remove cookie file failed to remove file `C:\Users\ekire\current projects\uscor\.turbo\cookies\.turbo-cookie`
-2025-09-16T17:06:23.407713Z  WARN daemon_server: turborepo_lib::commands::daemon: daemon already running

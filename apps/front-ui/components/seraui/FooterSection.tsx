@@ -26,7 +26,7 @@ const LinkedInIcon = () => (
 // --- Footer Component ---
 export default function Footer() {
   return (
-    <footer className=" bg-white dark:bg-gray-950  border-t border-border text-foreground py-12 px-4">
+    <footer className=" bg-card border-t border-orange-400/60 dark:border-orange-500/70 text-foreground py-12 px-4 ">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="space-y-4">

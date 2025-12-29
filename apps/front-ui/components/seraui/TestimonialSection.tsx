@@ -61,7 +61,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
         {subtitle}
       </p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full max-w-6xl">
-        <div className="bg-white/80 dark:bg-gray-950/50 p-8 rounded-xl flex flex-col justify-between border border-[var(--secondary-light)] dark:border-[var(--secondary-dark)] backdrop-blur-sm shadow-md">
+        <div className="bg-white/80 /50 p-8 rounded-xl flex flex-col justify-between border border-[var(--secondary-light)] dark:border-[var(--secondary-dark)] backdrop-blur-sm shadow-md">
           <div className="mb-8">
             {testimonials[0].logo && (
               <div className="flex items-center mb-6">
@@ -88,7 +88,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
           </div>
         </div>
         <div className="flex flex-col gap-4">
-          <div className="bg-white/80 dark:bg-gray-950/50 p-8 rounded-xl flex flex-col justify-between border border-[var(--secondary-light)] dark:border-[var(--secondary-dark)] backdrop-blur-sm shadow-md">
+          <div className="bg-white/80 /50 p-8 rounded-xl flex flex-col justify-between border border-[var(--secondary-light)] dark:border-[var(--secondary-dark)] backdrop-blur-sm shadow-md">
             <p className="text-base sm:text-lg lg:text-xl text-[var(--secondary-dark)] dark:text-[var(--lightGray)] leading-relaxed mb-8">
               {testimonials[1].quote}
             </p>
@@ -107,7 +107,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {testimonials.slice(2).map((testimonial) => (
-              <div key={testimonial.author} className="bg-white/80 dark:bg-gray-950/50 p-6 rounded-xl flex flex-col justify-between border border-[var(--secondary-light)] dark:border-[var(--secondary-dark)] backdrop-blur-sm shadow-md">
+              <div key={testimonial.author} className="bg-white/80 /50 p-6 rounded-xl flex flex-col justify-between border border-[var(--secondary-light)] dark:border-[var(--secondary-dark)] backdrop-blur-sm shadow-md">
                 <p className="text-sm sm:text-base text-[var(--secondary-dark)] dark:text-[var(--lightGray)] leading-relaxed mb-6">
                   {testimonial.quote}
                 </p>

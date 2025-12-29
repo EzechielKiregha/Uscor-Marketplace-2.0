@@ -10,6 +10,7 @@ import {
   Business,
   Client,
   Worker,
+  Admin,
 } from '../generated/prisma/client'
 import { UserPayload } from './entities/auth-payload.entity'
 
@@ -24,35 +25,27 @@ export class AuthService {
     email: string,
     password: string,
   ) {
-    // Check each role in order and return as soon as we find a match
-    const client =
-      await this.prisma.client.findUnique({
-        where: { email },
-      })
+    // Check Admin first, then other roles
+    const admin = await this.prisma.admin.findUnique({ where: { email } })
+    if (admin) return { role: 'admin' }
+
+    const client = await this.prisma.client.findUnique({ where: { email } })
     if (client) {
-      return { role: 'Client' }
+      return { role: 'client' }
     }
 
-    const business =
-      await this.prisma.business.findUnique({
-        where: { email },
-      })
+    const business = await this.prisma.business.findUnique({ where: { email } })
     if (business) {
-      return { role: 'Business' }
+      return { role: 'business' }
     }
-
-    const worker =
-      await this.prisma.worker.findUnique({
-        where: { email },
-      })
+    
+    const worker = await this.prisma.worker.findUnique({ where: { email } })
     if (worker) {
-      return { role: 'Worker' }
+      return { role: 'worker' }
     }
-
+    
     // If no user found, throw an error instead of returning a string
-    throw new UnauthorizedException(
-      'User not found',
-    )
+    throw new UnauthorizedException('User not found')
   }
   async validateUser(
     email: string,
@@ -61,38 +54,39 @@ export class AuthService {
   ) {
     let user
     if (role === 'client') {
-      user = await this.prisma.client.findUnique({
-        where: { email },
-      })
+      user = await this.prisma.client.findUnique({ where: { email } })
     } else if (role === 'business') {
-      user =
-        await this.prisma.business.findUnique({
-          where: { email },
-        })
+      user = await this.prisma.business.findUnique({ where: { email } })
     } else if (role === 'worker') {
-      user = await this.prisma.worker.findUnique({
-        where: { email },
-      })
+      user = await this.prisma.worker.findUnique({ where: { email } })
+    } else if (role === 'admin') {
+      user = await this.prisma.admin.findUnique({ where: { email } })
     } else {
-      throw new UnauthorizedException(
-        'Invalid role',
-      )
+      throw new UnauthorizedException('Invalid role')
     }
 
     if (!user) {
-      throw new UnauthorizedException(
-        `${role} not found`,
-      )
+      throw new UnauthorizedException(`${role} not found`)
     }
 
-    const isValid = await verify(
-      user.password,
-      password,
-    )
+    const isValid = await verify(user.password, password)
     if (!isValid) {
-      throw new UnauthorizedException(
-        'Invalid credentials',
-      )
+      throw new UnauthorizedException('Invalid credentials')
+    }
+
+    // update lastLogin for the user
+    try {
+      if (role === 'client') {
+        await this.prisma.client.update({ where: { id: user.id }, data: { lastLogin: new Date() } })
+      } else if (role === 'business') {
+        await this.prisma.business.update({ where: { id: user.id }, data: { lastLogin: new Date() } })
+      } else if (role === 'worker') {
+        await this.prisma.worker.update({ where: { id: user.id }, data: { lastLogin: new Date() } })
+      } else if (role === 'admin') {
+        await (this.prisma as any).admin.update({ where: { id: user.id }, data: { lastLogin: new Date() } })
+      }
+    } catch (err) {
+      // ignore logging failure
     }
 
     return user
@@ -114,19 +108,15 @@ export class AuthService {
           where: { id: userId },
         })
     } else if (role === 'worker') {
-      user = await this.prisma.worker.findUnique({
-        where: { id: userId },
-      })
+      user = await this.prisma.worker.findUnique({ where: { id: userId } })
+    } else if (role === 'admin') {
+      user = await this.prisma.admin.findUnique({ where: { id: userId } })
     } else {
-      throw new UnauthorizedException(
-        'Invalid role',
-      )
+      throw new UnauthorizedException('Invalid role')
     }
 
     if (!user) {
-      throw new UnauthorizedException(
-        `${role} not found`,
-      )
+      throw new UnauthorizedException(`${role} not found`)
     }
     // Generate a token (e.g., JWT) and return it
     const payload: AuthJwtPayload = {
@@ -193,6 +183,21 @@ export class AuthService {
       refreshToken, // Now included in the response
     }
   }
+  async loginAdmin(admin: Admin) {
+    const { accessToken, refreshToken } =
+      await this.generateToken(
+        admin.id,
+        'admin',
+      )
+    return {
+      id: admin.id,
+      email: admin.email,
+      fullname: admin.fullName,
+      phone: admin.phone,
+      accessToken,
+      refreshToken, // Now included in the response
+    }
+  }
 
   async validateCurrentAccountJwt(
     id: string,
@@ -245,10 +250,14 @@ export class AuthService {
         role,
       }
       return currentAccount
+    } else if (role === 'admin') {
+      const userAccountAdmin = await this.prisma.admin.findUnique({ where: { id } })
+      if (!userAccountAdmin) {
+        throw new UnauthorizedException('Acount not found')
+      }
+      return { id: userAccountAdmin.id, role }
     } else {
-      throw new UnauthorizedException(
-        'Unauthorized Role so far',
-      )
+      throw new UnauthorizedException('Unauthorized Role so far')
     }
   }
 }

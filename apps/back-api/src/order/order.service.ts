@@ -696,6 +696,12 @@ export class OrderService {
                     },
                     take: 1,
                   },
+                  business: {
+                    select: { id: true, name: true, avatar: true },
+                  },
+                  store: {
+                    select: { id: true, name: true },
+                  },
                 },
               },
             },
@@ -707,17 +713,68 @@ export class OrderService {
       }),
     ])
 
-    // Transform the data to match frontend expectations
-    const transformedOrders = orders.map(
-      (order) => ({
-        ...order,
-        status:
-          order.payment?.status || 'PENDING',
-        products: order.products?.map((op) => ({
-          ...op,
-        })),
-      }),
-    )
+    // Build business map from product businessIds
+    const businessIds = new Set<string>()
+    for (const o of orders) {
+      for (const op of o.products || []) {
+        const bId = op.product?.businessId || op.product?.business?.id
+        if (bId) businessIds.add(bId)
+      }
+    }
+    const businesses = businessIds.size
+      ? await this.prisma.business.findMany({ where: { id: { in: Array.from(businessIds) } }, select: { id: true, name: true, avatar: true } })
+      : []
+    const businessMap: Record<string, any> = {}
+    for (const b of businesses) businessMap[b.id] = b
+
+    const transformedOrders = orders.map((order) => {
+      const firstProduct = order.products?.find((p: any) => !!p.product)
+      const bizId = firstProduct?.product?.businessId
+      const business = firstProduct?.product?.business || (bizId ? businessMap[bizId] : null)
+      const store = firstProduct?.product?.store || null
+
+      // items array expected by frontend
+      const items = (order.products || []).map((op: any) => ({
+        id: op.product?.id || op.id,
+        name: op.product?.title || op.product?.name || '',
+        price: op.product?.price || 0,
+        quantity: op.quantity || 0,
+        media: op.product?.medias?.[0]
+          ? { url: op.product.medias[0].url }
+          : null,
+      }))
+
+      // deliveryAddress transformation: try JSON parse, fallback split
+      let deliveryAddress: any = null
+      if (order.deliveryAddress) {
+        try {
+          const parsed = JSON.parse(order.deliveryAddress)
+          deliveryAddress = {
+            street: parsed.street || order.deliveryAddress,
+            city: parsed.city || null,
+          }
+        } catch (e) {
+          const parts = (order.deliveryAddress || '').split(',')
+          deliveryAddress = {
+            street: parts.slice(0, -1).join(',').trim() || order.deliveryAddress,
+            city: parts.slice(-1)[0]?.trim() || null,
+          }
+        }
+      }
+
+      return {
+        id: order.id,
+        orderNumber: order.id,
+        status: order.payment?.status || 'PENDING',
+        totalAmount: order.totalAmount,
+        createdAt: order.createdAt,
+        items,
+        business,
+        store,
+        paymentMethod: order.payment ? { type: order.payment.method, last4: null } : null,
+        deliveryAddress,
+      }
+    })
 
     return {
       items: transformedOrders,

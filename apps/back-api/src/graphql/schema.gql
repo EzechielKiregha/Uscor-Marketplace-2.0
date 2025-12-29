@@ -120,46 +120,6 @@ type WorkerEntity {
   chats: [ChatEntity!]
 }
 
-type FreelanceServiceEntity {
-  id: String!
-  title: String!
-  description: String
-  isHourly: Boolean!
-  rate: Float!
-  category: FreelanceServiceCategory
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  business: BusinessEntity!
-  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
-}
-
-enum FreelanceServiceCategory {
-  PLUMBER
-  ELECTRICIAN
-  CARPENTER
-  MECHANIC
-  TUTOR
-  CLEANER
-  OTHER
-}
-
-type WorkerServiceAssignmentEntity {
-  id: String!
-  freelanceServiceId: String
-  workerId: String
-  freelanceService: FreelanceServiceEntity
-  worker: WorkerEntity!
-  role: String
-  assignedAt: DateTime!
-}
-
-type PaginatedFreelanceServicesResponse {
-  items: [FreelanceServiceEntity!]!
-  total: Int!
-  page: Int!
-  limit: Int!
-}
-
 type AdEntity {
   id: String!
   businessId: String!
@@ -181,66 +141,23 @@ type CategoryEntity {
   products: [ProductEntity!]
 }
 
-type MediaEntity {
+type PostTransactionEntity {
   id: String!
-  url: String!
-  type: String!
-  productId: String!
-  createdAt: DateTime!
-  product: ProductEntity!
-}
-
-type ShippingEntity {
-  id: String!
-  reOwnedProductId: String!
+  amount: Float!
   status: String!
-  trackingNumber: String
-  carrier: String
-  shippedAt: DateTime
-  deliveredAt: DateTime
   createdAt: DateTime!
 }
 
-type ReOwnedProductEntity {
+type PaymentTransactionEntity {
   id: String!
-  newProductId: String!
-  newProduct: ProductEntity!
-  originalProductId: String!
-  originalProduct: ProductEntity!
-  oldOwnerId: String!
-  newOwnerId: String!
-  quantity: Int!
-  oldPrice: Float!
-  newPrice: Float!
-  markupPercentage: Float!
-  agreedViaChatId: String!
-  agreementDate: DateTime!
-  isOriginalApproved: Boolean!
-  isNewOwnerApproved: Boolean!
-  shippingId: String
-  shipping: ShippingEntity
+  amount: Float!
+  method: String!
+  status: String!
+  transactionDate: DateTime!
+  qrCode: String
   createdAt: DateTime!
-}
-
-type RepostedProductEntity {
-  id: String!
-  productId: String!
-  product: ProductEntity!
-  businessId: String!
-  business: BusinessEntity!
-  markupPercentage: Float!
-  createdAt: DateTime!
-}
-
-type ReviewEntity {
-  id: String!
-  clientId: String!
-  productId: String!
-  rating: Int!
-  comment: String
-  createdAt: DateTime!
-  client: ClientEntity!
-  product: ProductEntity!
+  order: OrderEntity!
+  postTransaction: PostTransactionEntity
 }
 
 type PurchaseOrderProductEntity {
@@ -435,12 +352,142 @@ type StoreEntity {
   products: [ProductEntity!]
 }
 
-type ProductEntity {
+type OrderItemEntity {
+  id: String!
+  name: String!
+  price: Float!
+  quantity: Int!
+  mediaUrl: String
+}
+
+type DeliveryAddressEntity {
+  street: String
+  city: String
+}
+
+type PaymentMethodEntity {
+  id: String
+  type: String
+  last4: String
+  isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type OrderEntity {
+  id: String!
+  deliveryFee: Float!
+  deliveryAddress: DeliveryAddressEntity
+  qrCode: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  clientId: String
+  client: ClientEntity!
+  payment: PaymentTransactionEntity
+  products: [OrderProductEntity!]
+  orderNumber: String
+  status: String
+  items: [OrderItemEntity!]
+  business: BusinessEntity
+  store: StoreEntity
+  paymentMethod: PaymentMethodEntity
+  totalAmount: Float
+}
+
+type PaginatedOrdersResponse {
+  items: [OrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type OrderProductEntity {
+  id: String!
+  orderId: String!
+  productId: String!
+  quantity: Int!
+  order: OrderEntity!
+  product: ProductEntity!
+}
+
+type ShippingEntity {
+  id: String!
+  reOwnedProductId: String!
+  status: String!
+  trackingNumber: String
+  carrier: String
+  shippedAt: DateTime
+  deliveredAt: DateTime
+  createdAt: DateTime!
+}
+
+type ReOwnedProductEntity {
+  id: String!
+  newProductId: String!
+  newProduct: ProductEntity!
+  originalProductId: String!
+  originalProduct: ProductEntity!
+  oldOwnerId: String!
+  newOwnerId: String!
+  quantity: Int!
+  oldPrice: Float!
+  newPrice: Float!
+  markupPercentage: Float!
+  agreedViaChatId: String!
+  agreementDate: DateTime!
+  isOriginalApproved: Boolean!
+  isNewOwnerApproved: Boolean!
+  shippingId: String
+  shipping: ShippingEntity
+  createdAt: DateTime!
+}
+
+type RepostedProductEntity {
+  id: String!
+  productId: String!
+  product: ProductEntity!
+  businessId: String!
+  business: BusinessEntity!
+  markupPercentage: Float!
+  createdAt: DateTime!
+}
+
+type ReviewEntity {
+  id: String!
+  clientId: String!
+  productId: String!
+  rating: Int!
+  comment: String
+  createdAt: DateTime!
+  client: ClientEntity!
+  product: ProductEntity!
+}
+
+type PromotionEntity {
   id: String!
   title: String!
   description: String
+  type: String
+  value: Float
+  discountPercentage: Float
+  code: String
+  startDate: DateTime
+  endDate: DateTime
+  applicableBusinesses: [BusinessEntity!]
+  applicableCategories: [String!]
+  minimumPurchase: Float
+  isRedeemed: Boolean
+}
+
+type ProductEntity {
+  id: String!
+  title: String!
+  name: String
+  description: String
   price: Float!
+  stockQuantity: Int!
   quantity: Int!
+  media: MediaEntity
   businessId: String!
   storeId: String
   isPhysical: Boolean!
@@ -458,56 +505,57 @@ type ProductEntity {
   reposts: [RepostedProductEntity!]!
   reowns: [ReOwnedProductEntity!]!
   ads: [AdEntity!]!
+  promotions: [PromotionEntity!]
 }
 
-type OrderProductEntity {
+type MediaEntity {
   id: String!
-  orderId: String!
+  url: String!
+  type: String!
   productId: String!
-  quantity: Int!
-  order: OrderEntity!
+  createdAt: DateTime!
   product: ProductEntity!
 }
 
-type OrderEntity {
+type FreelanceServiceEntity {
   id: String!
-  deliveryFee: Float!
-  deliveryAddress: String
-  qrCode: String
+  title: String!
+  description: String
+  isHourly: Boolean!
+  rate: Float!
+  category: FreelanceServiceCategory
   createdAt: DateTime!
   updatedAt: DateTime!
-  clientId: String
-  client: ClientEntity!
-  payment: PaymentTransactionEntity
-  products: [OrderProductEntity!]
-  status: String
-  totalAmount: Float
+  business: BusinessEntity!
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
+  medias: [MediaEntity!]
 }
 
-type PaginatedOrdersResponse {
-  items: [OrderEntity!]!
+enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+type WorkerServiceAssignmentEntity {
+  id: String!
+  freelanceServiceId: String
+  workerId: String
+  freelanceService: FreelanceServiceEntity
+  worker: WorkerEntity!
+  role: String
+  assignedAt: DateTime!
+}
+
+type PaginatedFreelanceServicesResponse {
+  items: [FreelanceServiceEntity!]!
   total: Int!
   page: Int!
   limit: Int!
-}
-
-type PostTransactionEntity {
-  id: String!
-  amount: Float!
-  status: String!
-  createdAt: DateTime!
-}
-
-type PaymentTransactionEntity {
-  id: String!
-  amount: Float!
-  method: String!
-  status: String!
-  transactionDate: DateTime!
-  qrCode: String
-  createdAt: DateTime!
-  order: OrderEntity!
-  postTransaction: PostTransactionEntity
 }
 
 type FreelanceOrderEntity {
@@ -541,6 +589,17 @@ type PaginatedFreelanceOrdersResponse {
   limit: Int!
 }
 
+type AddressEntity {
+  id: String
+  street: String
+  city: String
+  country: String
+  postalCode: String
+  isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type ClientEntity {
   id: String
   username: String
@@ -549,8 +608,11 @@ type ClientEntity {
   address: String
   phone: String
   avatar: String
-  password: String
   isVerified: Boolean
+  loyaltyPoints: Float
+  loyaltyTier: String
+  totalSpent: Float
+  totalOrders: Float
   createdAt: DateTime
   updatedAt: DateTime
   orders: [OrderEntity!]
@@ -559,6 +621,8 @@ type ClientEntity {
   freelanceOrders: [FreelanceOrderEntity!]
   referralsMade: [ReferralEntity!]
   referralsReceived: [ReferralEntity!]
+  addresses: [AddressEntity!]
+  paymentMethods: [PaymentMethodEntity!]
 }
 
 type TokenTransactionEntity {
@@ -655,10 +719,34 @@ type KycDocumentEntity {
   verifiedAt: DateTime
 }
 
-type BusinessEntity {
+type PointsTransactionEntity {
   id: String!
+  clientId: String!
+  client: ClientEntity!
+  loyaltyProgramId: String!
+  loyaltyProgram: LoyaltyProgramEntity!
+  points: Float!
+  createdAt: DateTime!
+}
+
+type LoyaltyProgramEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
   name: String!
-  email: String!
+  description: String
+  pointsPerPurchase: Float!
+  pointsPerDollar: Float!
+  minimumPointsToRedeem: Float
+  pointsTransactions: [PointsTransactionEntity!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type BusinessEntity {
+  id: String
+  name: String
+  email: String
   description: String
   address: String
   phone: String
@@ -672,7 +760,7 @@ type BusinessEntity {
   notes: String
   preferences: JSON
   isVerified: Boolean!
-  kycStatus: KycStatus!
+  kycStatus: KycStatus
   totalProductsSold: Int!
   totalClients: Int!
   totalWorkers: Int!
@@ -692,6 +780,8 @@ type BusinessEntity {
   hardwareConfig: HardwareConfigEntity
   kyc: [KycDocumentEntity!]
   stores: [StoreEntity!]
+  loyaltyProgram: LoyaltyProgramEntity
+  promotions: [PromotionEntity!]
   freelanceServices: [FreelanceServiceEntity!]!
   freelanceOrders: [FreelanceOrderEntity!]!
   referralsMade: [ReferralEntity!]!
@@ -790,6 +880,41 @@ type BusinessDashboardResponse {
   recentOrders: [RecentOrder!]!
 }
 
+type PaginatedBusinesses {
+  items: [BusinessEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type BusinessTypeEntity {
+  id: String!
+  name: String!
+  description: String
+  icon: String
+}
+
+type SuccessResponse {
+  success: Boolean!
+}
+
+type RecommendationItem {
+  id: String!
+  name: String!
+  price: Float!
+  mediaUrl: String
+}
+
+type RecommendationEntity {
+  id: String!
+  type: String
+  title: String!
+  description: String
+  items: [RecommendationItem!]
+  reason: String
+  createdAt: DateTime
+}
+
 type AuthPayload {
   id: String!
   role: String!
@@ -815,6 +940,15 @@ type AuthPayloadWorker {
   email: String!
   fullname: String!
   phone: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthPayloadAdmin {
+  id: String!
+  email: String!
+  fullname: String!
+  phone: String
   accessToken: String!
   refreshToken: String!
 }
@@ -894,30 +1028,6 @@ type StoreStatistics {
   sales: SalesStats!
   revenue: RevenueStats!
   products: ProductStats!
-}
-
-type PointsTransactionEntity {
-  id: String!
-  clientId: String!
-  client: ClientEntity!
-  loyaltyProgramId: String!
-  loyaltyProgram: LoyaltyProgramEntity!
-  points: Float!
-  createdAt: DateTime!
-}
-
-type LoyaltyProgramEntity {
-  id: String!
-  businessId: String!
-  business: BusinessEntity!
-  name: String!
-  description: String
-  pointsPerPurchase: Float!
-  pointsPerDollar: Float!
-  minimumPointsToRedeem: Float
-  pointsTransactions: [PointsTransactionEntity!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type ClientPointsBalanceEntity {
@@ -1023,6 +1133,185 @@ type BusinessSettingsEntity {
   postOfSales: [PostOfSaleEntity!]
 }
 
+type PaginatedProductsResponse {
+  items: [ProductEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type SearchMarketplaceResponse {
+  products: [ProductEntity!]!
+  services: [FreelanceServiceEntity!]!
+}
+
+type Admin {
+  id: String!
+  email: String!
+  fullName: String
+  phone: String
+  avatar: String
+  role: AdminRole!
+  isActive: Boolean!
+  lastLogin: DateTime
+  permissions: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Roles assigned to admin users"""
+enum AdminRole {
+  SUPERADMIN
+  ADMIN
+  SUPPORT
+}
+
+type PaginatedBusinessesResponse {
+  items: [BusinessEntity!]
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PaginatedClientsResponse {
+  items: [ClientEntity!]
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PaginatedWorkersResponse {
+  items: [WorkerEntity!]
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PaginatedAdminsResponse {
+  items: [Admin!]
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PlatformSettings {
+  id: String!
+  platformFeePercentage: Float!
+  minTransactionAmount: Float
+  maxTransactionAmount: Float
+  currency: String!
+  tokenValue: Float
+  tokenSymbol: String
+  kycRequired: Boolean!
+  b2bEnabled: Boolean!
+  marketplaceEnabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DailyCount {
+  date: String!
+  count: Int!
+}
+
+type PlatformMetrics {
+  totalUsers: Int!
+  totalBusinesses: Int!
+  totalProducts: Int!
+  totalServices: Int!
+  totalTransactions: Int!
+  totalRevenue: Float!
+  activeUsersToday: Int!
+  activeBusinessesToday: Int!
+  averageTransactionValue: Float!
+  platformFeesCollected: Float!
+  kycPendingCount: Int!
+  kycVerifiedCount: Int!
+  kycRejectedCount: Int!
+  disputesOpenCount: Int!
+  disputesResolvedCount: Int!
+  adsActiveCount: Int!
+  adsPendingCount: Int!
+  last24Hours: [DailyCount!]!
+  last7Days: [DailyCount!]!
+  last30Days: [DailyCount!]!
+}
+
+type AnnouncementEntity {
+  id: String!
+  title: String!
+  content: String!
+  type: String
+  priority: String
+  status: String!
+  scheduledFor: String
+  sentAt: DateTime
+  targetUsers: JSON
+  readCount: Int!
+  totalRecipients: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PaginatedAnnouncementsResponse {
+  items: [AnnouncementEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type DisputeMessageEntity {
+  id: String!
+  content: String!
+  createdAt: DateTime!
+  senderId: String
+  sender: ClientEntity
+}
+
+type DisputeEntity {
+  id: String!
+  title: String!
+  description: String
+  status: String!
+  type: String
+  createdAt: DateTime!
+  resolvedAt: DateTime
+  resolutionNotes: String
+  reporterId: String
+  reporterType: String
+  reporter: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  orderId: String
+  order: OrderEntity
+  messages: [DisputeMessageEntity!]
+}
+
+type PaginatedDisputesResponse {
+  items: [DisputeEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type AuditLogEntity {
+  id: String!
+  action: String!
+  entityType: String!
+  entityId: String!
+  details: String
+  createdAt: DateTime!
+  adminId: String
+  admin: WorkerEntity
+}
+
+type PaginatedAuditLogsResponse {
+  items: [AuditLogEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
 type Query {
   """Retrieves all products with their relations."""
   products: [ProductEntity!]!
@@ -1070,11 +1359,12 @@ type Query {
   """Retrieves the account balance for a user."""
   accountBalance: Float!
 
-  """Retrieves all businesses with their relations."""
-  businesses: [BusinessEntity!]!
+  """Retrieve businesses with pagination and filtering."""
+  businesses(search: String, businessType: String, hasLoyalty: Boolean, hasPromotions: Boolean, isB2BEnabled: Boolean, isVerified: Boolean, sort: String, page: Int, limit: Int): PaginatedBusinesses!
   business(id: String!): BusinessSettingsEntity!
   businessServices(businessId: String!, category: String, search: String, page: Int, limit: Int): [FreelanceServiceEntity!]!
   businessDashboard: BusinessDashboardResponse!
+  businessTypes: [BusinessTypeEntity!]!
   businessReviews(businessId: String!, page: Int, limit: Int): PaginatedReviews!
 
   """Retrieves all clients with their relations."""
@@ -1085,6 +1375,9 @@ type Query {
 
   """Find client by email."""
   clientByEmail(email: String!): ClientEntity
+  clientReviews(clientId: String!, page: Int, limit: Int): PaginatedReviews!
+  clientPromotions(clientId: String!): [PromotionEntity!]!
+  clientRecommendations(clientId: String!): [RecommendationEntity!]!
 
   """Search clients by query."""
   searchClients(query: String!): [ClientEntity!]!
@@ -1216,6 +1509,25 @@ type Query {
 
   """Retrieves shifts for a worker."""
   shiftsByWorker(workerId: String!): [ShiftEntity!]!
+  marketplaceProducts(search: String, category: String, businessType: String, hasPromotion: Boolean, isFeatured: Boolean, minPrice: Float, maxPrice: Float, sort: String, page: Int! = 1, limit: Int! = 12): PaginatedProductsResponse!
+  marketplaceServices(search: String, category: String, businessType: String, minPrice: Float, maxPrice: Float, sort: String, page: Int! = 1, limit: Int! = 12): PaginatedFreelanceServicesResponse!
+  productCategories: [CategoryEntity!]!
+  searchMarketplace(query: String!): SearchMarketplaceResponse!
+
+  """Find a single admin by ID."""
+  admin(id: String!): Admin!
+  all_businesses(input: GetUsersInput!): PaginatedBusinessesResponse!
+  all_clients(input: GetUsersInput!): PaginatedClientsResponse!
+  all_workers(input: GetUsersInput!): PaginatedWorkersResponse!
+  all_admins(input: GetUsersInput!): PaginatedAdminsResponse!
+  one_business(id: String!): BusinessEntity
+  one_client(id: String!): ClientEntity
+  one_worker(id: String!): WorkerEntity
+  announcements(status: String, priority: String, search: String, page: Int = 1, limit: Int = 10): PaginatedAnnouncementsResponse!
+  disputes(status: String, type: String, search: String, page: Int = 1, limit: Int = 10): PaginatedDisputesResponse!
+  auditLogs(action: String, adminId: String, startDate: DateTime, endDate: DateTime, page: Int = 1, limit: Int = 10): PaginatedAuditLogsResponse!
+  platformMetrics: PlatformMetrics!
+  platformSettings: PlatformSettings!
 }
 
 input SignInInput {
@@ -1226,6 +1538,16 @@ input SignInInput {
 input LowStockAlertInput {
   storeId: String!
   threshold: Int!
+}
+
+input GetUsersInput {
+  search: String
+  userType: String
+  status: String
+  kycStatus: KycStatus
+  businessType: String
+  page: Int = 1
+  limit: Int = 10
 }
 
 type Mutation {
@@ -1286,6 +1608,11 @@ type Mutation {
 
   """Creates a new client for POS with minimal info."""
   createClientForPOS(createClientInput: CreateClientForPOSInput!): ClientEntity!
+  addClientAddress(clientId: String!, input: AddressInput!): ClientEntity!
+  updateClientAddress(addressId: String!, input: AddressInput!): AddressEntity!
+  deleteClientAddress(addressId: String!): SuccessResponse!
+  addClientPaymentMethod(clientId: String!, input: PaymentMethodInput!): ClientEntity!
+  setDefaultPaymentMethod(paymentMethodId: String!): PaymentMethodEntity!
 
   """Updates a client’s details."""
   updateClient(id: String!, updateClientInput: UpdateClientInput!): ClientEntity!
@@ -1379,6 +1706,7 @@ type Mutation {
   signClientIn(SignInInput: SignInInput!): AuthPayloadClient!
   signBusinessIn(SignInInput: SignInInput!): AuthPayloadBusiness!
   signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
+  signAdminIn(SignInInput: SignInInput!): AuthPayloadAdmin!
   refreshToken(refreshToken: String!): AuthPayloadClient!
   createPostOfSale(createPostOfSaleInput: CreatePostOfSaleInput!): PostOfSaleEntity!
   updatePostOfSale(updatePostOfSaleInput: UpdatePostOfSaleInput!): PostOfSaleEntity!
@@ -1466,7 +1794,17 @@ type Mutation {
   updateHardwareConfig(businessId: String!, input: UpdateHardwareConfigInput!): BusinessSettingsEntity!
   uploadKycDocument(input: UploadKycDocumentInput!): KycDocumentEntity!
   submitKyc(businessId: String!): BusinessSettingsEntity!
+  verifyKyc(input: VerifyKycInput!): BusinessEntity!
+  rejectKyc(input: RejectKycInput!): BusinessEntity!
   agreeToTerms(businessId: String!): BusinessSettingsEntity!
+  createAdmin(input: CreateAdminInput!): Admin!
+  updateAdmin(id: String!, input: UpdateAdminInput!): Admin!
+  removeAdmin(id: String!): Admin!
+  registerSuperAdmin(createAdminInput: CreateAdminInput!): Admin!
+  updateUserStatus(input: UpdateUserStatusInput!): Boolean!
+  createAnnouncement(input: CreateAnnouncementInput!): AnnouncementEntity!
+  resolveDispute(disputeId: String!, resolutionNotes: String!, refundAmount: Float, compensation: Float): DisputeEntity!
+  updatePlatformSettings(input: UpdatePlatformSettingsInput!): PlatformSettings!
 }
 
 input CreateProductInput {
@@ -1641,6 +1979,20 @@ input CreateClientForPOSInput {
   fullName: String
   phone: String
   address: String
+}
+
+input AddressInput {
+  street: String!
+  city: String!
+  country: String
+  postalCode: String
+  isDefault: Boolean
+}
+
+input PaymentMethodInput {
+  type: String!
+  last4: String
+  isDefault: Boolean
 }
 
 input UpdateClientInput {
@@ -2007,13 +2359,68 @@ input UploadKycDocumentInput {
   documentUrl: String!
 }
 
+input VerifyKycInput {
+  businessId: String!
+  notes: String
+}
+
+input RejectKycInput {
+  businessId: String!
+  rejectionReason: String!
+}
+
+input CreateAdminInput {
+  email: String!
+  fullName: String
+  password: String!
+  phone: String
+  avatar: String
+  permissions: JSON
+}
+
+input UpdateAdminInput {
+  fullName: String
+  phone: String
+  avatar: String
+  permissions: JSON
+}
+
+input UpdateUserStatusInput {
+  id: String!
+  userType: String!
+  status: String!
+}
+
+input CreateAnnouncementInput {
+  title: String!
+  content: String!
+  type: String
+  priority: String
+  scheduledFor: String
+  status: String
+  targetUsers: String
+}
+
+input UpdatePlatformSettingsInput {
+  platformFeePercentage: Float
+  minTransactionAmount: Float
+  maxTransactionAmount: Float
+  currency: String
+  tokenValue: Float
+  tokenSymbol: String
+  kycRequired: Boolean
+  b2bEnabled: Boolean
+  marketplaceEnabled: Boolean
+}
+
 type Subscription {
   productCreated(businessId: String!): ProductEntity!
   productUpdated(businessId: String!): ProductEntity!
   orderCreated(clientId: String!, businessId: String!): OrderEntity!
   orderUpdated(clientId: String!, businessId: String!): OrderEntity!
   orderPaymentProcessed(orderId: String!): OrderEntity!
-  businessUpdated: BusinessEntity!
+  businessUpdated(businessId: String!): BusinessEntity!
+  businessAdded: BusinessEntity!
   messageReceived(chatId: String!): ChatMessageEntity!
   chatCreated(userId: String!): ChatEntity!
   chatStatusUpdated(userId: String!): ChatEntity!
@@ -2033,4 +2440,13 @@ type Subscription {
   transferOrderUpdated(fromStoreId: String!): TransferOrderEntity!
   settingsUpdated: BusinessSettingsEntity!
   kycUpdated: BusinessSettingsEntity!
+  kycSubmitted: BusinessSettingsEntity!
+  productAdded(businessId: String!): ProductEntity!
+  serviceAdded(businessId: String!): FreelanceServiceEntity!
+  newAdmin: Admin!
+  kycVerified: BusinessEntity!
+  kycRejected: BusinessEntity!
+  newAnnouncement: AnnouncementEntity!
+  newDispute: DisputeEntity!
+  platformSettingsUpdated: PlatformSettings!
 }

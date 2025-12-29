@@ -65,6 +65,27 @@ export class AuthPayloadWorker {
 }
 
 @ObjectType()
+export class AuthPayloadAdmin {
+  @Field(() => String)
+  id: string
+
+  @Field(() => String)
+  email: string
+
+  @Field(() => String)
+  fullname: string
+
+  @Field(() => String, { nullable: true })
+  phone: string
+
+  @Field(() => String)
+  accessToken: string
+
+  @Field(() => String)
+  refreshToken: string
+}
+
+@ObjectType()
 export class AuthPayloadBusiness {
   @Field(() => String)
   id: string

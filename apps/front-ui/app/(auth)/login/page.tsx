@@ -135,8 +135,9 @@ export default function LoginPage() {
   const [signInClient, { loading: clientLoading }] = useMutation(getLoginMutation('Client'));
   const [signInBusiness, { loading: businessLoading }] = useMutation(getLoginMutation('Business'));
   const [signInWorker, { loading: workerLoading }] = useMutation(getLoginMutation('Worker'));
+  const [signInAdmin, { loading: adminLoading }] = useMutation(getLoginMutation('Admin'));
 
-  const loading = roleLoading || clientLoading || businessLoading || workerLoading;
+  const loading = roleLoading || clientLoading || businessLoading || workerLoading || adminLoading;
 
   const onSubmit = async (formData: FormData) => {
     try {
@@ -152,18 +153,22 @@ export default function LoginPage() {
       let userRole: string;
       let signInMutation: any;
 
-      switch (res.whatIsUserRole.role) {
-        case 'Client':
+      switch (res.whatIsUserRole.role.toLowerCase()) {
+        case 'client':
           userRole = 'Client';
           signInMutation = signInClient;
           break;
-        case 'Business':
+        case 'business':
           userRole = 'Business';
           signInMutation = signInBusiness;
           break;
-        case 'Worker':
+        case 'worker':
           userRole = 'Worker';
           signInMutation = signInWorker;
+          break;
+        case 'admin':
+          userRole = 'Admin';
+          signInMutation = signInAdmin;
           break;
         default:
           throw new Error(`Unknown UserRole ${res.whatIsUserRole.role}`);
@@ -189,7 +194,7 @@ export default function LoginPage() {
       const role = getUserRole();
       if (role && role === 'client') {
         console.log('Redirecting to client dashboard');
-        router.push('/');
+        router.push('/client');
       } else if (role && role === 'business') {
         console.log('Redirecting to business dashboard');
         router.push('/business/dashboard');
@@ -197,6 +202,9 @@ export default function LoginPage() {
       else if (role && role === 'worker') {
         console.log('Redirecting to worker dashboard');
         router.push('/');
+      } else if (role && role === 'admin') {
+        console.log('Redirecting to admin dashboard');
+        router.push('/admin');
       } else {
         console.warn('Unknown role, redirecting to home');
         router.push('/');
@@ -214,8 +222,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative w-full flex items-center justify-center min-h-screen bg-white dark:bg-gray-950">
-      <div className="w-full max-w-sm p-6 space-y-6 bg-white dark:bg-gray-950 rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
+    <div className="relative w-full flex items-center justify-center min-h-screen bg-background px-4">
+      <div className="w-full max-w-sm p-6 space-y-6 bg-background rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
         {/* Header */}
         <div className="text-center space-y-3">
           <div className="inline-flex p-2 bg-secondary-light dark:bg-secondary-dark rounded-md border border-secondary-light dark:border-secondary-dark">
@@ -323,6 +331,11 @@ export default function LoginPage() {
             Don&apos;t have an account?{' '}
             <a href="/signup" className="font-medium text-primary underline underline-offset-4 hover:text-accent transition-colors">
               Sign up
+            </a>
+          </p>
+          <p>
+            <a href="/register-superadmin" className="text-sm font-medium text-primary underline underline-offset-4 hover:text-accent transition-colors">
+              Bootstrap Super Admin
             </a>
           </p>
           <a href="#" className="text-sm font-medium text-primary underline underline-offset-4 hover:text-accent transition-colors">

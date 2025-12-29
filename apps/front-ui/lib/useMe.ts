@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { fetchMe } from './fetchMe';
-import { BusinessEntity, ClientEntity, WorkerEntity } from './types';
+import { AdminEntity, BusinessEntity, ClientEntity, WorkerEntity } from './types';
 
 type MeResult =
   | { role: 'client'; id: string; user: ClientEntity }
@@ -13,8 +13,8 @@ type MeResult =
 
 export function useMe() {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<ClientEntity | BusinessEntity | WorkerEntity | null>(null);
-  const [role, setRole] = useState<'client' | 'business' | 'worker' | null>(null);
+  const [user, setUser] = useState<ClientEntity | BusinessEntity | WorkerEntity | AdminEntity | null>(null);
+  const [role, setRole] = useState<'client' | 'business' | 'worker' | 'admin' | null>(null);
   const [id, setId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();

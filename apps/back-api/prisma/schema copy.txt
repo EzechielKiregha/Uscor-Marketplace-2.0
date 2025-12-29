@@ -1,0 +1,1173 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+// Enums
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum RechargeMethod {
+  MTN_MONEY
+  AIRTEL_MONEY
+  ORANGE_MONEY
+  MPESA
+  TOKEN
+}
+
+enum Country {
+  DRC
+  KENYA
+  UGANDA
+  RWANDA
+  BURUNDI
+  TANZANIA
+}
+
+enum KycStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentMethod {
+  TOKEN
+  MOBILE_MONEY
+  CASH
+  CARD
+}
+
+enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+enum FreelanceStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  DISPUTED
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SOLD
+  ARCHIVED
+}
+
+enum PostTransactionStatus {
+  PENDING
+  COMPLETED
+  REFUNDED
+}
+
+enum NegotiationType {
+  REOWNERSHIP
+  FREELANCEORDER
+  PURCHASE
+  GENERAL
+}
+
+enum TokenTransactionType {
+  RELEASE
+  PROFIT_SHARE
+  REPOST_COMMISSION
+}
+
+enum ChatStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+// Enums (Updated)
+
+enum SaleStatus {
+  OPEN
+  CLOSED
+  REFUNDED
+}
+
+enum PurchaseOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum TransferOrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum AdjustmentType {
+  ADD
+  REMOVE
+}
+
+enum WorkerRole {
+  ADMIN
+  STAFF
+  SUPERVISOR
+  PRIMARY
+  ASSISTANT
+  MANAGER
+  FREELANCER
+}
+
+// Models
+
+model Business {
+  id                   String                @id @default(uuid())
+  name                 String
+  email                String                @unique
+  description          String?
+  avatar               String?
+  coverImage           String?
+  address              String?
+  phone                String?
+  password             String
+  isVerified           Boolean               @default(false)
+  kyc                  KYC?                  @relation("BusinessKYC")
+  businessType         String?               @default("NA") // e.g., "artisan", "retail", "service"
+  taxId                String?               @default("NA") // For tax purposes
+  registrationNumber   String?               @default("NA")// Business registration number
+  website              String?               @default("NA")// Business website
+  country              String?               @default("NA") // Country of operation
+  socialLinks          Json?                 // e.g., {"facebook": "...", "twitter": "..."}
+  notes                String?               @default("NA")// Internal notes for CRM
+  preferences          Json?                 // Business preferences/settings
+  totalClients         Int?           @default(0)        // Total clients served
+  totalWorkers         Int?             @default(0)        // Total workers employed
+  totalSales           Int?                @default(0)        // Total sales made
+  totalRevenueGenerated Float?               @default(0)        // Total revenue generated
+  products             Product[]
+  workers              Worker[]
+  repostedItems        RepostedProduct[]
+  reownedItems         ReOwnedProduct[]
+  recharges            AccountRecharge[]     @relation("BusinessRecharges")
+  ads                  Ad[]
+  freelanceServices    FreelanceService[]    @relation("ServiceOwner")
+  referralsMade        Referral[]            @relation("BusinessAffiliations")
+  referralsReceived    Referral[]            @relation("BusinessReferred")
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  lastLogin            DateTime?
+  postOfSales          PostOfSale[]
+  freelanceOrderBusiness FreelanceOrderBusiness[]
+
+  kycStatus            KycStatus             @default(PENDING)  // Enum: PENDING, VERIFIED, REJECTED
+  isB2BEnabled         Boolean               @default(false)    // B2B participation flag
+  totalProductsSold    Int                   @default(0)        // Tracks sales for threshold
+  hasAgreedToTerms     Boolean               @default(false)    // Terms compliance
+  termsAgreedAt        DateTime?             // Timestamp of agreement
+
+  // Settings related
+  paymentConfig        PaymentConfig?
+  hardwareConfig       HardwareConfig?
+  kycDocuments         KycDocument[]
+
+
+  chatParticipants ChatParticipant[]
+  tokenTransactions TokenTransaction[]
+  stores Store[]
+  purchaseOrders PurchaseOrder[]
+  loyaltyPrograms LoyaltyProgram[]
+  medias Media[]
+
+  // Index to speed up listing businesses by creation date
+  @@index([createdAt])
+  @@index([email])
+
+  promotions Promotion[] @relation("BusinessPromotions")
+  disputes Dispute[]
+}
+
+model PaymentConfig {
+  id                 String   @id @default(uuid())
+  business           Business @relation(fields: [businessId], references: [id])
+  businessId         String   @unique
+
+  mtnCode            String?
+  airtelCode         String?
+  orangeCode         String?
+  mpesaCode          String?
+  bankAccount        String?
+  mobileMoneyEnabled Boolean  @default(false)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model HardwareConfig {
+  id               String   @id @default(uuid())
+  business         Business @relation(fields: [businessId], references: [id])
+  businessId       String   @unique
+
+  receiptPrinter   String?
+  barcodeScanner   String?
+  cashDrawer       String?
+  cardReader       String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model KycDocument {
+  id             String   @id @default(uuid())
+  business       Business @relation(fields: [businessId], references: [id])
+  businessId     String
+
+  documentType   String
+  documentUrl    String
+  status         KycStatus @default(PENDING)
+  rejectionReason String?
+  submittedAt    DateTime @default(now())
+  verifiedAt     DateTime?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PricingPlan {
+  id        String   @id @default(uuid())
+  name      String
+  description String?
+  price     Float
+  features  PricingFeature[]
+  isCurrentPlan Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PricingFeature {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  plan        PricingPlan @relation(fields: [planId], references: [id])
+  planId      String
+}
+
+model HardwareRecommendation {
+  id          String   @id @default(uuid())
+  type        String
+  model       String?
+  description String?
+  priceRange  String?
+  localSupplier String?
+  setupGuideUrl String?
+  businessType String?
+  country     Country?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BusinessType {
+  id          String @id @default(uuid())
+  name        String
+  description String?
+  icon        String?
+}
+
+model Client {
+  id                   String                @id @default(uuid())
+  username             String                @unique
+  email                String                @unique
+  fullName             String?
+  avatar               String?
+  address              String?
+  phone                String?
+  password             String
+  isVerified           Boolean               @default(false)
+  notes                String?               // For CRM notes
+  preferences          Json?                 // For customer preferences
+  kyc                  KYC?                  @relation("ClientKYC")
+  orders               Order[]
+  reviews              Review[]
+  recharges            AccountRecharge[]     @relation("ClientRecharges")
+  freelanceOrders      FreelanceOrder[]      @relation("ClientOrders")
+  referralsMade        Referral[]            @relation("ClientAffiliations")
+  referralsReceived    Referral[]            @relation("ClientReferred")
+
+  // New relations used by the front-end
+  addresses            Address[]
+  paymentMethods       ClientPaymentMethod[]
+
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  lastLogin            DateTime?
+
+  postTransactions PostTransaction[]
+  chatParticipants ChatParticipant[]
+  sales Sale[]
+  pointsTransactions PointsTransaction[]
+  medias Media[]
+
+  // Common lookup
+  @@index([createdAt])
+  @@index([id])
+  @@index([email])
+
+}
+
+model Worker {
+  id                   String                @id @default(uuid())
+  email                String                @unique
+  fullName             String?
+  role                 WorkerRole           @default(STAFF) // Updated to use WorkerRole enum
+  phone                String?
+  password             String
+  business             Business              @relation(fields: [businessId], references: [id])
+  businessId           String
+  avatar               String?
+  kyc                  KYC?                  @relation("WorkerKYC")
+  isVerified           Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  lastLogin            DateTime?
+  workerServiceAssignments WorkerServiceAssignment[]
+  chatParticipants ChatParticipant[]
+  sales Sale[]
+  shifts Shift[]
+
+  @@index([id])
+  @@index([email])
+  medias Media[]
+  auditLogs AuditLog[]
+}
+
+enum AdminRole {
+  SUPERADMIN
+  ADMIN
+  SUPPORT
+}
+
+model Admin {
+  id         String    @id @default(uuid())
+  email      String    @unique
+  fullName   String?
+  password   String
+  role       AdminRole @default(ADMIN)
+  phone      String?
+  avatar     String?
+  isActive   Boolean   @default(true)
+  lastLogin  DateTime?
+  permissions Json?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([email])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[] @relation("ProductCategory")
+}
+
+model Product {
+  id                   String                @id @default(uuid())
+  title                String
+  description          String?
+  price                Float                 @default(0)
+  stock                Int                   @default(0)
+  quantity             Int                   @default(0) // New field for stock quantity
+  minQuantity             Int                   @default(10) // New field for stock quantity
+  isPhysical           Boolean               @default(false)  // New field to flag physical products
+  business             Business              @relation(fields: [businessId], references: [id])
+  businessId           String
+  storeId              String?
+  store                Store?                @relation(fields: [storeId], references: [id])
+  categoryId           String
+  category             Category         @relation("ProductCategory", fields: [categoryId], references: [id])
+  variants             Json?                 // For size, color, etc.
+  featured             Boolean               @default(false)
+  approvedForSale      Boolean               @default(false)
+  medias               Media[]
+  reviews              Review[]
+  orders               OrderProduct[]
+  chats                Chat[]
+  reposts              RepostedProduct[]
+  ads                  Ad[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  reOwnedProducts      ReOwnedProduct[]      @relation(name: "OriginalProduct")
+  newReOwnedProducts   ReOwnedProduct[]
+
+  saleProducts SaleProduct[]
+  transferOrderProducts        TransferOrderProduct[]
+  purchaseOrderProducts        PurchaseOrderProduct[]
+  inventoryAdjustments InventoryAdjustment[]
+
+  // Foreign keys
+  @@index([businessId])
+  @@index([categoryId])
+
+  // Common filters / sorts
+  @@index([price])
+  @@index([stock])
+  @@index([createdAt])
+
+  // If you frequently search by title
+  @@index([title])
+}
+
+model Media {
+  id                   String                @id @default(uuid())
+  url                  String
+  type                 MediaType
+  size                 BigInt?
+  pathname           String?
+  product              Product?               @relation(fields: [productId], references: [id])
+  productId            String?
+  service              FreelanceService?     @relation(fields: [serviceId], references: [id])
+  serviceId            String?
+  business             Business?             @relation(fields: [businessId], references: [id])
+  businessId           String?
+  client             Client?               @relation(fields: [clientId], references: [id])
+  clientId           String?
+  store                Store?               @relation(fields: [storeId], references: [id])
+  storeId            String?
+  worker               Worker?               @relation(fields: [workerId], references: [id])
+  workerId            String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+}
+
+model Order {
+  id                   String                @id @default(uuid())
+  client               Client                @relation(fields: [clientId], references: [id])
+  clientId             String
+  products             OrderProduct[]
+  deliveryFee          Float                 @default(0)
+  deliveryAddress      String?
+  qrCode               String?
+  payment              PaymentTransaction?
+  totalAmount          Float                 @default(0)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  // Speed up queries like “orders by client” and “recent orders”
+  @@index([clientId])
+  @@index([createdAt])
+}
+
+// Join table for many-to-many between Order and Product
+model OrderProduct {
+  id                   String                @id @default(uuid())
+  order                Order                 @relation(fields: [orderId], references: [id])
+  orderId              String
+  product              Product               @relation(fields: [productId], references: [id])
+  productId            String
+  quantity             Int                   @default(1)
+  createdAt            DateTime              @default(now())
+
+  // Foreign keys
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Review {
+  id                   String                @id @default(uuid())
+  client               Client                @relation(fields: [clientId], references: [id])
+  clientId             String
+  product              Product               @relation(fields: [productId], references: [id])
+  productId            String
+  rating               Int                   @default(0)
+  comment              String?
+  createdAt            DateTime              @default(now())
+}
+
+model Chat {
+  id                   String                @id @default(uuid())
+  status               ChatStatus            @default(PENDING)
+  isSecure             Boolean               @default(false)
+  negotiationType      NegotiationType?
+  product              Product?              @relation(fields: [productId], references: [id])
+  productId            String?
+  service              FreelanceService?     @relation(fields: [serviceId], references: [id])
+  serviceId            String?
+  participants         ChatParticipant[]     // New relation for dynamic participants
+  messages             ChatMessage[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  
+  @@index([createdAt])
+
+}
+
+model ChatParticipant {
+  id                   String                @id @default(uuid())
+  chat                 Chat                  @relation(fields: [chatId], references: [id])
+  chatId               String
+  client               Client?               @relation(fields: [clientId], references: [id])
+  clientId             String?
+  business             Business?             @relation(fields: [businessId], references: [id])
+  businessId           String?
+  worker               Worker?               @relation(fields: [workerId], references: [id])
+  workerId             String?
+  createdAt            DateTime              @default(now())
+
+  @@index([businessId])
+  @@index([clientId])
+}
+
+model ChatMessage {
+  id                   String                @id @default(uuid())
+  chat                 Chat                  @relation(fields: [chatId], references: [id])
+  chatId               String
+  message              String
+  isRead               Boolean               @default(false)
+  senderId             String?               // ID of the sender (business or client)
+  createdAt            DateTime              @default(now())
+
+   // Fast retrieval of recent messages in a chat
+  @@index([chatId, createdAt])
+}
+
+model RepostedProduct {
+  id                   String                @id @default(uuid())
+  business             Business              @relation(fields: [businessId], references: [id])
+  businessId           String                @unique
+  product              Product               @relation(fields: [productId], references: [id])
+  productId            String                @unique
+  markupPercentage     Float                 @default(0.02)
+  createdAt            DateTime              @default(now())
+  tokenTransactions    TokenTransaction[]
+
+  @@index([createdAt])
+
+}
+
+model ReOwnedProduct {
+  id                   String                @id @default(uuid())
+  newProduct           Product               @relation(fields: [newProductId], references: [id])  // New product for new owner
+  newProductId         String                @default("N/A")
+  originalProduct      Product               @relation(fields: [originalProductId], references: [id], name: "OriginalProduct")  // Original product
+  originalProductId    String                @default("N/A")
+  oldOwnerId           String                @default("N/A") // Original business ID
+  newOwnerId           String                @default("N/A") // New business ID
+  quantity             Int                   @default(0) // Quantity re-owned
+  oldPrice             Float                 @default(0) // Original price per unit
+  newPrice             Float                 @default(0) // New price per unit
+  markupPercentage     Float                 @default(0) // Markup percentage
+  agreedViaChatId      String                // Chat ID for negotiation
+  agreementDate        DateTime              // Agreement timestamp
+  isOriginalApproved   Boolean               @default(false)  // Original owner approval
+  isNewOwnerApproved   Boolean               @default(false)  // New owner approval
+  shipping             Shipping?             @relation(fields: [shippingId], references: [id])  // Shipping details
+  shippingId           String?               @unique
+  createdAt            DateTime              @default(now())
+
+  tokenTransactions    TokenTransaction[]
+  businessProductOwners       Business[]
+
+  @@index([createdAt])
+
+}
+
+model Shipping {
+  id                   String                @id @default(uuid())
+  reOwnedProduct       ReOwnedProduct?       
+  reOwnedProductId     String?
+  status               String                @default("PENDING")  // PENDING, SHIPPED, DELIVERED
+  trackingNumber       String?               // Optional tracking number
+  carrier              String?               // Shipping carrier
+  shippedAt            DateTime?             // Timestamp of shipping
+  deliveredAt          DateTime?             // Timestamp of delivery
+  createdAt            DateTime              @default(now())
+
+  @@index([createdAt, id])
+
+  
+}
+
+model TokenTransaction {
+  id                   String                @id @default(uuid())
+  business             Business              @relation(fields: [businessId], references: [id])
+  businessId           String
+  reOwnedProduct       ReOwnedProduct?       @relation(fields: [reOwnedProductId], references: [id])
+  reOwnedProductId     String?
+  repostedProduct      RepostedProduct?      @relation(fields: [repostedProductId], references: [id])
+  repostedProductId    String?
+  amount               Float                 @default(0)
+  type                 TokenTransactionType
+  isRedeemed           Boolean               @default(false)
+  isReleased           Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+
+  AccountRecharge AccountRecharge[]
+
+  @@index([createdAt])
+
+}
+
+model KYC {
+  id                   String                @id @default(uuid())
+  status               KycStatus             @default(PENDING)
+  documentUrl          String
+  submittedAt          DateTime              @default(now())
+  verifiedAt           DateTime?
+  business             Business?             @relation("BusinessKYC", fields: [businessId], references: [id])
+  businessId           String? @unique
+  client               Client?               @relation("ClientKYC", fields: [clientId], references: [id])
+  clientId             String? @unique
+  worker               Worker?               @relation("WorkerKYC", fields: [workerId], references: [id])
+  workerId             String? @unique
+}
+
+model AccountRecharge {
+  id                   String                @id @default(uuid())
+  amount               Float                 @default(0)
+  method               RechargeMethod
+  origin               Country
+  business             Business?             @relation("BusinessRecharges", fields: [businessId], references: [id])
+  businessId           String?
+  client               Client?               @relation("ClientRecharges", fields: [clientId], references: [id])
+  clientId             String?
+  tokenTransaction     TokenTransaction?     @relation(fields: [tokenTransactionId], references: [id])
+  tokenTransactionId   String?              
+  // New fields for UI expectations
+  status               PaymentStatus         @default(PENDING)
+  transactionDate      DateTime              @default(now())
+  qrCode               String?
+  createdAt            DateTime              @default(now())
+
+  @@index([createdAt])
+  @@index([origin])
+
+}
+
+model Token {
+  id                   String                @id @default(uuid())
+  name                 String?               @default("uT")
+  value                Int                   @default(0)
+  createdAt            DateTime              @default(now())
+}
+
+model PaymentTransaction {
+  id                   String                @id @default(uuid())
+  order                Order?                 @relation(fields: [orderId], references: [id])
+  orderId              String?                @unique
+  status               PaymentStatus         @default(PENDING)
+  method               PaymentMethod         @default(TOKEN)
+  amount               Float                 @default(0)
+  transactionDate      DateTime              @default(now())
+  qrCode               String?
+  createdAt            DateTime              @default(now())
+  freelanceOrder       FreelanceOrder?       @relation(fields: [freelanceOrderId], references: [id])
+  freelanceOrderId     String?               @unique
+
+  postTransactions PostTransaction[]
+
+  @@index([createdAt])
+
+}
+
+model Ad {
+  id                   String                @id @default(uuid())
+  business             Business              @relation(fields: [businessId], references: [id])
+  businessId           String
+  product              Product               @relation(fields: [productId], references: [id])
+  productId            String
+  price                Float                 @default(0)
+  periodDays           Int
+  createdAt            DateTime              @default(now())
+  endedAt              DateTime?
+
+  @@index([productId])
+  @@index([businessId])
+
+}
+
+// Freelancing Models
+
+model FreelanceService {
+  id                   String                @id @default(uuid())
+  title                String
+  description          String?
+  isHourly             Boolean               @default(true)
+  rate                 Float                 @default(0) // Ts per hour or fixed
+  category             FreelanceServiceCategory? @default(OTHER)
+  business             Business              @relation("ServiceOwner", fields: [businessId], references: [id])
+  businessId           String
+  orders               FreelanceOrder[]      
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  workerServiceAssignments WorkerServiceAssignment[]
+  chats Chat[]
+  medias Media[]
+
+  @@index([createdAt])
+  @@index([businessId])
+  @@index([category])
+
+}
+
+model WorkerServiceAssignment {
+  id                   String                @id @default(uuid())
+  worker               Worker                @relation(fields: [workerId], references: [id])
+  workerId             String
+  freelanceService     FreelanceService      @relation(fields: [freelanceServiceId], references: [id])
+  freelanceServiceId   String
+  role                 String?               // e.g., "Lead", "Assistant"
+  assignedAt           DateTime              @default(now())
+}
+
+model FreelanceOrder {
+  id                   String                @id @default(uuid())
+  client               Client                @relation("ClientOrders", fields: [clientId], references: [id])
+  clientId             String
+  service              FreelanceService      @relation(fields: [serviceId], references: [id])
+  serviceId            String
+  status               FreelanceStatus       @default(PENDING)
+  quantity             Int                   @default(1)  // hours or units
+  totalAmount          Float                 @default(0) // in Ts
+  escrowAmount         Float                 @default(0) // in Ts
+  commissionPercent    Float                 @default(0) // e.g. 0.1 for 10%
+  escrowStatus         EscrowStatus?         @default(HELD) // HELD, RELEASED, DISPUTED
+  escrowReleasedAt     DateTime?
+  payment              PaymentTransaction?   
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  freelanceOrderBusiness FreelanceOrderBusiness[]
+
+  @@index([createdAt])
+
+}
+
+model FreelanceOrderBusiness {
+  id                   String                @id @default(uuid())
+  freelanceOrder       FreelanceOrder        @relation(fields: [freelanceOrderId], references: [id])
+  freelanceOrderId     String
+  business             Business              @relation(fields: [businessId], references: [id])
+  businessId           String
+  role                 String?               // e.g., "Contractor"
+  assignedAt           DateTime              @default(now())
+}
+
+// Affiliation Tracking
+
+model Referral {
+  id                   String                @id @default(uuid())
+  affiliateBusiness    Business?             @relation("BusinessAffiliations", fields: [affiliateBusinessId], references: [id])
+  affiliateBusinessId  String?
+  affiliateClient      Client?               @relation("ClientAffiliations", fields: [affiliateClientId], references: [id])
+  affiliateClientId    String?
+  referredBusiness     Business?             @relation("BusinessReferred", fields: [referredBusinessId], references: [id])
+  referredBusinessId   String?
+  referredClient       Client?               @relation("ClientReferred", fields: [referredClientId], references: [id])
+  referredClientId     String?
+  verifiedPurchase     Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+
+  @@index([createdAt])
+
+}
+
+// 2. Core PostOfSale model
+model PostOfSale {
+  id           String         @id @default(cuid())
+  title        String
+  description  String?
+  price        Float          @default(0)
+  status       PostStatus     @default(DRAFT)
+  business     Business       @relation(fields: [businessId], references: [id])
+  businessId   String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Optional relations
+  // media        Media[]        // if you attach images/videos
+  transactions PostTransaction[]
+}
+
+// 3. Link PostTransaction to PostOfSale + Client + PaymentTransaction
+model PostTransaction {
+  id                  String                  @id @default(cuid())
+  post                PostOfSale              @relation(fields: [postId], references: [id])
+  postId              String
+  client              Client                  @relation(fields: [clientId], references: [id])
+  clientId            String
+  paymentTransaction  PaymentTransaction?     @relation(fields: [paymentTransactionId], references: [id])
+  paymentTransactionId String?
+
+  status              PostTransactionStatus   @default(PENDING)
+  amount              Float                   @default(0)
+  createdAt           DateTime                @default(now())
+}
+
+// New Models
+model Store {
+  id           String         @id @default(uuid())
+  businessId   String
+  business     Business       @relation(fields: [businessId], references: [id])
+  name         String
+  address      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  sales        Sale[]
+  purchaseOrders PurchaseOrder[]
+  transferOrdersFrom TransferOrder[] @relation("FromStore")
+  transferOrdersTo   TransferOrder[] @relation("ToStore")
+  inventoryAdjustments InventoryAdjustment[]
+  shifts       Shift[]
+  products     Product[]
+
+  medias Media[]
+}
+
+model Sale {
+  id           String         @id @default(uuid())
+  storeId      String
+  store        Store          @relation(fields: [storeId], references: [id])
+  workerId     String
+  worker       Worker         @relation(fields: [workerId], references: [id])
+  clientId     String?
+  client       Client?        @relation(fields: [clientId], references: [id])
+  totalAmount  Float          @default(0)
+  discount     Float          @default(0)
+  paymentMethod PaymentMethod
+  status       SaleStatus     @default(OPEN)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  saleProducts SaleProduct[]
+  returns      Return[]
+
+  // Queries like “sales by store” & “recent sales”
+  @@index([storeId])
+  @@index([workerId])
+  @@index([createdAt])
+}
+
+model SaleProduct {
+  id           String         @id @default(uuid())
+  saleId       String
+  sale         Sale           @relation(fields: [saleId], references: [id])
+  productId    String
+  product      Product        @relation(fields: [productId], references: [id])
+  quantity     Int            @default(1)
+  price        Float          @default(0)
+  modifiers    Json?          // For item variants or modifiers (e.g., size, color)
+  createdAt    DateTime       @default(now())
+
+  @@index([saleId])
+  @@index([productId])
+}
+
+model PurchaseOrder {
+  id              String              @id @default(uuid())
+  businessId      String
+  business        Business            @relation(fields: [businessId], references: [id])
+  storeId         String
+  store           Store               @relation(fields: [storeId], references: [id])
+  supplierId      String?             // External supplier ID or reference
+  status          PurchaseOrderStatus @default(PENDING)
+  expectedDelivery DateTime?
+  products        PurchaseOrderProduct[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([storeId])
+  @@index([createdAt])
+}
+
+model TransferOrder {
+  id              String              @id @default(uuid())
+  fromStoreId     String
+  fromStore       Store               @relation("FromStore", fields: [fromStoreId], references: [id])
+  toStoreId       String
+  toStore         Store               @relation("ToStore", fields: [toStoreId], references: [id])
+  status          TransferOrderStatus @default(PENDING)
+  products        TransferOrderProduct[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@index([fromStoreId])
+  @@index([toStoreId])
+  @@index([createdAt])
+}
+
+model PurchaseOrderProduct {
+  id              String         @id @default(uuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder  @relation(fields: [purchaseOrderId], references: [id])
+  productId       String
+  product         Product        @relation(fields: [productId], references: [id])
+  quantity        Int            @default(1)
+  createdAt       DateTime       @default(now())
+}
+
+model TransferOrderProduct {
+  id              String         @id @default(uuid())
+  transferOrderId String
+  transferOrder   TransferOrder  @relation(fields: [transferOrderId], references: [id])
+  productId       String
+  product         Product        @relation(fields: [productId], references: [id])
+  quantity        Int            @default(1)
+  createdAt       DateTime       @default(now())
+}
+
+model InventoryAdjustment {
+  id              String         @id @default(uuid())
+  productId       String
+  product         Product        @relation(fields: [productId], references: [id])
+  storeId         String
+  store           Store          @relation(fields: [storeId], references: [id])
+  adjustmentType  AdjustmentType
+  quantity        Int
+  reason          String?
+  createdAt       DateTime       @default(now())
+}
+
+model Shift {
+  id           String         @id @default(uuid())
+  workerId     String
+  worker       Worker         @relation(fields: [workerId], references: [id])
+  storeId      String
+  store        Store          @relation(fields: [storeId], references: [id])
+  startTime    DateTime
+  endTime      DateTime?
+  sales        Float          @default(0) // Total sales during shift
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([storeId])
+  @@index([workerId])
+  @@index([createdAt])
+}
+
+model LoyaltyProgram {
+  id                     String            @id @default(uuid())
+  businessId             String
+  business               Business          @relation(fields: [businessId], references: [id])
+  name                   String
+  description            String?
+  pointsPerPurchase      Float             @default(0) // Points earned per unit of currency spent
+  minimumPointsToRedeem  Float?            @default(0) // Minimum points required for redemption
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  pointsTransactions     PointsTransaction[]
+  tiers                  LoyaltyTier[]     // Loyalty tiers for this program
+}
+
+// Loyalty tier definitions (used by front-end)
+model LoyaltyTier {
+  id          String    @id @default(uuid())
+  loyaltyProgramId String
+  loyaltyProgram LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
+  name        String
+  minPoints   Float     @default(0)
+  benefits    LoyaltyTierBenefit[]
+}
+
+model LoyaltyTierBenefit {
+  id       String @id @default(uuid())
+  tierId   String
+  tier     LoyaltyTier @relation(fields: [tierId], references: [id])
+  description String
+}
+
+// Promotions and marketing offers
+model Promotion {
+  id                   String   @id @default(uuid())
+  title                String
+  description          String?
+  type                 String?
+  value                Float?
+  code                 String?
+  startDate            DateTime?
+  endDate              DateTime?
+  applicableBusinesses Business[] @relation("BusinessPromotions")
+  applicableCategories String[]
+  minimumPurchase      Float?
+  isRedeemed           Boolean?  @default(false)
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+}
+
+
+// Address model for clients (frontend expects addresses array)
+model Address {
+  id        String   @id @default(uuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  street    String
+  city      String
+  country   String?
+  postalCode String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+}
+
+// Client payment methods (cards, mobile money tokens etc.)
+model ClientPaymentMethod {
+  id        String   @id @default(uuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  type      PaymentMethod
+  last4     String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+}
+
+model PointsTransaction {
+  id              String         @id @default(uuid())
+  clientId        String
+  client          Client         @relation(fields: [clientId], references: [id])
+  loyaltyProgramId String
+  loyaltyProgram  LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
+  points          Float          @default(0)
+  createdAt       DateTime       @default(now())
+}
+
+model Return {
+  id           String         @id @default(uuid())
+  saleId       String
+  sale         Sale           @relation(fields: [saleId], references: [id])
+  reason       String?
+  status       SaleStatus     @default(REFUNDED)
+  createdAt    DateTime       @default(now())
+}
+
+model StripeCustomer {
+  id                String @id @default(uuid())
+  userId            String @unique
+  striperCustomerId String @unique
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Admin / Platform models
+
+enum AnnouncementStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  CANCELLED
+}
+
+enum AnnouncementPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED
+  REJECTED
+}
+
+model PlatformSettings {
+  id                     String   @id @default(uuid())
+  platformFeePercentage  Float    @default(0)
+  minTransactionAmount   Float?   @default(0)
+  maxTransactionAmount   Float?   @default(0)
+  currency               String   @default("USD")
+  tokenValue             Float?   @default(0)
+  tokenSymbol            String?
+  kycRequired            Boolean  @default(true)
+  b2bEnabled             Boolean  @default(false)
+  marketplaceEnabled     Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Announcement {
+  id              String            @id @default(uuid())
+  title           String
+  content         String
+  type            String?
+  priority        AnnouncementPriority? @default(LOW)
+  status          AnnouncementStatus @default(DRAFT)
+  scheduledFor    DateTime?
+  sentAt          DateTime?
+  targetUsers     Json?
+  readCount       Int               @default(0)
+  totalRecipients Int?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  action     String
+  entityType String
+  entityId   String?
+  details    Json?
+  adminId    String?
+  admin      Worker?  @relation(fields: [adminId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Dispute {
+  id              String       @id @default(uuid())
+  title           String
+  description     String?
+  status          DisputeStatus @default(OPEN)
+  type            String?
+  reporterId      String?
+  reporterType    String?
+  businessId      String?
+  business        Business?     @relation(fields: [businessId], references: [id])
+  orderId         String?
+  resolutionNotes String?
+  refundAmount    Float?
+  compensation    Float?
+  createdAt       DateTime      @default(now())
+  resolvedAt      DateTime?
+  messages        DisputeMessage[]
+}
+
+model DisputeMessage {
+  id         String   @id @default(uuid())
+  disputeId  String
+  dispute    Dispute  @relation(fields: [disputeId], references: [id])
+  senderId   String?
+  senderType String?
+  content    String
+  createdAt  DateTime @default(now())
+}
+

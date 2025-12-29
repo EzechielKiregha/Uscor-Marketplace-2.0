@@ -30,7 +30,7 @@ export const MainNavbar: React.FC = () => {
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   return (
-    <div className={`sticky z-50 top-0 inset-x-0 h-16 transition-colors duration-300 bg-white dark:bg-gray-950 shadow-sm dark:text-gray-100 text-gray-950`}>
+    <div className={`sticky z-50 top-0 inset-x-0 h-16 transition-colors duration-300 bg-white  shadow-sm dark:text-gray-100 text-gray-950`}>
       <div className="absolute inset-0 z-0">
         <Canvas>
           <Stars radius={20} count={200} factor={2} fade speed={1} />

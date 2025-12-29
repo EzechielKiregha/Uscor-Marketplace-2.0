@@ -12,6 +12,7 @@ import {
   AuthPayloadBusiness,
   AuthPayloadClient,
   AuthPayloadWorker,
+  AuthPayloadAdmin,
   UserPayload,
 } from './entities/auth-payload.entity'
 import { JwtService } from '@nestjs/jwt'
@@ -73,6 +74,14 @@ export class AuthResolver {
       )
 
     return this.authService.loginWorker(worker)
+  }
+  @Mutation(() => AuthPayloadAdmin)
+  async signAdminIn(
+    @Args('SignInInput') signInInput: SignInInput,
+  ) {
+    const admin = await this.authService.validateUser(signInInput.email, signInInput.password, 'admin')
+
+    return this.authService.loginAdmin(admin)
   }
 
   @Mutation(() => AuthPayloadClient)

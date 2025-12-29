@@ -29,7 +29,7 @@ export function ModeToggle() {
           Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark {/* Ensure dark mode applies dark:bg-gray-950 */}
+          Dark {/* Ensure dark mode applies  */}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           System

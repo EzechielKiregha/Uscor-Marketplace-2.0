@@ -50,7 +50,7 @@ export default function ChatThreadListPage() {
 
   // Responsive: show drawer on mobile, sidebar on desktop
   return (
-    <div className=" flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground overflow-x-hidden">
+    <div className=" flex flex-col min-h-screen bg-background  text-foreground overflow-x-hidden">
       <HeaderComponent />
       <div className="flex flex-1 overflow-hidden relative min-h-0">
         {/* Mobile Drawer Button */}

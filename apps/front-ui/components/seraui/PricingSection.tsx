@@ -130,7 +130,7 @@ const PricingSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative bg-white dark:bg-gray-950 overflow-hidden">
+    <div className="min-h-screen w-full relative bg-white  overflow-hidden">
       {/* Background Gradients */}
       <div
         className="absolute inset-0 z-0 opacity-60"
@@ -224,7 +224,7 @@ const PricingSection = () => {
               <motion.div
                 key={tier.name}
                 className={`relative flex flex-col p-6 sm:p-8 rounded-xl border transition-all duration-300 ${tier.isPopular
-                  ? 'border-orange-500 bg-white/95 dark:bg-gray-950/80 shadow-lg'
+                  ? 'border-orange-500 bg-white/95 /80 shadow-lg'
                   : 'border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/70'
                   }`}
                 style={{

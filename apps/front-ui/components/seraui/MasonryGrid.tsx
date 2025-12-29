@@ -154,7 +154,7 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: produc
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     onClick={handleLike}
-                    className="p-2 bg-primary dark:bg-gray-950/30 rounded-lg backdrop-blur-sm group"
+                    className="p-2 bg-primary /30 rounded-lg backdrop-blur-sm group"
                     aria-label={`Like ${product.title}`}
                   >
                     <HeartIcon />
@@ -163,7 +163,7 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({ item: produc
                     whileHover={{ scale: 1.1 }}
                     onClick={handleChat}
                     disabled={chatLoading}
-                    className="p-2 bg-primary dark:bg-gray-950/30 rounded-lg backdrop-blur-sm group"
+                    className="p-2 bg-primary /30 rounded-lg backdrop-blur-sm group"
                     aria-label={`Chat about ${product.title}`}
                   >
                     <MessageCircle className="h-5 w-5 text-white group-hover:text-blue-500 transition-colors duration-200" />
@@ -299,7 +299,7 @@ export const ServiceGridItem: React.FC<GridItemProps<FreelanceService>> = ({ ite
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     onClick={handleLike}
-                    className="p-2 bg-card dark:bg-gray-950 rounded-full group"
+                    className="p-2 bg-card  rounded-full group"
                     aria-label={`Like ${service.title}`}
                   >
                     <HeartIcon />
@@ -308,7 +308,7 @@ export const ServiceGridItem: React.FC<GridItemProps<FreelanceService>> = ({ ite
                     whileHover={{ scale: 1.1 }}
                     onClick={handleChat}
                     disabled={chatLoading}
-                    className="p-2 bg-card dark:bg-gray-950 rounded-full group"
+                    className="p-2 bg-card  rounded-full group"
                     aria-label={`Chat about ${service.title}`}
                   >
                     <MessageCircle className="h-5 w-5 text-gray-900 dark:text-gray-100 group-hover:text-blue-500 transition-colors duration-200" />

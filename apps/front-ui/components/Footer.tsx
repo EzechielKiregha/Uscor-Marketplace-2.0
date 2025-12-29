@@ -17,7 +17,7 @@ const Footer = () => {
   ]
 
   return (
-    <footer className='bg-white dark:bg-gray-950 flex-grow-0'>
+    <footer className='bg-white  flex-grow-0'>
       <NewsletterSignup />
       <MaxWidthWrapper>
         <div className='border-t border-gray-200 dark:border-gray-700'>

@@ -52,11 +52,11 @@ export default function FreelanceOrderForm({ serviceId }: FreelanceOrderFormProp
   const onSubmit = (data: any) => {
     createOrder({
       variables: {
-        createFreelanceOrderInput: removeTypename({
+        createFreelanceOrderInput: {
           serviceId,
           quantity: data.quantity,
           status: 'PENDING',
-        }),
+        },
       },
     });
   };

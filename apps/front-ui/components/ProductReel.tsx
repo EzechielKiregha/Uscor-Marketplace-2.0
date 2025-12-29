@@ -68,7 +68,7 @@ export default function ProductReel({
   }, [data]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
+    <div className="min-h-screen bg-background text-gray-900 dark:text-gray-100 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
       <div className="md:flex md:items-center md:justify-between mb-4">
         <div className="max-w-2xl px-4 lg:max-w-4xl lg:px-0">
           {title && <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>}

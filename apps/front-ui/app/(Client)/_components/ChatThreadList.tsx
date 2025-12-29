@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from '@apollo/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
@@ -18,8 +20,8 @@ export default function ChatThreadList({ participantId }: ChatThreadListProps) {
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Your Chats</h1>
       {loading && <p className="text-center">Loading...</p>}
       {error && <p className="text-center text-red-500">Error: {error.message}</p>}
-      {data && data.chats.length === 0 && <p className="text-center text-gray-500 dark:text-gray-400">No chats found.</p>}
-      {data && data.chats.map((chat: any) => (
+      {data && !data.chats && <p className="text-center text-gray-500 dark:text-gray-400">No chats found.</p>}
+      {data && data.chats && data.chats.map((chat: any) => (
         <Link key={chat.id} href={`/freelance-gigs/chat/${chat.id}`}>
           <Card className="mb-4 bg-white dark:bg-gray-800 border-orange-500 hover:border-orange-600 transition-colors">
             <CardHeader>

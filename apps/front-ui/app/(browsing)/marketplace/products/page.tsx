@@ -20,7 +20,7 @@ function ProductsPage() {
   )?.label;
 
   return (
-    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
+    <div className="flex flex-col min-h-screen bg-background  text-foreground">
       {/* Header */}
       <HeaderComponent />
       <MaxWidthWrapper>

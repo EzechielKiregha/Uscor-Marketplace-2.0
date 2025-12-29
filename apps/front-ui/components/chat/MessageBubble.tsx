@@ -6,7 +6,7 @@ interface MessageBubbleProps {
   senderType?: string;
   createdAt: string | Date;
   isCurrentUser: boolean;
-  userRole: 'business' | 'client' | 'worker';
+  userRole: 'business' | 'client' | 'worker' | 'admin';
 }
 
 export default function MessageBubble({ message, senderId, senderType, createdAt, isCurrentUser }: MessageBubbleProps) {

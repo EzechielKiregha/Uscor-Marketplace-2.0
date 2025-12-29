@@ -153,6 +153,7 @@ export interface ClientEntity {
   fullName?: string;
   address?: string;
   phone?: string;
+  avatar?: string;
   password: string; 
   isVerified: boolean;
   createdAt: Date;
@@ -195,6 +196,7 @@ export interface ProductEntity {
 export interface BusinessEntity {
   id: string;
   name: string;
+  fullName?: string;
   email: string;
   description?: string;
   address?: string;
@@ -239,7 +241,9 @@ export interface WorkerEntity {
   email: string;
   fullName?: string;
   role?: string;
-  isVerified: boolean;
+  phone?: string;
+  avatar?: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
   business?: BusinessEntity;
@@ -247,6 +251,17 @@ export interface WorkerEntity {
   kyc?: KnowYourCustomerEntity;
   freelanceServices?: FreelanceServiceEntity[];
   chats: ChatEntity[];
+}
+
+export interface AdminEntity {
+  id: string;
+  email: string;
+  fullName?: string;
+  phone?: string;
+  avatar?: string;
+  isVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface WorkerServiceAssignmentEntity {

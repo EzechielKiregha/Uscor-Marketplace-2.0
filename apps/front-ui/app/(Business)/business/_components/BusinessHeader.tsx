@@ -5,13 +5,12 @@ import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useMe } from '@/lib/useMe';
 import { Button } from '@/components/ui/button';
-import { Menu, Search, Bell, Settings, X, SidebarOpen, SidebarClose } from 'lucide-react';
+import { Menu, Search, Bell, Settings, X, SidebarOpen, SidebarClose, SunIcon, MoonIcon } from 'lucide-react';
 import { useOpenCreateProductModal } from '../_hooks/use-open-create-product-modal';
 import CreateProductModal from './modals/CreateProductModal';
 import { sidebarItems } from './BusinessSidebar';
 import { useOpenCreateServiceModal } from '../_hooks/use-open-create-service-modal';
 import UserDropdown from '@/components/seraui/UserDrodown';
-import { MoonIcon, SunIcon } from '@/components/icons/Logos';
 import CreateServiceModal from './modals/CreateServiceModal';
 import NotificationsPopover from '@/components/seraui/Notifications';
 

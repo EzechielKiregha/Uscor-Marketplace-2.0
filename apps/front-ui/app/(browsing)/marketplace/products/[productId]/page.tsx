@@ -41,7 +41,7 @@ export default function Page() {
   const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
     onCompleted: (data) => {
       showToast("success", "Success", 'Chat started successfully', true, 5000);
-      router.push(`/marketplace/chat?currentId${data.createChat.id}`);
+      router.push(`/client/chats`);
     },
     onError: (error) => {
       showToast("error", "Failed", 'Failed to start chat: ' + error.message, true, 5000);
@@ -49,7 +49,7 @@ export default function Page() {
   });
 
   if (loading) return (
-    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 justify-center items-center">
+    <div className="flex flex-col min-h-screen bg-background  justify-center items-center">
       <div className="w-8 h-8 bg-orange-600 rounded animate-spin"></div>
     </div>
   );
@@ -99,11 +99,9 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background dark:bg-gray-950 text-foreground">
-      {/* Header */}
-      <HeaderComponent />
-      <MaxWidthWrapper className="bg-background dark:bg-gray-950">
-        <div className="bg-background dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-background  text-foreground">
+      <MaxWidthWrapper className="bg-background ">
+        <div className="bg-background ">
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
             {/* Product Details */}
             <div className="lg:max-w-lg lg:self-end">
