@@ -1,4 +1,3 @@
-// app/marketplace/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -34,7 +33,7 @@ import SearchModal from './_components/SearchModal';
 import { useSearchParams } from 'next/navigation';
 
 interface MarketplacePageProps {
-  searchParams: {
+  sp: {
     category?: string;
     businessType?: string;
     hasPromotion?: string;
@@ -43,10 +42,10 @@ interface MarketplacePageProps {
   };
 }
 
-export default function MarketplacePage({ searchParams }: MarketplacePageProps) {
+export default function MarketplacePage({ sp }: MarketplacePageProps) {
   // const { user, loading: authLoading } = useMe();
-  // Unwrap Next.js `searchParams` proxy using React.use() per lint advice
-  const _searchParams = (React as any).use ? (React as any).use(searchParams) : searchParams;
+  // Unwrap Next.js `sp` proxy using React.use() per lint advice
+  const _searchParams = (React as any).use ? (React as any).use(sp) : sp;
   const search_params = useSearchParams();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const tab = search_params.get('tab');
