@@ -169,11 +169,11 @@ export class ClientResolver {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('client')
+  @Roles('client', 'admin')
   @Mutation(() => ClientEntity)
   async addClientPaymentMethod(
     @Args('clientId', { type: () => String }) clientId: string,
-    @Args('input') input: PaymentMethodInput,
+    @Args('input', { type: () => PaymentMethodInput, nullable: true }) input: PaymentMethodInput,
     @Context() context,
   ) {
     const user = context.req.user
@@ -279,21 +279,19 @@ export class ClientResolver {
     description: 'Updates a client’s details.',
   })
   async updateClient(
-    @Args('id', { type: () => String })
-    id: string,
-    @Args('updateClientInput')
-    updateClientInput: UpdateClientInput,
+    @Args('input')
+    input: UpdateClientInput,
     @Context() context,
   ) {
     const user = context.req.user
-    if (user.id !== id) {
+    if (user.id !== input.id) {
       throw new Error(
         'Clients can only update their own data',
       )
     }
     return this.clientService.update(
-      id,
-      updateClientInput,
+      input.id,
+      input,
     )
   }
 

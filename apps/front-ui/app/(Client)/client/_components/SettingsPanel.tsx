@@ -23,7 +23,8 @@ import {
   Loader2,
   X,
   Plus,
-  Trash2
+  Trash2,
+  Edit
 } from 'lucide-react';
 import { useToast } from '@/components/toast-provider';
 import { useMe } from '@/lib/useMe';
@@ -86,9 +87,26 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
     const { name, value, type, ariaChecked } = e.target;
     setProfileForm(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? ariaChecked : value
+      [name]: type === 'checkbox' ? ariaChecked ?? false : value
     }));
   };
+
+  const handleProfileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setProfileForm(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleProfileSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProfileForm(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, ariaChecked } = e.target;
@@ -113,8 +131,8 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
     try {
       await updateProfile({
         variables: {
-          id: client.id,
           input: {
+            id: client.id,
             fullName: profileForm.fullName,
             phone: profileForm.phone
           }
@@ -425,12 +443,15 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                           size="icon"
                           onClick={() => handleEditAddress(address)}
                         >
-                          <X className="h-4 w-4" />
+                          <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => handleDeleteAddress(address.id)}
+                          onClick={() => {
+                            handleDeleteAddress(address.id)
+                            client.addresses.pop(address)
+                          }}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -651,7 +672,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                         </div>
                         <p>
                           {method.type === 'MOBILE_MONEY' ? 'Mobile Money' :
-                            method.type === 'CREDIT_CARD' ? 'Credit Card' : 'Payment Method'}
+                            method.type === 'CARD' ? 'Credit Card' : 'Payment Method'}
                           {method.last4 && ` •••• ${method.last4}`}
                         </p>
                         {method.type === 'MOBILE_MONEY' && (
@@ -674,7 +695,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                             setShowPaymentModal(true);
                           }}
                         >
-                          <X className="h-4 w-4" />
+                          <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"

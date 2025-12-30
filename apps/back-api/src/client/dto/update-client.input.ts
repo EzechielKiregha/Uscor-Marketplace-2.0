@@ -14,7 +14,8 @@ import {
 export class UpdateClientInput extends PartialType(
   CreateClientInput,
 ) {
-  @Field(() => Int)
+  @Field()
+  @IsString()
   id: string
 
   @Field({ nullable: true })

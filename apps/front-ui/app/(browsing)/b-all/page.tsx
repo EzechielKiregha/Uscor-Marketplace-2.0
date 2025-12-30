@@ -26,31 +26,20 @@ import {
 import { useMe } from '@/lib/useMe';
 import Loader from '@/components/seraui/Loader';
 import BusinessCard from './_components/BusinessCard';
+import { useSearchParams } from 'next/navigation';
 
-interface SearchParams {
-  loyalty?: string;
-  promotions?: string;
-  b2b?: string;
-  verified?: string;
-  businessType?: string;
-  sort?: string;
-}
+export default function BusinessListingPage() {
 
-export default async function BusinessListingPage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const sp = await searchParams;
+  const searchParams = useSearchParams();
 
   const [filters, setFilters] = useState({
     search: '',
-    businessType: sp.businessType ?? '',
-    hasLoyalty: sp.loyalty === 'true',
-    hasPromotions: sp.promotions === 'true',
-    isB2BEnabled: sp.b2b === 'true',
-    isVerified: sp.verified === 'true',
-    sort: sp.sort ?? 'relevance',
+    businessType: searchParams.get('businessType') || '',
+    hasLoyalty: searchParams.get('loyalty') === 'true',
+    hasPromotions: searchParams.get('promotions') === 'true',
+    isB2BEnabled: searchParams.get('b2b') === 'true',
+    isVerified: searchParams.get('verified') === 'true',
+    sort: searchParams.get('sort') || 'relevance',
   });
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [page, setPage] = useState(1);
@@ -135,14 +124,14 @@ export default async function BusinessListingPage({
     // Apply filters from URL params on initial load
     setFilters({
       search: '',
-      businessType: sp.businessType || '',
-      hasLoyalty: sp.loyalty === 'true',
-      hasPromotions: sp.promotions === 'true',
-      isB2BEnabled: sp.b2b === 'true',
-      isVerified: sp.verified === 'true',
-      sort: sp.sort || 'relevance'
+      businessType: searchParams.get('businessType') || '',
+      hasLoyalty: searchParams.get('loyalty') === 'true',
+      hasPromotions: searchParams.get('promotions') === 'true',
+      isB2BEnabled: searchParams.get('b2b') === 'true',
+      isVerified: searchParams.get('verified') === 'true',
+      sort: searchParams.get('sort') || 'relevance'
     });
-  }, [sp]);
+  }, [searchParams]);
 
   if (businessesLoading || businessTypesLoading) return <Loader loading={true} />;
   if (businessesError) return <div>Error loading businesses: {businessesError.message}</div>;

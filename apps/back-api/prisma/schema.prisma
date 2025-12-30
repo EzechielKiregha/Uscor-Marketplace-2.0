@@ -1045,6 +1045,11 @@ model ClientPaymentMethod {
   clientId  String
   client    Client   @relation(fields: [clientId], references: [id])
   type      PaymentMethod
+  provider  RechargeMethod?
+  accountNumber String?
+  expiryMonth Int?
+  expiryYear  Int?
+  cardToken String?
   last4     String?
   isDefault Boolean  @default(false)
   createdAt DateTime @default(now())

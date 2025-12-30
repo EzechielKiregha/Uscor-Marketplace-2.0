@@ -20,14 +20,31 @@ export type ClientPaymentMethodModel = runtime.Types.Result.DefaultSelection<Pri
 
 export type AggregateClientPaymentMethod = {
   _count: ClientPaymentMethodCountAggregateOutputType | null
+  _avg: ClientPaymentMethodAvgAggregateOutputType | null
+  _sum: ClientPaymentMethodSumAggregateOutputType | null
   _min: ClientPaymentMethodMinAggregateOutputType | null
   _max: ClientPaymentMethodMaxAggregateOutputType | null
+}
+
+export type ClientPaymentMethodAvgAggregateOutputType = {
+  expiryMonth: number | null
+  expiryYear: number | null
+}
+
+export type ClientPaymentMethodSumAggregateOutputType = {
+  expiryMonth: number | null
+  expiryYear: number | null
 }
 
 export type ClientPaymentMethodMinAggregateOutputType = {
   id: string | null
   clientId: string | null
   type: $Enums.PaymentMethod | null
+  provider: $Enums.RechargeMethod | null
+  accountNumber: string | null
+  expiryMonth: number | null
+  expiryYear: number | null
+  cardToken: string | null
   last4: string | null
   isDefault: boolean | null
   createdAt: Date | null
@@ -38,6 +55,11 @@ export type ClientPaymentMethodMaxAggregateOutputType = {
   id: string | null
   clientId: string | null
   type: $Enums.PaymentMethod | null
+  provider: $Enums.RechargeMethod | null
+  accountNumber: string | null
+  expiryMonth: number | null
+  expiryYear: number | null
+  cardToken: string | null
   last4: string | null
   isDefault: boolean | null
   createdAt: Date | null
@@ -48,6 +70,11 @@ export type ClientPaymentMethodCountAggregateOutputType = {
   id: number
   clientId: number
   type: number
+  provider: number
+  accountNumber: number
+  expiryMonth: number
+  expiryYear: number
+  cardToken: number
   last4: number
   isDefault: number
   createdAt: number
@@ -56,10 +83,25 @@ export type ClientPaymentMethodCountAggregateOutputType = {
 }
 
 
+export type ClientPaymentMethodAvgAggregateInputType = {
+  expiryMonth?: true
+  expiryYear?: true
+}
+
+export type ClientPaymentMethodSumAggregateInputType = {
+  expiryMonth?: true
+  expiryYear?: true
+}
+
 export type ClientPaymentMethodMinAggregateInputType = {
   id?: true
   clientId?: true
   type?: true
+  provider?: true
+  accountNumber?: true
+  expiryMonth?: true
+  expiryYear?: true
+  cardToken?: true
   last4?: true
   isDefault?: true
   createdAt?: true
@@ -70,6 +112,11 @@ export type ClientPaymentMethodMaxAggregateInputType = {
   id?: true
   clientId?: true
   type?: true
+  provider?: true
+  accountNumber?: true
+  expiryMonth?: true
+  expiryYear?: true
+  cardToken?: true
   last4?: true
   isDefault?: true
   createdAt?: true
@@ -80,6 +127,11 @@ export type ClientPaymentMethodCountAggregateInputType = {
   id?: true
   clientId?: true
   type?: true
+  provider?: true
+  accountNumber?: true
+  expiryMonth?: true
+  expiryYear?: true
+  cardToken?: true
   last4?: true
   isDefault?: true
   createdAt?: true
@@ -125,6 +177,18 @@ export type ClientPaymentMethodAggregateArgs<ExtArgs extends runtime.Types.Exten
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ClientPaymentMethodAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ClientPaymentMethodSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ClientPaymentMethodMinAggregateInputType
@@ -155,6 +219,8 @@ export type ClientPaymentMethodGroupByArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   _count?: ClientPaymentMethodCountAggregateInputType | true
+  _avg?: ClientPaymentMethodAvgAggregateInputType
+  _sum?: ClientPaymentMethodSumAggregateInputType
   _min?: ClientPaymentMethodMinAggregateInputType
   _max?: ClientPaymentMethodMaxAggregateInputType
 }
@@ -163,11 +229,18 @@ export type ClientPaymentMethodGroupByOutputType = {
   id: string
   clientId: string
   type: $Enums.PaymentMethod
+  provider: $Enums.RechargeMethod | null
+  accountNumber: string | null
+  expiryMonth: number | null
+  expiryYear: number | null
+  cardToken: string | null
   last4: string | null
   isDefault: boolean
   createdAt: Date
   updatedAt: Date
   _count: ClientPaymentMethodCountAggregateOutputType | null
+  _avg: ClientPaymentMethodAvgAggregateOutputType | null
+  _sum: ClientPaymentMethodSumAggregateOutputType | null
   _min: ClientPaymentMethodMinAggregateOutputType | null
   _max: ClientPaymentMethodMaxAggregateOutputType | null
 }
@@ -194,6 +267,11 @@ export type ClientPaymentMethodWhereInput = {
   id?: Prisma.StringFilter<"ClientPaymentMethod"> | string
   clientId?: Prisma.StringFilter<"ClientPaymentMethod"> | string
   type?: Prisma.EnumPaymentMethodFilter<"ClientPaymentMethod"> | $Enums.PaymentMethod
+  provider?: Prisma.EnumRechargeMethodNullableFilter<"ClientPaymentMethod"> | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
+  expiryMonth?: Prisma.IntNullableFilter<"ClientPaymentMethod"> | number | null
+  expiryYear?: Prisma.IntNullableFilter<"ClientPaymentMethod"> | number | null
+  cardToken?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
   last4?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
   isDefault?: Prisma.BoolFilter<"ClientPaymentMethod"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ClientPaymentMethod"> | Date | string
@@ -205,6 +283,11 @@ export type ClientPaymentMethodOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  provider?: Prisma.SortOrderInput | Prisma.SortOrder
+  accountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiryMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiryYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  cardToken?: Prisma.SortOrderInput | Prisma.SortOrder
   last4?: Prisma.SortOrderInput | Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -219,6 +302,11 @@ export type ClientPaymentMethodWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ClientPaymentMethodWhereInput | Prisma.ClientPaymentMethodWhereInput[]
   clientId?: Prisma.StringFilter<"ClientPaymentMethod"> | string
   type?: Prisma.EnumPaymentMethodFilter<"ClientPaymentMethod"> | $Enums.PaymentMethod
+  provider?: Prisma.EnumRechargeMethodNullableFilter<"ClientPaymentMethod"> | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
+  expiryMonth?: Prisma.IntNullableFilter<"ClientPaymentMethod"> | number | null
+  expiryYear?: Prisma.IntNullableFilter<"ClientPaymentMethod"> | number | null
+  cardToken?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
   last4?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
   isDefault?: Prisma.BoolFilter<"ClientPaymentMethod"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ClientPaymentMethod"> | Date | string
@@ -230,13 +318,20 @@ export type ClientPaymentMethodOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  provider?: Prisma.SortOrderInput | Prisma.SortOrder
+  accountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiryMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  expiryYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  cardToken?: Prisma.SortOrderInput | Prisma.SortOrder
   last4?: Prisma.SortOrderInput | Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ClientPaymentMethodCountOrderByAggregateInput
+  _avg?: Prisma.ClientPaymentMethodAvgOrderByAggregateInput
   _max?: Prisma.ClientPaymentMethodMaxOrderByAggregateInput
   _min?: Prisma.ClientPaymentMethodMinOrderByAggregateInput
+  _sum?: Prisma.ClientPaymentMethodSumOrderByAggregateInput
 }
 
 export type ClientPaymentMethodScalarWhereWithAggregatesInput = {
@@ -246,6 +341,11 @@ export type ClientPaymentMethodScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ClientPaymentMethod"> | string
   clientId?: Prisma.StringWithAggregatesFilter<"ClientPaymentMethod"> | string
   type?: Prisma.EnumPaymentMethodWithAggregatesFilter<"ClientPaymentMethod"> | $Enums.PaymentMethod
+  provider?: Prisma.EnumRechargeMethodNullableWithAggregatesFilter<"ClientPaymentMethod"> | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.StringNullableWithAggregatesFilter<"ClientPaymentMethod"> | string | null
+  expiryMonth?: Prisma.IntNullableWithAggregatesFilter<"ClientPaymentMethod"> | number | null
+  expiryYear?: Prisma.IntNullableWithAggregatesFilter<"ClientPaymentMethod"> | number | null
+  cardToken?: Prisma.StringNullableWithAggregatesFilter<"ClientPaymentMethod"> | string | null
   last4?: Prisma.StringNullableWithAggregatesFilter<"ClientPaymentMethod"> | string | null
   isDefault?: Prisma.BoolWithAggregatesFilter<"ClientPaymentMethod"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClientPaymentMethod"> | Date | string
@@ -255,6 +355,11 @@ export type ClientPaymentMethodScalarWhereWithAggregatesInput = {
 export type ClientPaymentMethodCreateInput = {
   id?: string
   type: $Enums.PaymentMethod
+  provider?: $Enums.RechargeMethod | null
+  accountNumber?: string | null
+  expiryMonth?: number | null
+  expiryYear?: number | null
+  cardToken?: string | null
   last4?: string | null
   isDefault?: boolean
   createdAt?: Date | string
@@ -266,6 +371,11 @@ export type ClientPaymentMethodUncheckedCreateInput = {
   id?: string
   clientId: string
   type: $Enums.PaymentMethod
+  provider?: $Enums.RechargeMethod | null
+  accountNumber?: string | null
+  expiryMonth?: number | null
+  expiryYear?: number | null
+  cardToken?: string | null
   last4?: string | null
   isDefault?: boolean
   createdAt?: Date | string
@@ -275,6 +385,11 @@ export type ClientPaymentMethodUncheckedCreateInput = {
 export type ClientPaymentMethodUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -286,6 +401,11 @@ export type ClientPaymentMethodUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -296,6 +416,11 @@ export type ClientPaymentMethodCreateManyInput = {
   id?: string
   clientId: string
   type: $Enums.PaymentMethod
+  provider?: $Enums.RechargeMethod | null
+  accountNumber?: string | null
+  expiryMonth?: number | null
+  expiryYear?: number | null
+  cardToken?: string | null
   last4?: string | null
   isDefault?: boolean
   createdAt?: Date | string
@@ -305,6 +430,11 @@ export type ClientPaymentMethodCreateManyInput = {
 export type ClientPaymentMethodUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -315,6 +445,11 @@ export type ClientPaymentMethodUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -335,16 +470,31 @@ export type ClientPaymentMethodCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  accountNumber?: Prisma.SortOrder
+  expiryMonth?: Prisma.SortOrder
+  expiryYear?: Prisma.SortOrder
+  cardToken?: Prisma.SortOrder
   last4?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
+export type ClientPaymentMethodAvgOrderByAggregateInput = {
+  expiryMonth?: Prisma.SortOrder
+  expiryYear?: Prisma.SortOrder
+}
+
 export type ClientPaymentMethodMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  accountNumber?: Prisma.SortOrder
+  expiryMonth?: Prisma.SortOrder
+  expiryYear?: Prisma.SortOrder
+  cardToken?: Prisma.SortOrder
   last4?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -355,10 +505,20 @@ export type ClientPaymentMethodMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  accountNumber?: Prisma.SortOrder
+  expiryMonth?: Prisma.SortOrder
+  expiryYear?: Prisma.SortOrder
+  cardToken?: Prisma.SortOrder
   last4?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClientPaymentMethodSumOrderByAggregateInput = {
+  expiryMonth?: Prisma.SortOrder
+  expiryYear?: Prisma.SortOrder
 }
 
 export type ClientPaymentMethodCreateNestedManyWithoutClientInput = {
@@ -403,9 +563,18 @@ export type ClientPaymentMethodUncheckedUpdateManyWithoutClientNestedInput = {
   deleteMany?: Prisma.ClientPaymentMethodScalarWhereInput | Prisma.ClientPaymentMethodScalarWhereInput[]
 }
 
+export type NullableEnumRechargeMethodFieldUpdateOperationsInput = {
+  set?: $Enums.RechargeMethod | null
+}
+
 export type ClientPaymentMethodCreateWithoutClientInput = {
   id?: string
   type: $Enums.PaymentMethod
+  provider?: $Enums.RechargeMethod | null
+  accountNumber?: string | null
+  expiryMonth?: number | null
+  expiryYear?: number | null
+  cardToken?: string | null
   last4?: string | null
   isDefault?: boolean
   createdAt?: Date | string
@@ -415,6 +584,11 @@ export type ClientPaymentMethodCreateWithoutClientInput = {
 export type ClientPaymentMethodUncheckedCreateWithoutClientInput = {
   id?: string
   type: $Enums.PaymentMethod
+  provider?: $Enums.RechargeMethod | null
+  accountNumber?: string | null
+  expiryMonth?: number | null
+  expiryYear?: number | null
+  cardToken?: string | null
   last4?: string | null
   isDefault?: boolean
   createdAt?: Date | string
@@ -454,6 +628,11 @@ export type ClientPaymentMethodScalarWhereInput = {
   id?: Prisma.StringFilter<"ClientPaymentMethod"> | string
   clientId?: Prisma.StringFilter<"ClientPaymentMethod"> | string
   type?: Prisma.EnumPaymentMethodFilter<"ClientPaymentMethod"> | $Enums.PaymentMethod
+  provider?: Prisma.EnumRechargeMethodNullableFilter<"ClientPaymentMethod"> | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
+  expiryMonth?: Prisma.IntNullableFilter<"ClientPaymentMethod"> | number | null
+  expiryYear?: Prisma.IntNullableFilter<"ClientPaymentMethod"> | number | null
+  cardToken?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
   last4?: Prisma.StringNullableFilter<"ClientPaymentMethod"> | string | null
   isDefault?: Prisma.BoolFilter<"ClientPaymentMethod"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ClientPaymentMethod"> | Date | string
@@ -463,6 +642,11 @@ export type ClientPaymentMethodScalarWhereInput = {
 export type ClientPaymentMethodCreateManyClientInput = {
   id?: string
   type: $Enums.PaymentMethod
+  provider?: $Enums.RechargeMethod | null
+  accountNumber?: string | null
+  expiryMonth?: number | null
+  expiryYear?: number | null
+  cardToken?: string | null
   last4?: string | null
   isDefault?: boolean
   createdAt?: Date | string
@@ -472,6 +656,11 @@ export type ClientPaymentMethodCreateManyClientInput = {
 export type ClientPaymentMethodUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -481,6 +670,11 @@ export type ClientPaymentMethodUpdateWithoutClientInput = {
 export type ClientPaymentMethodUncheckedUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -490,6 +684,11 @@ export type ClientPaymentMethodUncheckedUpdateWithoutClientInput = {
 export type ClientPaymentMethodUncheckedUpdateManyWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  provider?: Prisma.NullableEnumRechargeMethodFieldUpdateOperationsInput | $Enums.RechargeMethod | null
+  accountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiryMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  expiryYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cardToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last4?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -502,6 +701,11 @@ export type ClientPaymentMethodSelect<ExtArgs extends runtime.Types.Extensions.I
   id?: boolean
   clientId?: boolean
   type?: boolean
+  provider?: boolean
+  accountNumber?: boolean
+  expiryMonth?: boolean
+  expiryYear?: boolean
+  cardToken?: boolean
   last4?: boolean
   isDefault?: boolean
   createdAt?: boolean
@@ -513,6 +717,11 @@ export type ClientPaymentMethodSelectCreateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   clientId?: boolean
   type?: boolean
+  provider?: boolean
+  accountNumber?: boolean
+  expiryMonth?: boolean
+  expiryYear?: boolean
+  cardToken?: boolean
   last4?: boolean
   isDefault?: boolean
   createdAt?: boolean
@@ -524,6 +733,11 @@ export type ClientPaymentMethodSelectUpdateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   clientId?: boolean
   type?: boolean
+  provider?: boolean
+  accountNumber?: boolean
+  expiryMonth?: boolean
+  expiryYear?: boolean
+  cardToken?: boolean
   last4?: boolean
   isDefault?: boolean
   createdAt?: boolean
@@ -535,13 +749,18 @@ export type ClientPaymentMethodSelectScalar = {
   id?: boolean
   clientId?: boolean
   type?: boolean
+  provider?: boolean
+  accountNumber?: boolean
+  expiryMonth?: boolean
+  expiryYear?: boolean
+  cardToken?: boolean
   last4?: boolean
   isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClientPaymentMethodOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "type" | "last4" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["clientPaymentMethod"]>
+export type ClientPaymentMethodOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "type" | "provider" | "accountNumber" | "expiryMonth" | "expiryYear" | "cardToken" | "last4" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["clientPaymentMethod"]>
 export type ClientPaymentMethodInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }
@@ -561,6 +780,11 @@ export type $ClientPaymentMethodPayload<ExtArgs extends runtime.Types.Extensions
     id: string
     clientId: string
     type: $Enums.PaymentMethod
+    provider: $Enums.RechargeMethod | null
+    accountNumber: string | null
+    expiryMonth: number | null
+    expiryYear: number | null
+    cardToken: string | null
     last4: string | null
     isDefault: boolean
     createdAt: Date
@@ -992,6 +1216,11 @@ export interface ClientPaymentMethodFieldRefs {
   readonly id: Prisma.FieldRef<"ClientPaymentMethod", 'String'>
   readonly clientId: Prisma.FieldRef<"ClientPaymentMethod", 'String'>
   readonly type: Prisma.FieldRef<"ClientPaymentMethod", 'PaymentMethod'>
+  readonly provider: Prisma.FieldRef<"ClientPaymentMethod", 'RechargeMethod'>
+  readonly accountNumber: Prisma.FieldRef<"ClientPaymentMethod", 'String'>
+  readonly expiryMonth: Prisma.FieldRef<"ClientPaymentMethod", 'Int'>
+  readonly expiryYear: Prisma.FieldRef<"ClientPaymentMethod", 'Int'>
+  readonly cardToken: Prisma.FieldRef<"ClientPaymentMethod", 'String'>
   readonly last4: Prisma.FieldRef<"ClientPaymentMethod", 'String'>
   readonly isDefault: Prisma.FieldRef<"ClientPaymentMethod", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"ClientPaymentMethod", 'DateTime'>

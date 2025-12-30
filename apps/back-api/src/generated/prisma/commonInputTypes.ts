@@ -704,6 +704,23 @@ export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
 }
 
+export type EnumRechargeMethodNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.RechargeMethod | Prisma.EnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel> | $Enums.RechargeMethod | null
+}
+
+export type EnumRechargeMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RechargeMethod | Prisma.EnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumRechargeMethodNullableWithAggregatesFilter<$PrismaModel> | $Enums.RechargeMethod | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
+}
+
 export type EnumAnnouncementPriorityNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.AnnouncementPriority | Prisma.EnumAnnouncementPriorityFieldRefInput<$PrismaModel> | null
   in?: $Enums.AnnouncementPriority[] | Prisma.ListEnumAnnouncementPriorityFieldRefInput<$PrismaModel> | null
@@ -1407,6 +1424,23 @@ export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumRechargeMethodNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.RechargeMethod | Prisma.EnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel> | $Enums.RechargeMethod | null
+}
+
+export type NestedEnumRechargeMethodNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RechargeMethod | Prisma.EnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  in?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.RechargeMethod[] | Prisma.ListEnumRechargeMethodFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumRechargeMethodNullableWithAggregatesFilter<$PrismaModel> | $Enums.RechargeMethod | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumAnnouncementPriorityNullableFilter<$PrismaModel = never> = {

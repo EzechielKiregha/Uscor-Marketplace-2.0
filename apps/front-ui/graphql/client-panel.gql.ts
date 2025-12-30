@@ -27,6 +27,7 @@ export const GET_CLIENT_PROFILE = gql`
       paymentMethods {
         id
         type
+        provider
         last4
         isDefault
       }
@@ -179,33 +180,34 @@ export const GET_LOYALTY_PROGRAM = gql`
 // ======================
 
 export const UPDATE_CLIENT_PROFILE = gql`
-  mutation UpdateClientProfile($id: String!, $input: UpdateClientInput!) {
-    updateClient(id: $id, input: $input) {
+  mutation UpdateClientProfile($input: UpdateClientInput!) {
+    updateClient(input: $input) {
       id
-    fullName
-    email
-    phone
-    avatar
-    loyaltyPoints
-    loyaltyTier
-    totalSpent
-    totalOrders
-    addresses {
-      id
-      street
-      city
-      country
-      postalCode
-      isDefault
-    }
-    paymentMethods {
-      id
-      type
-      last4
-      isDefault
-    }
-    createdAt
-    updatedAt
+      fullName
+      email
+      phone
+      avatar
+      loyaltyPoints
+      loyaltyTier
+      totalSpent
+      totalOrders
+      addresses {
+        id
+        street
+        city
+        country
+        postalCode
+        isDefault
+      }
+      paymentMethods {
+        id
+        type
+        provider
+        last4
+        isDefault
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -233,6 +235,7 @@ export const ADD_CLIENT_ADDRESS = gql`
     paymentMethods {
       id
       type
+      provider
       last4
       isDefault
     }
@@ -264,7 +267,7 @@ export const DELETE_CLIENT_ADDRESS = gql`
 `;
 
 export const ADD_CLIENT_PAYMENT_METHOD = gql`
-  mutation AddClientPaymentMethod($clientId: String!, $input: PaymentMethodInput!) {
+  mutation AddClientPaymentMethod($clientId: String!, $input: PaymentMethodInput) {
     addClientPaymentMethod(clientId: $clientId, input: $input) {
       id
     fullName
@@ -287,6 +290,7 @@ export const ADD_CLIENT_PAYMENT_METHOD = gql`
       id
       type
       last4
+      provider
       isDefault
     }
     createdAt

@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql'
+import { ObjectType, Field, Int } from '@nestjs/graphql'
 import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input'
 
 @ObjectType()
@@ -8,6 +8,21 @@ export class PaymentMethodEntity {
 
   @Field({ nullable: true })
   type?: PaymentMethod
+
+  @Field({nullable: true})
+  provider?: string
+
+  @Field({nullable: true})
+  accountNumber?: string
+
+  @Field(() => Int, {nullable: true})
+  expiryMonth?: number
+
+  @Field(() => Int, {nullable: true})
+  expiryYear?: number
+
+  @Field({nullable: true})
+  cardToken?: string 
 
   @Field({ nullable: true })
   last4?: string

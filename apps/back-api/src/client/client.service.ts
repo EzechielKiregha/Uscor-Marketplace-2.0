@@ -6,6 +6,10 @@ import {
 } from './dto/create-client.input'
 import { PrismaService } from '../prisma/prisma.service'
 import { Injectable } from '@nestjs/common'
+import { AddressInput } from './dto/address.input'
+import { PaymentMethodInput } from './dto/payment-method.input'
+import { PaymentMethod, RechargeMethod } from '../generated/prisma/enums'
+import { da } from '@faker-js/faker/.'
 
 @Injectable()
 export class ClientService {
@@ -158,7 +162,7 @@ export class ClientService {
   }
 
   async findOne(id: string) {
-    const client: any = await (this.prisma as any).client.findUnique({
+    const client: any = await this.prisma.client.findUnique({
       where: { id },
       include: {
         addresses: true,
@@ -429,63 +433,115 @@ export class ClientService {
   }
 
   // Addresses
-  async addAddress(clientId: string, input: { street: string; city: string; country?: string; postalCode?: string; isDefault?: boolean; }) {
+  async addAddress(clientId: string, input: AddressInput) {
     if (input.isDefault) {
       // unset other defaults
-      await (this.prisma as any).address.updateMany({ where: { clientId, isDefault: true }, data: { isDefault: false } })
+      await this.prisma.address.updateMany({ where: { clientId, isDefault: true }, data: { isDefault: false } })
     }
-    return (this.prisma as any).address.create({ data: { clientId, ...input } })
+    return this.prisma.address.create(
+      { 
+        data: {
+          street: input.street,
+          city: input.city,
+          country: input.country,
+          postalCode: input.postalCode,
+          isDefault: input.isDefault ?? false,
+          client: { connect: { id: clientId } }
+        } 
+      })
   }
 
   async updateAddress(addressId: string, input: { street?: string; city?: string; country?: string; postalCode?: string; isDefault?: boolean; }) {
     if (input.isDefault) {
-      const addr = await (this.prisma as any).address.findUnique({ where: { id: addressId } })
+      const addr = await this.prisma.address.findUnique({ where: { id: addressId } })
       if (addr) {
-        await (this.prisma as any).address.updateMany({ where: { clientId: addr.clientId, isDefault: true }, data: { isDefault: false } })
+        await this.prisma.address.updateMany({ where: { clientId: addr.clientId, isDefault: true }, data: { isDefault: false } })
       }
     }
-    return (this.prisma as any).address.update({ where: { id: addressId }, data: input })
+    return this.prisma.address.update({ where: { id: addressId }, data: input })
   }
 
   async deleteAddress(addressId: string) {
-    return (this.prisma as any).address.delete({ where: { id: addressId } })
+    return this.prisma.address.delete({ where: { id: addressId } })
   }
 
   // Payment methods
-  async addPaymentMethod(clientId: string, input: { type: any; last4?: string; isDefault?: boolean; }) {
+  async addPaymentMethod(clientId: string, input: PaymentMethodInput) {
     if (input.isDefault) {
-      await (this.prisma as any).clientPaymentMethod.updateMany({ where: { clientId, isDefault: true }, data: { isDefault: false } })
+      await this.prisma.clientPaymentMethod.updateMany({ where: { clientId, isDefault: true }, data: { isDefault: false } })
     }
-    return (this.prisma as any).clientPaymentMethod.create({ data: { clientId, ...input } })
+
+    let dataClause: any = {}
+
+    if (clientId) {
+      dataClause.client = { connect: { id: clientId } }
+    }
+
+    if (input.type) {
+      dataClause.type = input.type === 'MOBILE_MONEY' ? PaymentMethod.MOBILE_MONEY
+        : input.type === 'CARD' ? PaymentMethod.CARD
+        : input.type === 'DEBIT_CARD' ? PaymentMethod.CASH
+        : PaymentMethod.TOKEN
+    }
+    if (input.provider) {
+      dataClause.provider = input.provider === 'MTN_MOMO' ? RechargeMethod.MTN_MONEY
+        : input.type === 'AIRTEL_MONEY' ? RechargeMethod.AIRTEL_MONEY
+        : input.type === 'ORANGE_MONEY' ? RechargeMethod.ORANGE_MONEY
+        : input.type === 'MPESA' ? RechargeMethod.MPESA
+        : RechargeMethod.TOKEN
+    }
+    if (input.accountNumber) {
+      dataClause.accountNumber = input.accountNumber
+    }
+    if (input.expiryMonth) {
+      dataClause.expiryMonth = input.expiryMonth
+    }
+    if (input.last4) {
+      dataClause.last4 = input.last4
+    }
+    if (input.cardToken) {
+      dataClause.cardToken = input.cardToken
+    }
+    if (input.expiryYear) {
+      dataClause.expiryYear = input.expiryYear
+    }
+    if (input.isDefault !== undefined) {
+      dataClause.isDefault = input.isDefault
+    }
+    if (input.isDefault === null) {
+      dataClause.isDefault = true
+    }
+
+    return this.prisma.clientPaymentMethod.create({ data: dataClause})
   }
 
   async setDefaultPaymentMethod(paymentMethodId: string) {
-    const pm = await (this.prisma as any).clientPaymentMethod.findUnique({ where: { id: paymentMethodId } })
+    const pm = await this.prisma.clientPaymentMethod.findUnique({ where: { id: paymentMethodId } })
     if (!pm) throw new Error('Payment method not found')
-    await (this.prisma as any).clientPaymentMethod.updateMany({ where: { clientId: pm.clientId, isDefault: true }, data: { isDefault: false } })
-    return (this.prisma as any).clientPaymentMethod.update({ where: { id: paymentMethodId }, data: { isDefault: true } })
+    await this.prisma.clientPaymentMethod.updateMany({ where: { clientId: pm.clientId, isDefault: true }, data: { isDefault: false } })
+    return this.prisma.clientPaymentMethod.update({ where: { id: paymentMethodId }, data: { isDefault: true } })
   }
 
   // Computed loyalty/stats
   async getLoyaltyPoints(clientId: string) {
-    const res = await (this.prisma as any).pointsTransaction.aggregate({ where: { clientId }, _sum: { points: true } })
+    const res = await this.prisma.pointsTransaction.aggregate({ where: { clientId }, _sum: { points: true } })
     return res._sum.points || 0
   }
 
   async getTotalSpent(clientId: string) {
-    const res = await (this.prisma as any).order.aggregate({ where: { clientId, payment: { status: 'COMPLETED' } }, _sum: { totalAmount: true } })
+    const res = await this.prisma.order.aggregate({ where: { clientId, payment: { status: 'COMPLETED' } }, _sum: { totalAmount: true } })
     return res._sum.totalAmount || 0
   }
 
   async getTotalOrders(clientId: string) {
-    const res = await (this.prisma as any).order.count({ where: { clientId, payment: { status: 'COMPLETED' } } })
+    const res = await this.prisma.order.count({ where: { clientId, payment: { status: 'COMPLETED' } } })
     return res
   }
 
   async getLoyaltyTier(clientId: string) {
     // Naive implementation: choose the highest tier across all programs where minPoints <= points
     const points = await this.getLoyaltyPoints(clientId)
-    const tiers = await (this.prisma as any).loyaltyTier.findMany({ orderBy: { minPoints: 'desc' } })
+    const tiers = await this.prisma.loyaltyTier.findMany({ orderBy: { minPoints: 'desc' } })
     const tier = tiers.find(t => points >= t.minPoints)
     return tier ? tier.name : null
   }

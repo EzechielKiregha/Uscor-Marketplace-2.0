@@ -368,6 +368,11 @@ type DeliveryAddressEntity {
 type PaymentMethodEntity {
   id: String
   type: String
+  provider: String
+  accountNumber: String
+  expiryMonth: Int
+  expiryYear: Int
+  cardToken: String
   last4: String
   isDefault: Boolean
   createdAt: DateTime
@@ -1611,11 +1616,11 @@ type Mutation {
   addClientAddress(clientId: String!, input: AddressInput!): ClientEntity!
   updateClientAddress(addressId: String!, input: AddressInput!): AddressEntity!
   deleteClientAddress(addressId: String!): SuccessResponse!
-  addClientPaymentMethod(clientId: String!, input: PaymentMethodInput!): ClientEntity!
+  addClientPaymentMethod(clientId: String!, input: PaymentMethodInput): ClientEntity!
   setDefaultPaymentMethod(paymentMethodId: String!): PaymentMethodEntity!
 
   """Updates a client’s details."""
-  updateClient(id: String!, updateClientInput: UpdateClientInput!): ClientEntity!
+  updateClient(input: UpdateClientInput!): ClientEntity!
 
   """Deletes a client."""
   deleteClient(id: String!): ClientEntity!
@@ -1991,6 +1996,11 @@ input AddressInput {
 
 input PaymentMethodInput {
   type: String!
+  provider: String
+  accountNumber: String
+  expiryMonth: Int
+  expiryYear: Int
+  cardToken: String
   last4: String
   isDefault: Boolean
 }
@@ -2003,7 +2013,7 @@ input UpdateClientInput {
   phone: String
   password: String
   isVerified: Boolean
-  id: Int!
+  id: String!
   kycId: String
 }
 

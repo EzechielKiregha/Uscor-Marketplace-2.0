@@ -32,22 +32,7 @@ import ServiceCard from './_components/ServiceCard';
 import SearchModal from './_components/SearchModal';
 import { useSearchParams } from 'next/navigation';
 
-interface SearchParams {
-  category?: string;
-  businessType?: string;
-  hasPromotion?: string;
-  featured?: string;
-  sort?: string;
-};
-
-export default async function MarketplacePage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  // const { user, loading: authLoading } = useMe();
-  // Unwrap Next.js `searchParams` proxy using React.use() per lint advice
-  const _searchParams = await searchParams;
+export default function MarketplacePage() {
   const search_params = useSearchParams();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const tab = search_params.get('tab');
@@ -55,13 +40,13 @@ export default async function MarketplacePage({
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
-    category: _searchParams?.category || '',
-    businessType: _searchParams?.businessType || '',
-    hasPromotion: _searchParams?.hasPromotion ? true : false,
-    featured: _searchParams?.featured ? true : false,
+    category: search_params.get('category') || '',
+    businessType: search_params.get('businessType') || '',
+    hasPromotion: search_params.get('hasPromotion') ? true : false,
+    featured: search_params.get('featured') ? true : false,
     minPrice: '',
     maxPrice: '',
-    sort: _searchParams?.sort || 'relevance'
+    sort: search_params.get('sort') || 'relevance'
   });
   const [page, setPage] = useState(1);
 
@@ -201,15 +186,15 @@ export default async function MarketplacePage({
     // Apply filters from URL params on initial load
     setFilters({
       search: '',
-      category: _searchParams.category || '',
-      businessType: _searchParams.businessType || '',
-      hasPromotion: _searchParams.hasPromotion === 'true',
-      featured: _searchParams.featured === 'true',
+      category: search_params.get('category') || '',
+      businessType: search_params.get('businessType') || '',
+      hasPromotion: search_params.get('hasPromotion') === 'true',
+      featured: search_params.get('featured') === 'true',
       minPrice: '',
       maxPrice: '',
-      sort: _searchParams.sort || 'relevance'
+      sort: search_params.get('sort') || 'relevance'
     });
-  }, [_searchParams]);
+  }, [search_params]);
 
   if (marketplaceLoading) return <Loader loading={true} />;
   if (marketplaceError) return <div>Error loading marketplace: {marketplaceError.message}</div>;
