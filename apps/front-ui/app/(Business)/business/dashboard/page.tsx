@@ -131,9 +131,7 @@ export default function BusinessDashboardPage() {
   };
 
   if (loading || businessDataLoading || storesLoading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
   if (error || businessDataErro || storesError) return <div>Error loading dashboard</div>;
 

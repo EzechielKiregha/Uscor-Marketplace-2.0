@@ -57,14 +57,16 @@ export default function UserDropdown() {
           <img
             src={avatar}
             alt="User avatar"
-            className="w-8 h-8 rounded-full object-cover border border-gray-300 dark:border-gray-600"
+            className="w-8 h-8 rounded-full mr-2 object-cover border border-gray-300 dark:border-gray-600"
           />
           <span className="text-sm sm:hidden lg:block font-medium text-gray-700 dark:text-gray-200 hidden">
             {displayName}
           </span>
-          <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
-            125 pts
-          </span>
+          {role !== 'business' && (
+            <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
+              125 pts
+            </span>
+          )}
         </div>
       </PopoverTrigger>
       <PopoverContent align="end" className="p-0 w-56">

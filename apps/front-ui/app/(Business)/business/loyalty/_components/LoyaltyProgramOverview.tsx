@@ -47,7 +47,10 @@ export default function LoyaltyProgramOverview({
   if (loading) return (
     <Card>
       <CardContent className="h-[600px] flex items-center justify-center">
-        <Loader loading={true} />
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading data...</p>
+        </div>
       </CardContent>
     </Card>
   );

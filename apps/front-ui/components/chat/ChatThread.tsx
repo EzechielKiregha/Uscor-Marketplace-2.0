@@ -71,10 +71,15 @@ export default function ChatThread({ chat, userId, userRole, onSendMessage, load
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center min-h-[60vh]">Loading...</div>;
+  if (loading) return (
+    <div className="text-center">
+      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p className="text-muted-foreground">Loading data...</p>
+    </div>
+  );
   if (!chat) return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
+      <p className="text-red-600">No chat found</p>
     </div>
   )
 

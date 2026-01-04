@@ -15,9 +15,7 @@ export default function ClientSideLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
   if (error || role !== 'business') return <div>Unauthorized</div>;
 

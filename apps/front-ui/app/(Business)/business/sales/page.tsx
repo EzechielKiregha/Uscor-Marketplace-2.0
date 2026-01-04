@@ -54,9 +54,7 @@ export default function SalesManagementPage() {
   }, [storesData, selectedStoreId]);
 
   if (authLoading || storesLoading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
   if (storesError) return <div>Error loading stores: {storesError.message}</div>;
   if (!storesData?.stores || storesData.stores.length === 0) {

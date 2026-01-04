@@ -26,9 +26,7 @@ export default function OrderDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader loading={true} />
-      </div>
+      <Loader loading={true} />
     )
   }
 

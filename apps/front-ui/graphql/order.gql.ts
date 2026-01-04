@@ -30,7 +30,10 @@ export const GET_ORDERS = gql`
       items {
         id
         deliveryFee
-        deliveryAddress
+        deliveryAddress {
+          street
+          city
+        }
         qrCode
         createdAt
         updatedAt
@@ -73,7 +76,10 @@ export const GET_ORDER_BY_ID = gql`
     order(id: $id) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt
@@ -113,7 +119,10 @@ export const GET_CLIENT_ORDERS = gql`
       items {
         id
         deliveryFee
-        deliveryAddress
+        deliveryAddress {
+          street
+          city
+        }
         qrCode
         createdAt
         updatedAt
@@ -157,7 +166,10 @@ export const GET_BUSINESS_ORDERS = gql`
       items {
         id
         deliveryFee
-        deliveryAddress
+        deliveryAddress {
+          street
+          city
+        }
         qrCode
         createdAt
         updatedAt
@@ -204,7 +216,10 @@ export const CREATE_ORDER = gql`
     createOrder(input: $input) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt
@@ -243,7 +258,10 @@ export const UPDATE_ORDER = gql`
     updateOrder(id: $id, input: $input) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt
@@ -338,7 +356,10 @@ export const PROCESS_ORDER_PAYMENT = gql`
     processOrderPayment(orderId: $orderId, input: $input) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt
@@ -381,7 +402,10 @@ export const ON_ORDER_CREATED = gql`
     orderCreated(clientId: $clientId, businessId: $businessId) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt
@@ -420,7 +444,10 @@ export const ON_ORDER_UPDATED = gql`
     orderUpdated(clientId: $clientId, businessId: $businessId) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt
@@ -459,7 +486,10 @@ export const ON_ORDER_PAYMENT_PROCESSED = gql`
     orderPaymentProcessed(orderId: $orderId) {
     id
     deliveryFee
-    deliveryAddress
+    deliveryAddress {
+      street
+      city
+    }
     qrCode
     createdAt
     updatedAt

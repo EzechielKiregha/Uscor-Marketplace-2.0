@@ -17,10 +17,10 @@ function NotificationsPopover() {
 
   // Helper to build link based on role
   const buildLink = (r: string | undefined, chatId: string) => {
-    if (r === 'business') return `/business/dashboard/chats/${chatId}`;
-    if (r === 'client') return `/marketplace/chat/${chatId}`;
-    if (r === 'worker') return `/worker/dashboard/chats/${chatId}`;
-    return `/chats/${chatId}`;
+    if (r === 'business') return `/business/dashboard/chats?notif_chat_id=${chatId}`;
+    if (r === 'client') return `/marketplace/chat?notif_chat_id=${chatId}`;
+    if (r === 'worker') return `/worker/dashboard/chats?notif_chat_id=${chatId}`;
+    return `/chats?notif_chat_id=${chatId}`;
   };
 
   // Base route for role (used to decide whether to add query param instead of full redirect)

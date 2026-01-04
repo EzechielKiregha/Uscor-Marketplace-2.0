@@ -51,9 +51,7 @@ export default function BusinessProductsPage() {
   ) || [];
 
   if (loading && searchTerm.trim() === '') return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
   if (error) return <div>Error loading products</div>;
 

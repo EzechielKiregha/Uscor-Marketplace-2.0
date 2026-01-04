@@ -277,7 +277,10 @@ export interface WorkerServiceAssignmentEntity {
 export interface OrderEntity {
   id: string;
   deliveryFee: number;
-  deliveryAddress?: string;
+  deliveryAddress?: {
+    street: string,
+    city: string,
+  };
   qrCode?: string;
   createdAt: Date;
   updatedAt: Date;

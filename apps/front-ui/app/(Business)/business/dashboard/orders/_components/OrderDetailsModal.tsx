@@ -9,6 +9,7 @@ import { CheckCircle, XCircle, Package, Truck, CreditCard } from 'lucide-react';
 import { useOpenOrderDetailsModal } from '../../../_hooks/use-open-order-details-modal';
 import ResponsiveModal from '@/app/(Business)/business/_components/responsive-modal';
 import { UPDATE_PAYMENT_TRANSACTION } from '@/graphql/payment.gql';
+import { removeTypename } from '@/lib/removeTypeName';
 
 export default function OrderDetailsModal() {
   const { isOpen, setIsOpen, orderId } = useOpenOrderDetailsModal();
@@ -20,6 +21,8 @@ export default function OrderDetailsModal() {
 
   const [updatePaymentTransaction] = useMutation(UPDATE_PAYMENT_TRANSACTION);
 
+  const orderData = removeTypename(data?.order)
+
   const handleClose = () => {
     setIsOpen({
       openOrderDetailsModal: false,
@@ -30,7 +33,7 @@ export default function OrderDetailsModal() {
   const handleOrderPayment = () => {
     updatePaymentTransaction({
       variables: {
-        id: data.order.payment.id,
+        id: orderData.payment.id,
         input: {
           status: 'COMPLETED'
         }
@@ -53,7 +56,9 @@ export default function OrderDetailsModal() {
     >
       {loading ? (
         <div className="p-6">
-          <Loader loading={true} />
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          </div>
         </div>
       ) : error ? (
         <div className="p-6 text-center">
@@ -66,16 +71,16 @@ export default function OrderDetailsModal() {
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-xl font-bold">Order Details</h2>
-                <p className="text-muted-foreground">Placed on {new Date(data.order.createdAt).toLocaleDateString()}</p>
+                <p className="text-muted-foreground">Placed on {new Date(orderData.createdAt).toLocaleDateString()}</p>
               </div>
               <div className="text-right">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${data.order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                  data.order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
-                    data.order.status === 'SHIPPED' ? 'bg-purple-100 text-purple-800' :
-                      data.order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${orderData.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                  orderData.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                    orderData.status === 'SHIPPED' ? 'bg-purple-100 text-purple-800' :
+                      orderData.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
                         'bg-yellow-100 text-yellow-800'
                   }`}>
-                  {data.order.status}
+                  {orderData.status}
                 </span>
               </div>
             </div>
@@ -87,12 +92,12 @@ export default function OrderDetailsModal() {
                 <Package className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Customer</h3>
               </div>
-              <p className="font-medium">{data.order.client.fullName}</p>
-              <p className="text-sm text-muted-foreground">{data.order.client.email}</p>
-              {data.order.deliveryAddress && (
+              <p className="font-medium">{orderData.client.fullName}</p>
+              <p className="text-sm text-muted-foreground">{orderData.client.email}</p>
+              {orderData.deliveryAddress && (
                 <div className="mt-2">
                   <p className="text-sm">Delivery Address:</p>
-                  <p className="text-sm">{data.order.deliveryAddress}</p>
+                  <p className="text-sm">{orderData.deliveryAddress.street} - {orderData.deliveryAddress.city}</p>
                 </div>
               )}
             </div>
@@ -102,11 +107,11 @@ export default function OrderDetailsModal() {
                 <Truck className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Shipping</h3>
               </div>
-              <p className="text-sm">Delivery Fee: ${data.order.deliveryFee ? data.order.deliveryFee : 0}</p>
-              {data.order.shipping && (
+              <p className="text-sm">Delivery Fee: ${orderData.deliveryFee ? orderData.deliveryFee : 0}</p>
+              {orderData.shipping && (
                 <>
-                  <p className="text-sm">Carrier: {data.order.shipping.carrier}</p>
-                  <p className="text-sm">Tracking #: {data.order.shipping.trackingNumber}</p>
+                  <p className="text-sm">Carrier: {orderData.shipping.carrier}</p>
+                  <p className="text-sm">Tracking #: {orderData.shipping.trackingNumber}</p>
                 </>
               )}
             </div>
@@ -116,16 +121,16 @@ export default function OrderDetailsModal() {
                 <CreditCard className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Payment</h3>
               </div>
-              <p className="text-sm">Method: {data.order.payment?.method}</p>
-              <p className="text-sm">Status: {data.order.payment?.status}</p>
-              <p className="font-medium mt-2">Total: {data.order.payment?.method === "TOKEN" ? (data.order.payment?.amount / 10).toFixed(2) : data.order.payment?.amount || 0} {data.order.payment?.method === "TOKEN" ? 'uTns' : '$'}</p>
+              <p className="text-sm">Method: {orderData.payment?.method}</p>
+              <p className="text-sm">Status: {orderData.payment?.status}</p>
+              <p className="font-medium mt-2">Total: {orderData.payment?.method === "TOKEN" ? (orderData.payment?.amount / 10).toFixed(2) : orderData.payment?.amount || 0} {orderData.payment?.method === "TOKEN" ? 'uTns' : '$'}</p>
             </div>
           </div>
 
           <div>
             <h3 className="font-semibold mb-3">Order Items</h3>
             <div className="space-y-3">
-              {data.order.products.map((item: any) => (
+              {orderData.products.map((item: any) => (
                 <div key={item.id} className="flex items-center gap-3 p-3 border border-border rounded-lg">
                   <img
                     src={item.product.medias && item.product.medias.length > 0 ? item.product.medias[0].url : 'image.png'}
@@ -156,7 +161,7 @@ export default function OrderDetailsModal() {
             >
               Close
             </Button>
-            {data.order.status === 'PENDING' && (
+            {orderData.status === 'PENDING' && (
               <Button
                 className="bg-green-600 hover:bg-green-700"
                 onClick={() => {
@@ -168,7 +173,7 @@ export default function OrderDetailsModal() {
                 Mark as Completed
               </Button>
             )}
-            {data.order.status !== 'CANCELLED' && (
+            {orderData.status !== 'CANCELLED' && (
               <Button
                 variant="destructive"
                 onClick={() => {

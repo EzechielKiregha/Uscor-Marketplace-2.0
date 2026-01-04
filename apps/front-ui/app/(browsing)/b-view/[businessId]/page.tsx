@@ -103,13 +103,7 @@ export default function BusinessPage() {
   const services = servicesData?.businessServices || [];
   const reviews = reviewsData?.businessReviews?.items || [];
 
-  if (businessLoading) return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <Loader loading={true} />
-      </div>
-    </div>
-  );
+  if (businessLoading) return <Loader loading={true} />;
 
   if (!business) return (
     <div className="min-h-screen bg-background flex items-center justify-center">

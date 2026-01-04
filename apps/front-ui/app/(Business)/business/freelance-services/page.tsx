@@ -66,9 +66,7 @@ export default function FreelanceServicesPage() {
   }, [services, selectedService, setSelectedServiceId]);
 
   if (authLoading || storesLoading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
 
   return (

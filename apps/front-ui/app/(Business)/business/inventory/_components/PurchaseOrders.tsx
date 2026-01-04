@@ -176,8 +176,9 @@ export default function PurchaseOrders({
 
       <CardContent>
         {loading || productsLoading ? (
-          <div className="h-[400px] flex items-center justify-center">
-            <Loader loading={true} />
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading data...</p>
           </div>
         ) : filteredOrders.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">

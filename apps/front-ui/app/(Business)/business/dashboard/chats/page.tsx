@@ -84,14 +84,12 @@ export default function BusinessChatsPage() {
   };
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
 
   if (error) return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
+      <p>error</p>
     </div>
   )
 

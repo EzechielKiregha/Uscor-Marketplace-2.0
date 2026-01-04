@@ -310,8 +310,8 @@ export default function CurrentSalePanel({
       {/* Products Grid */}
       <div className="flex-1 overflow-y-auto p-4">
         {productsLoading ? (
-          <div className="flex justify-center py-8">
-            <Loader loading={true} />
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">

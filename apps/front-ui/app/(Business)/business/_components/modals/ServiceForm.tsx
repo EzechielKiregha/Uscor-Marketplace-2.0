@@ -183,7 +183,9 @@ export default function ServiceForm({
           className="bg-primary hover:bg-accent text-primary-foreground"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <Loader loading={true} /> : initialData ? 'Update Service' : 'Create Service'}
+          {isSubmitting ? <div className="text-center">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          </div> : initialData ? 'Update Service' : 'Create Service'}
         </Button>
       </div>
     </form>

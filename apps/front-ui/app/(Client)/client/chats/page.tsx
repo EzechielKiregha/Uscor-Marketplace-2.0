@@ -82,14 +82,12 @@ export default function ClientChatsPage() {
   };
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
-    </div>
+    <Loader loading={true} />
   )
 
   if (error) return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <Loader loading={true} />
+      <p className="text-red-600">Error loading chats</p>
     </div>
   )
 

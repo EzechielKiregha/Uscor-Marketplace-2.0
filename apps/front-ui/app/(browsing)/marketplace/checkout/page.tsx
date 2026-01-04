@@ -377,9 +377,7 @@ export default function CheckoutPage() {
 
   if (userLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader loading={true} />
-      </div>
+      <Loader loading={true} />
     )
   }
 

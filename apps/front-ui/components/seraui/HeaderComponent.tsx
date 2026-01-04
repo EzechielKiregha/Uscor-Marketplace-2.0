@@ -1,7 +1,7 @@
 'use client';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
-import React, { useState, useId, useRef, useEffect, ReactNode } from 'react';
+import React, { useState, useId, useRef, useEffect, ReactNode, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Popover, PopoverContent, PopoverTrigger } from './PopOver';
@@ -90,6 +90,53 @@ export const businessTypes = [
   { href: '/signup?businessType=clothing', label: 'Clothing & Accessories', icon: Shirt },
 ];
 
+// Constants for search input configuration
+const SEARCH_INPUT_CONFIG = {
+  placeholder: 'Search products and services...',
+  className: 'pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+} as const;
+
+// Reusable search input component to reduce duplication
+interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  onFocus: () => void;
+  showPlaceholder?: boolean;
+  iconOnly?: boolean;
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, onFocus, showPlaceholder = true, iconOnly = false }) => {
+  if (iconOnly) {
+    return (
+      <button
+        onClick={onFocus}
+        className="p-2 hover:bg-orange-400/20 dark:hover:bg-orange-500/20 rounded-md transition-colors"
+        aria-label="Search products and services"
+      >
+        <Search className="h-5 w-5 text-muted-foreground" />
+      </button>
+    );
+  }
+
+  return (
+    <div className="relative w-full sm:w-64">
+      <input
+        type="text"
+        placeholder={showPlaceholder ? SEARCH_INPUT_CONFIG.placeholder : ''}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={SEARCH_INPUT_CONFIG.className}
+        onFocus={onFocus}
+        aria-label="Search products and services"
+      />
+      <Search
+        className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
+        aria-hidden="true"
+      />
+    </div>
+  );
+};
+
 function HeaderComponent() {
   const { theme, setTheme } = useTheme();
   const [showSearchModal, setShowSearchModal] = useState(false);
@@ -98,18 +145,22 @@ function HeaderComponent() {
   });
   const [page, setPage] = useState(1);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  }, [theme, setTheme]);
 
-  const handleFilterChange = (name: string, value: any) => {
+  const handleFilterChange = useCallback((name: string, value: string) => {
     setFilters(prev => ({
       ...prev,
       [name]: value,
       page: 1
     }));
     setPage(1);
-  };
+  }, []);
+
+  const handleSearchFocus = useCallback(() => {
+    setShowSearchModal(true);
+  }, []);
 
   // Define navigation links based on pathname
   const navLinks = [
@@ -244,46 +295,32 @@ function HeaderComponent() {
 
         {/* Right side: Search, Theme Toggle, and Sign In */}
         <div className="flex items-center gap-2">
-          <div className="relative hidden lg:hidden">
-            {/* <Input id={id} className="form-field h-9 pl-9 pr-2 w-64" placeholder="Search Product..." type="search" /> */}
-            <div className="relative w-full sm:w-64">
-              <input
-                type="text"
-                placeholder="Search products and services..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
-                className="pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                onClick={() => setShowSearchModal(true)}
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
+          {/* Search for small screens (hidden on lg) */}
+          <div className="hidden md:block lg:hidden">
+            <SearchInput
+              value={filters.search}
+              onChange={(value) => handleFilterChange('search', value)}
+              onFocus={handleSearchFocus}
+            />
           </div>
-          <div className=" items-center lg:flex md:hidden hidden gap-2">
-            <div className="relative w-full sm:w-64">
-              <input
-                type="text"
-                placeholder="Search products and services..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
-                className="pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                onClick={() => setShowSearchModal(true)}
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
 
+          {/* Search for medium screens (md:hidden lg:flex) */}
+          <div className="hidden lg:flex items-center gap-2">
+            <SearchInput
+              value={filters.search}
+              onChange={(value) => handleFilterChange('search', value)}
+              onFocus={handleSearchFocus}
+            />
           </div>
-          <div className="flex items-center lg:hidden gap-2">
-            <div className="relative w-full sm:w-64">
-              <input
-                type="text"
-                placeholder="Search products and services..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
-                className="pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                onClick={() => setShowSearchModal(true)}
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
+
+          {/* Mobile layout (lg:hidden) */}
+          <div className="flex lg:hidden items-center gap-2">
+            <SearchInput
+              value={filters.search}
+              onChange={(value) => handleFilterChange('search', value)}
+              onFocus={handleSearchFocus}
+              iconOnly={true}
+            />
             <Cart />
             <UserDropdown />
           </div>
