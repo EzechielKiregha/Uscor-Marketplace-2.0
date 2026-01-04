@@ -36,7 +36,7 @@ export default function OrderDetailsPage() {
     return (
       <div className="max-w-3xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <Link href="/marketplace/products" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
+          <Link href="/marketplace" className="inline-flex items-center text-sm text-gray-600 dark:text-gray-200 hover:text-gray-900">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Products
           </Link>
@@ -48,7 +48,7 @@ export default function OrderDetailsPage() {
           <CardContent>
             <p className="text-sm text-muted-foreground">We couldn't find this order. It may have been removed or the link is invalid.</p>
             <div className="mt-4">
-              <Button onClick={() => router.push('/marketplace/products')}>Browse products</Button>
+              <Button onClick={() => router.push('/marketplace')}>Browse products</Button>
             </div>
           </CardContent>
         </Card>
@@ -76,7 +76,7 @@ export default function OrderDetailsPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <Link href="/marketplace/products" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
+          <Link href="/marketplace" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Products
           </Link>
@@ -121,7 +121,7 @@ export default function OrderDetailsPage() {
                 <div className="text-sm space-y-2">
                   <div>
                     <span className="text-gray-600">Address:</span>
-                    <p className="mt-1">{order.deliveryAddress || 'N/A'}</p>
+                    <p className="mt-1">{order.deliveryAddress.street} - {order.deliveryAddress.city}</p>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Delivery fee</span>
@@ -169,7 +169,7 @@ export default function OrderDetailsPage() {
                   </div>
                 </div>
                 <Button className="w-full mt-6" asChild>
-                  <Link href="/marketplace/products">Continue shopping</Link>
+                  <Link href="/marketplace">Continue shopping</Link>
                 </Button>
               </CardContent>
             </Card>

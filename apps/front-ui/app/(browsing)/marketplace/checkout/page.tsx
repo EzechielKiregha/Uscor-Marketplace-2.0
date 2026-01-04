@@ -136,7 +136,7 @@ export default function CheckoutPage() {
   // Redirect if cart is empty
   useEffect(() => {
     if (items.length === 0) {
-      router.push('/marketplace/products')
+      router.push('/marketplace')
     }
   }, [items, router])
 
@@ -464,7 +464,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="country">Country *</Label>
                     <select
                       id="country"
-                      className="w-full mt-1 p-2 border border-border rounded-md"
+                      className="w-full bg-card mt-1 p-2 border border-border rounded-md"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
                       required
@@ -486,7 +486,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="province">Province *</Label>
                         <select
                           id="province"
-                          className="w-full mt-1 p-2 border border-border rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                           value={province}
                           onChange={(e) => setProvince(e.target.value)}
                           disabled={!rwanda}
@@ -501,7 +501,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="district">District *</Label>
                         <select
                           id="district"
-                          className="w-full mt-1 p-2 border border-border rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                           value={district}
                           onChange={(e) => setDistrict(e.target.value)}
                           disabled={!province}
@@ -516,7 +516,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="sector">Sector *</Label>
                         <select
                           id="sector"
-                          className="w-full mt-1 p-2 border border-border rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                           value={sector}
                           onChange={(e) => setSector(e.target.value)}
                           disabled={!district}
@@ -531,7 +531,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="cell">Cell *</Label>
                         <select
                           id="cell"
-                          className="w-full mt-1 p-2 border border-border rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                           value={cell}
                           onChange={(e) => setCell(e.target.value)}
                           disabled={!sector}
@@ -546,7 +546,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="village">Village *</Label>
                         <select
                           id="village"
-                          className="w-full mt-1 p-2 border border-border rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                           value={village}
                           onChange={(e) => setVillage(e.target.value)}
                           disabled={!cell}
@@ -708,7 +708,7 @@ export default function CheckoutPage() {
               <div>
                 <label className="text-sm font-medium">Mobile Money Provider</label>
                 <select
-                  className="w-full mt-1 p-2 border border-border rounded-md"
+                  className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                   value={paymentDetails.mobileMoneyProvider || ''}
                   onChange={(e) => setPaymentDetails({ ...paymentDetails, mobileMoneyProvider: e.target.value })}
                 >
@@ -722,7 +722,7 @@ export default function CheckoutPage() {
               <div>
                 <label className="text-sm font-medium">Country</label>
                 <select
-                  className="w-full mt-1 p-2 border border-border rounded-md"
+                  className="w-full mt-1 bg-card p-2 border border-border rounded-md"
                   value={paymentDetails.country || ''}
                   onChange={(e) => setPaymentDetails({ ...paymentDetails, country: e.target.value })}
                 >
