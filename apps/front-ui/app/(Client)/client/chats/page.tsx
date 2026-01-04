@@ -111,7 +111,7 @@ export default function ClientChatsPage() {
           chats={chats}
           activeChatId={activeChatId}
           onSelect={handleChatSelect}
-          userRole="business"
+          userRole="client"
         />
       </div>
       {/* Chat Thread */}
@@ -120,7 +120,7 @@ export default function ClientChatsPage() {
           <ChatThread
             chat={chats.find(c => c.id === activeChatId)}
             userId={user?.id || ''}
-            userRole="business"
+            userRole="client"
             onSendMessage={async (content) => {
               // mimic handleSendMessage logic
               await sendMessage({
@@ -128,7 +128,7 @@ export default function ClientChatsPage() {
                   input: {
                     chatId: activeChatId,
                     content,
-                    senderType: 'BUSINESS',
+                    senderType: 'CLIENT',
                     senderId: user?.id
                   }
                 }
