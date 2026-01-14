@@ -149,6 +149,11 @@ export class OrderResolver {
       defaultValue: 20,
     })
     limit: number,
+    @Args('status', {
+      type: () => String,
+      nullable: true,
+    })
+    status?: string,
     @Context() context?: any,
   ) {
     return this.orderService.findClientOrders(

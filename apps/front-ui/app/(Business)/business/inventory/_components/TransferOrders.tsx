@@ -226,7 +226,7 @@ export default function TransferOrders({
       {/* Create Transfer Order Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-3xl">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -255,7 +255,7 @@ export default function TransferOrders({
                       title='from store ID'
                       value={fromStoreId}
                       onChange={(e) => setFromStoreId(e.target.value)}
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                     >
                       {storesData?.stores?.map((store: any) => (
                         <option key={store.id} value={store.id}>
@@ -271,7 +271,7 @@ export default function TransferOrders({
                       title='to store ID'
                       value={toStoreId}
                       onChange={(e) => setToStoreId(e.target.value)}
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                     >
                       <option value="">Select destination store</option>
                       {transferableStores.map((store: any) => (
@@ -299,7 +299,7 @@ export default function TransferOrders({
                   </div>
 
                   {selectedProducts.length === 0 ? (
-                    <div className="text-center py-6 border border-border rounded-lg">
+                    <div className="text-center py-6 border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
                       <ArrowRightLeft className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                       <p className="text-sm text-muted-foreground">No products added yet</p>
                       <Button
@@ -317,7 +317,7 @@ export default function TransferOrders({
                       {selectedProducts.map(product => (
                         <div
                           key={product.id}
-                          className="flex items-center justify-between p-3 border border-border rounded-lg"
+                          className="flex items-center justify-between p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg"
                         >
                           <div className="flex items-center gap-3">
                             {product.imageUrl ? (
@@ -418,7 +418,7 @@ export default function TransferOrders({
       {/* Transfer Details Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-3xl">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>

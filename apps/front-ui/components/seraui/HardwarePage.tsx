@@ -186,7 +186,7 @@ const SearchIcon = () => (
 // --- Hardware Card ---
 const HardwareCard = ({ item }: { item: HardwareItem }) => {
   return (
-    <div className="bg-card border border-border/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
       <div className="aspect-square overflow-hidden">
         <img
           src={item.image}
@@ -259,7 +259,7 @@ export default function HardwarePage() {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
-        <div className="flex items-center border border-border rounded-lg px-3 py-2 bg-muted w-full sm:w-auto">
+        <div className="flex items-center border border-orange-400/60 dark:border-orange-500/70 rounded-lg px-3 py-2 bg-muted w-full sm:w-auto">
           <SearchIcon />
           <input
             type="text"
@@ -268,7 +268,7 @@ export default function HardwarePage() {
           />
         </div>
 
-        <div className="flex border border-border rounded-lg overflow-hidden bg-muted w-full sm:w-auto">
+        <div className="flex border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-muted w-full sm:w-auto">
           <button
             onClick={() => setFilter('all')}
             className={`px-4 py-2 text-sm font-medium ${filter === 'all' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}

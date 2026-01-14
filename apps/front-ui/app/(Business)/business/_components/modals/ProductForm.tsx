@@ -265,7 +265,7 @@ export default function ProductForm({
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-2 border border-border rounded-md"
+            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             required
           />
         </div>
@@ -280,7 +280,7 @@ export default function ProductForm({
             value={formData.description}
             onChange={handleChange}
             rows={2}
-            className="w-full p-2 border border-border rounded-md"
+            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             required
           />
         </div>
@@ -298,7 +298,7 @@ export default function ProductForm({
               onChange={handleChange}
               min="0"
               step="0.01"
-              className="w-full p-2 border border-border rounded-md"
+              className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
               required
             />
           </div>
@@ -314,7 +314,7 @@ export default function ProductForm({
               value={formData.quantity}
               onChange={handleChange}
               min="0"
-              className="w-full p-2 border border-border rounded-md"
+              className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
               required
             />
           </div>
@@ -332,7 +332,7 @@ export default function ProductForm({
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleChange}
-                className="w-full p-2 border border-border rounded-md"
+                className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                 required
               >
                 {!catData && !catLoading && <option>No categories found</option>}
@@ -365,11 +365,11 @@ export default function ProductForm({
             name="storeId"
             value={formData.storeId}
             // onChange={handleChange}
-            // className="w-full p-2 border border-border rounded-md"
+            // className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             required
             title='selected store ID'
             onChange={(e) => setSelectedStoreId(e.target.value)}
-            className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             {!storesData && !storesLoading && <option>No stores found</option>}
             {storesData && storesData.stores.map((store: StoreEntity) => (

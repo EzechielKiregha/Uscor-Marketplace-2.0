@@ -1,4 +1,5 @@
 import { ObjectType, Field, Float, Int } from '@nestjs/graphql'
+import { MediaEntity } from '../../media/entities/media.entity'
 
 @ObjectType()
 export class OrderItemEntity {
@@ -14,6 +15,6 @@ export class OrderItemEntity {
   @Field(() => Int)
   quantity: number
 
-  @Field({ nullable: true })
-  mediaUrl?: string
+  @Field(() => [MediaEntity], { nullable: true })
+  media: MediaEntity[]
 }

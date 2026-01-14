@@ -100,7 +100,7 @@ export default function ServiceDetailsModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -151,7 +151,7 @@ export default function ServiceDetailsModal({
             {/* Right Column - Service Details */}
             <div className="space-y-6">
               {/* Business Info */}
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-xl font-bold">
                     {getBusinessTypeIcon()}
@@ -253,7 +253,7 @@ export default function ServiceDetailsModal({
               )}
 
               {/* Booking Form */}
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <h3 className="font-semibold mb-3">Book This Service</h3>
 
                 <div className="space-y-4">
@@ -266,7 +266,7 @@ export default function ServiceDetailsModal({
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                       min={new Date().toISOString().split('T')[0]}
                     />
                   </div>
@@ -279,7 +279,7 @@ export default function ServiceDetailsModal({
                     <select
                       value={selectedTime}
                       onChange={(e) => setSelectedTime(e.target.value)}
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                       disabled={!selectedDate}
                     >
                       <option value="">Select a time</option>
@@ -299,7 +299,7 @@ export default function ServiceDetailsModal({
                   <div>
                     <label className="block text-sm font-medium mb-1">Before you book, tell us what you need</label>
                     <textarea
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                       rows={3}
                       placeholder="Tell us about your specific needs or requirements..."
                     ></textarea>
@@ -330,7 +330,7 @@ export default function ServiceDetailsModal({
               </div>
 
               {/* Business Type Specific Information */}
-              <div className="mt-6 p-4 bg-muted rounded-lg border border-border">
+              <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <div className="flex items-start gap-3">
                   <BriefcaseBusiness className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <div>

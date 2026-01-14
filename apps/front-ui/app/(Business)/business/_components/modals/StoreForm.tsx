@@ -88,7 +88,7 @@ export default function StoreForm({
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-2 border border-border rounded-md"
+            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             required
           />
         </div>
@@ -103,7 +103,7 @@ export default function StoreForm({
             value={formData.address}
             onChange={handleChange}
             rows={3}
-            className="w-full p-2 border border-border rounded-md"
+            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
           />
         </div>
       </div>

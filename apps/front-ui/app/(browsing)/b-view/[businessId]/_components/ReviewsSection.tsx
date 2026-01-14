@@ -66,7 +66,7 @@ export default function ReviewsSection({
 
   if (loading) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -79,7 +79,7 @@ export default function ReviewsSection({
 
   if (reviews.length === 0) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Star className="h-8 w-8 text-muted-foreground" />
@@ -102,7 +102,7 @@ export default function ReviewsSection({
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -235,7 +235,7 @@ export default function ReviewsSection({
                 </p>
 
                 {review.response && (
-                  <div className="mt-4 p-3 bg-muted rounded-lg border border-border">
+                  <div className="mt-4 p-3 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-medium">{business.name} Response</span>
                       <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">

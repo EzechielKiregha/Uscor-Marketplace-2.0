@@ -166,7 +166,7 @@ export default function ClientSelectionModal({
                   {searchResults.map((client) => (
                     <div
                       key={client.id}
-                      className="p-3 border border-border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                      className="p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                       onClick={() => {
                         onClientSelected(client);
                         handleClose();

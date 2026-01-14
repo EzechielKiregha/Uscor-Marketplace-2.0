@@ -579,7 +579,7 @@ export default function ProfileSettings({ }: ProfileSettingsProps) {
               name="country"
               value={formData.country}
               onChange={handleSelectChange}
-              className="w-full p-2 border border-border rounded-md"
+              className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             >
               <option value="RWANDA">Rwanda</option>
               <option value="UGANDA">Uganda</option>
@@ -594,7 +594,7 @@ export default function ProfileSettings({ }: ProfileSettingsProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}
@@ -610,7 +610,7 @@ export default function ProfileSettings({ }: ProfileSettingsProps) {
             </ul>
 
             {benefits.tip && (
-              <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+              <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm">
                   <strong>Pro Tip:</strong> {benefits.tip}
                 </p>

@@ -70,7 +70,7 @@ export default function BusinessProductsPage() {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border border-orange-400/60 dark:border-orange-500/70 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
@@ -79,7 +79,7 @@ export default function BusinessProductsPage() {
             title='all categories'
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="w-full sm:w-48 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Categories</option>
             {/* In real app, fetch categories */}
@@ -98,7 +98,7 @@ export default function BusinessProductsPage() {
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredProducts.map((product: ProductEntity) => (
-          <div key={product.id} className="border border-border rounded-lg overflow-hidden bg-card">
+          <div key={product.id} className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
             <div className="relative pt-[100%]">
               <img
                 src={product.medias && product.medias.length > 0 ? product.medias[0].url : 'image.png'}
@@ -163,7 +163,7 @@ export default function BusinessProductsPage() {
 
       {/* Empty State */}
       {filteredProducts.length === 0 && (
-        <div className="text-center py-12 bg-card rounded-lg border border-border">
+        <div className="text-center py-12 bg-card rounded-lg border border-orange-400/60 dark:border-orange-500/70">
           <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium mb-2">No products yet</h3>
           <p className="text-muted-foreground mb-6">Get started by creating your first product</p>

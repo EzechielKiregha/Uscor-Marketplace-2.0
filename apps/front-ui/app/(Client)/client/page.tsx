@@ -25,10 +25,11 @@ import SettingsPanel from './_components/SettingsPanel';
 import Loader from '@/components/seraui/Loader';
 import { useMe } from '@/lib/useMe';
 import HeaderComponent from '@/components/seraui/HeaderComponent';
+import ClientChatsPage from './_components/ClientChatPage';
 
 export default function ClientPanel() {
   const { user, loading: authLoading } = useMe();
-  const [activeSection, setActiveSection] = useState<'profile' | 'orders' | 'loyalty' | 'recommendations' | 'reviews' | 'settings'>('profile');
+  const [activeSection, setActiveSection] = useState<'profile' | 'chat' | 'orders' | 'loyalty' | 'recommendations' | 'reviews' | 'settings'>('profile');
 
   const {
     data: clientData,
@@ -63,7 +64,7 @@ export default function ClientPanel() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-lg overflow-hidden sticky top-8">
+            <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden sticky top-8">
               <div className="p-4 bg-muted border-b border-border">
                 <h2 className="font-semibold">Client Dashboard</h2>
               </div>
@@ -76,6 +77,15 @@ export default function ClientPanel() {
                 >
                   <User className="h-4 w-4 mr-2" />
                   Profile Overview
+                </Button>
+
+                <Button
+                  variant={activeSection === 'chat' ? 'secondary' : 'ghost'}
+                  className="w-full justify-start"
+                  onClick={() => setActiveSection('chat')}
+                >
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  My Chats
                 </Button>
 
                 <Button
@@ -126,18 +136,10 @@ export default function ClientPanel() {
             </div>
 
             {/* Quick Actions */}
-            <div className="mt-6 bg-card border border-border rounded-lg p-4">
+            <div className="mt-6 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
               <h3 className="font-semibold mb-3">Quick Actions</h3>
 
               <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => window.location.href = '/client/chats'}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2 text-orange-600" />
-                  My recent Chats
-                </Button>
                 <Button
                   variant="outline"
                   className="w-full justify-start"
@@ -189,6 +191,7 @@ export default function ClientPanel() {
           {/* Main Content Area */}
           <div className="lg:col-span-3 space-y-6">
             {activeSection === 'profile' && <ProfileOverview client={clientData.client} />}
+            {activeSection === 'chat' && <ClientChatsPage client={clientData.client} />}
             {activeSection === 'orders' && <OrderHistory client={clientData.client} />}
             {activeSection === 'loyalty' && <LoyaltyDashboard client={clientData.client} />}
             {activeSection === 'recommendations' && <Recommendations client={clientData.client} />}

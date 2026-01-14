@@ -147,7 +147,7 @@ export default function UserDetailModal({
         return (
           <>
             {/* Business Information */}
-            <div className="border border-border rounded-lg overflow-hidden">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
               <div className="p-4 bg-muted border-b border-border">
                 <h3 className="font-semibold">Business Information</h3>
               </div>
@@ -203,7 +203,7 @@ export default function UserDetailModal({
 
             {/* Business Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <ShoppingCart className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Products Sold</p>
@@ -211,7 +211,7 @@ export default function UserDetailModal({
                 <p className="font-bold text-lg">{user.totalProductsSold}</p>
               </div>
 
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <BriefcaseBusiness className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Workers</p>
@@ -219,7 +219,7 @@ export default function UserDetailModal({
                 <p className="font-bold text-lg">{user.totalWorkers}</p>
               </div>
 
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Total Clients</p>
@@ -229,7 +229,7 @@ export default function UserDetailModal({
             </div>
 
             {/* Business Stats */}
-            <div className="border border-border rounded-lg overflow-hidden">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
               <div className="p-4 bg-muted border-b border-border">
                 <h3 className="font-semibold">Business Statistics</h3>
               </div>
@@ -256,7 +256,7 @@ export default function UserDetailModal({
 
             {/* Business Description */}
             {user.description && (
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">Business Description</h3>
                 </div>
@@ -275,7 +275,7 @@ export default function UserDetailModal({
         return (
           <>
             {/* Client Information */}
-            <div className="border border-border rounded-lg overflow-hidden">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
               <div className="p-4 bg-muted border-b border-border">
                 <h3 className="font-semibold">Client Information</h3>
               </div>
@@ -302,7 +302,7 @@ export default function UserDetailModal({
 
             {/* Client Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <ShoppingCart className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Total Orders</p>
@@ -310,7 +310,7 @@ export default function UserDetailModal({
                 <p className="font-bold text-lg">{user.totalOrders}</p>
               </div>
 
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <CreditCard className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Total Spent</p>
@@ -318,7 +318,7 @@ export default function UserDetailModal({
                 <p className="font-bold text-lg">${user.totalSpent.toFixed(2)}</p>
               </div>
 
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Star className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Loyalty Points</p>
@@ -329,7 +329,7 @@ export default function UserDetailModal({
 
             {/* Addresses */}
             {user.addresses && user.addresses.length > 0 && (
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">Addresses</h3>
                 </div>
@@ -367,7 +367,7 @@ export default function UserDetailModal({
         return (
           <>
             {/* Worker Information */}
-            <div className="border border-border rounded-lg overflow-hidden">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
               <div className="p-4 bg-muted border-b border-border">
                 <h3 className="font-semibold">Worker Information</h3>
               </div>
@@ -409,7 +409,7 @@ export default function UserDetailModal({
 
             {/* Worker Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Total Sales</p>
@@ -417,7 +417,7 @@ export default function UserDetailModal({
                 <p className="font-medium">0</p>
               </div>
 
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Calendar className="h-4 w-4 text-primary" />
                   <p className="text-sm text-muted-foreground">Shifts Worked</p>
@@ -428,7 +428,7 @@ export default function UserDetailModal({
 
             {/* KYC Information */}
             {user.kyc && (
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">KYC Information</h3>
                 </div>
@@ -438,8 +438,8 @@ export default function UserDetailModal({
                     <div>
                       <p className="text-sm text-muted-foreground mb-1">Status</p>
                       <span className={`px-2 py-1 rounded-full text-xs ${user.kyc.status === 'VERIFIED' ? 'bg-success/10 text-success' :
-                          user.kyc.status === 'PENDING' ? 'bg-warning/10 text-warning' :
-                            'bg-destructive/10 text-destructive'
+                        user.kyc.status === 'PENDING' ? 'bg-warning/10 text-warning' :
+                          'bg-destructive/10 text-destructive'
                         }`}>
                         {user.kyc.status}
                       </span>
@@ -480,7 +480,7 @@ export default function UserDetailModal({
         return (
           <>
             {/* Admin Information */}
-            <div className="border border-border rounded-lg overflow-hidden">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
               <div className="p-4 bg-muted border-b border-border">
                 <h3 className="font-semibold">Admin Information</h3>
               </div>
@@ -525,7 +525,7 @@ export default function UserDetailModal({
             </div>
 
             {/* Admin Permissions */}
-            <div className="border border-border rounded-lg overflow-hidden">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
               <div className="p-4 bg-muted border-b border-border">
                 <h3 className="font-semibold">Permissions</h3>
               </div>
@@ -576,7 +576,7 @@ export default function UserDetailModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -605,7 +605,7 @@ export default function UserDetailModal({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* User Profile */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">User Profile</h3>
                 </div>
@@ -663,8 +663,8 @@ export default function UserDetailModal({
                       <div>
                         <p className="text-sm text-muted-foreground">Status</p>
                         <span className={`px-2 py-1 rounded-full text-xs ${getUserStatus() === 'VERIFIED' || getUserStatus() === 'ACTIVE' ? 'bg-success/10 text-success' :
-                            getUserStatus() === 'PENDING' || getUserStatus() === 'INACTIVE' ? 'bg-warning/10 text-warning' :
-                              'bg-destructive/10 text-destructive'
+                          getUserStatus() === 'PENDING' || getUserStatus() === 'INACTIVE' ? 'bg-warning/10 text-warning' :
+                            'bg-destructive/10 text-destructive'
                           }`}>
                           {getUserStatus()}
                         </span>

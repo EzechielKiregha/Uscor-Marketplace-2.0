@@ -97,7 +97,7 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
   if (viewMode === 'grid') {
     return (
       <>
-        <div className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
+        <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
           {/* Product Image */}
           <div className="h-48 bg-muted relative">
             {product.medias && product.medias.length > 0 ? (
@@ -204,7 +204,7 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
 
   return (
     <>
-      <div className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row">
+      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row">
         {/* Product Image */}
         <div className="md:w-48 h-32 md:h-auto bg-muted relative">
           {product.medias && product.medias.length > 0 ? (

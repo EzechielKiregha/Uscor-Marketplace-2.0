@@ -56,7 +56,7 @@ export default function BusinessStoresPage() {
               placeholder="Search stores..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border border-orange-400/60 dark:border-orange-500/70 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
@@ -78,7 +78,7 @@ export default function BusinessStoresPage() {
           const lowStockProducts = store.products?.filter(product => product.quantity < product.minQuantity).length || 0;
 
           return (
-            <div key={store.id} className="border border-border rounded-lg overflow-hidden bg-card">
+            <div key={store.id} className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
               <div className="p-4">
                 <div className="flex items-center gap-3 mb-3">
                   <Building className="h-6 w-6 text-primary" />
@@ -167,7 +167,7 @@ export default function BusinessStoresPage() {
 
       {/* Empty State */}
       {data.stores.length === 0 && (
-        <div className="text-center py-12 bg-card rounded-lg border border-border">
+        <div className="text-center py-12 bg-card rounded-lg border border-orange-400/60 dark:border-orange-500/70">
           <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium mb-2">No stores yet</h3>
           <p className="text-muted-foreground mb-6">Get started by creating your first store location</p>

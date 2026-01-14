@@ -239,7 +239,7 @@ export default function PurchaseOrders({
       {/* Create/Edit Purchase Order Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-3xl">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -273,7 +273,7 @@ export default function PurchaseOrders({
                       title='supplier ID'
                       value={supplierId}
                       onChange={(e) => setSupplierId(e.target.value)}
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                       disabled={selectedOrder && selectedOrder.status !== 'PENDING'}
                     >
                       <option value="">Select a supplier</option>
@@ -318,7 +318,7 @@ export default function PurchaseOrders({
                   </div>
 
                   {selectedProducts.length === 0 ? (
-                    <div className="text-center py-6 border border-border rounded-lg">
+                    <div className="text-center py-6 border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
                       <Package className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                       <p className="text-sm text-muted-foreground">No products added yet</p>
                       <Button
@@ -336,7 +336,7 @@ export default function PurchaseOrders({
                       {selectedProducts.map(product => (
                         <div
                           key={product.id}
-                          className="flex items-center justify-between p-3 border border-border rounded-lg"
+                          className="flex items-center justify-between p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg"
                         >
                           <div className="flex items-center gap-3">
                             {product.imageUrl ? (
@@ -437,7 +437,7 @@ export default function PurchaseOrders({
       {/* Order Details Modal */}
       {selectedOrder && !showCreateModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-3xl">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>

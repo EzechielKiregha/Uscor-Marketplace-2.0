@@ -46,7 +46,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
 
   if (recommendationsLoading) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading personalized recommendations...</p>
@@ -57,7 +57,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
 
   if (recommendationsError) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <TrendingUp className="h-8 w-8 text-muted-foreground" />
@@ -80,7 +80,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
 
   if (recommendations.length === 0) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <TrendingUp className="h-8 w-8 text-muted-foreground" />
@@ -104,7 +104,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -172,7 +172,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
 
                   <div className="mt-3 flex flex-wrap gap-2">
                     {filteredRecommendations[0].items.slice(0, 2).map((item: any) => (
-                      <div key={item.id} className="flex items-center gap-2 bg-background border border-border rounded px-2 py-1">
+                      <div key={item.id} className="flex items-center gap-2 bg-background border border-orange-400/60 dark:border-orange-500/70 rounded px-2 py-1">
                         <span className="font-medium">${item.price.toFixed(2)}</span>
                         <span>{item.name}</span>
                       </div>
@@ -228,7 +228,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
                   .map((rec: any) => (
                     <div
                       key={rec.id}
-                      className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                      className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                     >
                       <div className="p-4 bg-muted border-b border-border">
                         <h3 className="font-medium">{rec.title}</h3>
@@ -295,7 +295,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
                   .map((rec: any) => (
                     <div
                       key={rec.id}
-                      className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                      className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                     >
                       <div className="p-4 bg-muted border-b border-border">
                         <h3 className="font-medium">{rec.title}</h3>
@@ -364,7 +364,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
                   .map((rec: any) => (
                     <div
                       key={rec.id}
-                      className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                      className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                     >
                       <div className="p-4 bg-muted border-b border-border">
                         <div className="flex items-center gap-2">
@@ -426,7 +426,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
         </div>
 
         {/* How Recommendations Work */}
-        <div className="mt-8 p-4 bg-muted rounded-lg border border-border">
+        <div className="mt-8 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
           <div className="flex items-start gap-3">
             <TrendingUp className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
             <div>
@@ -438,7 +438,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
                 our recommendations become.
               </p>
 
-              <div className="mt-3 p-3 bg-background rounded-lg border border-border">
+              <div className="mt-3 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm">
                   <span className="font-medium">Pro Tip:</span> For bookstore customers,
                   we recommend educational materials based on your previous purchases.

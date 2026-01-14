@@ -121,7 +121,7 @@ export default function SalesHistoryPanel({
               {filteredSales.slice(0, 5).map(sale => (
                 <div
                   key={sale.id}
-                  className="border border-border rounded-lg p-3 hover:bg-muted/50 cursor-pointer"
+                  className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-3 hover:bg-muted/50 cursor-pointer"
                   onClick={() => setSelectedSale(sale)}
                 >
                   <div className="flex justify-between items-start">
@@ -160,7 +160,7 @@ export default function SalesHistoryPanel({
       {/* Sale Details Modal */}
       {selectedSale && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-2xl overflow-hidden">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-2xl overflow-hidden">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>

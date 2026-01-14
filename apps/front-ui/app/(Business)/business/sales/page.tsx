@@ -96,7 +96,7 @@ export default function SalesManagementPage() {
             title='selected store ID'
             value={selectedStoreId || ''}
             onChange={(e) => setSelectedStoreId(e.target.value)}
-            className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             {storesData.stores.map((store: StoreEntity) => (
               <option key={store.id} value={store.id}>
@@ -109,7 +109,7 @@ export default function SalesManagementPage() {
             <input
               type="text"
               placeholder="Search products..."
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border border-orange-400/60 dark:border-orange-500/70 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>

@@ -149,7 +149,7 @@ export default function ChatThread({ chat, userId, userRole, onSendMessage, load
               onChange={e => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="w-full p-2 sm:p-2.5 md:p-3 border border-border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[40px] max-h-[120px] text-sm md:text-base max-w-full overflow-x-hidden"
+              className="w-full p-2 sm:p-2.5 md:p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[40px] max-h-[120px] text-sm md:text-base max-w-full overflow-x-hidden"
               rows={1}
               disabled={isSending}
             />

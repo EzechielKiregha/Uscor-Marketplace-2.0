@@ -210,7 +210,7 @@ export default function CurrentSalePanel({
 
   if (!currentSale && !currentSaleDetails) {
     return (
-      <div className="border border-border rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
+      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
           <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
             <ShoppingCart className="h-10 w-10 text-primary" />
@@ -233,7 +233,7 @@ export default function CurrentSalePanel({
   }
 
   return (
-    <div className="border border-border rounded-lg bg-card h-[900px] overflow-hidden flex flex-col">
+    <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-[900px] overflow-hidden flex flex-col">
       {/* Sale Header */}
       <div className="border-b border-border p-4 flex items-center justify-between">
         <div>
@@ -322,7 +322,7 @@ export default function CurrentSalePanel({
             {filteredProducts.map((product: ProductEntity) => (
               <div
                 key={product.id}
-                className="border border-border rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors"
+                className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors"
                 onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative pt-[100%]">
@@ -350,7 +350,7 @@ export default function CurrentSalePanel({
       {/* Product Selection Modal */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-md overflow-hidden">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md overflow-hidden">
             <div className="p-6">
               <div className="flex -mx-4 -mt-4 -mb-4 bg-muted border-b border-border p-4 mb-4">
                 <div className="w-24 h-24 flex-shrink-0 mr-4">
@@ -377,7 +377,7 @@ export default function CurrentSalePanel({
               {/* Quantity Selector */}
               <div className="flex items-center justify-between mb-6">
                 <label className="text-sm font-medium">Quantity</label>
-                <div className="flex items-center border border-border rounded-lg">
+                <div className="flex items-center border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -502,7 +502,7 @@ export default function CurrentSalePanel({
                 Card
                 {/* Payment Form */}
                 {showPaymentForm && paymentMethod && (
-                  <div className="border border-border rounded-lg p-4 space-y-4">
+                  <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium">Payment Details</h3>
                       <Button
@@ -523,7 +523,7 @@ export default function CurrentSalePanel({
                         <div>
                           <label className="text-sm font-medium">Mobile Money Provider</label>
                           <select
-                            className="w-full mt-1 p-2 border border-border rounded-md"
+                            className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                             value={paymentDetails.mobileMoneyMethod || ''}
                             onChange={(e) => setPaymentDetails({ ...paymentDetails, mobileMoneyMethod: e.target.value })}
                           >
@@ -537,7 +537,7 @@ export default function CurrentSalePanel({
                         <div>
                           <label className="text-sm font-medium">Country</label>
                           <select
-                            className="w-full mt-1 p-2 border border-border rounded-md"
+                            className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                             value={paymentDetails.country || ''}
                             onChange={(e) => setPaymentDetails({ ...paymentDetails, country: e.target.value })}
                           >
@@ -656,7 +656,7 @@ export default function CurrentSalePanel({
 
           {/* Payment Form */}
           {showPaymentForm && paymentMethod && (
-            <div className="border border-border rounded-lg p-4 space-y-4">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Payment Details</h3>
                 <Button
@@ -677,7 +677,7 @@ export default function CurrentSalePanel({
                   <div>
                     <label className="text-sm font-medium">Mobile Money Provider</label>
                     <select
-                      className="w-full mt-1 p-2 border border-border rounded-md"
+                      className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                       value={paymentDetails.mobileMoneyMethod || ''}
                       onChange={(e) => setPaymentDetails({ ...paymentDetails, mobileMoneyMethod: e.target.value })}
                     >
@@ -691,7 +691,7 @@ export default function CurrentSalePanel({
                   <div>
                     <label className="text-sm font-medium">Country</label>
                     <select
-                      className="w-full mt-1 p-2 border border-border rounded-md"
+                      className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                       value={paymentDetails.country || ''}
                       onChange={(e) => setPaymentDetails({ ...paymentDetails, country: e.target.value })}
                     >

@@ -297,33 +297,33 @@ export default function ProgramConfiguration({
           </div>
 
           {/* Program Preview */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Star className="h-4 w-4 text-primary" />
               Program Preview
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3 bg-background rounded-lg border border-border">
+              <div className="p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm text-muted-foreground">For every</p>
                 <p className="text-2xl font-bold">${1.00}</p>
                 <p className="text-sm">you spend</p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border">
+              <div className="p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm text-muted-foreground">Earn</p>
                 <p className="text-2xl font-bold">{formData.pointsPerPurchase} pts</p>
                 <p className="text-sm">points</p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border">
+              <div className="p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm text-muted-foreground">Redeem</p>
                 <p className="text-2xl font-bold">{formData.minimumPointsToRedeem} pts</p>
                 <p className="text-sm">for ${calculateRedemptionValue()}</p>
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
               <p className="font-medium">How it works for customers:</p>
               <p className="text-sm text-muted-foreground mt-1">
                 "Spend ${1.00} to earn {formData.pointsPerPurchase} points.
@@ -333,7 +333,7 @@ export default function ProgramConfiguration({
           </div>
 
           {/* Benefits for Local Businesses */}
-          <div className="border border-border rounded-lg p-4">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Benefits for Your Local Business

@@ -722,7 +722,14 @@ export class OrderService {
       }
     }
     const businesses = businessIds.size
-      ? await this.prisma.business.findMany({ where: { id: { in: Array.from(businessIds) } }, select: { id: true, name: true, avatar: true } })
+      ? await this.prisma.business.findMany({ 
+        where: { 
+          id: { 
+            in: Array.from(businessIds) 
+          } 
+        }, 
+        select: { id: true, name: true, avatar: true } 
+      })
       : []
     const businessMap: Record<string, any> = {}
     for (const b of businesses) businessMap[b.id] = b
@@ -739,9 +746,7 @@ export class OrderService {
         name: op.product?.title || op.product?.name || '',
         price: op.product?.price || 0,
         quantity: op.quantity || 0,
-        media: op.product?.medias?.[0]
-          ? { url: op.product.medias[0].url }
-          : null,
+        media: op.product?.medias?.map((m: any) => ({ url: m.url })),
       }))
 
       // deliveryAddress transformation: try JSON parse, fallback split

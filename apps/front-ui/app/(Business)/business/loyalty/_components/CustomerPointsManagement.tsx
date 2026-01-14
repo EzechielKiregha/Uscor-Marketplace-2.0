@@ -258,7 +258,7 @@ export default function CustomerPointsManagement({
       {/* Add Points Modal */}
       {showAddPointsModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-md">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -362,7 +362,7 @@ export default function CustomerPointsManagement({
       {/* Redeem Points Modal */}
       {showRedeemModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-md">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>

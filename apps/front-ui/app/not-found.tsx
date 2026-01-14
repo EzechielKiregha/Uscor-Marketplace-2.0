@@ -4,9 +4,13 @@ import HeaderComponent from "@/components/seraui/HeaderComponent";
 import { Button } from "@/components/ui/button";
 import { Frown } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function NotFoundPage() {
+
+  const router = useRouter();
+
   return (
 
     <div className="flex flex-col items-center bg-background text-foreground">
@@ -20,11 +24,11 @@ export default function NotFoundPage() {
         <p className="text-muted-foreground text-lg">
           Could not find requested resources
         </p>
-        <Link href="/">
-          <Button variant={"outline"} className="mt-1 cursor-pointer">
-            Return Home
-          </Button>
-        </Link>
+        <Button variant={"outline"} onClick={() => {
+          router.back();
+        }} className="mt-1 cursor-pointer">
+          Go Back
+        </Button>
       </div>
       <Footer />
     </div>

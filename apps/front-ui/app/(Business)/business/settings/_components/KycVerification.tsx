@@ -350,7 +350,7 @@ export default function KycVerification({ }: KycVerificationProps) {
                 return (
                   <div
                     key={document.id}
-                    className={`border border-border rounded-lg p-4 ${status === 'VERIFIED' ? 'bg-success/5' :
+                    className={`border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 ${status === 'VERIFIED' ? 'bg-success/5' :
                       status === 'PENDING' ? 'bg-warning/5' :
                         status === 'REJECTED' ? 'bg-destructive/5' : ''
                       }`}
@@ -450,7 +450,7 @@ export default function KycVerification({ }: KycVerificationProps) {
           {/* Document Upload Modal */}
           {selectedDocumentType && (
             <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-card border border-border rounded-lg w-full max-w-md">
+              <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-6">
                     <div>
@@ -574,7 +574,7 @@ export default function KycVerification({ }: KycVerificationProps) {
           )}
 
           {/* Benefits for Local Businesses */}
-          <div className="border border-border rounded-lg p-4">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Why KYC Verification Matters
@@ -609,7 +609,7 @@ export default function KycVerification({ }: KycVerificationProps) {
           </div>
 
           {/* East Africa Specific Information */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
               KYC Requirements in East Africa

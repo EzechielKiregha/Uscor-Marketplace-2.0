@@ -50,7 +50,7 @@ export default function BusinessCard({ business, viewMode }: BusinessCardProps) 
 
   if (viewMode === 'grid') {
     return (
-      <div className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
+      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
         <div className="h-40 bg-muted relative">
           {business.coverImage ? (
             <img
@@ -152,7 +152,7 @@ export default function BusinessCard({ business, viewMode }: BusinessCardProps) 
   }
 
   return (
-    <div className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row">
+    <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row">
       <div className="md:w-48 h-32 md:h-auto bg-muted relative">
         {business.coverImage ? (
           <img

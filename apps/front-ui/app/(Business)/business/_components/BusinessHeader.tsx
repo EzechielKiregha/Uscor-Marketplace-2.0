@@ -63,7 +63,7 @@ export default function BusinessHeader({ business, isSidebarOpen, toggleSidebar 
           <input
             type="text"
             placeholder="Search products, orders, customers..."
-            className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full pl-9 pr-4 py-2 rounded-lg border border-orange-400/60 dark:border-orange-500/70 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
       </div>

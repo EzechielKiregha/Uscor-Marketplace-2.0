@@ -86,7 +86,7 @@ export default function LoyaltyDashboard({ client }: LoyaltyDashboardProps) {
 
   if (loyaltyLoading) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading loyalty program details...</p>
@@ -97,7 +97,7 @@ export default function LoyaltyDashboard({ client }: LoyaltyDashboardProps) {
 
   if (loyaltyError || !loyaltyData?.loyaltyProgram) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Star className="h-8 w-8 text-muted-foreground" />
@@ -122,7 +122,7 @@ export default function LoyaltyDashboard({ client }: LoyaltyDashboardProps) {
   const currentTier = program.tiers.find((tier: any) => client.loyaltyPoints >= tier.minPoints) || program.tiers[0];
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Business Selection */}
       {businesses.length > 1 && (
         <div className="p-4 bg-muted border-b border-border">
@@ -213,7 +213,7 @@ export default function LoyaltyDashboard({ client }: LoyaltyDashboardProps) {
 
           {/* Tier Benefits */}
           {currentTier.benefits.length > 0 && (
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
               <h4 className="font-medium mb-2">Your Current Benefits:</h4>
               <ul className="space-y-1">
                 {currentTier.benefits.map((benefit: any) => (
@@ -333,7 +333,7 @@ export default function LoyaltyDashboard({ client }: LoyaltyDashboardProps) {
         </div>
 
         {/* Business Type Specific Information */}
-        <div className="mt-8 p-4 bg-muted rounded-lg border border-border">
+        <div className="mt-8 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
           <div className="flex items-start gap-3">
             <Star className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
             <div>

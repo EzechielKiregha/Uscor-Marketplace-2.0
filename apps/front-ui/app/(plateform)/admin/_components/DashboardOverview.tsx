@@ -68,7 +68,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
     <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <Users className="h-5 w-5" />
@@ -80,7 +80,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
               <Building2 className="h-5 w-5" />
@@ -92,7 +92,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <ShoppingCart className="h-5 w-5" />
@@ -104,7 +104,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
               <BriefcaseBusiness className="h-5 w-5" />
@@ -119,7 +119,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
 
       {/* Platform Health */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-2 bg-card border border-border rounded-lg overflow-hidden">
+        <div className="md:col-span-2 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
           <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold">Platform Activity</h2>
@@ -218,7 +218,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
           <div className="p-4 bg-muted border-b border-border">
             <h2 className="text-lg font-bold">System Health</h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -272,7 +272,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
 
       {/* Platform Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-2 bg-card border border-border rounded-lg overflow-hidden">
+        <div className="md:col-span-2 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
           <div className="p-4 bg-muted border-b border-border">
             <h2 className="text-lg font-bold">Business Verification Status</h2>
           </div>
@@ -316,7 +316,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
           <div className="p-4 bg-muted border-b border-border">
             <h2 className="text-lg font-bold">Recent Disputes</h2>
           </div>
@@ -352,7 +352,7 @@ export default function DashboardOverview({ metrics, settings }: DashboardOvervi
       </div>
 
       {/* Platform Settings Summary */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
         <div className="p-4 bg-muted border-b border-border">
           <h2 className="text-lg font-bold">Platform Configuration</h2>
         </div>

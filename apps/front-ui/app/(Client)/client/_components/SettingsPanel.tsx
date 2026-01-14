@@ -257,7 +257,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Navigation */}
       <div className="p-4 bg-muted border-b border-border">
         <div className="flex flex-wrap gap-1">
@@ -494,7 +494,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
             {/* Address Modal */}
             {showAddressModal && (
               <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div className="bg-card border border-border rounded-lg w-full max-w-md">
+                <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-6">
                       <div>
@@ -556,7 +556,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                             name="country"
                             value={addressForm.country}
                             onChange={handleAddressChange}
-                            className="w-full p-2 border border-border rounded-md"
+                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                           >
                             <option value="RWANDA">Rwanda</option>
                             <option value="UGANDA">Uganda</option>
@@ -745,7 +745,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
             {/* Payment Method Modal */}
             {showPaymentModal && (
               <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div className="bg-card border border-border rounded-lg w-full max-w-md">
+                <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-6">
                       <div>
@@ -780,7 +780,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                           name="type"
                           value={paymentForm.type}
                           onChange={handlePaymentChange}
-                          className="w-full p-2 border border-border rounded-md"
+                          className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                         >
                           <option value="MOBILE_MONEY">Mobile Money</option>
                           <option value="CREDIT_CARD">Credit Card</option>
@@ -797,7 +797,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                             name="provider"
                             value={paymentForm.provider}
                             onChange={handlePaymentChange}
-                            className="w-full p-2 border border-border rounded-md"
+                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                           >
                             <option value="MTN_MOMO">MTN Mobile Money</option>
                             <option value="AIRTEL_MONEY">Airtel Money</option>
@@ -872,7 +872,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
             )}
 
             {/* East Africa Payment Information */}
-            <div className="mt-6 p-4 bg-muted rounded-lg border border-border">
+            <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
               <div className="flex items-start gap-3">
                 <CreditCard className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                 <div>
@@ -883,7 +883,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
                     transactions.
                   </p>
 
-                  <div className="mt-3 p-3 bg-background rounded-lg border border-border">
+                  <div className="mt-3 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                     <p className="text-sm">
                       <span className="font-medium">Pro Tip:</span> For most East African
                       businesses, mobile money is the fastest and most convenient payment

@@ -108,7 +108,7 @@ export default function ProductDetailsModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -174,7 +174,7 @@ export default function ProductDetailsModal({
             {/* Right Column - Product Details */}
             <div className="space-y-6">
               {/* Business Info */}
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-xl font-bold">
                     {getBusinessTypeIcon()}
@@ -268,7 +268,7 @@ export default function ProductDetailsModal({
               {/* Quantity Selector */}
               <div className="flex items-center gap-3">
                 <label className="font-medium">Quantity:</label>
-                <div className="flex items-center border border-border rounded-md">
+                <div className="flex items-center border border-orange-400/60 dark:border-orange-500/70 rounded-md">
                   <Button
                     variant="outline"
                     size="icon"
@@ -321,7 +321,7 @@ export default function ProductDetailsModal({
               </div>
 
               {/* Business Type Specific Information */}
-              <div className="mt-6 p-4 bg-muted rounded-lg border border-border">
+              <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <div className="flex items-start gap-3">
                   <ShoppingCart className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <div>

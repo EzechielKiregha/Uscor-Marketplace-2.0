@@ -135,7 +135,7 @@ export default function Reviews({ client }: ReviewsProps) {
 
   if (loading) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading your reviews...</p>
@@ -146,7 +146,7 @@ export default function Reviews({ client }: ReviewsProps) {
 
   if (error) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Star className="h-8 w-8 text-muted-foreground" />
@@ -168,7 +168,7 @@ export default function Reviews({ client }: ReviewsProps) {
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -191,7 +191,7 @@ export default function Reviews({ client }: ReviewsProps) {
           <select
             value={activeBusiness || ''}
             onChange={(e) => setActiveBusiness(e.target.value || null)}
-            className="w-full sm:w-48 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Businesses</option>
             {/* In a real app, this would be populated with businesses the client has reviewed */}
@@ -225,9 +225,9 @@ export default function Reviews({ client }: ReviewsProps) {
         ) : (
           <div className="space-y-6">
             {reviews.map((review: any) => (
-              <div key={review.id} className="border border-border rounded-lg p-4">
+              <div key={review.id} className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                  <div className="w-12 h-12 flex-shrink-0">
+                  <div className="w-12 h-12 shrink-0">
                     {review.business.avatar ? (
                       <img
                         src={review.business.avatar}
@@ -284,7 +284,7 @@ export default function Reviews({ client }: ReviewsProps) {
 
                     {/* Business Response */}
                     {review.response && (
-                      <div className="mt-4 p-3 bg-muted rounded-lg border border-border">
+                      <div className="mt-4 p-3 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium">{review.business.name} Response</span>
                           <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
@@ -341,7 +341,7 @@ export default function Reviews({ client }: ReviewsProps) {
       {/* Write Review Modal */}
       {showReviewModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-md">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -474,9 +474,9 @@ export default function Reviews({ client }: ReviewsProps) {
 
       {/* Business Type Specific Information */}
       {reviews.length > 0 && (
-        <div className="mt-6 p-4 bg-muted rounded-lg border border-border">
+        <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
           <div className="flex items-start gap-3">
-            <Star className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+            <Star className="h-5 w-5 text-primary mt-0.5 shrink-0" />
             <div>
               <h3 className="font-semibold">Review Tips by Business Type</h3>
 

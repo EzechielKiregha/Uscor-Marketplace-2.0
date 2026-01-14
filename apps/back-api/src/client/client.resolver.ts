@@ -217,26 +217,11 @@ export class ClientResolver {
     @Args('page', { type: () => Int, nullable: true }) page = 1,
     @Args('limit', { type: () => Int, nullable: true }) limit = 10,
   ) {
-    const skip = (page - 1) * limit
-    const items = await (this.clientService as any).prisma.review.findMany({
-      where: { clientId },
-      include: {
-        client: true,
-        product: {
-          select: {
-            id: true,
-            title: true,
-            business: { select: { id: true, name: true, avatar: true } },
-            medias: { select: { url: true } },
-          },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-      skip,
-      take: limit,
-    })
-    const total = await (this.clientService as any).prisma.review.count({ where: { clientId } })
-    return { items, total, page, limit }
+    return this.clientService.getClientReviews(
+      clientId,
+      page,
+      limit,
+    )
   }
 
   @Query(() => [PromotionEntity], { name: 'clientPromotions' })
@@ -251,13 +236,7 @@ export class ClientResolver {
   async getClientRecommendations(
     @Args('clientId', { type: () => String }) clientId: string,
   ) {
-    // Simple logic: return latest products from businesses the client has ordered from
-    const orders = await (this.clientService as any).prisma.order.findMany({ where: { clientId }, select: { id: true, businessId: true } })
-    const businessIds = [...new Set(orders.map(o => o.businessId).filter(Boolean))]
-    if (!businessIds.length) return []
-    const items = await (this.clientService as any).prisma.product.findMany({ where: { businessId: { in: businessIds } }, take: 10, orderBy: { createdAt: 'desc' }, include: { medias: { select: { url: true } }, business: { select: { id: true, name: true } } } })
-    const recs = items.map(it => ({ id: it.id, type: 'product', title: it.title, description: it.description, items: [{ id: it.id, name: it.title, price: it.price, mediaUrl: it.medias?.[0]?.url }], reason: 'Based on your orders', createdAt: it.createdAt }))
-    return recs
+    return this.clientService.getClientRecommendations(clientId)
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

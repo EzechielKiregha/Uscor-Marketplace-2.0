@@ -322,7 +322,7 @@ export default function PaymentConfiguration({ }: PaymentConfigurationProps) {
                 </div>
 
                 {/* Payment Code Preview */}
-                <div className="border border-border rounded-lg p-4">
+                <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                   <h4 className="font-medium mb-2">Payment Code Preview</h4>
                   <p className="text-sm text-muted-foreground mb-3">
                     See how your payment code will appear to customers at checkout
@@ -461,7 +461,7 @@ export default function PaymentConfiguration({ }: PaymentConfigurationProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Payment Tips for {businessType === 'ARTISAN' ? 'Artisans' : businessType}
@@ -550,7 +550,7 @@ export default function PaymentConfiguration({ }: PaymentConfigurationProps) {
               )}
             </ul>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
               <p className="text-sm">
                 <strong>Pro Tip:</strong> In East Africa, mobile money is the preferred payment method for
                 over 80% of transactions. Make sure your payment codes are correctly configured to avoid

@@ -159,7 +159,7 @@ export default function RedemptionProcess({
           <CardContent>
             <div className="space-y-6">
               {/* Customer Selection */}
-              <div className="border border-border rounded-lg p-4">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold">1. Select Customer</h3>
                   <Button
@@ -222,7 +222,7 @@ export default function RedemptionProcess({
                     {filteredCustomers.slice(0, 5).map((customer: any) => (
                       <div
                         key={customer.clientId}
-                        className="flex items-center justify-between p-2 border border-border rounded-lg hover:bg-muted/50 cursor-pointer"
+                        className="flex items-center justify-between p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer"
                         onClick={() => {
                           setSelectedCustomer(customer);
                           setPointsToRedeem(Math.min(100, customer.totalPoints));
@@ -249,7 +249,7 @@ export default function RedemptionProcess({
 
               {/* Transaction Details */}
               {selectedCustomer && (
-                <div className="border border-border rounded-lg p-4">
+                <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                   <h3 className="font-semibold mb-3">2. Enter Transaction Details</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -334,7 +334,7 @@ export default function RedemptionProcess({
 
               {/* Redemption Confirmation */}
               {selectedCustomer && (
-                <div className="border border-border rounded-lg p-4">
+                <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                   <h3 className="font-semibold mb-3">3. Confirm Redemption</h3>
 
                   <div className="space-y-4">
@@ -421,7 +421,7 @@ export default function RedemptionProcess({
               </ul>
             </div>
 
-            <div className="border border-border rounded-lg p-4">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-warning" />
                 Best Practices
@@ -451,7 +451,7 @@ export default function RedemptionProcess({
               </div>
             </div>
 
-            <div className="border border-border rounded-lg p-4">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
               <h3 className="font-semibold mb-2 flex items-center gap-2">
                 <Gift className="h-4 w-4" />
                 Sample Redemption Options

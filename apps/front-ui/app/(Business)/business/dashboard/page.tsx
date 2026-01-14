@@ -206,7 +206,7 @@ export default function BusinessDashboardPage() {
           title='selected store ID'
           value={selectedStoreId || ''}
           onChange={(e) => setSelectedStoreId(e.target.value)}
-          className="w-full sm:w-64 p-2 border border-border rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
           {storesData.stores.map((store: StoreEntity) => (
             <option key={store.id} value={store.id}>

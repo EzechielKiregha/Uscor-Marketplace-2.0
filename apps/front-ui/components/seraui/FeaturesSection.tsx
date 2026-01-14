@@ -135,7 +135,7 @@ export default function FeaturesSection() {
                       : 'order-1 md:order-1'
                   }
                 >
-                  <div className="relative w-full overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+                  <div className="relative w-full overflow-hidden rounded-2xl border border-orange-400/60 dark:border-orange-500/70/60 bg-card shadow-sm">
                     <Image
                       src={feature.imageSrc}
                       alt={feature.imageAlt}

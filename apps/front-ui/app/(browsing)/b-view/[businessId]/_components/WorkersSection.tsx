@@ -42,7 +42,7 @@ export default function WorkersSection({
 
   if (loading) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -55,7 +55,7 @@ export default function WorkersSection({
 
   if (filteredWorkers.length === 0) {
     return (
-      <div className="bg-card border border-border rounded-lg p-6">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Users className="h-8 w-8 text-muted-foreground" />
@@ -84,7 +84,7 @@ export default function WorkersSection({
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-64">
@@ -109,7 +109,7 @@ export default function WorkersSection({
               {selectedRole ? selectedRole : 'All Roles'}
             </Button>
             {roles.length > 0 && (
-              <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-md shadow-lg z-10 hidden group-hover:block">
+              <div className="absolute right-0 mt-2 w-48 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-md shadow-lg z-10 hidden group-hover:block">
                 <div className="py-1">
                   <button
                     onClick={() => setSelectedRole(null)}
@@ -139,7 +139,7 @@ export default function WorkersSection({
           {filteredWorkers.map(worker => (
             <div
               key={worker.id}
-              className="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+              className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
             >
               <div className="p-4 text-center bg-muted border-b border-border">
                 <div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden border-2 border-border">

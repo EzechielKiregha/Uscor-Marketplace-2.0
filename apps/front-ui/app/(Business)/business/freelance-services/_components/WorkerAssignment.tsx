@@ -208,7 +208,7 @@ export default function WorkerAssignment({
       {/* Assign Worker Modal */}
       {showAssignModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-md">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -258,7 +258,7 @@ export default function WorkerAssignment({
                       {filteredWorkers.map((worker: WorkerEntity) => (
                         <div
                           key={worker.id}
-                          className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-muted/50 cursor-pointer mb-2"
+                          className="flex items-center justify-between p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer mb-2"
                           onClick={() => setSelectedWorker(worker)}
                         >
                           <div className="flex items-center gap-3">
@@ -292,7 +292,7 @@ export default function WorkerAssignment({
                     <select
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
-                      className="w-full p-2 border border-border rounded-md"
+                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                     >
                       <option value="PRIMARY">Primary Worker</option>
                       <option value="ASSISTANT">Assistant</option>

@@ -339,6 +339,64 @@ export class ClientService {
     })
   }
 
+  async getClientReviews(clientId: string, page = 1, limit = 10) {
+    const skip = (page - 1) * limit
+        const items = await this.prisma.review.findMany({
+          where: { clientId },
+          include: {
+            client: true,
+            product: {
+              select: {
+                id: true,
+                title: true,
+                business: { select: { id: true, name: true, avatar: true } },
+                medias: { select: { url: true } },
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+          skip,
+          take: limit,
+        })
+        const total = await this.prisma.review.count({ where: { clientId } })
+        return { items, total, page, limit }
+  }
+
+
+  async getClientRecommendations(clientId: string){
+    // Simple logic: return latest products from businesses the client has ordered from
+        const orders = await this.prisma.order.findMany({ 
+          where: { clientId }, 
+          select: { id: true, products: { select: { product: { select: { businessId: true } } } } } })
+        
+          const businessIds = [...new Set(orders.map(o => o.products?.[0]?.product?.businessId).filter(Boolean))]
+    
+        if (!businessIds.length) return []
+    
+        const items = await this.prisma.product.findMany({ 
+          where: { businessId: { in: businessIds } }, 
+          take: 10, 
+          orderBy: { createdAt: 'desc' }, 
+          include: { medias: { select: { url: true } }, 
+          business: { select: { id: true, name: true } } } 
+        })
+        
+        const recs = items.map(it => ({ 
+          id: it.id, type: 'product', 
+          title: it.title, description: it.description, 
+          items: [{ 
+            id: it.id, 
+            name: it.title, 
+            price: it.price, 
+            mediaUrl: it.medias?.[0]?.url,
+            business: it.business
+          }], 
+          reason: 'Based on your orders', 
+          createdAt: it.createdAt 
+        }))
+        return recs
+  }
+
   async searchClients(query: string) {
     return this.prisma.client.findMany({
       where: {

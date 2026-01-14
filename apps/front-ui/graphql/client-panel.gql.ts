@@ -38,8 +38,8 @@ export const GET_CLIENT_PROFILE = gql`
 `;
 
 export const GET_CLIENT_ORDERS = gql`
-  query GetClientOrders($clientId: String!, $status: String, $page: Int = 1, $limit: Int = 10) {
-    clientOrders(clientId: $clientId, status: $status, page: $page, limit: limit) {
+  query GetPanelClientOrders($clientId: String!, $status: String, $page: Int = 1, $limit: Int = 10) {
+    clientOrders(clientId: $clientId, status: $status, page: $page, limit: $limit) {
       items {
         id
         orderNumber
@@ -88,15 +88,22 @@ export const GET_CLIENT_REVIEWS = gql`
         rating
         comment
         createdAt
-        response {
+        client {
           id
-          comment
-          createdAt
-        }
-        business {
-          id
-          name
+          fullName
           avatar
+        }
+        product {
+          id
+          title
+          business {
+            id
+            name
+            avatar
+          }
+          medias {
+            url
+          }
         }
       }
       total
@@ -140,9 +147,7 @@ export const GET_CLIENT_RECOMMENDATIONS = gql`
         id
         name
         price
-        media {
-          url
-        }
+        mediaUrl
         business {
           id
           name
@@ -347,36 +352,36 @@ export const ON_ORDER_UPDATED = gql`
   subscription OnOrderUpdated($clientId: String!) {
     orderUpdated(clientId: $clientId) {
       id
-    orderNumber
-    status
-    totalAmount
-    createdAt
-    items {
-      id
-      name
-      price
-      quantity
-      media {
-        url
+      orderNumber
+      status
+      totalAmount
+      createdAt
+      items {
+        id
+        name
+        price
+        quantity
+        media {
+          url
+        }
       }
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    store {
-      id
-      name
-    }
-    paymentMethod {
-      type
-      last4
-    }
-    deliveryAddress {
-      street
-      city
-    }
+      business {
+        id
+        name
+        avatar
+      }
+      store {
+        id
+        name
+      }
+      paymentMethod {
+        type
+        last4
+      }
+      deliveryAddress {
+        street
+        city
+      }
     }
   }
 `;

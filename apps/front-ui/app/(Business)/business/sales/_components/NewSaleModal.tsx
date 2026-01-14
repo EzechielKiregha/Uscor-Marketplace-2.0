@@ -186,7 +186,7 @@ export default function NewSaleModal({
             <div className="space-y-3">
               <Label>Client (Optional)</Label>
               {selectedClient ? (
-                <div className="p-3 border border-border rounded-lg">
+                <div className="p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">

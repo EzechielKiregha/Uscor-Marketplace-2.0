@@ -152,7 +152,7 @@ export default function BusinessHeaderEditModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -179,7 +179,7 @@ export default function BusinessHeaderEditModal({
                 This image appears at the top of your business page
               </p>
 
-              <div className="relative h-48 rounded-lg overflow-hidden border border-border">
+              <div className="relative h-48 rounded-lg overflow-hidden border border-orange-400/60 dark:border-orange-500/70">
                 {coverImagePreview ? (
                   <div className="relative w-full h-full">
                     <img
@@ -220,7 +220,7 @@ export default function BusinessHeaderEditModal({
               </p>
 
               <div className="flex items-center gap-4">
-                <div className="relative w-24 h-24 rounded-full overflow-hidden border border-border">
+                <div className="relative w-24 h-24 rounded-full overflow-hidden border border-orange-400/60 dark:border-orange-500/70">
                   {avatarPreview ? (
                     <div className="relative w-full h-full">
                       <img
@@ -303,7 +303,7 @@ export default function BusinessHeaderEditModal({
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full p-2 border border-border rounded-md"
+                  className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                   placeholder="Tell customers about your business, what you offer, and why they should choose you..."
                 ></textarea>
                 <p className="mt-1 text-xs text-muted-foreground">

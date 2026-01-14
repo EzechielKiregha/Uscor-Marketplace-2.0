@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql'
-import { ProductEntity } from '../../product/entities/product.entity'
+import { BusinessEntity } from '../../business/entities/business.entity'
 
 @ObjectType()
 export class RecommendationItem {
@@ -14,6 +14,9 @@ export class RecommendationItem {
 
   @Field({ nullable: true })
   mediaUrl?: string
+
+  @Field(() => BusinessEntity, { nullable: true })
+  business?: BusinessEntity
 }
 
 @ObjectType()

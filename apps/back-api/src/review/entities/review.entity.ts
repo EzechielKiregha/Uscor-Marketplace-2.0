@@ -5,6 +5,7 @@ import {
 } from '@nestjs/graphql'
 import { ClientEntity } from '../../client/entities/client.entity'
 import { ProductEntity } from '../../product/entities/product.entity'
+import { MediaEntity } from '../../media/entities/media.entity'
 
 @ObjectType()
 export class ReviewEntity {
@@ -32,4 +33,7 @@ export class ReviewEntity {
 
   @Field(() => ProductEntity) // Product being reviewed
   product: ProductEntity
+
+  @Field(() => [MediaEntity], { nullable: true }) // Optional media associated with the review
+  media?: MediaEntity[]
 }

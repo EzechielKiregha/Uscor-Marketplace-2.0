@@ -232,7 +232,7 @@ export default function StockManagement({
       {/* Stock Adjustment Modal */}
       {showAdjustModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-lg w-full max-w-md">
+          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -264,7 +264,7 @@ export default function StockManagement({
                     {productsData?.products?.items?.map((product: ProductEntity) => (
                       <div
                         key={product.id}
-                        className="flex items-center justify-between p-2 border border-border rounded-lg hover:bg-muted/50 cursor-pointer"
+                        className="flex items-center justify-between p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer"
                         onClick={() => {
                           const inventoryItem = inventory.find(i => i.productId === product.id);
                           setSelectedItem(inventoryItem || {

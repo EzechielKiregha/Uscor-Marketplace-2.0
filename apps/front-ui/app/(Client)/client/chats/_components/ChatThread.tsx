@@ -113,7 +113,7 @@ export default function ChatThread({ chatId, onBack }: ChatThreadProps) {
           >
             <div
               className={`max-w-[85%] md:max-w-[70%] rounded-lg p-2 md:p-3 ${message.senderType === 'CLIENT'
-                ? 'bg-card border border-border'
+                ? 'bg-card border border-orange-400/60 dark:border-orange-500/70'
                 : 'bg-primary text-primary-foreground'
                 }`}
             >
@@ -143,7 +143,7 @@ export default function ChatThread({ chatId, onBack }: ChatThreadProps) {
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="w-full p-2 md:p-3 border border-border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[40px] max-h-[120px] text-sm md:text-base"
+              className="w-full p-2 md:p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[40px] max-h-[120px] text-sm md:text-base"
               rows={1}
             />
           </div>

@@ -65,7 +65,7 @@ export default function SearchModal({ onClose, onSearch }: SearchModalProps) {
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-start justify-center pt-16 p-4">
-      <div className="bg-card border border-border rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
         <div className="p-4 border-b border-border flex items-center justify-between">
           <div className="relative flex-1 max-w-xl">
             <Input

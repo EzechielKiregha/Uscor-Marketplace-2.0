@@ -150,7 +150,6 @@ export const GET_CLIENT_ORDERS = gql`
             }
           }
         }
-        status
       }
       total
       page

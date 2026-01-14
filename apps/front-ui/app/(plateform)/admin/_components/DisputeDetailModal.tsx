@@ -68,7 +68,7 @@ export default function DisputeDetailModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -93,7 +93,7 @@ export default function DisputeDetailModal({
             {/* Dispute Information */}
             <div className="lg:col-span-1 space-y-6">
               {/* Dispute Summary */}
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">Dispute Summary</h3>
                 </div>
@@ -103,9 +103,9 @@ export default function DisputeDetailModal({
                     <div>
                       <p className="text-sm text-muted-foreground mb-1">Type</p>
                       <span className={`px-2 py-1 rounded-full text-xs ${dispute.type === 'PAYMENT' ? 'bg-destructive/10 text-destructive' :
-                          dispute.type === 'PRODUCT' ? 'bg-warning/10 text-warning' :
-                            dispute.type === 'SERVICE' ? 'bg-info/10 text-info' :
-                              'bg-muted'
+                        dispute.type === 'PRODUCT' ? 'bg-warning/10 text-warning' :
+                          dispute.type === 'SERVICE' ? 'bg-info/10 text-info' :
+                            'bg-muted'
                         }`}>
                         {dispute.type}
                       </span>
@@ -114,8 +114,8 @@ export default function DisputeDetailModal({
                     <div>
                       <p className="text-sm text-muted-foreground mb-1">Status</p>
                       <span className={`px-2 py-1 rounded-full text-xs ${dispute.status === 'OPEN' ? 'bg-warning/10 text-warning' :
-                          dispute.status === 'IN_PROGRESS' ? 'bg-info/10 text-info' :
-                            'bg-success/10 text-success'
+                        dispute.status === 'IN_PROGRESS' ? 'bg-info/10 text-info' :
+                          'bg-success/10 text-success'
                         }`}>
                         {dispute.status}
                       </span>
@@ -147,7 +147,7 @@ export default function DisputeDetailModal({
               </div>
 
               {/* Involved Parties */}
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">Involved Parties</h3>
                 </div>
@@ -252,7 +252,7 @@ export default function DisputeDetailModal({
             {/* Dispute Details */}
             <div className="lg:col-span-2 space-y-6">
               {/* Dispute Description */}
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">Dispute Description</h3>
                 </div>
@@ -265,7 +265,7 @@ export default function DisputeDetailModal({
               </div>
 
               {/* Communication History */}
-              <div className="border border-border rounded-lg overflow-hidden">
+              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted border-b border-border">
                   <h3 className="font-semibold">Communication History</h3>
                 </div>
@@ -324,7 +324,7 @@ export default function DisputeDetailModal({
 
               {/* Resolution Details */}
               {dispute.status === 'RESOLVED' && dispute.resolutionNotes && (
-                <div className="border border-border rounded-lg overflow-hidden">
+                <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                   <div className="p-4 bg-muted border-b border-border">
                     <h3 className="font-semibold">Resolution Details</h3>
                   </div>
@@ -340,7 +340,7 @@ export default function DisputeDetailModal({
                     {(dispute.refundAmount > 0 || dispute.compensation > 0) && (
                       <div className="grid grid-cols-2 gap-4">
                         {dispute.refundAmount > 0 && (
-                          <div className="border border-border rounded-lg p-4">
+                          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                             <div className="flex items-center gap-2 mb-1">
                               <DollarSign className="h-4 w-4 text-destructive" />
                               <p className="text-sm text-muted-foreground">Refund</p>
@@ -350,7 +350,7 @@ export default function DisputeDetailModal({
                         )}
 
                         {dispute.compensation > 0 && (
-                          <div className="border border-border rounded-lg p-4">
+                          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
                             <div className="flex items-center gap-2 mb-1">
                               <DollarSign className="h-4 w-4 text-success" />
                               <p className="text-sm text-muted-foreground">Compensation</p>
@@ -366,7 +366,7 @@ export default function DisputeDetailModal({
 
               {/* Resolution Form */}
               {dispute.status !== 'RESOLVED' && (
-                <div className="border border-border rounded-lg overflow-hidden">
+                <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                   <div className="p-4 bg-muted border-b border-border">
                     <h3 className="font-semibold">Resolve Dispute</h3>
                   </div>

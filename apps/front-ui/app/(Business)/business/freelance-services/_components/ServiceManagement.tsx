@@ -362,7 +362,7 @@ export default function ServiceManagement({
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-border rounded-md"
+                  className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                 >
                   <option value="">Select a category</option>
                   <option value="WOODWORKING">Woodworking</option>
@@ -393,26 +393,26 @@ export default function ServiceManagement({
           </div>
 
           {/* Service Preview */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <BriefcaseBusiness className="h-4 w-4 text-primary" />
               Service Preview
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3 bg-background rounded-lg border border-border">
+              <div className="p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm text-muted-foreground">Service</p>
                 <p className="font-medium mt-1 truncate">{formData.title || 'Service Name'}</p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border">
+              <div className="p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm text-muted-foreground">Rate</p>
                 <p className="font-medium mt-1">
                   ${formData.rate || '0.00'} {formData.isHourly ? '/hr' : 'fixed'}
                 </p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border">
+              <div className="p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm text-muted-foreground">Category</p>
                 <p className="font-medium mt-1 capitalize">
                   {formData.category || 'Uncategorized'}
@@ -420,7 +420,7 @@ export default function ServiceManagement({
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
               <p className="font-medium">Description:</p>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                 {formData.description || 'Service description goes here...'}
@@ -429,7 +429,7 @@ export default function ServiceManagement({
           </div>
 
           {/* Contextual Benefits based on business type */}
-          <div className="border border-border rounded-lg p-4">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}

@@ -127,7 +127,7 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
       {/* Profile Header */}
       <div className="p-6 bg-muted border-b border-border">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">

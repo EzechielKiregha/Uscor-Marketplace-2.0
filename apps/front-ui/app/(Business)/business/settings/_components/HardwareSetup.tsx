@@ -177,7 +177,7 @@ export default function HardwareSetup({ }: HardwareSetupProps) {
             {hardwareTypes.map((type) => {
               const Icon = type.icon;
               return (
-                <div key={type.id} className="border border-border rounded-lg overflow-hidden">
+                <div key={type.id} className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                   <div className="p-4 bg-muted border-b border-border flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-full bg-primary/10 text-primary">
@@ -261,7 +261,7 @@ export default function HardwareSetup({ }: HardwareSetupProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Hardware Tips for {businessType === 'ARTISAN' ? 'Artisans' : businessType}
@@ -350,7 +350,7 @@ export default function HardwareSetup({ }: HardwareSetupProps) {
               )}
             </ul>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
               <p className="text-sm">
                 <strong>Pro Tip:</strong> In East Africa, many businesses start with a basic mobile POS
                 setup (smartphone/tablet + portable printer) before investing in more comprehensive hardware.

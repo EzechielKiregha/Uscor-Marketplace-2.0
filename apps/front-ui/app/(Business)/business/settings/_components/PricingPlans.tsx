@@ -206,7 +206,7 @@ export default function PricingPlans({ }: PricingPlansProps) {
             return (
               <div
                 key={plan.id}
-                className={`border border-border rounded-lg overflow-hidden ${plan.isCurrentPlan ? 'ring-2 ring-primary' : ''
+                className={`border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden ${plan.isCurrentPlan ? 'ring-2 ring-primary' : ''
                   }`}
               >
                 <div className="p-6 bg-muted border-b border-border">
@@ -287,7 +287,7 @@ export default function PricingPlans({ }: PricingPlansProps) {
         </div>
 
         {/* Benefits for Local Businesses */}
-        <div className="mt-6 border border-border rounded-lg p-4">
+        <div className="mt-6 border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
           <h3 className="font-semibold mb-3 flex items-center gap-2">
             <Star className="h-4 w-4 text-warning" />
             Why Upgrade for Local Artisans?
@@ -322,7 +322,7 @@ export default function PricingPlans({ }: PricingPlansProps) {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-6 border border-border rounded-lg overflow-hidden">
+        <div className="mt-6 border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
           <div className="p-4 bg-muted border-b border-border">
             <h3 className="font-semibold">Frequently Asked Questions</h3>
           </div>
@@ -385,7 +385,7 @@ export default function PricingPlans({ }: PricingPlansProps) {
         </div>
 
         {/* East Africa Specific Pricing */}
-        <div className="mt-6 border border-border rounded-lg p-4 bg-muted">
+        <div className="mt-6 border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
           <h3 className="font-semibold mb-3 flex items-center gap-2">
             <Receipt className="h-4 w-4 text-primary" />
             East Africa Pricing Information

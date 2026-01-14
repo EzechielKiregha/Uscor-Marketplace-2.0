@@ -442,7 +442,7 @@ export default function Preferences({ }: PreferencesProps) {
                   <select
                     value={formData.language}
                     onChange={(e) => handleSelectChange('language', e.target.value)}
-                    className="w-full p-2 border border-border rounded-md"
+                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                   >
                     <option value="en">English</option>
                     <option value="sw">Swahili</option>
@@ -456,7 +456,7 @@ export default function Preferences({ }: PreferencesProps) {
                   <select
                     value={formData.timeZone}
                     onChange={(e) => handleSelectChange('timeZone', e.target.value)}
-                    className="w-full p-2 border border-border rounded-md"
+                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                   >
                     <option value="Africa/Kigali">Kigali, Rwanda (GMT+2)</option>
                     <option value="Africa/Kampala">Kampala, Uganda (GMT+3)</option>
@@ -478,7 +478,7 @@ export default function Preferences({ }: PreferencesProps) {
                           businessData?.country === 'TANZANIA' ? 'TZS' :
                             businessData?.country === 'DRC' ? 'CDF' :
                               businessData?.country === 'BURUNDI' ? 'BIF' : 'RWF'}
-                    className="w-full p-2 border border-border rounded-md"
+                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                     disabled
                   >
                     <option value="RWF">Rwandan Franc (RWF)</option>
@@ -497,7 +497,7 @@ export default function Preferences({ }: PreferencesProps) {
                   <label className="block text-sm font-medium mb-1">Measurement System</label>
                   <select
                     value="metric"
-                    className="w-full p-2 border border-border rounded-md"
+                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
                   >
                     <option value="metric">Metric (kg, m)</option>
                     <option value="imperial">Imperial (lb, ft)</option>
@@ -508,7 +508,7 @@ export default function Preferences({ }: PreferencesProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-border rounded-lg p-4 bg-muted">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}
@@ -524,7 +524,7 @@ export default function Preferences({ }: PreferencesProps) {
             </ul>
 
             {benefits.tip && (
-              <div className="mt-4 p-3 bg-background rounded-lg border border-border">
+              <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
                 <p className="text-sm">
                   <strong>Pro Tip:</strong> {benefits.tip}
                 </p>
@@ -533,7 +533,7 @@ export default function Preferences({ }: PreferencesProps) {
           </div>
 
           {/* East Africa Specific Settings */}
-          <div className="border border-border rounded-lg p-4">
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Building2 className="h-4 w-4 text-primary" />
               East Africa Specific Settings
@@ -651,7 +651,7 @@ export default function Preferences({ }: PreferencesProps) {
         {/* Business Type Modal */}
         {showBusinessTypeModal && (
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-card border border-border rounded-lg w-full max-w-2xl">
+            <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-2xl">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-6">
                   <div>

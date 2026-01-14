@@ -83,7 +83,7 @@ export default function ServiceForm({
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-2 border border-border rounded-md"
+            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             required
           />
         </div>
@@ -98,7 +98,7 @@ export default function ServiceForm({
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className="w-full p-2 border border-border rounded-md"
+            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
             required
           />
         </div>
@@ -116,7 +116,7 @@ export default function ServiceForm({
               onChange={handleChange}
               min="0"
               step="0.01"
-              className="w-full p-2 border border-border rounded-md"
+              className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
               required
             />
           </div>
@@ -130,7 +130,7 @@ export default function ServiceForm({
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full p-2 border border-border rounded-md"
+              className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
               required
             >
               <option value="">Select a category</option>

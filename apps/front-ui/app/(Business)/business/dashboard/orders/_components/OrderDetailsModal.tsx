@@ -87,7 +87,7 @@ export default function OrderDetailsModal() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="border border-border rounded-lg p-4">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Package className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Customer</h3>
@@ -102,7 +102,7 @@ export default function OrderDetailsModal() {
               )}
             </div>
 
-            <div className="border border-border rounded-lg p-4">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Truck className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Shipping</h3>
@@ -116,7 +116,7 @@ export default function OrderDetailsModal() {
               )}
             </div>
 
-            <div className="border border-border rounded-lg p-4">
+            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <CreditCard className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Payment</h3>
@@ -131,7 +131,7 @@ export default function OrderDetailsModal() {
             <h3 className="font-semibold mb-3">Order Items</h3>
             <div className="space-y-3">
               {orderData.products.map((item: any) => (
-                <div key={item.id} className="flex items-center gap-3 p-3 border border-border rounded-lg">
+                <div key={item.id} className="flex items-center gap-3 p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
                   <img
                     src={item.product.medias && item.product.medias.length > 0 ? item.product.medias[0].url : 'image.png'}
                     alt={item.product.title}
