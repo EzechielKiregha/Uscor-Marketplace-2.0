@@ -442,12 +442,12 @@ export default function CheckoutPage() {
         <div className="mb-8">
           <Link
             href="/marketplace"
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4 dark:text-gray-400 dark:hover:text-gray-600"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Products
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">Checkout</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

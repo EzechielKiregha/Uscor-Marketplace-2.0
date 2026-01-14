@@ -168,7 +168,7 @@ function HeaderComponent() {
     { href: '/hardware', label: 'Hardware', target: '' },
     { href: '#', label: 'Join as Business', isPopover: true, popoverItems: businessTypes },
     { href: '/marketplace', label: 'Marketplace', target: '' },
-    { href: '/freelance-gigs', label: 'Freelance', target: '', rel: '' },
+    // { href: '/freelance-gigs', label: 'Freelance', target: '', rel: '' },
     { href: '/faq', label: 'FAQ', target: '' },
   ];
 
@@ -212,7 +212,9 @@ function HeaderComponent() {
                             </PopoverContent>
                           </Popover>
                         ) : (
-                          <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="">
+                          <NavigationMenuLink href={link.href} target={link.target}
+                            // rel={link.rel}
+                            className="">
                             <Button variant="link" className='flex cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors'>
                               {link.label}
                               {link.target === '_blank' && <ArrowUpRight size={16} className="opacity-70" />}
@@ -280,7 +282,9 @@ function HeaderComponent() {
                       </PopoverContent>
                     </Popover>
                   ) : (
-                    <NavigationMenuLink href={link.href} target={link.target} rel={link.rel} className="">
+                    <NavigationMenuLink href={link.href} target={link.target}
+                      // rel={link.rel}
+                      className="">
                       <Button variant="link" className='flex cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors'>
                         {link.label}
                         {link.target === '_blank' && <ArrowUpRight size={16} className="opacity-70" />}
