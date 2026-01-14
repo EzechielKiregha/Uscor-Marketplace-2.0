@@ -148,7 +148,7 @@ export default function BusinessDashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -161,7 +161,7 @@ export default function BusinessDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
@@ -174,7 +174,7 @@ export default function BusinessDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Products</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
@@ -187,7 +187,7 @@ export default function BusinessDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Messages</CardTitle>
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
@@ -253,7 +253,7 @@ export default function BusinessDashboardPage() {
         </div>
       ) : (
         <>
-          {/* <Card>
+          {/* <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
             <CardHeader>
               <CardTitle>Sales Overview</CardTitle>
             </CardHeader>

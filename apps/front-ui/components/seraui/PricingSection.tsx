@@ -130,7 +130,7 @@ const PricingSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative bg-white  overflow-hidden">
+    <div className="min-h-screen w-full relative bg-card overflow-hidden">
       {/* Background Gradients */}
       <div
         className="absolute inset-0 z-0 opacity-60"
@@ -160,7 +160,7 @@ const PricingSection = () => {
           {/* Pricing Toggle */}
           <div className="mt-8 sm:mt-10 flex justify-center px-4">
             <div
-              className="relative flex items-center p-1 rounded-full border border-gray-300 dark:border-gray-700 shadow-lg"
+              className="relative flex items-center p-1 rounded-full border border-orange-400/60 dark:border-orange-500/70 cursor-pointer shadow-lg"
               style={{
                 background: 'rgba(255, 255, 255, 0.9)',
                 backdropFilter: 'blur(10px)',
@@ -224,8 +224,8 @@ const PricingSection = () => {
               <motion.div
                 key={tier.name}
                 className={`relative flex flex-col p-6 sm:p-8 rounded-xl border transition-all duration-300 ${tier.isPopular
-                  ? 'border-orange-500 bg-white/95 /80 shadow-lg'
-                  : 'border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/70'
+                  ? 'border-orange-500 bg-card/95 /80 shadow-lg'
+                  : 'border-gray-200 dark:border-gray-700 bg-card/90 dark:bg-gray-900/70'
                   }`}
                 style={{
                   backdropFilter: 'blur(10px)',

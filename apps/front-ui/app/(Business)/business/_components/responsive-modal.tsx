@@ -1,4 +1,3 @@
-// components/responsive-modal.tsx
 "use client";
 
 import { useMedia } from "react-use";

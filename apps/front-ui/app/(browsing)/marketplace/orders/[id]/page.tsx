@@ -41,7 +41,7 @@ export default function OrderDetailsPage() {
             Back to Products
           </Link>
         </div>
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle>Order not found</CardTitle>
           </CardHeader>
@@ -87,7 +87,7 @@ export default function OrderDetailsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left column */}
           <div className="lg:col-span-2 space-y-6">
-            <Card>
+            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <Package className="h-5 w-5" />
@@ -110,7 +110,7 @@ export default function OrderDetailsPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Truck className="h-5 w-5" />
@@ -134,7 +134,7 @@ export default function OrderDetailsPage() {
 
           {/* Right column */}
           <div className="space-y-6">
-            <Card>
+            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CreditCard className="h-5 w-5" />

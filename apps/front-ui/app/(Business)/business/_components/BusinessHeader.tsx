@@ -1,4 +1,3 @@
-// app/business/_components/BusinessHeader.tsx
 'use client';
 
 import { useState } from 'react';
@@ -32,7 +31,7 @@ export default function BusinessHeader({ business, isSidebarOpen, toggleSidebar 
   };
 
   return (
-    <header className="border-b border-border bg-card h-16 flex items-center justify-between px-4 md:px-6">
+    <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-card h-16 flex items-center justify-between px-4 md:px-6">
       {/* Mobile menu button */}
       <Button
         variant="ghost"
@@ -88,34 +87,12 @@ export default function BusinessHeader({ business, isSidebarOpen, toggleSidebar 
         <div className="hidden sm:flex items-center gap-2">
           <UserDropdown />
         </div>
-
-        {/* <div className="hidden lg:flex items-center justify-between flex-raw gap-1.5">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsProductModalOpen({ openCreateProductModal: true, initialProductData: null })}
-          >
-            Add Product
-          </Button>
-
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => setIsServiceModalOpen({ openCreateServiceModal: true, initialServiceData: null })}
-          >
-            Add Service
-          </Button>
-        </div> */}
       </div>
-
-      {/* Modals
-      <CreateProductModal />
-      <CreateServiceModal /> */}
 
       {/* Mobile menu overlay */}
       {showMobileMenu && (
         <div className="fixed inset-0 bg-background/90 z-50 md:hidden">
-          <div className="p-4 border-b border-border flex justify-between items-center">
+          <div className="p-4 border-b border-orange-400/60 dark:border-orange-500/70 flex justify-between items-center">
             <div className="flex items-center gap-3">
               {business.avatar ? (
                 <img

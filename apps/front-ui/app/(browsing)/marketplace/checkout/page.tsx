@@ -453,7 +453,7 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Order Form */}
           <div className="space-y-6">
-            <Card>
+            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
               <CardHeader>
                 <CardTitle>Delivery Information</CardTitle>
               </CardHeader>
@@ -576,7 +576,7 @@ export default function CheckoutPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
               <CardHeader className="flex items-center justify-between">
                 <CardTitle>Payment Method</CardTitle>
                 {paymentMethod === 'TOKEN' && (
@@ -622,7 +622,7 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="space-y-6">
-            <Card>
+            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>

@@ -134,7 +134,7 @@ export default function RedemptionProcess({
   };
 
   if (loading || customersLoading) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[500px] flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -148,7 +148,7 @@ export default function RedemptionProcess({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Column - Redemption Process */}
       <div className="lg:col-span-2">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Gift className="h-5 w-5" />
@@ -390,7 +390,7 @@ export default function RedemptionProcess({
 
       {/* Right Column - Program Benefits */}
       <div className="lg:col-span-1">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg">Loyalty Program Benefits</CardTitle>
           </CardHeader>

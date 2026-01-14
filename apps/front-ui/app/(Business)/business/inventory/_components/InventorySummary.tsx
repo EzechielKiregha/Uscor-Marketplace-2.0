@@ -33,7 +33,7 @@ export default function InventorySummary({ businessId, storeId }: InventorySumma
   } = useInventory(storeId || '', businessId || '');
 
   if (loading) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[80px] flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -44,7 +44,7 @@ export default function InventorySummary({ businessId, storeId }: InventorySumma
   );
 
   if (error) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[80px] flex items-center justify-center">
         <div className="text-center">
           <div className="text-destructive mb-2">Error loading inventory summary</div>
@@ -67,7 +67,7 @@ export default function InventorySummary({ businessId, storeId }: InventorySumma
   const totalQuantity = inventoryItems.reduce((sum: any, item: any) => sum + item.quantity, 0);
 
   return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardHeader>
         <CardTitle className="text-sm font-medium">Inventory Summary</CardTitle>
       </CardHeader>

@@ -92,7 +92,7 @@ export default function ServiceOverview({
 
   if (loading) {
     return (
-      <Card>
+      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -107,7 +107,7 @@ export default function ServiceOverview({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Column - Service Stats */}
       <div className="lg:col-span-1 space-y-6">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <BriefcaseBusiness className="h-5 w-5 text-primary" />
@@ -166,7 +166,7 @@ export default function ServiceOverview({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg">Top Services</CardTitle>
           </CardHeader>
@@ -209,7 +209,7 @@ export default function ServiceOverview({
 
       {/* Right Column - Charts & Details */}
       <div className="lg:col-span-2 space-y-6">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <CardTitle className="text-lg">Service Orders</CardTitle>
             <div className="flex gap-1">
@@ -251,7 +251,7 @@ export default function ServiceOverview({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Clock className="h-5 w-5" />

@@ -143,7 +143,7 @@ export default function PurchaseOrders({
   };
 
   return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>

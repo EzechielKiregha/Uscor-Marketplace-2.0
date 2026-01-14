@@ -109,7 +109,7 @@ export default function StockManagement({
   };
 
   if (loading || productsLoading) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[400px] flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -120,7 +120,7 @@ export default function StockManagement({
   );
 
   return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>

@@ -1,4 +1,3 @@
-// app/business/_components/BusinessSidebar.tsx
 'use client';
 
 import Link from 'next/link';
@@ -45,8 +44,8 @@ export default function BusinessSidebar({ business, isOpen = true }: BusinessSid
   }, [unreadMessages])
 
   const containerClass = isOpen
-    ? 'hidden md:block w-64 bg-card border-r border-border h-screen sticky top-0 transition-all duration-200'
-    : 'hidden md:block w-16 bg-card border-r border-border h-screen sticky top-0 transition-all duration-200';
+    ? 'hidden md:block w-64 bg-card border-r border-orange-400/60 dark:border-orange-500/70 h-screen sticky top-0 transition-all duration-200'
+    : 'hidden md:block w-16 bg-card border-r border-orange-400/60 dark:border-orange-500/70 h-screen sticky top-0 transition-all duration-200';
 
   return (
     <aside className={containerClass}>

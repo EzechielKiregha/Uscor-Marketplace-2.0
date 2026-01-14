@@ -45,7 +45,7 @@ export default function LoyaltyProgramOverview({
   }, [program, refetchCustomers]);
 
   if (loading) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[600px] flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -80,7 +80,7 @@ export default function LoyaltyProgramOverview({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Column - Program Stats */}
       <div className="lg:col-span-1 space-y-6">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Star className="h-5 w-5 text-primary" />
@@ -144,7 +144,7 @@ export default function LoyaltyProgramOverview({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle className="text-lg">Top Customers</CardTitle>
@@ -181,7 +181,7 @@ export default function LoyaltyProgramOverview({
 
       {/* Right Column - Charts & Details */}
       <div className="lg:col-span-2 space-y-6">
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <CardTitle className="text-lg">Points Activity</CardTitle>
             <div className="flex gap-1">
@@ -224,7 +224,7 @@ export default function LoyaltyProgramOverview({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Gift className="h-5 w-5" />

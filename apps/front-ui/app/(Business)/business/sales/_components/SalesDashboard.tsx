@@ -37,7 +37,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   }, [storeId, period, refetch]);
 
   if (loading) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[300px] flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -48,7 +48,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   );
 
   if (error) return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardContent className="h-[300px] flex items-center justify-center">
         <div className="text-center">
           <div className="text-destructive mb-2">Error loading dashboard</div>
@@ -67,7 +67,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   const chartData = dashboardData?.chartData || [];
 
   return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Sales Dashboard</CardTitle>
         <div className="flex gap-1">

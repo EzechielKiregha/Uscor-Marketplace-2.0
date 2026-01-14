@@ -64,7 +64,7 @@ export default function SalesHistoryPanel({
 
   if (loading) {
     return (
-      <Card>
+      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
         <CardHeader>
           <CardTitle className="text-lg">Recent Sales</CardTitle>
         </CardHeader>
@@ -79,7 +79,7 @@ export default function SalesHistoryPanel({
   }
 
   return (
-    <Card>
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Recent Sales</CardTitle>
