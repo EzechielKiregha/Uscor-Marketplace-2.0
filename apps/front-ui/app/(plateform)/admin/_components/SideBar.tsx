@@ -10,12 +10,12 @@ import { usePathname } from 'next/navigation';
 
 
 export const sidebarItems = [
-  { href: '/admin?section=dashboard', icon: Home, label: 'Dashboard' },
-  { href: '/admin?section=users', icon: Users, label: 'Users' },
-  { href: '/admin?section=disputes', icon: AlertTriangle, label: 'Dispute Resolution' },
-  { href: '/admin?section=settings', icon: Settings, label: 'Platform Settings' },
-  { href: '/admin?section=announcements', icon: Megaphone, label: 'Announcements' },
-  { href: '/admin?section=audits', icon: Activity, label: 'Audit Logs' },
+  { section: 'dashboard', icon: Home, label: 'Dashboard' },
+  { section: 'users', icon: Users, label: 'Users' },
+  { section: 'announcements', icon: Megaphone, label: 'Announcements' },
+  { section: 'disputes', icon: AlertTriangle, label: 'Dispute Resolution' },
+  { section: 'audits', icon: Activity, label: 'Audit Logs' },
+  { section: 'settings', icon: Settings, label: 'Platform Settings' },
 ];
 interface SideBarProps {
   isOpen?: boolean;
@@ -48,13 +48,13 @@ export default function SideBar({ isOpen = true, selectedSection }: SideBarProps
 
           <nav className="space-y-1">
             {sidebarItems.map((item) => {
-              const isActive = ['dashboard', 'users', 'disputes', 'settings', 'announcements', 'audit'].includes(activeSection) && activeSection === item.label.toLowerCase();
+              const isActive = ['dashboard', 'users', 'disputes', 'settings', 'announcements', 'audit'].includes(activeSection) && activeSection === item.section.toLowerCase();
               return (
                 <Button
                   variant={isActive ? 'secondary' : 'ghost'}
                   className="w-full justify-start"
-                  key={item.label}
-                  onClick={() => handleActiveSectionChange(item.label.toLowerCase() as any)}
+                  key={item.section}
+                  onClick={() => handleActiveSectionChange(item.section.toLowerCase() as any)}
                 >
                   <item.icon className="h-4 w-4 mr-2" />
                   {isOpen && <span>{item.label}</span>}

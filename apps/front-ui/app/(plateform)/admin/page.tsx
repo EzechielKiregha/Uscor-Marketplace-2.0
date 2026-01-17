@@ -1,7 +1,7 @@
 // app/admin/page.tsx
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useCallback } from 'react';
 import { useQuery, useSubscription } from '@apollo/client';
 import {
   GET_PLATFORM_DASHBOARD,
@@ -30,7 +30,9 @@ import {
   SidebarOpen,
   SidebarClose,
   X,
-  Menu
+  Menu,
+  SunIcon,
+  MoonIcon
 } from 'lucide-react';
 import Loader from '@/components/seraui/Loader';
 import DashboardOverview from './_components/DashboardOverview';
@@ -45,6 +47,7 @@ import SideBar, { sidebarItems } from './_components/SideBar';
 import { useActiveSection } from './_components/useActiveSection';
 import { useSearchParams } from 'next/navigation';
 import UserDropdown from '@/components/seraui/UserDrodown';
+import { useTheme } from 'next-themes';
 
 export default function AdminDashboard() {
   const { user, role, loading: authLoading } = useMe();
@@ -60,6 +63,12 @@ export default function AdminDashboard() {
     error: dashboardError,
     refetch: refetchDashboard
   } = useQuery(GET_PLATFORM_DASHBOARD);
+
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  }, [theme, setTheme]);
 
   // Handle real-time updates
   useSubscription(ON_NEW_USER, {
@@ -131,18 +140,51 @@ export default function AdminDashboard() {
                 >
                   {isSidebarOpen ? <SidebarClose className="h-5 w-5" /> : <SidebarOpen className="h-5 w-5" />}
                 </Button>
+                {!isSidebarOpen ? <>
+                  <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
+                    <BarChart className="h-5 w-5" />
+                  </div>
+                  <h1 className="text-xl font-bold">USCOR Admin</h1>
+                </>
+                  : null
+                }
                 {/* Mobile menu button */}
 
-                {!showMobileMenu && (
-                  <div className="flex items-center  gap-2 mb-6">
-                    <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-                      {isSidebarOpen ? <BarChart className="h-5 w-5" /> : <Menu onClick={() => setShowMobileMenu(!showMobileMenu)} className="h-5 w-5" />}
-                    </div>
-                    <h1 className="text-xl font-bold">USCOR Admin</h1>
+                {showMobileMenu && (
+                  <div className="flex items-center gap-2 mb-6">
+                    {isSidebarOpen ?
+                      <>
+                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
+                          <BarChart className="h-5 w-5" />
+                        </div>
+                        <h1 className="text-xl font-bold">USCOR Admin</h1>
+                      </>
+                      :
+                      <>
+                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
+                          <Menu onClick={() => setShowMobileMenu(!showMobileMenu)} className="h-5 w-5" />
+                        </div>
+                        <h1 className="text-xl font-bold">USCOR Admin</h1>
+                      </>
+                    }
+
                   </div>
                 )}
               </div>
-              <UserDropdown />
+              <div className="flex flex-row items-center gap-4">
+                <Button
+                  onClick={toggleTheme}
+                  variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'dark' ? (
+                    <SunIcon className="h-5 w-5" />
+                  ) : (
+                    <MoonIcon className="h-5 w-5" />
+                  )}
+                </Button>
+                <UserDropdown />
+              </div>
             </div>
 
 
@@ -207,6 +249,17 @@ export default function AdminDashboard() {
                 </div>
                 <h1 className="text-xl font-bold">USCOR Admin</h1>
               </div>
+              <Button
+                onClick={toggleTheme}
+                variant="ghost" size="sm" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? (
+                  <SunIcon className="h-5 w-5" />
+                ) : (
+                  <MoonIcon className="h-5 w-5" />
+                )}
+              </Button>
               <Button variant="ghost" size="icon" onClick={() => setShowMobileMenu(false)}>
                 <X className="h-5 w-5" />
               </Button>

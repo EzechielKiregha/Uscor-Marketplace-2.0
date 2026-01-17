@@ -432,7 +432,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
             <div>
               <h3 className="font-semibold">How Our Recommendations Work</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Our AI-powered recommendation engine analyzes your purchase history,
+                Our AI-powered recommendation engine analyzes your purchase
                 browsing behavior, and preferences to suggest products, services,
                 and businesses you might like. The more you use Uscor, the better
                 our recommendations become.
