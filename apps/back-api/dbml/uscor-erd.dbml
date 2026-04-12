@@ -1,0 +1,1211 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Project "Uscor Marketplace" {
+  database_type: 'PostgreSQL'
+  Note: 'This DBML file was generated from the Prisma schema for the Uscor Marketplace application. It includes all models, fields, and relationships defined in the Prisma schema, and is intended for use with DBML tools to visualize the database structure. Please refer to the original Prisma schema for any additional details or constraints that may not be fully represented in this DBML file.'
+}
+
+Table Business {
+  id String [pk]
+  name String [not null]
+  email String [unique, not null]
+  description String
+  avatar String
+  coverImage String
+  address String
+  phone String
+  password String [not null]
+  isVerified Boolean [not null, default: false]
+  kyc KYC
+  businessType String [default: 'NA']
+  taxId String [default: 'NA']
+  registrationNumber String [default: 'NA']
+  website String [default: 'NA']
+  country String [default: 'NA']
+  socialLinks Json
+  notes String [default: 'NA']
+  preferences Json
+  totalClients Int [default: 0]
+  totalWorkers Int [default: 0]
+  totalSales Int [default: 0]
+  totalRevenueGenerated Float [default: 0]
+  products Product [not null]
+  workers Worker [not null]
+  repostedItems RepostedProduct [not null]
+  reownedItems ReOwnedProduct [not null]
+  recharges AccountRecharge [not null]
+  ads Ad [not null]
+  freelanceServices FreelanceService [not null]
+  referralsMade Referral [not null]
+  referralsReceived Referral [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lastLogin DateTime
+  postOfSales PostOfSale [not null]
+  freelanceOrderBusiness FreelanceOrderBusiness [not null]
+  kycStatus KycStatus [not null, default: 'PENDING']
+  isB2BEnabled Boolean [not null, default: false]
+  totalProductsSold Int [not null, default: 0]
+  hasAgreedToTerms Boolean [not null, default: false]
+  termsAgreedAt DateTime
+  paymentConfig PaymentConfig
+  hardwareConfig HardwareConfig
+  kycDocuments KycDocument [not null]
+  chatParticipants ChatParticipant [not null]
+  tokenTransactions TokenTransaction [not null]
+  stores Store [not null]
+  purchaseOrders PurchaseOrder [not null]
+  loyaltyPrograms LoyaltyProgram [not null]
+  medias Media [not null]
+  promotions Promotion [not null]
+  disputes Dispute [not null]
+}
+
+Table PaymentConfig {
+  id String [pk]
+  business Business [not null]
+  businessId String [unique, not null]
+  mtnCode String
+  airtelCode String
+  orangeCode String
+  mpesaCode String
+  bankAccount String
+  mobileMoneyEnabled Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table HardwareConfig {
+  id String [pk]
+  business Business [not null]
+  businessId String [unique, not null]
+  receiptPrinter String
+  barcodeScanner String
+  cashDrawer String
+  cardReader String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table KycDocument {
+  id String [pk]
+  business Business [not null]
+  businessId String [not null]
+  documentType String [not null]
+  documentUrl String [not null]
+  status KycStatus [not null, default: 'PENDING']
+  rejectionReason String
+  submittedAt DateTime [default: `now()`, not null]
+  verifiedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PricingPlan {
+  id String [pk]
+  name String [not null]
+  description String
+  price Float [not null]
+  features PricingFeature [not null]
+  isCurrentPlan Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PricingFeature {
+  id String [pk]
+  name String [not null]
+  description String
+  plan PricingPlan [not null]
+  planId String [not null]
+}
+
+Table HardwareRecommendation {
+  id String [pk]
+  type String [not null]
+  model String
+  description String
+  priceRange String
+  localSupplier String
+  setupGuideUrl String
+  businessType String
+  country Country
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table BusinessType {
+  id String [pk]
+  name String [not null]
+  description String
+  icon String
+}
+
+Table Client {
+  id String [pk]
+  username String [unique, not null]
+  email String [unique, not null]
+  fullName String
+  avatar String
+  address String
+  phone String
+  password String [not null]
+  isVerified Boolean [not null, default: false]
+  notes String
+  preferences Json
+  kyc KYC
+  orders Order [not null]
+  reviews Review [not null]
+  recharges AccountRecharge [not null]
+  freelanceOrders FreelanceOrder [not null]
+  referralsMade Referral [not null]
+  referralsReceived Referral [not null]
+  addresses Address [not null]
+  paymentMethods ClientPaymentMethod [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lastLogin DateTime
+  postTransactions PostTransaction [not null]
+  chatParticipants ChatParticipant [not null]
+  sales Sale [not null]
+  pointsTransactions PointsTransaction [not null]
+  medias Media [not null]
+}
+
+Table Worker {
+  id String [pk]
+  email String [unique, not null]
+  fullName String
+  role WorkerRole [not null, default: 'STAFF']
+  phone String
+  password String [not null]
+  business Business [not null]
+  businessId String [not null]
+  avatar String
+  kyc KYC
+  isVerified Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lastLogin DateTime
+  workerServiceAssignments WorkerServiceAssignment [not null]
+  chatParticipants ChatParticipant [not null]
+  sales Sale [not null]
+  shifts Shift [not null]
+  medias Media [not null]
+  auditLogs AuditLog [not null]
+}
+
+Table Admin {
+  id String [pk]
+  email String [unique, not null]
+  fullName String
+  password String [not null]
+  role AdminRole [not null, default: 'ADMIN']
+  phone String
+  avatar String
+  isActive Boolean [not null, default: true]
+  lastLogin DateTime
+  permissions Json
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Category {
+  id String [pk]
+  name String [unique, not null]
+  description String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  products Product [not null]
+}
+
+Table Product {
+  id String [pk]
+  title String [not null]
+  description String
+  price Float [not null, default: 0]
+  stock Int [not null, default: 0]
+  quantity Int [not null, default: 0]
+  minQuantity Int [not null, default: 10]
+  isPhysical Boolean [not null, default: false]
+  business Business [not null]
+  businessId String [not null]
+  storeId String
+  store Store
+  categoryId String [not null]
+  category Category [not null]
+  variants Json
+  featured Boolean [not null, default: false]
+  approvedForSale Boolean [not null, default: false]
+  medias Media [not null]
+  reviews Review [not null]
+  orders OrderProduct [not null]
+  chats Chat [not null]
+  reposts RepostedProduct [not null]
+  ads Ad [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  reOwnedProducts ReOwnedProduct [not null]
+  newReOwnedProducts ReOwnedProduct [not null]
+  saleProducts SaleProduct [not null]
+  transferOrderProducts TransferOrderProduct [not null]
+  purchaseOrderProducts PurchaseOrderProduct [not null]
+  inventoryAdjustments InventoryAdjustment [not null]
+}
+
+Table Media {
+  id String [pk]
+  url String [not null]
+  type MediaType [not null]
+  size BigInt
+  pathname String
+  product Product
+  productId String
+  service FreelanceService
+  serviceId String
+  business Business
+  businessId String
+  client Client
+  clientId String
+  store Store
+  storeId String
+  worker Worker
+  workerId String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Order {
+  id String [pk]
+  client Client [not null]
+  clientId String [not null]
+  products OrderProduct [not null]
+  deliveryFee Float [not null, default: 0]
+  deliveryAddress String
+  qrCode String
+  payment PaymentTransaction
+  totalAmount Float [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table OrderProduct {
+  id String [pk]
+  order Order [not null]
+  orderId String [not null]
+  product Product [not null]
+  productId String [not null]
+  quantity Int [not null, default: 1]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Review {
+  id String [pk]
+  client Client [not null]
+  clientId String [not null]
+  product Product [not null]
+  productId String [not null]
+  rating Int [not null, default: 0]
+  comment String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Chat {
+  id String [pk]
+  status ChatStatus [not null, default: 'PENDING']
+  isSecure Boolean [not null, default: false]
+  negotiationType NegotiationType
+  product Product
+  productId String
+  service FreelanceService
+  serviceId String
+  participants ChatParticipant [not null]
+  messages ChatMessage [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table ChatParticipant {
+  id String [pk]
+  chat Chat [not null]
+  chatId String [not null]
+  client Client
+  clientId String
+  business Business
+  businessId String
+  worker Worker
+  workerId String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table ChatMessage {
+  id String [pk]
+  chat Chat [not null]
+  chatId String [not null]
+  message String [not null]
+  isRead Boolean [not null, default: false]
+  senderId String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table RepostedProduct {
+  id String [pk]
+  business Business [not null]
+  businessId String [unique, not null]
+  product Product [not null]
+  productId String [unique, not null]
+  markupPercentage Float [not null, default: 0.02]
+  createdAt DateTime [default: `now()`, not null]
+  tokenTransactions TokenTransaction [not null]
+}
+
+Table ReOwnedProduct {
+  id String [pk]
+  newProduct Product [not null]
+  newProductId String [not null, default: 'N/A']
+  originalProduct Product [not null]
+  originalProductId String [not null, default: 'N/A']
+  oldOwnerId String [not null, default: 'N/A']
+  newOwnerId String [not null, default: 'N/A']
+  quantity Int [not null, default: 0]
+  oldPrice Float [not null, default: 0]
+  newPrice Float [not null, default: 0]
+  markupPercentage Float [not null, default: 0]
+  agreedViaChatId String [not null]
+  agreementDate DateTime [not null]
+  isOriginalApproved Boolean [not null, default: false]
+  isNewOwnerApproved Boolean [not null, default: false]
+  shipping Shipping
+  shippingId String [unique]
+  createdAt DateTime [default: `now()`, not null]
+  tokenTransactions TokenTransaction [not null]
+  businessProductOwners Business [not null]
+}
+
+Table Shipping {
+  id String [pk]
+  reOwnedProduct ReOwnedProduct
+  reOwnedProductId String
+  status String [not null, default: 'PENDING']
+  trackingNumber String
+  carrier String
+  shippedAt DateTime
+  deliveredAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table TokenTransaction {
+  id String [pk]
+  business Business [not null]
+  businessId String [not null]
+  reOwnedProduct ReOwnedProduct
+  reOwnedProductId String
+  repostedProduct RepostedProduct
+  repostedProductId String
+  amount Float [not null, default: 0]
+  type TokenTransactionType [not null]
+  isRedeemed Boolean [not null, default: false]
+  isReleased Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  AccountRecharge AccountRecharge [not null]
+}
+
+Table KYC {
+  id String [pk]
+  status KycStatus [not null, default: 'PENDING']
+  documentUrl String [not null]
+  notes String
+  rejectionReason String
+  submittedAt DateTime [default: `now()`, not null]
+  verifiedAt DateTime
+  business Business
+  businessId String [unique]
+  client Client
+  clientId String [unique]
+  worker Worker
+  workerId String [unique]
+}
+
+Table AccountRecharge {
+  id String [pk]
+  amount Float [not null, default: 0]
+  method RechargeMethod [not null]
+  origin Country [not null]
+  business Business
+  businessId String
+  client Client
+  clientId String
+  tokenTransaction TokenTransaction
+  tokenTransactionId String
+  status PaymentStatus [not null, default: 'PENDING']
+  transactionDate DateTime [default: `now()`, not null]
+  qrCode String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Token {
+  id String [pk]
+  name String [default: 'uT']
+  value Int [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table PaymentTransaction {
+  id String [pk]
+  order Order
+  orderId String [unique]
+  status PaymentStatus [not null, default: 'PENDING']
+  method PaymentMethod [not null, default: 'TOKEN']
+  amount Float [not null, default: 0]
+  transactionDate DateTime [default: `now()`, not null]
+  qrCode String
+  createdAt DateTime [default: `now()`, not null]
+  freelanceOrder FreelanceOrder
+  freelanceOrderId String [unique]
+  postTransactions PostTransaction [not null]
+}
+
+Table Ad {
+  id String [pk]
+  business Business [not null]
+  businessId String [not null]
+  product Product [not null]
+  productId String [not null]
+  price Float [not null, default: 0]
+  periodDays Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  endedAt DateTime
+}
+
+Table FreelanceService {
+  id String [pk]
+  title String [not null]
+  description String
+  isHourly Boolean [not null, default: true]
+  rate Float [not null, default: 0]
+  category FreelanceServiceCategory [default: 'OTHER']
+  business Business [not null]
+  businessId String [not null]
+  orders FreelanceOrder [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  workerServiceAssignments WorkerServiceAssignment [not null]
+  chats Chat [not null]
+  medias Media [not null]
+}
+
+Table WorkerServiceAssignment {
+  id String [pk]
+  worker Worker [not null]
+  workerId String [not null]
+  freelanceService FreelanceService [not null]
+  freelanceServiceId String [not null]
+  role String
+  assignedAt DateTime [default: `now()`, not null]
+}
+
+Table FreelanceOrder {
+  id String [pk]
+  client Client [not null]
+  clientId String [not null]
+  service FreelanceService [not null]
+  serviceId String [not null]
+  status FreelanceStatus [not null, default: 'PENDING']
+  quantity Int [not null, default: 1]
+  totalAmount Float [not null, default: 0]
+  escrowAmount Float [not null, default: 0]
+  commissionPercent Float [not null, default: 0]
+  escrowStatus EscrowStatus [default: 'HELD']
+  escrowReleasedAt DateTime
+  payment PaymentTransaction
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  freelanceOrderBusiness FreelanceOrderBusiness [not null]
+}
+
+Table FreelanceOrderBusiness {
+  id String [pk]
+  freelanceOrder FreelanceOrder [not null]
+  freelanceOrderId String [not null]
+  business Business [not null]
+  businessId String [not null]
+  role String
+  assignedAt DateTime [default: `now()`, not null]
+}
+
+Table Referral {
+  id String [pk]
+  affiliateBusiness Business
+  affiliateBusinessId String
+  affiliateClient Client
+  affiliateClientId String
+  referredBusiness Business
+  referredBusinessId String
+  referredClient Client
+  referredClientId String
+  verifiedPurchase Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table PostOfSale {
+  id String [pk]
+  title String [not null]
+  description String
+  price Float [not null, default: 0]
+  status PostStatus [not null, default: 'DRAFT']
+  business Business [not null]
+  businessId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  transactions PostTransaction [not null]
+}
+
+Table PostTransaction {
+  id String [pk]
+  post PostOfSale [not null]
+  postId String [not null]
+  client Client [not null]
+  clientId String [not null]
+  paymentTransaction PaymentTransaction
+  paymentTransactionId String
+  status PostTransactionStatus [not null, default: 'PENDING']
+  amount Float [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Store {
+  id String [pk]
+  businessId String [not null]
+  business Business [not null]
+  name String [not null]
+  address String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  sales Sale [not null]
+  purchaseOrders PurchaseOrder [not null]
+  transferOrdersFrom TransferOrder [not null]
+  transferOrdersTo TransferOrder [not null]
+  inventoryAdjustments InventoryAdjustment [not null]
+  shifts Shift [not null]
+  products Product [not null]
+  medias Media [not null]
+}
+
+Table Sale {
+  id String [pk]
+  storeId String [not null]
+  store Store [not null]
+  workerId String [not null]
+  worker Worker [not null]
+  clientId String
+  client Client
+  totalAmount Float [not null, default: 0]
+  discount Float [not null, default: 0]
+  paymentMethod PaymentMethod [not null]
+  status SaleStatus [not null, default: 'OPEN']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  saleProducts SaleProduct [not null]
+  returns Return [not null]
+}
+
+Table SaleProduct {
+  id String [pk]
+  saleId String [not null]
+  sale Sale [not null]
+  productId String [not null]
+  product Product [not null]
+  quantity Int [not null, default: 1]
+  price Float [not null, default: 0]
+  modifiers Json
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table PurchaseOrder {
+  id String [pk]
+  businessId String [not null]
+  business Business [not null]
+  storeId String [not null]
+  store Store [not null]
+  supplierId String
+  status PurchaseOrderStatus [not null, default: 'PENDING']
+  expectedDelivery DateTime
+  products PurchaseOrderProduct [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table TransferOrder {
+  id String [pk]
+  fromStoreId String [not null]
+  fromStore Store [not null]
+  toStoreId String [not null]
+  toStore Store [not null]
+  status TransferOrderStatus [not null, default: 'PENDING']
+  products TransferOrderProduct [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PurchaseOrderProduct {
+  id String [pk]
+  purchaseOrderId String [not null]
+  purchaseOrder PurchaseOrder [not null]
+  productId String [not null]
+  product Product [not null]
+  quantity Int [not null, default: 1]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table TransferOrderProduct {
+  id String [pk]
+  transferOrderId String [not null]
+  transferOrder TransferOrder [not null]
+  productId String [not null]
+  product Product [not null]
+  quantity Int [not null, default: 1]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table InventoryAdjustment {
+  id String [pk]
+  productId String [not null]
+  product Product [not null]
+  storeId String [not null]
+  store Store [not null]
+  adjustmentType AdjustmentType [not null]
+  quantity Int [not null]
+  reason String
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Shift {
+  id String [pk]
+  workerId String [not null]
+  worker Worker [not null]
+  storeId String [not null]
+  store Store [not null]
+  startTime DateTime [not null]
+  endTime DateTime
+  sales Float [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table LoyaltyProgram {
+  id String [pk]
+  businessId String [not null]
+  business Business [not null]
+  name String [not null]
+  description String
+  pointsPerPurchase Float [not null, default: 0]
+  minimumPointsToRedeem Float [default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  pointsTransactions PointsTransaction [not null]
+  tiers LoyaltyTier [not null]
+}
+
+Table LoyaltyTier {
+  id String [pk]
+  loyaltyProgramId String [not null]
+  loyaltyProgram LoyaltyProgram [not null]
+  name String [not null]
+  minPoints Float [not null, default: 0]
+  benefits LoyaltyTierBenefit [not null]
+}
+
+Table LoyaltyTierBenefit {
+  id String [pk]
+  tierId String [not null]
+  tier LoyaltyTier [not null]
+  description String [not null]
+}
+
+Table Promotion {
+  id String [pk]
+  title String [not null]
+  description String
+  type String
+  value Float
+  code String
+  startDate DateTime
+  endDate DateTime
+  applicableBusinesses Business [not null]
+  applicableCategories String[] [not null]
+  minimumPurchase Float
+  isRedeemed Boolean [default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Address {
+  id String [pk]
+  clientId String [not null]
+  client Client [not null]
+  street String [not null]
+  city String [not null]
+  country String
+  postalCode String
+  isDefault Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table ClientPaymentMethod {
+  id String [pk]
+  clientId String [not null]
+  client Client [not null]
+  type PaymentMethod [not null]
+  provider RechargeMethod
+  accountNumber String
+  expiryMonth Int
+  expiryYear Int
+  cardToken String
+  last4 String
+  isDefault Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PointsTransaction {
+  id String [pk]
+  clientId String [not null]
+  client Client [not null]
+  loyaltyProgramId String [not null]
+  loyaltyProgram LoyaltyProgram [not null]
+  points Float [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Return {
+  id String [pk]
+  saleId String [not null]
+  sale Sale [not null]
+  reason String
+  status SaleStatus [not null, default: 'REFUNDED']
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table StripeCustomer {
+  id String [pk]
+  userId String [unique, not null]
+  striperCustomerId String [unique, not null]
+  createAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table PlatformSettings {
+  id String [pk]
+  platformFeePercentage Float [not null, default: 0]
+  minTransactionAmount Float [default: 0]
+  maxTransactionAmount Float [default: 0]
+  currency String [not null, default: 'USD']
+  tokenValue Float [default: 0]
+  tokenSymbol String
+  kycRequired Boolean [not null, default: true]
+  b2bEnabled Boolean [not null, default: false]
+  marketplaceEnabled Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Announcement {
+  id String [pk]
+  title String [not null]
+  content String [not null]
+  type String
+  priority AnnouncementPriority [default: 'LOW']
+  status AnnouncementStatus [not null, default: 'DRAFT']
+  scheduledFor String
+  sentAt DateTime [default: `now()`]
+  targetUsers String
+  readCount Int [not null, default: 0]
+  totalRecipients Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table AuditLog {
+  id String [pk]
+  action String [not null]
+  entityType String [not null]
+  entityId String
+  details Json
+  adminId String
+  admin Worker
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table Dispute {
+  id String [pk]
+  title String [not null]
+  description String
+  status DisputeStatus [not null, default: 'OPEN']
+  type String
+  reporterId String
+  reporterType String
+  businessId String
+  business Business
+  orderId String
+  resolutionNotes String
+  refundAmount Float
+  compensation Float
+  createdAt DateTime [default: `now()`, not null]
+  resolvedAt DateTime
+  messages DisputeMessage [not null]
+}
+
+Table DisputeMessage {
+  id String [pk]
+  disputeId String [not null]
+  dispute Dispute [not null]
+  senderId String
+  senderType String
+  content String [not null]
+  createdAt DateTime [default: `now()`, not null]
+}
+
+Table BusinessToReOwnedProduct {
+  reowneditemsId String [ref: > ReOwnedProduct.id]
+  businessproductownersId String [ref: > Business.id]
+}
+
+Table BusinessPromotions {
+  promotionsId String [ref: > Promotion.id]
+  applicablebusinessesId String [ref: > Business.id]
+}
+
+Enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+Enum RechargeMethod {
+  MTN_MONEY
+  AIRTEL_MONEY
+  ORANGE_MONEY
+  MPESA
+  TOKEN
+}
+
+Enum Country {
+  DRC
+  KENYA
+  UGANDA
+  RWANDA
+  BURUNDI
+  TANZANIA
+}
+
+Enum KycStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+Enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+Enum PaymentMethod {
+  TOKEN
+  MOBILE_MONEY
+  CASH
+  CARD
+}
+
+Enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+Enum FreelanceStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+Enum EscrowStatus {
+  HELD
+  RELEASED
+  DISPUTED
+}
+
+Enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SOLD
+  ARCHIVED
+}
+
+Enum PostTransactionStatus {
+  PENDING
+  COMPLETED
+  REFUNDED
+}
+
+Enum NegotiationType {
+  REOWNERSHIP
+  FREELANCEORDER
+  PURCHASE
+  GENERAL
+}
+
+Enum TokenTransactionType {
+  RELEASE
+  PROFIT_SHARE
+  REPOST_COMMISSION
+}
+
+Enum ChatStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+Enum SaleStatus {
+  OPEN
+  CLOSED
+  REFUNDED
+}
+
+Enum PurchaseOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+Enum TransferOrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+Enum AdjustmentType {
+  ADD
+  REMOVE
+}
+
+Enum WorkerRole {
+  ADMIN
+  STAFF
+  SUPERVISOR
+  PRIMARY
+  ASSISTANT
+  MANAGER
+  FREELANCER
+}
+
+Enum AdminRole {
+  SUPERADMIN
+  ADMIN
+  SUPPORT
+}
+
+Enum AnnouncementStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+  CANCELLED
+}
+
+Enum AnnouncementPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+Enum DisputeStatus {
+  OPEN
+  RESOLVED
+  REJECTED
+}
+
+Ref: PaymentConfig.businessId - Business.id
+
+Ref: HardwareConfig.businessId - Business.id
+
+Ref: KycDocument.businessId > Business.id
+
+Ref: PricingFeature.planId > PricingPlan.id
+
+Ref: Worker.businessId > Business.id
+
+Ref: Product.businessId > Business.id
+
+Ref: Product.storeId > Store.id
+
+Ref: Product.categoryId > Category.id
+
+Ref: Media.productId > Product.id
+
+Ref: Media.serviceId > FreelanceService.id
+
+Ref: Media.businessId > Business.id
+
+Ref: Media.clientId > Client.id
+
+Ref: Media.storeId > Store.id
+
+Ref: Media.workerId > Worker.id
+
+Ref: Order.clientId > Client.id
+
+Ref: OrderProduct.orderId > Order.id
+
+Ref: OrderProduct.productId > Product.id
+
+Ref: Review.clientId > Client.id
+
+Ref: Review.productId > Product.id
+
+Ref: Chat.productId > Product.id
+
+Ref: Chat.serviceId > FreelanceService.id
+
+Ref: ChatParticipant.chatId > Chat.id
+
+Ref: ChatParticipant.clientId > Client.id
+
+Ref: ChatParticipant.businessId > Business.id
+
+Ref: ChatParticipant.workerId > Worker.id
+
+Ref: ChatMessage.chatId > Chat.id
+
+Ref: RepostedProduct.businessId > Business.id
+
+Ref: RepostedProduct.productId > Product.id
+
+Ref: ReOwnedProduct.newProductId > Product.id
+
+Ref: ReOwnedProduct.originalProductId > Product.id
+
+Ref: ReOwnedProduct.shippingId - Shipping.id
+
+Ref: TokenTransaction.businessId > Business.id
+
+Ref: TokenTransaction.reOwnedProductId > ReOwnedProduct.id
+
+Ref: TokenTransaction.repostedProductId > RepostedProduct.id
+
+Ref: KYC.businessId - Business.id
+
+Ref: KYC.clientId - Client.id
+
+Ref: KYC.workerId - Worker.id
+
+Ref: AccountRecharge.businessId > Business.id
+
+Ref: AccountRecharge.clientId > Client.id
+
+Ref: AccountRecharge.tokenTransactionId > TokenTransaction.id
+
+Ref: PaymentTransaction.orderId - Order.id
+
+Ref: PaymentTransaction.freelanceOrderId - FreelanceOrder.id
+
+Ref: Ad.businessId > Business.id
+
+Ref: Ad.productId > Product.id
+
+Ref: FreelanceService.businessId > Business.id
+
+Ref: WorkerServiceAssignment.workerId > Worker.id
+
+Ref: WorkerServiceAssignment.freelanceServiceId > FreelanceService.id
+
+Ref: FreelanceOrder.clientId > Client.id
+
+Ref: FreelanceOrder.serviceId > FreelanceService.id
+
+Ref: FreelanceOrderBusiness.freelanceOrderId > FreelanceOrder.id
+
+Ref: FreelanceOrderBusiness.businessId > Business.id
+
+Ref: Referral.affiliateBusinessId > Business.id
+
+Ref: Referral.affiliateClientId > Client.id
+
+Ref: Referral.referredBusinessId > Business.id
+
+Ref: Referral.referredClientId > Client.id
+
+Ref: PostOfSale.businessId > Business.id
+
+Ref: PostTransaction.postId > PostOfSale.id
+
+Ref: PostTransaction.clientId > Client.id
+
+Ref: PostTransaction.paymentTransactionId > PaymentTransaction.id
+
+Ref: Store.businessId > Business.id
+
+Ref: Sale.storeId > Store.id
+
+Ref: Sale.workerId > Worker.id
+
+Ref: Sale.clientId > Client.id
+
+Ref: SaleProduct.saleId > Sale.id
+
+Ref: SaleProduct.productId > Product.id
+
+Ref: PurchaseOrder.businessId > Business.id
+
+Ref: PurchaseOrder.storeId > Store.id
+
+Ref: TransferOrder.fromStoreId > Store.id
+
+Ref: TransferOrder.toStoreId > Store.id
+
+Ref: PurchaseOrderProduct.purchaseOrderId > PurchaseOrder.id
+
+Ref: PurchaseOrderProduct.productId > Product.id
+
+Ref: TransferOrderProduct.transferOrderId > TransferOrder.id
+
+Ref: TransferOrderProduct.productId > Product.id
+
+Ref: InventoryAdjustment.productId > Product.id
+
+Ref: InventoryAdjustment.storeId > Store.id
+
+Ref: Shift.workerId > Worker.id
+
+Ref: Shift.storeId > Store.id
+
+Ref: LoyaltyProgram.businessId > Business.id
+
+Ref: LoyaltyTier.loyaltyProgramId > LoyaltyProgram.id
+
+Ref: LoyaltyTierBenefit.tierId > LoyaltyTier.id
+
+Ref: Address.clientId > Client.id
+
+Ref: ClientPaymentMethod.clientId > Client.id
+
+Ref: PointsTransaction.clientId > Client.id
+
+Ref: PointsTransaction.loyaltyProgramId > LoyaltyProgram.id
+
+Ref: Return.saleId > Sale.id
+
+Ref: AuditLog.adminId > Worker.id
+
+Ref: Dispute.businessId > Business.id
+
+Ref: DisputeMessage.disputeId > Dispute.id

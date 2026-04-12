@@ -4,6 +4,15 @@ generator client {
   
 }
 
+generator dbml {
+  provider   = "prisma-dbml-generator"
+  output     = "../dbml"
+  outputName = "uscor-erd.dbml"
+  projectName = "Uscor Marketplace"
+  projectDatabaseType = "PostgreSQL"
+  projectNote = "This DBML file was generated from the Prisma schema for the Uscor Marketplace application. It includes all models, fields, and relationships defined in the Prisma schema, and is intended for use with DBML tools to visualize the database structure. Please refer to the original Prisma schema for any additional details or constraints that may not be fully represented in this DBML file."
+}
+
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
