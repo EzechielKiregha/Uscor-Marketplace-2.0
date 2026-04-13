@@ -201,7 +201,7 @@ export default function LoginPage() {
       }
       else if (role && role === 'worker') {
         console.log('Redirecting to worker dashboard');
-        router.push('/');
+        router.push('/worker');
       } else if (role && role === 'admin') {
         console.log('Redirecting to admin dashboard');
         router.push('/admin');

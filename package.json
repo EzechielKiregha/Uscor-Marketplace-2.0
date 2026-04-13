@@ -26,6 +26,7 @@
   "description": "",
   "devDependencies": {
     "date-fns": "^4.1.0",
+    "prettier": "3.8.2",
     "turbo": "^2.5.0"
   },
   "dependencies": {

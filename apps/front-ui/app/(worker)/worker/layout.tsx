@@ -1,17 +1,16 @@
-import WorkerSideLayout from './WorkerLayout';
 
-export default function WorkerLayout({
+import WorkerLayout from './WorkerLayout';
+
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <WorkerSideLayout>
-        <main className="flex-1 overflow-y-auto bg-muted/5">
+    <WorkerLayout>
+      <main className="flex-1 overflow-y-auto bg-muted/5">
           {children}
         </main>
-      </WorkerSideLayout>
-    </>
+    </WorkerLayout>
   );
 }

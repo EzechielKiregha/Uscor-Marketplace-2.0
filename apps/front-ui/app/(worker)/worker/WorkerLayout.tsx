@@ -1,7 +1,6 @@
-// app/worker/layout.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_WORKER_PROFILE } from '@/graphql/worker.gql';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,6 @@ import {
   BarChart,
   Settings,
   Clock,
-  X,
   Menu,
   LogOut
 } from 'lucide-react';
@@ -22,48 +20,45 @@ import { useMe } from '@/lib/useMe';
 import { StoreEntity } from '@/lib/types';
 import { useIndexedDB } from '@/hooks/use-indexed-db';
 import { GET_STORES } from '@/graphql/store.gql';
-import PosPage from './_components/PosPage';
-import InventoryPage from './_components/InventoryPage';
-import ShiftsPage from './_components/ShiftsPage';
-import ChatsPage from './_components/ChatsPage';
-import ReportsPage from './_components/ReportsPage';
-import ProfilePage from './_components/ProfilePage';
-
+import { useRouter } from 'next/navigation';
 
 interface WorkerLayoutProps {
   children: React.ReactNode;
 }
 
+type WorkerSection = 'pos' | 'inventory' | 'shifts' | 'chats' | 'reports' | 'profile';
+
+interface WorkerLayoutContextValue {
+  activeSection: WorkerSection;
+  setActiveSection: React.Dispatch<React.SetStateAction<WorkerSection>>;
+  selectedStoreId: string | null;
+  setSelectedStoreId: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const WorkerLayoutContext = createContext<WorkerLayoutContextValue | null>(null);
+
+export function useWorkerLayout() {
+  const context = useContext(WorkerLayoutContext);
+  if (!context) {
+    throw new Error('useWorkerLayout must be used within WorkerLayoutContext');
+  }
+  return context;
+}
+
 export default function WorkerLayout({ children }: WorkerLayoutProps) {
-  const { user, role, loading: authLoading } = useMe();
+  const { user, loading: authLoading } = useMe();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<'pos' | 'inventory' | 'shifts' | 'chats' | 'reports' | 'profile'>('pos');
-    const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<WorkerSection>('pos');
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
 
-  
-  const { data: storesData, loading: storesLoading, error: storesError, refetch: refetchStores } = useQuery(GET_STORES);
+  const { data: storesData, loading: storesLoading, error: storesError } = useQuery(GET_STORES);
+  useEffect(() => {
+    if (!selectedStoreId && storesData?.stores?.length > 0) {
+      setSelectedStoreId(storesData.stores[0].id);
+    }
+  }, [storesData, selectedStoreId]);
 
-  const { 
-    data: workerData,
-    loading: workerLoading,
-    error: workerError 
-  } = useQuery(GET_WORKER_PROFILE, {
-    variables: { id: user?.id },
-    skip: !user?.id
-  });
-
-   // Auto-select first store if none selected
-    useEffect(() => {
-      if (storesData?.stores && storesData.stores.length > 0 && !selectedStoreId) {
-        setSelectedStoreId(storesData.stores[0].id);
-      }
-    }, [storesData, selectedStoreId]);
-
-  const worker = workerData?.worker;
-  const { isOnline, syncing } = useIndexedDB();
-
-  if (authLoading || workerLoading || storesLoading) return <Loader loading={true} />;
-  if (workerError || storesError) return <div>Error loading worker profile: {workerError?.message || storesError?.message}</div>;
   if (!user) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -80,8 +75,29 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
     </div>
   );
 
+  const { 
+    data: workerData,
+    loading: workerLoading,
+    error: workerError 
+  } = useQuery(GET_WORKER_PROFILE, {
+    variables: { id: user?.id },
+    skip: !user?.id
+  });
+
+  const worker = workerData?.worker;
+  const { isOnline, syncing } = useIndexedDB();
+
+  if (authLoading || workerLoading || storesLoading) return <Loader loading={true} />;
+  if (workerError || storesError) return <div>Error loading worker profile: {workerError?.message || storesError?.message}</div>;
+
   return (
-    <div className="min-h-screen bg-background">
+    <WorkerLayoutContext.Provider value={{
+      activeSection,
+      setActiveSection,
+      selectedStoreId,
+      setSelectedStoreId,
+    }}>
+      <div className="min-h-screen bg-background flex">
       {/* Mobile Menu Button */}
       <Button
         variant="ghost"
@@ -93,9 +109,14 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
       </Button>
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border transform ${
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0`}>
+      <div className={`
+        fixed md:relative
+        inset-y-0 left-0 z-40
+        w-64 bg-card border-r border-border
+        transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        transition-transform duration-300 ease-in-out
+        md:translate-x-0
+      `}>
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
           <div className="p-4 border-b border-border">
@@ -266,27 +287,23 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
       </Button>
     </div>
   </div>
-</div>
+      </div>
 
-{/* Overlay for mobile */}
-{isSidebarOpen && (
-  <div 
-    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
-    onClick={() => setIsSidebarOpen(false)}
-  ></div>
-)}
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
 
       {/* Main Content */}
-      <div className="md:ml-64">
+      <div className="flex-1">
         <div className="container mx-auto px-4 py-8">
-          {activeSection === 'pos' && <PosPage selectedStoreId={selectedStoreId} />}
-          {activeSection === 'inventory' && <InventoryPage selectedStoreId={selectedStoreId} />}
-          {activeSection === 'shifts' && <ShiftsPage selectedStoreId={selectedStoreId}/>}
-          {activeSection === 'chats' && <ChatsPage />}
-          {activeSection === 'reports' && <ReportsPage selectedStoreId={selectedStoreId} />}
-          {activeSection === 'profile' && <ProfilePage />}
+          {children}
         </div>
       </div>
     </div>
+    </WorkerLayoutContext.Provider>
   );
 }

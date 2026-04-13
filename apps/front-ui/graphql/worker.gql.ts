@@ -381,7 +381,50 @@ export const CHAT_MESSAGE_ENTITY = gql`
 // ======================
 // QUERIES
 // ======================
-
+export const GET_WORKER_DASHBOARD = gql`
+  query GetWorkerDashboard($workerId: String!, $storeId: String!) {
+    workerDashboard(workerId: $workerId, storeId: $storeId) {
+      todaySales
+      todayOrders
+      lowStockItems
+      activeChats
+      currentShift {
+        id
+        startTime
+        sales
+        transactions
+      }
+      salesThisWeek
+      salesThisMonth
+      topSellingProducts {
+        id
+        title
+        quantitySold
+        revenue
+      }
+      recentOrders {
+        id
+        orderNumber
+        totalAmount
+        status
+        client {
+          id
+          fullName
+          avatar
+        }
+        createdAt
+      }
+      workerPerformance {
+        totalSales
+        totalTransactions
+        customerSatisfaction
+        attendanceRate
+        shiftsCompleted
+        personalSales
+      }
+    }
+  }
+`;
 export const GET_WORKER_PROFILE = gql`
   query GetWorkerProfile($id: String!) {
     worker(id: $id) {
