@@ -39,6 +39,7 @@ export default function HomePage() {
       <HeaderComponent />
 
       {/* Hero */}
+      
       <HeroSection />
 
       {/* Featured Products */}

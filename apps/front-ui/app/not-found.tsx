@@ -12,7 +12,6 @@ export default function NotFoundPage() {
   const router = useRouter();
 
   return (
-
     <div className="flex flex-col items-center bg-background text-foreground">
       {/* Header */}
       <HeaderComponent />

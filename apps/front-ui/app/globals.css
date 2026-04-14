@@ -8,6 +8,7 @@ html {
   font-family: var(--font-sans);
 }
 
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
