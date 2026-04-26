@@ -109,7 +109,7 @@ export class FreelanceOrderService {
     return this.prisma.$transaction(
       async (prisma) => {
         const freelanceOrder =
-          await prisma.freelanceOrder.create({
+          await this.prisma.freelanceOrder.create({
             data: {
               client: {
                 connect: { id: clientId },
@@ -420,7 +420,7 @@ export class FreelanceOrderService {
       async (prisma) => {
         // Update order to mark escrow as released
         const updatedOrder =
-          await prisma.freelanceOrder.update({
+          await this.prisma.freelanceOrder.update({
             where: { id: orderId },
             data: {
               escrowReleasedAt: new Date(),
@@ -571,7 +571,7 @@ export class FreelanceOrderService {
           )
 
           // Update FreelanceOrder
-          return prisma.freelanceOrder.update({
+          return this.prisma.freelanceOrder.update({
             where: { id },
             data: {
               status,

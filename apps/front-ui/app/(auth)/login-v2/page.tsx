@@ -11,6 +11,7 @@ import { useToast } from '@/components/toast-provider';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { GET_ROLE_IF_USER_EXIST, getLoginMutation } from '@/graphql/auth.gql';
 import { removeTypename } from '@/lib/removeTypeName';
+import { CloudLightningIcon, LockIcon, PaletteIcon, SmartphoneIcon } from 'lucide-react';
 
 // SVG Icons
 const UserIcon = () => (
@@ -219,39 +220,39 @@ export default function LoginPageV2() {
   }
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex overflow-hidden">
+    <div className="relative w-full min-h-screen bg-linear-to-br from-gray-950 via-gray-900 to-gray-950 flex overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/4 w-[800px] h-[800px] bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-1/2 -right-1/4 w-[600px] h-[600px] bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/4 right-1/3 w-[400px] h-[400px] bg-primary/5 rounded-full blur-2xl animate-pulse delay-500"></div>
+        <div className="absolute -top-1/2 -left-1/4 w-200 h-200 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-1/2 -right-1/4 w-150 h-150 bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/4 right-1/3 w-100 h-100 bg-primary/5 rounded-full blur-2xl animate-pulse delay-500"></div>
       </div>
 
       {/* Left Panel - Branding (Hidden on mobile, visible on lg+) */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-white/5 bg-gradient-to-br from-primary/20 via-transparent to-accent/10 backdrop-blur-sm">
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-white/5 bg-linear-to-br from-primary/20 via-transparent to-accent/10 backdrop-blur-sm">
         {/* Decorative overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-accent/5 mix-blend-overlay"></div>
         
         {/* Content */}
         <div className="relative z-10">
           {/* Logo placeholder */}
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="text-2xl font-bold text-white">S</span>
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+              <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-              Seraplus
+            <span className="text-2xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent">
+              USCOR
             </span>
           </div>
           
           {/* Hero content */}
           <div className="mt-16 space-y-6">
             <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
                 Welcome to the Future
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
                 of Digital Excellence
               </span>
             </h1>
@@ -263,10 +264,10 @@ export default function LoginPageV2() {
             {/* Feature highlights */}
             <div className="grid grid-cols-2 gap-4 pt-8">
               {[
-                { icon: '⚡', title: 'Lightning Fast', desc: 'Optimized performance' },
-                { icon: '🔒', title: 'Secure', desc: 'Enterprise-grade security' },
-                { icon: '📱', title: 'Responsive', desc: 'Works on all devices' },
-                { icon: '🎨', title: 'Beautiful', desc: 'Premium design' },
+                { icon: <CloudLightningIcon className="h-6 w-6" />, title: 'Lightning Fast', desc: 'Optimized performance' },
+                { icon: <LockIcon className="h-6 w-6" />, title: 'Secure', desc: 'Enterprise-grade security' },
+                { icon: <SmartphoneIcon className="h-6 w-6" />, title: 'Responsive', desc: 'Works on all devices' },
+                { icon: <PaletteIcon className="h-6 w-6" />, title: 'Beautiful', desc: 'Premium design' },
               ].map((feature, idx) => (
                 <div key={idx} className="group p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300">
                   <span className="text-2xl mb-2 block">{feature.icon}</span>
@@ -283,7 +284,7 @@ export default function LoginPageV2() {
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 border-2 border-gray-900 flex items-center justify-center text-xs text-white font-medium">
+                <div key={i} className="w-10 h-10 rounded-full bg-linear-to-br from-primary/30 to-accent/30 border-2 border-gray-900 flex items-center justify-center text-xs text-white font-medium">
                   {String.fromCharCode(64 + i)}
                 </div>
               ))}
@@ -304,17 +305,17 @@ export default function LoginPageV2() {
         <div className="w-full max-w-md relative z-10">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">S</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Seraplus
             </span>
           </div>
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl font-bold bg-linear-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent mb-2">
               Welcome Back
             </h2>
             <p className="text-gray-400">
@@ -416,7 +417,7 @@ export default function LoginPageV2() {
               <GlowButton
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">

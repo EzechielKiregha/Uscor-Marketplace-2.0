@@ -30,11 +30,14 @@
     "turbo": "^2.5.0"
   },
   "dependencies": {
+    "@apollo/server": "^5.5.0",
     "@as-integrations/express5": "^1.1.2",
+    "@nestjs/apollo": "^13.2.5",
     "apollo3-cache-persist": "^0.15.0",
     "aws-lambda": "^1.0.7",
     "date-fns": "^4.1.0",
     "glob": "^11.0.3",
+    "graphql": "^16.13.2",
     "idb": "^8.0.3",
     "react-is": "^19.2.5",
     "react-use": "^17.6.0",
