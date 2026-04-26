@@ -249,27 +249,19 @@ export class OrderService {
         ),
       ),
     ]
-    await Promise.all(
-      businessIds.map((businessId) =>
-        this.prisma.business.update({
-          where: { id: businessId },
-          data: {
-            totalProductsSold: {
-              increment: order.products
-                .filter(
-                  (op) =>
-                    op.product.businessId ===
-                    businessId,
-                )
-                .reduce(
-                  (sum, op) => sum + op.quantity,
-                  0,
-                ),
-            },
+    if (businessIds.length > 0) {
+      await this.prisma.business.updateMany({
+        where: { id: { in: businessIds } },
+        data: {
+          totalProductsSold: {
+            increment: order.products.reduce(
+              (sum, op) => sum + op.quantity,
+              0,
+            ),
           },
-        }),
-      ),
-    )
+        },
+      })
+    }
 
     // Transform the data to match frontend expectations
     return {

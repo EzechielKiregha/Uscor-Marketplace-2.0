@@ -1,4 +1,3 @@
-// app/ClientWrapper.tsx
 'use client'
 
 import LoadingSpinner from '@/components/LoadingSpinner'
@@ -17,7 +16,6 @@ export default function ClientWrapper({
     const pathname = usePathname();
     const [prevPath, setPrevPath] = useState(pathname);
     const router = useRouter()
-
     useEffect(() => {
         if (pathname !== prevPath) {
             setIsLoading(false); // Stop loading when the path changes
