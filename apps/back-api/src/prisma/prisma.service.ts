@@ -4,7 +4,7 @@ import {
   OnModuleInit,
   OnModuleDestroy,
 } from '@nestjs/common'
-import { PrismaClient } from 'src/generated/prisma/client'
+import { PrismaClient } from '../generated/prisma/client'
 
 declare global {
   // allow a global var so we can persist the client across hot reloads / serverless instances
@@ -32,7 +32,7 @@ export class PrismaService
         global.__prismaService__ = this
       } else {
         // If there's already an instance, return it to reuse the same client
-        return global.__prismaService__ as unknown as PrismaService
+        return global.__prismaService__ as PrismaService
       }
     }
     // In production we just use this new instance (no global reuse)

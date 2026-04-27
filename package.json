@@ -26,22 +26,33 @@
   "description": "",
   "devDependencies": {
     "date-fns": "^4.1.0",
-    "prettier": "3.8.2",
+    "prettier": "^3.8.3",
     "turbo": "^2.5.0"
   },
   "dependencies": {
     "@apollo/server": "^5.5.0",
     "@as-integrations/express5": "^1.1.2",
-    "@nestjs/apollo": "^13.2.5",
+    "@nestjs/apollo": "^13.3.0",
+    "@nestjs/cli": "^11.0.21",
+    "@nestjs/graphql": "^13.3.0",
+    "@nestjs/schematics": "^11.1.0",
+    "@nestjs/swagger": "^11.4.1",
+    "@swc/core": "^1.15.30",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@tanstack/react-query": "^5.100.5",
     "apollo3-cache-persist": "^0.15.0",
     "aws-lambda": "^1.0.7",
     "date-fns": "^4.1.0",
     "glob": "^11.0.3",
     "graphql": "^16.13.2",
     "idb": "^8.0.3",
+    "payload": "^3.84.1",
+    "postcss": "^8.5.10",
+    "react-hook-form": "^7.74.0",
     "react-is": "^19.2.5",
     "react-use": "^17.6.0",
     "recharts": "^3.8.1",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "typescript-eslint": "^8.59.0"
   }
 }
