@@ -1,17 +1,17 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql'
-import { BusinessEntity } from './business.entity'
+import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { BusinessEntity } from "./business.entity";
 
 @ObjectType()
 export class PaginatedBusinesses {
-  @Field(() => [BusinessEntity])
-  items: BusinessEntity[]
+	@Field(() => [BusinessEntity])
+	items: BusinessEntity[];
 
-  @Field(() => Int)
-  total: number
+	@Field(() => Int)
+	total: number;
 
-  @Field(() => Int)
-  page: number
+	@Field(() => Int)
+	page: number;
 
-  @Field(() => Int)
-  limit: number
+	@Field(() => Int)
+	limit: number;
 }

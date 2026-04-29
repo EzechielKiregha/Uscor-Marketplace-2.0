@@ -1,29 +1,25 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-} from '@nestjs/graphql'
-import { OrderEntity } from '../../order/entities/order.entity'
-import { ProductEntity } from '../../product/entities/product.entity'
+import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { OrderEntity } from "../../order/entities/order.entity";
+import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
 export class OrderProductEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field()
-  orderId: string
+	@Field()
+	orderId: string;
 
-  @Field()
-  productId: string
+	@Field()
+	productId: string;
 
-  @Field(() => Int)
-  quantity: number
+	@Field(() => Int)
+	quantity: number;
 
-  // Relations
-  @Field(() => OrderEntity) // Order associated with the product
-  order: OrderEntity
+	// Relations
+	@Field(() => OrderEntity) // Order associated with the product
+	order: OrderEntity;
 
-  @Field(() => ProductEntity) // Product associated with the order
-  product: ProductEntity
+	@Field(() => ProductEntity) // Product associated with the order
+	product: ProductEntity;
 }

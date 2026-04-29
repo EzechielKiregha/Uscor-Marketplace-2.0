@@ -1,8 +1,13 @@
-import { jwtDecode } from 'jwt-decode';
-import { client } from './apollo-client';
-import { getAccessToken, logout } from '@/lib/auth';
-import { gql } from '@apollo/client';
-import { AdminEntity, BusinessEntity, ClientEntity, WorkerEntity } from './types';
+import { gql } from "@apollo/client";
+import { jwtDecode } from "jwt-decode";
+import { getAccessToken, logout } from "@/lib/auth";
+import { client } from "./apollo-client";
+import type {
+	AdminEntity,
+	BusinessEntity,
+	ClientEntity,
+	WorkerEntity,
+} from "./types";
 
 // GraphQL queries
 export const GET_CLIENT_BY_ID = gql`
@@ -76,16 +81,16 @@ export const GET_ADMIN_BY_ID = gql`
 
 // Align with backend's AuthJwtPayload and types.ts
 interface TokenPayload {
-  sub: string; // Matches AuthJwtPayload.sub
-  role: 'client' | 'business' | 'worker' | 'admin'; // Matches AuthJwtPayload.role
+	sub: string; // Matches AuthJwtPayload.sub
+	role: "client" | "business" | "worker" | "admin"; // Matches AuthJwtPayload.role
 }
 
 type MeResult =
-  | { role: 'client'; id: string; user: ClientEntity }
-  | { role: 'business'; id: string; user: BusinessEntity }
-  | { role: 'worker'; id: string; user: WorkerEntity }
-  | { role: 'admin'; id: string; user: AdminEntity }
-  | null;
+	| { role: "client"; id: string; user: ClientEntity }
+	| { role: "business"; id: string; user: BusinessEntity }
+	| { role: "worker"; id: string; user: WorkerEntity }
+	| { role: "admin"; id: string; user: AdminEntity }
+	| null;
 
 /**
  * Fetch current user profile using the client-side JWT.
@@ -93,79 +98,79 @@ type MeResult =
  * Returns null on invalid token or error.
  */
 export async function fetchMe(): Promise<MeResult> {
-  const token = getAccessToken();
-  if (!token) {
-    console.warn('No access token found');
-    return null;
-  }
+	const token = getAccessToken();
+	if (!token) {
+		console.warn("No access token found");
+		return null;
+	}
 
-  let payload: TokenPayload;
-  try {
-    payload = jwtDecode<TokenPayload>(token);
-  } catch (err) {
-    console.warn('Failed to decode JWT:', err);
-    return null;
-  }
+	let payload: TokenPayload;
+	try {
+		payload = jwtDecode<TokenPayload>(token);
+	} catch (err) {
+		console.warn("Failed to decode JWT:", err);
+		return null;
+	}
 
-  const id = payload.sub;
-  const role = payload.role;
+	const id = payload.sub;
+	const role = payload.role;
 
-  console.log('fetchMe: decoded JWT payload: ', payload);
+	console.log("fetchMe: decoded JWT payload: ", payload);
 
-  if (!id || !['client', 'business', 'worker', 'admin'].includes(role)) {
-    console.warn('Invalid JWT payload: missing id or invalid role');
-    return null;
-  }
+	if (!id || !["client", "business", "worker", "admin"].includes(role)) {
+		console.warn("Invalid JWT payload: missing id or invalid role");
+		return null;
+	}
 
-  try {
-    switch (role) {
-      case 'client': {
-        const { data } = await client.query({
-          query: GET_CLIENT_BY_ID,
-          variables: { id },
-          fetchPolicy: 'cache-first', // Use cache for performance
-        });
-        if (!data.client) throw new Error('Client not found');
-        return { role: 'client', id, user: data.client };
-      }
-      case 'business': {
-        const { data } = await client.query({
-          query: GET_BUSINESS_BY_ID,
-          variables: { id },
-          fetchPolicy: 'cache-first',
-        });
-        if (!data.business) throw new Error('Business not found');
-        return { role: 'business', id, user: data.business };
-      }
-      case 'worker': {
-        const { data } = await client.query({
-          query: GET_WORKER_BY_ID,
-          variables: { id },
-          fetchPolicy: 'cache-first',
-        });
-        if (!data.worker) throw new Error('Worker not found');
-        return { role: 'worker', id, user: data.worker };
-      }
-      case 'admin': {
-        const { data } = await client.query({
-          query: GET_ADMIN_BY_ID,
-          variables: { id },
-          fetchPolicy: 'cache-first',
-        });
+	try {
+		switch (role) {
+			case "client": {
+				const { data } = await client.query({
+					query: GET_CLIENT_BY_ID,
+					variables: { id },
+					fetchPolicy: "cache-first", // Use cache for performance
+				});
+				if (!data.client) throw new Error("Client not found");
+				return { role: "client", id, user: data.client };
+			}
+			case "business": {
+				const { data } = await client.query({
+					query: GET_BUSINESS_BY_ID,
+					variables: { id },
+					fetchPolicy: "cache-first",
+				});
+				if (!data.business) throw new Error("Business not found");
+				return { role: "business", id, user: data.business };
+			}
+			case "worker": {
+				const { data } = await client.query({
+					query: GET_WORKER_BY_ID,
+					variables: { id },
+					fetchPolicy: "cache-first",
+				});
+				if (!data.worker) throw new Error("Worker not found");
+				return { role: "worker", id, user: data.worker };
+			}
+			case "admin": {
+				const { data } = await client.query({
+					query: GET_ADMIN_BY_ID,
+					variables: { id },
+					fetchPolicy: "cache-first",
+				});
 
-        console.log('fetchMe: fetched admin data: ', data.admin);
+				console.log("fetchMe: fetched admin data: ", data.admin);
 
-        if (!data.admin) throw new Error('Admin not found');
-        return { role: 'admin', id, user: data.admin };
-      }
-      default:
-        throw new Error('Invalid role');
-    }
-  } catch (err: any) {
-    console.error('FETCH ME ERROR: --failed to fetch profile: ', err);
-    if (err.message.includes('UNAUTHENTICATED')) {
-      logout(); // Trigger logout to redirect to /login
-    }
-    return null;
-  }
+				if (!data.admin) throw new Error("Admin not found");
+				return { role: "admin", id, user: data.admin };
+			}
+			default:
+				throw new Error("Invalid role");
+		}
+	} catch (err: any) {
+		console.error("FETCH ME ERROR: --failed to fetch profile: ", err);
+		if (err.message.includes("UNAUTHENTICATED")) {
+			logout(); // Trigger logout to redirect to /login
+		}
+		return null;
+	}
 }

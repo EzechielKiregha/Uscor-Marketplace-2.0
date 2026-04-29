@@ -1,18 +1,8 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-} from '@nestjs/graphql'
-import { OrderProductService } from './order-product.service'
-import { OrderProductEntity } from './entities/order-product.entity'
-import { CreateOrderProductInput } from './dto/create-order-product.input'
-import { UpdateOrderProductInput } from './dto/update-order-product.input'
+import { Resolver } from "@nestjs/graphql";
+import { OrderProductEntity } from "./entities/order-product.entity";
+import type { OrderProductService } from "./order-product.service";
 
 @Resolver(() => OrderProductEntity)
 export class OrderProductResolver {
-  constructor(
-    private readonly orderProductService: OrderProductService,
-  ) {}
+	constructor(readonly orderProductService: OrderProductService) {}
 }

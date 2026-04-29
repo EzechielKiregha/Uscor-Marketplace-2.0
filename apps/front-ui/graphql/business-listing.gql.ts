@@ -1,5 +1,5 @@
 // graphql/business-listing.gql.ts
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // BUSINESS ENTITIES

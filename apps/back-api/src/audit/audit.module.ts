@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common'
-import { AuditService } from './audit.service'
-import { AuditResolver } from './audit.resolver'
-import { PrismaService } from '../prisma/prisma.service'
+import { Module } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { AuditResolver } from "./audit.resolver";
+import { AuditService } from "./audit.service";
 
 @Module({
-  providers: [AuditResolver, AuditService, PrismaService],
+	providers: [AuditResolver, AuditService, PrismaService],
 })
 export class AuditModule {}

@@ -1,22 +1,22 @@
-import { InputType, Field } from '@nestjs/graphql'
+import { Field, InputType } from "@nestjs/graphql";
 
 @InputType()
 export class CreatePaymentConfigInput {
-  @Field({ nullable: true })
-  mtnCode?: string
+	@Field({ nullable: true })
+	mtnCode?: string;
 
-  @Field({ nullable: true })
-  airtelCode?: string
+	@Field({ nullable: true })
+	airtelCode?: string;
 
-  @Field({ nullable: true })
-  orangeCode?: string
+	@Field({ nullable: true })
+	orangeCode?: string;
 
-  @Field({ nullable: true })
-  mpesaCode?: string
+	@Field({ nullable: true })
+	mpesaCode?: string;
 
-  @Field({ nullable: true })
-  bankAccount?: string
+	@Field({ nullable: true })
+	bankAccount?: string;
 
-  @Field({ nullable: true })
-  mobileMoneyEnabled?: boolean
+	@Field({ nullable: true })
+	mobileMoneyEnabled?: boolean;
 }

@@ -1,28 +1,28 @@
-import { ObjectType, Field } from '@nestjs/graphql'
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class KycDocumentEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field()
-  businessId: string
+	@Field()
+	businessId: string;
 
-  @Field()
-  documentType: string
+	@Field()
+	documentType: string;
 
-  @Field()
-  documentUrl: string
+	@Field()
+	documentUrl: string;
 
-  @Field()
-  status: string
+	@Field()
+	status: string;
 
-  @Field({ nullable: true })
-  rejectionReason?: string
+	@Field({ nullable: true })
+	rejectionReason?: string;
 
-  @Field()
-  submittedAt: Date
+	@Field()
+	submittedAt: Date;
 
-  @Field({ nullable: true })
-  verifiedAt?: Date
+	@Field({ nullable: true })
+	verifiedAt?: Date;
 }

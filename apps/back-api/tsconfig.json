@@ -1,27 +1,25 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2022",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "ignoreDeprecations": "5.0",
-    "baseUrl": "./",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "incremental": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
-  }
+	"compilerOptions": {
+		"module": "commonjs",
+		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"target": "es2022",
+		"sourceMap": true,
+		"outDir": "./dist",
+		"paths": {
+			"src/*": ["./src/*"]
+		},
+		"incremental": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"strictPropertyInitialization": false,
+		"strictNullChecks": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": false,
+		"strictBindCallApply": false,
+		"noFallthroughCasesInSwitch": false
+	}
 }

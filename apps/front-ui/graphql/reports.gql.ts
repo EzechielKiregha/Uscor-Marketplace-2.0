@@ -1,5 +1,5 @@
 // graphql/reports.gql.ts
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // REPORT ENTITIES

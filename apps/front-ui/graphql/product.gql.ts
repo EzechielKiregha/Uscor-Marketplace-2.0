@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // QUERIES
@@ -121,8 +121,6 @@ export const GET_PRODUCT_BY_ID = gql`
     }
   }
 `;
-
-
 
 export const GET_FEATURED_PRODUCTS = gql`
   query GetFeaturedProducts {
@@ -255,8 +253,6 @@ export const DELETE_PRODUCT = gql`
   }
 `;
 
-
-
 export const ADD_PRODUCT_MEDIA = gql`
   mutation AddProductMedia($productId: String!, $input: AddMediaInput!) {
     addProductMedia(productId: $productId, input: $input) {
@@ -340,4 +336,3 @@ export const ON_PRODUCT_UPDATED = gql`
   }
   }
 `;
-

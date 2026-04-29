@@ -1,130 +1,142 @@
 "use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useMutation } from '@apollo/client';
-import { CREATE_STORE, GET_STORES, UPDATE_STORE } from '@/graphql/store.gql';
-import Loader from '@/components/seraui/Loader';
-import { useToast } from '@/components/toast-provider';
-import { useMe } from '@/lib/useMe';
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { CREATE_STORE, GET_STORES, UPDATE_STORE } from "@/graphql/store.gql";
+import { useMe } from "@/lib/useMe";
 
 interface StoreFormProps {
-  initialData?: {
-    id: string;
-    name: string;
-    address: string;
-  } | null;
-  onSuccess: () => void;
-  onCancel: () => void;
+	initialData?: {
+		id: string;
+		name: string;
+		address: string;
+	} | null;
+	onSuccess: () => void;
+	onCancel: () => void;
 }
 
 export default function StoreForm({
-  initialData,
-  onSuccess,
-  onCancel
+	initialData,
+	onSuccess,
+	onCancel,
 }: StoreFormProps) {
-  const [formData, setFormData] = useState(initialData || {
-    name: '',
-    address: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { showToast } = useToast();
-  const user = useMe();
+	const [formData, setFormData] = useState(
+		initialData || {
+			name: "",
+			address: "",
+		},
+	);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { showToast } = useToast();
+	const user = useMe();
 
-  const [createStore] = useMutation(CREATE_STORE);
-  const [updateStore] = useMutation(UPDATE_STORE);
+	const [createStore] = useMutation(CREATE_STORE);
+	const [updateStore] = useMutation(UPDATE_STORE);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev: any) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		const { name, value } = e.target;
+		setFormData((prev: any) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setIsSubmitting(true);
 
-    try {
-      const storeData = {
-        ...formData,
-        businessId: user?.id // In real app, get from useMe()
-      };
+		try {
+			const storeData = {
+				...formData,
+				businessId: user?.id, // In real app, get from useMe()
+			};
 
-      if (initialData) {
-        await updateStore({
-          variables: {
-            id: initialData.id,
-            input: {
-              name: formData.name,
-              address: formData.address
-            }
-          }
-        });
-        showToast('success', 'Success', 'Store updated successfully');
-      } else {
-        await createStore({ variables: { input: storeData }, refetchQueries: [GET_STORES] });
-        showToast('success', 'Success', 'Store created successfully');
-      }
+			if (initialData) {
+				await updateStore({
+					variables: {
+						id: initialData.id,
+						input: {
+							name: formData.name,
+							address: formData.address,
+						},
+					},
+				});
+				showToast("success", "Success", "Store updated successfully");
+			} else {
+				await createStore({
+					variables: { input: storeData },
+					refetchQueries: [GET_STORES],
+				});
+				showToast("success", "Success", "Store created successfully");
+			}
 
-      onSuccess();
-    } catch (error: any) {
-      showToast('error', 'Error', error.message);
-      setIsSubmitting(false);
-    }
-  };
+			onSuccess();
+		} catch (error: any) {
+			showToast("error", "Error", error.message);
+			setIsSubmitting(false);
+		}
+	};
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Store Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-            required
-          />
-        </div>
+	return (
+		<form onSubmit={handleSubmit} className="space-y-6">
+			<div className="space-y-4">
+				<div>
+					<label htmlFor="name" className="block text-sm font-medium mb-1">
+						Store Name
+					</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+						value={formData.name}
+						onChange={handleChange}
+						className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+						required
+					/>
+				</div>
 
-        <div>
-          <label htmlFor="address" className="block text-sm font-medium mb-1">
-            Address
-          </label>
-          <textarea
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            rows={3}
-            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-          />
-        </div>
-      </div>
+				<div>
+					<label htmlFor="address" className="block text-sm font-medium mb-1">
+						Address
+					</label>
+					<textarea
+						id="address"
+						name="address"
+						value={formData.address}
+						onChange={handleChange}
+						rows={3}
+						className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+					/>
+				</div>
+			</div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-border">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          className="bg-primary hover:bg-accent text-primary-foreground"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? initialData ? 'Updating...' : 'Creating...' : initialData ? 'Update Store' : 'Create Store'}
-        </Button>
-      </div>
-    </form>
-  );
+			<div className="flex justify-end gap-3 pt-4 border-t border-border">
+				<Button
+					type="button"
+					variant="outline"
+					onClick={onCancel}
+					disabled={isSubmitting}
+				>
+					Cancel
+				</Button>
+				<Button
+					type="submit"
+					className="bg-primary hover:bg-accent text-primary-foreground"
+					disabled={isSubmitting}
+				>
+					{isSubmitting
+						? initialData
+							? "Updating..."
+							: "Creating..."
+						: initialData
+							? "Update Store"
+							: "Create Store"}
+				</Button>
+			</div>
+		</form>
+	);
 }

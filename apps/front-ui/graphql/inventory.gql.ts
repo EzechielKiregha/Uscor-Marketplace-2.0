@@ -1,5 +1,5 @@
 // graphql/inventory.gql.ts
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // INVENTORY ENTITIES

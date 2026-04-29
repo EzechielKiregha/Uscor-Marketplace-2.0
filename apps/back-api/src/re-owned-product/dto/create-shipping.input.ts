@@ -1,17 +1,17 @@
-import { InputType, Field } from '@nestjs/graphql'
-import { IsString } from 'class-validator'
+import { Field, InputType } from "@nestjs/graphql";
+import { IsString } from "class-validator";
 
 @InputType()
 export class CreateShippingInput {
-  @Field()
-  @IsString()
-  reOwnedProductId: string
+	@Field()
+	@IsString()
+	reOwnedProductId: string;
 
-  @Field()
-  @IsString()
-  trackingNumber: string
+	@Field()
+	@IsString()
+	trackingNumber: string;
 
-  @Field()
-  @IsString()
-  carrier: string
+	@Field()
+	@IsString()
+	carrier: string;
 }

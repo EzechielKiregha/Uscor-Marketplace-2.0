@@ -1,113 +1,110 @@
-import {
-  Field,
-  ObjectType,
-} from '@nestjs/graphql'
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class AuthPayload {
-  @Field(() => String)
-  id: string
+	@Field(() => String)
+	id: string;
 
-  @Field(() => String)
-  role: string
+	@Field(() => String)
+	role: string;
 
-  @Field(() => String, { nullable: true })
-  email?: string
+	@Field(() => String, { nullable: true })
+	email?: string;
 }
 @ObjectType()
 export class UserPayload {
-  @Field(() => String)
-  role: string
+	@Field(() => String)
+	role: string;
 }
 
 @ObjectType()
 export class AuthPayloadClient {
-  @Field(() => String)
-  id: string
+	@Field(() => String)
+	id: string;
 
-  @Field(() => String)
-  email: string
+	@Field(() => String)
+	email: string;
 
-  @Field(() => String)
-  fullname: string
+	@Field(() => String)
+	fullname: string;
 
-  @Field(() => String)
-  phone: string
+	@Field(() => String)
+	phone: string;
 
-  @Field(() => String, { nullable: true })
-  avatar?: string
+	@Field(() => String, { nullable: true })
+	avatar?: string;
 
-  @Field(() => String)
-  accessToken: string
+	@Field(() => String)
+	accessToken: string;
 
-  @Field(() => String)
-  refreshToken: string
+	@Field(() => String)
+	refreshToken: string;
 }
 @ObjectType()
 export class AuthPayloadWorker {
-  @Field(() => String)
-  id: string
+	@Field(() => String)
+	id: string;
 
-  @Field(() => String)
-  email: string
+	@Field(() => String)
+	email: string;
 
-  @Field(() => String)
-  fullname: string
+	@Field(() => String)
+	fullname: string;
 
-  @Field(() => String)
-  phone: string
+	@Field(() => String)
+	phone: string;
 
-  @Field(() => String)
-  accessToken: string
+	@Field(() => String)
+	accessToken: string;
 
-  @Field(() => String)
-  refreshToken: string
+	@Field(() => String)
+	refreshToken: string;
 }
 
 @ObjectType()
 export class AuthPayloadAdmin {
-  @Field(() => String)
-  id: string
+	@Field(() => String)
+	id: string;
 
-  @Field(() => String)
-  email: string
+	@Field(() => String)
+	email: string;
 
-  @Field(() => String)
-  fullname: string
+	@Field(() => String)
+	fullname: string;
 
-  @Field(() => String, { nullable: true })
-  phone: string
+	@Field(() => String, { nullable: true })
+	phone: string;
 
-  @Field(() => String)
-  accessToken: string
+	@Field(() => String)
+	accessToken: string;
 
-  @Field(() => String)
-  refreshToken: string
+	@Field(() => String)
+	refreshToken: string;
 }
 
 @ObjectType()
 export class AuthPayloadBusiness {
-  @Field(() => String)
-  id: string
+	@Field(() => String)
+	id: string;
 
-  @Field(() => String)
-  email: string
+	@Field(() => String)
+	email: string;
 
-  @Field(() => String)
-  name: string
+	@Field(() => String)
+	name: string;
 
-  @Field(() => String)
-  phone: string
+	@Field(() => String)
+	phone: string;
 
-  @Field(() => String, { nullable: true })
-  avatar?: string
+	@Field(() => String, { nullable: true })
+	avatar?: string;
 
-  @Field(() => String, { nullable: true })
-  coverImage?: string
+	@Field(() => String, { nullable: true })
+	coverImage?: string;
 
-  @Field(() => String)
-  accessToken: string
+	@Field(() => String)
+	accessToken: string;
 
-  @Field(() => String)
-  refreshToken: string
+	@Field(() => String)
+	refreshToken: string;
 }

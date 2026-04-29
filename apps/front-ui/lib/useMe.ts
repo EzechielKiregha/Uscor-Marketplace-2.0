@@ -1,75 +1,89 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { fetchMe } from './fetchMe';
-import { AdminEntity, BusinessEntity, ClientEntity, WorkerEntity } from './types';
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { fetchMe } from "./fetchMe";
+import type {
+	AdminEntity,
+	BusinessEntity,
+	ClientEntity,
+	WorkerEntity,
+} from "./types";
 
 type MeResult =
-  | { role: 'client'; id: string; user: ClientEntity }
-  | { role: 'business'; id: string; user: BusinessEntity }
-  | { role: 'worker'; id: string; user: WorkerEntity }
-  | null;
+	| { role: "client"; id: string; user: ClientEntity }
+	| { role: "business"; id: string; user: BusinessEntity }
+	| { role: "worker"; id: string; user: WorkerEntity }
+	| null;
 
 export function useMe() {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<ClientEntity | BusinessEntity | WorkerEntity | AdminEntity | null>(null);
-  const [role, setRole] = useState<'client' | 'business' | 'worker' | 'admin' | null>(null);
-  const [id, setId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-  const path = usePathname()
+	const [loading, setLoading] = useState(true);
+	const [user, setUser] = useState<
+		ClientEntity | BusinessEntity | WorkerEntity | AdminEntity | null
+	>(null);
+	const [role, setRole] = useState<
+		"client" | "business" | "worker" | "admin" | null
+	>(null);
+	const [id, setId] = useState<string | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
+	const path = usePathname();
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      setLoading(true);
-      try {
-        const res = await fetchMe();
-        if (!mounted) return;
-        if (!res) {
-          setError('Failed to fetch user profile. Please log in again.');
-          setUser(null);
-          setRole(null);
-          setId(null);
-          // if (path !== '/' && path !== "/marketplace/products" && path !== '/freelance-gigs' ) router.push('/');
-        } else {
-          setUser(res.user);
-          setRole(res.role);
-          setId(res.id);
-        }
-      } catch (err) {
-        if (!mounted) return;
-        setError('An unexpected error occurred.');
-        setUser(null);
-        setRole(null);
-        setId(null);
-        if (path !== '/' && path !== "/marketplace/products" && path !== '/freelance-gigs' ) router.push('/login');
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, [router]);
+	useEffect(() => {
+		let mounted = true;
+		(async () => {
+			setLoading(true);
+			try {
+				const res = await fetchMe();
+				if (!mounted) return;
+				if (!res) {
+					setError("Failed to fetch user profile. Please log in again.");
+					setUser(null);
+					setRole(null);
+					setId(null);
+					// if (path !== '/' && path !== "/marketplace/products" && path !== '/freelance-gigs' ) router.push('/');
+				} else {
+					setUser(res.user);
+					setRole(res.role);
+					setId(res.id);
+				}
+			} catch (_err) {
+				if (!mounted) return;
+				setError("An unexpected error occurred.");
+				setUser(null);
+				setRole(null);
+				setId(null);
+				if (
+					path !== "/" &&
+					path !== "/marketplace/products" &&
+					path !== "/freelance-gigs"
+				)
+					router.push("/login");
+			} finally {
+				if (mounted) setLoading(false);
+			}
+		})();
+		return () => {
+			mounted = false;
+		};
+	}, [router, path]);
 
-  // Show toast notification for errors
-  // useEffect(() => {
-  //   if (path !== '/'){
-  //     if (error) {
-  //       showToast(
-  //         'error',
-  //         'Failed',
-  //         "failed to fetch user profile. Please log in again.",
-  //         true,
-  //         8000,
-  //         'bottom-right'
-  //       )
-  //     }
-  //   }
-    
-  // }, [error]);
+	// Show toast notification for errors
+	// useEffect(() => {
+	//   if (path !== '/'){
+	//     if (error) {
+	//       showToast(
+	//         'error',
+	//         'Failed',
+	//         "failed to fetch user profile. Please log in again.",
+	//         true,
+	//         8000,
+	//         'bottom-right'
+	//       )
+	//     }
+	//   }
 
-  return { loading, user, role, id, error };
+	// }, [error]);
+
+	return { loading, user, role, id, error };
 }

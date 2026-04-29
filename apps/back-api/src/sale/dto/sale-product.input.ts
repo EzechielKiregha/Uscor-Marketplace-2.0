@@ -1,37 +1,26 @@
-import {
-  InputType,
-  Int,
-  Field,
-  Float,
-} from '@nestjs/graphql'
-import {
-  IsJSON,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator'
-import GraphQLJSON from 'graphql-type-json'
+import { Field, Float, InputType, Int } from "@nestjs/graphql";
+import { IsNumber, IsOptional, IsString, Min } from "class-validator";
+import GraphQLJSON from "graphql-type-json";
 
 // DTOs
 @InputType()
 export class SaleProductInput {
-  @Field()
-  @IsString()
-  productId: string
+	@Field()
+	@IsString()
+	productId: string;
 
-  @Field(() => Int)
-  @IsNumber()
-  @Min(1)
-  quantity: number
+	@Field(() => Int)
+	@IsNumber()
+	@Min(1)
+	quantity: number;
 
-  @Field(() => Float, { nullable: true })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  price?: number
+	@Field(() => Float, { nullable: true })
+	@IsOptional()
+	@IsNumber()
+	@Min(0)
+	price?: number;
 
-  @Field(() => GraphQLJSON, { nullable: true })
-  @IsOptional()
-  modifiers?: any
+	@Field(() => GraphQLJSON, { nullable: true })
+	@IsOptional()
+	modifiers?: any;
 }

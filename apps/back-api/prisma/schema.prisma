@@ -122,7 +122,10 @@ enum ChatStatus {
 enum SaleStatus {
   OPEN
   CLOSED
-  REFUNDED
+  PENDING 
+	COMPLETED 
+	CANCELLED 
+	REFUNDED 
 }
 
 enum PurchaseOrderStatus {
@@ -141,6 +144,12 @@ enum TransferOrderStatus {
 enum AdjustmentType {
   ADD
   REMOVE
+  RESTOCK
+	DAMAGE
+	SHRINKAGE
+	LOSS
+	CORRECTION
+	RETURN
 }
 
 enum WorkerRole {

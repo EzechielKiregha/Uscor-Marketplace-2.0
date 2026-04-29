@@ -1,15 +1,8 @@
-import { CreateTokenInput } from './create-token.input'
-import {
-  InputType,
-  Field,
-  Int,
-  PartialType,
-} from '@nestjs/graphql'
+import { Field, InputType, Int, PartialType } from "@nestjs/graphql";
+import { CreateTokenInput } from "./create-token.input";
 
 @InputType()
-export class UpdateTokenInput extends PartialType(
-  CreateTokenInput,
-) {
-  @Field(() => Int)
-  id: number
+export class UpdateTokenInput extends PartialType(CreateTokenInput) {
+	@Field(() => Int)
+	id: number;
 }

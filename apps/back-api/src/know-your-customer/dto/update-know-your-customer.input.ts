@@ -1,15 +1,10 @@
-import { CreateKnowYourCustomerInput } from './create-know-your-customer.input'
-import {
-  InputType,
-  Field,
-  Int,
-  PartialType,
-} from '@nestjs/graphql'
+import { Field, InputType, Int, PartialType } from "@nestjs/graphql";
+import { CreateKnowYourCustomerInput } from "./create-know-your-customer.input";
 
 @InputType()
 export class UpdateKnowYourCustomerInput extends PartialType(
-  CreateKnowYourCustomerInput,
+	CreateKnowYourCustomerInput,
 ) {
-  @Field(() => Int)
-  id: number
+	@Field(() => Int)
+	id: number;
 }

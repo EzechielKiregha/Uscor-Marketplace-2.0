@@ -1,15 +1,10 @@
-import { CreateRepostedProductInput } from './create-reposted-product.input'
-import {
-  InputType,
-  Field,
-  Int,
-  PartialType,
-} from '@nestjs/graphql'
+import { Field, InputType, Int, PartialType } from "@nestjs/graphql";
+import { CreateRepostedProductInput } from "./create-reposted-product.input";
 
 @InputType()
 export class UpdateRepostedProductInput extends PartialType(
-  CreateRepostedProductInput,
+	CreateRepostedProductInput,
 ) {
-  @Field(() => Int)
-  id: number
+	@Field(() => Int)
+	id: number;
 }

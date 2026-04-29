@@ -1,29 +1,25 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-} from '@nestjs/graphql'
-import { ProductEntity } from '../../product/entities/product.entity'
+import { Field, ObjectType } from "@nestjs/graphql";
+import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
 export class CategoryEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field()
-  name: string
+	@Field()
+	name: string;
 
-  @Field({ nullable: true })
-  description?: string
+	@Field({ nullable: true })
+	description?: string;
 
-  @Field()
-  createdAt: Date
+	@Field()
+	createdAt: Date;
 
-  @Field()
-  updatedAt: Date
+	@Field()
+	updatedAt: Date;
 
-  @Field(() => [ProductEntity], {
-    nullable: true,
-  })
-  products?: ProductEntity[]
+	@Field(() => [ProductEntity], {
+		nullable: true,
+	})
+	products?: ProductEntity[];
 }

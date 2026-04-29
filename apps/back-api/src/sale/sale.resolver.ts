@@ -1,352 +1,283 @@
+import { Inject, UseGuards } from "@nestjs/common";
 import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-  Context,
-  Subscription,
-} from '@nestjs/graphql'
-import { SaleService } from './sale.service'
-import { CreateSaleInput } from './dto/create-sale.input'
-import { UpdateSaleInput } from './dto/update-sale.input'
-import { SaleEntity } from './entities/sale.entity'
-import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard'
-import { RolesGuard } from '../auth/guards/roles.guard'
-import { Inject, UseGuards } from '@nestjs/common'
-import { Roles } from '../auth/decorators/roles.decorator'
-import {
-  CloseSaleInput,
-  PaymentDetailsInput,
-} from './dto/close-sale.input'
-import { CreateReturnInput } from './dto/create-return.input'
-import { ReturnEntity } from './entities/return.entity'
-import { StoreService } from '../store/store.service'
-import { ReceiptEntity } from './entities/receipt.entity'
-import { GenerateReceiptInput } from './dto/receipt.input'
-import { PaginatedSalesResponse } from './entities/paginated-sales-response.entity'
-import { SalesDashboard } from './entities/sales-dashboard.entity'
-import { SaleProductEntity } from './entities/sale-product.entity'
-import { AddSaleProductInput } from './dto/add-sale-product.input'
-import { UpdateSaleProductInput } from './dto/update-sale-product.input'
-import { DeleteResponse } from './entities/delete-response.entity'
-import { PaymentMethod } from '../payment-transaction/dto/create-payment-transaction.input'
-import { PubSub } from 'graphql-subscriptions'
+	Args,
+	Context,
+	Mutation,
+	Query,
+	Resolver,
+	Subscription,
+} from "@nestjs/graphql";
+import type { PubSub } from "graphql-subscriptions";
+import { Roles } from "../auth/decorators/roles.decorator";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
+import { RolesGuard } from "../auth/guards/roles.guard";
+import type { PaymentMethod } from "../payment-transaction/dto/create-payment-transaction.input";
+import type { StoreService } from "../store/store.service";
+import type { AddSaleProductInput } from "./dto/add-sale-product.input";
+import type {
+	CloseSaleInput,
+	PaymentDetailsInput,
+} from "./dto/close-sale.input";
+import type { CreateReturnInput } from "./dto/create-return.input";
+import type { CreateSaleInput } from "./dto/create-sale.input";
+import type { GenerateReceiptInput } from "./dto/receipt.input";
+import type { UpdateSaleInput } from "./dto/update-sale.input";
+import type { UpdateSaleProductInput } from "./dto/update-sale-product.input";
+import { DeleteResponse } from "./entities/delete-response.entity";
+import { PaginatedSalesResponse } from "./entities/paginated-sales-response.entity";
+import { ReceiptEntity } from "./entities/receipt.entity";
+import { ReturnEntity } from "./entities/return.entity";
+import { SaleEntity } from "./entities/sale.entity";
+import { SaleProductEntity } from "./entities/sale-product.entity";
+import { SalesDashboard } from "./entities/sales-dashboard.entity";
+import type { SaleService } from "./sale.service";
 
 // Resolver
 @Resolver(() => SaleEntity)
 export class SaleResolver {
-  constructor(
-    private readonly saleService: SaleService,
-    private readonly storeService: StoreService,
-    @Inject('PUB_SUB') private pubSub: PubSub,
-  ) {}
-  // ============ QUERIES ============
+	constructor(
+		private readonly saleService: SaleService,
+		private readonly storeService: StoreService,
+		@Inject("PUB_SUB") private pubSub: PubSub,
+	) {}
+	// ============ QUERIES ============
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Query(() => [SaleEntity], {
-    name: 'activeSales',
-    description:
-      'Retrieves active sales for a store in a business.',
-  })
-  async getActiveSales(
-    @Args('storeId', { type: () => String })
-    storeId: string,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.findActiveSales(
-      storeId,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Query(() => [SaleEntity], {
+		name: "activeSales",
+		description: "Retrieves active sales for a store in a business.",
+	})
+	async getActiveSales(
+		@Args("storeId", { type: () => String })
+		storeId: string,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.findActiveSales(storeId, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Query(() => SaleEntity, { name: 'sale' })
-  async getSaleById(
-    @Args('id', { type: () => String })
-    id: string,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.findOne(id, user)
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Query(() => SaleEntity, { name: "sale" })
+	async getSaleById(
+		@Args("id", { type: () => String })
+		id: string,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.findOne(id, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Query(() => PaginatedSalesResponse, {
-    name: 'salesHistory',
-    description:
-      'Retrieves sales for a store in a business.',
-  })
-  async getSalesHistory(
-    @Context() context: any,
-    @Args('storeId', { nullable: true })
-    storeId?: string,
-    @Args('workerId', { nullable: true })
-    workerId?: string,
-    @Args('startDate', { nullable: true })
-    startDate?: Date,
-    @Args('endDate', { nullable: true })
-    endDate?: Date,
-    @Args('status', { nullable: true })
-    status?: string,
-    @Args('page', { defaultValue: 1 })
-    page: number = 1,
-    @Args('limit', { defaultValue: 20 })
-    limit: number = 20,
-  ) {
-    const user = context.req.user
-    return this.saleService.findSalesWithPagination(
-      {
-        storeId,
-        workerId,
-        startDate,
-        endDate,
-        status,
-        page,
-        limit,
-      },
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Query(() => PaginatedSalesResponse, {
+		name: "salesHistory",
+		description: "Retrieves sales for a store in a business.",
+	})
+	async getSalesHistory(
+		@Context() context: any,
+		@Args("storeId", { nullable: true })
+		storeId?: string,
+		@Args("workerId", { nullable: true })
+		workerId?: string,
+		@Args("startDate", { nullable: true })
+		startDate?: Date,
+		@Args("endDate", { nullable: true })
+		endDate?: Date,
+		@Args("status", { nullable: true })
+		status?: string,
+		@Args("page", { defaultValue: 1 })
+		page: number = 1,
+		@Args("limit", { defaultValue: 20 })
+		limit: number = 20,
+	) {
+		const user = context.req.user;
+		return this.saleService.findSalesWithPagination(
+			{
+				storeId,
+				workerId,
+				startDate,
+				endDate,
+				status,
+				page,
+				limit,
+			},
+			user,
+		);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Query(() => SalesDashboard)
-  async salesDashboard(
-    @Args('storeId', { type: () => String })
-    storeId: string,
-    @Args('period', { defaultValue: 'day' })
-    period: string = 'day',
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.getSalesDashboard(
-      storeId,
-      period,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Query(() => SalesDashboard)
+	async salesDashboard(
+		@Args("storeId", { type: () => String })
+		storeId: string,
+		@Args("period", { defaultValue: "day" })
+		period: string = "day",
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.getSalesDashboard(storeId, period, user);
+	}
 
-  // ============ MUTATIONS ============
+	// ============ MUTATIONS ============
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => SaleEntity)
-  async createSale(
-    @Args('input')
-    createSaleInput: CreateSaleInput,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.create(
-      createSaleInput,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SaleEntity)
+	async createSale(
+		@Args("input")
+		createSaleInput: CreateSaleInput,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.create(createSaleInput, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => SaleEntity)
-  async updateSale(
-    @Args('id') id: string,
-    @Args('input')
-    updateSaleInput: UpdateSaleInput,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.update(
-      id,
-      updateSaleInput,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SaleEntity)
+	async updateSale(
+		@Args("id") id: string,
+		@Args("input")
+		updateSaleInput: UpdateSaleInput,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.update(id, updateSaleInput, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => SaleEntity)
-  async closeSale(
-    @Args('input') closeSaleInput: CloseSaleInput,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.close(
-      closeSaleInput,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SaleEntity)
+	async closeSale(
+		@Args("input") closeSaleInput: CloseSaleInput,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.close(closeSaleInput, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => SaleEntity)
-  async completeSale(
-    @Context() context: any,
-    @Args('id') id: string,
-    @Args('paymentMethod')
-    paymentMethod: PaymentMethod,
-    @Args('paymentDetails', { nullable: true })
-    paymentDetails?: PaymentDetailsInput,
-  ) {
-    const user = context.req.user
-    // Create CloseSaleInput from individual parameters
-    const closeSaleInput: CloseSaleInput = {
-      saleId: id,
-      paymentMethod,
-      paymentDetails,
-      status: 'CLOSED',
-    }
-    return this.saleService.close(
-      closeSaleInput,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SaleEntity)
+	async completeSale(
+		@Context() context: any,
+		@Args("id") id: string,
+		@Args("paymentMethod")
+		paymentMethod: PaymentMethod,
+		@Args("paymentDetails", { nullable: true })
+		paymentDetails?: PaymentDetailsInput,
+	) {
+		const user = context.req.user;
+		// Create CloseSaleInput from individual parameters
+		const closeSaleInput: CloseSaleInput = {
+			saleId: id,
+			paymentMethod,
+			paymentDetails,
+			status: "CLOSED",
+		};
+		return this.saleService.close(closeSaleInput, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => SaleProductEntity)
-  async addSaleProduct(
-    @Args('input') input: AddSaleProductInput,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.addSaleProduct(
-      input,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SaleProductEntity)
+	async addSaleProduct(
+		@Args("input") input: AddSaleProductInput,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.addSaleProduct(input, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => SaleProductEntity)
-  async updateSaleProduct(
-    @Args('id') id: string,
-    @Args('input') input: UpdateSaleProductInput,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.updateSaleProduct(
-      id,
-      input,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SaleProductEntity)
+	async updateSaleProduct(
+		@Args("id") id: string,
+		@Args("input") input: UpdateSaleProductInput,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.updateSaleProduct(id, input, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => DeleteResponse)
-  async removeSaleProduct(
-    @Args('id') id: string,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    return this.saleService.removeSaleProduct(
-      id,
-      user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => DeleteResponse)
+	async removeSaleProduct(@Args("id") id: string, @Context() context: any) {
+		const user = context.req.user;
+		return this.saleService.removeSaleProduct(id, user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => ReturnEntity, {
-    description:
-      'Processes a return for a POS sale.',
-  })
-  async createReturn(
-    @Args('createReturnInput')
-    createReturnInput: CreateReturnInput,
-    @Context() context,
-  ) {
-    return this.saleService.createReturn(
-      createReturnInput,
-      context.req.user,
-    )
-  }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => ReceiptEntity, {
-    description:
-      'Generates a PDF receipt and optionally emails it.',
-  })
-  async generateReceipt(
-    @Args('generateReceiptInput')
-    input: GenerateReceiptInput,
-    @Context() context,
-  ) {
-    return this.saleService.generateReceipt(
-      input,
-      context.req.user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => ReturnEntity, {
+		description: "Processes a return for a POS sale.",
+	})
+	async createReturn(
+		@Args("createReturnInput")
+		createReturnInput: CreateReturnInput,
+		@Context() context,
+	) {
+		return this.saleService.createReturn(createReturnInput, context.req.user);
+	}
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => ReceiptEntity, {
+		description: "Generates a PDF receipt and optionally emails it.",
+	})
+	async generateReceipt(
+		@Args("generateReceiptInput")
+		input: GenerateReceiptInput,
+		@Context() context,
+	) {
+		return this.saleService.generateReceipt(input, context.req.user);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Mutation(() => ReceiptEntity, {
-    description:
-      'Generates a PDF receipt using pdfkit and optionally emails it.',
-  })
-  async generateReceiptWithPDFKit(
-    @Args('generateReceiptInput')
-    input: GenerateReceiptInput,
-    @Context() context,
-  ) {
-    return this.saleService.generateReceiptWithPDFKit(
-      input,
-      context.req.user,
-    )
-  }
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => ReceiptEntity, {
+		description:
+			"Generates a PDF receipt using pdfkit and optionally emails it.",
+	})
+	async generateReceiptWithPDFKit(
+		@Args("generateReceiptInput")
+		input: GenerateReceiptInput,
+		@Context() context,
+	) {
+		return this.saleService.generateReceiptWithPDFKit(input, context.req.user);
+	}
 
-  // ============ SUBSCRIPTIONS ============
+	// ============ SUBSCRIPTIONS ============
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Subscription(() => SaleEntity, {
-    filter: (payload, variables) => {
-      return (
-        payload.saleCreated.storeId ===
-        variables.storeId
-      )
-    },
-  })
-  async saleCreated(
-    @Args('storeId') storeId: string,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    await this.storeService.verifyStoreAccess(
-      storeId,
-      user,
-    )
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Subscription(() => SaleEntity, {
+		filter: (payload, variables) => {
+			return payload.saleCreated.storeId === variables.storeId;
+		},
+	})
+	async saleCreated(@Args("storeId") storeId: string, @Context() context: any) {
+		const user = context.req.user;
+		await this.storeService.verifyStoreAccess(storeId, user);
 
-    return this.pubSub.asyncIterableIterator(
-      `sale_created_${storeId}`,
-    )
-  }
+		return this.pubSub.asyncIterableIterator(`sale_created_${storeId}`);
+	}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('business', 'worker')
-  @Subscription(() => SaleEntity, {
-    filter: (payload, variables) => {
-      return (
-        payload.saleUpdated.storeId ===
-        variables.storeId
-      )
-    },
-  })
-  async saleUpdated(
-    @Args('storeId') storeId: string,
-    @Context() context: any,
-  ) {
-    const user = context.req.user
-    await this.storeService.verifyStoreAccess(
-      storeId,
-      user,
-    )
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Subscription(() => SaleEntity, {
+		filter: (payload, variables) => {
+			return payload.saleUpdated.storeId === variables.storeId;
+		},
+	})
+	async saleUpdated(@Args("storeId") storeId: string, @Context() context: any) {
+		const user = context.req.user;
+		await this.storeService.verifyStoreAccess(storeId, user);
 
-    return this.pubSub.asyncIterableIterator(
-      `sale_updated_${storeId}`,
-    )
-  }
+		return this.pubSub.asyncIterableIterator(`sale_updated_${storeId}`);
+	}
 }

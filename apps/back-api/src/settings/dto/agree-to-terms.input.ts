@@ -1,7 +1,7 @@
-import { InputType, Field } from '@nestjs/graphql'
+import { Field, InputType } from "@nestjs/graphql";
 
 @InputType()
 export class AgreeToTermsInput {
-  @Field()
-  businessId: string
+	@Field()
+	businessId: string;
 }

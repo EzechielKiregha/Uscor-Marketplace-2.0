@@ -1,28 +1,24 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-} from '@nestjs/graphql'
-import { ProductEntity } from '../../product/entities/product.entity'
-import { StoreEntity } from '../../store/entities/store.entity'
+import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { ProductEntity } from "../../product/entities/product.entity";
+import { StoreEntity } from "../../store/entities/store.entity";
 
 @ObjectType()
 export class LowStockAlertEntity {
-  @Field()
-  productId: string
+	@Field()
+	productId: string;
 
-  @Field(() => ProductEntity)
-  product: ProductEntity
+	@Field(() => ProductEntity)
+	product: ProductEntity;
 
-  @Field()
-  storeId: string
+	@Field()
+	storeId: string;
 
-  @Field(() => StoreEntity)
-  store: StoreEntity
+	@Field(() => StoreEntity)
+	store: StoreEntity;
 
-  @Field(() => Int)
-  quantity: number
+	@Field(() => Int)
+	quantity: number;
 
-  @Field(() => Int)
-  threshold: number
+	@Field(() => Int)
+	threshold: number;
 }

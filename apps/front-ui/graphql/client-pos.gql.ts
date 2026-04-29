@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // Client Entity Fragment
 export const CLIENT_ENTITY = gql`

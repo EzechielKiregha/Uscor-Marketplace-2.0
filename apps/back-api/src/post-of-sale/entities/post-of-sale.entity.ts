@@ -1,29 +1,25 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-} from '@nestjs/graphql'
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class PostOfSaleEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field()
-  title: string
+	@Field()
+	title: string;
 
-  @Field({ nullable: true })
-  description?: string
+	@Field({ nullable: true })
+	description?: string;
 
-  @Field()
-  price: number
+	@Field()
+	price: number;
 
-  @Field()
-  status: string
+	@Field()
+	status: string;
 
-  @Field()
-  createdAt: Date
+	@Field()
+	createdAt: Date;
 
-  @Field()
-  updatedAt: Date
+	@Field()
+	updatedAt: Date;
 }

@@ -1,13 +1,13 @@
-import { InputType, Field } from '@nestjs/graphql'
+import { Field, InputType } from "@nestjs/graphql";
 
 @InputType()
 export class UploadKycDocumentInput {
-  @Field()
-  businessId: string
+	@Field()
+	businessId: string;
 
-  @Field()
-  documentType: string
+	@Field()
+	documentType: string;
 
-  @Field()
-  documentUrl: string
+	@Field()
+	documentUrl: string;
 }

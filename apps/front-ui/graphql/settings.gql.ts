@@ -1,5 +1,5 @@
 // graphql/settings.gql.ts
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // QUERIES

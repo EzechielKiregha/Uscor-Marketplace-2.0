@@ -151,6 +151,9 @@ export type ChatStatus = (typeof ChatStatus)[keyof typeof ChatStatus]
 export const SaleStatus = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED'
 } as const
 
@@ -178,7 +181,13 @@ export type TransferOrderStatus = (typeof TransferOrderStatus)[keyof typeof Tran
 
 export const AdjustmentType = {
   ADD: 'ADD',
-  REMOVE: 'REMOVE'
+  REMOVE: 'REMOVE',
+  RESTOCK: 'RESTOCK',
+  DAMAGE: 'DAMAGE',
+  SHRINKAGE: 'SHRINKAGE',
+  LOSS: 'LOSS',
+  CORRECTION: 'CORRECTION',
+  RETURN: 'RETURN'
 } as const
 
 export type AdjustmentType = (typeof AdjustmentType)[keyof typeof AdjustmentType]

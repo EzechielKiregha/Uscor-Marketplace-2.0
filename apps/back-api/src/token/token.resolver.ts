@@ -1,10 +1,8 @@
-import { Resolver } from '@nestjs/graphql'
-import { TokenService } from './token.service'
-import { TokenEntity } from './entities/token.entity'
+import { Resolver } from "@nestjs/graphql";
+import { TokenEntity } from "./entities/token.entity";
+import type { TokenService } from "./token.service";
 
 @Resolver(() => TokenEntity)
 export class TokenResolver {
-  constructor(
-    private readonly tokenService: TokenService,
-  ) {}
+	constructor(readonly _tokenService: TokenService) {}
 }

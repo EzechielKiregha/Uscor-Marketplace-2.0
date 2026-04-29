@@ -1,19 +1,14 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-  Float,
-} from '@nestjs/graphql'
-import { ClientEntity } from '../../client/entities/client.entity'
+import { Field, Float, ObjectType } from "@nestjs/graphql";
+import { ClientEntity } from "../../client/entities/client.entity";
 
 @ObjectType()
 export class ClientPointsBalanceEntity {
-  @Field()
-  clientId: string
+	@Field()
+	clientId: string;
 
-  @Field(() => ClientEntity)
-  client: ClientEntity
+	@Field(() => ClientEntity)
+	client: ClientEntity;
 
-  @Field(() => Float)
-  totalPoints: number
+	@Field(() => Float)
+	totalPoints: number;
 }

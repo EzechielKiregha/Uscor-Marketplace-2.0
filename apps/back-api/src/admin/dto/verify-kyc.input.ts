@@ -1,14 +1,14 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsString, IsOptional } from 'class-validator';
+import { Field, InputType } from "@nestjs/graphql";
+import { IsOptional, IsString } from "class-validator";
 
 @InputType()
 export class VerifyKycInput {
-  @Field()
-  @IsString()
-  businessId: string;
+	@Field()
+	@IsString()
+	businessId: string;
 
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  notes?: string;
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	notes?: string;
 }

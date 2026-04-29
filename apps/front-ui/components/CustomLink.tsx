@@ -1,26 +1,26 @@
 // components/TGlink.tsx
-'use client'
+"use client";
 
-import { useLoading } from '@/app/context/loadingContext'
-import Link from 'next/link'
+import Link from "next/link";
+import { useLoading } from "@/app/context/loadingContext";
 
 interface TGlinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    href: string
-    children: React.ReactNode
+	href: string;
+	children: React.ReactNode;
 }
 
-const TGlink: React.FC<TGlinkProps> = ({ href , children, ...props }) => {
-    const { setIsLoading } = useLoading()
+const TGlink: React.FC<TGlinkProps> = ({ href, children, ...props }) => {
+	const { setIsLoading } = useLoading();
 
-    const handleClick = () => {
-        setIsLoading(true)
-    }
+	const handleClick = () => {
+		setIsLoading(true);
+	};
 
-    return (
-        <Link href={href} onClick={handleClick} {...props}>
-        {children}
-        </Link>
-    )
-}
+	return (
+		<Link href={href} onClick={handleClick} {...props}>
+			{children}
+		</Link>
+	);
+};
 
-export default TGlink
+export default TGlink;

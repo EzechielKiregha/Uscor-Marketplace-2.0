@@ -8,8 +8,8 @@ export const getLoginMutation = (role: string) => gql`
       refreshToken
       id
       email
-      ${role === 'Business' ? 'coverImage' : ''}
-      ${role === 'Business' ? 'avatar' : ''}
+      ${role === "Business" ? "coverImage" : ""}
+      ${role === "Business" ? "avatar" : ""}
       
     }
   }

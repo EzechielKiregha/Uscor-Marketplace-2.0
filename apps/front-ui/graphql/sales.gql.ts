@@ -1,5 +1,5 @@
 // graphql/sales.gql.ts
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // SALE ENTITIES

@@ -1,29 +1,26 @@
-import { Injectable } from '@nestjs/common'
-import { CreateAdInput } from './dto/create-ad.input'
-import { UpdateAdInput } from './dto/update-ad.input'
+import { Injectable } from "@nestjs/common";
+import type { CreateAdInput } from "./dto/create-ad.input";
+import type { UpdateAdInput } from "./dto/update-ad.input";
 
 @Injectable()
 export class AdService {
-  create(createAdInput: CreateAdInput) {
-    return 'This action adds a new ad'
-  }
+	create(_createAdInput: CreateAdInput) {
+		return "This action adds a new ad";
+	}
 
-  findAll() {
-    return `This action returns all ad`
-  }
+	findAll() {
+		return `This action returns all ad`;
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} ad`
-  }
+	findOne(id: number) {
+		return `This action returns a #${id} ad`;
+	}
 
-  update(
-    id: number,
-    updateAdInput: UpdateAdInput,
-  ) {
-    return `This action updates a #${id} ad`
-  }
+	update(id: number, _updateAdInput: UpdateAdInput) {
+		return `This action updates a #${id} ad`;
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} ad`
-  }
+	remove(id: number) {
+		return `This action removes a #${id} ad`;
+	}
 }

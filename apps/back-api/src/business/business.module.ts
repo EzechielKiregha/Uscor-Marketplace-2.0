@@ -1,18 +1,21 @@
-import { Module } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { BusinessService } from './business.service'
-import { BusinessResolver } from './business.resolver'
-import { PubSub } from 'graphql-subscriptions'
+import { Module } from "@nestjs/common";
+import { PubSub } from "graphql-subscriptions";
+import { PrismaService } from "../prisma/prisma.service";
+import { BusinessResolver } from "./business.resolver";
+import { BusinessService } from "./business.service";
+import { PrismaModule } from "../prisma/prisma.module";
 
-const pubSub = new PubSub()
+const pubSub = new PubSub();
 
 // Module
 @Module({
-  providers: [
-    BusinessResolver,
-    BusinessService,
-    PrismaService,
-    { provide: 'PUB_SUB', useValue: pubSub },
-  ],
+	providers: [
+		BusinessResolver,
+		BusinessService,
+		PrismaService,
+		{ provide: "PUB_SUB", useValue: pubSub },
+	],
+	imports: [PrismaModule],
+
 })
 export class BusinessModule {}

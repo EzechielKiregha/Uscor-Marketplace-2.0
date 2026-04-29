@@ -1,112 +1,110 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-} from '@nestjs/graphql'
-import { AccountRechargeEntity } from '../../account-recharge/entities/account-recharge.entity'
-import { ChatEntity } from '../../chat/entities/chat.entity'
-import { FreelanceOrderEntity } from '../../freelance-order/entities/freelance-order.entity'
-import { OrderEntity } from '../../order/entities/order.entity'
-import { ReferralEntity } from '../../referral/entities/referral.entity'
-import { ReviewEntity } from '../../review/entities/review.entity'
-import { AddressEntity } from './address.entity'
-import { PaymentMethodEntity } from './payment-method.entity'
+import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { AccountRechargeEntity } from "../../account-recharge/entities/account-recharge.entity";
+import { FreelanceOrderEntity } from "../../freelance-order/entities/freelance-order.entity";
+import { OrderEntity } from "../../order/entities/order.entity";
+import { ReferralEntity } from "../../referral/entities/referral.entity";
+import { ReviewEntity } from "../../review/entities/review.entity";
+import { AddressEntity } from "./address.entity";
+import { PaymentMethodEntity } from "./payment-method.entity";
 
 @ObjectType()
 export class ClientEntity {
-  @Field({ nullable: true })
-  id?: string
+	@Field({ nullable: true })
+	id?: string;
 
-  @Field({ nullable: true })
-  username?: string
+	@Field({ nullable: true })
+	username?: string;
 
-  @Field({ nullable: true })
-  email?: string
+	@Field({ nullable: true })
+	email?: string;
 
-  @Field({ nullable: true })
-  fullName?: string
+	@Field({ nullable: true })
+	fullName?: string;
 
-  @Field({ nullable: true })
-  address?: string
+	@Field({ nullable: true })
+	address?: string;
 
-  @Field({ nullable: true })
-  phone?: string
-  
-  @Field({ nullable: true })
-  avatar?: string
+	@Field({ nullable: true })
+	phone?: string;
 
-  @Field({ nullable: true })
-  isVerified?: boolean
+	@Field({ nullable: true })
+	avatar?: string;
 
-  // Computed / derived fields
-  @Field(() => Number, { nullable: true })
-  loyaltyPoints?: number
+	@Field({ nullable: true })
+	isVerified?: boolean;
 
-  @Field({ nullable: true })
-  loyaltyTier?: string
+	// Computed / derived fields
+	@Field(() => Number, { nullable: true })
+	loyaltyPoints?: number;
 
-  @Field(() => Number, { nullable: true })
-  totalSpent?: number
+	@Field({ nullable: true })
+	loyaltyTier?: string;
 
-  @Field(() => Number, { nullable: true })
-  totalOrders?: number
+	@Field(() => Number, { nullable: true })
+	totalSpent?: number;
 
-  @Field({ nullable: true })
-  createdAt?: Date
+	@Field(() => Number, { nullable: true })
+	totalOrders?: number;
 
-  @Field({ nullable: true })
-  updatedAt?: Date
+	@Field({ nullable: true })
+	createdAt?: Date;
 
-  // Relations
-  @Field(() => [OrderEntity], { nullable: true }) // Orders made by the client
-  orders?: OrderEntity[]
+	@Field({ nullable: true })
+	updatedAt?: Date;
 
-  @Field(() => [ReviewEntity], { nullable: true }) // Reviews written by the client
-  reviews?: ReviewEntity[]
+	// Relations
+	@Field(() => [OrderEntity], { nullable: true }) // Orders made by the client
+	orders?: OrderEntity[];
 
-  // @Field(() => [ChatEntity]) // Chats associated with the client
-  // chats: ChatEntity[];
+	@Field(() => [ReviewEntity], { nullable: true }) // Reviews written by the client
+	reviews?: ReviewEntity[];
 
-  @Field(() => [AccountRechargeEntity], {
-    nullable: true,
-  }) // Recharges made by the client
-  recharges?: AccountRechargeEntity[]
+	// @Field(() => [ChatEntity]) // Chats associated with the client
+	// chats: ChatEntity[];
 
-  @Field(() => [FreelanceOrderEntity], {
-    nullable: true,
-  }) // Freelance orders made by the client
-  freelanceOrders?: FreelanceOrderEntity[]
+	@Field(() => [AccountRechargeEntity], {
+		nullable: true,
+	}) // Recharges made by the client
+	recharges?: AccountRechargeEntity[];
 
-  @Field(() => [ReferralEntity], {
-    nullable: true,
-  }) // Referrals made by the client
-  referralsMade?: ReferralEntity[]
+	@Field(() => [FreelanceOrderEntity], {
+		nullable: true,
+	}) // Freelance orders made by the client
+	freelanceOrders?: FreelanceOrderEntity[];
 
-  @Field(() => [ReferralEntity], {
-    nullable: true,
-  }) // Referrals received by the client
-  referralsReceived?: ReferralEntity[]
+	@Field(() => [ReferralEntity], {
+		nullable: true,
+	}) // Referrals made by the client
+	referralsMade?: ReferralEntity[];
 
-  // Addresses & payment methods expected by front-end
-  @Field(() => [AddressEntity], { nullable: true })
-  addresses?: any
+	@Field(() => [ReferralEntity], {
+		nullable: true,
+	}) // Referrals received by the client
+	referralsReceived?: ReferralEntity[];
 
-  @Field(() => [PaymentMethodEntity], { nullable: true })
-  paymentMethods?: any
+	// Addresses & payment methods expected by front-end
+	@Field(() => [AddressEntity], {
+		nullable: true,
+	})
+	addresses?: any;
 
+	@Field(() => [PaymentMethodEntity], {
+		nullable: true,
+	})
+	paymentMethods?: any;
 }
 
 @ObjectType()
 export class PaginatedClientsResponse {
-  @Field(() => [ClientEntity])
-  items: ClientEntity[]
+	@Field(() => [ClientEntity])
+	items: ClientEntity[];
 
-  @Field(() => Int)
-  total: number
+	@Field(() => Int)
+	total: number;
 
-  @Field(() => Int)
-  page: number
+	@Field(() => Int)
+	page: number;
 
-  @Field(() => Int)
-  limit: number
+	@Field(() => Int)
+	limit: number;
 }

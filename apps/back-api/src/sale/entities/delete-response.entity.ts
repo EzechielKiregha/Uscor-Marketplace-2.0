@@ -1,10 +1,7 @@
-import {
-  ObjectType,
-  Field,
-} from '@nestjs/graphql'
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class DeleteResponse {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 }

@@ -1,16 +1,8 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-} from '@nestjs/graphql'
-import { KnowYourCustomerService } from './know-your-customer.service'
-import { KnowYourCustomerEntity } from './entities/know-your-customer.entity'
+import { Resolver } from "@nestjs/graphql";
+import { KnowYourCustomerEntity } from "./entities/know-your-customer.entity";
+import type { KnowYourCustomerService } from "./know-your-customer.service";
 
 @Resolver(() => KnowYourCustomerEntity)
 export class KnowYourCustomerResolver {
-  constructor(
-    private readonly knowYourCustomerService: KnowYourCustomerService,
-  ) {}
+	constructor(readonly _knowYourCustomerService: KnowYourCustomerService) {}
 }

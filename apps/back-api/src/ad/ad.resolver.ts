@@ -1,10 +1,8 @@
-import { Resolver } from '@nestjs/graphql'
-import { AdService } from './ad.service'
-import { AdEntity } from './entities/ad.entity'
+import { Resolver } from "@nestjs/graphql";
+import type { AdService } from "./ad.service";
+import { AdEntity } from "./entities/ad.entity";
 
 @Resolver(() => AdEntity)
 export class AdResolver {
-  constructor(
-    private readonly adService: AdService,
-  ) {}
+	constructor(readonly _adService: AdService) {}
 }

@@ -1,65 +1,60 @@
+import { Field, InputType, Int, registerEnumType } from "@nestjs/graphql";
 import {
-  InputType,
-  Int,
-  Field,
-  registerEnumType,
-} from '@nestjs/graphql'
-import {
-  IsArray,
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator'
-import { PaymentMethod } from '../../payment-transaction/dto/create-payment-transaction.input'
+	IsArray,
+	IsEnum,
+	IsInt,
+	IsOptional,
+	IsString,
+	Min,
+} from "class-validator";
+import { PaymentMethod } from "../../payment-transaction/dto/create-payment-transaction.input";
 
 // Enums
 export enum FreelanceStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
+	PENDING = "PENDING",
+	CONFIRMED = "CONFIRMED",
+	IN_PROGRESS = "IN_PROGRESS",
+	COMPLETED = "COMPLETED",
+	CANCELLED = "CANCELLED",
 }
 
 export enum EscrowStatus {
-  HELD = 'HELD',
-  RELEASED = 'RELEASED',
-  DISPUTED = 'DISPUTED',
+	HELD = "HELD",
+	RELEASED = "RELEASED",
+	DISPUTED = "DISPUTED",
 }
 
 registerEnumType(FreelanceStatus, {
-  name: 'FreelanceStatus',
-})
+	name: "FreelanceStatus",
+});
 registerEnumType(EscrowStatus, {
-  name: 'EscrowStatus',
-})
+	name: "EscrowStatus",
+});
 
 // DTOs
 @InputType()
 export class CreateFreelanceOrderInput {
-  @Field()
-  @IsString()
-  serviceId: string
+	@Field()
+	@IsString()
+	serviceId: string;
 
-  @Field()
-  @IsString()
-  clientId: string
+	@Field()
+	@IsString()
+	clientId: string;
 
-  @Field(() => Int, { defaultValue: 1 })
-  @IsInt()
-  @Min(1)
-  quantity: number
+	@Field(() => Int, { defaultValue: 1 })
+	@IsInt()
+	@Min(1)
+	quantity: number;
 
-  @Field(() => [String], { nullable: true })
-  @IsOptional()
-  @IsArray()
-  businessIds?: string[]
+	@Field(() => [String], { nullable: true })
+	@IsOptional()
+	@IsArray()
+	businessIds?: string[];
 
-  @Field(() => PaymentMethod, {
-    defaultValue: PaymentMethod.TOKEN,
-  })
-  @IsEnum(PaymentMethod)
-  paymentMethod: PaymentMethod
+	@Field(() => PaymentMethod, {
+		defaultValue: PaymentMethod.TOKEN,
+	})
+	@IsEnum(PaymentMethod)
+	paymentMethod: PaymentMethod;
 }

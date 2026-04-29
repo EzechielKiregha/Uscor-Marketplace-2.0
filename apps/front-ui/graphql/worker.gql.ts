@@ -212,7 +212,7 @@ export const WORKER_ENTITY = gql`
         updatedAt
         messages {
           id
-          content
+          message
           senderType
           createdAt
         }
@@ -349,7 +349,7 @@ export const CHAT_ENTITY = gql`
     updatedAt
     messages {
       id
-      content
+      message
       senderType
       senderId
       createdAt
@@ -371,7 +371,7 @@ export const CHAT_MESSAGE_ENTITY = gql`
   fragment ChatMessageEntity on ChatMessage {
     id
     chatId
-    content
+    message
     senderType
     senderId
     createdAt

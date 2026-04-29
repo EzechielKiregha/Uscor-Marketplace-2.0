@@ -1,74 +1,71 @@
-import {
-  ObjectType,
-  Field,
-  Float,
-  registerEnumType,
-} from '@nestjs/graphql'
-import { OrderEntity } from '../../order/entities/order.entity'
+import { Field, Float, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { OrderEntity } from "../../order/entities/order.entity";
 
 // Enums
 enum PaymentStatus {
-  PENDING = 'PENDING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
+	PENDING = "PENDING",
+	COMPLETED = "COMPLETED",
+	FAILED = "FAILED",
 }
 
 enum PaymentMethod {
-  TOKEN = 'TOKEN',
-  MOBILE_MONEY = 'MOBILE_MONEY',
+	TOKEN = "TOKEN",
+	MOBILE_MONEY = "MOBILE_MONEY",
 }
 
 // Register enums with GraphQL
 registerEnumType(PaymentStatus, {
-  name: 'PaymentStatus',
-})
+	name: "PaymentStatus",
+});
 registerEnumType(PaymentMethod, {
-  name: 'PaymentMethod',
-})
+	name: "PaymentMethod",
+});
 
 @ObjectType()
 export class PostTransactionEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field(() => Float)
-  amount: number
+	@Field(() => Float)
+	amount: number;
 
-  @Field()
-  status: string
+	@Field()
+	status: string;
 
-  @Field()
-  createdAt: Date
+	@Field()
+	createdAt: Date;
 }
 
 @ObjectType()
 export class PaymentTransactionEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field(() => Float)
-  amount: number
+	@Field(() => Float)
+	amount: number;
 
-  @Field()
-  method: PaymentMethod
+	@Field()
+	method: PaymentMethod;
 
-  @Field()
-  status: PaymentStatus
+	@Field()
+	status: PaymentStatus;
 
-  @Field()
-  transactionDate: Date
+	@Field()
+	transactionDate: Date;
 
-  @Field({ nullable: true })
-  qrCode?: string
+	@Field({ nullable: true })
+	qrCode?: string;
 
-  @Field()
-  createdAt: Date
+	@Field()
+	createdAt: Date;
 
-  // Relations
-  @Field(() => OrderEntity)
-  order: OrderEntity
+	// Relations
+	@Field(() => OrderEntity)
+	order: OrderEntity;
 
-  // Expose single latest post transaction for frontend
-  @Field(() => PostTransactionEntity, { nullable: true })
-  postTransaction?: PostTransactionEntity
+	// Expose single latest post transaction for frontend
+	@Field(() => PostTransactionEntity, {
+		nullable: true,
+	})
+	postTransaction?: PostTransactionEntity;
 }

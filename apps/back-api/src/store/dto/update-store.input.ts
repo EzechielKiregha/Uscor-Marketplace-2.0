@@ -1,18 +1,15 @@
-import {
-  IsOptional,
-  IsString,
-} from 'class-validator'
-import { InputType, Field } from '@nestjs/graphql'
+import { Field, InputType } from "@nestjs/graphql";
+import { IsOptional, IsString } from "class-validator";
 
 @InputType()
 export class UpdateStoreInput {
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  name?: string
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	name?: string;
 
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  address?: string
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	address?: string;
 }

@@ -1,5 +1,5 @@
 // graphql/loyalty.gql.ts
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // ======================
 // LOYALTY ENTITIES

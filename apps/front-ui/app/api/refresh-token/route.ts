@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { gql } from '@apollo/client';
-import { client } from '@/lib/apollo-client';
+import { gql } from "@apollo/client";
+import { type NextRequest, NextResponse } from "next/server";
+import { client } from "@/lib/apollo-client";
 
 const REFRESH_TOKEN_MUTATION = gql`
   mutation RefreshToken($refreshToken: String!) {
@@ -11,19 +11,25 @@ const REFRESH_TOKEN_MUTATION = gql`
 `;
 
 export async function POST(request: NextRequest) {
-  try {
-    const { refreshToken } = await request.json();
-    if (!refreshToken) {
-      return NextResponse.json({ error: 'Refresh token required' }, { status: 400 });
-    }
+	try {
+		const { refreshToken } = await request.json();
+		if (!refreshToken) {
+			return NextResponse.json(
+				{ error: "Refresh token required" },
+				{ status: 400 },
+			);
+		}
 
-    const { data } = await client.mutate({
-      mutation: REFRESH_TOKEN_MUTATION,
-      variables: { refreshToken },
-    });
+		const { data } = await client.mutate({
+			mutation: REFRESH_TOKEN_MUTATION,
+			variables: { refreshToken },
+		});
 
-    return NextResponse.json({ accessToken: data.refreshToken.accessToken });
-  } catch (error) {
-    return NextResponse.json({ error: 'Token refresh failed' }, { status: 401 });
-  }
+		return NextResponse.json({ accessToken: data.refreshToken.accessToken });
+	} catch (_error) {
+		return NextResponse.json(
+			{ error: "Token refresh failed" },
+			{ status: 401 },
+		);
+	}
 }

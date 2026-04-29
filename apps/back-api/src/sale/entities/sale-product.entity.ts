@@ -1,38 +1,33 @@
-import {
-  ObjectType,
-  Field,
-  Int,
-  Float,
-} from '@nestjs/graphql'
-import GraphQLJSON from 'graphql-type-json'
-import { ProductEntity } from '../../product/entities/product.entity'
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
+import GraphQLJSON from "graphql-type-json";
+import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
 export class SaleProductEntity {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field(() => Int)
-  quantity: number
+	@Field(() => Int)
+	quantity: number;
 
-  @Field(() => String)
-  saleId: string
+	@Field(() => String)
+	saleId: string;
 
-  @Field(() => String)
-  productId: string
+	@Field(() => String)
+	productId: string;
 
-  @Field(() => Float)
-  price: number
+	@Field(() => Float)
+	price: number;
 
-  @Field(() => String, { nullable: true })
-  description?: string
+	@Field(() => String, { nullable: true })
+	description?: string;
 
-  @Field(() => GraphQLJSON, { nullable: true })
-  modifiers?: any
+	@Field(() => GraphQLJSON, { nullable: true })
+	modifiers?: any;
 
-  @Field()
-  createdAt: Date
+	@Field()
+	createdAt: Date;
 
-  @Field(() => ProductEntity)
-  product: ProductEntity
+	@Field(() => ProductEntity)
+	product: ProductEntity;
 }

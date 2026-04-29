@@ -1,17 +1,13 @@
-import {
-  ObjectType,
-  Field,
-  ID,
-} from '@nestjs/graphql'
-import { ApiProperty } from '@nestjs/swagger'
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { ApiProperty } from "@nestjs/swagger";
 
 @ObjectType()
 export class DashboardClientDto {
-  @ApiProperty()
-  @Field(() => ID)
-  id: string
+	@ApiProperty()
+	@Field(() => ID)
+	id: string;
 
-  @ApiProperty()
-  @Field()
-  fullName: string
+	@ApiProperty()
+	@Field()
+	fullName: string;
 }

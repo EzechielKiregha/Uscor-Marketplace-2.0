@@ -1,10 +1,10 @@
-import { ObjectType, Field } from '@nestjs/graphql'
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class DeliveryAddressEntity {
-  @Field({ nullable: true })
-  street?: string
+	@Field({ nullable: true })
+	street?: string;
 
-  @Field({ nullable: true })
-  city?: string
+	@Field({ nullable: true })
+	city?: string;
 }
