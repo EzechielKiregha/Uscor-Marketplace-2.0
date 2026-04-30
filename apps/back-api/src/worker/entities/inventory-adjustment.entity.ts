@@ -1,7 +1,7 @@
 import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { ProductEntity } from "../../product/entities/product.entity";
 import { StoreEntity } from "../../store/entities/store.entity";
-import { AdjustmentType } from "src/generated/prisma/enums";
+import { AdjustmentType } from "../../generated/prisma/enums";
 
 registerEnumType(AdjustmentType, {
 	name: "AdjustmentType",

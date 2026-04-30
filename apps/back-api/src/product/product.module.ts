@@ -5,7 +5,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { ProductResolver } from "./product.resolver";
 import { ProductService } from "./product.service";
 import { PrismaModule } from "../prisma/prisma.module";
-import { MediaModule } from "src/media/media.module";
+import { MediaModule } from "../media/media.module";
 
 const pubSub = new PubSub();
 

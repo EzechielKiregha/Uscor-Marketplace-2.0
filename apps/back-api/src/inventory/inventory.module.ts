@@ -11,7 +11,7 @@ import { WorkerModule } from "../worker/worker.module";
 import { WorkerService } from "../worker/worker.service";
 import { InventoryResolver } from "./inventory.resolver";
 import { InventoryService } from "./inventory.service";
-import { PrismaModule } from "src/prisma/prisma.module";
+import { PrismaModule } from "../prisma/prisma.module";
 
 const pubSub = new PubSub();
 // Module
