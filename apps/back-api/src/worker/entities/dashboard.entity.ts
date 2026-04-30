@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { ClientEntity } from "src/client/entities/client.entity";
 
 @ObjectType()
 export class WorkerPerformanceEntity {
@@ -49,6 +50,9 @@ export class RecentOrderEntity {
 
 	@Field()
 	status: string;
+
+	@Field(() => ClientEntity)
+	client: ClientEntity;
 
 	@Field()
 	createdAt: Date;

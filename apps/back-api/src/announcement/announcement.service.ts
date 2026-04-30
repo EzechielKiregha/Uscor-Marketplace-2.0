@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
-import type { PubSub } from "graphql-subscriptions";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateAnnouncementInput } from "./dto/create-announcement.input";
+import { PubSub } from "graphql-subscriptions";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateAnnouncementInput } from "./dto/create-announcement.input";
 
 @Injectable()
 export class AnnouncementService {

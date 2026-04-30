@@ -1,17 +1,17 @@
 import { Inject, UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
+import { PubSub } from "graphql-subscriptions";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { BusinessEntity } from "../business/entities/business.entity";
 import { ClientEntity } from "../client/entities/client.entity";
 import { WorkerEntity } from "../worker/entities/worker.entity";
-import type { AdminService } from "./admin.service";
-import type { CreateAdminInput } from "./dto/create-admin.input";
+import { AdminService } from "./admin.service";
+import { CreateAdminInput } from "./dto/create-admin.input";
 import { GetUsersInput } from "./dto/get-users.input";
-import type { RejectKycInput } from "./dto/reject-kyc.input";
-import type { UpdateAdminInput } from "./dto/update-admin.input";
-import type { UpdateUserStatusInput } from "./dto/update-user-status.input";
-import type { VerifyKycInput } from "./dto/verify-kyc.input";
+import { RejectKycInput } from "./dto/reject-kyc.input";
+import { UpdateAdminInput } from "./dto/update-admin.input";
+import { UpdateUserStatusInput } from "./dto/update-user-status.input";
+import { VerifyKycInput } from "./dto/verify-kyc.input";
 import { Admin } from "./entities/admin.entity";
 import {
 	PaginatedAdminsResponse,
@@ -19,7 +19,7 @@ import {
 	PaginatedClientsResponse,
 	PaginatedWorkersResponse,
 } from "./entities/paginated-users.entity";
-import type { UserService } from "./user.service";
+import { UserService } from "./user.service";
 
 @Resolver()
 export class AdminResolver {

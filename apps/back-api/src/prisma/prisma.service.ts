@@ -1,4 +1,3 @@
-// apps/back-api/../prisma/prisma.service.ts
 import {
 	Injectable,
 	type OnModuleDestroy,

@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import type { AuthPayload } from "../auth/entities/auth-payload.entity";
-import type { BusinessService } from "../business/business.service";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { WorkerService } from "../worker/worker.service";
-import type { CreateStoreInput } from "./dto/create-store.input";
-import type { UpdateStoreInput } from "./dto/update-store.input";
+import { AuthPayload } from "../auth/entities/auth-payload.entity";
+import { BusinessService } from "../business/business.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { WorkerService } from "../worker/worker.service";
+import { CreateStoreInput } from "./dto/create-store.input";
+import { UpdateStoreInput } from "./dto/update-store.input";
 
 // Service
 @Injectable()

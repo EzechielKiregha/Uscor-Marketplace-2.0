@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { hash } from "argon2";
-import type { PubSub } from "graphql-subscriptions";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateAdminInput } from "./dto/create-admin.input";
-import type { UpdateAdminInput } from "./dto/update-admin.input";
+import { PubSub } from "graphql-subscriptions";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateAdminInput } from "./dto/create-admin.input";
+import { UpdateAdminInput } from "./dto/update-admin.input";
 
 @Injectable()
 export class AdminService {

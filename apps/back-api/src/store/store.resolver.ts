@@ -3,12 +3,12 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { WorkerService } from "../worker/worker.service";
-import type { CreateStoreInput } from "./dto/create-store.input";
-import type { UpdateStoreInput } from "./dto/update-store.input";
+import { WorkerService } from "../worker/worker.service";
+import { CreateStoreInput } from "./dto/create-store.input";
+import { UpdateStoreInput } from "./dto/update-store.input";
 import { StoreEntity } from "./entities/store.entity";
 import { StoreStatistics } from "./entities/store-stats.entity";
-import type { StoreService } from "./store.service";
+import { StoreService } from "./store.service";
 
 // Resolver
 @Resolver(() => StoreEntity)

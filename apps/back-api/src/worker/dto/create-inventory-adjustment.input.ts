@@ -1,14 +1,6 @@
 import { Field, InputType, registerEnumType } from "@nestjs/graphql";
 import { IsEnum, IsNumber, IsOptional, IsString, Min } from "class-validator";
-
-export enum AdjustmentType {
-	RESTOCK = "RESTOCK",
-	DAMAGE = "DAMAGE",
-	SHRINKAGE = "SHRINKAGE",
-	LOSS = "LOSS",
-	CORRECTION = "CORRECTION",
-	RETURN = "RETURN",
-}
+import { AdjustmentType } from "../../generated/prisma/enums";
 
 registerEnumType(AdjustmentType, {
 	name: "AdjustmentType",

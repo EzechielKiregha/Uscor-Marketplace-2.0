@@ -41,12 +41,14 @@ export const useIndexedDB = () => {
 		};
 	}, []);
 
+	
+
 	// Auto-sync when coming online
 	useEffect(() => {
 		if (isOnline && isInitialized) {
 			handleSync();
 		}
-	}, [isOnline, isInitialized, handleSync]);
+	}, [isOnline, isInitialized]);
 
 	const saveData = async (storeName: string, data: any) => {
 		if (!isInitialized) return;
@@ -55,6 +57,19 @@ export const useIndexedDB = () => {
 		} catch (error) {
 			console.error("Failed to save to IndexedDB:", error);
 			return null;
+		}
+	};
+
+	const handleSync = async () => {
+		if (!isOnline || !isInitialized) return;
+
+		setSyncing(true);
+		try {
+			await syncOfflineOperations();
+		} catch (error) {
+			console.error("Sync failed:", error);
+		} finally {
+			setSyncing(false);
 		}
 	};
 
@@ -105,19 +120,6 @@ export const useIndexedDB = () => {
 		} catch (error) {
 			console.error("Failed to clear IndexedDB store:", error);
 			return null;
-		}
-	};
-
-	const handleSync = async () => {
-		if (!isOnline || !isInitialized) return;
-
-		setSyncing(true);
-		try {
-			await syncOfflineOperations();
-		} catch (error) {
-			console.error("Sync failed:", error);
-		} finally {
-			setSyncing(false);
 		}
 	};
 

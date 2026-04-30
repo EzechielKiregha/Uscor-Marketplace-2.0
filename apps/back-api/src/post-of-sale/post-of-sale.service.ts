@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { CreatePostOfSaleInput } from "./dto/create-post-of-sale.input";
-import type { UpdatePostOfSaleInput } from "./dto/update-post-of-sale.input";
+import { CreatePostOfSaleInput } from "./dto/create-post-of-sale.input";
+import { UpdatePostOfSaleInput } from "./dto/update-post-of-sale.input";
 
 @Injectable()
 export class PostOfSaleService {

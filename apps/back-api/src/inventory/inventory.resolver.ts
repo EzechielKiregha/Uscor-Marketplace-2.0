@@ -7,18 +7,18 @@ import {
 	Resolver,
 	Subscription,
 } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
+import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { StoreService } from "../store/store.service";
-import type { CreateInventoryAdjustmentInput } from "./dto/create-inventory.input";
-import type { CreatePurchaseOrderInput } from "./dto/create-purchase-order.input";
+import { StoreService } from "../store/store.service";
+import { CreateInventoryAdjustmentInput } from "./dto/create-inventory.input";
+import { CreatePurchaseOrderInput } from "./dto/create-purchase-order.input";
 import { PurchaseOrderProductInput } from "./dto/create-purchase-order-product.input";
-import type { CreateTransferOrderInput } from "./dto/create-transfer-order.input";
-import type { LowStockAlertInput } from "./dto/low-stock-alert.input";
-import type { UpdatePurchaseOrderInput } from "./dto/update-purchase-order.input";
-import type { UpdateTransferOrderInput } from "./dto/update-transfer-order.input";
+import { CreateTransferOrderInput } from "./dto/create-transfer-order.input";
+import { LowStockAlertInput } from "./dto/low-stock-alert.input";
+import { UpdatePurchaseOrderInput } from "./dto/update-purchase-order.input";
+import { UpdateTransferOrderInput } from "./dto/update-transfer-order.input";
 import { BulkImportResultEntity } from "./entities/bulk-import-result.entity";
 import {
 	InventoryAdjustmentEntity,
@@ -35,7 +35,7 @@ import {
 	PaginatedTransferOrderResponse,
 	TransferOrderEntity,
 } from "./entities/transfer-order.entity";
-import type { InventoryService } from "./inventory.service";
+import { InventoryService } from "./inventory.service";
 
 // Resolver
 @Resolver(() => InventoryEntity)

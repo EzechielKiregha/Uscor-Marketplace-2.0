@@ -1,21 +1,17 @@
 import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { ClientEntity } from "../../client/entities/client.entity";
 import { StoreEntity } from "../../store/entities/store.entity";
-import { SaleStatus } from "../dto/create-sale.input";
-import { SaleProductEntity } from "./sale-product.entity";
+import { SaleProductEntityWorker } from "./sale-product.entity";
 import { WorkerEntity } from "./worker.entity";
 import { PaymentMethod } from "../../payment-transaction/dto/create-payment-transaction.input";
-
-registerEnumType(PaymentMethod, {
-	name: "PaymentMethod",
-});
+import { SaleStatus } from "../../generated/prisma/enums";
 
 registerEnumType(SaleStatus, {
 	name: "SaleStatus",
 });
 
 @ObjectType()
-export class SaleEntity {
+export class SaleEntityWorker {
 	@Field()
 	id: string;
 
@@ -55,10 +51,10 @@ export class SaleEntity {
 	@Field()
 	updatedAt: Date;
 
-	@Field(() => [SaleProductEntity], {
+	@Field(() => [SaleProductEntityWorker], {
 		nullable: true,
 	})
-	saleProducts?: SaleProductEntity[];
+	saleProducts?: SaleProductEntityWorker[];
 
 	@Field(() => [SaleReturnEntity], {
 		nullable: true,

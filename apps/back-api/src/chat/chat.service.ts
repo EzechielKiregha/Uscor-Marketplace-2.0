@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { PrismaService } from "../prisma/prisma.service";
-import type {
+import { PrismaService } from "../prisma/prisma.service";
+import {
 	PaginatedChatsResponse,
 	PaginatedMessagesResponse,
 	UnreadCountResponse,
@@ -12,7 +12,7 @@ import {
 	NegotiationType,
 	type SendMessageInput,
 } from "./dto/create-chat.input";
-import type { UpdateChatInput } from "./dto/update-chat.input";
+import { UpdateChatInput } from "./dto/update-chat.input";
 
 // Service
 @Injectable()

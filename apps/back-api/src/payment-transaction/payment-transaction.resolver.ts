@@ -3,11 +3,11 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreatePaymentTransactionInput } from "./dto/create-payment-transaction.input";
-import type { UpdatePaymentTransactionInput } from "./dto/update-payment-transaction.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreatePaymentTransactionInput } from "./dto/create-payment-transaction.input";
+import { UpdatePaymentTransactionInput } from "./dto/update-payment-transaction.input";
 import { PaymentTransactionEntity } from "./entities/payment-transaction.entity";
-import type { PaymentTransactionService } from "./payment-transaction.service";
+import { PaymentTransactionService } from "./payment-transaction.service";
 
 // Resolver
 @Resolver(() => PaymentTransactionEntity)

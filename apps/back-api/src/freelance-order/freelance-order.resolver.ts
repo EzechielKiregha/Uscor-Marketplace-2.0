@@ -12,14 +12,14 @@ import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateFreelanceOrderInput } from "./dto/create-freelance-order.input";
-import type { UpdateFreelanceOrderInput } from "./dto/update-freelance-order.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateFreelanceOrderInput } from "./dto/create-freelance-order.input";
+import { UpdateFreelanceOrderInput } from "./dto/update-freelance-order.input";
 import {
 	FreelanceOrderEntity,
 	PaginatedFreelanceOrdersResponse,
 } from "./entities/freelance-order.entity";
-import type { FreelanceOrderService } from "./freelance-order.service";
+import { FreelanceOrderService } from "./freelance-order.service";
 
 const pubSub = new PubSub();
 

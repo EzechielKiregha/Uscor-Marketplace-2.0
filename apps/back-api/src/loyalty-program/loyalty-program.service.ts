@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import type { BusinessService } from "../business/business.service";
-import type { ClientService } from "../client/client.service";
-import type { PrismaService } from "../prisma/prisma.service";
-import type {
+import { BusinessService } from "../business/business.service";
+import { ClientService } from "../client/client.service";
+import { PrismaService } from "../prisma/prisma.service";
+import {
 	CreateLoyaltyProgramInput,
 	CreatePointsTransactionInput,
 	EarnPointsInput,
 	RedeemPointsInput,
 } from "./dto/loyalty-program.input";
-import type { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
+import { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
 
 // Service
 @Injectable()

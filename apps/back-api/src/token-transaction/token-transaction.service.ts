@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import type { AccountRechargeService } from "../account-recharge/account-recharge.service";
+import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
 	Country,
 	RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateTokenTransactionInput } from "./dto/create-token-transaction.input";
-import type { RedeemTokenTransactionInput } from "./dto/redeem-token-transaction.input";
-import type { ReleaseTokenTransactionInput } from "./dto/release-token-transaction.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateTokenTransactionInput } from "./dto/create-token-transaction.input";
+import { RedeemTokenTransactionInput } from "./dto/redeem-token-transaction.input";
+import { ReleaseTokenTransactionInput } from "./dto/release-token-transaction.input";
 
 // Service
 @Injectable()

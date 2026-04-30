@@ -7,9 +7,9 @@ import {
 	Resolver,
 	Subscription,
 } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
-import type { AnnouncementService } from "./announcement.service";
-import type { CreateAnnouncementInput } from "./dto/create-announcement.input";
+import { PubSub } from "graphql-subscriptions";
+import { AnnouncementService } from "./announcement.service";
+import { CreateAnnouncementInput } from "./dto/create-announcement.input";
 import {
 	AnnouncementEntity,
 	PaginatedAnnouncementsResponse,

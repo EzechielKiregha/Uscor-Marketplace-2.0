@@ -4,18 +4,18 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { hash } from "argon2";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { AddSaleProductInput } from "./dto/add-sale-product.input";
-import type { CompleteSaleInput } from "./dto/complete-sale.input";
-import type { CreateInventoryAdjustmentInput } from "./dto/create-inventory-adjustment.input";
-import type { CreateSaleInput } from "./dto/create-sale.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { AddSaleProductInput } from "./dto/add-sale-product.input";
+import { CompleteSaleInput } from "./dto/complete-sale.input";
+import { CreateInventoryAdjustmentInput } from "./dto/create-inventory-adjustment.input";
+import { CreateSaleInput } from "./dto/create-sale.input";
 import { type CreateWorkerInput, WorkerRole } from "./dto/create-worker.input";
-import type { EndShiftInput } from "./dto/end-shift.input";
-import type { ProcessMobileMoneyPaymentInput } from "./dto/process-mobile-money.input";
-import type { SendChatMessageInput } from "./dto/send-chat-message.input";
-import type { StartShiftInput } from "./dto/start-shift.input";
-import type { UpdateSaleProductInput } from "./dto/update-sale-product.input";
-import type { UpdateWorkerInput } from "./dto/update-worker.input";
+import { EndShiftInput } from "./dto/end-shift.input";
+import { ProcessMobileMoneyPaymentInput } from "./dto/process-mobile-money.input";
+import { SendChatMessageInput } from "./dto/send-chat-message.input";
+import { StartShiftInput } from "./dto/start-shift.input";
+import { UpdateSaleProductInput } from "./dto/update-sale-product.input";
+import { UpdateWorkerInput } from "./dto/update-worker.input";
 
 @Injectable()
 export class WorkerService {
@@ -73,7 +73,7 @@ export class WorkerService {
 						freelanceService: true,
 					},
 				},
-				chats: true,
+				chatParticipants : true,
 				sales: true,
 				shifts: true,
 				medias: true,
@@ -97,9 +97,13 @@ export class WorkerService {
 						freelanceService: true,
 					},
 				},
-				chats: {
+				chatParticipants: {
 					include: {
-						messages: true,
+						chat: {
+							include: {
+								messages: true,
+							}
+						},
 					},
 				},
 				sales: {
@@ -631,8 +635,12 @@ export class WorkerService {
 		const items = await this.prisma.chat.findMany({
 			include: {
 				messages: true,
-				business: true,
-				client: true,
+				participants:{
+					include: {
+						business: true,
+						client: true,
+					}
+				}
 			},
 			skip: (page - 1) * limit,
 			take: limit,

@@ -2,14 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ChatMessageEntity {
-	id: String!
-	chatId: String!
-	content: String!
-	senderType: String
-	senderId: String
-	sender: ChatUserInfo
-	createdAt: DateTime!
+type CategoryEntity {
+  id: String!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [ProductEntity!]
 }
 
 """
@@ -17,264 +16,205 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type ChatParticipantEntity {
-	id: String!
-	chatId: String!
-	clientId: String
-	client: ClientEntity
-	businessId: String
-	business: BusinessEntity
-	workerId: String
-	worker: WorkerEntity
-	createdAt: DateTime!
+type ChatMessageEntity {
+  id: String!
+  chatId: String!
+  content: String!
+  senderType: String
+  senderId: String
+  sender: ChatUserInfo
+  createdAt: DateTime!
 }
 
-type ChatProductInfo {
-	id: String!
-	title: String!
-	description: String!
-	price: Float!
-	businessId: String
-	business: BusinessEntity
-	isPhysical: Boolean
+type MediaEntity {
+  id: String!
+  url: String!
+  type: String!
+  productId: String!
+  createdAt: DateTime!
+  product: ProductEntity!
 }
 
-type ChatUserInfo {
-	id: String!
-	fullName: String
-	name: String
-	avatar: String
+type AuditLogEntity {
+  id: String!
+  action: String!
+  entityType: String!
+  entityId: String!
+  details: String
+  createdAt: DateTime!
+  adminId: String
+  admin: WorkerEntity
 }
 
-type chatNotification {
-	id: String!
-	chatId: String!
-	userId: String!
-	lastReadAt: DateTime!
-	unreadCount: Int!
-	createdAt: DateTime!
-	updatedAt: DateTime!
+type PaginatedAuditLogsResponse {
+  items: [AuditLogEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
-type ChatEntity {
-	id: String!
-	status: ChatStatus!
-	isSecure: Boolean!
-	negotiationType: NegotiationType
-	productId: String
-	product: ChatProductInfo
-	serviceId: String
-	service: FreelanceServiceEntity
-	clientId: String
-	client: ChatUserInfo
-	businessId: String
-	business: ChatUserInfo
-	workerId: String
-	worker: ChatUserInfo
-	participants: [ChatParticipantEntity!]!
-	messages: [ChatMessageEntity!]!
-	unreadCount: Float!
-	createdAt: DateTime!
-	updatedAt: DateTime!
+type PaymentMethodEntity {
+  id: String
+  type: String
+  provider: String
+  accountNumber: String
+  expiryMonth: Int
+  expiryYear: Int
+  cardToken: String
+  last4: String
+  isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
-enum ChatStatus {
-	PENDING
-	ACTIVE
-	CLOSED
-}
-
-enum NegotiationType {
-	REOWNERSHIP
-	FREELANCEORDER
-	PURCHASE
-	GENERAL
-}
-
-type KnowYourCustomerEntity {
-	id: String!
-	status: String!
-	documentUrl: String!
-	submittedAt: DateTime!
-	verifiedAt: DateTime
-	businessId: String
-	clientId: String
-	workerId: String
-	business: BusinessEntity
-	client: ClientEntity
-	worker: WorkerEntity
-}
-
-type WorkerEntity {
-	id: String
-	email: String
-	fullName: String
-	avatar: String
-	role: String
-	isVerified: Boolean
-	createdAt: DateTime
-	updatedAt: DateTime
-	business: BusinessEntity
-	kyc: KnowYourCustomerEntity
-	workerServiceAssignments: [WorkerServiceAssignmentEntity!]
-	chats: [ChatEntity!]
-}
-
-type AdEntity {
-	id: String!
-	businessId: String!
-	productId: String!
-	price: Float!
-	periodDays: Int!
-	createdAt: DateTime!
-	endedAt: DateTime
-	business: BusinessEntity!
-	product: ProductEntity!
-}
-
-type CategoryEntity {
-	id: String!
-	name: String!
-	description: String
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	products: [ProductEntity!]
-}
-
-type PostTransactionEntity {
-	id: String!
-	amount: Float!
-	status: String!
-	createdAt: DateTime!
-}
-
-type PaymentTransactionEntity {
-	id: String!
-	amount: Float!
-	method: String!
-	status: String!
-	transactionDate: DateTime!
-	qrCode: String
-	createdAt: DateTime!
-	order: OrderEntity!
-	postTransaction: PostTransactionEntity
-}
-
-type PurchaseOrderProductEntity {
-	id: String!
-	productId: String!
-	quantity: Int!
-	product: ProductEntity!
-	createdAt: DateTime!
-}
-
-type PurchaseOrderEntity {
-	id: String
-	businessId: String
-	business: BusinessEntity
-	storeId: String
-	store: StoreEntity
-	supplierId: String
-	status: PurchaseOrderStatus
-	expectedDelivery: DateTime
-	createdAt: DateTime
-	updatedAt: DateTime
-	products: [PurchaseOrderProductEntity!]
-}
-
-enum PurchaseOrderStatus {
-	PENDING
-	COMPLETED
-	CANCELLED
-}
-
-type PaginatedPurchaseOrderResponse {
-	items: [PurchaseOrderEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+type OrderProductEntity {
+  id: String!
+  orderId: String!
+  productId: String!
+  quantity: Int!
+  order: OrderEntity!
+  product: ProductEntity!
 }
 
 type InventoryEntity {
-	id: String
-	productId: String
-	product: ProductEntity
-	storeId: String
-	store: StoreEntity
-	quantity: Int
-	minQuantity: Int
-	createdAt: DateTime
-	updatedAt: DateTime
+  id: String
+  productId: String
+  product: ProductEntity
+  storeId: String
+  store: StoreEntity
+  quantity: Int
+  minQuantity: Int
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type InventoryAdjustmentEntity {
-	id: String
-	productId: String
-	product: ProductEntity
-	storeId: String
-	store: StoreEntity
-	adjustmentType: AdjustmentType
-	quantity: Int
-	reason: String
-	createdAt: DateTime
+  id: String
+  productId: String
+  product: ProductEntity
+  storeId: String
+  store: StoreEntity
+  adjustmentType: AdjustmentType
+  quantity: Int
+  reason: String
+  createdAt: DateTime
 }
 
 enum AdjustmentType {
-	ADD
-	REMOVE
+  ADD
+  REMOVE
+  RESTOCK
+  DAMAGE
+  SHRINKAGE
+  LOSS
+  CORRECTION
+  RETURN
 }
 
 type PaginatedInventoryResponse {
-	items: [InventoryEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [InventoryEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PurchaseOrderProductEntity {
+  id: String!
+  productId: String!
+  quantity: Int!
+  product: ProductEntity!
+  createdAt: DateTime!
+}
+
+type PurchaseOrderEntity {
+  id: String
+  businessId: String
+  business: BusinessEntity
+  storeId: String
+  store: StoreEntity
+  supplierId: String
+  status: PurchaseOrderStatus
+  expectedDelivery: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  products: [PurchaseOrderProductEntity!]
+}
+
+enum PurchaseOrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+type PaginatedPurchaseOrderResponse {
+  items: [PurchaseOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type TransferOrderProductEntity {
-	id: String!
-	productId: String!
-	quantity: Int!
-	product: ProductEntity!
-	createdAt: DateTime!
+  id: String!
+  productId: String!
+  quantity: Int!
+  product: ProductEntity!
+  createdAt: DateTime!
 }
 
 type TransferOrderEntity {
-	id: String
-	fromStoreId: String
-	fromStore: StoreEntity
-	toStoreId: String
-	toStore: StoreEntity
-	status: TransferOrderStatus
-	createdAt: DateTime
-	updatedAt: DateTime
-	products: [TransferOrderProductEntity!]
+  id: String
+  fromStoreId: String
+  fromStore: StoreEntity
+  toStoreId: String
+  toStore: StoreEntity
+  status: TransferOrderStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+  products: [TransferOrderProductEntity!]
 }
 
 enum TransferOrderStatus {
-	PENDING
-	SHIPPED
-	DELIVERED
-	CANCELLED
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
 type PaginatedTransferOrderResponse {
-	items: [TransferOrderEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [TransferOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type ReturnEntity {
+  id: String!
+  saleId: String!
+  reason: String
+  status: SaleStatus!
+  createdAt: DateTime!
+  sale: SaleEntity!
+}
+
+enum SaleStatus {
+  OPEN
+  CLOSED
+  PENDING
+  COMPLETED
+  CANCELLED
+  REFUNDED
 }
 
 type SaleProductEntity {
-	id: String!
-	quantity: Int!
-	saleId: String!
-	productId: String!
-	price: Float!
-	description: String
-	modifiers: JSON
-	createdAt: DateTime!
-	product: ProductEntity!
+  id: String!
+  quantity: Int!
+  saleId: String!
+  productId: String!
+  price: Float!
+  description: String
+  modifiers: JSON
+  createdAt: DateTime!
+  product: ProductEntity!
 }
 
 """
@@ -282,2708 +222,2457 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-type ReturnEntity {
-	id: String!
-	saleId: String!
-	reason: String
-	status: SaleStatus!
-	createdAt: DateTime!
-	sale: SaleEntity!
-}
-
-enum SaleStatus {
-	OPEN
-	CLOSED
-	REFUNDED
-}
-
 type SaleEntity {
-	id: String
-	storeId: String
-	store: StoreEntity
-	workerId: String
-	worker: WorkerEntity
-	clientId: String
-	client: ClientEntity
-	totalAmount: Float
-	discount: Float
-	paymentMethod: PaymentMethod
-	status: SaleStatus
-	createdAt: DateTime
-	updatedAt: DateTime
-	saleProducts: [SaleProductEntity!]
-	returns: [ReturnEntity!]
+  id: String
+  storeId: String
+  store: StoreEntity
+  workerId: String
+  worker: WorkerEntity
+  clientId: String
+  client: ClientEntity
+  totalAmount: Float
+  discount: Float
+  paymentMethod: PaymentMethod
+  status: SaleStatus
+  createdAt: DateTime
+  updatedAt: DateTime
+  saleProducts: [SaleProductEntity!]
+  returns: [ReturnEntity!]
 }
 
 enum PaymentMethod {
-	TOKEN
-	MOBILE_MONEY
-	CASH
-	CARD
+  TOKEN
+  MOBILE_MONEY
+  CASH
+  CARD
 }
 
 type ShiftEntity {
-	id: String
-	workerId: String
-	worker: WorkerEntity
-	storeId: String
-	store: StoreEntity
-	startTime: DateTime
-	endTime: DateTime
-	sales: Float
-	createdAt: DateTime
-	updatedAt: DateTime
+  id: String
+  workerId: String
+  worker: WorkerEntity
+  storeId: String
+  store: StoreEntity
+  startTime: DateTime
+  endTime: DateTime
+  sales: Float
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type StoreEntity {
-	id: String!
-	businessId: String!
-	name: String!
-	address: String
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	business: BusinessEntity!
-	transferOrdersFrom: [TransferOrderEntity!]
-	transferOrdersTo: [TransferOrderEntity!]
-	inventoryAdjustments: [InventoryAdjustmentEntity!]
-	purchaseOrders: [PurchaseOrderEntity!]
-	sales: [SaleEntity!]
-	shifts: [ShiftEntity!]
-	products: [ProductEntity!]
-}
-
-type OrderItemEntity {
-	id: String!
-	name: String!
-	price: Float!
-	quantity: Int!
-	media: [MediaEntity!]
+  id: String!
+  businessId: String!
+  name: String!
+  address: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity!
+  transferOrdersFrom: [TransferOrderEntity!]
+  transferOrdersTo: [TransferOrderEntity!]
+  inventoryAdjustments: [InventoryAdjustmentEntity!]
+  purchaseOrders: [PurchaseOrderEntity!]
+  sales: [SaleEntity!]
+  shifts: [ShiftEntity!]
+  products: [ProductEntity!]
 }
 
 type DeliveryAddressEntity {
-	street: String
-	city: String
+  street: String
+  city: String
 }
 
-type PaymentMethodEntity {
-	id: String
-	type: String
-	provider: String
-	accountNumber: String
-	expiryMonth: Int
-	expiryYear: Int
-	cardToken: String
-	last4: String
-	isDefault: Boolean
-	createdAt: DateTime
-	updatedAt: DateTime
+type OrderItemEntity {
+  id: String!
+  name: String!
+  price: Float!
+  quantity: Int!
+  media: [MediaEntity!]
 }
 
 type OrderEntity {
-	id: String!
-	deliveryFee: Float!
-	deliveryAddress: DeliveryAddressEntity
-	qrCode: String
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	clientId: String
-	client: ClientEntity!
-	payment: PaymentTransactionEntity
-	products: [OrderProductEntity!]
-	orderNumber: String
-	status: String
-	items: [OrderItemEntity!]
-	business: BusinessEntity
-	store: StoreEntity
-	paymentMethod: PaymentMethodEntity
-	totalAmount: Float
+  id: String!
+  deliveryFee: Float!
+  deliveryAddress: DeliveryAddressEntity
+  qrCode: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  clientId: String
+  client: ClientEntity!
+  payment: PaymentTransactionEntity
+  products: [OrderProductEntity!]
+  orderNumber: String
+  status: String
+  items: [OrderItemEntity!]
+  business: BusinessEntity
+  store: StoreEntity
+  paymentMethod: PaymentMethodEntity
+  totalAmount: Float
 }
 
 type PaginatedOrdersResponse {
-	items: [OrderEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [OrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
-type OrderProductEntity {
-	id: String!
-	orderId: String!
-	productId: String!
-	quantity: Int!
-	order: OrderEntity!
-	product: ProductEntity!
+type PostTransactionEntity {
+  id: String!
+  amount: Float!
+  status: String!
+  createdAt: DateTime!
 }
 
-type ShippingEntity {
-	id: String!
-	reOwnedProductId: String!
-	status: String!
-	trackingNumber: String
-	carrier: String
-	shippedAt: DateTime
-	deliveredAt: DateTime
-	createdAt: DateTime!
-}
-
-type ReOwnedProductEntity {
-	id: String!
-	newProductId: String!
-	newProduct: ProductEntity!
-	originalProductId: String!
-	originalProduct: ProductEntity!
-	oldOwnerId: String!
-	newOwnerId: String!
-	quantity: Int!
-	oldPrice: Float!
-	newPrice: Float!
-	markupPercentage: Float!
-	agreedViaChatId: String!
-	agreementDate: DateTime!
-	isOriginalApproved: Boolean!
-	isNewOwnerApproved: Boolean!
-	shippingId: String
-	shipping: ShippingEntity
-	createdAt: DateTime!
-}
-
-type RepostedProductEntity {
-	id: String!
-	productId: String!
-	product: ProductEntity!
-	businessId: String!
-	business: BusinessEntity!
-	markupPercentage: Float!
-	createdAt: DateTime!
-}
-
-type ReviewEntity {
-	id: String!
-	clientId: String!
-	productId: String!
-	rating: Int!
-	comment: String
-	createdAt: DateTime!
-	client: ClientEntity!
-	product: ProductEntity!
-	media: [MediaEntity!]
-}
-
-type PromotionEntity {
-	id: String!
-	title: String!
-	description: String
-	type: String
-	value: Float
-	discountPercentage: Float
-	code: String
-	startDate: DateTime
-	endDate: DateTime
-	applicableBusinesses: [BusinessEntity!]
-	applicableCategories: [String!]
-	minimumPurchase: Float
-	isRedeemed: Boolean
-}
-
-type ProductEntity {
-	id: String!
-	title: String!
-	name: String
-	description: String
-	price: Float!
-	stockQuantity: Int!
-	quantity: Int!
-	media: MediaEntity
-	businessId: String!
-	storeId: String
-	isPhysical: Boolean!
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	featured: Boolean!
-	approvedForSale: Boolean!
-	medias: [MediaEntity!]
-	business: BusinessEntity
-	store: StoreEntity
-	category: CategoryEntity
-	reviews: [ReviewEntity!]!
-	orders: [OrderProductEntity!]!
-	chats: [ChatEntity!]!
-	reposts: [RepostedProductEntity!]!
-	reowns: [ReOwnedProductEntity!]!
-	ads: [AdEntity!]!
-	promotions: [PromotionEntity!]
-}
-
-type MediaEntity {
-	id: String!
-	url: String!
-	type: String!
-	productId: String!
-	createdAt: DateTime!
-	product: ProductEntity!
-}
-
-type FreelanceServiceEntity {
-	id: String!
-	title: String!
-	description: String
-	isHourly: Boolean!
-	rate: Float!
-	category: FreelanceServiceCategory
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	business: BusinessEntity!
-	workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
-	medias: [MediaEntity!]
-}
-
-enum FreelanceServiceCategory {
-	PLUMBER
-	ELECTRICIAN
-	CARPENTER
-	MECHANIC
-	TUTOR
-	CLEANER
-	OTHER
-}
-
-type WorkerServiceAssignmentEntity {
-	id: String!
-	freelanceServiceId: String
-	workerId: String
-	freelanceService: FreelanceServiceEntity
-	worker: WorkerEntity!
-	role: String
-	assignedAt: DateTime!
-}
-
-type PaginatedFreelanceServicesResponse {
-	items: [FreelanceServiceEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+type PaymentTransactionEntity {
+  id: String!
+  amount: Float!
+  method: String!
+  status: String!
+  transactionDate: DateTime!
+  qrCode: String
+  createdAt: DateTime!
+  order: OrderEntity!
+  postTransaction: PostTransactionEntity
 }
 
 type FreelanceOrderEntity {
-	id: String!
-	serviceId: String!
-	service: FreelanceServiceEntity!
-	clientId: String!
-	client: ClientEntity!
-	quantity: Int!
-	totalAmount: Float!
-	escrowAmount: Float!
-	platformCommissionPercentage: Float!
-	status: FreelanceStatus!
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	paymentTransaction: PaymentTransactionEntity
+  id: String!
+  serviceId: String!
+  service: FreelanceServiceEntity!
+  clientId: String!
+  client: ClientEntity!
+  quantity: Int!
+  totalAmount: Float!
+  escrowAmount: Float!
+  platformCommissionPercentage: Float!
+  status: FreelanceStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  paymentTransaction: PaymentTransactionEntity
 }
 
 enum FreelanceStatus {
-	PENDING
-	CONFIRMED
-	IN_PROGRESS
-	COMPLETED
-	CANCELLED
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
 
 type PaginatedFreelanceOrdersResponse {
-	items: [FreelanceOrderEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
-}
-
-type AddressEntity {
-	id: String
-	street: String
-	city: String
-	country: String
-	postalCode: String
-	isDefault: Boolean
-	createdAt: DateTime
-	updatedAt: DateTime
-}
-
-type ClientEntity {
-	id: String
-	username: String
-	email: String
-	fullName: String
-	address: String
-	phone: String
-	avatar: String
-	isVerified: Boolean
-	loyaltyPoints: Float
-	loyaltyTier: String
-	totalSpent: Float
-	totalOrders: Float
-	createdAt: DateTime
-	updatedAt: DateTime
-	orders: [OrderEntity!]
-	reviews: [ReviewEntity!]
-	recharges: [AccountRechargeEntity!]
-	freelanceOrders: [FreelanceOrderEntity!]
-	referralsMade: [ReferralEntity!]
-	referralsReceived: [ReferralEntity!]
-	addresses: [AddressEntity!]
-	paymentMethods: [PaymentMethodEntity!]
-}
-
-type TokenTransactionEntity {
-	id: String!
-	businessId: String!
-	business: BusinessEntity!
-	reOwnedProductId: String
-	reOwnedProduct: ReOwnedProductEntity
-	repostedProductId: String
-	repostedProduct: RepostedProductEntity
-	amount: Float!
-	type: TokenTransactionType!
-	isRedeemed: Boolean!
-	isReleased: Boolean!
-	createdAt: DateTime!
-}
-
-enum TokenTransactionType {
-	RELEASE
-	PROFIT_SHARE
-	REPOST_COMMISSION
-}
-
-type AccountRechargeEntity {
-	id: String!
-	amount: Float!
-	method: RechargeMethod!
-	origin: Country!
-	businessId: String
-	business: BusinessEntity
-	clientId: String
-	client: ClientEntity
-	tokenTransactionId: String
-	tokenTransaction: TokenTransactionEntity
-	status: String!
-	transactionDate: DateTime!
-	qrCode: String
-	createdAt: DateTime!
-}
-
-enum RechargeMethod {
-	MTN_MONEY
-	AIRTEL_MONEY
-	ORANGE_MONEY
-	MPESA
-	TOKEN
-}
-
-enum Country {
-	DRC
-	KENYA
-	UGANDA
-	RWANDA
-	BURUNDI
-	TANZANIA
-}
-
-type PostOfSaleEntity {
-	id: String!
-	title: String!
-	description: String
-	price: Float!
-	status: String!
-	createdAt: DateTime!
-	updatedAt: DateTime!
-}
-
-type PaymentConfigEntity {
-	id: String!
-	mtnCode: String
-	airtelCode: String
-	orangeCode: String
-	mpesaCode: String
-	bankAccount: String
-	mobileMoneyEnabled: Boolean!
-}
-
-type HardwareConfigEntity {
-	id: String!
-	receiptPrinter: String
-	barcodeScanner: String
-	cashDrawer: String
-	cardReader: String
-}
-
-type KycDocumentEntity {
-	id: String!
-	businessId: String!
-	documentType: String!
-	documentUrl: String!
-	status: String!
-	rejectionReason: String
-	submittedAt: DateTime!
-	verifiedAt: DateTime
-}
-
-type PointsTransactionEntity {
-	id: String!
-	clientId: String!
-	client: ClientEntity!
-	loyaltyProgramId: String!
-	loyaltyProgram: LoyaltyProgramEntity!
-	points: Float!
-	createdAt: DateTime!
-}
-
-type LoyaltyProgramEntity {
-	id: String!
-	businessId: String!
-	business: BusinessEntity!
-	name: String!
-	description: String
-	pointsPerPurchase: Float!
-	pointsPerDollar: Float!
-	minimumPointsToRedeem: Float
-	pointsTransactions: [PointsTransactionEntity!]
-	createdAt: DateTime!
-	updatedAt: DateTime!
-}
-
-type BusinessEntity {
-	id: String
-	name: String
-	email: String
-	description: String
-	address: String
-	phone: String
-	avatar: String
-	coverImage: String
-	businessType: String
-	taxId: String
-	registrationNumber: String
-	website: String
-	socialLinks: JSON
-	notes: String
-	preferences: JSON
-	isVerified: Boolean!
-	kycStatus: KycStatus
-	totalProductsSold: Int!
-	totalClients: Int!
-	totalWorkers: Int!
-	totalSales: Int!
-	totalRevenueGenerated: Float!
-	hasAgreedToTerms: Boolean!
-	isB2BEnabled: Boolean!
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	products: [ProductEntity!]!
-	workers: [WorkerEntity!]!
-	repostedItems: [RepostedProductEntity!]!
-	reownedItems: [ReOwnedProductEntity!]!
-	recharges: [AccountRechargeEntity!]!
-	ads: [AdEntity!]!
-	paymentConfig: PaymentConfigEntity
-	hardwareConfig: HardwareConfigEntity
-	kyc: [KycDocumentEntity!]
-	stores: [StoreEntity!]
-	loyaltyProgram: LoyaltyProgramEntity
-	promotions: [PromotionEntity!]
-	freelanceServices: [FreelanceServiceEntity!]!
-	freelanceOrders: [FreelanceOrderEntity!]!
-	referralsMade: [ReferralEntity!]!
-	referralsReceived: [ReferralEntity!]!
-	chats: [ChatEntity!]!
-	postOfSales: [PostOfSaleEntity!]
-}
-
-enum KycStatus {
-	PENDING
-	VERIFIED
-	REJECTED
+  items: [FreelanceOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type ReferralEntity {
-	id: String!
-	affiliateBusinessId: String
-	affiliateClientId: String
-	referredBusinessId: String
-	referredClientId: String
-	verifiedPurchase: Boolean!
-	createdAt: DateTime!
-	affiliateBusiness: BusinessEntity
-	affiliateClient: ClientEntity
-	referredBusiness: BusinessEntity
-	referredClient: ClientEntity
+  id: String!
+  affiliateBusinessId: String
+  affiliateClientId: String
+  referredBusinessId: String
+  referredClientId: String
+  verifiedPurchase: Boolean!
+  createdAt: DateTime!
+  affiliateBusiness: BusinessEntity
+  affiliateClient: ClientEntity
+  referredBusiness: BusinessEntity
+  referredClient: ClientEntity
 }
 
-type PaginatedChatsResponse {
-	items: [ChatEntity!]!
-	total: Float!
-	page: Float!
-	limit: Float!
+type ReviewEntity {
+  id: String!
+  clientId: String!
+  productId: String!
+  rating: Int!
+  comment: String
+  createdAt: DateTime!
+  client: ClientEntity!
+  product: ProductEntity!
+  media: [MediaEntity!]
 }
 
-type PaginatedMessagesResponse {
-	items: [ChatMessageEntity!]!
-	hasMore: Boolean!
-	cursor: String
+type AddressEntity {
+  id: String
+  street: String
+  city: String
+  country: String
+  postalCode: String
+  isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
-type UnreadCountResponse {
-	totalUnread: Float!
-	chatsWithUnread: [ChatUnreadInfo!]!
+type ClientEntity {
+  id: String
+  username: String
+  email: String
+  fullName: String
+  address: String
+  phone: String
+  avatar: String
+  isVerified: Boolean
+  loyaltyPoints: Float
+  loyaltyTier: String
+  totalSpent: Float
+  totalOrders: Float
+  createdAt: DateTime
+  updatedAt: DateTime
+  orders: [OrderEntity!]
+  reviews: [ReviewEntity!]
+  recharges: [AccountRechargeEntity!]
+  freelanceOrders: [FreelanceOrderEntity!]
+  referralsMade: [ReferralEntity!]
+  referralsReceived: [ReferralEntity!]
+  addresses: [AddressEntity!]
+  paymentMethods: [PaymentMethodEntity!]
 }
 
-type ChatUnreadInfo {
-	chatId: String!
-	unreadCount: Float!
+type KnowYourCustomerEntity {
+  id: String!
+  status: String!
+  documentUrl: String!
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+  businessId: String
+  clientId: String
+  workerId: String
+  business: BusinessEntity
+  client: ClientEntity
+  worker: WorkerEntity
 }
 
-type MarkAsReadResponse {
-	success: Boolean!
-	unreadCount: Float!
+type ChatMessageEntityV2 {
+  id: String!
+  chatId: String!
+  content: String!
+  senderType: MessageSenderType!
+  senderId: String!
+  createdAt: DateTime!
 }
 
-type PaginatedReviews {
-	items: [ReviewEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+enum MessageSenderType {
+  WORKER
+  CLIENT
+  BUSINESS
 }
 
-type DashboardStats {
-	totalRevenue: Float!
-	revenueChange: Int!
-	totalOrders: Int!
-	ordersChange: Int!
-	totalProducts: Int!
-	lowStockProducts: Int!
-	unreadMessages: Int!
-	totalMessages: Int!
+type ChatEntityWorker {
+  id: String!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  messages: [ChatMessageEntityV2!]
+  business: BusinessEntity
+  client: ClientEntity
 }
 
-type SalesDataPoint {
-	date: String!
-	sales: Int!
+type SaleProductEntityWorker {
+  id: String!
+  saleId: String!
+  productId: String!
+  product: ProductEntity
+  quantity: Float!
+  price: Float!
+  modifiers: String
+  createdAt: DateTime!
 }
 
-type DashboardClientDto {
-	id: ID!
-	fullName: String!
+type SaleEntityWorker {
+  id: String!
+  storeId: String!
+  store: StoreEntity
+  workerId: String
+  worker: WorkerEntity
+  clientId: String
+  client: ClientEntity
+  totalAmount: Float!
+  discount: Float
+  paymentMethod: PaymentMethod
+  status: SaleStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  saleProducts: [SaleProductEntityWorker!]
+  returns: [SaleReturnEntity!]
 }
 
-type RecentOrder {
-	id: String!
-	client: DashboardClientDto!
-	createdAt: DateTime!
-	totalAmount: Int!
-	status: String!
+type SaleReturnEntity {
+  id: String!
+  saleId: String!
+  reason: String!
+  status: String!
+  createdAt: DateTime!
 }
 
-type BusinessDashboardResponse {
-	stats: DashboardStats!
-	salesData: [SalesDataPoint!]!
-	recentOrders: [RecentOrder!]!
+type ShiftEntityWorker {
+  id: String!
+  workerId: String!
+  worker: WorkerEntity
+  storeId: String!
+  store: StoreEntity
+  startTime: DateTime!
+  endTime: DateTime
+  sales: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type PaginatedBusinesses {
-	items: [BusinessEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+type WorkerEntity {
+  id: String
+  email: String
+  fullName: String
+  avatar: String
+  phone: String
+  role: String
+  isVerified: Boolean
+  lastLogin: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  business: BusinessEntity
+  kyc: KnowYourCustomerEntity
+  sales: [SaleEntityWorker!]
+  shifts: [ShiftEntityWorker!]
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]
+  chats: [ChatEntityWorker!]
+  medias: [MediaEntity!]
+  auditLogs: [AuditLogEntity!]
 }
 
-type BusinessTypeEntity {
-	id: String!
-	name: String!
-	description: String
-	icon: String
+type FreelanceServiceEntity {
+  id: String!
+  title: String!
+  description: String
+  isHourly: Boolean!
+  rate: Float!
+  category: FreelanceServiceCategory
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity!
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
+  medias: [MediaEntity!]
 }
 
-type SuccessResponse {
-	success: Boolean!
+enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
 }
 
-type RecommendationItem {
-	id: String!
-	name: String!
-	price: Float!
-	mediaUrl: String
-	business: BusinessEntity
+type WorkerServiceAssignmentEntity {
+  id: String!
+  freelanceServiceId: String
+  workerId: String
+  freelanceService: FreelanceServiceEntity
+  worker: WorkerEntity!
+  role: String
+  assignedAt: DateTime!
 }
 
-type RecommendationEntity {
-	id: String!
-	type: String
-	title: String!
-	description: String
-	items: [RecommendationItem!]
-	reason: String
-	createdAt: DateTime
+type PaginatedFreelanceServicesResponse {
+  items: [FreelanceServiceEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
-type AuthPayload {
-	id: String!
-	role: String!
-	email: String
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  createdAt: DateTime!
 }
 
-type UserPayload {
-	role: String!
+type ChatProductInfo {
+  id: String!
+  title: String!
+  description: String!
+  price: Float!
+  businessId: String
+  business: BusinessEntity
+  isPhysical: Boolean
 }
 
-type AuthPayloadClient {
-	id: String!
-	email: String!
-	fullname: String!
-	phone: String!
-	avatar: String
-	accessToken: String!
-	refreshToken: String!
+type ChatUserInfo {
+  id: String!
+  fullName: String
+  name: String
+  avatar: String
 }
 
-type AuthPayloadWorker {
-	id: String!
-	email: String!
-	fullname: String!
-	phone: String!
-	accessToken: String!
-	refreshToken: String!
+type chatNotification {
+  id: String!
+  chatId: String!
+  userId: String!
+  lastReadAt: DateTime!
+  unreadCount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type AuthPayloadAdmin {
-	id: String!
-	email: String!
-	fullname: String!
-	phone: String
-	accessToken: String!
-	refreshToken: String!
+type ChatEntity {
+  id: String!
+  status: ChatStatus!
+  isSecure: Boolean!
+  negotiationType: NegotiationType
+  productId: String
+  product: ChatProductInfo
+  serviceId: String
+  service: FreelanceServiceEntity
+  clientId: String
+  client: ChatUserInfo
+  businessId: String
+  business: ChatUserInfo
+  workerId: String
+  worker: ChatUserInfo
+  participants: [ChatParticipantEntity!]!
+  messages: [ChatMessageEntity!]!
+  unreadCount: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type AuthPayloadBusiness {
-	id: String!
-	email: String!
-	name: String!
-	phone: String!
-	avatar: String
-	coverImage: String
-	accessToken: String!
-	refreshToken: String!
+enum ChatStatus {
+  PENDING
+  ACTIVE
+  CLOSED
 }
 
-type ReceiptEntity {
-	filePath: String!
-	emailSent: Boolean
+enum NegotiationType {
+  REOWNERSHIP
+  FREELANCEORDER
+  PURCHASE
+  GENERAL
 }
 
-type PaginatedSalesResponse {
-	items: [SaleEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+type PromotionEntity {
+  id: String!
+  title: String!
+  description: String
+  type: String
+  value: Float
+  discountPercentage: Float
+  code: String
+  startDate: DateTime
+  endDate: DateTime
+  applicableBusinesses: [BusinessEntity!]
+  applicableCategories: [String!]
+  minimumPurchase: Float
+  isRedeemed: Boolean
 }
 
-type TopProduct {
-	id: String!
-	title: String!
-	quantitySold: Int!
+type ShippingEntity {
+  id: String!
+  reOwnedProductId: String!
+  status: String!
+  trackingNumber: String
+  carrier: String
+  shippedAt: DateTime
+  deliveredAt: DateTime
+  createdAt: DateTime!
 }
 
-type PaymentMethodStat {
-	method: String!
-	count: Int!
-	amount: Float!
+type ReOwnedProductEntity {
+  id: String!
+  newProductId: String!
+  newProduct: ProductEntity!
+  originalProductId: String!
+  originalProduct: ProductEntity!
+  oldOwnerId: String!
+  newOwnerId: String!
+  quantity: Int!
+  oldPrice: Float!
+  newPrice: Float!
+  markupPercentage: Float!
+  agreedViaChatId: String!
+  agreementDate: DateTime!
+  isOriginalApproved: Boolean!
+  isNewOwnerApproved: Boolean!
+  shippingId: String
+  shipping: ShippingEntity
+  createdAt: DateTime!
 }
 
-type ChartDataPoint {
-	name: String!
-	sales: Float!
-	transactions: Int!
+type RepostedProductEntity {
+  id: String!
+  productId: String!
+  product: ProductEntity!
+  businessId: String!
+  business: BusinessEntity!
+  markupPercentage: Float!
+  createdAt: DateTime!
 }
 
-type SalesDashboard {
-	totalSales: Int!
-	totalRevenue: Float!
-	averageTicket: Float!
-	topProducts: [TopProduct!]!
-	paymentMethods: [PaymentMethodStat!]!
-	chartData: [ChartDataPoint!]!
+type ProductEntity {
+  id: String!
+  title: String!
+  name: String
+  description: String
+  price: Float!
+  stockQuantity: Int!
+  quantity: Int!
+  media: MediaEntity
+  businessId: String!
+  storeId: String
+  isPhysical: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  featured: Boolean!
+  approvedForSale: Boolean!
+  medias: [MediaEntity!]
+  business: BusinessEntity
+  store: StoreEntity
+  category: CategoryEntity
+  reviews: [ReviewEntity!]!
+  orders: [OrderProductEntity!]!
+  chats: [ChatEntity!]!
+  reposts: [RepostedProductEntity!]!
+  reowns: [ReOwnedProductEntity!]!
+  ads: [AdEntity!]!
+  promotions: [PromotionEntity!]
 }
 
-type DeleteResponse {
-	id: String!
+type AdEntity {
+  id: String!
+  businessId: String!
+  productId: String!
+  price: Float!
+  periodDays: Int!
+  createdAt: DateTime!
+  endedAt: DateTime
+  business: BusinessEntity!
+  product: ProductEntity!
 }
 
-type SalesStats {
-	total: Int!
-	monthly: Int!
-	weekly: Int!
+type PointsTransactionEntity {
+  id: String!
+  clientId: String!
+  client: ClientEntity!
+  loyaltyProgramId: String!
+  loyaltyProgram: LoyaltyProgramEntity!
+  points: Float!
+  createdAt: DateTime!
 }
 
-type ProductStats {
-	total: Int!
-	lowStock: Int!
+type LoyaltyProgramEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  name: String!
+  description: String
+  pointsPerPurchase: Float!
+  pointsPerDollar: Float!
+  minimumPointsToRedeem: Float
+  pointsTransactions: [PointsTransactionEntity!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type RevenueStats {
-	total: Float!
-	monthly: Float!
-	weekly: Float!
+type PostOfSaleEntity {
+  id: String!
+  title: String!
+  description: String
+  price: Float!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type StoreStatistics {
-	sales: SalesStats!
-	revenue: RevenueStats!
-	products: ProductStats!
+type HardwareConfigEntity {
+  id: String!
+  receiptPrinter: String
+  barcodeScanner: String
+  cashDrawer: String
+  cardReader: String
 }
 
-type ClientPointsBalanceEntity {
-	clientId: String!
-	client: ClientEntity!
-	totalPoints: Float!
+type KycDocumentEntity {
+  id: String!
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
+  status: String!
+  rejectionReason: String
+  submittedAt: DateTime!
+  verifiedAt: DateTime
 }
 
-type TopCustomerEntity {
-	clientId: String!
-	clientName: String!
-	totalPoints: Float!
-	totalSpent: Float!
+type PaymentConfigEntity {
+  id: String!
+  mtnCode: String
+  airtelCode: String
+  orangeCode: String
+  mpesaCode: String
+  bankAccount: String
+  mobileMoneyEnabled: Boolean!
 }
 
-type PointsByDayEntity {
-	date: String!
-	earned: Float!
-	redeemed: Float!
+type BusinessEntity {
+  id: String
+  name: String
+  email: String
+  description: String
+  address: String
+  phone: String
+  avatar: String
+  coverImage: String
+  businessType: String
+  taxId: String
+  registrationNumber: String
+  website: String
+  socialLinks: JSON
+  notes: String
+  preferences: JSON
+  isVerified: Boolean!
+  kycStatus: KycStatus
+  totalProductsSold: Int!
+  totalClients: Int!
+  totalWorkers: Int!
+  totalSales: Int!
+  totalRevenueGenerated: Float!
+  hasAgreedToTerms: Boolean!
+  isB2BEnabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [ProductEntity!]!
+  workers: [WorkerEntity!]!
+  repostedItems: [RepostedProductEntity!]!
+  reownedItems: [ReOwnedProductEntity!]!
+  recharges: [AccountRechargeEntity!]!
+  ads: [AdEntity!]!
+  paymentConfig: PaymentConfigEntity
+  hardwareConfig: HardwareConfigEntity
+  kyc: [KycDocumentEntity!]
+  stores: [StoreEntity!]
+  loyaltyProgram: LoyaltyProgramEntity
+  promotions: [PromotionEntity!]
+  freelanceServices: [FreelanceServiceEntity!]!
+  freelanceOrders: [FreelanceOrderEntity!]!
+  referralsMade: [ReferralEntity!]!
+  referralsReceived: [ReferralEntity!]!
+  chats: [ChatEntity!]!
+  postOfSales: [PostOfSaleEntity!]
 }
 
-type LoyaltyAnalyticsEntity {
-	totalMembers: Int!
-	activeMembers: Int!
-	pointsEarned: Float!
-	pointsRedeemed: Float!
-	redemptionRate: Float!
-	topCustomers: [TopCustomerEntity!]!
-	pointsByDay: [PointsByDayEntity!]!
+enum KycStatus {
+  PENDING
+  VERIFIED
+  REJECTED
 }
 
-type PointsTransactionSummaryEntity {
-	id: String!
-	points: Float!
-	createdAt: DateTime!
-	type: String!
+type TokenTransactionEntity {
+  id: String!
+  businessId: String!
+  business: BusinessEntity!
+  reOwnedProductId: String
+  reOwnedProduct: ReOwnedProductEntity
+  repostedProductId: String
+  repostedProduct: RepostedProductEntity
+  amount: Float!
+  type: TokenTransactionType!
+  isRedeemed: Boolean!
+  isReleased: Boolean!
+  createdAt: DateTime!
 }
 
-type CustomerPointsEntity {
-	totalPoints: Float!
-	program: LoyaltyProgramEntity!
-	transactions: [PointsTransactionSummaryEntity!]!
+enum TokenTransactionType {
+  RELEASE
+  PROFIT_SHARE
+  REPOST_COMMISSION
 }
 
-type BulkImportResultEntity {
-	success: Boolean!
-	count: Int!
+type AccountRechargeEntity {
+  id: String!
+  amount: Float!
+  method: RechargeMethod!
+  origin: Country!
+  businessId: String
+  business: BusinessEntity
+  clientId: String
+  client: ClientEntity
+  tokenTransactionId: String
+  tokenTransaction: TokenTransactionEntity
+  status: String!
+  transactionDate: DateTime!
+  qrCode: String
+  createdAt: DateTime!
 }
 
-type LowStockAlertEntity {
-	productId: String!
-	product: ProductEntity!
-	storeId: String!
-	store: StoreEntity!
-	quantity: Int!
-	threshold: Int!
+enum RechargeMethod {
+  MTN_MONEY
+  AIRTEL_MONEY
+  ORANGE_MONEY
+  MPESA
+  TOKEN
 }
 
-type BusinessSettingsEntity {
-	id: String!
-	name: String!
-	email: String!
-	description: String
-	avatar: String
-	coverImage: String
-	address: String
-	phone: String
-	country: String
-	businessType: String
-	kycStatus: String!
-	isB2BEnabled: Boolean!
-	isVerified: Boolean!
-	totalProductsSold: Float!
-	hasAgreedToTerms: Boolean!
-	termsAgreedAt: DateTime
-	paymentConfig: PaymentConfigEntity
-	hardwareConfig: HardwareConfigEntity
-	kyc: [KycDocumentEntity!]
-	createdAt: DateTime!
-	updatedAt: DateTime!
-	taxId: String
-	registrationNumber: String
-	website: String
-	socialLinks: JSON
-	notes: String
-	preferences: JSON
-	totalClients: Int!
-	totalWorkers: Int!
-	totalSales: Int!
-	totalRevenueGenerated: Float!
-	products: [ProductEntity!]!
-	workers: [WorkerEntity!]!
-	repostedItems: [RepostedProductEntity!]!
-	reownedItems: [ReOwnedProductEntity!]!
-	recharges: [AccountRechargeEntity!]!
-	ads: [AdEntity!]!
-	stores: [StoreEntity!]
-	freelanceServices: [FreelanceServiceEntity!]!
-	freelanceOrders: [FreelanceOrderEntity!]!
-	referralsMade: [ReferralEntity!]!
-	referralsReceived: [ReferralEntity!]!
-	chats: [ChatEntity!]!
-	postOfSales: [PostOfSaleEntity!]
-}
-
-type PaginatedProductsResponse {
-	items: [ProductEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
-}
-
-type SearchMarketplaceResponse {
-	products: [ProductEntity!]!
-	services: [FreelanceServiceEntity!]!
+enum Country {
+  DRC
+  KENYA
+  UGANDA
+  RWANDA
+  BURUNDI
+  TANZANIA
 }
 
 type Admin {
-	id: String!
-	email: String!
-	fullName: String
-	phone: String
-	avatar: String
-	role: AdminRole!
-	isActive: Boolean!
-	lastLogin: DateTime
-	permissions: JSON
-	createdAt: DateTime!
-	updatedAt: DateTime!
+  id: String!
+  email: String!
+  fullName: String
+  phone: String
+  avatar: String
+  role: AdminRole!
+  isActive: Boolean!
+  lastLogin: DateTime
+  permissions: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-"""
-Roles assigned to admin users
-"""
+"""Roles assigned to admin users"""
 enum AdminRole {
-	SUPERADMIN
-	ADMIN
-	SUPPORT
+  SUPERADMIN
+  ADMIN
+  SUPPORT
 }
 
 type PaginatedBusinessesResponse {
-	items: [BusinessEntity!]
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [BusinessEntity!]
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type PaginatedClientsResponse {
-	items: [ClientEntity!]
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [ClientEntity!]
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type PaginatedWorkersResponse {
-	items: [WorkerEntity!]
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [WorkerEntity!]
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type PaginatedAdminsResponse {
-	items: [Admin!]
-	total: Int!
-	page: Int!
-	limit: Int!
-}
-
-type PlatformSettings {
-	id: String!
-	platformFeePercentage: Float!
-	minTransactionAmount: Float
-	maxTransactionAmount: Float
-	currency: String!
-	tokenValue: Float
-	tokenSymbol: String
-	kycRequired: Boolean!
-	b2bEnabled: Boolean!
-	marketplaceEnabled: Boolean!
-	createdAt: DateTime!
-	updatedAt: DateTime!
-}
-
-type DailyCount {
-	date: String!
-	count: Int!
-}
-
-type PlatformMetrics {
-	totalUsers: Int!
-	totalBusinesses: Int!
-	totalProducts: Int!
-	totalServices: Int!
-	totalTransactions: Int!
-	totalRevenue: Float!
-	activeUsersToday: Int!
-	activeBusinessesToday: Int!
-	averageTransactionValue: Float!
-	platformFeesCollected: Float!
-	kycPendingCount: Int!
-	kycVerifiedCount: Int!
-	kycRejectedCount: Int!
-	disputesOpenCount: Int!
-	disputesResolvedCount: Int!
-	adsActiveCount: Int!
-	adsPendingCount: Int!
-	last24Hours: [DailyCount!]!
-	last7Days: [DailyCount!]!
-	last30Days: [DailyCount!]!
+  items: [Admin!]
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type AnnouncementEntity {
-	id: String!
-	title: String!
-	content: String!
-	type: String
-	priority: String
-	status: String!
-	scheduledFor: String
-	sentAt: DateTime
-	targetUsers: JSON
-	readCount: Int!
-	totalRecipients: Int
-	createdAt: DateTime!
-	updatedAt: DateTime!
+  id: String!
+  title: String!
+  content: String!
+  type: String
+  priority: String
+  status: String!
+  scheduledFor: String
+  sentAt: DateTime
+  targetUsers: JSON
+  readCount: Int!
+  totalRecipients: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type PaginatedAnnouncementsResponse {
-	items: [AnnouncementEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [AnnouncementEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type AuthPayload {
+  id: String!
+  role: String!
+  email: String
+}
+
+type UserPayload {
+  role: String!
+}
+
+type AuthPayloadClient {
+  id: String!
+  email: String!
+  fullname: String!
+  phone: String!
+  avatar: String
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthPayloadWorker {
+  id: String!
+  email: String!
+  fullname: String!
+  phone: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthPayloadAdmin {
+  id: String!
+  email: String!
+  fullname: String!
+  phone: String
+  accessToken: String!
+  refreshToken: String!
+}
+
+type AuthPayloadBusiness {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  avatar: String
+  coverImage: String
+  accessToken: String!
+  refreshToken: String!
+}
+
+type DashboardStats {
+  totalRevenue: Float!
+  revenueChange: Int!
+  totalOrders: Int!
+  ordersChange: Int!
+  totalProducts: Int!
+  lowStockProducts: Int!
+  unreadMessages: Int!
+  totalMessages: Int!
+}
+
+type DashboardClientDto {
+  id: ID!
+  fullName: String!
+}
+
+type RecentOrder {
+  id: String!
+  client: DashboardClientDto!
+  createdAt: DateTime!
+  totalAmount: Int!
+  status: String!
+}
+
+type SalesDataPoint {
+  date: String!
+  sales: Int!
+}
+
+type BusinessDashboardResponse {
+  stats: DashboardStats!
+  salesData: [SalesDataPoint!]!
+  recentOrders: [RecentOrder!]!
+}
+
+type BusinessTypeEntity {
+  id: String!
+  name: String!
+  description: String
+  icon: String
+}
+
+type PaginatedBusinesses {
+  items: [BusinessEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PaginatedReviews {
+  items: [ReviewEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PaginatedChatsResponse {
+  items: [ChatEntity!]!
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
+type PaginatedMessagesResponse {
+  items: [ChatMessageEntity!]!
+  hasMore: Boolean!
+  cursor: String
+}
+
+type UnreadCountResponse {
+  totalUnread: Float!
+  chatsWithUnread: [ChatUnreadInfo!]!
+}
+
+type ChatUnreadInfo {
+  chatId: String!
+  unreadCount: Float!
+}
+
+type MarkAsReadResponse {
+  success: Boolean!
+  unreadCount: Float!
+}
+
+type SuccessResponse {
+  success: Boolean!
+}
+
+type RecommendationItem {
+  id: String!
+  name: String!
+  price: Float!
+  mediaUrl: String
+  business: BusinessEntity
+}
+
+type RecommendationEntity {
+  id: String!
+  type: String
+  title: String!
+  description: String
+  items: [RecommendationItem!]
+  reason: String
+  createdAt: DateTime
 }
 
 type DisputeMessageEntity {
-	id: String!
-	content: String!
-	createdAt: DateTime!
-	senderId: String
-	sender: ClientEntity
+  id: String!
+  content: String!
+  createdAt: DateTime!
+  senderId: String
+  sender: ClientEntity
 }
 
 type DisputeEntity {
-	id: String!
-	title: String!
-	description: String
-	status: String!
-	type: String
-	createdAt: DateTime!
-	resolvedAt: DateTime
-	resolutionNotes: String
-	reporterId: String
-	reporterType: String
-	reporter: ClientEntity
-	businessId: String
-	business: BusinessEntity
-	orderId: String
-	order: OrderEntity
-	messages: [DisputeMessageEntity!]
+  id: String!
+  title: String!
+  description: String
+  status: String!
+  type: String
+  createdAt: DateTime!
+  resolvedAt: DateTime
+  resolutionNotes: String
+  reporterId: String
+  reporterType: String
+  reporter: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  orderId: String
+  order: OrderEntity
+  messages: [DisputeMessageEntity!]
 }
 
 type PaginatedDisputesResponse {
-	items: [DisputeEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+  items: [DisputeEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
-type AuditLogEntity {
-	id: String!
-	action: String!
-	entityType: String!
-	entityId: String!
-	details: String
-	createdAt: DateTime!
-	adminId: String
-	admin: WorkerEntity
+type WorkerPerformanceEntity {
+  totalSales: Float!
+  totalTransactions: Float!
+  customerSatisfaction: Float!
+  attendanceRate: Float!
+  shiftsCompleted: Float!
+  personalSales: Float!
 }
 
-type PaginatedAuditLogsResponse {
-	items: [AuditLogEntity!]!
-	total: Int!
-	page: Int!
-	limit: Int!
+type TopSellingProductEntity {
+  id: String!
+  title: String!
+  quantitySold: Float!
+  revenue: Float!
+}
+
+type RecentOrderEntity {
+  id: String!
+  orderNumber: String!
+  totalAmount: Float!
+  status: String!
+  client: ClientEntity!
+  createdAt: DateTime!
+}
+
+type CurrentShiftEntity {
+  id: String!
+  startTime: DateTime!
+  sales: Float
+  transactions: Float
+}
+
+type WorkerDashboardEntity {
+  todaySales: Float!
+  todayOrders: Float!
+  lowStockItems: Float!
+  activeChats: Float!
+  currentShift: CurrentShiftEntity
+  salesThisWeek: Float!
+  salesThisMonth: Float!
+  topSellingProducts: [TopSellingProductEntity!]
+  recentOrders: [RecentOrderEntity!]
+  workerPerformance: WorkerPerformanceEntity
+}
+
+type WorkerDashboardStatsEntity {
+  todaySales: Float!
+  todayTransactions: Float!
+  currentShiftSales: Float!
+  currentShiftDuration: Float!
+  lowStockProducts: Float!
+  upcomingChats: Float!
+}
+
+type MobileMoneyPaymentResponseEntity {
+  success: Boolean!
+  transactionId: String!
+  status: String!
+  ussdCode: String
+}
+
+type InventoryAdjustmentEntityWorker {
+  id: String!
+  productId: String!
+  product: ProductEntity
+  storeId: String!
+  store: StoreEntity
+  adjustmentType: AdjustmentType!
+  quantity: Float!
+  reason: String
+  createdAt: DateTime!
+}
+
+type SalesPagedResult {
+  items: [SaleEntityWorker!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type ShiftsPagedResult {
+  items: [ShiftEntityWorker!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type InventoryPagedResult {
+  items: [InventoryAdjustmentEntityWorker!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type ChatsPagedResult {
+  items: [ChatEntityWorker!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type ProductStats {
+  total: Int!
+  lowStock: Int!
+}
+
+type RevenueStats {
+  total: Float!
+  monthly: Float!
+  weekly: Float!
+}
+
+type SalesStats {
+  total: Int!
+  monthly: Int!
+  weekly: Int!
+}
+
+type StoreStatistics {
+  sales: SalesStats!
+  revenue: RevenueStats!
+  products: ProductStats!
+}
+
+type BulkImportResultEntity {
+  success: Boolean!
+  count: Int!
+}
+
+type LowStockAlertEntity {
+  productId: String!
+  product: ProductEntity!
+  storeId: String!
+  store: StoreEntity!
+  quantity: Int!
+  threshold: Int!
+}
+
+type ClientPointsBalanceEntity {
+  clientId: String!
+  client: ClientEntity!
+  totalPoints: Float!
+}
+
+type PointsTransactionSummaryEntity {
+  id: String!
+  points: Float!
+  createdAt: DateTime!
+  type: String!
+}
+
+type CustomerPointsEntity {
+  totalPoints: Float!
+  program: LoyaltyProgramEntity!
+  transactions: [PointsTransactionSummaryEntity!]!
+}
+
+type TopCustomerEntity {
+  clientId: String!
+  clientName: String!
+  totalPoints: Float!
+  totalSpent: Float!
+}
+
+type PointsByDayEntity {
+  date: String!
+  earned: Float!
+  redeemed: Float!
+}
+
+type LoyaltyAnalyticsEntity {
+  totalMembers: Int!
+  activeMembers: Int!
+  pointsEarned: Float!
+  pointsRedeemed: Float!
+  redemptionRate: Float!
+  topCustomers: [TopCustomerEntity!]!
+  pointsByDay: [PointsByDayEntity!]!
+}
+
+type PaginatedProductsResponse {
+  items: [ProductEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type SearchMarketplaceResponse {
+  products: [ProductEntity!]!
+  services: [FreelanceServiceEntity!]!
+}
+
+type DailyCount {
+  date: String!
+  count: Int!
+}
+
+type PlatformMetrics {
+  totalUsers: Int!
+  totalBusinesses: Int!
+  totalProducts: Int!
+  totalServices: Int!
+  totalTransactions: Int!
+  totalRevenue: Float!
+  activeUsersToday: Int!
+  activeBusinessesToday: Int!
+  averageTransactionValue: Float!
+  platformFeesCollected: Float!
+  kycPendingCount: Int!
+  kycVerifiedCount: Int!
+  kycRejectedCount: Int!
+  disputesOpenCount: Int!
+  disputesResolvedCount: Int!
+  adsActiveCount: Int!
+  adsPendingCount: Int!
+  last24Hours: [DailyCount!]!
+  last7Days: [DailyCount!]!
+  last30Days: [DailyCount!]!
+}
+
+type PlatformSettings {
+  id: String!
+  platformFeePercentage: Float!
+  minTransactionAmount: Float
+  maxTransactionAmount: Float
+  currency: String!
+  tokenValue: Float
+  tokenSymbol: String
+  kycRequired: Boolean!
+  b2bEnabled: Boolean!
+  marketplaceEnabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DeleteResponse {
+  id: String!
+}
+
+type PaginatedSalesResponse {
+  items: [SaleEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type ReceiptEntity {
+  filePath: String!
+  emailSent: Boolean
+}
+
+type TopProduct {
+  id: String!
+  title: String!
+  quantitySold: Int!
+}
+
+type PaymentMethodStat {
+  method: String!
+  count: Int!
+  amount: Float!
+}
+
+type ChartDataPoint {
+  name: String!
+  sales: Float!
+  transactions: Int!
+}
+
+type SalesDashboard {
+  totalSales: Int!
+  totalRevenue: Float!
+  averageTicket: Float!
+  topProducts: [TopProduct!]!
+  paymentMethods: [PaymentMethodStat!]!
+  chartData: [ChartDataPoint!]!
+}
+
+type BusinessSettingsEntity {
+  id: String!
+  name: String!
+  email: String!
+  description: String
+  avatar: String
+  coverImage: String
+  address: String
+  phone: String
+  country: String
+  businessType: String
+  kycStatus: String!
+  isB2BEnabled: Boolean!
+  isVerified: Boolean!
+  totalProductsSold: Float!
+  hasAgreedToTerms: Boolean!
+  termsAgreedAt: DateTime
+  paymentConfig: PaymentConfigEntity
+  hardwareConfig: HardwareConfigEntity
+  kyc: [KycDocumentEntity!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  taxId: String
+  registrationNumber: String
+  website: String
+  socialLinks: JSON
+  notes: String
+  preferences: JSON
+  totalClients: Int!
+  totalWorkers: Int!
+  totalSales: Int!
+  totalRevenueGenerated: Float!
+  products: [ProductEntity!]!
+  workers: [WorkerEntity!]!
+  repostedItems: [RepostedProductEntity!]!
+  reownedItems: [ReOwnedProductEntity!]!
+  recharges: [AccountRechargeEntity!]!
+  ads: [AdEntity!]!
+  stores: [StoreEntity!]
+  freelanceServices: [FreelanceServiceEntity!]!
+  freelanceOrders: [FreelanceOrderEntity!]!
+  referralsMade: [ReferralEntity!]!
+  referralsReceived: [ReferralEntity!]!
+  chats: [ChatEntity!]!
+  postOfSales: [PostOfSaleEntity!]
 }
 
 type Query {
-	"""
-	Retrieves all products with their relations.
-	"""
-	products: [ProductEntity!]!
-	businessProducts(
-		businessId: String!
-		storeId: String
-		category: String
-		search: String
-		page: Int
-		limit: Int
-	): [ProductEntity!]!
+  """Retrieves all products with their relations."""
+  products: [ProductEntity!]!
+  businessProducts(businessId: String!, storeId: String, category: String, search: String, page: Int, limit: Int): [ProductEntity!]!
 
-	"""
-	Retrieves all featured products with their relations.
-	"""
-	featuredProducts: [ProductEntity!]!
+  """Retrieves all featured products with their relations."""
+  featuredProducts: [ProductEntity!]!
 
-	"""
-	Retrieves all featured products with their relations.
-	"""
-	relatedProducts(category: String!): [ProductEntity!]!
+  """Retrieves all featured products with their relations."""
+  relatedProducts(category: String!): [ProductEntity!]!
 
-	"""
-	Retrieves a single product by ID.
-	"""
-	product(id: String!): ProductEntity!
+  """Retrieves a single product by ID."""
+  product(id: String!): ProductEntity!
 
-	"""
-	Retrieves products by name.
-	"""
-	productsByName(storeId: String!, title: String!): [ProductEntity!]!
+  """Retrieves products by name."""
+  productsByName(storeId: String!, title: String!): [ProductEntity!]!
 
-	"""
-	Retrieves searched products.
-	"""
-	searchedProducts(title: String!): [ProductEntity!]!
+  """Retrieves searched products."""
+  searchedProducts(title: String!): [ProductEntity!]!
 
-	"""
-	Retrieves orders.
-	"""
-	orders: [OrderEntity!]!
+  """Retrieves orders."""
+  orders: [OrderEntity!]!
 
-	"""
-	Retrieves a single order by ID.
-	"""
-	order(id: String!): OrderEntity!
+  """Retrieves a single order by ID."""
+  order(id: String!): OrderEntity!
 
-	"""
-	Retrieves orders for a business.
-	"""
-	businessOrders(
-		businessId: String!
-		page: Int! = 1
-		limit: Int! = 20
-		search: String
-		status: String
-		date: String
-	): PaginatedOrdersResponse!
+  """Retrieves orders for a business."""
+  businessOrders(businessId: String!, page: Int! = 1, limit: Int! = 20, search: String, status: String, date: String): PaginatedOrdersResponse!
 
-	"""
-	Retrieves orders for a client.
-	"""
-	clientOrders(
-		clientId: String!
-		page: Int! = 1
-		limit: Int! = 20
-		status: String
-	): PaginatedOrdersResponse!
+  """Retrieves orders for a client."""
+  clientOrders(clientId: String!, page: Int! = 1, limit: Int! = 20, status: String): PaginatedOrdersResponse!
 
-	"""
-	Retrieves token transactions for a business.
-	"""
-	tokenTransactions: [TokenTransactionEntity!]!
+  """Retrieves token transactions for a business."""
+  tokenTransactions: [TokenTransactionEntity!]!
 
-	"""
-	Retrieves a single token transaction by ID.
-	"""
-	tokenTransaction(id: String!): TokenTransactionEntity!
+  """Retrieves a single token transaction by ID."""
+  tokenTransaction(id: String!): TokenTransactionEntity!
 
-	"""
-	Retrieves account recharges for a user.
-	"""
-	accountRecharges: [AccountRechargeEntity!]!
+  """Retrieves account recharges for a user."""
+  accountRecharges: [AccountRechargeEntity!]!
 
-	"""
-	Retrieves a single account recharge by ID.
-	"""
-	accountRecharge(id: String!): AccountRechargeEntity!
+  """Retrieves a single account recharge by ID."""
+  accountRecharge(id: String!): AccountRechargeEntity!
 
-	"""
-	Retrieves the account balance for a user.
-	"""
-	accountBalance: Float!
+  """Retrieves the account balance for a user."""
+  accountBalance: Float!
 
-	"""
-	Retrieve businesses with pagination and filtering.
-	"""
-	businesses(
-		search: String
-		businessType: String
-		hasLoyalty: Boolean
-		hasPromotions: Boolean
-		isB2BEnabled: Boolean
-		isVerified: Boolean
-		sort: String
-		page: Int
-		limit: Int
-	): PaginatedBusinesses!
-	business(id: String!): BusinessSettingsEntity!
-	businessServices(
-		businessId: String!
-		category: String
-		search: String
-		page: Int
-		limit: Int
-	): [FreelanceServiceEntity!]!
-	businessDashboard: BusinessDashboardResponse!
-	businessTypes: [BusinessTypeEntity!]!
-	businessReviews(businessId: String!, page: Int, limit: Int): PaginatedReviews!
+  """Retrieve businesses with pagination and filtering."""
+  businesses(search: String, businessType: String, hasLoyalty: Boolean, hasPromotions: Boolean, isB2BEnabled: Boolean, isVerified: Boolean, sort: String, page: Int, limit: Int): PaginatedBusinesses!
+  business(id: String!): BusinessSettingsEntity!
+  businessServices(businessId: String!, category: String, search: String, page: Int, limit: Int): [FreelanceServiceEntity!]!
+  businessDashboard: BusinessDashboardResponse!
+  businessTypes: [BusinessTypeEntity!]!
+  businessReviews(businessId: String!, page: Int, limit: Int): PaginatedReviews!
 
-	"""
-	Retrieves all clients with their relations.
-	"""
-	clients: [ClientEntity!]!
+  """Retrieves all clients with their relations."""
+  clients: [ClientEntity!]!
 
-	"""
-	Retrieves a single client by ID.
-	"""
-	client(id: String!): ClientEntity!
+  """Retrieves a single client by ID."""
+  client(id: String!): ClientEntity!
 
-	"""
-	Find client by email.
-	"""
-	clientByEmail(email: String!): ClientEntity
-	clientReviews(clientId: String!, page: Int, limit: Int): PaginatedReviews!
-	clientPromotions(clientId: String!): [PromotionEntity!]!
-	clientRecommendations(clientId: String!): [RecommendationEntity!]!
+  """Find client by email."""
+  clientByEmail(email: String!): ClientEntity
+  clientReviews(clientId: String!, page: Int, limit: Int): PaginatedReviews!
+  clientPromotions(clientId: String!): [PromotionEntity!]!
+  clientRecommendations(clientId: String!): [RecommendationEntity!]!
 
-	"""
-	Search clients by query.
-	"""
-	searchClients(query: String!): [ClientEntity!]!
+  """Search clients by query."""
+  searchClients(query: String!): [ClientEntity!]!
+  workers(storeId: String): [WorkerEntity!]!
+  worker(id: String!): WorkerEntity!
+  workerDashboard(workerId: String!, storeId: String!): WorkerDashboardEntity!
+  workerDashboardStats(workerId: String!, storeId: String!): WorkerDashboardStatsEntity!
+  workerSales(workerId: String!, storeId: String, status: String, startDate: DateTime, endDate: DateTime, page: Int! = 1, limit: Int! = 20): SalesPagedResult!
+  workerCurrentSale(workerId: String!, storeId: String!): SaleEntityWorker
+  workerInventory(storeId: String!, productId: String, lowStockOnly: Boolean, page: Int! = 1, limit: Int! = 20): InventoryPagedResult!
+  workerShifts(workerId: String!, storeId: String, startDate: DateTime, endDate: DateTime, page: Int! = 1, limit: Int! = 20): ShiftsPagedResult!
+  workerCurrentShift(workerId: String!, storeId: String!): ShiftEntityWorker
+  workerChats(workerId: String!, page: Int! = 1, limit: Int! = 20): ChatsPagedResult!
 
-	"""
-	Retrieves all workers with their relations.
-	"""
-	workers(storeId: String): [WorkerEntity!]!
+  """Retrieves chats for the user with pagination."""
+  chats(productId: String, clientId: String, businessId: String, workerId: String, status: String, search: String, page: Float! = 1, limit: Float! = 20): PaginatedChatsResponse!
 
-	"""
-	Retrieves a single worker by ID.
-	"""
-	worker(id: String!): WorkerEntity!
+  """Retrieves a single chat by ID."""
+  chat(id: String!): ChatEntity!
 
-	"""
-	Retrieves chats for the user with pagination.
-	"""
-	chats(
-		productId: String
-		clientId: String
-		businessId: String
-		workerId: String
-		status: String
-		search: String
-		page: Float! = 1
-		limit: Float! = 20
-	): PaginatedChatsResponse!
+  """Retrieves messages for a chat."""
+  chatMessages(chatId: String!, after: String, before: String, limit: Int! = 20): PaginatedMessagesResponse!
 
-	"""
-	Retrieves a single chat by ID.
-	"""
-	chat(id: String!): ChatEntity!
+  """Gets unread message count for user."""
+  unreadChatCount(userId: String!): UnreadCountResponse!
 
-	"""
-	Retrieves messages for a chat.
-	"""
-	chatMessages(
-		chatId: String!
-		after: String
-		before: String
-		limit: Int! = 20
-	): PaginatedMessagesResponse!
+  """Gets chats by participant ID."""
+  chatsByParticipant(participantId: String!): [ChatEntity!]!
 
-	"""
-	Gets unread message count for user.
-	"""
-	unreadChatCount(userId: String!): UnreadCountResponse!
+  """Gets chat notifications for user."""
+  chatNotifications(userId: String!): [chatNotification!]!
 
-	"""
-	Gets chats by participant ID.
-	"""
-	chatsByParticipant(participantId: String!): [ChatEntity!]!
+  """Retrieves reposted products for a business."""
+  repostedProducts: [RepostedProductEntity!]!
 
-	"""
-	Gets chat notifications for user.
-	"""
-	chatNotifications(userId: String!): [chatNotification!]!
+  """Retrieves a single reposted product by ID."""
+  repostedProduct(id: String!): RepostedProductEntity!
 
-	"""
-	Retrieves reposted products for a business.
-	"""
-	repostedProducts: [RepostedProductEntity!]!
+  """Retrieves re-owned products for a business."""
+  reOwnedProducts: [ReOwnedProductEntity!]!
 
-	"""
-	Retrieves a single reposted product by ID.
-	"""
-	repostedProduct(id: String!): RepostedProductEntity!
+  """Retrieves a single re-owned product by ID."""
+  reOwnedProduct(id: String!): ReOwnedProductEntity!
 
-	"""
-	Retrieves re-owned products for a business.
-	"""
-	reOwnedProducts: [ReOwnedProductEntity!]!
+  """Retrieves payment transactions based on user role."""
+  paymentTransactions: [PaymentTransactionEntity!]!
 
-	"""
-	Retrieves a single re-owned product by ID.
-	"""
-	reOwnedProduct(id: String!): ReOwnedProductEntity!
+  """Retrieves a single payment transaction by ID."""
+  paymentTransaction(id: String!): PaymentTransactionEntity!
 
-	"""
-	Retrieves payment transactions based on user role.
-	"""
-	paymentTransactions: [PaymentTransactionEntity!]!
+  """Retrieves freelance services with pagination and filters."""
+  freelanceServices(category: String, minRate: Float, maxRate: Float, isHourly: Boolean, businessId: String, search: String, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceServicesResponse!
 
-	"""
-	Retrieves a single payment transaction by ID.
-	"""
-	paymentTransaction(id: String!): PaymentTransactionEntity!
+  """Retrieves a single freelance service by ID."""
+  freelanceService(id: String!): FreelanceServiceEntity!
 
-	"""
-	Retrieves freelance services with pagination and filters.
-	"""
-	freelanceServices(
-		category: String
-		minRate: Float
-		maxRate: Float
-		isHourly: Boolean
-		businessId: String
-		search: String
-		page: Int! = 1
-		limit: Int! = 20
-	): PaginatedFreelanceServicesResponse!
+  """Get worker assignments for a service or worker."""
+  workerServiceAssignments(workerId: String!, serviceId: String): [WorkerServiceAssignmentEntity!]!
 
-	"""
-	Retrieves a single freelance service by ID.
-	"""
-	freelanceService(id: String!): FreelanceServiceEntity!
+  """Retrieves freelance orders with pagination and filters."""
+  freelanceOrders(serviceId: String, clientId: String, businessId: String, status: String, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceOrdersResponse!
 
-	"""
-	Get worker assignments for a service or worker.
-	"""
-	workerServiceAssignments(
-		workerId: String!
-		serviceId: String
-	): [WorkerServiceAssignmentEntity!]!
+  """Retrieves a single freelance order by ID."""
+  freelanceOrder(id: String!): FreelanceOrderEntity!
+  whatIsUserRole(SignInInput: SignInInput!): UserPayload!
+  verifyCurrentUser: AuthPayload!
+  postOfSale(id: Int!): PostOfSaleEntity!
 
-	"""
-	Retrieves freelance orders with pagination and filters.
-	"""
-	freelanceOrders(
-		serviceId: String
-		clientId: String
-		businessId: String
-		status: String
-		page: Int! = 1
-		limit: Int! = 20
-	): PaginatedFreelanceOrdersResponse!
+  """Retrieves all categories with their products."""
+  categories: [CategoryEntity!]!
 
-	"""
-	Retrieves a single freelance order by ID.
-	"""
-	freelanceOrder(id: String!): FreelanceOrderEntity!
-	whatIsUserRole(SignInInput: SignInInput!): UserPayload!
-	verifyCurrentUser: AuthPayload!
-	postOfSale(id: Int!): PostOfSaleEntity!
+  """Retrieves a single category by ID."""
+  category(id: String!): CategoryEntity!
 
-	"""
-	Retrieves all categories with their products.
-	"""
-	categories: [CategoryEntity!]!
+  """Retrieves active sales for a store in a business."""
+  activeSales(storeId: String!): [SaleEntity!]!
+  sale(id: String!): SaleEntity!
 
-	"""
-	Retrieves a single category by ID.
-	"""
-	category(id: String!): CategoryEntity!
+  """Retrieves sales for a store in a business."""
+  salesHistory(storeId: String, workerId: String, startDate: DateTime, endDate: DateTime, status: String, page: Float! = 1, limit: Float! = 20): PaginatedSalesResponse!
+  salesDashboard(storeId: String!, period: String! = "day"): SalesDashboard!
 
-	"""
-	Retrieves active sales for a store in a business.
-	"""
-	activeSales(storeId: String!): [SaleEntity!]!
-	sale(id: String!): SaleEntity!
+  """Retrieves stores for a business."""
+  stores: [StoreEntity!]!
 
-	"""
-	Retrieves sales for a store in a business.
-	"""
-	salesHistory(
-		storeId: String
-		workerId: String
-		startDate: DateTime
-		endDate: DateTime
-		status: String
-		page: Float! = 1
-		limit: Float! = 20
-	): PaginatedSalesResponse!
-	salesDashboard(storeId: String!, period: String! = "day"): SalesDashboard!
+  """Retrieves a single store by ID."""
+  store(id: String!): StoreEntity!
 
-	"""
-	Retrieves stores for a business.
-	"""
-	stores: [StoreEntity!]!
+  """Retrieves statistics for a store."""
+  storeStatistics(storeId: String!): StoreStatistics!
 
-	"""
-	Retrieves a single store by ID.
-	"""
-	store(id: String!): StoreEntity!
+  """Retrieves points transactions for a client."""
+  pointsTransactionsByClient(clientId: String!): [PointsTransactionEntity!]!
 
-	"""
-	Retrieves statistics for a store.
-	"""
-	storeStatistics(storeId: String!): StoreStatistics!
+  """Retrieves points transactions for a loyalty program."""
+  pointsTransactionsByProgram(loyaltyProgramId: String!): [PointsTransactionEntity!]!
 
-	"""
-	Retrieves points transactions for a client.
-	"""
-	pointsTransactionsByClient(clientId: String!): [PointsTransactionEntity!]!
+  """Retrieves total points for a client."""
+  clientPointsBalance(clientId: String!): ClientPointsBalanceEntity!
 
-	"""
-	Retrieves points transactions for a loyalty program.
-	"""
-	pointsTransactionsByProgram(
-		loyaltyProgramId: String!
-	): [PointsTransactionEntity!]!
+  """Retrieves loyalty programs for a business."""
+  loyaltyPrograms(businessId: String!): [LoyaltyProgramEntity!]!
 
-	"""
-	Retrieves total points for a client.
-	"""
-	clientPointsBalance(clientId: String!): ClientPointsBalanceEntity!
+  """Retrieves a loyalty program by ID."""
+  loyaltyProgram(id: String!): LoyaltyProgramEntity!
 
-	"""
-	Retrieves loyalty programs for a business.
-	"""
-	loyaltyPrograms(businessId: String!): [LoyaltyProgramEntity!]!
+  """Retrieves customer points and transactions."""
+  customerPoints(businessId: String!, clientId: String!): CustomerPointsEntity!
 
-	"""
-	Retrieves a loyalty program by ID.
-	"""
-	loyaltyProgram(id: String!): LoyaltyProgramEntity!
+  """Retrieves loyalty program analytics."""
+  loyaltyAnalytics(businessId: String!, period: String! = "month"): LoyaltyAnalyticsEntity!
 
-	"""
-	Retrieves customer points and transactions.
-	"""
-	customerPoints(businessId: String!, clientId: String!): CustomerPointsEntity!
+  """Retrieves inventory for a store."""
+  inventory(storeId: String, productId: String, lowStockOnly: Boolean, page: Float! = 1, limit: Float! = 20): PaginatedInventoryResponse!
 
-	"""
-	Retrieves loyalty program analytics.
-	"""
-	loyaltyAnalytics(
-		businessId: String!
-		period: String! = "month"
-	): LoyaltyAnalyticsEntity!
+  """Retrieves purchase orders for a business."""
+  purchaseOrders(businessId: String!, storeId: String, status: String, startDate: DateTime, endDate: DateTime, page: Float! = 1, limit: Float! = 20): PaginatedPurchaseOrderResponse!
 
-	"""
-	Retrieves inventory for a store.
-	"""
-	inventory(
-		storeId: String
-		productId: String
-		lowStockOnly: Boolean
-		page: Float! = 1
-		limit: Float! = 20
-	): PaginatedInventoryResponse!
+  """Retrieves transfer orders."""
+  transferOrders(fromStoreId: String, toStoreId: String, status: String, startDate: DateTime, endDate: DateTime, page: Float! = 1, limit: Float! = 20): PaginatedTransferOrderResponse!
 
-	"""
-	Retrieves purchase orders for a business.
-	"""
-	purchaseOrders(
-		businessId: String!
-		storeId: String
-		status: String
-		startDate: DateTime
-		endDate: DateTime
-		page: Float! = 1
-		limit: Float! = 20
-	): PaginatedPurchaseOrderResponse!
+  """Retrieves low stock alerts for a store."""
+  lowStockAlerts(lowStockAlertInput: LowStockAlertInput!): [LowStockAlertEntity!]!
 
-	"""
-	Retrieves transfer orders.
-	"""
-	transferOrders(
-		fromStoreId: String
-		toStoreId: String
-		status: String
-		startDate: DateTime
-		endDate: DateTime
-		page: Float! = 1
-		limit: Float! = 20
-	): PaginatedTransferOrderResponse!
+  """Exports products for a store."""
+  bulkExportProducts(storeId: String!): [PurchaseOrderProductEntity!]!
 
-	"""
-	Retrieves low stock alerts for a store.
-	"""
-	lowStockAlerts(
-		lowStockAlertInput: LowStockAlertInput!
-	): [LowStockAlertEntity!]!
+  """Retrieves a single shift."""
+  shift(id: String!): ShiftEntity!
 
-	"""
-	Exports products for a store.
-	"""
-	bulkExportProducts(storeId: String!): [PurchaseOrderProductEntity!]!
+  """Retrieves shifts for a store."""
+  shiftsByStore(storeId: String!): [ShiftEntity!]!
 
-	"""
-	Retrieves a single shift.
-	"""
-	shift(id: String!): ShiftEntity!
+  """Retrieves shifts for a worker."""
+  shiftsByWorker(workerId: String!): [ShiftEntity!]!
+  marketplaceProducts(search: String, category: String, businessType: String, hasPromotion: Boolean, isFeatured: Boolean, minPrice: Float, maxPrice: Float, sort: String, page: Int! = 1, limit: Int! = 12): PaginatedProductsResponse!
+  marketplaceServices(search: String, category: String, businessType: String, minPrice: Float, maxPrice: Float, sort: String, page: Int! = 1, limit: Int! = 12): PaginatedFreelanceServicesResponse!
+  productCategories: [CategoryEntity!]!
+  searchMarketplace(query: String!): SearchMarketplaceResponse!
 
-	"""
-	Retrieves shifts for a store.
-	"""
-	shiftsByStore(storeId: String!): [ShiftEntity!]!
-
-	"""
-	Retrieves shifts for a worker.
-	"""
-	shiftsByWorker(workerId: String!): [ShiftEntity!]!
-	marketplaceProducts(
-		search: String
-		category: String
-		businessType: String
-		hasPromotion: Boolean
-		isFeatured: Boolean
-		minPrice: Float
-		maxPrice: Float
-		sort: String
-		page: Int! = 1
-		limit: Int! = 12
-	): PaginatedProductsResponse!
-	marketplaceServices(
-		search: String
-		category: String
-		businessType: String
-		minPrice: Float
-		maxPrice: Float
-		sort: String
-		page: Int! = 1
-		limit: Int! = 12
-	): PaginatedFreelanceServicesResponse!
-	productCategories: [CategoryEntity!]!
-	searchMarketplace(query: String!): SearchMarketplaceResponse!
-
-	"""
-	Find a single admin by ID.
-	"""
-	admin(id: String!): Admin!
-	all_businesses(input: GetUsersInput!): PaginatedBusinessesResponse!
-	all_clients(input: GetUsersInput!): PaginatedClientsResponse!
-	all_workers(input: GetUsersInput!): PaginatedWorkersResponse!
-	all_admins(input: GetUsersInput!): PaginatedAdminsResponse!
-	one_business(id: String!): BusinessEntity
-	one_client(id: String!): ClientEntity
-	one_worker(id: String!): WorkerEntity
-	announcements(
-		status: String
-		priority: String
-		search: String
-		page: Int = 1
-		limit: Int = 10
-	): PaginatedAnnouncementsResponse!
-	disputes(
-		status: String
-		type: String
-		search: String
-		page: Int = 1
-		limit: Int = 10
-	): PaginatedDisputesResponse!
-	auditLogs(
-		action: String
-		adminId: String
-		startDate: DateTime
-		endDate: DateTime
-		page: Int = 1
-		limit: Int = 10
-	): PaginatedAuditLogsResponse!
-	platformMetrics: PlatformMetrics!
-	platformSettings: PlatformSettings!
+  """Find a single admin by ID."""
+  admin(id: String!): Admin!
+  all_businesses(input: GetUsersInput!): PaginatedBusinessesResponse!
+  all_clients(input: GetUsersInput!): PaginatedClientsResponse!
+  all_workers(input: GetUsersInput!): PaginatedWorkersResponse!
+  all_admins(input: GetUsersInput!): PaginatedAdminsResponse!
+  one_business(id: String!): BusinessEntity
+  one_client(id: String!): ClientEntity
+  one_worker(id: String!): WorkerEntity
+  announcements(status: String, priority: String, search: String, page: Int = 1, limit: Int = 10): PaginatedAnnouncementsResponse!
+  disputes(status: String, type: String, search: String, page: Int = 1, limit: Int = 10): PaginatedDisputesResponse!
+  auditLogs(action: String, adminId: String, startDate: DateTime, endDate: DateTime, page: Int = 1, limit: Int = 10): PaginatedAuditLogsResponse!
+  platformMetrics: PlatformMetrics!
+  platformSettings: PlatformSettings!
 }
 
 input SignInInput {
-	email: String!
-	password: String!
+  email: String!
+  password: String!
 }
 
 input LowStockAlertInput {
-	storeId: String!
-	threshold: Int!
+  storeId: String!
+  threshold: Int!
 }
 
 input GetUsersInput {
-	search: String
-	userType: String
-	status: String
-	kycStatus: KycStatus
-	businessType: String
-	page: Int = 1
-	limit: Int = 10
+  search: String
+  userType: String
+  status: String
+  kycStatus: KycStatus
+  businessType: String
+  page: Int = 1
+  limit: Int = 10
 }
 
 type Mutation {
-	"""
-	Creates a new product for a business.
-	"""
-	createProduct(
-		input: CreateProductInput!
-		mediaInput: AddMediaInput!
-	): ProductEntity!
-
-	"""
-	Updates a product's details.
-	"""
-	updateProduct(
-		id: String!
-		input: UpdateProductInput!
-		mediaInput: AddMediaInput!
-	): ProductEntity!
-
-	"""
-	Deletes a product.
-	"""
-	deleteProduct(id: String!): ProductEntity!
-
-	"""
-	Adds media to a product.
-	"""
-	addProductMedia(productId: String!, input: AddMediaInput!): MediaEntity!
-
-	"""
-	Removes media from a product.
-	"""
-	removeProductMedia(mediaId: String!): MediaEntity!
-
-	"""
-	Creates an order for a product.
-	"""
-	createOrder(input: CreateOrderInput!): OrderEntity!
-
-	"""
-	Updates an order.
-	"""
-	updateOrder(id: String!, input: UpdateOrderInput!): OrderEntity!
-
-	"""
-	Deletes an order.
-	"""
-	deleteOrder(id: String!): OrderEntity!
-
-	"""
-	Process payment for an order.
-	"""
-	processOrderPayment(
-		orderId: String!
-		input: ProcessPaymentInput!
-	): OrderEntity!
-
-	"""
-	Creates a token transaction.
-	"""
-	createTokenTransaction(
-		createTokenTransactionInput: CreateTokenTransactionInput!
-	): TokenTransactionEntity!
-
-	"""
-	Redeems a token transaction.
-	"""
-	redeemTokenTransaction(
-		redeemTokenTransactionInput: RedeemTokenTransactionInput!
-	): TokenTransactionEntity!
-
-	"""
-	Releases a token transaction.
-	"""
-	releaseTokenTransaction(
-		releaseTokenTransactionInput: ReleaseTokenTransactionInput!
-	): TokenTransactionEntity!
-
-	"""
-	Creates an account recharge.
-	"""
-	createAccountRecharge(
-		createAccountRechargeInput: CreateAccountRechargeInput!
-	): AccountRechargeEntity!
-
-	"""
-	Updates an account recharge.
-	"""
-	updateAccountRecharge(
-		id: String!
-		updateAccountRechargeInput: UpdateAccountRechargeInput!
-	): AccountRechargeEntity!
-
-	"""
-	Deletes an account recharge.
-	"""
-	deleteAccountRecharge(id: String!): AccountRechargeEntity!
-
-	"""
-	Creates a new business with hashed password.
-	"""
-	createBusiness(createBusinessInput: CreateBusinessInput!): BusinessEntity!
-	updateBusiness(
-		id: String!
-		input: UpdateBusinessInput!
-	): BusinessSettingsEntity!
-
-	"""
-	Deletes a business.
-	"""
-	deleteBusiness(id: String!): BusinessEntity!
-
-	"""
-	Creates a new client with hashed password.
-	"""
-	createClient(createClientInput: CreateClientInput!): ClientEntity!
-
-	"""
-	Creates a new client for POS with minimal info.
-	"""
-	createClientForPOS(createClientInput: CreateClientForPOSInput!): ClientEntity!
-	addClientAddress(clientId: String!, input: AddressInput!): ClientEntity!
-	updateClientAddress(addressId: String!, input: AddressInput!): AddressEntity!
-	deleteClientAddress(addressId: String!): SuccessResponse!
-	addClientPaymentMethod(
-		clientId: String!
-		input: PaymentMethodInput
-	): ClientEntity!
-	setDefaultPaymentMethod(paymentMethodId: String!): PaymentMethodEntity!
-
-	"""
-	Updates a client’s details.
-	"""
-	updateClient(input: UpdateClientInput!): ClientEntity!
-
-	"""
-	Deletes a client.
-	"""
-	deleteClient(id: String!): ClientEntity!
-
-	"""
-	Creates a new worker with hashed password.
-	"""
-	createWorker(createWorkerInput: CreateWorkerInput!): WorkerEntity!
-
-	"""
-	Updates a worker’s details.
-	"""
-	updateWorker(
-		id: String!
-		updateWorkerInput: UpdateWorkerInput!
-	): WorkerEntity!
-
-	"""
-	Deletes a worker.
-	"""
-	deleteWorker(id: String!): WorkerEntity!
-
-	"""
-	Creates a new chat with dynamic participants.
-	"""
-	createChat(createChatInput: CreateChatInput!): ChatEntity!
-
-	"""
-	Sends a message in a chat.
-	"""
-	createChatMessage(
-		createChatMessageInput: CreateChatMessageInput!
-	): ChatMessageEntity!
-
-	"""
-	Updates a chat’s status or properties.
-	"""
-	updateChat(id: String!, updateChatInput: UpdateChatInput!): ChatEntity!
-
-	"""
-	Deletes a chat.
-	"""
-	deleteChat(id: String!): ChatEntity!
-
-	"""
-	Sends a message in a chat.
-	"""
-	sendMessage(input: SendMessageInput!): ChatMessageEntity!
-
-	"""
-	Marks messages as read.
-	"""
-	markMessagesAsRead(chatId: String!, userId: String!): MarkAsReadResponse!
-
-	"""
-	Updates chat status.
-	"""
-	updateChatStatus(id: String!, status: String!): ChatEntity!
-
-	"""
-	Starts a negotiation chat.
-	"""
-	startNegotiation(input: StartNegotiationInput!): ChatEntity!
-
-	"""
-	Accepts a negotiation.
-	"""
-	acceptNegotiation(negotiationId: String!): ChatEntity!
-
-	"""
-	Creates a reposted product.
-	"""
-	createRepostedProduct(
-		createRepostedProductInput: CreateRepostedProductInput!
-	): RepostedProductEntity!
-
-	"""
-	Deletes a reposted product.
-	"""
-	deleteRepostedProduct(id: String!): RepostedProductEntity!
-
-	"""
-	Initiates a re-ownership request.
-	"""
-	createReOwnedProduct(
-		createReOwnedProductInput: CreateReOwnedProductInput!
-	): ReOwnedProductEntity!
-
-	"""
-	Approves or rejects a re-ownership request.
-	"""
-	approveReOwnedProduct(
-		approveReOwnedProductInput: ApproveReOwnedProductInput!
-	): ReOwnedProductEntity!
-
-	"""
-	Creates shipping details for a re-owned product.
-	"""
-	createShipping(createShippingInput: CreateShippingInput!): ShippingEntity!
-
-	"""
-	Creates a new payment transaction.
-	"""
-	createPaymentTransaction(
-		createPaymentTransactionInput: CreatePaymentTransactionInput!
-	): PaymentTransactionEntity!
-
-	"""
-	Updates a payment transaction’s status or QR code.
-	"""
-	updatePaymentTransaction(
-		id: String!
-		input: UpdatePaymentTransactionInput!
-	): PaymentTransactionEntity!
-
-	"""
-	Deletes a payment transaction.
-	"""
-	deletePaymentTransaction(id: String!): PaymentTransactionEntity!
-
-	"""
-	Creates a new freelance service.
-	"""
-	createFreelanceService(
-		input: CreateFreelanceServiceInput!
-	): FreelanceServiceEntity!
-
-	"""
-	Updates a freelance service.
-	"""
-	updateFreelanceService(
-		id: String!
-		input: UpdateFreelanceServiceInput!
-	): FreelanceServiceEntity!
-
-	"""
-	Assigns a worker to a freelance service.
-	"""
-	assignWorkerToService(
-		input: AssignWorkersInput!
-	): WorkerServiceAssignmentEntity!
-
-	"""
-	Deletes a freelance service.
-	"""
-	deleteFreelanceService(id: String!): FreelanceServiceEntity!
-
-	"""
-	Creates a new freelance order.
-	"""
-	createFreelanceOrder(input: CreateFreelanceOrderInput!): FreelanceOrderEntity!
-
-	"""
-	Updates a freelance order.
-	"""
-	updateFreelanceOrder(
-		id: String!
-		input: UpdateFreelanceOrderInput!
-	): FreelanceOrderEntity!
-
-	"""
-	Complete a freelance order.
-	"""
-	completeFreelanceOrder(id: String!): FreelanceOrderEntity!
-
-	"""
-	Release escrow for a freelance order.
-	"""
-	releaseEscrow(orderId: String!): FreelanceOrderEntity!
-	signClientIn(SignInInput: SignInInput!): AuthPayloadClient!
-	signBusinessIn(SignInInput: SignInInput!): AuthPayloadBusiness!
-	signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
-	signAdminIn(SignInInput: SignInInput!): AuthPayloadAdmin!
-	refreshToken(refreshToken: String!): AuthPayloadClient!
-	createPostOfSale(
-		createPostOfSaleInput: CreatePostOfSaleInput!
-	): PostOfSaleEntity!
-	updatePostOfSale(
-		updatePostOfSaleInput: UpdatePostOfSaleInput!
-	): PostOfSaleEntity!
-	removePostOfSale(id: Int!): PostOfSaleEntity!
-
-	"""
-	Creates a new category.
-	"""
-	createCategory(createCategoryInput: CreateCategoryInput!): CategoryEntity!
-
-	"""
-	Updates a category's details.
-	"""
-	updateCategory(
-		id: String!
-		updateCategoryInput: UpdateCategoryInput!
-	): CategoryEntity!
-
-	"""
-	Deletes a category.
-	"""
-	deleteCategory(id: String!): CategoryEntity!
-	createSale(input: CreateSaleInput!): SaleEntity!
-	updateSale(id: String!, input: UpdateSaleInput!): SaleEntity!
-	closeSale(input: CloseSaleInput!): SaleEntity!
-	completeSale(
-		id: String!
-		paymentMethod: String!
-		paymentDetails: PaymentDetailsInput
-	): SaleEntity!
-	addSaleProduct(input: AddSaleProductInput!): SaleProductEntity!
-	updateSaleProduct(
-		id: String!
-		input: UpdateSaleProductInput!
-	): SaleProductEntity!
-	removeSaleProduct(id: String!): DeleteResponse!
-
-	"""
-	Processes a return for a POS sale.
-	"""
-	createReturn(createReturnInput: CreateReturnInput!): ReturnEntity!
-
-	"""
-	Generates a PDF receipt and optionally emails it.
-	"""
-	generateReceipt(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
-
-	"""
-	Generates a PDF receipt using pdfkit and optionally emails it.
-	"""
-	generateReceiptWithPDFKit(
-		generateReceiptInput: GenerateReceiptInput!
-	): ReceiptEntity!
-
-	"""
-	Creates a new store for a business.
-	"""
-	createStore(input: CreateStoreInput!): StoreEntity!
-
-	"""
-	Updates an existing store.
-	"""
-	updateStore(id: String!, input: UpdateStoreInput!): StoreEntity!
-
-	"""
-	Deletes a store.
-	"""
-	deleteStore(id: String!): StoreEntity!
-
-	"""
-	Creates a new loyalty program.
-	"""
-	createLoyaltyProgram(input: CreateLoyaltyProgramInput!): LoyaltyProgramEntity!
-
-	"""
-	Updates a loyalty program.
-	"""
-	updateLoyaltyProgram(
-		id: String!
-		input: UpdateLoyaltyProgramInput!
-	): LoyaltyProgramEntity!
-
-	"""
-	Creates a points transaction.
-	"""
-	createPointsTransaction(
-		createPointsTransactionInput: CreatePointsTransactionInput!
-	): PointsTransactionEntity!
-
-	"""
-	Awards points to a customer.
-	"""
-	earnPoints(input: EarnPointsInput!): PointsTransactionEntity!
-
-	"""
-	Redeems points for a customer.
-	"""
-	redeemPoints(input: RedeemPointsInput!): PointsTransactionEntity!
-
-	"""
-	Deletes a loyalty program.
-	"""
-	deleteLoyaltyProgram(id: String!): Boolean!
-
-	"""
-	Creates a new purchase order.
-	"""
-	createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrderEntity!
-
-	"""
-	Updates a purchase order.
-	"""
-	updatePurchaseOrder(
-		id: String!
-		input: UpdatePurchaseOrderInput!
-	): PurchaseOrderEntity!
-
-	"""
-	Creates a new transfer order.
-	"""
-	createTransferOrder(input: CreateTransferOrderInput!): TransferOrderEntity!
-
-	"""
-	Updates a transfer order.
-	"""
-	updateTransferOrder(
-		id: String!
-		input: UpdateTransferOrderInput!
-	): TransferOrderEntity!
-
-	"""
-	Creates an inventory adjustment.
-	"""
-	createInventoryAdjustment(
-		input: CreateInventoryAdjustmentInput!
-	): InventoryAdjustmentEntity!
-
-	"""
-	Imports products in bulk.
-	"""
-	bulkImportProducts(
-		storeId: String!
-		products: [PurchaseOrderProductInput!]!
-	): BulkImportResultEntity!
-
-	"""
-	Starts a new shift for a worker.
-	"""
-	createShift(createShiftInput: CreateShiftInput!): ShiftEntity!
-
-	"""
-	Ends a shift and calculates sales.
-	"""
-	endShift(endShiftInput: EndShiftInput!): ShiftEntity!
-
-	"""
-	Updates shift details (business only).
-	"""
-	updateShift(id: String!, updateShiftInput: UpdateShiftInput!): ShiftEntity!
-	updatePaymentConfig(
-		businessId: String!
-		input: UpdatePaymentConfigInput!
-	): BusinessSettingsEntity!
-	updateHardwareConfig(
-		businessId: String!
-		input: UpdateHardwareConfigInput!
-	): BusinessSettingsEntity!
-	uploadKycDocument(input: UploadKycDocumentInput!): KycDocumentEntity!
-	submitKyc(businessId: String!): BusinessSettingsEntity!
-	verifyKyc(input: VerifyKycInput!): BusinessEntity!
-	rejectKyc(input: RejectKycInput!): BusinessEntity!
-	agreeToTerms(businessId: String!): BusinessSettingsEntity!
-	createAdmin(input: CreateAdminInput!): Admin!
-	updateAdmin(id: String!, input: UpdateAdminInput!): Admin!
-	removeAdmin(id: String!): Admin!
-	registerSuperAdmin(createAdminInput: CreateAdminInput!): Admin!
-	updateUserStatus(input: UpdateUserStatusInput!): Boolean!
-	createAnnouncement(input: CreateAnnouncementInput!): AnnouncementEntity!
-	resolveDispute(
-		disputeId: String!
-		resolutionNotes: String!
-		refundAmount: Float
-		compensation: Float
-	): DisputeEntity!
-	updatePlatformSettings(input: UpdatePlatformSettingsInput!): PlatformSettings!
+  createProduct(input: CreateProductInput!, mediaInput: AddMediaInput!): ProductEntity!
+
+  """Updates a product's details."""
+  updateProduct(id: String!, input: UpdateProductInput!, mediaInput: AddMediaInput!): ProductEntity!
+
+  """Deletes a product."""
+  deleteProduct(id: String!): ProductEntity!
+
+  """Adds media to a product."""
+  addProductMedia(productId: String!, input: AddMediaInput!): MediaEntity!
+
+  """Removes media from a product."""
+  removeProductMedia(mediaId: String!): MediaEntity!
+
+  """Creates an order for a product."""
+  createOrder(input: CreateOrderInput!): OrderEntity!
+
+  """Updates an order."""
+  updateOrder(id: String!, input: UpdateOrderInput!): OrderEntity!
+
+  """Deletes an order."""
+  deleteOrder(id: String!): OrderEntity!
+
+  """Process payment for an order."""
+  processOrderPayment(orderId: String!, input: ProcessPaymentInput!): OrderEntity!
+
+  """Creates a token transaction."""
+  createTokenTransaction(createTokenTransactionInput: CreateTokenTransactionInput!): TokenTransactionEntity!
+
+  """Redeems a token transaction."""
+  redeemTokenTransaction(redeemTokenTransactionInput: RedeemTokenTransactionInput!): TokenTransactionEntity!
+
+  """Releases a token transaction."""
+  releaseTokenTransaction(releaseTokenTransactionInput: ReleaseTokenTransactionInput!): TokenTransactionEntity!
+
+  """Creates an account recharge."""
+  createAccountRecharge(createAccountRechargeInput: CreateAccountRechargeInput!): AccountRechargeEntity!
+
+  """Updates an account recharge."""
+  updateAccountRecharge(id: String!, updateAccountRechargeInput: UpdateAccountRechargeInput!): AccountRechargeEntity!
+
+  """Deletes an account recharge."""
+  deleteAccountRecharge(id: String!): AccountRechargeEntity!
+
+  """Creates a new business with hashed password."""
+  createBusiness(createBusinessInput: CreateBusinessInput!): BusinessEntity!
+  updateBusiness(id: String!, input: UpdateBusinessInput!): BusinessSettingsEntity!
+
+  """Deletes a business."""
+  deleteBusiness(id: String!): BusinessEntity!
+
+  """Creates a new client with hashed password."""
+  createClient(createClientInput: CreateClientInput!): ClientEntity!
+
+  """Creates a new client for POS with minimal info."""
+  createClientForPOS(createClientInput: CreateClientForPOSInput!): ClientEntity!
+  addClientAddress(clientId: String!, input: AddressInput!): ClientEntity!
+  updateClientAddress(addressId: String!, input: AddressInput!): AddressEntity!
+  deleteClientAddress(addressId: String!): SuccessResponse!
+  addClientPaymentMethod(clientId: String!, input: PaymentMethodInput): ClientEntity!
+  setDefaultPaymentMethod(paymentMethodId: String!): PaymentMethodEntity!
+
+  """Updates a client’s details."""
+  updateClient(input: UpdateClientInput!): ClientEntity!
+
+  """Deletes a client."""
+  deleteClient(id: String!): ClientEntity!
+  createWorker(createWorkerInput: CreateWorkerInput!): WorkerEntity!
+  updateWorker(id: String!, updateWorkerInput: UpdateWorkerInput!): WorkerEntity!
+  deleteWorker(id: String!): WorkerEntity!
+  updateWorkerProfile(id: String!, input: UpdateWorkerInput!): WorkerEntity!
+  createSale(input: CreateSaleInput!): SaleEntity!
+  addSaleProduct(input: AddSaleProductInput!): SaleProductEntity!
+  updateSaleProduct(id: String!, input: UpdateSaleProductInput!): SaleProductEntity!
+  removeSaleProduct(id: String!): DeleteResponse!
+  completeSale(id: String!, paymentMethod: String!, paymentDetails: PaymentDetailsInput): SaleEntity!
+
+  """Creates an inventory adjustment."""
+  createInventoryAdjustment(input: CreateInventoryAdjustmentInput!): InventoryAdjustmentEntity!
+  startShift(input: StartShiftInput!): ShiftEntityWorker!
+
+  """Ends a shift and calculates sales."""
+  endShift(endShiftInput: EndShiftInput!): ShiftEntity!
+
+  """Sends a message in a chat."""
+  sendMessage(input: SendMessageInput!): ChatMessageEntity!
+  processMobileMoneyPayment(input: ProcessMobileMoneyPaymentInput!): MobileMoneyPaymentResponseEntity!
+
+  """Creates a new chat with dynamic participants."""
+  createChat(createChatInput: CreateChatInput!): ChatEntity!
+
+  """Sends a message in a chat."""
+  createChatMessage(createChatMessageInput: CreateChatMessageInput!): ChatMessageEntity!
+
+  """Updates a chat’s status or properties."""
+  updateChat(id: String!, updateChatInput: UpdateChatInput!): ChatEntity!
+
+  """Deletes a chat."""
+  deleteChat(id: String!): ChatEntity!
+
+  """Marks messages as read."""
+  markMessagesAsRead(chatId: String!, userId: String!): MarkAsReadResponse!
+
+  """Updates chat status."""
+  updateChatStatus(id: String!, status: String!): ChatEntity!
+
+  """Starts a negotiation chat."""
+  startNegotiation(input: StartNegotiationInput!): ChatEntity!
+
+  """Accepts a negotiation."""
+  acceptNegotiation(negotiationId: String!): ChatEntity!
+
+  """Creates a reposted product."""
+  createRepostedProduct(createRepostedProductInput: CreateRepostedProductInput!): RepostedProductEntity!
+
+  """Deletes a reposted product."""
+  deleteRepostedProduct(id: String!): RepostedProductEntity!
+
+  """Initiates a re-ownership request."""
+  createReOwnedProduct(createReOwnedProductInput: CreateReOwnedProductInput!): ReOwnedProductEntity!
+
+  """Approves or rejects a re-ownership request."""
+  approveReOwnedProduct(approveReOwnedProductInput: ApproveReOwnedProductInput!): ReOwnedProductEntity!
+
+  """Creates shipping details for a re-owned product."""
+  createShipping(createShippingInput: CreateShippingInput!): ShippingEntity!
+
+  """Creates a new payment transaction."""
+  createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
+
+  """Updates a payment transaction’s status or QR code."""
+  updatePaymentTransaction(id: String!, input: UpdatePaymentTransactionInput!): PaymentTransactionEntity!
+
+  """Deletes a payment transaction."""
+  deletePaymentTransaction(id: String!): PaymentTransactionEntity!
+
+  """Creates a new freelance service."""
+  createFreelanceService(input: CreateFreelanceServiceInput!): FreelanceServiceEntity!
+
+  """Updates a freelance service."""
+  updateFreelanceService(id: String!, input: UpdateFreelanceServiceInput!): FreelanceServiceEntity!
+
+  """Assigns a worker to a freelance service."""
+  assignWorkerToService(input: AssignWorkersInput!): WorkerServiceAssignmentEntity!
+
+  """Deletes a freelance service."""
+  deleteFreelanceService(id: String!): FreelanceServiceEntity!
+
+  """Creates a new freelance order."""
+  createFreelanceOrder(input: CreateFreelanceOrderInput!): FreelanceOrderEntity!
+
+  """Updates a freelance order."""
+  updateFreelanceOrder(id: String!, input: UpdateFreelanceOrderInput!): FreelanceOrderEntity!
+
+  """Complete a freelance order."""
+  completeFreelanceOrder(id: String!): FreelanceOrderEntity!
+
+  """Release escrow for a freelance order."""
+  releaseEscrow(orderId: String!): FreelanceOrderEntity!
+  signClientIn(SignInInput: SignInInput!): AuthPayloadClient!
+  signBusinessIn(SignInInput: SignInInput!): AuthPayloadBusiness!
+  signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
+  signAdminIn(SignInInput: SignInInput!): AuthPayloadAdmin!
+  refreshToken(refreshToken: String!): AuthPayloadClient!
+  createPostOfSale(createPostOfSaleInput: CreatePostOfSaleInput!): PostOfSaleEntity!
+  updatePostOfSale(updatePostOfSaleInput: UpdatePostOfSaleInput!): PostOfSaleEntity!
+  removePostOfSale(id: Int!): PostOfSaleEntity!
+
+  """Creates a new category."""
+  createCategory(createCategoryInput: CreateCategoryInput!): CategoryEntity!
+
+  """Updates a category's details."""
+  updateCategory(id: String!, updateCategoryInput: UpdateCategoryInput!): CategoryEntity!
+
+  """Deletes a category."""
+  deleteCategory(id: String!): CategoryEntity!
+  updateSale(id: String!, input: UpdateSaleInput!): SaleEntity!
+  closeSale(input: CloseSaleInput!): SaleEntity!
+
+  """Processes a return for a POS sale."""
+  createReturn(createReturnInput: CreateReturnInput!): ReturnEntity!
+
+  """Generates a PDF receipt and optionally emails it."""
+  generateReceipt(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
+
+  """Generates a PDF receipt using pdfkit and optionally emails it."""
+  generateReceiptWithPDFKit(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
+
+  """Creates a new store for a business."""
+  createStore(input: CreateStoreInput!): StoreEntity!
+
+  """Updates an existing store."""
+  updateStore(id: String!, input: UpdateStoreInput!): StoreEntity!
+
+  """Deletes a store."""
+  deleteStore(id: String!): StoreEntity!
+
+  """Creates a new loyalty program."""
+  createLoyaltyProgram(input: CreateLoyaltyProgramInput!): LoyaltyProgramEntity!
+
+  """Updates a loyalty program."""
+  updateLoyaltyProgram(id: String!, input: UpdateLoyaltyProgramInput!): LoyaltyProgramEntity!
+
+  """Creates a points transaction."""
+  createPointsTransaction(createPointsTransactionInput: CreatePointsTransactionInput!): PointsTransactionEntity!
+
+  """Awards points to a customer."""
+  earnPoints(input: EarnPointsInput!): PointsTransactionEntity!
+
+  """Redeems points for a customer."""
+  redeemPoints(input: RedeemPointsInput!): PointsTransactionEntity!
+
+  """Deletes a loyalty program."""
+  deleteLoyaltyProgram(id: String!): Boolean!
+
+  """Creates a new purchase order."""
+  createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrderEntity!
+
+  """Updates a purchase order."""
+  updatePurchaseOrder(id: String!, input: UpdatePurchaseOrderInput!): PurchaseOrderEntity!
+
+  """Creates a new transfer order."""
+  createTransferOrder(input: CreateTransferOrderInput!): TransferOrderEntity!
+
+  """Updates a transfer order."""
+  updateTransferOrder(id: String!, input: UpdateTransferOrderInput!): TransferOrderEntity!
+
+  """Imports products in bulk."""
+  bulkImportProducts(storeId: String!, products: [PurchaseOrderProductInput!]!): BulkImportResultEntity!
+
+  """Starts a new shift for a worker."""
+  createShift(createShiftInput: CreateShiftInput!): ShiftEntity!
+
+  """Updates shift details (business only)."""
+  updateShift(id: String!, updateShiftInput: UpdateShiftInput!): ShiftEntity!
+  updatePaymentConfig(businessId: String!, input: UpdatePaymentConfigInput!): BusinessSettingsEntity!
+  updateHardwareConfig(businessId: String!, input: UpdateHardwareConfigInput!): BusinessSettingsEntity!
+  uploadKycDocument(input: UploadKycDocumentInput!): KycDocumentEntity!
+  submitKyc(businessId: String!): BusinessSettingsEntity!
+  verifyKyc(input: VerifyKycInput!): BusinessEntity!
+  rejectKyc(input: RejectKycInput!): BusinessEntity!
+  agreeToTerms(businessId: String!): BusinessSettingsEntity!
+  createAdmin(input: CreateAdminInput!): Admin!
+  updateAdmin(id: String!, input: UpdateAdminInput!): Admin!
+  removeAdmin(id: String!): Admin!
+  registerSuperAdmin(createAdminInput: CreateAdminInput!): Admin!
+  updateUserStatus(input: UpdateUserStatusInput!): Boolean!
+  createAnnouncement(input: CreateAnnouncementInput!): AnnouncementEntity!
+  resolveDispute(disputeId: String!, resolutionNotes: String!, refundAmount: Float, compensation: Float): DisputeEntity!
+  updatePlatformSettings(input: UpdatePlatformSettingsInput!): PlatformSettings!
 }
 
 input CreateProductInput {
-	title: String!
-	description: String
-	price: Float!
-	quantity: Int!
-	storeId: String
-	isPhysical: Boolean!
-	businessId: String!
-	categoryId: String!
-	featured: Boolean! = false
-	approvedForSale: Boolean! = true
+  title: String!
+  description: String
+  price: Float!
+  quantity: Int!
+  storeId: String
+  isPhysical: Boolean!
+  businessId: String!
+  categoryId: String!
+  featured: Boolean! = false
+  approvedForSale: Boolean! = true
 }
 
 input AddMediaInput {
-	url: String!
-	pathname: String!
-	type: String!
-	size: Int!
+  url: String!
+  pathname: String!
+  type: String!
+  size: Int!
 }
 
 input UpdateProductInput {
-	title: String!
-	description: String
-	price: Float!
-	quantity: Int!
-	storeId: String
-	isPhysical: Boolean!
-	businessId: String!
-	categoryId: String!
-	featured: Boolean! = false
-	approvedForSale: Boolean! = true
+  title: String!
+  description: String
+  price: Float!
+  quantity: Int!
+  storeId: String
+  isPhysical: Boolean!
+  businessId: String!
+  categoryId: String!
+  featured: Boolean! = false
+  approvedForSale: Boolean! = true
 }
 
 input CreateOrderInput {
-	clientId: String
-	deliveryFee: Float!
-	deliveryAddress: String
-	qrCode: String
-	orderProducts: [CreateOrderProductInput!]!
-	payment: CreatePaymentTransactionInput!
+  clientId: String
+  deliveryFee: Float!
+  deliveryAddress: String
+  qrCode: String
+  orderProducts: [CreateOrderProductInput!]!
+  payment: CreatePaymentTransactionInput!
 }
 
 input CreateOrderProductInput {
-	productId: String!
-	quantity: Int!
+  productId: String!
+  quantity: Int!
 }
 
 input CreatePaymentTransactionInput {
-	orderId: String
-	amount: Float
-	method: PaymentMethod!
-	status: PaymentStatus!
-	qrCode: String
+  orderId: String
+  amount: Float
+  method: PaymentMethod!
+  status: PaymentStatus!
+  qrCode: String
 }
 
 enum PaymentStatus {
-	PENDING
-	COMPLETED
-	FAILED
+  PENDING
+  COMPLETED
+  FAILED
 }
 
 input UpdateOrderInput {
-	deliveryAddress: String
-	qrCode: String
-	deliveryFee: Float
+  deliveryAddress: String
+  qrCode: String
+  deliveryFee: Float
 }
 
 input ProcessPaymentInput {
-	status: String
-	transactionId: String
-	method: String
+  status: String
+  transactionId: String
+  method: String
 }
 
 input CreateTokenTransactionInput {
-	businessId: String!
-	reOwnedProductId: String
-	repostedProductId: String
-	amount: Float!
-	type: TokenTransactionType!
+  businessId: String!
+  reOwnedProductId: String
+  repostedProductId: String
+  amount: Float!
+  type: TokenTransactionType!
 }
 
 input RedeemTokenTransactionInput {
-	tokenTransactionId: String!
-	isRedeemed: Boolean!
+  tokenTransactionId: String!
+  isRedeemed: Boolean!
 }
 
 input ReleaseTokenTransactionInput {
-	tokenTransactionId: String!
-	isReleased: Boolean!
+  tokenTransactionId: String!
+  isReleased: Boolean!
 }
 
 input CreateAccountRechargeInput {
-	amount: Float!
-	method: RechargeMethod!
-	origin: Country!
-	clientId: String
-	businessId: String
-	tokenTransactionId: String
+  amount: Float!
+  method: RechargeMethod!
+  origin: Country!
+  clientId: String
+  businessId: String
+  tokenTransactionId: String
 }
 
 input UpdateAccountRechargeInput {
-	amount: Float
-	method: RechargeMethod
-	origin: Country
+  amount: Float
+  method: RechargeMethod
+  origin: Country
 }
 
 input CreateBusinessInput {
-	name: String!
-	email: String!
-	description: String
-	avatar: String
-	coverImage: String
-	address: String
-	phone: String
-	password: String!
-	isVerified: Boolean! = false
-	businessType: String = "NA"
-	taxId: String = "NA"
-	registrationNumber: String = "NA"
-	website: String = "NA"
-	socialLinks: JSON
-	notes: String = "NA"
-	preferences: JSON
-	totalClients: Int = 0
-	totalWorkers: Int = 0
-	totalSales: Int = 0
-	totalRevenueGenerated: Float = 0
+  name: String!
+  email: String!
+  description: String
+  avatar: String
+  coverImage: String
+  address: String
+  phone: String
+  password: String!
+  isVerified: Boolean! = false
+  businessType: String = "NA"
+  taxId: String = "NA"
+  registrationNumber: String = "NA"
+  website: String = "NA"
+  socialLinks: JSON
+  notes: String = "NA"
+  preferences: JSON
+  totalClients: Int = 0
+  totalWorkers: Int = 0
+  totalSales: Int = 0
+  totalRevenueGenerated: Float = 0
 }
 
 input UpdateBusinessInput {
-	name: String
-	email: String
-	description: String
-	avatar: String
-	coverImage: String
-	address: String
-	phone: String
-	isVerified: Boolean! = false
-	businessType: String = "NA"
-	taxId: String = "NA"
-	registrationNumber: String = "NA"
-	website: String = "NA"
-	country: String = "NA"
-	socialLinks: JSON
-	notes: String = "NA"
-	preferences: JSON
-	totalClients: Int = 0
-	totalWorkers: Int = 0
-	totalSales: Int = 0
-	totalRevenueGenerated: Float = 0
-	kycId: String
-	kycStatus: KycStatus = PENDING
-	totalProductsSold: Int
-	hasAgreedToTerms: Boolean
-	isB2BEnabled: Boolean
+  name: String
+  email: String
+  description: String
+  avatar: String
+  coverImage: String
+  address: String
+  phone: String
+  isVerified: Boolean! = false
+  businessType: String = "NA"
+  taxId: String = "NA"
+  registrationNumber: String = "NA"
+  website: String = "NA"
+  country: String = "NA"
+  socialLinks: JSON
+  notes: String = "NA"
+  preferences: JSON
+  totalClients: Int = 0
+  totalWorkers: Int = 0
+  totalSales: Int = 0
+  totalRevenueGenerated: Float = 0
+  kycId: String
+  kycStatus: KycStatus = PENDING
+  totalProductsSold: Int
+  hasAgreedToTerms: Boolean
+  isB2BEnabled: Boolean
 }
 
 input CreateClientInput {
-	username: String!
-	email: String!
-	fullName: String
-	address: String
-	phone: String
-	password: String!
-	isVerified: Boolean!
+  username: String!
+  email: String!
+  fullName: String
+  address: String
+  phone: String
+  password: String!
+  isVerified: Boolean!
 }
 
 input CreateClientForPOSInput {
-	email: String!
-	fullName: String
-	phone: String
-	address: String
+  email: String!
+  fullName: String
+  phone: String
+  address: String
 }
 
 input AddressInput {
-	street: String!
-	city: String!
-	country: String
-	postalCode: String
-	isDefault: Boolean
+  street: String!
+  city: String!
+  country: String
+  postalCode: String
+  isDefault: Boolean
 }
 
 input PaymentMethodInput {
-	type: String!
-	provider: String
-	accountNumber: String
-	expiryMonth: Int
-	expiryYear: Int
-	cardToken: String
-	last4: String
-	isDefault: Boolean
+  type: String!
+  provider: String
+  accountNumber: String
+  expiryMonth: Int
+  expiryYear: Int
+  cardToken: String
+  last4: String
+  isDefault: Boolean
 }
 
 input UpdateClientInput {
-	username: String
-	email: String
-	fullName: String
-	address: String
-	phone: String
-	password: String
-	isVerified: Boolean
-	id: String!
-	kycId: String
+  username: String
+  email: String
+  fullName: String
+  address: String
+  phone: String
+  password: String
+  isVerified: Boolean
+  id: String!
+  kycId: String
 }
 
 input CreateWorkerInput {
-	email: String!
-	fullName: String
-	role: WorkerRole!
-	password: String!
-	isVerified: Boolean! = false
-	businessId: String
-	kycId: String
+  email: String!
+  fullName: String
+  role: WorkerRole!
+  password: String!
+  isVerified: Boolean! = false
+  businessId: String
+  kycId: String
 }
 
 enum WorkerRole {
-	ADMIN
-	STAFF
-	MANAGER
-	FREELANCER
+  ADMIN
+  STAFF
+  MANAGER
+  FREELANCER
 }
 
 input UpdateWorkerInput {
-	email: String
-	fullName: String
-	role: WorkerRole
-	password: String
-	isVerified: Boolean = false
-	businessId: String
-	kycId: String
-	id: String!
-}
-
-input CreateChatInput {
-	productId: String
-	serviceId: String
-	participantIds: [String!]!
-	isSecure: Boolean! = false
-	negotiationType: NegotiationType
-}
-
-input CreateChatMessageInput {
-	chatId: String!
-	message: String!
-}
-
-input UpdateChatInput {
-	id: String!
-	status: ChatStatus
-	isSecure: Boolean
-	negotiationType: NegotiationType
-}
-
-input SendMessageInput {
-	chatId: String!
-	content: String!
-	senderType: String!
-	senderId: String!
-}
-
-input StartNegotiationInput {
-	productId: String
-	serviceId: String
-	participantIds: [String!]!
-	negotiationType: NegotiationType! = GENERAL
-}
-
-input CreateRepostedProductInput {
-	productId: String!
-	businessId: String!
-	markupPercentage: Float! = 0.02
-}
-
-input CreateReOwnedProductInput {
-	originalProductId: String!
-	newOwnerId: String!
-	quantity: Int!
-	newPrice: Float!
-	markupPercentage: Float!
-}
-
-input ApproveReOwnedProductInput {
-	reOwnedProductId: String!
-	chatId: String!
-	isApproved: Boolean!
-}
-
-input CreateShippingInput {
-	reOwnedProductId: String!
-	trackingNumber: String!
-	carrier: String!
-}
-
-input UpdatePaymentTransactionInput {
-	status: String
-	qrCode: String
-}
-
-input CreateFreelanceServiceInput {
-	title: String!
-	description: String
-	isHourly: Boolean! = true
-	category: FreelanceServiceCategory!
-	rate: Float!
-	workerIds: [String!]
-}
-
-input UpdateFreelanceServiceInput {
-	id: String!
-	title: String
-	description: String
-	isHourly: Boolean
-	rate: Float
-	workerIds: [String!]
-}
-
-input AssignWorkersInput {
-	serviceId: String!
-	workerIds: [String!]!
-	role: String
-}
-
-input CreateFreelanceOrderInput {
-	serviceId: String!
-	clientId: String!
-	quantity: Int! = 1
-	businessIds: [String!]
-	paymentMethod: PaymentMethod! = TOKEN
-}
-
-input UpdateFreelanceOrderInput {
-	status: FreelanceStatus
-	escrowStatus: EscrowStatus
-	commissionPercent: Float
-}
-
-enum EscrowStatus {
-	HELD
-	RELEASED
-	DISPUTED
-}
-
-input CreatePostOfSaleInput {
-	"""
-	Example field (placeholder)
-	"""
-	exampleField: Int!
-}
-
-input UpdatePostOfSaleInput {
-	"""
-	Example field (placeholder)
-	"""
-	exampleField: Int
-	id: Int!
-}
-
-input CreateCategoryInput {
-	name: String!
-	description: String
-}
-
-input UpdateCategoryInput {
-	name: String
-	description: String
-	id: String!
+  email: String
+  fullName: String
+  role: WorkerRole
+  password: String
+  isVerified: Boolean = false
+  businessId: String
+  kycId: String
+  id: String!
 }
 
 input CreateSaleInput {
-	storeId: String!
-	workerId: String
-	clientId: String
-	totalAmount: Float
-	discount: Float
-	paymentMethod: PaymentMethod
-	saleProducts: [SaleProductInput!]
+  storeId: String!
+  workerId: String
+  clientId: String
+  totalAmount: Float
+  discount: Float
+  paymentMethod: PaymentMethod
+  saleProducts: [SaleProductInput!]
 }
 
 input SaleProductInput {
-	productId: String!
-	quantity: Int!
-	price: Float
-	modifiers: JSON
-}
-
-input UpdateSaleInput {
-	clientId: String
-	totalAmount: Float
-	discount: Float
-	paymentMethod: PaymentMethod
-	saleProducts: [SaleProductInput!]
-}
-
-input CloseSaleInput {
-	saleId: String!
-	paymentMethod: PaymentMethod!
-	status: SaleStatus
-	paymentDetails: PaymentDetailsInput
-}
-
-input PaymentDetailsInput {
-	mobileMoneyMethod: RechargeMethod
-	country: Country
-	operatorTransactionId: String
-	screenshotUrl: String
-	cardNumber: String
-	cardHolderName: String
-	expiryDate: String
-	cvv: String
-	tokenAmount: String
+  productId: String!
+  quantity: Int!
+  price: Float
+  modifiers: JSON
 }
 
 input AddSaleProductInput {
-	saleId: String!
-	productId: String!
-	quantity: Float!
-	modifiers: JSON
+  saleId: String!
+  productId: String!
+  quantity: Float!
+  modifiers: JSON
 }
 
 input UpdateSaleProductInput {
-	quantity: Float
-	modifiers: JSON
+  quantity: Float
+  modifiers: JSON
 }
 
-input CreateReturnInput {
-	saleId: String!
-	reason: String!
-}
-
-input GenerateReceiptInput {
-	saleId: String!
-	email: String
-}
-
-input CreateStoreInput {
-	businessId: String!
-	name: String!
-	address: String
-}
-
-input UpdateStoreInput {
-	name: String
-	address: String
-}
-
-input CreateLoyaltyProgramInput {
-	businessId: String!
-	name: String!
-	description: String
-	pointsPerPurchase: Float!
-	minimumPointsToRedeem: Float
-}
-
-input UpdateLoyaltyProgramInput {
-	name: String
-	description: String
-	pointsPerPurchase: Float
-	minimumPointsToRedeem: Float
-}
-
-input CreatePointsTransactionInput {
-	clientId: String!
-	loyaltyProgramId: String!
-	points: Float!
-}
-
-input EarnPointsInput {
-	clientId: String!
-	loyaltyProgramId: String!
-	points: Float!
-	orderId: String
-}
-
-input RedeemPointsInput {
-	clientId: String!
-	loyaltyProgramId: String!
-	points: Float!
-	rewardDescription: String
-}
-
-input CreatePurchaseOrderInput {
-	businessId: String!
-	storeId: String!
-	supplierId: String
-	expectedDelivery: DateTime
-	products: [PurchaseOrderProductInput!]!
-}
-
-input PurchaseOrderProductInput {
-	productId: String!
-	quantity: Int!
-}
-
-input UpdatePurchaseOrderInput {
-	supplierId: String
-	expectedDelivery: DateTime
-	status: PurchaseOrderStatus
-	products: [PurchaseOrderProductInput!]
-}
-
-input CreateTransferOrderInput {
-	fromStoreId: String!
-	toStoreId: String!
-	products: [TransferOrderProductInput!]!
-}
-
-input TransferOrderProductInput {
-	productId: String!
-	quantity: Int!
-}
-
-input UpdateTransferOrderInput {
-	status: TransferOrderStatus
-	products: [TransferOrderProductInput!]
+input PaymentDetailsInput {
+  mobileMoneyMethod: RechargeMethod
+  country: Country
+  operatorTransactionId: String
+  screenshotUrl: String
+  cardNumber: String
+  cardHolderName: String
+  expiryDate: String
+  cvv: String
+  tokenAmount: String
 }
 
 input CreateInventoryAdjustmentInput {
-	productId: String!
-	storeId: String!
-	adjustmentType: AdjustmentType!
-	quantity: Int!
-	reason: String
+  productId: String!
+  storeId: String!
+  adjustmentType: AdjustmentType!
+  quantity: Int!
+  reason: String
 }
 
-input CreateShiftInput {
-	storeId: String!
-	startTime: DateTime!
+input StartShiftInput {
+  workerId: String!
+  storeId: String!
+  startTime: DateTime!
 }
 
 input EndShiftInput {
-	shiftId: String!
-	endTime: DateTime!
+  shiftId: String!
+  endTime: DateTime!
+}
+
+input SendMessageInput {
+  chatId: String!
+  content: String!
+  senderType: String!
+  senderId: String!
+}
+
+input ProcessMobileMoneyPaymentInput {
+  saleId: String!
+  phoneNumber: String!
+  amount: String!
+  provider: MobileMoneyProvider!
+}
+
+enum MobileMoneyProvider {
+  MTN
+  AIRTEL
+  VODAFONE
+}
+
+input CreateChatInput {
+  productId: String
+  serviceId: String
+  participantIds: [String!]!
+  isSecure: Boolean! = false
+  negotiationType: NegotiationType
+}
+
+input CreateChatMessageInput {
+  chatId: String!
+  message: String!
+}
+
+input UpdateChatInput {
+  id: String!
+  status: ChatStatus
+  isSecure: Boolean
+  negotiationType: NegotiationType
+}
+
+input StartNegotiationInput {
+  productId: String
+  serviceId: String
+  participantIds: [String!]!
+  negotiationType: NegotiationType! = GENERAL
+}
+
+input CreateRepostedProductInput {
+  productId: String!
+  businessId: String!
+  markupPercentage: Float! = 0.02
+}
+
+input CreateReOwnedProductInput {
+  originalProductId: String!
+  newOwnerId: String!
+  quantity: Int!
+  newPrice: Float!
+  markupPercentage: Float!
+}
+
+input ApproveReOwnedProductInput {
+  reOwnedProductId: String!
+  chatId: String!
+  isApproved: Boolean!
+}
+
+input CreateShippingInput {
+  reOwnedProductId: String!
+  trackingNumber: String!
+  carrier: String!
+}
+
+input UpdatePaymentTransactionInput {
+  status: String
+  qrCode: String
+}
+
+input CreateFreelanceServiceInput {
+  title: String!
+  description: String
+  isHourly: Boolean! = true
+  category: FreelanceServiceCategory!
+  rate: Float!
+  workerIds: [String!]
+}
+
+input UpdateFreelanceServiceInput {
+  id: String!
+  title: String
+  description: String
+  isHourly: Boolean
+  rate: Float
+  workerIds: [String!]
+}
+
+input AssignWorkersInput {
+  serviceId: String!
+  workerIds: [String!]!
+  role: String
+}
+
+input CreateFreelanceOrderInput {
+  serviceId: String!
+  clientId: String!
+  quantity: Int! = 1
+  businessIds: [String!]
+  paymentMethod: PaymentMethod! = TOKEN
+}
+
+input UpdateFreelanceOrderInput {
+  status: FreelanceStatus
+  escrowStatus: EscrowStatus
+  commissionPercent: Float
+}
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  DISPUTED
+}
+
+input CreatePostOfSaleInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePostOfSaleInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  name: String!
+  description: String
+}
+
+input UpdateCategoryInput {
+  name: String
+  description: String
+  id: String!
+}
+
+input UpdateSaleInput {
+  clientId: String
+  totalAmount: Float
+  discount: Float
+  paymentMethod: PaymentMethod
+  saleProducts: [SaleProductInput!]
+}
+
+input CloseSaleInput {
+  saleId: String!
+  paymentMethod: PaymentMethod!
+  status: SaleStatus
+  paymentDetails: PaymentDetailsInput
+}
+
+input CreateReturnInput {
+  saleId: String!
+  reason: String!
+}
+
+input GenerateReceiptInput {
+  saleId: String!
+  email: String
+}
+
+input CreateStoreInput {
+  businessId: String!
+  name: String!
+  address: String
+}
+
+input UpdateStoreInput {
+  name: String
+  address: String
+}
+
+input CreateLoyaltyProgramInput {
+  businessId: String!
+  name: String!
+  description: String
+  pointsPerPurchase: Float!
+  minimumPointsToRedeem: Float
+}
+
+input UpdateLoyaltyProgramInput {
+  name: String
+  description: String
+  pointsPerPurchase: Float
+  minimumPointsToRedeem: Float
+}
+
+input CreatePointsTransactionInput {
+  clientId: String!
+  loyaltyProgramId: String!
+  points: Float!
+}
+
+input EarnPointsInput {
+  clientId: String!
+  loyaltyProgramId: String!
+  points: Float!
+  orderId: String
+}
+
+input RedeemPointsInput {
+  clientId: String!
+  loyaltyProgramId: String!
+  points: Float!
+  rewardDescription: String
+}
+
+input CreatePurchaseOrderInput {
+  businessId: String!
+  storeId: String!
+  supplierId: String
+  expectedDelivery: DateTime
+  products: [PurchaseOrderProductInput!]!
+}
+
+input PurchaseOrderProductInput {
+  productId: String!
+  quantity: Int!
+}
+
+input UpdatePurchaseOrderInput {
+  supplierId: String
+  expectedDelivery: DateTime
+  status: PurchaseOrderStatus
+  products: [PurchaseOrderProductInput!]
+}
+
+input CreateTransferOrderInput {
+  fromStoreId: String!
+  toStoreId: String!
+  products: [TransferOrderProductInput!]!
+}
+
+input TransferOrderProductInput {
+  productId: String!
+  quantity: Int!
+}
+
+input UpdateTransferOrderInput {
+  status: TransferOrderStatus
+  products: [TransferOrderProductInput!]
+}
+
+input CreateShiftInput {
+  storeId: String!
+  startTime: DateTime!
 }
 
 input UpdateShiftInput {
-	startTime: DateTime
-	endTime: DateTime
+  startTime: DateTime
+  endTime: DateTime
 }
 
 input UpdatePaymentConfigInput {
-	mtnCode: String
-	airtelCode: String
-	orangeCode: String
-	mpesaCode: String
-	bankAccount: String
-	mobileMoneyEnabled: Boolean
+  mtnCode: String
+  airtelCode: String
+  orangeCode: String
+  mpesaCode: String
+  bankAccount: String
+  mobileMoneyEnabled: Boolean
 }
 
 input UpdateHardwareConfigInput {
-	receiptPrinter: String
-	barcodeScanner: String
-	cashDrawer: String
-	cardReader: String
+  receiptPrinter: String
+  barcodeScanner: String
+  cashDrawer: String
+  cardReader: String
 }
 
 input UploadKycDocumentInput {
-	businessId: String!
-	documentType: String!
-	documentUrl: String!
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
 }
 
 input VerifyKycInput {
-	businessId: String!
-	notes: String
+  businessId: String!
+  notes: String
 }
 
 input RejectKycInput {
-	businessId: String!
-	rejectionReason: String!
+  businessId: String!
+  rejectionReason: String!
 }
 
 input CreateAdminInput {
-	email: String!
-	fullName: String
-	password: String!
-	phone: String
-	avatar: String
-	permissions: JSON
+  email: String!
+  fullName: String
+  password: String!
+  phone: String
+  avatar: String
+  permissions: JSON
 }
 
 input UpdateAdminInput {
-	fullName: String
-	phone: String
-	avatar: String
-	permissions: JSON
+  fullName: String
+  phone: String
+  avatar: String
+  permissions: JSON
 }
 
 input UpdateUserStatusInput {
-	id: String!
-	userType: String!
-	status: String!
+  id: String!
+  userType: String!
+  status: String!
 }
 
 input CreateAnnouncementInput {
-	title: String!
-	content: String!
-	type: String
-	priority: String
-	scheduledFor: String
-	status: String
-	targetUsers: String
+  title: String!
+  content: String!
+  type: String
+  priority: String
+  scheduledFor: String
+  status: String
+  targetUsers: String
 }
 
 input UpdatePlatformSettingsInput {
-	platformFeePercentage: Float
-	minTransactionAmount: Float
-	maxTransactionAmount: Float
-	currency: String
-	tokenValue: Float
-	tokenSymbol: String
-	kycRequired: Boolean
-	b2bEnabled: Boolean
-	marketplaceEnabled: Boolean
+  platformFeePercentage: Float
+  minTransactionAmount: Float
+  maxTransactionAmount: Float
+  currency: String
+  tokenValue: Float
+  tokenSymbol: String
+  kycRequired: Boolean
+  b2bEnabled: Boolean
+  marketplaceEnabled: Boolean
 }
 
 type Subscription {
-	productCreated(businessId: String!): ProductEntity!
-	productUpdated(businessId: String!): ProductEntity!
-	orderCreated(clientId: String!, businessId: String!): OrderEntity!
-	orderUpdated(clientId: String!, businessId: String!): OrderEntity!
-	orderPaymentProcessed(orderId: String!): OrderEntity!
-	businessUpdated(businessId: String!): BusinessEntity!
-	businessAdded: BusinessEntity!
-	messageReceived(chatId: String!): ChatMessageEntity!
-	chatCreated(userId: String!): ChatEntity!
-	chatStatusUpdated(userId: String!): ChatEntity!
-	freelanceServiceCreated(businessId: String!): FreelanceServiceEntity!
-	freelanceServiceUpdated(businessId: String!): FreelanceServiceEntity!
-	freelanceOrderCreated(clientId: String!): FreelanceOrderEntity!
-	freelanceOrderUpdated(businessId: String!): FreelanceOrderEntity!
-	saleCreated(storeId: String!): SaleEntity!
-	saleUpdated(storeId: String!): SaleEntity!
-	loyaltyProgramCreated(businessId: String!): LoyaltyProgramEntity!
-	loyaltyProgramUpdated(businessId: String!): LoyaltyProgramEntity!
-	pointsEarned(businessId: String!): PointsTransactionEntity!
-	pointsRedeemed(businessId: String!): PointsTransactionEntity!
-	purchaseOrderCreated(
-		storeId: String!
-		businessId: String!
-	): PurchaseOrderEntity!
-	purchaseOrderUpdated(
-		storeId: String!
-		businessId: String!
-	): PurchaseOrderEntity!
-	transferOrderCreated(
-		fromStoreId: String!
-		toStoreId: String!
-	): TransferOrderEntity!
-	transferOrderUpdated(fromStoreId: String!): TransferOrderEntity!
-	settingsUpdated: BusinessSettingsEntity!
-	kycUpdated: BusinessSettingsEntity!
-	kycSubmitted: BusinessSettingsEntity!
-	productAdded(businessId: String!): ProductEntity!
-	serviceAdded(businessId: String!): FreelanceServiceEntity!
-	newAdmin: Admin!
-	kycVerified: BusinessEntity!
-	kycRejected: BusinessEntity!
-	newAnnouncement: AnnouncementEntity!
-	newDispute: DisputeEntity!
-	platformSettingsUpdated: PlatformSettings!
+  productCreated(businessId: String!): ProductEntity!
+  productUpdated(businessId: String!): ProductEntity!
+  orderCreated(clientId: String!, businessId: String!): OrderEntity!
+  orderUpdated(clientId: String!, businessId: String!): OrderEntity!
+  orderPaymentProcessed(orderId: String!): OrderEntity!
+  businessUpdated(businessId: String!): BusinessEntity!
+  businessAdded: BusinessEntity!
+  saleCreated(storeId: String!): SaleEntity!
+  saleUpdated(storeId: String!): SaleEntity!
+  newChatMessage(workerId: String!): ChatMessageEntityV2!
+  inventoryUpdated(storeId: String!): InventoryAdjustmentEntityWorker!
+  newShiftStarted(workerId: String!): ShiftEntityWorker!
+  shiftEnded(workerId: String!): ShiftEntityWorker!
+  messageReceived(chatId: String!): ChatMessageEntity!
+  chatCreated(userId: String!): ChatEntity!
+  chatStatusUpdated(userId: String!): ChatEntity!
+  freelanceServiceCreated(businessId: String!): FreelanceServiceEntity!
+  freelanceServiceUpdated(businessId: String!): FreelanceServiceEntity!
+  freelanceOrderCreated(clientId: String!): FreelanceOrderEntity!
+  freelanceOrderUpdated(businessId: String!): FreelanceOrderEntity!
+  loyaltyProgramCreated(businessId: String!): LoyaltyProgramEntity!
+  loyaltyProgramUpdated(businessId: String!): LoyaltyProgramEntity!
+  pointsEarned(businessId: String!): PointsTransactionEntity!
+  pointsRedeemed(businessId: String!): PointsTransactionEntity!
+  purchaseOrderCreated(storeId: String!, businessId: String!): PurchaseOrderEntity!
+  purchaseOrderUpdated(storeId: String!, businessId: String!): PurchaseOrderEntity!
+  transferOrderCreated(fromStoreId: String!, toStoreId: String!): TransferOrderEntity!
+  transferOrderUpdated(fromStoreId: String!): TransferOrderEntity!
+  settingsUpdated: BusinessSettingsEntity!
+  kycUpdated: BusinessSettingsEntity!
+  kycSubmitted: BusinessSettingsEntity!
+  productAdded(businessId: String!): ProductEntity!
+  serviceAdded(businessId: String!): FreelanceServiceEntity!
+  newAdmin: Admin!
+  kycVerified: BusinessEntity!
+  kycRejected: BusinessEntity!
+  newAnnouncement: AnnouncementEntity!
+  newDispute: DisputeEntity!
+  platformSettingsUpdated: PlatformSettings!
 }

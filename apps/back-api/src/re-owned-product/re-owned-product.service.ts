@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import type { ChatService } from "../chat/chat.service";
+import { ChatService } from "../chat/chat.service";
 import { NegotiationType } from "../chat/dto/create-chat.input";
-import type { PrismaService } from "../prisma/prisma.service";
-import type {
+import { PrismaService } from "../prisma/prisma.service";
+import {
 	ApproveReOwnedProductInput,
 	CreateReOwnedProductInput,
 } from "./dto/create-re-owned-product.input";
-import type { CreateShippingInput } from "./dto/create-shipping.input";
+import { CreateShippingInput } from "./dto/create-shipping.input";
 
 // Service
 @Injectable()

@@ -12,17 +12,17 @@ import {
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type {
+import {
 	AssignWorkersInput,
 	CreateFreelanceServiceInput,
 } from "./dto/create-freelance-service.input";
-import type { UpdateFreelanceServiceInput } from "./dto/update-freelance-service.input";
+import { UpdateFreelanceServiceInput } from "./dto/update-freelance-service.input";
 import {
 	FreelanceServiceEntity,
 	PaginatedFreelanceServicesResponse,
 	WorkerServiceAssignmentEntity,
 } from "./entities/freelance-service.entity";
-import type { FreelanceServiceService } from "./freelance-service.service";
+import { FreelanceServiceService } from "./freelance-service.service";
 
 // Resolver
 @Resolver(() => FreelanceServiceEntity)

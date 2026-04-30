@@ -1,20 +1,20 @@
 import { Inject, Injectable } from "@nestjs/common";
-import type { PubSub } from "graphql-subscriptions";
-import type { AuthPayload } from "../auth/entities/auth-payload.entity";
-import type { BusinessService } from "../business/business.service";
+import { PubSub } from "graphql-subscriptions";
+import { AuthPayload } from "../auth/entities/auth-payload.entity";
+import { BusinessService } from "../business/business.service";
 import {
 	PurchaseOrderStatus,
 	TransferOrderStatus,
 } from "../generated/prisma/enums";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { ProductService } from "../product/product.service";
-import type { StoreService } from "../store/store.service";
-import type { CreateInventoryAdjustmentInput } from "./dto/create-inventory.input";
-import type { CreatePurchaseOrderInput } from "./dto/create-purchase-order.input";
-import type { CreateTransferOrderInput } from "./dto/create-transfer-order.input";
-import type { LowStockAlertInput } from "./dto/low-stock-alert.input";
-import type { UpdatePurchaseOrderInput } from "./dto/update-purchase-order.input";
-import type { UpdateTransferOrderInput } from "./dto/update-transfer-order.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { ProductService } from "../product/product.service";
+import { StoreService } from "../store/store.service";
+import { CreateInventoryAdjustmentInput } from "./dto/create-inventory.input";
+import { CreatePurchaseOrderInput } from "./dto/create-purchase-order.input";
+import { CreateTransferOrderInput } from "./dto/create-transfer-order.input";
+import { LowStockAlertInput } from "./dto/low-stock-alert.input";
+import { UpdatePurchaseOrderInput } from "./dto/update-purchase-order.input";
+import { UpdateTransferOrderInput } from "./dto/update-transfer-order.input";
 // Service
 @Injectable()
 export class InventoryService {

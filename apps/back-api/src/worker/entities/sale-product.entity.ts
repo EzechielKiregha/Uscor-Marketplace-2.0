@@ -2,7 +2,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
-export class SaleProductEntity {
+export class SaleProductEntityWorker {
 	@Field()
 	id: string;
 

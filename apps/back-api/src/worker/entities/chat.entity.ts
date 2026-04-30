@@ -1,10 +1,10 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { ClientEntity } from "../../client/entities/client.entity";
-import { ChatMessageEntity } from "./chat-message.entity";
+import { ChatMessageEntityV2 } from "./chat-message.entity";
 
 @ObjectType()
-export class ChatEntity {
+export class ChatEntityWorker {
 	@Field()
 	id: string;
 
@@ -17,10 +17,10 @@ export class ChatEntity {
 	@Field()
 	updatedAt: Date;
 
-	@Field(() => [ChatMessageEntity], {
+	@Field(() => [ChatMessageEntityV2], {
 		nullable: true,
 	})
-	messages?: ChatMessageEntity[];
+	messages?: ChatMessageEntityV2[];
 
 	@Field(() => BusinessEntity, { nullable: true })
 	business?: BusinessEntity;

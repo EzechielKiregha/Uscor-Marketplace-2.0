@@ -361,7 +361,7 @@ model Worker {
   id                   String                @id @default(uuid())
   email                String                @unique
   fullName             String?
-  role                 WorkerRole           @default(STAFF) // Updated to use WorkerRole enum
+  role                 WorkerRole           @default(STAFF)
   phone                String?
   password             String
   business             Business              @relation(fields: [businessId], references: [id])

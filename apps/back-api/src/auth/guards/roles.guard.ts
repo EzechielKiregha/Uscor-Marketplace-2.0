@@ -3,7 +3,7 @@ import {
 	type ExecutionContext,
 	Injectable,
 } from "@nestjs/common";
-import type { Reflector } from "@nestjs/core";
+import { Reflector } from "@nestjs/core";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { ROLES_KEY } from "../decorators/roles.decorator";
 

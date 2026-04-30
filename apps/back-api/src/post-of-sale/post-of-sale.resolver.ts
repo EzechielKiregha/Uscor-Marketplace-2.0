@@ -1,8 +1,8 @@
 import { Args, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
-import type { CreatePostOfSaleInput } from "./dto/create-post-of-sale.input";
-import type { UpdatePostOfSaleInput } from "./dto/update-post-of-sale.input";
+import { CreatePostOfSaleInput } from "./dto/create-post-of-sale.input";
+import { UpdatePostOfSaleInput } from "./dto/update-post-of-sale.input";
 import { PostOfSaleEntity } from "./entities/post-of-sale.entity";
-import type { PostOfSaleService } from "./post-of-sale.service";
+import { PostOfSaleService } from "./post-of-sale.service";
 
 @Resolver(() => PostOfSaleEntity)
 export class PostOfSaleResolver {

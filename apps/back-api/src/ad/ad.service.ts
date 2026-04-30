@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { CreateAdInput } from "./dto/create-ad.input";
-import type { UpdateAdInput } from "./dto/update-ad.input";
+import { CreateAdInput } from "./dto/create-ad.input";
+import { UpdateAdInput } from "./dto/update-ad.input";
 
 @Injectable()
 export class AdService {

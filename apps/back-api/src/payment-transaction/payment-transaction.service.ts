@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import type { AccountRechargeService } from "../account-recharge/account-recharge.service";
+import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
 	Country,
 	RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
 import { PaymentMethod, PaymentStatus } from "../generated/prisma/enums";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreatePaymentTransactionInput } from "./dto/create-payment-transaction.input";
-import type { UpdatePaymentTransactionInput } from "./dto/update-payment-transaction.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreatePaymentTransactionInput } from "./dto/create-payment-transaction.input";
+import { UpdatePaymentTransactionInput } from "./dto/update-payment-transaction.input";
 
 // Service
 @Injectable()

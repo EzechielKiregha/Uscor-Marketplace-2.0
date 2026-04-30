@@ -3,14 +3,14 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type {
+import {
 	ApproveReOwnedProductInput,
 	CreateReOwnedProductInput,
 } from "./dto/create-re-owned-product.input";
-import type { CreateShippingInput } from "./dto/create-shipping.input";
+import { CreateShippingInput } from "./dto/create-shipping.input";
 import { ReOwnedProductEntity } from "./entities/re-owned-product.entity";
 import { ShippingEntity } from "./entities/shipping.entity";
-import type { ReOwnedProductService } from "./re-owned-product.service";
+import { ReOwnedProductService } from "./re-owned-product.service";
 
 // Resolver
 @Resolver(() => ReOwnedProductEntity)

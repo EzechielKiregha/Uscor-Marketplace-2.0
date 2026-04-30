@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { CreateReviewInput } from "./dto/create-review.input";
-import type { UpdateReviewInput } from "./dto/update-review.input";
+import { CreateReviewInput } from "./dto/create-review.input";
+import { UpdateReviewInput } from "./dto/update-review.input";
 
 @Injectable()
 export class ReviewService {

@@ -7,22 +7,22 @@ import {
 	Resolver,
 	Subscription,
 } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
+import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { PaymentMethod } from "../payment-transaction/dto/create-payment-transaction.input";
-import type { StoreService } from "../store/store.service";
-import type { AddSaleProductInput } from "./dto/add-sale-product.input";
-import type {
+import { PaymentMethod } from "../payment-transaction/dto/create-payment-transaction.input";
+import { StoreService } from "../store/store.service";
+import { AddSaleProductInput } from "./dto/add-sale-product.input";
+import {
 	CloseSaleInput,
 	PaymentDetailsInput,
 } from "./dto/close-sale.input";
-import type { CreateReturnInput } from "./dto/create-return.input";
-import type { CreateSaleInput } from "./dto/create-sale.input";
-import type { GenerateReceiptInput } from "./dto/receipt.input";
-import type { UpdateSaleInput } from "./dto/update-sale.input";
-import type { UpdateSaleProductInput } from "./dto/update-sale-product.input";
+import { CreateReturnInput } from "./dto/create-return.input";
+import { CreateSaleInput } from "./dto/create-sale.input";
+import { GenerateReceiptInput } from "./dto/receipt.input";
+import { UpdateSaleInput } from "./dto/update-sale.input";
+import { UpdateSaleProductInput } from "./dto/update-sale-product.input";
 import { DeleteResponse } from "./entities/delete-response.entity";
 import { PaginatedSalesResponse } from "./entities/paginated-sales-response.entity";
 import { ReceiptEntity } from "./entities/receipt.entity";
@@ -30,7 +30,7 @@ import { ReturnEntity } from "./entities/return.entity";
 import { SaleEntity } from "./entities/sale.entity";
 import { SaleProductEntity } from "./entities/sale-product.entity";
 import { SalesDashboard } from "./entities/sales-dashboard.entity";
-import type { SaleService } from "./sale.service";
+import { SaleService } from "./sale.service";
 
 // Resolver
 @Resolver(() => SaleEntity)

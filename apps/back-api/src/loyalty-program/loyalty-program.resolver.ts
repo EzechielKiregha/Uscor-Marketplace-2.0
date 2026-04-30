@@ -11,19 +11,19 @@ import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type {
+import {
 	CreateLoyaltyProgramInput,
 	CreatePointsTransactionInput,
 	EarnPointsInput,
 	RedeemPointsInput,
 } from "./dto/loyalty-program.input";
-import type { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
+import { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
 import { ClientPointsBalanceEntity } from "./entities/client-points-balance.entity";
 import { CustomerPointsEntity } from "./entities/customer-points.entity";
 import { LoyaltyAnalyticsEntity } from "./entities/loyalty-analytics.entity";
 import { LoyaltyProgramEntity } from "./entities/loyalty-program.entity";
 import { PointsTransactionEntity } from "./entities/points-transaction.entity";
-import type { LoyaltyService } from "./loyalty-program.service";
+import { LoyaltyService } from "./loyalty-program.service";
 // Resolver
 @Resolver(() => LoyaltyProgramEntity)
 export class LoyaltyResolver {

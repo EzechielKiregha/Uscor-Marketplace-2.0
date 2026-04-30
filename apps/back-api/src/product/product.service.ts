@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import type { AuthPayload } from "../auth/entities/auth-payload.entity";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateProductInput } from "./dto/create-product.input";
-import type { UpdateProductInput } from "./dto/update-product.input";
+import { AuthPayload } from "../auth/entities/auth-payload.entity";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateProductInput } from "./dto/create-product.input";
+import { UpdateProductInput } from "./dto/update-product.input";
 
 // Service
 @Injectable()

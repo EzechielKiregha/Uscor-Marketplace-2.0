@@ -1,10 +1,10 @@
 import { Inject } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
-import type { UpdatePlatformSettingsInput } from "./dto/update-platform-settings.input";
+import { PubSub } from "graphql-subscriptions";
+import { UpdatePlatformSettingsInput } from "./dto/update-platform-settings.input";
 import { PlatformMetrics } from "./entities/platform-metrics.entity";
 import { PlatformSettings } from "./entities/platform-settings.entity";
-import type { PlatformService } from "./platform.service";
+import { PlatformService } from "./platform.service";
 
 @Resolver()
 export class PlatformResolver {

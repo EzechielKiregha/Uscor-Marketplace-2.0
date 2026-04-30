@@ -3,9 +3,9 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { CategoryService } from "./category.service";
-import type { CreateCategoryInput } from "./dto/create-category.input";
-import type { UpdateCategoryInput } from "./dto/update-category.input";
+import { CategoryService } from "./category.service";
+import { CreateCategoryInput } from "./dto/create-category.input";
+import { UpdateCategoryInput } from "./dto/update-category.input";
 import { CategoryEntity } from "./entities/category.entity";
 
 @Resolver(() => CategoryEntity)

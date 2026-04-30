@@ -13,34 +13,34 @@ import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { AddSaleProductInput } from "./dto/add-sale-product.input";
-import type { CreateInventoryAdjustmentInput } from "./dto/create-inventory-adjustment.input";
-import type { CreateSaleInput } from "./dto/create-sale.input";
-import type { CreateWorkerInput } from "./dto/create-worker.input";
-import type { EndShiftInput } from "./dto/end-shift.input";
-import type { ProcessMobileMoneyPaymentInput } from "./dto/process-mobile-money.input";
-import type { SendChatMessageInput } from "./dto/send-chat-message.input";
-import type { StartShiftInput } from "./dto/start-shift.input";
-import type { UpdateSaleProductInput } from "./dto/update-sale-product.input";
-import type { UpdateWorkerInput } from "./dto/update-worker.input";
-import { ChatEntity } from "./entities/chat.entity";
-import { ChatMessageEntity } from "./entities/chat-message.entity";
+import { AddSaleProductInput } from "./dto/add-sale-product.input";
+import { CreateInventoryAdjustmentInput } from "./dto/create-inventory-adjustment.input";
+import { CreateSaleInput } from "./dto/create-sale.input";
+import { CreateWorkerInput } from "./dto/create-worker.input";
+import { EndShiftInput } from "./dto/end-shift.input";
+import { ProcessMobileMoneyPaymentInput } from "./dto/process-mobile-money.input";
+import { SendChatMessageInput } from "./dto/send-chat-message.input";
+import { StartShiftInput } from "./dto/start-shift.input";
+import { UpdateSaleProductInput } from "./dto/update-sale-product.input";
+import { UpdateWorkerInput } from "./dto/update-worker.input";
+import { ChatEntityWorker } from "./entities/chat.entity";
+import { ChatMessageEntityV2 } from "./entities/chat-message.entity";
 import {
 	MobileMoneyPaymentResponseEntity,
 	WorkerDashboardEntity,
 	WorkerDashboardStatsEntity,
 } from "./entities/dashboard.entity";
-import { InventoryAdjustmentEntity } from "./entities/inventory-adjustment.entity";
-import { SaleEntity } from "./entities/sale.entity";
-import { SaleProductEntity } from "./entities/sale-product.entity";
-import { ShiftEntity } from "./entities/shift.entity";
+import { InventoryAdjustmentEntityWorker } from "./entities/inventory-adjustment.entity";
+import { SaleEntityWorker } from "./entities/sale.entity";
+import { SaleProductEntityWorker } from "./entities/sale-product.entity";
+import { ShiftEntityWorker } from "./entities/shift.entity";
 import { WorkerEntity } from "./entities/worker.entity";
-import type { WorkerService } from "./worker.service";
+import { WorkerService } from "./worker.service";
 
 @ObjectType()
 class SalesPagedResult {
-	@Field(() => [SaleEntity])
-	items: SaleEntity[];
+	@Field(() => [SaleEntityWorker])
+	items: SaleEntityWorker[];
 
 	@Field(() => Int)
 	total: number;
@@ -54,8 +54,8 @@ class SalesPagedResult {
 
 @ObjectType()
 class ShiftsPagedResult {
-	@Field(() => [ShiftEntity])
-	items: ShiftEntity[];
+	@Field(() => [ShiftEntityWorker])
+	items: ShiftEntityWorker[];
 
 	@Field(() => Int)
 	total: number;
@@ -69,8 +69,8 @@ class ShiftsPagedResult {
 
 @ObjectType()
 class InventoryPagedResult {
-	@Field(() => [InventoryAdjustmentEntity])
-	items: InventoryAdjustmentEntity[];
+	@Field(() => [InventoryAdjustmentEntityWorker])
+	items: InventoryAdjustmentEntityWorker[];
 
 	@Field(() => Int)
 	total: number;
@@ -84,8 +84,8 @@ class InventoryPagedResult {
 
 @ObjectType()
 class ChatsPagedResult {
-	@Field(() => [ChatEntity])
-	items: ChatEntity[];
+	@Field(() => [ChatEntityWorker])
+	items: ChatEntityWorker[];
 
 	@Field(() => Int)
 	total: number;
@@ -196,7 +196,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => SaleEntity)
+	@Mutation(() => SaleEntityWorker)
 	async createSale(@Args("input") input: CreateSaleInput) {
 		const sale = await this.workerService.createSale(input);
 		await this.pubSub.publish("saleCreated", {
@@ -244,7 +244,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Query(() => SaleEntity, {
+	@Query(() => SaleEntityWorker, {
 		name: "workerCurrentSale",
 		nullable: true,
 	})
@@ -257,14 +257,14 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => SaleProductEntity)
+	@Mutation(() => SaleProductEntityWorker)
 	async addSaleProduct(@Args("input") input: AddSaleProductInput) {
 		return this.workerService.addSaleProduct(input);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => SaleProductEntity)
+	@Mutation(() => SaleProductEntityWorker)
 	async updateSaleProduct(
 		@Args("id") id: string,
 		@Args("input") input: UpdateSaleProductInput,
@@ -274,14 +274,14 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => SaleProductEntity)
+	@Mutation(() => SaleProductEntityWorker)
 	async removeSaleProduct(@Args("id") id: string) {
 		return this.workerService.removeSaleProduct(id);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => SaleEntity)
+	@Mutation(() => SaleEntityWorker)
 	async completeSale(
 		@Args("id") id: string,
 		@Args("paymentMethod") paymentMethod: string,
@@ -332,7 +332,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => InventoryAdjustmentEntity)
+	@Mutation(() => InventoryAdjustmentEntityWorker)
 	async createInventoryAdjustment(
 		@Args("input")
 		input: CreateInventoryAdjustmentInput,
@@ -347,7 +347,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => ShiftEntity)
+	@Mutation(() => ShiftEntityWorker)
 	async startShift(@Args("input") input: StartShiftInput) {
 		const shift = await this.workerService.startShift(input);
 		await this.pubSub.publish("shiftStarted", {
@@ -358,7 +358,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => ShiftEntity)
+	@Mutation(() => ShiftEntityWorker)
 	async endShift(@Args("input") input: EndShiftInput) {
 		const shift = await this.workerService.endShift(input);
 		await this.pubSub.publish("shiftEnded", {
@@ -403,7 +403,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Query(() => ShiftEntity, {
+	@Query(() => ShiftEntityWorker, {
 		name: "workerCurrentShift",
 		nullable: true,
 	})
@@ -437,7 +437,7 @@ export class WorkerResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
-	@Mutation(() => ChatMessageEntity)
+	@Mutation(() => ChatMessageEntityV2)
 	async sendMessage(@Args("input") input: SendChatMessageInput) {
 		const message = await this.workerService.sendChatMessage(input);
 		await this.pubSub.publish("newChatMessage", {
@@ -456,7 +456,7 @@ export class WorkerResolver {
 		return this.workerService.processMobileMoneyPayment(input);
 	}
 
-	@Subscription(() => SaleEntity, {
+	@Subscription(() => SaleEntityWorker, {
 		filter: (payload, variables) =>
 			payload.saleCreated.storeId === variables.storeId,
 	})
@@ -464,7 +464,7 @@ export class WorkerResolver {
 		return this.pubSub.asyncIterableIterator(["saleCreated"]);
 	}
 
-	@Subscription(() => SaleEntity, {
+	@Subscription(() => SaleEntityWorker, {
 		filter: (payload, variables) =>
 			payload.saleUpdated.storeId === variables.storeId,
 	})
@@ -472,12 +472,12 @@ export class WorkerResolver {
 		return this.pubSub.asyncIterableIterator(["saleUpdated"]);
 	}
 
-	@Subscription(() => ChatMessageEntity)
+	@Subscription(() => ChatMessageEntityV2)
 	newChatMessage(@Args("workerId") _workerId: string) {
 		return this.pubSub.asyncIterableIterator(["newChatMessage"]);
 	}
 
-	@Subscription(() => InventoryAdjustmentEntity, {
+	@Subscription(() => InventoryAdjustmentEntityWorker, {
 		filter: (payload, variables) =>
 			payload.inventoryUpdated.storeId === variables.storeId,
 	})
@@ -485,7 +485,7 @@ export class WorkerResolver {
 		return this.pubSub.asyncIterableIterator(["inventoryUpdated"]);
 	}
 
-	@Subscription(() => ShiftEntity, {
+	@Subscription(() => ShiftEntityWorker, {
 		filter: (payload, variables) =>
 			payload.shiftStarted.workerId === variables.workerId,
 	})
@@ -493,7 +493,7 @@ export class WorkerResolver {
 		return this.pubSub.asyncIterableIterator(["shiftStarted"]);
 	}
 
-	@Subscription(() => ShiftEntity, {
+	@Subscription(() => ShiftEntityWorker, {
 		filter: (payload, variables) =>
 			payload.shiftEnded.workerId === variables.workerId,
 	})

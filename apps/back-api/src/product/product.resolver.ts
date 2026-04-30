@@ -10,11 +10,11 @@ import {
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { AddMediaInput } from "../media/dto/add-media.input";
+import { AddMediaInput } from "../media/dto/add-media.input";
 import { MediaEntity } from "../media/entities/media.entity";
 import { MediaService } from "../media/media.service";
-import type { CreateProductInput } from "./dto/create-product.input";
-import type { UpdateProductInput } from "./dto/update-product.input";
+import { CreateProductInput } from "./dto/create-product.input";
+import { UpdateProductInput } from "./dto/update-product.input";
 import { ProductEntity } from "./entities/product.entity";
 import { ProductService } from "./product.service";
 
@@ -29,13 +29,11 @@ export class ProductResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("business")
-	@Mutation(() => ProductEntity, {
-		description: "Creates a new product for a business.",
-	})
+	@Mutation(() => ProductEntity)
 	async createProduct(
 		@Context() context,
-		@Args("input") input: CreateProductInput,
-		@Args("mediaInput") mediaInput: AddMediaInput,
+		@Args("input", { type: () => CreateProductInput }) input: CreateProductInput,
+		@Args("mediaInput", { type: () => AddMediaInput }) mediaInput: AddMediaInput,
 	) {
 		const user = context.req.user;
 		if (user.role === "business" && user.id !== input.businessId) {
@@ -143,8 +141,8 @@ export class ProductResolver {
 		@Context() context,
 		@Args("id", { type: () => String })
 		id: string,
-		@Args("input") input: UpdateProductInput,
-		@Args("mediaInput") mediaInput: AddMediaInput,
+		@Args("input", { type: () => UpdateProductInput }) input: UpdateProductInput,
+		@Args("mediaInput", { type: () => AddMediaInput }) mediaInput: AddMediaInput,
 	) {
 		const user = context.req.user;
 		const product = await this.productService.findOne(id);

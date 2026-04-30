@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { CreateReferralInput } from "./dto/create-referral.input";
-import type { UpdateReferralInput } from "./dto/update-referral.input";
+import { CreateReferralInput } from "./dto/create-referral.input";
+import { UpdateReferralInput } from "./dto/update-referral.input";
 
 @Injectable()
 export class ReferralService {

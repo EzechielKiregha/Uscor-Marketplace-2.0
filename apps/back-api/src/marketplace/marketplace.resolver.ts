@@ -7,15 +7,15 @@ import {
 	Resolver,
 	Subscription,
 } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
+import { PubSub } from "graphql-subscriptions";
 import { BusinessTypeEntity } from "../business/entities/business-type.entity";
 import { CategoryEntity } from "../category/entities/category.entity";
 import {
 	FreelanceServiceEntity,
 	PaginatedFreelanceServicesResponse,
 } from "../freelance-service/entities/freelance-service.entity";
-import type { FreelanceServiceService } from "../freelance-service/freelance-service.service";
-import type { PrismaService } from "../prisma/prisma.service";
+import { FreelanceServiceService } from "../freelance-service/freelance-service.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { ProductEntity } from "../product/entities/product.entity";
 import { PaginatedProductsResponse } from "./dto/paginated-products.response";
 import { SearchMarketplaceResponse } from "./dto/search-marketplace.response";

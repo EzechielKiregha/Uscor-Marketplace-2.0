@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { MediaType } from "../generated/prisma/enums";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { AddMediaInput } from "./dto/add-media.input";
-import type { CreateMediaInput } from "./dto/create-media.input";
-import type { UpdateMediaInput } from "./dto/update-media.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { AddMediaInput } from "./dto/add-media.input";
+import { CreateMediaInput } from "./dto/create-media.input";
+import { UpdateMediaInput } from "./dto/update-media.input";
 
 @Injectable()
 export class MediaService {

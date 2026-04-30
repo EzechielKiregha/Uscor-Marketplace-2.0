@@ -1,12 +1,12 @@
 import { Inject } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
-import type { UpdateBusinessInput } from "./dto/update-business.input";
-import type { UpdateHardwareConfigInput } from "./dto/update-hardware-config.input";
-import type { UpdatePaymentConfigInput } from "./dto/update-payment-config.input";
-import type { UploadKycDocumentInput } from "./dto/upload-kyc-document.input";
+import { UpdateBusinessInput } from "./dto/update-business.input";
+import { UpdateHardwareConfigInput } from "./dto/update-hardware-config.input";
+import { UpdatePaymentConfigInput } from "./dto/update-payment-config.input";
+import { UploadKycDocumentInput } from "./dto/upload-kyc-document.input";
 import { BusinessSettingsEntity } from "./entities/business-settings.entity";
 import { KycDocumentEntity } from "./entities/kyc-document.entity";
-import type { SettingsService } from "./settings.service";
+import { SettingsService } from "./settings.service";
 
 @Resolver(() => BusinessSettingsEntity)
 export class SettingsResolver {

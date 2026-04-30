@@ -1,6 +1,6 @@
 import { Resolver } from "@nestjs/graphql";
 import { ReferralEntity } from "./entities/referral.entity";
-import type { ReferralService } from "./referral.service";
+import { ReferralService } from "./referral.service";
 
 @Resolver(() => ReferralEntity)
 export class ReferralResolver {

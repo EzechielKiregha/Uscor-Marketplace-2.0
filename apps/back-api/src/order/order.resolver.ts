@@ -12,11 +12,11 @@ import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { CreateOrderInput } from "./dto/create-order.input";
-import type { ProcessPaymentInput } from "./dto/process-payment.input";
-import type { UpdateOrderInput } from "./dto/update-order.input";
+import { CreateOrderInput } from "./dto/create-order.input";
+import { ProcessPaymentInput } from "./dto/process-payment.input";
+import { UpdateOrderInput } from "./dto/update-order.input";
 import { OrderEntity, PaginatedOrdersResponse } from "./entities/order.entity";
-import type { OrderService } from "./order.service";
+import { OrderService } from "./order.service";
 
 // Resolver
 @Resolver(() => OrderEntity)

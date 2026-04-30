@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
-import type { PubSub } from "graphql-subscriptions";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { GetUsersInput } from "./dto/get-users.input";
-import type { RejectKycInput } from "./dto/reject-kyc.input";
-import type { UpdateUserStatusInput } from "./dto/update-user-status.input";
-import type { VerifyKycInput } from "./dto/verify-kyc.input";
+import { PubSub } from "graphql-subscriptions";
+import { PrismaService } from "../prisma/prisma.service";
+import { GetUsersInput } from "./dto/get-users.input";
+import { RejectKycInput } from "./dto/reject-kyc.input";
+import { UpdateUserStatusInput } from "./dto/update-user-status.input";
+import { VerifyKycInput } from "./dto/verify-kyc.input";
 import { buildSearchWhere, getPagination } from "./user.helpers";
 
 @Injectable()

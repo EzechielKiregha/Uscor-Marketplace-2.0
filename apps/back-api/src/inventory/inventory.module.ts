@@ -11,7 +11,9 @@ import { WorkerModule } from "../worker/worker.module";
 import { WorkerService } from "../worker/worker.service";
 import { InventoryResolver } from "./inventory.resolver";
 import { InventoryService } from "./inventory.service";
+import { PrismaModule } from "src/prisma/prisma.module";
 
+const pubSub = new PubSub();
 // Module
 @Module({
 	providers: [
@@ -24,9 +26,9 @@ import { InventoryService } from "./inventory.service";
 		WorkerService,
 		{
 			provide: "PUB_SUB",
-			useValue: new PubSub(),
+			useValue: pubSub,
 		},
 	],
-	imports: [StoreModule, ProductModule, BusinessModule, WorkerModule],
+	imports: [StoreModule, ProductModule, BusinessModule, WorkerModule, PrismaModule],
 })
 export class InventoryModule {}

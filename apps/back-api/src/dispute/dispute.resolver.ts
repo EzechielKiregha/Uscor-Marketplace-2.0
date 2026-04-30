@@ -7,8 +7,8 @@ import {
 	Resolver,
 	Subscription,
 } from "@nestjs/graphql";
-import type { PubSub } from "graphql-subscriptions";
-import type { DisputeService } from "./dispute.service";
+import { PubSub } from "graphql-subscriptions";
+import { DisputeService } from "./dispute.service";
 import {
 	DisputeEntity,
 	PaginatedDisputesResponse,

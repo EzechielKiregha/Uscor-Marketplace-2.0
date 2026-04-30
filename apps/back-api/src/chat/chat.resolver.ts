@@ -13,20 +13,20 @@ import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { ChatMessageEntity } from "../chat/entities/chat-nessage.entity";
-import type { ChatService } from "./chat.service";
+import { ChatService } from "./chat.service";
 import {
 	MarkAsReadResponse,
 	PaginatedChatsResponse,
 	PaginatedMessagesResponse,
 	UnreadCountResponse,
 } from "./dto/chat-response.dto";
-import type {
+import {
 	CreateChatInput,
 	CreateChatMessageInput,
 	SendMessageInput,
 	StartNegotiationInput,
 } from "./dto/create-chat.input";
-import type { UpdateChatInput } from "./dto/update-chat.input";
+import { UpdateChatInput } from "./dto/update-chat.input";
 import { ChatEntity, chatNotification } from "./entities/chat.entity";
 
 // Resolver

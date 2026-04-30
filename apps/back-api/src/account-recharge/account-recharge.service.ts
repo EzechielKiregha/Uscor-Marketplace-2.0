@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import type { RechargeMethod } from "../generated/prisma/enums";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
-import type { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
+import { RechargeMethod } from "../generated/prisma/enums";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
+import { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
 
 // Service
 @Injectable()

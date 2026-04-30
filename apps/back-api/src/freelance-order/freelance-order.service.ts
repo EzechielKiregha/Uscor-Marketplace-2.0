@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import type { AccountRechargeService } from "../account-recharge/account-recharge.service";
+import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
 	Country,
 	RechargeMethod,
@@ -8,14 +8,14 @@ import {
 	PaymentMethod,
 	PaymentStatus,
 } from "../payment-transaction/dto/create-payment-transaction.input";
-import type { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
-import type { PrismaService } from "../prisma/prisma.service";
+import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
+import { PrismaService } from "../prisma/prisma.service";
 import {
 	type CreateFreelanceOrderInput,
 	EscrowStatus,
 	FreelanceStatus,
 } from "./dto/create-freelance-order.input";
-import type {
+import {
 	AssignBusinessesInput,
 	UpdateFreelanceOrderInput,
 } from "./dto/update-freelance-order.input";

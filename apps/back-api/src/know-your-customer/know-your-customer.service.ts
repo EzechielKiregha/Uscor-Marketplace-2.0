@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { CreateKnowYourCustomerInput } from "./dto/create-know-your-customer.input";
-import type { UpdateKnowYourCustomerInput } from "./dto/update-know-your-customer.input";
+import { CreateKnowYourCustomerInput } from "./dto/create-know-your-customer.input";
+import { UpdateKnowYourCustomerInput } from "./dto/update-know-your-customer.input";
 
 @Injectable()
 export class KnowYourCustomerService {

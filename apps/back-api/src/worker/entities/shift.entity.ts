@@ -3,7 +3,7 @@ import { StoreEntity } from "../../store/entities/store.entity";
 import { WorkerEntity } from "./worker.entity";
 
 @ObjectType()
-export class ShiftEntity {
+export class ShiftEntityWorker {
 	@Field()
 	id: string;
 

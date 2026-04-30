@@ -1,8 +1,8 @@
 import { UnauthorizedException } from "@nestjs/common";
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
-import type { JwtService } from "@nestjs/jwt";
-import type { AuthService } from "./auth.service";
-import type { SignInInput } from "./dto/signin.input";
+import { JwtService } from "@nestjs/jwt";
+import { AuthService } from "./auth.service";
+import { SignInInput } from "./dto/signin.input";
 import {
 	AuthPayload,
 	AuthPayloadAdmin,

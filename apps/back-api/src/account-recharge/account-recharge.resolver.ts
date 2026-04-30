@@ -10,9 +10,9 @@ import {
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { AccountRechargeService } from "./account-recharge.service";
-import type { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
-import type { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
+import { AccountRechargeService } from "./account-recharge.service";
+import { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
+import { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
 import { AccountRechargeEntity } from "./entities/account-recharge.entity";
 
 // Resolver

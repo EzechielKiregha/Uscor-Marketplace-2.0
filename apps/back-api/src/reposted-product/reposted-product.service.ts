@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { CreateRepostedProductInput } from "./dto/create-reposted-product.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateRepostedProductInput } from "./dto/create-reposted-product.input";
 
 // Service
 @Injectable()

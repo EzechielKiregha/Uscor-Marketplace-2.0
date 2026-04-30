@@ -14,14 +14,14 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { PaginatedReviews } from "../business/entities/paginated-reviews.entity";
 import { SuccessResponse } from "../common/dto/success.dto";
-import type { ClientService } from "./client.service";
-import type { AddressInput } from "./dto/address.input";
-import type {
+import { ClientService } from "./client.service";
+import { AddressInput } from "./dto/address.input";
+import {
 	CreateClientForPOSInput,
 	CreateClientInput,
 } from "./dto/create-client.input";
 import { PaymentMethodInput } from "./dto/payment-method.input";
-import type { UpdateClientInput } from "./dto/update-client.input";
+import { UpdateClientInput } from "./dto/update-client.input";
 import { AddressEntity } from "./entities/address.entity";
 import { ClientEntity } from "./entities/client.entity";
 import { PaymentMethodEntity } from "./entities/payment-method.entity";

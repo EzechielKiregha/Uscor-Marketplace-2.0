@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { UpdateBusinessInput } from "./dto/update-business.input";
-import type { UpdateHardwareConfigInput } from "./dto/update-hardware-config.input";
-import type { UpdatePaymentConfigInput } from "./dto/update-payment-config.input";
-import type { UploadKycDocumentInput } from "./dto/upload-kyc-document.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { UpdateBusinessInput } from "./dto/update-business.input";
+import { UpdateHardwareConfigInput } from "./dto/update-hardware-config.input";
+import { UpdatePaymentConfigInput } from "./dto/update-payment-config.input";
+import { UploadKycDocumentInput } from "./dto/upload-kyc-document.input";
 
 @Injectable()
 export class SettingsService {

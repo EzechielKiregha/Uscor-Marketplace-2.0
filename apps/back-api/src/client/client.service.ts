@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { hash } from "argon2";
 import { PaymentMethod, RechargeMethod } from "../generated/prisma/enums";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { AddressInput } from "./dto/address.input";
-import type {
+import { PrismaService } from "../prisma/prisma.service";
+import { AddressInput } from "./dto/address.input";
+import {
 	CreateClientForPOSInput,
 	CreateClientInput,
 } from "./dto/create-client.input";
-import type { PaymentMethodInput } from "./dto/payment-method.input";
-import type { UpdateClientInput } from "./dto/update-client.input";
+import { PaymentMethodInput } from "./dto/payment-method.input";
+import { UpdateClientInput } from "./dto/update-client.input";
 
 @Injectable()
 export class ClientService {

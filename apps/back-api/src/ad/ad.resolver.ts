@@ -1,5 +1,5 @@
 import { Resolver } from "@nestjs/graphql";
-import type { AdService } from "./ad.service";
+import { AdService } from "./ad.service";
 import { AdEntity } from "./entities/ad.entity";
 
 @Resolver(() => AdEntity)

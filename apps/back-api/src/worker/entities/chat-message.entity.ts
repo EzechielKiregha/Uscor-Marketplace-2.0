@@ -6,7 +6,7 @@ registerEnumType(MessageSenderType, {
 });
 
 @ObjectType()
-export class ChatMessageEntity {
+export class ChatMessageEntityV2 {
 	@Field()
 	id: string;
 

@@ -3,11 +3,11 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { CreateTokenTransactionInput } from "./dto/create-token-transaction.input";
-import type { RedeemTokenTransactionInput } from "./dto/redeem-token-transaction.input";
-import type { ReleaseTokenTransactionInput } from "./dto/release-token-transaction.input";
+import { CreateTokenTransactionInput } from "./dto/create-token-transaction.input";
+import { RedeemTokenTransactionInput } from "./dto/redeem-token-transaction.input";
+import { ReleaseTokenTransactionInput } from "./dto/release-token-transaction.input";
 import { TokenTransactionEntity } from "./entities/token-transaction.entity";
-import type { TokenTransactionService } from "./token-transaction.service";
+import { TokenTransactionService } from "./token-transaction.service";
 // Resolver
 @Resolver(() => TokenTransactionEntity)
 export class TokenTransactionResolver {

@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { StoreService } from "../store/store.service";
-import type { WorkerService } from "../worker/worker.service";
-import type { CreateShiftInput, EndShiftInput } from "./dto/create-shift.input";
-import type { UpdateShiftInput } from "./dto/update-shift.input";
+import { PrismaService } from "../prisma/prisma.service";
+import { StoreService } from "../store/store.service";
+import { WorkerService } from "../worker/worker.service";
+import { CreateShiftInput, EndShiftInput } from "./dto/create-shift.input";
+import { UpdateShiftInput } from "./dto/update-shift.input";
 
 // Service
 @Injectable()

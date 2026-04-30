@@ -1,5 +1,5 @@
 import { Args, Int, Query, Resolver } from "@nestjs/graphql";
-import type { AuditService } from "./audit.service";
+import { AuditService } from "./audit.service";
 import { PaginatedAuditLogsResponse } from "./entities/audit-log.entity";
 
 @Resolver()

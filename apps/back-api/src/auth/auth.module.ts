@@ -5,6 +5,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { AuthResolver } from "./auth.resolver";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./strategies/jwt.strategies";
+import { PrismaModule } from "src/prisma/prisma.module";
 
 @Module({
 	imports: [
@@ -18,6 +19,7 @@ import { JwtStrategy } from "./strategies/jwt.strategies";
 				}, // Token expiration time
 			}),
 		}),
+		PrismaModule
 	],
 	providers: [AuthResolver, AuthService, PrismaService, JwtStrategy],
 })

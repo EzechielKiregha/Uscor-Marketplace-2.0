@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import type { PrismaService } from "../prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import {
 	type AssignWorkersInput,
 	type CreateFreelanceServiceInput,
 	FreelanceServiceCategory,
 } from "./dto/create-freelance-service.input";
-import type { UpdateFreelanceServiceInput } from "./dto/update-freelance-service.input";
+import { UpdateFreelanceServiceInput } from "./dto/update-freelance-service.input";
 
 interface FindAllFilters {
 	category?: string;

@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
-import type { PaymentMethod } from "../../payment-transaction/dto/create-payment-transaction.input";
+import { PaymentMethod } from "../../payment-transaction/dto/create-payment-transaction.input";
 
 @ObjectType()
 export class PaymentMethodEntity {

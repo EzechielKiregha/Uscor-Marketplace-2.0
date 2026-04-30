@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { CreateTokenInput } from "./dto/create-token.input";
-import type { UpdateTokenInput } from "./dto/update-token.input";
+import { CreateTokenInput } from "./dto/create-token.input";
+import { UpdateTokenInput } from "./dto/update-token.input";
 
 @Injectable()
 export class TokenService {

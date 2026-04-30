@@ -3,10 +3,10 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { CreateShiftInput, EndShiftInput } from "./dto/create-shift.input";
-import type { UpdateShiftInput } from "./dto/update-shift.input";
+import { CreateShiftInput, EndShiftInput } from "./dto/create-shift.input";
+import { UpdateShiftInput } from "./dto/update-shift.input";
 import { ShiftEntity } from "./entities/shift.entity";
-import type { ShiftService } from "./shift.service";
+import { ShiftService } from "./shift.service";
 
 // Resolver
 @Resolver(() => ShiftEntity)

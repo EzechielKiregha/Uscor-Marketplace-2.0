@@ -3,37 +3,37 @@ import { createWriteStream, mkdir } from "node:fs";
 import { promisify } from "node:util";
 import { Inject, Injectable } from "@nestjs/common";
 import { subDays } from "date-fns";
-import type { PubSub } from "graphql-subscriptions";
-import type { AccountRechargeService } from "../account-recharge/account-recharge.service";
+import { PubSub } from "graphql-subscriptions";
+import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
 	Country,
 	RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
-import type { AuthPayload } from "../auth/entities/auth-payload.entity";
-import type { BusinessService } from "../business/business.service";
-import type { Worker } from "../generated/prisma/client";
-import type { LoyaltyService } from "../loyalty-program/loyalty-program.service";
+import { AuthPayload } from "../auth/entities/auth-payload.entity";
+import { BusinessService } from "../business/business.service";
+import { Worker } from "../generated/prisma/client";
+import { LoyaltyService } from "../loyalty-program/loyalty-program.service";
 import {
 	PaymentMethod,
 	PaymentStatus,
 } from "../payment-transaction/dto/create-payment-transaction.input";
-import type { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { ProductService } from "../product/product.service";
-import type { StoreService } from "../store/store.service";
+import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { ProductService } from "../product/product.service";
+import { StoreService } from "../store/store.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
-import type { TokenTransactionService } from "../token-transaction/token-transaction.service";
-import type { WorkerService } from "../worker/worker.service";
-import type {
+import { TokenTransactionService } from "../token-transaction/token-transaction.service";
+import { WorkerService } from "../worker/worker.service";
+import {
 	CloseSaleInput,
 	PaymentDetailsInput,
 } from "./dto/close-sale.input";
-import type { CreateReturnInput } from "./dto/create-return.input";
-import type { CreateSaleInput } from "./dto/create-sale.input";
-import type { GenerateReceiptInput } from "./dto/receipt.input";
-import type { UpdateSaleInput } from "./dto/update-sale.input";
-import type { UpdateSaleProductInput } from "./dto/update-sale-product.input";
-import type { SaleProductInput } from "./dto/sale-product.input";
+import { CreateReturnInput } from "./dto/create-return.input";
+import { CreateSaleInput } from "./dto/create-sale.input";
+import { GenerateReceiptInput } from "./dto/receipt.input";
+import { UpdateSaleInput } from "./dto/update-sale.input";
+import { UpdateSaleProductInput } from "./dto/update-sale-product.input";
+import { SaleProductInput } from "./dto/sale-product.input";
 
 const execAsync = promisify(exec);
 const mkdirAsync = promisify(mkdir);

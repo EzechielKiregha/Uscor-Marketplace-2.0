@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
-import type { PubSub } from "graphql-subscriptions";
-import type { PrismaService } from "../prisma/prisma.service";
-import type { UpdatePlatformSettingsInput } from "./dto/update-platform-settings.input";
+import { PubSub } from "graphql-subscriptions";
+import { PrismaService } from "../prisma/prisma.service";
+import { UpdatePlatformSettingsInput } from "./dto/update-platform-settings.input";
 
 @Injectable()
 export class PlatformService {

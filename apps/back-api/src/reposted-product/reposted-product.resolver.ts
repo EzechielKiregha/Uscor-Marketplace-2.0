@@ -3,9 +3,9 @@ import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
-import type { CreateRepostedProductInput } from "./dto/create-reposted-product.input";
+import { CreateRepostedProductInput } from "./dto/create-reposted-product.input";
 import { RepostedProductEntity } from "./entities/reposted-product.entity";
-import type { RepostedProductService } from "./reposted-product.service";
+import { RepostedProductService } from "./reposted-product.service";
 
 // Resolver
 @Resolver(() => RepostedProductEntity)
