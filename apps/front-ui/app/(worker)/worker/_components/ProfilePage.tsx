@@ -1,4 +1,3 @@
-// app/worker/_components/ProfilePage.tsx
 "use client";
 
 import { useMutation, useQuery } from "@apollo/client";

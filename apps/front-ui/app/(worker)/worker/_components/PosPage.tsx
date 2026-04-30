@@ -1,4 +1,3 @@
-// app/worker/pos/page.tsx (Updated)
 "use client";
 
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
