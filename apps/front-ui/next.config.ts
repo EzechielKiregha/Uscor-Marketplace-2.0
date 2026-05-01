@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
-import withSerwistInit from "@serwist/next";
+import { withSerwist } from "@serwist/turbopack";
 
-const withSerwist = withSerwistInit({
-  swSrc: "app/sw.ts",
-  swDest: "public/sw.js",
-  cacheOnNavigation: true,
-  reloadOnOnline: true,
-  disable: process.env.NODE_ENV === "development",
+  withSerwist({
+    swSrc: "app/sw.ts",
+    swDest: "public/sw.js",
+    cacheOnNavigation: true,
+    reloadOnOnline: true,
+    disable: process.env.NODE_ENV === "development",
 });
 
 const nextConfig: NextConfig = {
