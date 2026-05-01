@@ -83,21 +83,6 @@ export const CREATE_WORKER = gql`
   }
 `;
 
-// ✏ Update Worker
-export const UPDATE_WORKER = gql`
-  mutation UpdateWorker($id: String!, $updateWorkerInput: UpdateWorkerInput!) {
-    updateWorker(id: $id, updateWorkerInput: $updateWorkerInput) {
-      id
-      email
-      fullName
-      role
-      isVerified
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
 // ❌ Delete Worker
 export const DELETE_WORKER = gql`
   mutation DeleteWorker($id: String!) {
@@ -113,12 +98,13 @@ export const DELETE_WORKER = gql`
 // ======================
 
 export const WORKER_ENTITY = gql`
-  fragment WorkerEntity on Worker {
+  fragment WorkerEntity on WorkerEntity {
     id
     email
     fullName
     role
     phone
+    bio
     avatar
     isVerified
     lastLogin
@@ -174,7 +160,7 @@ export const WORKER_ENTITY = gql`
           id
           title
           price
-          stock
+          stockQuantity
         }
       }
     }
@@ -212,7 +198,7 @@ export const WORKER_ENTITY = gql`
         updatedAt
         messages {
           id
-          message
+          content
           senderType
           createdAt
         }
@@ -233,7 +219,7 @@ export const WORKER_ENTITY = gql`
 `;
 
 export const SALE_ENTITY = gql`
-  fragment SaleEntity on Sale {
+  fragment SaleEntity on SaleEntityWorker {
     id
     storeId
     store {
@@ -249,6 +235,9 @@ export const SALE_ENTITY = gql`
     client {
       id
       fullName
+      username
+      email
+      avatar
     }
     totalAmount
     discount
@@ -264,9 +253,11 @@ export const SALE_ENTITY = gql`
         id
         title
         price
-        stock
+        stockQuantity
         description
-        imageUrl
+        media {
+          url
+        }
       }
       quantity
       price
@@ -290,7 +281,7 @@ export const SALE_PRODUCT_ENTITY = gql`
       id
       title
       price
-      stock
+      stockQuantity
     }
     quantity
     price
@@ -321,7 +312,7 @@ export const INVENTORY_ADJUSTMENT_ENTITY = gql`
 `;
 
 export const SHIFT_ENTITY = gql`
-  fragment ShiftEntity on Shift {
+  fragment ShiftEntity on ShiftEntityWorker {
     id
     workerId
     worker {
@@ -495,13 +486,14 @@ export const GET_WORKER_INVENTORY = gql`
           id
           title
           price
-          stock
-          minQuantity
-          imageUrl
+          stockQuantity
+          quantity
+          media {
+            url
+          }
         }
         storeId
         quantity
-        minQuantity
         createdAt
         updatedAt
       }
@@ -661,8 +653,8 @@ export const SEND_CHAT_MESSAGE = gql`
 `;
 
 export const UPDATE_WORKER_PROFILE = gql`
-  mutation UpdateWorkerProfile($id: String!, $input: UpdateWorkerInput!) {
-    updateWorker(id: $id, input: $input) {
+  mutation UpdateWorkerProfile($id: String!, $updateWorkerInput: UpdateWorkerInput!) {
+    updateWorker(id: $id, updateWorkerInput: $updateWorkerInput) {
       ...WorkerEntity
     }
   }

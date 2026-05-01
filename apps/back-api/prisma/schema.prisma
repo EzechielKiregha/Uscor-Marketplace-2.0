@@ -363,6 +363,7 @@ model Worker {
   fullName             String?
   role                 WorkerRole           @default(STAFF)
   phone                String?
+  bio                  String?
   password             String
   business             Business              @relation(fields: [businessId], references: [id])
   businessId           String

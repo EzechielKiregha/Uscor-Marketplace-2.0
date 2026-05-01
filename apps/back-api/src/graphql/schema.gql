@@ -443,31 +443,6 @@ type KnowYourCustomerEntity {
   worker: WorkerEntity
 }
 
-type ChatMessageEntityV2 {
-  id: String!
-  chatId: String!
-  content: String!
-  senderType: MessageSenderType!
-  senderId: String!
-  createdAt: DateTime!
-}
-
-enum MessageSenderType {
-  WORKER
-  CLIENT
-  BUSINESS
-}
-
-type ChatEntityWorker {
-  id: String!
-  status: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  messages: [ChatMessageEntityV2!]
-  business: BusinessEntity
-  client: ClientEntity
-}
-
 type SaleProductEntityWorker {
   id: String!
   saleId: String!
@@ -518,6 +493,19 @@ type ShiftEntityWorker {
   updatedAt: DateTime!
 }
 
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  chat: ChatEntity
+  createdAt: DateTime!
+}
+
 type WorkerEntity {
   id: String
   email: String
@@ -525,6 +513,7 @@ type WorkerEntity {
   avatar: String
   phone: String
   role: String
+  bio: String
   isVerified: Boolean
   lastLogin: DateTime
   createdAt: DateTime
@@ -534,7 +523,7 @@ type WorkerEntity {
   sales: [SaleEntityWorker!]
   shifts: [ShiftEntityWorker!]
   workerServiceAssignments: [WorkerServiceAssignmentEntity!]
-  chats: [ChatEntityWorker!]
+  chatParticipants: [ChatParticipantEntity!]
   medias: [MediaEntity!]
   auditLogs: [AuditLogEntity!]
 }
@@ -578,18 +567,6 @@ type PaginatedFreelanceServicesResponse {
   total: Int!
   page: Int!
   limit: Int!
-}
-
-type ChatParticipantEntity {
-  id: String!
-  chatId: String!
-  clientId: String
-  client: ClientEntity
-  businessId: String
-  business: BusinessEntity
-  workerId: String
-  worker: WorkerEntity
-  createdAt: DateTime!
 }
 
 type ChatProductInfo {
@@ -718,8 +695,8 @@ type ProductEntity {
   name: String
   description: String
   price: Float!
-  stockQuantity: Int!
-  quantity: Int!
+  stockQuantity: Int
+  quantity: Int
   media: MediaEntity
   businessId: String!
   storeId: String
@@ -1185,6 +1162,31 @@ type PaginatedDisputesResponse {
   limit: Int!
 }
 
+type ChatMessageEntityV2 {
+  id: String!
+  chatId: String!
+  content: String!
+  senderType: MessageSenderType!
+  senderId: String!
+  createdAt: DateTime!
+}
+
+enum MessageSenderType {
+  WORKER
+  CLIENT
+  BUSINESS
+}
+
+type ChatEntityWorker {
+  id: String!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  messages: [ChatMessageEntityV2!]
+  business: BusinessEntity
+  client: ClientEntity
+}
+
 type WorkerPerformanceEntity {
   totalSales: Float!
   totalTransactions: Float!
@@ -1255,7 +1257,8 @@ type InventoryAdjustmentEntityWorker {
   adjustmentType: AdjustmentType!
   quantity: Float!
   reason: String
-  createdAt: DateTime!
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type SalesPagedResult {
@@ -2213,7 +2216,10 @@ input UpdateClientInput {
 input CreateWorkerInput {
   email: String!
   fullName: String
+  avatar: String
   role: WorkerRole!
+  bio: String
+  phone: String
   password: String!
   isVerified: Boolean! = false
   businessId: String
@@ -2230,12 +2236,15 @@ enum WorkerRole {
 input UpdateWorkerInput {
   email: String
   fullName: String
+  avatar: String
   role: WorkerRole
+  bio: String
+  phone: String
   password: String
   isVerified: Boolean = false
   businessId: String
   kycId: String
-  id: String!
+  id: String
 }
 
 input CreateSaleInput {
@@ -2290,7 +2299,7 @@ input CreateInventoryAdjustmentInput {
 input StartShiftInput {
   workerId: String!
   storeId: String!
-  startTime: DateTime!
+  startTime: String!
 }
 
 input EndShiftInput {

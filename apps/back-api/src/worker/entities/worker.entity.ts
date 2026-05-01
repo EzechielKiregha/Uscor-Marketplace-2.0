@@ -7,6 +7,7 @@ import { MediaEntity } from "../../media/entities/media.entity";
 import { ChatEntityWorker } from "./chat.entity";
 import { SaleEntityWorker } from "./sale.entity";
 import { ShiftEntityWorker } from "./shift.entity";
+import { ChatParticipantEntity } from "../../chat/entities/chat-participants.entity";
 
 @ObjectType()
 export class WorkerEntity {
@@ -27,6 +28,9 @@ export class WorkerEntity {
 
 	@Field({ nullable: true })
 	role?: string;
+	
+	@Field({ nullable: true })
+	bio?: string;
 
 	@Field({ nullable: true })
 	isVerified?: boolean;
@@ -59,8 +63,8 @@ export class WorkerEntity {
 	})
 	workerServiceAssignments?: WorkerServiceAssignmentEntity[];
 
-	@Field(() => [ChatEntityWorker], { nullable: true })
-	chats?: ChatEntityWorker[];
+	@Field(() => [ChatParticipantEntity], { nullable: true })
+	chatParticipants?: ChatParticipantEntity[];
 
 	@Field(() => [MediaEntity], { nullable: true })
 	medias?: MediaEntity[];

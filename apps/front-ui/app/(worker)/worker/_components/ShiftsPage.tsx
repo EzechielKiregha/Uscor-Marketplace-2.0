@@ -9,7 +9,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Loader from "@/components/seraui/Loader";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,29 @@ import {
 } from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
+import { startOfDay, subDays } from "date-fns";
+import { intervalToDuration } from "date-fns";
+
+function useShiftDuration(startTime?: string) {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    if (!startTime) return;
+
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime]);
+
+  if (!startTime) return null;
+
+  return intervalToDuration({
+    start: new Date(startTime),
+    end: new Date(now),
+  });
+}
 
 interface ShiftsPageProps {
   selectedStoreId: string | null;
@@ -48,6 +71,20 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     skip: !user?.id,
   });
 
+  const startDate = useMemo(() => {
+    const now = new Date();
+
+    if (timeRange === "today") {
+      return startOfDay(now).toISOString();
+    }
+
+    if (timeRange === "week") {
+      return subDays(now, 7).toISOString();
+    }
+
+    return subDays(now, 30).toISOString();
+  }, [timeRange]);
+
   const {
     data: shiftsData,
     loading: shiftsLoading,
@@ -56,12 +93,7 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     variables: {
       workerId: user?.id,
       storeId: selectedStoreId,
-      startDate:
-        timeRange === "today"
-          ? new Date().toISOString()
-          : timeRange === "week"
-            ? new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-            : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      startDate,
     },
     skip: !user?.id,
   });
@@ -107,6 +139,7 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
             input: {
               workerId: user?.id,
               storeId: selectedStoreId,
+              startTime: new Date().toISOString(),
             },
           },
         });
@@ -149,6 +182,7 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
           variables: {
             id: currentShift.id,
             sales: currentShift.sales || 0,
+            endTime: new Date().toISOString(),
           },
         });
 
@@ -188,6 +222,8 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     }
     return sum;
   }, 0);
+
+  const duration = useShiftDuration(currentShift?.startTime);
 
   return (
     <div className="space-y-6">
@@ -258,13 +294,15 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="h-4 w-4 text-primary" />
                     <span className="text-sm text-muted-foreground">
-                      Shift Duration
+                      Shift Duration{" "}
+                      <span className="text-xs text-green-500">● Live</span>
                     </span>
                   </div>
-                  <p className="text-2xl font-bold">
-                    {currentShift.startTime
-                      ? `${Math.floor((Date.now() - new Date(currentShift.startTime).getTime()) / (1000 * 60 * 60))}h ${Math.floor(((Date.now() - new Date(currentShift.startTime).getTime()) % (1000 * 60 * 60)) / (1000 * 60))}m`
-                      : "0h 0m"}
+
+                  <p className="text-2xl font-bold tabular-nums">
+                    {duration
+                      ? `${duration.hours ?? 0}h ${duration.minutes ?? 0}m ${duration.seconds ?? 0}s`
+                      : "0h 0m 0s"}
                   </p>
                 </div>
 

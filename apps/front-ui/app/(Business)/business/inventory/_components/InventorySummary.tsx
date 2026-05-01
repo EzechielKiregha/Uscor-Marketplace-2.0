@@ -8,117 +8,117 @@ import { GET_INVENTORY } from "@/graphql/inventory.gql";
 import { useInventory } from "../../_hooks/use-inventory";
 
 interface InventorySummaryProps {
-	storeId: string;
-	businessId: string;
+  storeId: string;
+  businessId: string;
 }
 
 export default function InventorySummary({
-	businessId,
-	storeId,
+  businessId,
+  storeId,
 }: InventorySummaryProps) {
-	const { data, loading, error, refetch } = useQuery(GET_INVENTORY, {
-		variables: {
-			storeId,
-			lowStockOnly: true,
-		},
-		skip: !storeId,
-	});
+  const { data, loading, error, refetch } = useQuery(GET_INVENTORY, {
+    variables: {
+      storeId,
+      lowStockOnly: true,
+    },
+    skip: !storeId,
+  });
 
-	const { getInventory } = useInventory(storeId || "", businessId || "");
+  const { getInventory } = useInventory(storeId || "", businessId || "");
 
-	if (loading)
-		return (
-			<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-				<CardContent className="h-[80px] flex items-center justify-center">
-					<div className="text-center">
-						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-						<p className="text-muted-foreground">Loading data...</p>
-					</div>
-				</CardContent>
-			</Card>
-		);
+  if (loading)
+    return (
+      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <CardContent className="h-[80px] flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading data...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
 
-	if (error)
-		return (
-			<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-				<CardContent className="h-[80px] flex items-center justify-center">
-					<div className="text-center">
-						<div className="text-destructive mb-2">
-							Error loading inventory summary
-						</div>
-						<button
-							className="text-primary hover:underline"
-							onClick={() => refetch()}
-						>
-							Try Again
-						</button>
-					</div>
-				</CardContent>
-			</Card>
-		);
+  if (error)
+    return (
+      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <CardContent className="h-[80px] flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-destructive mb-2">
+              Error loading inventory summary
+            </div>
+            <button
+              className="text-primary hover:underline"
+              onClick={() => refetch()}
+            >
+              Try Again
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+    );
 
-	const inventoryItems = getInventory() || [];
-	console.log(data?.inventory);
-	const totalItems = inventoryItems.length;
-	const lowStockItems = inventoryItems.filter(
-		(item: any) => item.quantity < item.minQuantity,
-	).length;
-	const outOfStockItems = inventoryItems.filter(
-		(item: any) => item.quantity === 0,
-	).length;
-	const totalQuantity = inventoryItems.reduce(
-		(sum: any, item: any) => sum + item.quantity,
-		0,
-	);
+  const inventoryItems = getInventory() || [];
+  console.log(data?.inventory);
+  const totalItems = inventoryItems.length;
+  const lowStockItems = inventoryItems.filter(
+    (item: any) => item.quantity < item.minQuantity,
+  ).length;
+  const outOfStockItems = inventoryItems.filter(
+    (item: any) => item.quantity === 0,
+  ).length;
+  const totalQuantity = inventoryItems.reduce(
+    (sum: any, item: any) => sum + item.quantity,
+    0,
+  );
 
-	return (
-		<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-			<CardHeader>
-				<CardTitle className="text-sm font-medium">Inventory Summary</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-					<div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-						<div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-							<Package className="h-5 w-5 text-primary" />
-						</div>
-						<div>
-							<p className="font-medium">{totalItems}</p>
-							<p className="text-xs text-muted-foreground">Total Items</p>
-						</div>
-					</div>
+  return (
+    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <CardHeader>
+        <CardTitle className="text-sm font-medium">Inventory Summary</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Package className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="font-medium">{totalItems}</p>
+              <p className="text-xs text-muted-foreground">Total Items</p>
+            </div>
+          </div>
 
-					<div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-						<div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center">
-							<AlertTriangle className="h-5 w-5 text-warning" />
-						</div>
-						<div>
-							<p className="font-medium">{lowStockItems}</p>
-							<p className="text-xs text-muted-foreground">Low Stock</p>
-						</div>
-					</div>
+          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+            <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+            </div>
+            <div>
+              <p className="font-medium">{lowStockItems}</p>
+              <p className="text-xs text-muted-foreground">Low Stock</p>
+            </div>
+          </div>
 
-					<div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-						<div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
-							<AlertTriangle className="h-5 w-5 text-destructive" />
-						</div>
-						<div>
-							<p className="font-medium">{outOfStockItems}</p>
-							<p className="text-xs text-muted-foreground">Out of Stock</p>
-						</div>
-					</div>
+          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+            <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+            </div>
+            <div>
+              <p className="font-medium">{outOfStockItems}</p>
+              <p className="text-xs text-muted-foreground">Out of Stock</p>
+            </div>
+          </div>
 
-					<div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-						<div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
-							<ShoppingCart className="h-5 w-5 text-success" />
-						</div>
-						<div>
-							<p className="font-medium">{totalQuantity}</p>
-							<p className="text-xs text-muted-foreground">Total Quantity</p>
-						</div>
-					</div>
-				</div>
-			</CardContent>
-		</Card>
-	);
+          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+            <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
+              <ShoppingCart className="h-5 w-5 text-success" />
+            </div>
+            <div>
+              <p className="font-medium">{totalQuantity}</p>
+              <p className="text-xs text-muted-foreground">Total Quantity</p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }

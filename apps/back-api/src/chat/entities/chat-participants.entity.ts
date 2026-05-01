@@ -2,6 +2,7 @@ import { Field, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { ClientEntity } from "../../client/entities/client.entity";
 import { WorkerEntity } from "../../worker/entities/worker.entity";
+import { ChatEntity } from "./chat.entity";
 
 @ObjectType()
 export class ChatParticipantEntity {
@@ -28,6 +29,9 @@ export class ChatParticipantEntity {
 
 	@Field(() => WorkerEntity, { nullable: true })
 	worker?: WorkerEntity;
+
+	@Field(() => ChatEntity, { nullable: true })
+	chat?: ChatEntity;
 
 	@Field()
 	createdAt: Date;

@@ -23,6 +23,7 @@ import {
 } from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
+import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
 
 interface InventoryPageProps {
   selectedStoreId: string | null;
@@ -53,14 +54,23 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
     refetch: refetchInventory,
   } = useQuery(GET_WORKER_INVENTORY, {
     variables: {
-      storeId: selectedStoreId, // In real app, this would be selected
+      storeId: selectedStoreId,
     },
     skip: !user?.id,
   });
 
   const [createInventoryAdjustment] = useMutation(CREATE_INVENTORY_ADJUSTMENT);
 
-  const inventory = inventoryData?.workerInventory?.items || [];
+  const { getInventory } = useInventory(
+    selectedStoreId || "",
+    user && typeof user === "object" && "business" in user
+      ? user.business?.id || ""
+      : "",
+  );
+
+  const inventoryItems = getInventory() || [];
+
+  const inventory = inventoryItems || [];
 
   const filteredInventory = inventory.filter((item: any) => {
     const matchesSearch =
@@ -219,8 +229,8 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
       {/* Inventory Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredInventory.map((item: any) => {
-          const isLowStock = item.quantity < item.minQuantity;
-          const isOutOfStock = item.quantity === 0;
+          const isLowStock = item.stockQuantity < item.minQuantity;
+          const isOutOfStock = item.stockQuantity === 0;
 
           return (
             <div
@@ -234,9 +244,9 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
               }`}
             >
               <div className="relative">
-                {item.product.imageUrl ? (
+                {item.product.medias && item.product.medias.length > 0 ? (
                   <img
-                    src={item.product.imageUrl}
+                    src={item.product.medias[0].url}
                     alt={item.product.title}
                     className="w-full h-48 object-cover"
                   />
@@ -267,7 +277,7 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
                   </div>
 
                   <div className="text-right">
-                    <p className="font-bold text-lg">{item.quantity}</p>
+                    <p className="font-bold text-lg">{item.stockQuantity}</p>
                     <p className="text-xs text-muted-foreground">in stock</p>
                   </div>
                 </div>

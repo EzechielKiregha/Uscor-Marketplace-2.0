@@ -13,5 +13,5 @@ export class StartShiftInput {
 
 	@Field()
 	@IsDateString()
-	startTime: Date;
+	startTime: string;
 }

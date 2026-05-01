@@ -28,10 +28,21 @@ export class CreateWorkerInput {
 	@IsOptional()
 	@IsString()
 	fullName?: string;
+	
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	avatar?: string;
 
 	@Field(() => WorkerRole)
 	@IsEnum(WorkerRole)
 	role: WorkerRole;
+	
+	@Field({ nullable: true })
+	bio?: string;
+	
+	@Field({ nullable: true })
+	phone?: string;
 
 	@Field()
 	@IsString()

@@ -46,7 +46,9 @@ export default function UserDropdown() {
       `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(displayName[0])}`;
   } else {
     displayName = (user as WorkerEntity).fullName || "Worker";
-    avatar = `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(displayName[0])}`; // WorkerEntity lacks avatar
+    avatar =
+      (user as WorkerEntity).avatar ||
+      `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(displayName[0])}`; // WorkerEntity lacks avatar
   }
 
   const pathname =

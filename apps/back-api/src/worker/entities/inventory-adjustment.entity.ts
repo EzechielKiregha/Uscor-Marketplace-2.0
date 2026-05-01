@@ -33,6 +33,9 @@ export class InventoryAdjustmentEntityWorker {
 	@Field({ nullable: true })
 	reason?: string;
 
-	@Field()
+	@Field({ nullable: true })
 	createdAt: Date;
+
+	@Field({ nullable: true })
+	updatedAt: Date;
 }

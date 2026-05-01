@@ -138,7 +138,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker")
+	@Roles("worker", "business")
 	@Mutation(() => WorkerEntity)
 	async updateWorker(
 		@Args("id", { type: () => String })

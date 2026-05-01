@@ -150,6 +150,7 @@ export const GET_INVENTORY = gql`
             url
           }
           quantity
+          stockQuantity
         }
         store {
           id

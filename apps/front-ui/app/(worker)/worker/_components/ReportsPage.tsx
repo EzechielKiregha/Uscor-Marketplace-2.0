@@ -57,7 +57,7 @@ export default function ReportsPage({ selectedStoreId }: ReportsPageProps) {
   } = useQuery(GET_WORKER_REPORTS, {
     variables: {
       workerId: user?.id,
-      storeId: selectedStoreId, // In real app, this would be selected
+      storeId: selectedStoreId,
       timeRange,
       reportType,
     },

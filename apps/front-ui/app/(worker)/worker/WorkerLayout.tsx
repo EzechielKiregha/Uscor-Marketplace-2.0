@@ -198,14 +198,14 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
                     <div className="bg-card border border-border rounded-lg p-4">
                       <div className="flex items-center gap-3">
                         <Users className="h-5 w-5 text-primary" />
-                        <div>
+                        <div className="">
                           <label className="block text-sm font-medium mb-1">
                             Select Store
                           </label>
                           <select
                             value={selectedStoreId || ""}
                             onChange={(e) => setSelectedStoreId(e.target.value)}
-                            className="p-2 border border-border rounded-md"
+                            className="p-2 border border-border rounded-md w-full bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
                           >
                             <option value="">Select a store</option>
                             {storesData?.stores.map((store: StoreEntity) => (

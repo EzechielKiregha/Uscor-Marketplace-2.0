@@ -1,8 +1,10 @@
 import { Field, InputType, PartialType } from "@nestjs/graphql";
 import { CreateWorkerInput } from "./create-worker.input";
+import { IsOptional } from "class-validator";
 
 @InputType()
 export class UpdateWorkerInput extends PartialType(CreateWorkerInput) {
-	@Field(() => String)
-	id: string;
+	@Field({ nullable: true })
+	@IsOptional()
+	id?: string;
 }

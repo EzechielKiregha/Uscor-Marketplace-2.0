@@ -1,60 +1,6 @@
 // graphql/sales.gql.ts
 import { gql } from "@apollo/client";
 
-// ======================
-// SALE ENTITIES
-// ======================
-
-export const SALE_ENTITY = gql`
-  fragment SaleEntity on Sale {
-    id
-    storeId
-    store {
-      id
-      name
-      address
-    }
-    workerId
-    worker {
-      id
-      fullName
-      role
-    }
-    clientId
-    client {
-      id
-      fullName
-      email
-    }
-    totalAmount
-    discount
-    paymentMethod
-    status
-    createdAt
-    updatedAt
-    saleProducts {
-      id
-      quantity
-      price
-      modifiers
-      product {
-        id
-        title
-        price
-        medias {
-          url  
-        }
-      }
-    }
-    returns {
-      id
-      reason
-      status
-      createdAt
-    }
-  }
-`;
-
 export const SALE_PRODUCT_ENTITY = gql`
   fragment SaleProductEntity on SaleProduct {
     id

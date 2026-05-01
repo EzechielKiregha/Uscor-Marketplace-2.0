@@ -5031,6 +5031,7 @@ export const WorkerScalarFieldEnum = {
   fullName: 'fullName',
   role: 'role',
   phone: 'phone',
+  bio: 'bio',
   password: 'password',
   businessId: 'businessId',
   avatar: 'avatar',

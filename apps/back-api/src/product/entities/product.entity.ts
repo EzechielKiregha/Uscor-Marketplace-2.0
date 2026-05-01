@@ -29,10 +29,10 @@ export class ProductEntity {
 	price: number;
 
 	// Frontend expects 'stockQuantity'
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	stockQuantity: number;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	quantity: number;
 
 	// A single primary media object for lists

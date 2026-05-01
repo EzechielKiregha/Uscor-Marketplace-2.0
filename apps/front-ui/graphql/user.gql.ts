@@ -256,24 +256,6 @@ export const UPDATE_BUSINESS = gql`
   ${BUSINESS_ENTITY}
 `;
 
-export const CREATE_WORKER = gql`
-  mutation CreateWorker($input: CreateWorkerInput!) {
-    createWorker(input: $input) {
-      ...WorkerEntity
-    }
-  }
-  ${WORKER_ENTITY}
-`;
-
-export const UPDATE_WORKER = gql`
-  mutation UpdateWorker($id: String!, $input: UpdateWorkerInput!) {
-    updateWorker(id: $id, input: $input) {
-      ...WorkerEntity
-    }
-  }
-  ${WORKER_ENTITY}
-`;
-
 export const VERIFY_KYC = gql`
   mutation VerifyKyc($input: VerifyKycInput!) {
     verifyKyc(input: $input) {

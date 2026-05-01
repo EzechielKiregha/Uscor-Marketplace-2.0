@@ -54,12 +54,16 @@ export const GET_WORKER_BY_ID = gql`
       email
       fullName
       role
+	  phone
+	  avatar
+	  bio
       isVerified
       createdAt
       updatedAt
       business {
         id
         name
+		businessType
       }
     }
   }

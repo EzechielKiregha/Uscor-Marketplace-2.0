@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
-		"build": "next build",
+		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "next lint"
 	},
@@ -24,6 +24,9 @@
 		"@react-email/components": "^0.0.36",
 		"@react-three/drei": "^10.0.7",
 		"@react-three/fiber": "^9.1.2",
+		"@serwist/next": "^9.5.10",
+		"@serwist/precaching": "^9.5.10",
+		"@serwist/sw": "^9.5.10",
 		"@tanstack/react-query": "^5.84.1",
 		"@vercel/blob": "^1.1.1",
 		"class-variance-authority": "^0.7.1",
@@ -31,6 +34,7 @@
 		"cookies-next": "^6.1.0",
 		"framer-motion": "^12.23.12",
 		"graphql": "^16.11.0",
+		"idb": "^8.0.3",
 		"jwt-decode": "^4.0.0",
 		"lucide-react": "^0.503.0",
 		"motion": "^12.9.2",

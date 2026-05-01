@@ -41,6 +41,19 @@ export class WorkerService {
 			include: {
 				business: true,
 				kyc: true,
+				shifts: true,
+				sales: true,
+				medias: true,
+				auditLogs: true,
+				chatParticipants: {
+					include: {
+						chat: {
+							include: {
+								messages: true,
+							}
+						},
+					},
+				},
 				workerServiceAssignments: {
 					include: {
 						freelanceService: true,
@@ -156,6 +169,19 @@ export class WorkerService {
 			include: {
 				business: true,
 				kyc: true,
+				shifts: true,
+				sales: true,
+				medias: true,
+				auditLogs: true,
+				chatParticipants: {
+					include: {
+						chat: {
+							include: {
+								messages: true,
+							}
+						},
+					},
+				},
 				workerServiceAssignments: {
 					include: {
 						freelanceService: true,
@@ -447,6 +473,9 @@ export class WorkerService {
 					include: { product: true },
 				},
 				client: true,
+				worker: true,
+				store: true,
+				returns: true
 			},
 		});
 	}

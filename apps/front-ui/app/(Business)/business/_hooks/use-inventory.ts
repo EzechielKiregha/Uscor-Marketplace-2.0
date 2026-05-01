@@ -14,7 +14,7 @@ import {
 	ON_TRANSFER_ORDER_UPDATED,
 } from "@/graphql/inventory.gql";
 
-export const useInventory = (storeId: string, businessId: string) => {
+export const useInventory = (storeId: string, businessId?: string) => {
 	const [inventoryFilter, setInventoryFilter] = useState({
 		lowStockOnly: false,
 		productId: "",
