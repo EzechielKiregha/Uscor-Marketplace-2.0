@@ -35,7 +35,8 @@ export const useSales = (storeId: string, wUserId: string, role?: string) => {
 	} = useQuery(GET_SALES_HISTORY, {
 		variables: {
 			storeId,
-			status: "CLOSED",
+			status: "COMPLETED",
+			workerId: role === 'worker' ? wUserId : ""
 		},
 		skip: !storeId,
 	});

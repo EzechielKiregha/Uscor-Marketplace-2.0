@@ -194,7 +194,7 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
                   </p>
 
                   {/* Store Selection */}
-                  {storesData?.stores && storesData.stores.length > 1 && (
+                  {/* {storesData?.stores && storesData.stores.length > 1 && (
                     <div className="bg-card border border-border rounded-lg p-4">
                       <div className="flex items-center gap-3">
                         <Users className="h-5 w-5 text-primary" />
@@ -217,7 +217,7 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               )}
 

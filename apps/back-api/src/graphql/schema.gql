@@ -1188,63 +1188,63 @@ type ChatEntityWorker {
 }
 
 type WorkerPerformanceEntity {
-  totalSales: Float!
-  totalTransactions: Float!
-  customerSatisfaction: Float!
-  attendanceRate: Float!
-  shiftsCompleted: Float!
-  personalSales: Float!
+  totalSales: Float
+  totalTransactions: Float
+  customerSatisfaction: Float
+  attendanceRate: Float
+  shiftsCompleted: Float
+  personalSales: Float
 }
 
 type TopSellingProductEntity {
-  id: String!
-  title: String!
-  quantitySold: Float!
-  revenue: Float!
+  id: String
+  title: String
+  quantitySold: Float
+  revenue: Float
 }
 
 type RecentOrderEntity {
-  id: String!
-  orderNumber: String!
-  totalAmount: Float!
-  status: String!
-  client: ClientEntity!
-  createdAt: DateTime!
+  id: String
+  orderNumber: String
+  totalAmount: Float
+  status: String
+  client: ClientEntity
+  createdAt: DateTime
 }
 
 type CurrentShiftEntity {
-  id: String!
-  startTime: DateTime!
+  id: String
+  startTime: DateTime
   sales: Float
   transactions: Float
 }
 
 type WorkerDashboardEntity {
-  todaySales: Float!
-  todayOrders: Float!
-  lowStockItems: Float!
-  activeChats: Float!
+  todaySales: Float
+  todayOrders: Float
+  lowStockItems: Float
+  activeChats: Float
   currentShift: CurrentShiftEntity
-  salesThisWeek: Float!
-  salesThisMonth: Float!
+  salesThisWeek: Float
+  salesThisMonth: Float
   topSellingProducts: [TopSellingProductEntity!]
   recentOrders: [RecentOrderEntity!]
   workerPerformance: WorkerPerformanceEntity
 }
 
 type WorkerDashboardStatsEntity {
-  todaySales: Float!
-  todayTransactions: Float!
-  currentShiftSales: Float!
-  currentShiftDuration: Float!
-  lowStockProducts: Float!
-  upcomingChats: Float!
+  todaySales: Float
+  todayTransactions: Float
+  currentShiftSales: Float
+  currentShiftDuration: Float
+  lowStockProducts: Float
+  upcomingChats: Float
 }
 
 type MobileMoneyPaymentResponseEntity {
-  success: Boolean!
-  transactionId: String!
-  status: String!
+  success: Boolean
+  transactionId: String
+  status: String
   ussdCode: String
 }
 

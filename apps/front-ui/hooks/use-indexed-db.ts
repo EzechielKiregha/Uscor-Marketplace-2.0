@@ -60,12 +60,24 @@ export const useIndexedDB = () => {
 		}
 	};
 
-	const handleSync = async () => {
+	const handleSync = async (
+		mutations?: {
+			addSaleProduct?: any;
+			updateSaleProduct?: any;
+			removeSaleProduct?: any;
+			completeSale?: any;
+		}
+	) => {
 		if (!isOnline || !isInitialized) return;
 
 		setSyncing(true);
 		try {
-			await syncOfflineOperations();
+			await syncOfflineOperations(
+				mutations?.addSaleProduct,
+				mutations?.updateSaleProduct,
+				mutations?.removeSaleProduct,
+				mutations?.completeSale
+			);
 		} catch (error) {
 			console.error("Sync failed:", error);
 		} finally {

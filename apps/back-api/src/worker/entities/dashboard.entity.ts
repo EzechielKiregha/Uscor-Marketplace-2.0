@@ -1,151 +1,192 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { ClientEntity } from "../../client/entities/client.entity";
+import { IsOptional } from "class-validator";
 
 @ObjectType()
 export class WorkerPerformanceEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	totalSales: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	totalTransactions: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	customerSatisfaction: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	attendanceRate: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	shiftsCompleted: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	personalSales: number;
 }
 
 @ObjectType()
 export class TopSellingProductEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	id: string;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	title: string;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	quantitySold: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	revenue: number;
 }
 
 @ObjectType()
 export class RecentOrderEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	id: string;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	orderNumber: string;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	totalAmount: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	status: string;
 
-	@Field(() => ClientEntity)
+	@Field(() => ClientEntity, {nullable: true})
+	@IsOptional()
 	client: ClientEntity;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	createdAt: Date;
 }
 
 @ObjectType()
 export class CurrentShiftEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	id: string;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	startTime: Date;
 
 	@Field({ nullable: true })
+	@IsOptional()
 	sales?: number;
 
 	@Field({ nullable: true })
+	@IsOptional()
 	transactions?: number;
 }
 
 @ObjectType()
 export class WorkerDashboardEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	todaySales: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	todayOrders: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	lowStockItems: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	activeChats: number;
 
 	@Field(() => CurrentShiftEntity, {
 		nullable: true,
 	})
+	@IsOptional()
 	currentShift?: CurrentShiftEntity;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	salesThisWeek: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	salesThisMonth: number;
 
 	@Field(() => [TopSellingProductEntity], {
 		nullable: true,
 	})
+	@IsOptional()
 	topSellingProducts?: TopSellingProductEntity[];
 
 	@Field(() => [RecentOrderEntity], {
 		nullable: true,
 	})
+	@IsOptional()
 	recentOrders?: RecentOrderEntity[];
 
 	@Field(() => WorkerPerformanceEntity, {
 		nullable: true,
 	})
+	@IsOptional()
 	workerPerformance?: WorkerPerformanceEntity;
 }
 
 @ObjectType()
 export class WorkerDashboardStatsEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	todaySales: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	todayTransactions: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	currentShiftSales: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	currentShiftDuration: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	lowStockProducts: number;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	upcomingChats: number;
 }
 
 @ObjectType()
 export class MobileMoneyPaymentResponseEntity {
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	success: boolean;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	transactionId: string;
 
-	@Field()
+	@Field({nullable: true})
+	@IsOptional()
 	status: string;
 
 	@Field({ nullable: true })
+	@IsOptional()
 	ussdCode?: string;
 }

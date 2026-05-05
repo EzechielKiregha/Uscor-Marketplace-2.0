@@ -203,161 +203,173 @@ export class SaleService {
 			);
 		}
 
-		// Create sale
-		const sale = await this.prisma.sale.create({
-			data: {
-				store: { connect: { id: storeId } },
-				worker: { connect: { id: workerId } },
-				client: clientId ? { connect: { id: clientId } } : undefined,
-				totalAmount: finalTotal,
-				discount: discount || 0,
-				paymentMethod: paymentMethod || "CASH",
-				status: paymentMethod === "TOKEN" ? "CLOSED" : "OPEN",
-				saleProducts:
-					sales.length > 0
+		// Use transaction for all database operations
+		const sale = await this.prisma.$transaction(async (tx) => {
+			// Create sale
+			const createdSale = await tx.sale.create({
+				data: {
+					store: { connect: { id: storeId } },
+					worker: { connect: { id: _actualWorkerId } },
+					client: clientId ? { connect: { id: clientId } } : undefined,
+					totalAmount: finalTotal,
+					discount: discount || 0,
+					paymentMethod: paymentMethod || "CASH",
+					status: paymentMethod === "TOKEN" ? "COMPLETED" : "OPEN",
+					saleProducts:
+						sales.length > 0
+							? {
+									create: sales.map((sp) => ({
+										product: {
+											connect: { id: sp.productId },
+										},
+										quantity: sp.quantity,
+										price: sp.uniquePrice,
+										modifiers: sp.modifiers,
+									})),
+								}
+							: undefined,
+				},
+				include: {
+					store: {
+						select: {
+							id: true,
+							name: true,
+							businessId: true,
+							address: true,
+							createdAt: true,
+						},
+					},
+					worker: {
+						select: {
+							id: true,
+							fullName: true,
+							email: true,
+							createdAt: true,
+						},
+					},
+					client: clientId
 						? {
-								create: sales.map((sp) => ({
-									product: {
-										connect: { id: sp.productId },
-									},
-									quantity: sp.quantity,
-									price: sp.uniquePrice,
-									modifiers: sp.modifiers,
-								})),
+								select: {
+									id: true,
+									username: true,
+									email: true,
+									createdAt: true,
+								},
 							}
-						: undefined,
-			},
-			include: {
-				store: {
-					select: {
-						id: true,
-						name: true,
-						businessId: true,
-						address: true,
-						createdAt: true,
-					},
-				},
-				worker: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				client: clientId
-					? {
-							select: {
-								id: true,
-								username: true,
-								email: true,
-								createdAt: true,
-							},
-						}
-					: false,
-				saleProducts: {
-					include: {
-						product: {
-							select: {
-								id: true,
-								title: true,
-								price: true,
-								quantity: true,
-								createdAt: true,
+						: false,
+					saleProducts: {
+						include: {
+							product: {
+								select: {
+									id: true,
+									title: true,
+									price: true,
+									quantity: true,
+									createdAt: true,
+								},
 							},
 						},
 					},
-				},
-				returns: true,
-			},
-		});
-
-		// Update quantity
-		if (saleProducts) {
-			await Promise.all(
-				saleProducts.map((sp) =>
-					this.productService.updateStock(sp.productId, {
-						quantity: {
-							decrement: sp.quantity,
-						},
-					}),
-				),
-			);
-		}
-
-		// Handle commissions for RepostedProduct and profit-sharing for ReOwnedProduct
-		for (const sp of sale.saleProducts) {
-			const reOwnedProduct = await this.prisma.reOwnedProduct.findFirst({
-				where: { newProductId: sp.productId },
-				select: {
-					id: true,
-					oldOwnerId: true,
-					oldPrice: true,
-					newPrice: true,
-					quantity: true,
+					returns: true,
 				},
 			});
-			if (reOwnedProduct) {
-				const markup = reOwnedProduct.newPrice - reOwnedProduct.oldPrice;
-				if (markup > 0) {
-					const profitShare = markup * 0.2 * sp.quantity; // 20% of markup
-					await this.tokenTransactionService.create({
-						businessId: reOwnedProduct.oldOwnerId,
-						reOwnedProductId: reOwnedProduct.id,
-						amount: profitShare,
-						type: TokenTransactionType.PROFIT_SHARE,
+
+			// Update product quantities
+			if (saleProducts) {
+				for (const sp of saleProducts) {
+					await tx.product.update({
+						where: { id: sp.productId },
+						data: {
+							quantity: { decrement: sp.quantity },
+						},
 					});
 				}
 			}
 
-			const repostedProduct = await this.prisma.repostedProduct.findFirst({
-				where: { productId: sp.productId },
-				select: {
-					id: true,
-					businessId: true,
-				},
-			});
-			if (repostedProduct) {
-				const commission = sp.price * 0.002 * sp.quantity; // 0.02% commission
-				await this.tokenTransactionService.create({
-					businessId: repostedProduct.businessId,
-					repostedProductId: repostedProduct.id,
-					amount: commission,
-					type: TokenTransactionType.REPOST_COMMISSION,
+			// Handle commissions for RepostedProduct and profit-sharing for ReOwnedProduct
+			for (const sp of createdSale.saleProducts) {
+				const reOwnedProduct = await tx.reOwnedProduct.findFirst({
+					where: { newProductId: sp.productId },
+					select: {
+						id: true,
+						oldOwnerId: true,
+						oldPrice: true,
+						newPrice: true,
+						quantity: true,
+					},
 				});
+				if (reOwnedProduct) {
+					const markup = reOwnedProduct.newPrice - reOwnedProduct.oldPrice;
+					if (markup > 0) {
+						const profitShare = markup * 0.2 * sp.quantity; // 20% of markup
+						await tx.tokenTransaction.create({
+							data: {
+								businessId: reOwnedProduct.oldOwnerId,
+								reOwnedProductId: reOwnedProduct.id,
+								amount: profitShare,
+								type: TokenTransactionType.PROFIT_SHARE,
+							},
+						});
+					}
+				}
+
+				const repostedProduct = await tx.repostedProduct.findFirst({
+					where: { productId: sp.productId },
+					select: {
+						id: true,
+						businessId: true,
+					},
+				});
+				if (repostedProduct) {
+					const commission = sp.price * 0.002 * sp.quantity; // 0.02% commission
+					await tx.tokenTransaction.create({
+						data: {
+							businessId: repostedProduct.businessId,
+							repostedProductId: repostedProduct.id,
+							amount: commission,
+							type: TokenTransactionType.REPOST_COMMISSION,
+						},
+					});
+				}
 			}
-		}
 
-		// Update business sales metrics
-		const businessId = worker ? worker.businessId : user.id;
-		await this.businessService.updateTotalProuctSold(businessId, {
-			totalProductsSold: {
-				increment: saleProducts
-					? saleProducts.reduce((sum, sp) => sum + sp.quantity, 0)
-					: 0,
-			},
-		});
-
-		// Award loyalty points if sale is CLOSED
-		if (sale.status === "CLOSED" && sale.clientId) {
-			const loyaltyProgram = await this.prisma.loyaltyProgram.findFirst({
-				where: {
-					businessId: sale.store.businessId,
+			// Update business sales metrics
+			const businessId = worker ? worker.businessId : user.id;
+			await tx.business.update({
+				where: { id: businessId },
+				data: {
+					totalProductsSold: {
+						increment: saleProducts
+							? saleProducts.reduce((sum, sp) => sum + sp.quantity, 0)
+							: 0,
+					},
 				},
 			});
-			if (loyaltyProgram) {
-				const points = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
-				await this.loyaltyService.createPointsTransaction(
+
+			// Award loyalty points if sale is CLOSED
+			if (createdSale.status === "COMPLETED" && createdSale.clientId) {
+				const loyaltyProgram = await tx.loyaltyProgram.findFirst({
+					where: {
+						businessId: createdSale.store.businessId,
+					},
+				});
+				if (loyaltyProgram) {
+					const points = createdSale.totalAmount * loyaltyProgram.pointsPerPurchase;
+					await this.loyaltyService.createPointsTransaction(
 					{
-						clientId: sale.clientId,
+						clientId: sale.clientId!,
 						loyaltyProgramId: loyaltyProgram.id,
 						points,
 					},
 					user,
 				);
+				}
 			}
-		}
 
+			return createdSale;
+		});
+
+		// Publish event outside of transaction
 		await this.pubSub.publish(`sale_created_${sale.storeId}`, {
 			saleCreated: sale,
 		});
@@ -439,9 +451,6 @@ export class SaleService {
 			} else {
 				calculatedTotal = sale.totalAmount;
 			}
-			//  const calculatedTotal = saleProducts
-			//    ? saleProducts.reduce((sum, sp) => sum + sp.price * sp.quantity, 0)
-			//    : sale.totalAmount;
 
 			finalTotal =
 				calculatedTotal - (discount !== undefined ? discount : sale.discount);
@@ -450,94 +459,104 @@ export class SaleService {
 			// throw new Error(`Total amount (${totalAmount}) does not match calculated total (${finalTotal})`);
 		}
 
-		// Update sale
-		const updatedSale = await this.prisma.sale.update({
-			where: { id },
-			data: {
-				client: clientId ? { connect: { id: clientId } } : undefined,
-				totalAmount: finalTotal,
-				discount: discount !== undefined ? discount : sale.discount,
-				paymentMethod,
-				saleProducts: sales
-					? {
-							deleteMany: {},
-							create: sales.map((sp) => ({
-								product: {
-									connect: { id: sp.productId },
+		// Use transaction for all database operations
+		const updatedSale = await this.prisma.$transaction(async (tx) => {
+			// Update sale
+			const updated = await tx.sale.update({
+				where: { id },
+				data: {
+					client: clientId ? { connect: { id: clientId } } : undefined,
+					totalAmount: finalTotal,
+					discount: discount !== undefined ? discount : sale.discount,
+					paymentMethod,
+					saleProducts: sales
+						? {
+								deleteMany: {},
+								create: sales.map((sp) => ({
+									product: {
+										connect: { id: sp.productId },
+									},
+									quantity: sp.quantity,
+									price: sp.price ? sp.price : sp.uniquePrice,
+									modifiers: sp.modifiers,
+								})),
+							}
+						: undefined,
+				},
+				include: {
+					store: {
+						select: {
+							id: true,
+							name: true,
+							address: true,
+							createdAt: true,
+						},
+					},
+					worker: {
+						select: {
+							id: true,
+							fullName: true,
+							email: true,
+							createdAt: true,
+						},
+					},
+					client: clientId
+						? {
+								select: {
+									id: true,
+									username: true,
+									email: true,
+									createdAt: true,
 								},
-								quantity: sp.quantity,
-								price: sp.price ? sp.price : sp.uniquePrice,
-								modifiers: sp.modifiers,
-							})),
-						}
-					: undefined,
-			},
-			include: {
-				store: {
-					select: {
-						id: true,
-						name: true,
-						address: true,
-						createdAt: true,
-					},
-				},
-				worker: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				client: clientId
-					? {
-							select: {
-								id: true,
-								username: true,
-								email: true,
-								createdAt: true,
-							},
-						}
-					: false,
-				saleProducts: {
-					include: {
-						product: {
-							select: {
-								id: true,
-								title: true,
-								price: true,
-								quantity: true,
-								createdAt: true,
+							}
+						: false,
+					saleProducts: {
+						include: {
+							product: {
+								select: {
+									id: true,
+									title: true,
+									price: true,
+									quantity: true,
+									createdAt: true,
+								},
 							},
 						},
 					},
+					returns: true,
 				},
-				returns: true,
-			},
+			});
+
+			// Update quantity if saleProducts changed
+			if (saleProducts) {
+				// Restore old quantities
+				for (const sp of sale.saleProducts) {
+					await tx.product.update({
+						where: { id: sp.productId },
+						data: {
+							quantity: {
+								increment: sp.quantity,
+							},
+						},
+					});
+				}
+				// Decrement new quantities
+				for (const sp of saleProducts) {
+					await tx.product.update({
+						where: { id: sp.productId },
+						data: {
+							quantity: {
+								decrement: sp.quantity,
+							},
+						},
+					});
+				}
+			}
+
+			return updated;
 		});
 
-		// Update quantity if saleProducts changed
-		if (saleProducts) {
-			await Promise.all(
-				sale.saleProducts.map((sp) =>
-					this.productService.updateStock(sp.productId, {
-						quantity: {
-							increment: sp.quantity,
-						},
-					}),
-				),
-			);
-			await Promise.all(
-				saleProducts.map((sp) =>
-					this.productService.updateStock(sp.productId, {
-						quantity: {
-							decrement: sp.quantity,
-						},
-					}),
-				),
-			);
-		}
-
+		// Publish event outside of transaction
 		await this.pubSub.publish(`sale_updated_${updatedSale.storeId}`, {
 			saleUpdated: updatedSale,
 		});
@@ -570,81 +589,87 @@ export class SaleService {
 			throw new Error("Sale is not OPEN");
 		}
 
-		// Handle different payment methods
-		await this.processPayment(sale, paymentMethod, paymentDetails, user);
+		// Use transaction for payment processing and status updates
+		const closedSale = await this.prisma.$transaction(async (tx) => {
+			// Handle different payment methods
+			await this.processPayment(sale, paymentMethod, paymentDetails, user, tx);
 
-		// Award loyalty points if closing to CLOSED
-		if ((status || "CLOSED") === "CLOSED" && sale.clientId) {
-			const loyaltyProgram = await this.prisma.loyaltyProgram.findFirst({
-				where: {
-					businessId: sale.store.businessId,
-				},
-			});
-			if (loyaltyProgram) {
-				const points = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
-				await this.loyaltyService.createPointsTransaction(
+			// Award loyalty points if closing to CLOSED
+			if ((status || "COMPLETED") === "COMPLETED" && sale.clientId) {
+				const loyaltyProgram = await tx.loyaltyProgram.findFirst({
+					where: {
+						businessId: sale.store.businessId,
+					},
+				});
+				if (loyaltyProgram) {
+					const points = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
+					await this.loyaltyService.createPointsTransaction(
 					{
-						clientId: sale.clientId,
+						clientId: sale.clientId!,
 						loyaltyProgramId: loyaltyProgram.id,
 						points,
 					},
 					user,
 				);
+				}
 			}
-		}
 
-		const closedSale = await this.prisma.sale.update({
-			where: { id: saleId },
-			data: {
-				paymentMethod: paymentMethod || sale.paymentMethod,
-				status: status || "CLOSED",
-			},
-			include: {
-				store: {
-					select: {
-						id: true,
-						name: true,
-						address: true,
-						createdAt: true,
-					},
+			const updated = await tx.sale.update({
+				where: { id: saleId },
+				data: {
+					paymentMethod: paymentMethod || sale.paymentMethod,
+					status: status || "COMPLETED",
 				},
-				worker: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
+				include: {
+					store: {
+						select: {
+							id: true,
+							name: true,
+							address: true,
+							createdAt: true,
+						},
 					},
-				},
-				client: sale.clientId
-					? {
-							select: {
-								id: true,
-								username: true,
-								email: true,
-								createdAt: true,
-							},
-						}
-					: false,
-				saleProducts: {
-					include: {
-						product: {
-							select: {
-								id: true,
-								title: true,
-								price: true,
-								quantity: true,
-								createdAt: true,
+					worker: {
+						select: {
+							id: true,
+							fullName: true,
+							email: true,
+							createdAt: true,
+						},
+					},
+					client: sale.clientId
+						? {
+								select: {
+									id: true,
+									username: true,
+									email: true,
+									createdAt: true,
+								},
+							}
+						: false,
+					saleProducts: {
+						include: {
+							product: {
+								select: {
+									id: true,
+									title: true,
+									price: true,
+									quantity: true,
+									createdAt: true,
+								},
 							},
 						},
 					},
+					returns: true,
 				},
-				returns: true,
-			},
+			});
+
+			return updated;
 		});
 
+		// Publish event outside of transaction
 		await this.pubSub.publish(`sale_updated_${sale.storeId}`, {
-			saleUpdated: sale,
+			saleUpdated: closedSale,
 		});
 
 		return closedSale;
@@ -655,7 +680,10 @@ export class SaleService {
 		paymentMethod: string,
 		paymentDetails: PaymentDetailsInput | undefined,
 		user: AuthPayload,
+		tx?: any,
 	) {
+		const prismaClient = tx || this.prisma;
+
 		// Get worker info if sale has workerId, otherwise use business info
 		let worker: Worker | null;
 		let businessId = "";
@@ -676,7 +704,7 @@ export class SaleService {
 
 		switch (paymentMethod) {
 			case "TOKEN":
-				await this.processTokenPayment(sale, { businessId }, user);
+				await this.processTokenPayment(sale, { businessId }, user, tx);
 				break;
 			case "MOBILE_MONEY":
 				await this.processMobileMoneyPayment(
@@ -684,6 +712,7 @@ export class SaleService {
 					paymentDetails,
 					{ businessId },
 					user,
+					tx,
 				);
 				break;
 			case "CARD":
@@ -692,6 +721,7 @@ export class SaleService {
 					paymentDetails,
 					{ businessId },
 					user,
+					tx,
 				);
 				break;
 			case "CASH":
@@ -706,7 +736,10 @@ export class SaleService {
 		sale: any,
 		workerInfo: any,
 		user: AuthPayload,
+		tx?: any,
 	) {
+		const prismaClient = tx || this.prisma;
+
 		// Calculate token amount (1 uTn = $10)
 		const tokenAmount = sale.totalAmount / 10;
 
@@ -757,7 +790,10 @@ export class SaleService {
 		paymentDetails: PaymentDetailsInput | undefined,
 		workerInfo: any,
 		_user: AuthPayload,
+		tx?: any,
 	) {
+		const prismaClient = tx || this.prisma;
+
 		if (!paymentDetails?.mobileMoneyMethod || !paymentDetails?.country) {
 			throw new Error(
 				"Mobile money method and country are required for mobile money payments",
@@ -804,7 +840,10 @@ export class SaleService {
 		paymentDetails: PaymentDetailsInput | undefined,
 		workerInfo: any,
 		_user: AuthPayload,
+		tx?: any,
 	) {
+		const prismaClient = tx || this.prisma;
+
 		if (
 			!paymentDetails?.cardNumber ||
 			!paymentDetails?.cardHolderName ||
@@ -909,44 +948,50 @@ export class SaleService {
 			throw new Error("Sale already refunded");
 		}
 
-		// Revert quantity
-		await Promise.all(
-			sale.saleProducts.map((sp) =>
-				this.productService.updateStock(sp.productId, {
-					quantity: { increment: sp.quantity },
-				}),
-			),
-		);
+		// Use transaction for all database operations
+		const returnRecord = await this.prisma.$transaction(async (tx) => {
+			// Revert quantity
+			for (const sp of sale.saleProducts) {
+				await tx.product.update({
+					where: { id: sp.productId },
+					data: {
+						quantity: { increment: sp.quantity },
+					},
+				});
+			}
 
-		// Refund token payment if applicable
-		if (sale.paymentMethod === "TOKEN") {
-			const worker = await this.workerService.findOne(sale.workerId);
-			if (!worker) throw new Error("Worker not found");
-			await this.accountRechargeService.create(
-				{
-					clientId: sale.clientId || undefined,
-					businessId: sale.clientId ? undefined : worker.businessId,
-					amount: sale.totalAmount,
-					method: RechargeMethod.TOKEN,
-					origin: Country.DRC,
+			// Refund token payment if applicable
+			if (sale.paymentMethod === "TOKEN") {
+				const worker = await this.workerService.findOne(sale.workerId);
+				if (!worker) throw new Error("Worker not found");
+				await this.accountRechargeService.create(
+					{
+						clientId: sale.clientId || undefined,
+						businessId: sale.clientId ? undefined : worker.businessId,
+						amount: sale.totalAmount,
+						method: RechargeMethod.TOKEN,
+						origin: Country.DRC,
+					},
+					sale.clientId || worker.businessId,
+					sale.clientId ? "client" : "business",
+				);
+			}
+
+			const created = await tx.return.create({
+				data: {
+					sale: { connect: { id: saleId } },
+					reason,
+					status: "REFUNDED",
 				},
-				sale.clientId || worker.businessId,
-				sale.clientId ? "client" : "business",
-			);
-		}
+				include: { sale: true },
+			});
 
-		const returnRecord = await this.prisma.return.create({
-			data: {
-				sale: { connect: { id: saleId } },
-				reason,
-				status: "REFUNDED",
-			},
-			include: { sale: true },
-		});
+			await tx.sale.update({
+				where: { id: saleId },
+				data: { status: "REFUNDED" },
+			});
 
-		await this.prisma.sale.update({
-			where: { id: saleId },
-			data: { status: "REFUNDED" },
+			return created;
 		});
 
 		return returnRecord;
@@ -1434,6 +1479,7 @@ export class SaleService {
 
 		if (storeId) whereClause.storeId = storeId;
 		if (workerId) whereClause.workerId = workerId;
+		if (user.role === "worker") whereClause.workerId = user.id;
 		if (status) whereClause.status = status;
 		if (startDate || endDate) {
 			whereClause.createdAt = {};
@@ -1744,41 +1790,49 @@ export class SaleService {
 			throw new Error("Insufficient product quantity");
 		}
 
-		const saleProduct = await this.prisma.saleProduct.create({
-			data: {
-				sale: { connect: { id: input.saleId } },
-				product: {
-					connect: { id: input.productId },
+		// Use transaction for all database operations
+		const saleProduct = await this.prisma.$transaction(async (tx) => {
+			const created = await tx.saleProduct.create({
+				data: {
+					sale: { connect: { id: input.saleId } },
+					product: {
+						connect: { id: input.productId },
+					},
+					quantity: input.quantity,
+					price: product.price,
+					modifiers: input.modifiers,
 				},
-				quantity: input.quantity,
-				price: product.price,
-				modifiers: input.modifiers,
-			},
-			include: {
-				product: {
-					select: {
-						id: true,
-						title: true,
-						description: true,
-						price: true,
+				include: {
+					product: {
+						select: {
+							id: true,
+							title: true,
+							description: true,
+							price: true,
+						},
 					},
 				},
-			},
-		});
+			});
 
-		// Update sale total
-		await this.prisma.sale.update({
-			where: { id: input.saleId },
-			data: {
-				totalAmount: {
-					increment: product.price * input.quantity,
+			// Update sale total
+			await tx.sale.update({
+				where: { id: input.saleId },
+				data: {
+					totalAmount: {
+						increment: product.price * input.quantity,
+					},
 				},
-			},
-		});
+			});
 
-		// Update product stock
-		await this.productService.updateStock(input.productId, {
-			quantity: { decrement: input.quantity },
+			// Update product stock
+			await tx.product.update({
+				where: { id: input.productId },
+				data: {
+					quantity: { decrement: input.quantity },
+				},
+			});
+
+			return created;
 		});
 
 		const updatedSale = await this.findOne(input.saleId, user);
@@ -1838,40 +1892,48 @@ export class SaleService {
 			updates.modifiers = input.modifiers;
 		}
 
-		const updatedSaleProduct = await this.prisma.saleProduct.update({
-			where: { id },
-			data: updates,
-			include: {
-				product: {
-					select: {
-						id: true,
-						title: true,
-						description: true,
-						price: true,
-						medias: {
-							select: { url: true },
+		// Use transaction for all database operations
+		const updatedSaleProduct = await this.prisma.$transaction(async (tx) => {
+			const updated = await tx.saleProduct.update({
+				where: { id },
+				data: updates,
+				include: {
+					product: {
+						select: {
+							id: true,
+							title: true,
+							description: true,
+							price: true,
+							medias: {
+								select: { url: true },
+							},
 						},
 					},
 				},
-			},
+			});
+
+			// Update sale total if quantity changed
+			if (priceChange !== 0) {
+				await tx.sale.update({
+					where: { id: saleProduct.saleId },
+					data: {
+						totalAmount: { increment: priceChange },
+					},
+				});
+			}
+
+			// Update product stock if quantity changed
+			if (stockChange !== 0) {
+				await tx.product.update({
+					where: { id: saleProduct.productId },
+					data: {
+						quantity: { increment: stockChange },
+					},
+				});
+			}
+
+			return updated;
 		});
-
-		// Update sale total if quantity changed
-		if (priceChange !== 0) {
-			await this.prisma.sale.update({
-				where: { id: saleProduct.saleId },
-				data: {
-					totalAmount: { increment: priceChange },
-				},
-			});
-		}
-
-		// Update product stock if quantity changed
-		if (stockChange !== 0) {
-			await this.productService.updateStock(saleProduct.productId, {
-				quantity: { increment: stockChange },
-			});
-		}
 
 		const updatedSale = await this.findOne(saleProduct.saleId, user);
 		await this.pubSub.publish(`sale_updated_${updatedSale.storeId}`, {
@@ -1900,27 +1962,33 @@ export class SaleService {
 			throw new Error("Workers can only modify their own sales");
 		}
 
-		// Remove from sale
-		await this.prisma.saleProduct.delete({
-			where: { id },
-		});
+		// Use transaction for all database operations
+		await this.prisma.$transaction(async (tx) => {
+			// Remove from sale
+			await tx.saleProduct.delete({
+				where: { id },
+			});
 
-		// Update sale total
-		const priceReduction = saleProduct.product.price * saleProduct.quantity;
-		await this.prisma.sale.update({
-			where: { id: saleProduct.saleId },
-			data: {
-				totalAmount: {
-					decrement: priceReduction,
+			// Update sale total
+			const priceReduction = saleProduct.product.price * saleProduct.quantity;
+			await tx.sale.update({
+				where: { id: saleProduct.saleId },
+				data: {
+					totalAmount: {
+						decrement: priceReduction,
+					},
 				},
-			},
-		});
+			});
 
-		// Restore product stock
-		await this.productService.updateStock(saleProduct.productId, {
-			quantity: {
-				increment: saleProduct.quantity,
-			},
+			// Restore product stock
+			await tx.product.update({
+				where: { id: saleProduct.productId },
+				data: {
+					quantity: {
+						increment: saleProduct.quantity,
+					},
+				},
+			});
 		});
 
 		const updatedSale = await this.findOne(saleProduct.saleId, user);
@@ -1940,7 +2008,7 @@ export class SaleService {
 			{
 				saleId: id,
 				paymentMethod,
-				status: "CLOSED",
+				status: "COMPLETED",
 			},
 			user,
 		);

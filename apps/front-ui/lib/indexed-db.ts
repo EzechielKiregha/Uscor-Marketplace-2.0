@@ -2,10 +2,16 @@ import { type IDBPDatabase, openDB } from "idb";
 
 interface OfflineOperation {
 	id: string;
-	operationName: string;
-	variables: any;
+	type: string;
+	saleId?: string;
+	productId?: string;
+	saleProductId?: string;
+	quantity?: number;
+	paymentMethod?: string;
+	modifiers?: any;
 	timestamp: string;
 	status: "PENDING" | "SYNCED" | "FAILED";
+	error?: string;
 }
 
 interface WorkerCacheItem {
@@ -125,7 +131,12 @@ export async function clearIndexedDB(storeName: string) {
 }
 
 // Sync offline operations when online
-export async function syncOfflineOperations() {
+export async function syncOfflineOperations(
+	addSaleProduct?: any,
+	updateSaleProduct?: any,
+	removeSaleProduct?: any,
+	completeSale?: any
+) {
 	const db = await initDB();
 	const offlineOps = await db.getAll(
 		STORES.OFFLINE_OPERATIONS,
@@ -134,18 +145,58 @@ export async function syncOfflineOperations() {
 
 	for (const op of offlineOps) {
 		try {
-			// In a real implementation, you'd send this to your GraphQL endpoint
-			// This is a simplified example
 			console.log("Syncing offline operation:", op);
+
+			switch (op.type) {
+				case "ADD_PRODUCT":
+					if (addSaleProduct && op.saleId && op.productId && op.quantity) {
+						await addSaleProduct({
+							variables: {
+								input: {
+									saleId: op.saleId,
+									productId: op.productId,
+									quantity: op.quantity,
+									modifiers: null,
+								},
+							},
+						});
+					}
+					break;
+
+				case "REMOVE_PRODUCT":
+					if (removeSaleProduct && op.saleProductId) {
+						await removeSaleProduct({
+							variables: { id: op.saleProductId },
+						});
+					}
+					break;
+
+				case "COMPLETE_SALE":
+					if (completeSale && op.saleId && op.paymentMethod) {
+						await completeSale({
+							variables: {
+								id: op.saleId,
+								paymentMethod: op.paymentMethod,
+								paymentDetails: undefined,
+							},
+						});
+					}
+					break;
+
+				default:
+					console.warn("Unknown operation type:", op.type);
+					break;
+			}
 
 			// Update status to synced
 			await updateIndexedDB(STORES.OFFLINE_OPERATIONS, op.id, {
 				status: "SYNCED",
 			});
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Failed to sync operation:", op.id, error);
 			await updateIndexedDB(STORES.OFFLINE_OPERATIONS, op.id, {
 				status: "FAILED",
+				error: error.message,
 			});
 		}
 	}
@@ -153,10 +204,14 @@ export async function syncOfflineOperations() {
 
 // Listen for online/offline events
 export function setupOfflineSync() {
-	window.addEventListener("online", syncOfflineOperations);
+	window.addEventListener("online", () => {
+		// Note: This function is deprecated. Sync is now handled by the useIndexedDB hook
+		// which requires access to GraphQL mutations
+		console.warn("setupOfflineSync is deprecated. Use useIndexedDB hook instead.");
+	});
 
 	// Initial sync if online
 	if (navigator.onLine) {
-		syncOfflineOperations();
+		console.warn("setupOfflineSync initial sync skipped. Use useIndexedDB hook instead.");
 	}
 }

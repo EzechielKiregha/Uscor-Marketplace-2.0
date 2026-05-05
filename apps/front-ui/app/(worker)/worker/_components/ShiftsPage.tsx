@@ -19,6 +19,13 @@ import {
   GET_WORKER_SHIFTS,
   START_SHIFT,
 } from "@/graphql/worker.gql";
+import {
+  ADD_SALE_PRODUCT,
+  COMPLETE_SALE,
+  GET_SALE_BY_ID,
+  REMOVE_SALE_PRODUCT,
+  UPDATE_SALE_PRODUCT,
+} from "@/graphql/sales.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
 import { startOfDay, subDays } from "date-fns";
@@ -100,6 +107,10 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
 
   const [startShift] = useMutation(START_SHIFT);
   const [endShift] = useMutation(END_SHIFT);
+  const [addSaleProduct] = useMutation(ADD_SALE_PRODUCT);
+  const [updateSaleProduct] = useMutation(UPDATE_SALE_PRODUCT);
+  const [removeSaleProduct] = useMutation(REMOVE_SALE_PRODUCT);
+  const [completeSale] = useMutation(COMPLETE_SALE);
 
   useEffect(() => {
     if (currentShiftData?.workerCurrentShift) {
@@ -199,9 +210,23 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
   // Auto-sync when coming online
   useEffect(() => {
     if (isOnline) {
-      handleSync();
+      handleSync({
+        addSaleProduct,
+        updateSaleProduct,
+        removeSaleProduct,
+        completeSale,
+      });
     }
-  }, [isOnline, handleSync]);
+  }, [
+    isOnline,
+    handleSync,
+    addSaleProduct,
+    updateSaleProduct,
+    removeSaleProduct,
+    completeSale,
+  ]);
+
+  const duration = useShiftDuration(currentShift?.startTime);
 
   if (currentShiftLoading || shiftsLoading) return <Loader loading={true} />;
 
@@ -222,8 +247,6 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     }
     return sum;
   }, 0);
-
-  const duration = useShiftDuration(currentShift?.startTime);
 
   return (
     <div className="space-y-6">
