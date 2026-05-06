@@ -6,6 +6,8 @@ import { createSerwistRoute } from "@serwist/turbopack";
 // only support Next.js 15.0.0 and above.
 // import nextConfig from "$cwd/next.config.mjs";
 
+export const dynamic = "force-dynamic";
+
 // This is optional!
 // A revision helps Serwist version a precached page. This
 // avoids outdated precached responses being used. Using
@@ -14,7 +16,7 @@ import { createSerwistRoute } from "@serwist/turbopack";
 // the hashes of every extra file you precache.
 const revision = "dev";
 
-export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } = createSerwistRoute({
+export const { dynamicParams, revalidate, generateStaticParams, GET } = createSerwistRoute({
   additionalPrecacheEntries: [{ url: "/~offline", revision }],
   swSrc: "app/sw.ts",
   // nextConfig,
