@@ -1,4 +1,3 @@
-// app/business/sales/_components/SalesHistoryPanel.tsx
 "use client";
 
 import { format } from "date-fns";
@@ -7,6 +6,9 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useMutation } from "@apollo/client";
+import { GENERATE_RECEIPT } from "@/graphql/sales.gql";
+import { useToast } from "@/components/toast-provider";
 
 interface SalesHistoryPanelProps {
   storeId: string;
@@ -22,6 +24,10 @@ export default function SalesHistoryPanel({
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, _setDateRange] = useState<{ start?: Date; end?: Date }>({});
   const [selectedSale, setSelectedSale] = useState<any>(null);
+  const { showToast } = useToast();
+  const [isDownloading, serIsDownloading] = useState(false);
+
+  const [generateReceipt] = useMutation(GENERATE_RECEIPT);
 
   const filteredSales = useMemo(() => {
     if (!salesHistory) return [];
@@ -71,6 +77,31 @@ export default function SalesHistoryPanel({
             {status}
           </span>
         );
+    }
+  };
+
+  const handleReceiptGen = async (saleId: string, clientEmail: string) => {
+    if (!saleId || !clientEmail) return;
+    serIsDownloading(true);
+
+    const generateReceiptInput = {
+      saleId: saleId,
+      email: clientEmail,
+    };
+
+    try {
+      await generateReceipt({
+        variables: {
+          generateReceiptInput,
+        },
+      });
+      showToast("success", "Receipt", "In download process");
+    } catch (error: any) {
+      serIsDownloading(false);
+      showToast("error", "Receipt", "Failed to download");
+      console.log(error.message);
+    } finally {
+      serIsDownloading(false);
     }
   };
 
@@ -129,7 +160,7 @@ export default function SalesHistoryPanel({
                 : "No sales history available"}
             </div>
           ) : (
-            <div className="space-y-3 max-h-[300px] overflow-y-auto">
+            <div className="space-y-3 max-h-75 overflow-y-auto">
               {filteredSales.slice(0, 5).map((sale) => (
                 <div
                   key={sale.id}
@@ -246,11 +277,21 @@ export default function SalesHistoryPanel({
               </div>
 
               <div className="flex justify-end gap-3 mt-6">
-                <Button variant="outline" onClick={() => setSelectedSale(null)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedSale(null)}
+                  disabled={isDownloading}
+                >
                   Close
                 </Button>
-                <Button className="bg-primary hover:bg-accent text-primary-foreground">
-                  Print Receipt
+                <Button
+                  onClick={() =>
+                    handleReceiptGen(selectedSale.id, selectedSale.client.email)
+                  }
+                  disabled={isDownloading}
+                  className="bg-primary hover:bg-accent text-primary-foreground"
+                >
+                  {isDownloading ? "Printing..." : "Print Receipt"}
                 </Button>
               </div>
             </div>

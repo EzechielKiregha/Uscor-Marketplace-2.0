@@ -489,6 +489,7 @@ type ShiftEntityWorker {
   startTime: DateTime!
   endTime: DateTime
   sales: Float
+  transactionCount: Float
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1831,14 +1832,12 @@ type Mutation {
   addSaleProduct(input: AddSaleProductInput!): SaleProductEntity!
   updateSaleProduct(id: String!, input: UpdateSaleProductInput!): SaleProductEntity!
   removeSaleProduct(id: String!): DeleteResponse!
-  completeSale(id: String!, paymentMethod: String!, paymentDetails: PaymentDetailsInput): SaleEntity!
+  completeWorkerSale(id: String!, paymentMethod: String!): SaleEntityWorker!
 
   """Creates an inventory adjustment."""
   createInventoryAdjustment(input: CreateInventoryAdjustmentInput!): InventoryAdjustmentEntity!
   startShift(input: StartShiftInput!): ShiftEntityWorker!
-
-  """Ends a shift and calculates sales."""
-  endShift(endShiftInput: EndShiftInput!): ShiftEntity!
+  endWorkerShift(input: EndWorkerShiftInput!): ShiftEntityWorker!
 
   """Sends a message in a chat."""
   sendMessage(input: SendMessageInput!): ChatMessageEntity!
@@ -1934,15 +1933,13 @@ type Mutation {
   deleteCategory(id: String!): CategoryEntity!
   updateSale(id: String!, input: UpdateSaleInput!): SaleEntity!
   closeSale(input: CloseSaleInput!): SaleEntity!
+  completeSale(id: String!, clientId: String!, paymentMethod: String!, paymentDetails: PaymentDetailsInput): SaleEntity!
 
   """Processes a return for a POS sale."""
   createReturn(createReturnInput: CreateReturnInput!): ReturnEntity!
 
   """Generates a PDF receipt and optionally emails it."""
   generateReceipt(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
-
-  """Generates a PDF receipt using pdfkit and optionally emails it."""
-  generateReceiptWithPDFKit(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
 
   """Creates a new store for a business."""
   createStore(input: CreateStoreInput!): StoreEntity!
@@ -1988,6 +1985,9 @@ type Mutation {
 
   """Starts a new shift for a worker."""
   createShift(createShiftInput: CreateShiftInput!): ShiftEntity!
+
+  """Ends a shift and calculates sales."""
+  endShift(endShiftInput: EndShiftInput!): ShiftEntity!
 
   """Updates shift details (business only)."""
   updateShift(id: String!, updateShiftInput: UpdateShiftInput!): ShiftEntity!
@@ -2276,18 +2276,6 @@ input UpdateSaleProductInput {
   modifiers: JSON
 }
 
-input PaymentDetailsInput {
-  mobileMoneyMethod: RechargeMethod
-  country: Country
-  operatorTransactionId: String
-  screenshotUrl: String
-  cardNumber: String
-  cardHolderName: String
-  expiryDate: String
-  cvv: String
-  tokenAmount: String
-}
-
 input CreateInventoryAdjustmentInput {
   productId: String!
   storeId: String!
@@ -2302,9 +2290,9 @@ input StartShiftInput {
   startTime: String!
 }
 
-input EndShiftInput {
-  shiftId: String!
-  endTime: DateTime!
+input EndWorkerShiftInput {
+  id: String!
+  sales: Float!
 }
 
 input SendMessageInput {
@@ -2461,9 +2449,22 @@ input UpdateSaleInput {
 
 input CloseSaleInput {
   saleId: String!
+  clientId: String
   paymentMethod: PaymentMethod!
   status: SaleStatus
   paymentDetails: PaymentDetailsInput
+}
+
+input PaymentDetailsInput {
+  mobileMoneyMethod: RechargeMethod
+  country: Country
+  operatorTransactionId: String
+  screenshotUrl: String
+  cardNumber: String
+  cardHolderName: String
+  expiryDate: String
+  cvv: String
+  tokenAmount: String
 }
 
 input CreateReturnInput {
@@ -2561,6 +2562,11 @@ input UpdateTransferOrderInput {
 input CreateShiftInput {
   storeId: String!
   startTime: DateTime!
+}
+
+input EndShiftInput {
+  shiftId: String!
+  endTime: DateTime!
 }
 
 input UpdateShiftInput {

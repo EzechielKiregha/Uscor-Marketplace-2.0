@@ -170,6 +170,7 @@ export const useSales = (storeId: string, wUserId: string, role?: string) => {
 	}, [salesHistoryData]);
 
 	return {
+		activeSalesData,
 		currentSaleId,
 		setCurrentSaleId,
 		getCurrentSale,
@@ -177,6 +178,8 @@ export const useSales = (storeId: string, wUserId: string, role?: string) => {
 		createSale,
 		addProductToSale,
 		completeSale,
+		refetchSalesHistory,
+		refetchActiveSales,
 		activeSalesLoading,
 		salesHistoryLoading,
 	};

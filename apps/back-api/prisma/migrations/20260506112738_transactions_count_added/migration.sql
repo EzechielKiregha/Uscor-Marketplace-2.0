@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Shift" ADD COLUMN     "refundTotal" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "transactionCount" INTEGER NOT NULL DEFAULT 0;

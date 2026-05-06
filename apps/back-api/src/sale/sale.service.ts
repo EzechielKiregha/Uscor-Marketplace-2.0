@@ -565,7 +565,7 @@ export class SaleService {
 	}
 
 	async close(closeSaleInput: CloseSaleInput, user: AuthPayload) {
-		const { saleId, paymentMethod, status, paymentDetails } = closeSaleInput;
+		const { saleId, clientId, paymentMethod, status, paymentDetails } = closeSaleInput;
 
 		const sale = await this.prisma.sale.findUnique({
 			where: { id: saleId },
@@ -619,6 +619,7 @@ export class SaleService {
 				data: {
 					paymentMethod: paymentMethod || sale.paymentMethod,
 					status: status || "COMPLETED",
+					client: { connect: { id: clientId }},
 				},
 				include: {
 					store: {
@@ -664,8 +665,33 @@ export class SaleService {
 				},
 			});
 
+			// increment the current worker's shift sales
+			const currentShift = await tx.shift.findFirst({
+				where: {
+					workerId: updated.workerId,
+					storeId: updated.storeId,
+					endTime: null,
+				},
+			});
+			if (!currentShift) throw new Error("Something went while worker's shift")
+			const shift = await tx.shift.update({
+				where : {
+					id: currentShift?.id,
+				},
+				data : {
+					sales : {
+						increment : updated.totalAmount
+					},
+					transactionCount: { increment : 1}
+				}
+			})
+
+			// console.log("the shift: ", {shift})
+
 			return updated;
 		});
+
+		// console.log(" updated salee: ", {closedSale})
 
 		// Publish event outside of transaction
 		await this.pubSub.publish(`sale_updated_${sale.storeId}`, {
@@ -1124,124 +1150,7 @@ export class SaleService {
 	}
 
 	async generateReceipt(input: GenerateReceiptInput, user: AuthPayload) {
-		const { saleId, email } = input;
 
-		const sale = await this.prisma.sale.findUnique({
-			where: { id: saleId },
-			include: {
-				store: true,
-				worker: true,
-				client: true,
-				saleProducts: {
-					include: { product: true },
-				},
-			},
-		});
-		if (!sale) throw new Error("Sale not found");
-		await this.storeService.verifyStoreAccess(sale.storeId, user);
-		if (user.role === "worker" && sale.workerId !== user.id) {
-			throw new Error("Workers can only generate receipts for their own sales");
-		}
-
-		let pointsEarned = 0;
-		if (sale.clientId) {
-			const loyaltyProgram = await this.prisma.loyaltyProgram.findFirst({
-				where: {
-					businessId: sale.store.businessId,
-				},
-			});
-			if (loyaltyProgram) {
-				pointsEarned = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
-			}
-		}
-
-		const latexContent = `
-\\documentclass[a4paper]{article}
-\\usepackage{geometry}
-\\geometry{margin=1in}
-\\usepackage{booktabs}
-\\usepackage{pdflscape}
-\\usepackage{DejaVuSans}
-\\renewcommand{\\familydefault}{\\sfdefault}
-
-\\begin{document}
-\\begin{center}
-  \\textbf{Receipt - ${sale.store.name}} \\\\
-  \\small{${sale.store.address || "No address provided"}} \\\\
-  \\small{Sale ID: ${sale.id}} \\\\
-  \\small{Date: ${sale.createdAt.toISOString().split("T")[0]}} \\\\
-  \\small{Worker: ${sale.worker.fullName}} \\\\
-  ${sale.client ? `\\small{Customer: ${sale.client.username}} \\\\` : ""}
-\\end{center}
-
-\\vspace{0.5cm}
-
-\\begin{tabular}{llrr}
-  \\toprule
-  \\textbf{Item} & \\textbf{Modifiers} & \\textbf{Quantity} & \\textbf{Price} \\\\
-  \\midrule
-  ${sale.saleProducts
-		.map(
-			(sp) =>
-				`${sp.product.title} & ${sp.modifiers ? JSON.stringify(sp.modifiers).replace(/"/g, "") : "-"} & ${sp.quantity} & \\$${sp.price.toFixed(2)} \\\\`,
-		)
-		.join("\n")}
-  \\bottomrule
-\\end{tabular}
-
-\\vspace{0.5cm}
-
-\\begin{flushright}
-  \\textbf{Subtotal:} \\$${sale.totalAmount.toFixed(2)} \\\\
-  \\textbf{Discount:} \\$${sale.discount.toFixed(2)} \\\\
-  \\textbf{Total:} \\$${(sale.totalAmount - sale.discount).toFixed(2)} \\\\
-  \\textbf{Payment Method:} ${sale.paymentMethod} \\\\
-  ${pointsEarned > 0 ? `\\textbf{Points Earned:} ${pointsEarned.toFixed(2)}` : ""}
-\\end{flushright}
-
-\\end{document}
-`;
-
-		const fileName = `receipt_${sale.id}.tex`;
-		const outputDir = "./receipts";
-		// await execAsync(`mkdir -p ${outputDir}`);
-		await mkdirAsync(outputDir, {
-			recursive: true,
-		});
-
-		const stream = createWriteStream(`${outputDir}/${fileName}`);
-
-		await new Promise((resolve, reject) => {
-			stream.write(latexContent);
-			stream.on("finish", () => resolve);
-			stream.on("error", reject);
-		});
-		// await new Promise((resolve, reject) => {
-		//   createWriteStream(`${outputDir}/${fileName}`)
-		//     .write(latexContent)
-		//     .on('finish', () => resolve)
-		//     .on('error', reject);
-		// });
-		await execAsync(
-			`latexmk -pdf -output-directory=${outputDir} ${outputDir}/${fileName}`,
-		);
-
-		let emailSent = false;
-		if (email) {
-			console.log(`Simulated sending receipt to ${email}`);
-			emailSent = true;
-		}
-
-		return {
-			filePath: `${outputDir}/receipt_${sale.id}.pdf`,
-			emailSent,
-		};
-	}
-
-	async generateReceiptWithPDFKit(
-		input: GenerateReceiptInput,
-		user: AuthPayload,
-	) {
 		const { saleId, email } = input;
 
 		const sale = await this.prisma.sale.findUnique({
@@ -1999,18 +1908,18 @@ export class SaleService {
 		return { id };
 	}
 
-	async completeSale(
-		id: string,
-		paymentMethod: PaymentMethod,
-		user: AuthPayload,
-	) {
-		return this.close(
-			{
-				saleId: id,
-				paymentMethod,
-				status: "COMPLETED",
-			},
-			user,
-		);
-	}
+	// async completeSale(
+	// 	id: string,
+	// 	paymentMethod: PaymentMethod,
+	// 	user: AuthPayload,
+	// ) {
+	// 	return this.close(
+	// 		{
+	// 			saleId: id,
+	// 			paymentMethod,
+	// 			status: "COMPLETED",
+	// 		},
+	// 		user,
+	// 	);
+	// }
 }

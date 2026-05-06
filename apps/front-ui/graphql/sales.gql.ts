@@ -341,8 +341,8 @@ export const REMOVE_SALE_PRODUCT = gql`
 `;
 
 export const COMPLETE_SALE = gql`
-  mutation CompleteSale($id: String!, $paymentMethod: String!, $paymentDetails: PaymentDetailsInput) {
-    completeSale(id: $id, paymentMethod: $paymentMethod, paymentDetails: $paymentDetails) {
+  mutation CompleteSale($id: String!, $clientId: String!, $paymentMethod: String!, $paymentDetails: PaymentDetailsInput) {
+    completeSale(id: $id, clientId: $clientId, paymentMethod: $paymentMethod, paymentDetails: $paymentDetails) {
       id
       storeId
       store {
@@ -405,8 +405,8 @@ export const CREATE_RETURN = gql`
 `;
 
 export const GENERATE_RECEIPT = gql`
-  mutation GenerateReceipt($saleId: String!) {
-    generateReceipt(saleId: $saleId) {
+  mutation GenerateReceipt($generateReceiptInput: GenerateReceiptInput!) {
+    generateReceipt(generateReceiptInput: $generateReceiptInput) {
       filePath
       emailSent
     }

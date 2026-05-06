@@ -10,7 +10,7 @@ import { CompleteSaleInput } from "./dto/complete-sale.input";
 import { CreateInventoryAdjustmentInput } from "./dto/create-inventory-adjustment.input";
 import { CreateSaleInput } from "./dto/create-sale.input";
 import { type CreateWorkerInput, WorkerRole } from "./dto/create-worker.input";
-import { EndShiftInput } from "./dto/end-shift.input";
+import { EndWorkerShiftInput } from "./dto/end-shift.input";
 import { ProcessMobileMoneyPaymentInput } from "./dto/process-mobile-money.input";
 import { SendChatMessageInput } from "./dto/send-chat-message.input";
 import { StartShiftInput } from "./dto/start-shift.input";
@@ -583,7 +583,7 @@ export class WorkerService {
 		});
 	}
 
-	async endShift(input: EndShiftInput) {
+	async endShift(input: EndWorkerShiftInput) {
 		return this.prisma.shift.update({
 			where: { id: input.id },
 			data: {

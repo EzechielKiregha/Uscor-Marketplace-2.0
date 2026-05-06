@@ -1,38 +1,9 @@
 "use client";
 
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import {
-  AlertTriangle,
-  Camera,
-  Clock,
-  CreditCard,
-  Loader2,
-  Minus,
-  Package,
-  Phone,
-  Plus,
-  Search,
-  ShoppingCart,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { AlertTriangle } from "lucide-react";
 import Loader from "@/components/seraui/Loader";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  ADD_SALE_PRODUCT,
-  COMPLETE_SALE,
-  GET_WORKER_CURRENT_SALE,
-  GET_WORKER_INVENTORY,
-  ON_INVENTORY_UPDATED,
-  ON_SALE_CREATED,
-  PROCESS_MOBILE_MONEY_PAYMENT,
-  REMOVE_SALE_PRODUCT,
-} from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
-import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
 import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
 import CurrentSalePanel from "@/app/(Business)/business/sales/_components/CurrentSalePanel";
 import SalesDashboard from "@/app/(Business)/business/sales/_components/SalesDashboard";
@@ -44,17 +15,7 @@ interface PosPageProps {
 
 export default function PosPage({ selectedStoreId }: PosPageProps) {
   const { user, role } = useMe();
-  const { isOnline, getLocalSales } = useIndexedDB();
-
-  const [currentSale, setCurrentSale] = useState<any>(null);
-  const [_offlineQueue, _setOfflineQueue] = useState<any[]>([]);
-
-  // Auto-sync when coming online
-  useEffect(() => {
-    if (!isOnline) {
-      setCurrentSale(getLocalSales());
-    }
-  }, [isOnline, getLocalSales]);
+  const { isOnline } = useIndexedDB();
 
   const {
     getCurrentSale,
@@ -63,12 +24,6 @@ export default function PosPage({ selectedStoreId }: PosPageProps) {
     activeSalesLoading,
     salesHistoryLoading,
   } = useSales(selectedStoreId || "", user?.id || "", role || "");
-
-  useEffect(() => {
-    if (!currentSale && !activeSalesLoading) {
-      setCurrentSale(getCurrentSale());
-    }
-  });
 
   if (activeSalesLoading) return <Loader loading={true} />;
 
@@ -94,8 +49,7 @@ export default function PosPage({ selectedStoreId }: PosPageProps) {
         <div className="lg:col-span-2 space-y-6">
           <CurrentSalePanel
             storeId={selectedStoreId || ""}
-            currentSale={currentSale}
-            onCompleteSale={setCurrentSale}
+            sale={getCurrentSale()}
             onNewSale={createSale}
             userRole={role || ""}
             userId={user?.id || ""}

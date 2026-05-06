@@ -6,6 +6,7 @@ import {
   CheckCircle,
   Clock,
   Package,
+  RefreshCcw,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -62,7 +63,7 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
 
   const [currentShift, setCurrentShift] = useState<any>(null);
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month">(
-    "today",
+    "week",
   );
   const { showToast } = useToast();
 
@@ -117,6 +118,11 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
       setCurrentShift(currentShiftData.workerCurrentShift);
     }
   }, [currentShiftData]);
+
+  // console.log("current shift: ", {
+  //   currentShiftData,
+  //   currentShift,
+  // });
 
   const handleStartShift = async () => {
     if (!isOnline) {
@@ -189,12 +195,12 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
       showToast("info", "Offline Mode", "Shift ended. Will sync when online.");
     } else {
       try {
+        const input = {
+          id: currentShift.id,
+          sales: currentShift.sales || 0,
+        };
         const { data } = await endShift({
-          variables: {
-            id: currentShift.id,
-            sales: currentShift.sales || 0,
-            endTime: new Date().toISOString(),
-          },
+          variables: { input },
         });
 
         setCurrentShift(null);
@@ -336,7 +342,9 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
                       Transactions
                     </span>
                   </div>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">
+                    {currentShift.transactionCount}
+                  </p>
                 </div>
               </div>
 
@@ -360,10 +368,17 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
                 your work hours
               </p>
 
-              <Button variant="default" onClick={handleStartShift}>
-                <Clock className="h-4 w-4 mr-2" />
-                Start New Shift
-              </Button>
+              <div className="flex flex-col items-center space-y-3">
+                <Button variant="link" onClick={refetchCurrentShift}>
+                  <RefreshCcw className="h-4 w-4 mr-2" />
+                  reload current shift
+                </Button>
+                <span className="text-italic text-gray-500">or</span>
+                <Button variant="default" onClick={handleStartShift}>
+                  <Clock className="h-4 w-4 mr-2" />
+                  Start New Shift
+                </Button>
+              </div>
             </div>
           )}
         </div>

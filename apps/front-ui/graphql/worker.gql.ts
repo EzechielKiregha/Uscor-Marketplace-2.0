@@ -327,6 +327,7 @@ export const SHIFT_ENTITY = gql`
     startTime
     endTime
     sales
+    transactionCount
     createdAt
     updatedAt
   }
@@ -609,7 +610,7 @@ export const REMOVE_SALE_PRODUCT = gql`
 
 export const COMPLETE_SALE = gql`
   mutation CompleteSale($id: String!, $paymentMethod: PaymentMethod!) {
-    completeSale(id: $id, paymentMethod: $paymentMethod) {
+    completeWorkerSale(id: $id, paymentMethod: $paymentMethod) {
       ...SaleEntity
     }
   }
@@ -626,12 +627,26 @@ export const START_SHIFT = gql`
 `;
 
 export const END_SHIFT = gql`
-  mutation EndShift($id: String!, $sales: Float!) {
-    endShift(id: $id, sales: $sales) {
-      ...ShiftEntity
+  mutation EndShift($input: EndWorkerShiftInput!) {
+    endWorkerShift(input: $input) {
+      id
+      workerId
+      worker {
+        id
+        fullName
+      }
+      storeId
+      store {
+        id
+        name
+      }
+      startTime
+      endTime
+      sales
+      createdAt
+      updatedAt
     }
   }
-  ${SHIFT_ENTITY}
 `;
 
 export const CREATE_INVENTORY_ADJUSTMENT = gql`

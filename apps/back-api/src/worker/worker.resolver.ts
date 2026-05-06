@@ -17,7 +17,7 @@ import { AddSaleProductInput } from "./dto/add-sale-product.input";
 import { CreateInventoryAdjustmentInput } from "./dto/create-inventory-adjustment.input";
 import { CreateSaleInput } from "./dto/create-sale.input";
 import { CreateWorkerInput } from "./dto/create-worker.input";
-import { EndShiftInput } from "./dto/end-shift.input";
+import { EndWorkerShiftInput } from "./dto/end-shift.input";
 import { ProcessMobileMoneyPaymentInput } from "./dto/process-mobile-money.input";
 import { SendChatMessageInput } from "./dto/send-chat-message.input";
 import { StartShiftInput } from "./dto/start-shift.input";
@@ -282,7 +282,7 @@ export class WorkerResolver {
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
 	@Mutation(() => SaleEntityWorker)
-	async completeSale(
+	async completeWorkerSale(
 		@Args("id") id: string,
 		@Args("paymentMethod") paymentMethod: string,
 	) {
@@ -359,7 +359,7 @@ export class WorkerResolver {
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker")
 	@Mutation(() => ShiftEntityWorker)
-	async endShift(@Args("input") input: EndShiftInput) {
+	async endWorkerShift(@Args("input") input: EndWorkerShiftInput) {
 		const shift = await this.workerService.endShift(input);
 		await this.pubSub.publish("shiftEnded", {
 			shiftEnded: shift,

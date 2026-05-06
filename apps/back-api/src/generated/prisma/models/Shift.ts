@@ -28,10 +28,14 @@ export type AggregateShift = {
 
 export type ShiftAvgAggregateOutputType = {
   sales: number | null
+  transactionCount: number | null
+  refundTotal: number | null
 }
 
 export type ShiftSumAggregateOutputType = {
   sales: number | null
+  transactionCount: number | null
+  refundTotal: number | null
 }
 
 export type ShiftMinAggregateOutputType = {
@@ -41,6 +45,8 @@ export type ShiftMinAggregateOutputType = {
   startTime: Date | null
   endTime: Date | null
   sales: number | null
+  transactionCount: number | null
+  refundTotal: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +58,8 @@ export type ShiftMaxAggregateOutputType = {
   startTime: Date | null
   endTime: Date | null
   sales: number | null
+  transactionCount: number | null
+  refundTotal: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,6 +71,8 @@ export type ShiftCountAggregateOutputType = {
   startTime: number
   endTime: number
   sales: number
+  transactionCount: number
+  refundTotal: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -71,10 +81,14 @@ export type ShiftCountAggregateOutputType = {
 
 export type ShiftAvgAggregateInputType = {
   sales?: true
+  transactionCount?: true
+  refundTotal?: true
 }
 
 export type ShiftSumAggregateInputType = {
   sales?: true
+  transactionCount?: true
+  refundTotal?: true
 }
 
 export type ShiftMinAggregateInputType = {
@@ -84,6 +98,8 @@ export type ShiftMinAggregateInputType = {
   startTime?: true
   endTime?: true
   sales?: true
+  transactionCount?: true
+  refundTotal?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,6 +111,8 @@ export type ShiftMaxAggregateInputType = {
   startTime?: true
   endTime?: true
   sales?: true
+  transactionCount?: true
+  refundTotal?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +124,8 @@ export type ShiftCountAggregateInputType = {
   startTime?: true
   endTime?: true
   sales?: true
+  transactionCount?: true
+  refundTotal?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,6 +224,8 @@ export type ShiftGroupByOutputType = {
   startTime: Date
   endTime: Date | null
   sales: number
+  transactionCount: number
+  refundTotal: number
   createdAt: Date
   updatedAt: Date
   _count: ShiftCountAggregateOutputType | null
@@ -238,6 +260,8 @@ export type ShiftWhereInput = {
   startTime?: Prisma.DateTimeFilter<"Shift"> | Date | string
   endTime?: Prisma.DateTimeNullableFilter<"Shift"> | Date | string | null
   sales?: Prisma.FloatFilter<"Shift"> | number
+  transactionCount?: Prisma.IntFilter<"Shift"> | number
+  refundTotal?: Prisma.FloatFilter<"Shift"> | number
   createdAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   worker?: Prisma.XOR<Prisma.WorkerScalarRelationFilter, Prisma.WorkerWhereInput>
@@ -251,6 +275,8 @@ export type ShiftOrderByWithRelationInput = {
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrderInput | Prisma.SortOrder
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   worker?: Prisma.WorkerOrderByWithRelationInput
@@ -267,6 +293,8 @@ export type ShiftWhereUniqueInput = Prisma.AtLeast<{
   startTime?: Prisma.DateTimeFilter<"Shift"> | Date | string
   endTime?: Prisma.DateTimeNullableFilter<"Shift"> | Date | string | null
   sales?: Prisma.FloatFilter<"Shift"> | number
+  transactionCount?: Prisma.IntFilter<"Shift"> | number
+  refundTotal?: Prisma.FloatFilter<"Shift"> | number
   createdAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   worker?: Prisma.XOR<Prisma.WorkerScalarRelationFilter, Prisma.WorkerWhereInput>
@@ -280,6 +308,8 @@ export type ShiftOrderByWithAggregationInput = {
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrderInput | Prisma.SortOrder
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ShiftCountOrderByAggregateInput
@@ -299,6 +329,8 @@ export type ShiftScalarWhereWithAggregatesInput = {
   startTime?: Prisma.DateTimeWithAggregatesFilter<"Shift"> | Date | string
   endTime?: Prisma.DateTimeNullableWithAggregatesFilter<"Shift"> | Date | string | null
   sales?: Prisma.FloatWithAggregatesFilter<"Shift"> | number
+  transactionCount?: Prisma.IntWithAggregatesFilter<"Shift"> | number
+  refundTotal?: Prisma.FloatWithAggregatesFilter<"Shift"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Shift"> | Date | string
 }
@@ -308,6 +340,8 @@ export type ShiftCreateInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   worker: Prisma.WorkerCreateNestedOneWithoutShiftsInput
@@ -321,6 +355,8 @@ export type ShiftUncheckedCreateInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -330,6 +366,8 @@ export type ShiftUpdateInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   worker?: Prisma.WorkerUpdateOneRequiredWithoutShiftsNestedInput
@@ -343,6 +381,8 @@ export type ShiftUncheckedUpdateInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -354,6 +394,8 @@ export type ShiftCreateManyInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -363,6 +405,8 @@ export type ShiftUpdateManyMutationInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -374,6 +418,8 @@ export type ShiftUncheckedUpdateManyInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -395,12 +441,16 @@ export type ShiftCountOrderByAggregateInput = {
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type ShiftAvgOrderByAggregateInput = {
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
 }
 
 export type ShiftMaxOrderByAggregateInput = {
@@ -410,6 +460,8 @@ export type ShiftMaxOrderByAggregateInput = {
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -421,12 +473,16 @@ export type ShiftMinOrderByAggregateInput = {
   startTime?: Prisma.SortOrder
   endTime?: Prisma.SortOrder
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type ShiftSumOrderByAggregateInput = {
   sales?: Prisma.SortOrder
+  transactionCount?: Prisma.SortOrder
+  refundTotal?: Prisma.SortOrder
 }
 
 export type ShiftCreateNestedManyWithoutWorkerInput = {
@@ -518,6 +574,8 @@ export type ShiftCreateWithoutWorkerInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   store: Prisma.StoreCreateNestedOneWithoutShiftsInput
@@ -529,6 +587,8 @@ export type ShiftUncheckedCreateWithoutWorkerInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -569,6 +629,8 @@ export type ShiftScalarWhereInput = {
   startTime?: Prisma.DateTimeFilter<"Shift"> | Date | string
   endTime?: Prisma.DateTimeNullableFilter<"Shift"> | Date | string | null
   sales?: Prisma.FloatFilter<"Shift"> | number
+  transactionCount?: Prisma.IntFilter<"Shift"> | number
+  refundTotal?: Prisma.FloatFilter<"Shift"> | number
   createdAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Shift"> | Date | string
 }
@@ -578,6 +640,8 @@ export type ShiftCreateWithoutStoreInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   worker: Prisma.WorkerCreateNestedOneWithoutShiftsInput
@@ -589,6 +653,8 @@ export type ShiftUncheckedCreateWithoutStoreInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -625,6 +691,8 @@ export type ShiftCreateManyWorkerInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -634,6 +702,8 @@ export type ShiftUpdateWithoutWorkerInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   store?: Prisma.StoreUpdateOneRequiredWithoutShiftsNestedInput
@@ -645,6 +715,8 @@ export type ShiftUncheckedUpdateWithoutWorkerInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -655,6 +727,8 @@ export type ShiftUncheckedUpdateManyWithoutWorkerInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -665,6 +739,8 @@ export type ShiftCreateManyStoreInput = {
   startTime: Date | string
   endTime?: Date | string | null
   sales?: number
+  transactionCount?: number
+  refundTotal?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -674,6 +750,8 @@ export type ShiftUpdateWithoutStoreInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   worker?: Prisma.WorkerUpdateOneRequiredWithoutShiftsNestedInput
@@ -685,6 +763,8 @@ export type ShiftUncheckedUpdateWithoutStoreInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -695,6 +775,8 @@ export type ShiftUncheckedUpdateManyWithoutStoreInput = {
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sales?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -708,6 +790,8 @@ export type ShiftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   startTime?: boolean
   endTime?: boolean
   sales?: boolean
+  transactionCount?: boolean
+  refundTotal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
@@ -721,6 +805,8 @@ export type ShiftSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   startTime?: boolean
   endTime?: boolean
   sales?: boolean
+  transactionCount?: boolean
+  refundTotal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
@@ -734,6 +820,8 @@ export type ShiftSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   startTime?: boolean
   endTime?: boolean
   sales?: boolean
+  transactionCount?: boolean
+  refundTotal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
@@ -747,11 +835,13 @@ export type ShiftSelectScalar = {
   startTime?: boolean
   endTime?: boolean
   sales?: boolean
+  transactionCount?: boolean
+  refundTotal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ShiftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workerId" | "storeId" | "startTime" | "endTime" | "sales" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
+export type ShiftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workerId" | "storeId" | "startTime" | "endTime" | "sales" | "transactionCount" | "refundTotal" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
 export type ShiftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
@@ -778,6 +868,8 @@ export type $ShiftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     startTime: Date
     endTime: Date | null
     sales: number
+    transactionCount: number
+    refundTotal: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["shift"]>
@@ -1211,6 +1303,8 @@ export interface ShiftFieldRefs {
   readonly startTime: Prisma.FieldRef<"Shift", 'DateTime'>
   readonly endTime: Prisma.FieldRef<"Shift", 'DateTime'>
   readonly sales: Prisma.FieldRef<"Shift", 'Float'>
+  readonly transactionCount: Prisma.FieldRef<"Shift", 'Int'>
+  readonly refundTotal: Prisma.FieldRef<"Shift", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Shift", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Shift", 'DateTime'>
 }

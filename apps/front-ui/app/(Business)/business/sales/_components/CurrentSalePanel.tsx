@@ -8,6 +8,7 @@ import {
   Mail,
   Minus,
   Plus,
+  RefreshCcw,
   Search,
   ShoppingCart,
   User,
@@ -30,22 +31,19 @@ import ClientSelectionModal from "./ClientSelectionModal";
 import NewSaleModal from "./NewSaleModal";
 import { useSales } from "../../_hooks/use-sales";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
-import { on } from "events";
 
 interface CurrentSalePanelProps {
   storeId: string;
-  currentSale: any; // Replace with SaleEntity type
+  sale: any;
   onNewSale: (workerId?: string, clientId?: string) => Promise<any>;
-  onCompleteSale?: (currentSale: any) => void;
   userRole: string;
   userId: string;
 }
 
 export default function CurrentSalePanel({
   storeId,
-  currentSale,
+  sale,
   onNewSale,
-  onCompleteSale,
   userRole,
   userId,
 }: CurrentSalePanelProps) {
@@ -61,6 +59,8 @@ export default function CurrentSalePanel({
   const [selectedClient, setSelectedClient] = useState<any>(null);
   const [showClientModal, setShowClientModal] = useState(false);
   const [showNewSaleModal, setShowNewSaleModal] = useState(false);
+  const [currentSale, setCurrentSale] = useState<any>(sale);
+
   const { showToast } = useToast();
 
   // Get products for the store
@@ -76,16 +76,6 @@ export default function CurrentSalePanel({
     skip: !storeId,
   });
 
-  // Get current sale details if ID exists
-  const {
-    data: saleData,
-    loading: saleLoading,
-    refetch: refetchSale,
-  } = useQuery(GET_SALE_BY_ID, {
-    variables: { id: currentSale?.id },
-    skip: !currentSale?.id,
-  });
-
   const [addSaleProduct] = useMutation(ADD_SALE_PRODUCT);
   const [updateSaleProduct] = useMutation(UPDATE_SALE_PRODUCT);
   const [removeSaleProduct] = useMutation(REMOVE_SALE_PRODUCT);
@@ -99,12 +89,31 @@ export default function CurrentSalePanel({
     handleSync,
   } = useIndexedDB();
 
-  // Auto-refresh when currentSale changes
+  const {
+    activeSalesData,
+    createSale,
+    refetchSalesHistory,
+    refetchActiveSales,
+  } = useSales(storeId || "", userId || "", userRole || "");
+
+  const {
+    data: saleData,
+    loading: saleLoading,
+    refetch: refetchSale,
+  } = useQuery(GET_SALE_BY_ID, {
+    variables: { id: currentSale?.id },
+    skip: !currentSale?.id,
+    fetchPolicy: "cache-and-network",
+  });
+  const currentSaleDetails = saleData?.sale || currentSale;
+
+  // Auto-sync when coming online
   useEffect(() => {
-    if (currentSale?.id) {
-      refetchSale();
+    if (!isOnline) {
+      const locallyFetchedSale = getLocalSales();
+      setCurrentSale(locallyFetchedSale);
     }
-  }, [currentSale, refetchSale]);
+  }, [isOnline, getLocalSales]);
 
   // Auto-sync when coming online
   useEffect(() => {
@@ -132,9 +141,33 @@ export default function CurrentSalePanel({
         product.description?.toLowerCase().includes(searchQuery.toLowerCase()),
     ) || [];
 
-  const currentSaleDetails = saleData?.sale || currentSale;
+  // Get current active sale
+  const getCurrentSale = useCallback(() => {
+    if (!activeSalesData?.activeSales?.length) return null;
+    return activeSalesData.activeSales[0]; // Assuming only one active sale per worker
+  }, [activeSalesData]);
 
-  const { createSale } = useSales(storeId || "", userId || "", userRole || "");
+  const refreshFunction = () => {
+    refetchActiveSales();
+
+    const cs = getCurrentSale();
+    console.log("Current Sale: ", { cs });
+    if (cs && cs.status === "OPEN") {
+      setCurrentSale(cs);
+
+      refetchSale({
+        variables: {
+          id: cs.id,
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!currentSaleDetails) {
+      refreshFunction();
+    }
+  }, [currentSaleDetails]);
 
   const handleAddProduct = async (product: any) => {
     if (!isOnline) {
@@ -153,7 +186,8 @@ export default function CurrentSalePanel({
         totalAmount: (currentSale?.totalAmount || 0) + product.price * quantity,
       };
 
-      onCompleteSale?.(updatedSale);
+      setCurrentSale(updatedSale);
+
       await saveLocalSale(updatedSale);
       await saveOfflineOperation({
         type: "ADD_PRODUCT",
@@ -182,12 +216,12 @@ export default function CurrentSalePanel({
               },
             },
           });
-          refetchSale();
+
           setSelectedProduct(null);
           setQuantity(1);
           setModifiers({});
           setShowModifiers(false);
-          onCompleteSale?.(sale);
+          setCurrentSale(sale);
         }, 2000);
       } else {
         try {
@@ -201,7 +235,7 @@ export default function CurrentSalePanel({
               },
             },
           });
-          refetchSale();
+
           setSelectedProduct(null);
           setQuantity(1);
           setModifiers({});
@@ -214,6 +248,7 @@ export default function CurrentSalePanel({
           );
         }
       }
+      refreshFunction();
     }
   };
 
@@ -231,7 +266,6 @@ export default function CurrentSalePanel({
           },
         },
       });
-      refetchSale();
     } catch (error: any) {
       showToast("error", "Error", error.message || "Failed to remove product");
     }
@@ -250,7 +284,8 @@ export default function CurrentSalePanel({
           .reduce((sum: number, sp: any) => sum + sp.price * sp.quantity, 0),
       };
 
-      onCompleteSale?.(updatedSale);
+      setCurrentSale(updatedSale);
+
       await saveLocalSale(updatedSale);
       await saveOfflineOperation({
         type: "REMOVE_PRODUCT",
@@ -268,7 +303,6 @@ export default function CurrentSalePanel({
         await removeSaleProduct({
           variables: { id: saleProductId },
         });
-        refetchSale();
       } catch (error: any) {
         showToast(
           "error",
@@ -299,19 +333,19 @@ export default function CurrentSalePanel({
         saleId: currentSale.id,
         paymentMethod: paymentMethod,
       });
-
       showToast(
         "info",
         "Offline Mode",
         "Sale completed offline. Will sync when online.",
       );
-      onCompleteSale?.(null);
+      setCurrentSale(null);
       setPaymentMethod(null);
     } else {
       try {
         await completeSale({
           variables: {
             id: currentSaleDetails.id,
+            clientId: selectedClient?.id || currentSale.clientId,
             paymentMethod,
             paymentDetails:
               Object.keys(paymentDetails).length > 0
@@ -324,8 +358,9 @@ export default function CurrentSalePanel({
           "Sale Completed",
           "Payment processed successfully",
         );
-        const newSale = await onNewSale();
-        onCompleteSale?.(newSale);
+        // const newSale = await onNewSale();
+        // setCurrentSale(newSale);
+        // refreshFunction();
       } catch (error: any) {
         showToast("error", "Error", error.message);
       } finally {
@@ -333,6 +368,9 @@ export default function CurrentSalePanel({
         setPaymentMethod(null);
         setPaymentDetails({});
         setShowPaymentForm(false);
+        setSelectedClient(null);
+        setCurrentSale(null);
+        refetchSalesHistory();
       }
     }
   };
@@ -376,19 +414,33 @@ export default function CurrentSalePanel({
           <p className="text-muted-foreground mb-6">
             Start a new sale to begin processing transactions
           </p>
-          <Button
-            size="lg"
-            onClick={() => setShowNewSaleModal(true)}
-            className="bg-primary hover:bg-accent text-primary-foreground"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Start New Sale
-          </Button>
+          <div className="flex flex-col items-center space-y-3 ">
+            <Button
+              variant="link"
+              onClick={refreshFunction}
+              className="underline cursor-pointer"
+            >
+              <RefreshCcw className="h-4 w-4 mr-2" />
+              reload current sale
+            </Button>
+            <span className="text-italic text-gray-500">or</span>
+            <Button
+              size="lg"
+              onClick={() => setShowNewSaleModal(true)}
+              className="bg-primary hover:bg-accent text-primary-foreground"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Start New Sale
+            </Button>
+          </div>
         </div>
         {/* New Sale Modal */}
         <NewSaleModal
           isOpen={showNewSaleModal}
-          onClose={() => setShowNewSaleModal(false)}
+          onClose={() => {
+            setShowNewSaleModal(false);
+            refreshFunction();
+          }}
           onCreateSale={createSale}
           storeId={storeId || ""}
           userRole={userRole || ""}
@@ -410,13 +462,18 @@ export default function CurrentSalePanel({
               : "New Sale"}
           </p>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setShowNewSaleModal(true)}
-        >
-          <ArrowRightLeft className="h-5 w-5" />
-        </Button>
+        <div className="space-x-3">
+          <Button variant="ghost" size="icon" onClick={refreshFunction}>
+            <RefreshCcw className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowNewSaleModal(true)}
+          >
+            <ArrowRightLeft className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
 
       {/* Client Selection */}
@@ -1135,7 +1192,10 @@ export default function CurrentSalePanel({
       {/* New Sale Modal */}
       <NewSaleModal
         isOpen={showNewSaleModal}
-        onClose={() => setShowNewSaleModal(!showNewSaleModal)}
+        onClose={() => {
+          setShowNewSaleModal(!showNewSaleModal);
+          refreshFunction();
+        }}
         onCreateSale={onNewSale}
         storeId={storeId}
         userRole={userRole}

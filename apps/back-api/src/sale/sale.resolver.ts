@@ -165,6 +165,7 @@ export class SaleResolver {
 	async completeSale(
 		@Context() context: any,
 		@Args("id") id: string,
+		@Args("clientId") clientId: string,
 		@Args("paymentMethod")
 		paymentMethod: PaymentMethod,
 		@Args("paymentDetails", { nullable: true })
@@ -174,9 +175,10 @@ export class SaleResolver {
 		// Create CloseSaleInput from individual parameters
 		const closeSaleInput: CloseSaleInput = {
 			saleId: id,
+			clientId,
 			paymentMethod,
 			paymentDetails,
-			status: "CLOSED",
+			status: "COMPLETED",
 		};
 		return this.saleService.close(closeSaleInput, user);
 	}
@@ -237,19 +239,19 @@ export class SaleResolver {
 		return this.saleService.generateReceipt(input, context.req.user);
 	}
 
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
-	@Mutation(() => ReceiptEntity, {
-		description:
-			"Generates a PDF receipt using pdfkit and optionally emails it.",
-	})
-	async generateReceiptWithPDFKit(
-		@Args("generateReceiptInput")
-		input: GenerateReceiptInput,
-		@Context() context,
-	) {
-		return this.saleService.generateReceiptWithPDFKit(input, context.req.user);
-	}
+	// @UseGuards(JwtAuthGuard, RolesGuard)
+	// @Roles("business", "worker")
+	// @Mutation(() => ReceiptEntity, {
+	// 	description:
+	// 		"Generates a PDF receipt using pdfkit and optionally emails it.",
+	// })
+	// async generateReceiptWithPDFKit(
+	// 	@Args("generateReceiptInput")
+	// 	input: GenerateReceiptInput,
+	// 	@Context() context,
+	// ) {
+	// 	return this.saleService.generateReceiptWithPDFKit(input, context.req.user);
+	// }
 
 	// ============ SUBSCRIPTIONS ============
 

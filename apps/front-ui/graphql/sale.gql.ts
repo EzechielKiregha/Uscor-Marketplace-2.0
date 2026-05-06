@@ -303,8 +303,8 @@ export const PROCESS_RETURN = gql`
 `;
 
 export const GENERATE_RECEIPT = gql`
-  mutation GenerateReceipt($saleId: String!) {
-    generateReceipt(saleId: $saleId) {
+  mutation GenerateSaleReceipt($saleId: String!) {
+    generateSaleReceipt(saleId: $saleId) {
       filePath
       emailSent
     }

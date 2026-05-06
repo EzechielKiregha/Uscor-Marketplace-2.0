@@ -28,6 +28,9 @@ export class ShiftEntityWorker {
 	@Field({ nullable: true })
 	sales?: number;
 
+	@Field({ nullable: true })
+	transactionCount?: number;
+
 	@Field()
 	createdAt: Date;
 

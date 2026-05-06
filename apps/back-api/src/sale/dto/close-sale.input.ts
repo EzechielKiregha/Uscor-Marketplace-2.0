@@ -69,6 +69,10 @@ export class CloseSaleInput {
 	@IsString()
 	saleId: string;
 
+	@Field({nullable: true})
+	@IsOptional()
+	clientId?: string;
+
 	@Field(() => PaymentMethod)
 	@IsEnum(PaymentMethod)
 	paymentMethod: PaymentMethod;
