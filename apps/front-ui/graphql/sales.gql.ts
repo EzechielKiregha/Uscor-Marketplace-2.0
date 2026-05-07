@@ -154,6 +154,7 @@ export const GET_SALES_HISTORY = gql`
       items {
         id
         storeId
+        receiptUrl
         store {
           id
           name
@@ -407,8 +408,10 @@ export const CREATE_RETURN = gql`
 export const GENERATE_RECEIPT = gql`
   mutation GenerateReceipt($generateReceiptInput: GenerateReceiptInput!) {
     generateReceipt(generateReceiptInput: $generateReceiptInput) {
-      filePath
+      receiptUrl # Return the URL
       emailSent
+      fileName
+      mediaId
     }
   }
 `;

@@ -11,8 +11,13 @@ import {
   Settings,
   ShoppingCart,
   Users,
+  ChevronLeft,
+  ChevronRight,
+  SunIcon,
+  MoonIcon,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import Loader from "@/components/seraui/Loader";
 import { Button } from "@/components/ui/button";
@@ -21,6 +26,18 @@ import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import type { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import NotificationsPopover from "@/components/seraui/Notifications";
+
+const workerSideLinks = [
+  { section: "pos", icon: ShoppingCart, label: "Point of Sale" },
+  { section: "inventory", icon: Package, label: "Inventory" },
+  { section: "shifts", icon: Clock, label: "Shifts" },
+  { section: "chats", icon: MessageSquare, label: "Chats" },
+  { section: "reports", icon: BarChart, label: "Reports" },
+  { section: "profile", icon: Settings, label: "Profile" },
+];
 
 interface WorkerLayoutProps {
   children: React.ReactNode;
@@ -75,12 +92,17 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
     skip: !user?.id,
   });
   const { isOnline, syncing } = useIndexedDB();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     if (!selectedStoreId && storesData?.stores?.length > 0) {
       setSelectedStoreId(storesData.stores[0].id);
     }
   }, [storesData, selectedStoreId]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   // Handle loading and error states after all hooks are called
   if (authLoading || workerLoading || storesLoading)
@@ -222,95 +244,65 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
               )}
 
               {/* Online Status */}
-              <div className="mt-3 flex items-center gap-2 p-2 bg-muted rounded-lg">
-                <div
-                  className={`w-3 h-3 rounded-full ${isOnline ? "bg-success" : "bg-warning"}`}
-                ></div>
-                <span className="text-xs">
-                  {isOnline ? "Online" : "Offline"}
-                </span>
-                {syncing && (
-                  <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin ml-auto"></div>
-                )}
+              {/* <div className="mt-3 flex items-center gap-2 p-2 bg-muted rounded-lg"> */}
+              {syncing && (
+                <div className="w-3 h-3 my-2 border-2 p-2 border-primary border-t-transparent rounded-full animate-spin ml-auto"></div>
+              )}
+              {/* </div> */}
+              <div className="flex mt-3 flex-row justify-between gap-2 p-2 bg-muted rounded-lg">
+                <div className=" flex items-center ">
+                  <div
+                    className={`w-3 h-3 rounded-full ${isOnline ? "bg-success" : "bg-warning"}`}
+                  ></div>
+                  <span className="text-base">
+                    {isOnline ? "Online" : "Offline"}
+                  </span>
+                </div>
+                <div className="flex justify-end">
+                  {/* Notifications Popover */}
+                  <NotificationsPopover />
+                  <Button
+                    onClick={toggleTheme}
+                    variant="ghost"
+                    size="sm"
+                    className="text-sm cursor-pointer font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+                    aria-label="Toggle theme"
+                  >
+                    {theme === "dark" ? (
+                      <SunIcon className="h-5 w-5" />
+                    ) : (
+                      <MoonIcon className="h-5 w-5" />
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* Navigation */}
             <nav className="flex-1 p-2">
               <div className="space-y-1">
-                <Button
-                  variant={activeSection === "pos" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setActiveSection("pos");
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Point of Sale
-                </Button>
-
-                <Button
-                  variant={
-                    activeSection === "inventory" ? "secondary" : "ghost"
-                  }
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setActiveSection("inventory");
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <Package className="h-4 w-4 mr-2" />
-                  Inventory
-                </Button>
-
-                <Button
-                  variant={activeSection === "shifts" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setActiveSection("shifts");
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <Clock className="h-4 w-4 mr-2" />
-                  Shifts
-                </Button>
-
-                <Button
-                  variant={activeSection === "chats" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setActiveSection("chats");
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Chats
-                </Button>
-
-                <Button
-                  variant={activeSection === "reports" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setActiveSection("reports");
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <BarChart className="h-4 w-4 mr-2" />
-                  Reports
-                </Button>
-
-                <Button
-                  variant={activeSection === "profile" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setActiveSection("profile");
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  Profile
-                </Button>
+                {workerSideLinks.map((item) => {
+                  const isActive = activeSection === item.section;
+                  return (
+                    <Button
+                      key={item.section}
+                      className={cn(
+                        `flex justify-start border-b-0 border-orange-700 w-full px-4 py-2 gap-1.5 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]`,
+                        isActive
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground",
+                      )}
+                      variant={isActive ? "ghost" : "ghost"}
+                      onClick={() => {
+                        setActiveSection(item.section as WorkerSection);
+                        setIsSidebarOpen(false);
+                      }}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </Button>
+                  );
+                })}
               </div>
             </nav>
 

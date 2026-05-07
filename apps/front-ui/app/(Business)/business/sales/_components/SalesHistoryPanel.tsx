@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Calendar, Download, Filter, Package, Search } from "lucide-react";
+import { Calendar, Download, Eye, Filter, Package, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,25 +9,20 @@ import { Input } from "@/components/ui/input";
 import { useMutation } from "@apollo/client";
 import { GENERATE_RECEIPT } from "@/graphql/sales.gql";
 import { useToast } from "@/components/toast-provider";
+import ReceiptGenerator from "./ReceiptGenerator";
 
 interface SalesHistoryPanelProps {
-  storeId: string;
-  salesHistory: any[]; // Replace with SaleEntity[]
+  salesHistory: any[];
   loading: boolean;
 }
 
 export default function SalesHistoryPanel({
-  storeId,
   salesHistory,
   loading,
 }: SalesHistoryPanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, _setDateRange] = useState<{ start?: Date; end?: Date }>({});
   const [selectedSale, setSelectedSale] = useState<any>(null);
-  const { showToast } = useToast();
-  const [isDownloading, serIsDownloading] = useState(false);
-
-  const [generateReceipt] = useMutation(GENERATE_RECEIPT);
 
   const filteredSales = useMemo(() => {
     if (!salesHistory) return [];
@@ -80,29 +75,8 @@ export default function SalesHistoryPanel({
     }
   };
 
-  const handleReceiptGen = async (saleId: string, clientEmail: string) => {
-    if (!saleId || !clientEmail) return;
-    serIsDownloading(true);
-
-    const generateReceiptInput = {
-      saleId: saleId,
-      email: clientEmail,
-    };
-
-    try {
-      await generateReceipt({
-        variables: {
-          generateReceiptInput,
-        },
-      });
-      showToast("success", "Receipt", "In download process");
-    } catch (error: any) {
-      serIsDownloading(false);
-      showToast("error", "Receipt", "Failed to download");
-      console.log(error.message);
-    } finally {
-      serIsDownloading(false);
-    }
+  const handleView = (url: string) => {
+    window.open(url, "_blank");
   };
 
   if (loading) {
@@ -187,6 +161,12 @@ export default function SalesHistoryPanel({
                         {format(new Date(sale.createdAt), "MMM d, yyyy")}
                       </p>
                       {getStatusBadge(sale.status)}
+                      {sale.receiptUrl && (
+                        <Button type="button" size="sm" variant="link">
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Receipt
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -277,22 +257,27 @@ export default function SalesHistoryPanel({
               </div>
 
               <div className="flex justify-end gap-3 mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedSale(null)}
-                  disabled={isDownloading}
-                >
+                <Button variant="outline" onClick={() => setSelectedSale(null)}>
                   Close
                 </Button>
-                <Button
-                  onClick={() =>
-                    handleReceiptGen(selectedSale.id, selectedSale.client.email)
-                  }
-                  disabled={isDownloading}
-                  className="bg-primary hover:bg-accent text-primary-foreground"
-                >
-                  {isDownloading ? "Printing..." : "Print Receipt"}
-                </Button>
+                {selectedSale.receiptUrl ? (
+                  <Button
+                    type="button"
+                    variant="default"
+                    onClick={() => handleView(selectedSale.receiptUrl)}
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    View Receipt
+                  </Button>
+                ) : (
+                  <ReceiptGenerator
+                    saleId={selectedSale.id}
+                    clientEmail={selectedSale.client?.email}
+                    onReceiptGenerated={(receipt) => {
+                      console.log("Receipt generated:", receipt);
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>

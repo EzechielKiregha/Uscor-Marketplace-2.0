@@ -224,6 +224,7 @@ scalar JSON
 
 type SaleEntity {
   id: String
+  receiptUrl: String
   storeId: String
   store: StoreEntity
   workerId: String
@@ -1436,7 +1437,12 @@ type PaginatedSalesResponse {
 }
 
 type ReceiptEntity {
-  filePath: String!
+  filePath: String
+  receiptUrl: String
+  mediaId: String
+  fileName: String
+  fileSize: String
+  createdAt: String
   emailSent: Boolean
 }
 

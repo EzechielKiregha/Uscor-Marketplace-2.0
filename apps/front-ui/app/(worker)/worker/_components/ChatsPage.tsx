@@ -66,6 +66,7 @@ export default function ChatsPage({}: ChatsPageProps) {
   } = useQuery(GET_CHATS, {
     variables: {
       workerId: user?.id,
+      businessId: "7659de10-20da-4819-9285-f220cb0b0940",
       status: filterStatus || undefined,
       negotiationType: filterType || undefined,
       search: searchQuery || undefined,

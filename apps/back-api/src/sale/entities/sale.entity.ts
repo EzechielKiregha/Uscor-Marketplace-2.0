@@ -17,6 +17,9 @@ export class SaleEntity {
 	@Field({ nullable: true })
 	id?: string;
 
+	@Field(() => String, { nullable: true })
+	receiptUrl: string;
+
 	@Field({ nullable: true })
 	storeId?: string;
 

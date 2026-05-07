@@ -22,6 +22,7 @@ datasource db {
 
 enum MediaType {
   IMAGE
+  DOCUMENT
   VIDEO
 }
 
@@ -888,6 +889,9 @@ model Sale {
   updatedAt    DateTime       @updatedAt
   saleProducts SaleProduct[]
   returns      Return[]
+
+  // Add this field to directly link the receipt URL to the sale
+  receiptUrl           String?
 
   // Queries like “sales by store” & “recent sales”
   @@index([storeId])

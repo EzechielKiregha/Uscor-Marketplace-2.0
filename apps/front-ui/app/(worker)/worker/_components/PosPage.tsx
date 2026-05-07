@@ -59,7 +59,6 @@ export default function PosPage({ selectedStoreId }: PosPageProps) {
         {/* Right: Dashboard & History */}
         <div className="space-y-6">
           <SalesHistoryPanel
-            storeId={selectedStoreId || ""}
             salesHistory={getSalesHistory()}
             loading={salesHistoryLoading}
           />

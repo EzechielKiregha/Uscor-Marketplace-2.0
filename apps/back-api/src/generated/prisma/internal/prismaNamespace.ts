@@ -5438,7 +5438,8 @@ export const SaleScalarFieldEnum = {
   paymentMethod: 'paymentMethod',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  receiptUrl: 'receiptUrl'
 } as const
 
 export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
