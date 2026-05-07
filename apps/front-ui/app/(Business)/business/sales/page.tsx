@@ -151,7 +151,6 @@ export default function SalesManagementPage() {
         {/* Right: Dashboard & History */}
         <div className="space-y-6">
           <SalesHistoryPanel
-            storeId={selectedStoreId || ""}
             salesHistory={getSalesHistory()}
             loading={salesHistoryLoading}
           />
