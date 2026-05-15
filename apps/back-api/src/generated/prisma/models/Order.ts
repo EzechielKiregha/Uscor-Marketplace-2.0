@@ -41,6 +41,7 @@ export type OrderMinAggregateOutputType = {
   clientId: string | null
   deliveryFee: number | null
   deliveryAddress: string | null
+  clientOrderId: string | null
   qrCode: string | null
   totalAmount: number | null
   createdAt: Date | null
@@ -52,6 +53,7 @@ export type OrderMaxAggregateOutputType = {
   clientId: string | null
   deliveryFee: number | null
   deliveryAddress: string | null
+  clientOrderId: string | null
   qrCode: string | null
   totalAmount: number | null
   createdAt: Date | null
@@ -63,6 +65,7 @@ export type OrderCountAggregateOutputType = {
   clientId: number
   deliveryFee: number
   deliveryAddress: number
+  clientOrderId: number
   qrCode: number
   totalAmount: number
   createdAt: number
@@ -86,6 +89,7 @@ export type OrderMinAggregateInputType = {
   clientId?: true
   deliveryFee?: true
   deliveryAddress?: true
+  clientOrderId?: true
   qrCode?: true
   totalAmount?: true
   createdAt?: true
@@ -97,6 +101,7 @@ export type OrderMaxAggregateInputType = {
   clientId?: true
   deliveryFee?: true
   deliveryAddress?: true
+  clientOrderId?: true
   qrCode?: true
   totalAmount?: true
   createdAt?: true
@@ -108,6 +113,7 @@ export type OrderCountAggregateInputType = {
   clientId?: true
   deliveryFee?: true
   deliveryAddress?: true
+  clientOrderId?: true
   qrCode?: true
   totalAmount?: true
   createdAt?: true
@@ -206,6 +212,7 @@ export type OrderGroupByOutputType = {
   clientId: string
   deliveryFee: number
   deliveryAddress: string | null
+  clientOrderId: string | null
   qrCode: string | null
   totalAmount: number
   createdAt: Date
@@ -240,6 +247,7 @@ export type OrderWhereInput = {
   clientId?: Prisma.StringFilter<"Order"> | string
   deliveryFee?: Prisma.FloatFilter<"Order"> | number
   deliveryAddress?: Prisma.StringNullableFilter<"Order"> | string | null
+  clientOrderId?: Prisma.StringNullableFilter<"Order"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Order"> | string | null
   totalAmount?: Prisma.FloatFilter<"Order"> | number
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -254,6 +262,7 @@ export type OrderOrderByWithRelationInput = {
   clientId?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   deliveryAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  clientOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -271,6 +280,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   clientId?: Prisma.StringFilter<"Order"> | string
   deliveryFee?: Prisma.FloatFilter<"Order"> | number
   deliveryAddress?: Prisma.StringNullableFilter<"Order"> | string | null
+  clientOrderId?: Prisma.StringNullableFilter<"Order"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Order"> | string | null
   totalAmount?: Prisma.FloatFilter<"Order"> | number
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -285,6 +295,7 @@ export type OrderOrderByWithAggregationInput = {
   clientId?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   deliveryAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  clientOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -304,6 +315,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   clientId?: Prisma.StringWithAggregatesFilter<"Order"> | string
   deliveryFee?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   deliveryAddress?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  clientOrderId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   qrCode?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   totalAmount?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -314,6 +326,7 @@ export type OrderCreateInput = {
   id?: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -328,6 +341,7 @@ export type OrderUncheckedCreateInput = {
   clientId: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -340,6 +354,7 @@ export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -354,6 +369,7 @@ export type OrderUncheckedUpdateInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -367,6 +383,7 @@ export type OrderCreateManyInput = {
   clientId: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -377,6 +394,7 @@ export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,6 +406,7 @@ export type OrderUncheckedUpdateManyInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -409,6 +428,7 @@ export type OrderCountOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   deliveryAddress?: Prisma.SortOrder
+  clientOrderId?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -425,6 +445,7 @@ export type OrderMaxOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   deliveryAddress?: Prisma.SortOrder
+  clientOrderId?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -436,6 +457,7 @@ export type OrderMinOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   deliveryAddress?: Prisma.SortOrder
+  clientOrderId?: Prisma.SortOrder
   qrCode?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -533,6 +555,7 @@ export type OrderCreateWithoutClientInput = {
   id?: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -545,6 +568,7 @@ export type OrderUncheckedCreateWithoutClientInput = {
   id?: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -587,6 +611,7 @@ export type OrderScalarWhereInput = {
   clientId?: Prisma.StringFilter<"Order"> | string
   deliveryFee?: Prisma.FloatFilter<"Order"> | number
   deliveryAddress?: Prisma.StringNullableFilter<"Order"> | string | null
+  clientOrderId?: Prisma.StringNullableFilter<"Order"> | string | null
   qrCode?: Prisma.StringNullableFilter<"Order"> | string | null
   totalAmount?: Prisma.FloatFilter<"Order"> | number
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -597,6 +622,7 @@ export type OrderCreateWithoutProductsInput = {
   id?: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -610,6 +636,7 @@ export type OrderUncheckedCreateWithoutProductsInput = {
   clientId: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -637,6 +664,7 @@ export type OrderUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -650,6 +678,7 @@ export type OrderUncheckedUpdateWithoutProductsInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -661,6 +690,7 @@ export type OrderCreateWithoutPaymentInput = {
   id?: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -674,6 +704,7 @@ export type OrderUncheckedCreateWithoutPaymentInput = {
   clientId: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -701,6 +732,7 @@ export type OrderUpdateWithoutPaymentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -714,6 +746,7 @@ export type OrderUncheckedUpdateWithoutPaymentInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -725,6 +758,7 @@ export type OrderCreateManyClientInput = {
   id?: string
   deliveryFee?: number
   deliveryAddress?: string | null
+  clientOrderId?: string | null
   qrCode?: string | null
   totalAmount?: number
   createdAt?: Date | string
@@ -735,6 +769,7 @@ export type OrderUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -747,6 +782,7 @@ export type OrderUncheckedUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -759,6 +795,7 @@ export type OrderUncheckedUpdateManyWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
   deliveryAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -801,6 +838,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   clientId?: boolean
   deliveryFee?: boolean
   deliveryAddress?: boolean
+  clientOrderId?: boolean
   qrCode?: boolean
   totalAmount?: boolean
   createdAt?: boolean
@@ -816,6 +854,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   clientId?: boolean
   deliveryFee?: boolean
   deliveryAddress?: boolean
+  clientOrderId?: boolean
   qrCode?: boolean
   totalAmount?: boolean
   createdAt?: boolean
@@ -828,6 +867,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   clientId?: boolean
   deliveryFee?: boolean
   deliveryAddress?: boolean
+  clientOrderId?: boolean
   qrCode?: boolean
   totalAmount?: boolean
   createdAt?: boolean
@@ -840,13 +880,14 @@ export type OrderSelectScalar = {
   clientId?: boolean
   deliveryFee?: boolean
   deliveryAddress?: boolean
+  clientOrderId?: boolean
   qrCode?: boolean
   totalAmount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "deliveryFee" | "deliveryAddress" | "qrCode" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "deliveryFee" | "deliveryAddress" | "clientOrderId" | "qrCode" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   products?: boolean | Prisma.Order$productsArgs<ExtArgs>
@@ -872,6 +913,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     clientId: string
     deliveryFee: number
     deliveryAddress: string | null
+    clientOrderId: string | null
     qrCode: string | null
     totalAmount: number
     createdAt: Date
@@ -1306,6 +1348,7 @@ export interface OrderFieldRefs {
   readonly clientId: Prisma.FieldRef<"Order", 'String'>
   readonly deliveryFee: Prisma.FieldRef<"Order", 'Float'>
   readonly deliveryAddress: Prisma.FieldRef<"Order", 'String'>
+  readonly clientOrderId: Prisma.FieldRef<"Order", 'String'>
   readonly qrCode: Prisma.FieldRef<"Order", 'String'>
   readonly totalAmount: Prisma.FieldRef<"Order", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>

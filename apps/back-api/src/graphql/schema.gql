@@ -279,8 +279,15 @@ type StoreEntity {
 }
 
 type DeliveryAddressEntity {
+  createdAt: DateTime
+  id: String
+  clientId: String
+  updatedAt: DateTime
   street: String
   city: String
+  country: String
+  postalCode: String
+  isDefault: Boolean
 }
 
 type OrderItemEntity {
@@ -295,6 +302,7 @@ type OrderEntity {
   id: String!
   deliveryFee: Float!
   deliveryAddress: DeliveryAddressEntity
+  clientOrderId: String
   qrCode: String
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2051,6 +2059,7 @@ input CreateOrderInput {
   clientId: String
   deliveryFee: Float!
   deliveryAddress: String
+  clientOrderId: String
   qrCode: String
   orderProducts: [CreateOrderProductInput!]!
   payment: CreatePaymentTransactionInput!

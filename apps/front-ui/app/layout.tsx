@@ -7,6 +7,7 @@ import { ToastProvider } from "@/components/toast-provider";
 import ClientWrapper from "./ClientWrapper";
 import { LoadingProvider } from "./context/loadingContext";
 import { SerwistProvider } from "./serwist";
+import { CartProvider } from "./context/use-cart";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -75,30 +76,34 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <LoadingProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased relative font-sans h-full`}
-        >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+        <CartProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased relative font-sans h-full`}
           >
-            <main className="relative flex flex-col min-h-screen">
-              <ClientWrapper>
-                {process.env.NODE_ENV === "production" ? (
-                  <ToastProvider>
-                    <SerwistProvider swUrl="/sw.js">{children}</SerwistProvider>
-                  </ToastProvider>
-                ) : (
-                  <ToastProvider>{children}</ToastProvider>
-                )}
-              </ClientWrapper>
-            </main>
-            <Toaster />
-            {/* <Toaster position='top-center' richColors /> */}
-          </ThemeProvider>
-        </body>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main className="relative flex flex-col min-h-screen">
+                <ClientWrapper>
+                  {process.env.NODE_ENV === "production" ? (
+                    <ToastProvider>
+                      <SerwistProvider swUrl="/sw.js">
+                        {children}
+                      </SerwistProvider>
+                    </ToastProvider>
+                  ) : (
+                    <ToastProvider>{children}</ToastProvider>
+                  )}
+                </ClientWrapper>
+              </main>
+              <Toaster />
+              {/* <Toaster position='top-center' richColors /> */}
+            </ThemeProvider>
+          </body>
+        </CartProvider>
       </LoadingProvider>
     </html>
   );

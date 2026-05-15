@@ -494,6 +494,7 @@ model Order {
   products             OrderProduct[]
   deliveryFee          Float                 @default(0)
   deliveryAddress      String?
+  clientOrderId        String?
   qrCode               String?
   payment              PaymentTransaction?
   totalAmount          Float                 @default(0)

@@ -219,6 +219,9 @@ export class OrderService {
 		// Transform the data to match frontend expectations
 		return {
 			...order,
+			deliveryAddress: this.prisma.address.findUnique({
+				where: { id: order?.deliveryAddress!},
+			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
 				...op,
@@ -336,6 +339,9 @@ export class OrderService {
 		// Transform the data to match frontend expectations
 		return {
 			...order,
+			deliveryAddress: this.prisma.address.findUnique({
+				where: { id: order?.deliveryAddress!},
+			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
 				...op,
@@ -400,6 +406,9 @@ export class OrderService {
 		// Transform the data to match frontend expectations
 		return {
 			...order,
+			deliveryAddress: this.prisma.address.findUnique({
+				where: { id: order?.deliveryAddress!},
+			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
 				...op,
@@ -557,6 +566,9 @@ export class OrderService {
 		// Transform the data to match frontend expectations
 		const transformedOrders = orders.map((order) => ({
 			...order,
+			deliveryAddress: this.prisma.address.findUnique({
+				where: { id: order?.deliveryAddress!},
+			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
 				...op,
@@ -688,23 +700,23 @@ export class OrderService {
 			}));
 
 			// deliveryAddress transformation: try JSON parse, fallback split
-			let deliveryAddress: any = null;
-			if (order.deliveryAddress) {
-				try {
-					const parsed = JSON.parse(order.deliveryAddress);
-					deliveryAddress = {
-						street: parsed.street || order.deliveryAddress,
-						city: parsed.city || null,
-					};
-				} catch (_e) {
-					const parts = (order.deliveryAddress || "").split(",");
-					deliveryAddress = {
-						street:
-							parts.slice(0, -1).join(",").trim() || order.deliveryAddress,
-						city: parts.slice(-1)[0]?.trim() || null,
-					};
-				}
-			}
+			// let deliveryAddress: any = null;
+			// if (order.deliveryAddress) {
+			// 	try {
+			// 		const parsed = JSON.parse(order.deliveryAddress);
+			// 		deliveryAddress = {
+			// 			street: parsed.street || order.deliveryAddress,
+			// 			city: parsed.city || null,
+			// 		};
+			// 	} catch (_e) {
+			// 		const parts = (order.deliveryAddress || "").split(",");
+			// 		deliveryAddress = {
+			// 			street:
+			// 				parts.slice(0, -1).join(",").trim() || order.deliveryAddress,
+			// 			city: parts.slice(-1)[0]?.trim() || null,
+			// 		};
+			// 	}
+			// }
 
 			return {
 				id: order.id,
@@ -721,7 +733,9 @@ export class OrderService {
 							last4: null,
 						}
 					: null,
-				deliveryAddress,
+				deliveryAddress: this.prisma.address.findUnique({
+					where: { id: order?.deliveryAddress!},
+				}),
 			};
 		});
 

@@ -1,0 +1,102 @@
+"use client";
+import { createContext, useContext, createElement, ReactNode } from 'react';
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+
+export interface CartItem {
+  product: {
+    id: string;
+    title: string;
+    price: number;
+    medias?: { url: string }[];
+    businessId: string;
+  };
+  quantity: number;
+}
+
+type CartContextType = {
+  items: CartItem[];
+  addItem: (product: any, quantity?: number) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
+  clearCart: () => void;
+  getItemCount: () => number;
+  getCartTotal: () => number;
+}
+
+type CartState = {
+  items: CartItem[];
+  addItem: (product: any, quantity?: number) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
+  clearCart: () => void;
+  getItemCount: () => number;
+  getCartTotal: () => number;
+};
+
+const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (product, quantity = 1) =>
+        set((state) => {
+          const existingItem = state.items.find(
+            (item) => item.product.id === product.id
+          );
+
+          if (existingItem) {
+            return {
+              items: state.items.map((item) =>
+                item.product.id === product.id
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item
+              ),
+            };
+          }
+
+          return { items: [...state.items, { product, quantity }] };
+        }),
+      updateQuantity: (productId, quantity) =>
+        set((state) => ({
+          items: state.items.map((item) =>
+            item.product.id === productId ? { ...item, quantity } : item
+          ),
+        })),
+      removeItem: (productId) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.product.id !== productId),
+        })),
+      clearCart: () => set({ items: [] }),
+      getItemCount: () => {
+        return get().items.reduce((sum, item) => sum + item.quantity, 0);
+      },
+      getCartTotal: () => {
+        return get().items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+      },
+    }),
+    {
+      name: "cart-storage",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
+
+const CartContext = createContext<CartContextType | undefined>(undefined);
+
+export function CartProvider({ children }: { children: ReactNode }) {
+  const store = useCartStore();
+
+  return createElement(
+    CartContext.Provider,
+    { value: store },
+    children
+  );
+}
+
+export function useCart() {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+}

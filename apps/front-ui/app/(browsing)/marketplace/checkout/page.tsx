@@ -1,1064 +1,546 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import {
-	ArrowLeft,
-	Banknote,
-	CheckCircle2,
-	CreditCard,
-	Loader2,
-	Plus,
-	ShoppingCart,
-	Smartphone,
-} from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import ResponsiveModal from "@/app/(Business)/business/_components/responsive-modal";
-import Loader from "@/components/seraui/Loader";
-import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/components/toast-provider";
+import {
+  ArrowLeft,
+  Banknote,
+  CheckCircle2,
+  CreditCard,
+  Loader2,
+  Plus,
+  ShoppingBag,
+  Smartphone,
+  MapPin,
+} from "lucide-react";
+import {
+  CREATE_GROUPED_ORDER,
+  APPLY_PROMOTION,
+  CREATE_ORDER,
+} from "@/graphql/order.gql";
+import { formatPrice } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
-import { CREATE_ORDER } from "@/graphql/order.gql";
-import { useCart } from "@/hooks/use-cart";
+import OrderSummary from "../_components/OrderSummary";
+import PaymentMethodSelector from "../_components/PaymentMethodSelector";
+import AddressSelector from "../_components/AddressSelector";
+import { Address } from "@/lib/types";
+import { useCart } from "@/app/context/use-cart";
 import { useMe } from "@/lib/useMe";
-import { formatPrice } from "@/lib/utils";
-import PaymentCode from "./paymentCode";
+import Loader from "@/components/seraui/Loader";
 
-const PAYMENT_METHODS = [
-	{ id: "TOKEN", label: "Token Payment (uTn)", icon: CreditCard },
-	{ id: "MOBILE_MONEY", label: "Mobile Money", icon: Smartphone },
-	{ id: "CASH", label: "Cash on Delivery", icon: Banknote },
-	{ id: "CARD", label: "Credit/Debit Card", icon: CreditCard },
-] as const;
+interface RwandaLocation {
+  status: string;
+  statusCode: number;
+  message: string;
+  data: Record<string, Array<Record<string, string>>>;
+}
 
-type PaymentMethodId = (typeof PAYMENT_METHODS)[number]["id"];
+interface CheckoutPageProps {
+  params: {
+    businessId?: string;
+  };
+}
 
-type RwandaLocations = {
-	status: string;
-	statusCode: number;
-	message: string;
-	data: Array<
-		Record<
-			string,
-			Array<
-				Record<string, Array<Record<string, Array<Record<string, string[]>>>>>
-			>
-		>
-	>; // Province>District>Sector>Cell>Villages
-};
+export default function CheckoutPage({ params }: CheckoutPageProps) {
+  const router = useRouter();
+  const { getItemCount, items, clearCart } = useCart();
+  const { showToast } = useToast();
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const [selectedBusinessPaymentMethod, setSelectedBusinessPaymentMethod] =
+    useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [activeBusinessIndex, setActiveBusinessIndex] = useState(0);
+  const [promotionCode, setPromotionCode] = useState("");
+  const [appliedPromotions, setAppliedPromotions] = useState<any[]>([]);
+  const [showPromotionError, setShowPromotionError] = useState(false);
+  const [groupedOrders, setGroupedOrders] = useState<any[]>([]);
+  const [useUnifiedPayment, setUseUnifiedPayment] = useState(true);
+  const [paymentDetails, setPaymentDetails] = useState<any>({});
+  const { loading: userLoading, user } = useMe();
 
-// Helpers: input formatting
-const onlyDigits = (s: string) => s.replace(/\D/g, "");
+  const [createOrder] = useMutation(CREATE_ORDER);
 
-const formatMomoPhone = (input: string) => {
-	const digits = onlyDigits(input).slice(0, 12); // cap to 12
-	// Group into 3-3-3-3 blocks visually
-	return digits.replace(
-		/(\d{3})(\d{0,3})(\d{0,3})(\d{0,3}).*/,
-		(_, a: string, b: string, c: string, d: string) =>
-			[a, b, c, d].filter(Boolean).join(" "),
-	);
-};
+  // Calculate totals
+  const subtotal = items.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0,
+  );
+  const deliveryFee = 5.0; // Fixed delivery fee
+  const [total, setTotal] = useState(subtotal + deliveryFee);
+  const uTnAmount = total / 10; // 1 uTn = $10
 
-const formatCardNumber = (input: string) => {
-	const digits = onlyDigits(input).slice(0, 19);
-	return digits.replace(/(.{4})/g, "$1 ").trim();
-};
+  useEffect(() => {
+    if (getItemCount() === 0) {
+      router.push("/marketplace");
+      return;
+    }
 
-const formatExpiry = (input: string) => {
-	const digits = onlyDigits(input).slice(0, 4);
-	if (digits.length <= 2) return digits;
-	return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-};
+    // Group items by business
+    const businessGroups = items.reduce((groups: any, item) => {
+      const businessId = item.product.businessId;
+      if (!groups[businessId]) {
+        groups[businessId] = {
+          businessId,
+          items: [],
+          subtotal: 0,
+          deliveryFee: 5.0,
+          total: 5.0,
+        };
+      }
 
-const formatCvv = (input: string) => onlyDigits(input).slice(0, 4);
+      groups[businessId].items.push(item);
+      groups[businessId].subtotal += item.product.price * item.quantity;
+      groups[businessId].total =
+        groups[businessId].subtotal + groups[businessId].deliveryFee;
 
-// LocalStorage keys
-const LS_KEYS = {
-	country: "checkoutCountry",
-	province: "checkoutProvince",
-	district: "checkoutDistrict",
-	sector: "checkoutSector",
-	cell: "checkoutCell",
-	village: "checkoutVillage",
-};
+      return groups;
+    }, {});
 
-export default function CheckoutPage() {
-	const router = useRouter();
-	const { items, clearCart } = useCart();
-	const { showToast } = useToast();
-	const { user, role, id: userId, loading: userLoading } = useMe();
+    setGroupedOrders(Object.values(businessGroups));
 
-	const [country, setCountry] = useState("");
-	const [deliveryAddress, setDeliveryAddress] = useState("");
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethodId | "">("");
-	const [isProcessing, setIsProcessing] = useState(false);
+    // Set default payment method
+    if (groupedOrders.length > 0) {
+      setPaymentMethod("TOKEN");
+    }
+  }, [items, router]);
 
-	const [showPaymentModal, setShowPaymentModal] = useState(false);
-	const [paymentDetails, setPaymentDetails] = useState({
-		country: "",
-		mobileMoneyProvider: "",
-		paymentTransactionId: "",
-		mobileMoneyPhone: "",
-		cardName: "",
-		cardNumber: "",
-		cardExpiry: "", // MM/YY
-		cardCvv: "",
-	});
+  console.log("Grouped Orders:", groupedOrders);
 
-	// Rwanda location selections
-	const [rwanda, setRwanda] = useState<RwandaLocations | null>(null);
-	const [province, setProvince] = useState("");
-	const [district, setDistrict] = useState("");
-	const [sector, setSector] = useState("");
-	const [cell, setCell] = useState("");
-	const [village, setVillage] = useState("");
+  if (userLoading) {
+    return <Loader loading={true} />;
+  }
 
-	const [createOrder] = useMutation(CREATE_ORDER);
+  const handleApplyPromotion = async () => {
+    if (!promotionCode.trim()) return;
 
-	// Restore saved country/locations
-	useEffect(() => {
-		try {
-			const savedCountry = localStorage.getItem(LS_KEYS.country) || "";
-			const savedProvince = localStorage.getItem(LS_KEYS.province) || "";
-			const savedDistrict = localStorage.getItem(LS_KEYS.district) || "";
-			const savedSector = localStorage.getItem(LS_KEYS.sector) || "";
-			const savedCell = localStorage.getItem(LS_KEYS.cell) || "";
-			const savedVillage = localStorage.getItem(LS_KEYS.village) || "";
+    try {
+      // In a real app, this would call the APPLY_PROMOTION mutation
+      const mockPromotion = {
+        id: "PROMO10",
+        name: "10% Off",
+        discountType: "PERCENTAGE",
+        discountValue: 10,
+        applicableBusinesses: [
+          { id: groupedOrders[activeBusinessIndex]?.businessId },
+        ],
+        minimumPurchase: 0,
+      };
 
-			if (savedCountry) setCountry(savedCountry);
-			if (savedProvince) setProvince(savedProvince);
-			if (savedDistrict) setDistrict(savedDistrict);
-			if (savedSector) setSector(savedSector);
-			if (savedCell) setCell(savedCell);
-			if (savedVillage) setVillage(savedVillage);
-		} catch {
-			/* ignore */
-		}
-	}, []);
+      // Check if promotion applies to current business
+      const appliesToBusiness = mockPromotion.applicableBusinesses.some(
+        (b: any) => b.id === groupedOrders[activeBusinessIndex]?.businessId,
+      );
 
-	// Persist country/locations
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.country, country);
-		} catch {}
-	}, [country]);
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.province, province);
-		} catch {}
-	}, [province]);
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.district, district);
-		} catch {}
-	}, [district]);
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.sector, sector);
-		} catch {}
-	}, [sector]);
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.cell, cell);
-		} catch {}
-	}, [cell]);
-	useEffect(() => {
-		try {
-			localStorage.setItem(LS_KEYS.village, village);
-		} catch {}
-	}, [village]);
+      if (
+        !appliesToBusiness ||
+        groupedOrders[activeBusinessIndex]?.subtotal <
+          mockPromotion.minimumPurchase
+      ) {
+        setShowPromotionError(true);
+        setTimeout(() => setShowPromotionError(false), 3000);
+        return;
+      }
 
-	// Redirect if cart is empty
-	useEffect(() => {
-		if (items.length === 0) {
-			router.push("/marketplace");
-		}
-	}, [items, router]);
+      // Apply discount
+      let discountAmount = 0;
+      if (mockPromotion.discountType === "PERCENTAGE") {
+        discountAmount =
+          (groupedOrders[activeBusinessIndex]?.subtotal *
+            mockPromotion.discountValue) /
+          100;
+      } else {
+        discountAmount = mockPromotion.discountValue;
+      }
 
-	// Load Rwanda locations on demand
-	useEffect(() => {
-		if (country === "RWANDA" && !rwanda) {
-			import("@/app/(browsing)/marketplace/checkout/rwandaLocations.json")
-				.then((mod) => setRwanda(mod.default as unknown as RwandaLocations))
-				.catch(() =>
-					showToast("error", "Failed", "Could not load Rwanda locations"),
-				);
-		}
-	}, [country, rwanda, showToast]);
+      // Update totals
+      const newSubtotal =
+        groupedOrders[activeBusinessIndex]?.subtotal - discountAmount;
+      const newTotal =
+        newSubtotal + groupedOrders[activeBusinessIndex]?.deliveryFee;
 
-	// Reset Rwanda selections when country changes away from RWANDA
-	useEffect(() => {
-		if (country !== "RWANDA") {
-			setProvince("");
-			setDistrict("");
-			setSector("");
-			setCell("");
-			setVillage("");
-			// Clear saved Rwanda selections when leaving RWANDA
-			try {
-				localStorage.removeItem(LS_KEYS.province);
-				localStorage.removeItem(LS_KEYS.district);
-				localStorage.removeItem(LS_KEYS.sector);
-				localStorage.removeItem(LS_KEYS.cell);
-				localStorage.removeItem(LS_KEYS.village);
-			} catch {}
-		}
-	}, [country]);
+      // Update grouped orders
+      const updatedOrders = [...groupedOrders];
+      updatedOrders[activeBusinessIndex] = {
+        ...updatedOrders[activeBusinessIndex],
+        subtotal: newSubtotal,
+        total: newTotal,
+      };
 
-	// Reset deeper selections when parent changes
-	useEffect(() => {
-		setDistrict("");
-		setSector("");
-		setCell("");
-		setVillage("");
-	}, []);
-	useEffect(() => {
-		setSector("");
-		setCell("");
-		setVillage("");
-	}, []);
-	useEffect(() => {
-		setCell("");
-		setVillage("");
-	}, []);
-	useEffect(() => {
-		setVillage("");
-	}, []);
+      setGroupedOrders(updatedOrders);
+      setTotal(newTotal);
+      setAppliedPromotions([...appliedPromotions, mockPromotion]);
+      setPromotionCode("");
+      showToast(
+        "success",
+        "Promotion Applied",
+        "Discount has been applied to your order",
+      );
+    } catch (error) {
+      setShowPromotionError(true);
+      setTimeout(() => setShowPromotionError(false), 3000);
+    }
+  };
 
-	// Calculate totals
-	const subtotal = items.reduce(
-		(total, { product }) => total + product.price,
-		0,
-	);
-	const deliveryFee = 5.0; // Fixed delivery fee
-	const total = subtotal + deliveryFee;
+  const handlePaymentMethodSelect = (method: string) => {
+    setPaymentMethod(method);
+    setSelectedBusinessPaymentMethod(method);
+  };
 
-	const uTnAmount = useMemo(() => total / 10, [total]); // 1 uTn = $10
+  const handleCheckout = async () => {
+    if (!selectedAddress) {
+      showToast(
+        "error",
+        "Address Required",
+        "Please select a delivery address",
+      );
+      return;
+    }
 
-	const requiresDetails = useMemo(
-		() => paymentMethod === "MOBILE_MONEY" || paymentMethod === "CARD",
-		[paymentMethod],
-	);
+    if (!paymentMethod) {
+      showToast("error", "Payment Error", "Please select a payment method");
+      return;
+    }
 
-	const isPaymentDetailsValid = (): boolean => {
-		switch (paymentMethod) {
-			case "MOBILE_MONEY": {
-				const phoneDigits = onlyDigits(paymentDetails.mobileMoneyPhone);
-				return (
-					paymentDetails.mobileMoneyProvider.trim().length >= 2 &&
-					phoneDigits.length >= 8
-				);
-			}
-			case "CARD": {
-				const numberOnly = onlyDigits(paymentDetails.cardNumber);
-				const expiryOk = /^(0[1-9]|1[0-2])\/(\d{2})$/.test(
-					paymentDetails.cardExpiry.trim(),
-				);
-				const cvvOk = /^\d{3,4}$/.test(paymentDetails.cardCvv.trim());
-				return (
-					paymentDetails.cardName.trim().length > 2 &&
-					/^\d{12,19}$/.test(numberOnly) &&
-					expiryOk &&
-					cvvOk
-				);
-			}
-			case "TOKEN":
-			case "CASH":
-				return true;
-			default:
-				return false;
-		}
-	};
+    setIsProcessing(true);
 
-	const openPaymentModalIfNeeded = (method: PaymentMethodId | "") => {
-		if (method === "MOBILE_MONEY" || method === "CARD") {
-			setShowPaymentModal(true);
-		} else {
-			setShowPaymentModal(false);
-		}
-	};
+    try {
+      // Helper function to extract only digits
+      const onlyDigits = (str: string) => str.replace(/\D/g, "");
 
-	const handleSelectPaymentMethod = (method: PaymentMethodId | "") => {
-		setPaymentMethod(method);
-		// reset previous details when method changes
-		setPaymentDetails({
-			mobileMoneyProvider: "",
-			country: "",
-			paymentTransactionId: "",
-			mobileMoneyPhone: "",
-			cardName: "",
-			cardNumber: "",
-			cardExpiry: "",
-			cardCvv: "",
-		});
-		openPaymentModalIfNeeded(method);
-	};
+      // Prepare all order products for the main client order
+      const orderProducts = items.map(({ product, quantity }) => ({
+        productId: product.id,
+        quantity: quantity,
+      }));
 
-	// Rwanda options derived from data
-	const provinces = useMemo(() => {
-		if (!rwanda) return [] as string[];
-		return rwanda.data.flatMap((p) => Object.keys(p));
-	}, [rwanda]);
+      // Generate QR code based on payment method
+      let qrCode: string | undefined;
+      if (paymentMethod === "TOKEN") {
+        qrCode = `uTn:${uTnAmount.toFixed(2)}`;
+      } else if (paymentMethod === "MOBILE_MONEY") {
+        const phoneDigits = onlyDigits(paymentDetails.mobileMoneyPhone || "");
+        qrCode = `MOMO:${paymentDetails.mobileMoneyProvider?.trim() || ""}:${phoneDigits}`;
+      } else if (paymentMethod === "CARD") {
+        const last4 = onlyDigits(paymentDetails.cardNumber || "").slice(-4);
+        qrCode = `CARD:****${last4}`;
+      }
 
-	const districts = useMemo(() => {
-		if (!rwanda || !province) return [] as string[];
-		const provObj = rwanda.data.find((p) => Object.keys(p)[0] === province);
-		if (!provObj) return [];
-		const distArr = (provObj as any)[province] as Array<Record<string, any>>;
-		return distArr.map((d) => Object.keys(d)[0]);
-	}, [rwanda, province]);
+      // Create the main client order with all products
+      const { data: clientOrderData } = await createOrder({
+        variables: {
+          input: {
+            clientId: user?.id,
+            deliveryFee,
+            deliveryAddress: `${selectedAddress.street}, ${selectedAddress.city}`,
+            qrCode,
+            orderProducts,
+            payment: {
+              method: paymentMethod,
+              status: "PENDING",
+              amount: total,
+            },
+          },
+        },
+      });
 
-	const sectors = useMemo(() => {
-		if (!rwanda || !province || !district) return [] as string[];
-		const provObj = rwanda.data.find(
-			(p) => Object.keys(p)[0] === province,
-		) as any;
-		if (!provObj) return [];
-		const distArr = provObj[province] as Array<Record<string, any>>;
-		const distObj = distArr.find((d) => Object.keys(d)[0] === district) as any;
-		if (!distObj) return [];
-		const secArr = distObj[district] as Array<Record<string, any>>;
-		return secArr.map((s) => Object.keys(s)[0]);
-	}, [rwanda, province, district]);
+      const clientOrderId = clientOrderData?.createOrder?.id;
 
-	const cells = useMemo(() => {
-		if (!rwanda || !province || !district || !sector) return [] as string[];
-		const provObj = rwanda.data.find(
-			(p) => Object.keys(p)[0] === province,
-		) as any;
-		if (!provObj) return [];
-		const distArr = provObj[province] as Array<Record<string, any>>;
-		const distObj = distArr.find((d) => Object.keys(d)[0] === district) as any;
-		if (!distObj) return [];
-		const secArr = distObj[district] as Array<Record<string, any>>;
-		const secObj = secArr.find((s) => Object.keys(s)[0] === sector) as any;
-		if (!secObj) return [];
-		const cellArr = secObj[sector] as Array<Record<string, any>>;
-		return cellArr.map((c) => Object.keys(c)[0]);
-	}, [rwanda, province, district, sector]);
+      if (!clientOrderId) {
+        throw new Error("Failed to create client order");
+      }
 
-	const villages = useMemo(() => {
-		if (!rwanda || !province || !district || !sector || !cell)
-			return [] as string[];
-		const provObj = rwanda.data.find(
-			(p) => Object.keys(p)[0] === province,
-		) as any;
-		if (!provObj) return [];
-		const distArr = provObj[province] as Array<Record<string, any>>;
-		const distObj = distArr.find((d) => Object.keys(d)[0] === district) as any;
-		if (!distObj) return [];
-		const secArr = distObj[district] as Array<Record<string, any>>;
-		const secObj = secArr.find((s) => Object.keys(s)[0] === sector) as any;
-		if (!secObj) return [];
-		const cellArr = secObj[sector] as Array<Record<string, any>>;
-		const cellObj = cellArr.find((c) => Object.keys(c)[0] === cell) as any;
-		if (!cellObj) return [];
-		const villArr = cellObj[cell] as string[];
-		return villArr;
-	}, [rwanda, province, district, sector, cell]);
+      // Create individual orders for each business
+      const businessOrderPromises = groupedOrders.map(async (order) => {
+        const businessOrderProducts = order.items.map(
+          ({ product, quantity }: any) => ({
+            productId: product.id,
+            quantity: quantity,
+          }),
+        );
 
-	const rwandaAddressValid =
-		country === "RWANDA" && province && district && sector && cell && village;
+        return createOrder({
+          variables: {
+            input: {
+              businessId: order.businessId,
+              clientId: user?.id,
+              clientOrderId, // Link to main client order
+              deliveryFee: order.deliveryFee,
+              deliveryAddress: `${selectedAddress.street}, ${selectedAddress.city}`,
+              orderProducts: businessOrderProducts,
+              payment: {
+                method: useUnifiedPayment
+                  ? paymentMethod
+                  : selectedBusinessPaymentMethod,
+                status: "PENDING",
+                amount: order.total,
+              },
+            },
+          },
+        });
+      });
 
-	const finalDeliveryAddress =
-		country === "RWANDA" && rwandaAddressValid
-			? `${village}, ${cell}, ${sector}, ${district}, ${province}, Rwanda`
-			: deliveryAddress.trim();
+      await Promise.all(businessOrderPromises);
 
-	const addressValid =
-		country === "RWANDA"
-			? rwandaAddressValid
-			: deliveryAddress.trim().length > 0;
+      showToast(
+        "success",
+        "Order Placed",
+        "Your order has been placed successfully",
+        true,
+        5000,
+      );
+      // Clear cart and redirect to order confirmation
+      clearCart();
+      router.push(`/marketplace/orders/confirmation?orderId=${clientOrderId}`);
+    } catch (error) {
+      console.error("Checkout error:", error);
+      showToast(
+        "error",
+        "Order Failed",
+        "Failed to place your order. Please try again.",
+      );
+      setIsProcessing(false);
+    }
+  };
 
-	const handleSubmit = async (e?: React.FormEvent) => {
-		e?.preventDefault();
+  if (items.length === 0) {
+    return null; // This should be handled by the useEffect redirect
+  }
 
-		if (!country) {
-			showToast(
-				"error",
-				"Address Required",
-				"Please select a delivery country",
-			);
-			return;
-		}
+  return (
+    <div className="min-h-screen bg-background py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center mb-8">
+          <Button
+            variant="ghost"
+            className="mr-4"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="h-5 w-5 mr-2" />
+            Back to Shopping
+          </Button>
+          <h1 className="text-2xl font-bold">Checkout</h1>
+        </div>
 
-		if (!addressValid) {
-			showToast(
-				"error",
-				"Address Required",
-				country === "RWANDA"
-					? "Please complete all Rwanda location fields"
-					: "Please enter a delivery address",
-			);
-			return;
-		}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Address & Payment */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Address Section */}
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="p-4 bg-muted border-b border-border">
+                <h2 className="font-semibold flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Delivery Address
+                </h2>
+              </div>
 
-		if (!paymentMethod) {
-			showToast("error", "Payment Error", "Please select a payment method");
-			return;
-		}
+              <div className="p-4">
+                <AddressSelector
+                  selectedAddress={selectedAddress}
+                  onSelect={setSelectedAddress}
+                  onAddNew={() => {}}
+                />
+              </div>
+            </div>
 
-		if (requiresDetails && !isPaymentDetailsValid()) {
-			setShowPaymentModal(true);
-			showToast(
-				"error",
-				"Payment Details",
-				"Please complete valid payment details",
-			);
-			return;
-		}
+            {/* Business Tabs */}
+            {groupedOrders.length > 1 && (
+              <div className="bg-card border border-border rounded-lg overflow-hidden">
+                <div className="p-4 bg-muted border-b border-border">
+                  <h2 className="font-semibold">Business Selection</h2>
+                </div>
 
-		if (!userId) {
-			showToast("error", "Redirecting", "User not authenticated");
-			return;
-		}
+                <div className="p-4">
+                  <div className="flex flex-wrap gap-2">
+                    {groupedOrders.map((order, index) => (
+                      <Button
+                        key={order.businessId}
+                        variant={
+                          activeBusinessIndex === index ? "default" : "outline"
+                        }
+                        className="flex-1 min-w-30"
+                        onClick={() => setActiveBusinessIndex(index)}
+                      >
+                        Business {index + 1}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
-		setIsProcessing(true);
+            {/* Payment Section */}
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
+                <h2 className="font-semibold flex items-center gap-2">
+                  <CreditCard className="h-5 w-5" />
+                  Payment Method
+                </h2>
 
-		try {
-			const orderProducts = items.map(({ product }) => ({
-				productId: product.id,
-				quantity: 1, // If quantity support is added to cart, replace this accordingly
-			}));
+                {groupedOrders.length > 1 && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="unifiedPayment"
+                      checked={useUnifiedPayment}
+                      onChange={(e) => setUseUnifiedPayment(e.target.checked)}
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <Label htmlFor="unifiedPayment" className="text-sm">
+                      Unified Payment
+                    </Label>
+                  </div>
+                )}
+              </div>
 
-			// Encode minimal reference for payment (optional)
-			let qrCode: string | undefined;
-			if (paymentMethod === "TOKEN") {
-				qrCode = `uTn:${uTnAmount.toFixed(2)}`;
-			} else if (paymentMethod === "MOBILE_MONEY") {
-				const phoneDigits = onlyDigits(paymentDetails.mobileMoneyPhone);
-				qrCode = `MOMO:${paymentDetails.mobileMoneyProvider.trim()}:${phoneDigits}`;
-			} else if (paymentMethod === "CARD") {
-				const last4 = onlyDigits(paymentDetails.cardNumber).slice(-4);
-				qrCode = `CARD:****${last4}`;
-			}
+              <div className="p-4">
+                <PaymentMethodSelector
+                  businessPaymentMethods={[
+                    "TOKEN",
+                    "MOBILE_MONEY",
+                    "CASH",
+                    "CARD",
+                  ]}
+                  selectedMethod={selectedBusinessPaymentMethod}
+                  onMethodSelect={handlePaymentMethodSelect}
+                  amount={groupedOrders[activeBusinessIndex]?.total}
+                  businessName={`Business ${activeBusinessIndex + 1}`}
+                  isBusinessPayment={
+                    groupedOrders.length > 1 && !useUnifiedPayment
+                  }
+                />
+              </div>
+            </div>
 
-			const { data } = await createOrder({
-				variables: {
-					input: {
-						clientId: userId,
-						deliveryFee,
-						deliveryAddress: finalDeliveryAddress,
-						qrCode,
-						orderProducts,
-						payment: {
-							method: paymentMethod,
-							status: "PENDING",
-							amount: total,
-						},
-					},
-				},
-			});
+            {/* Promotion Section */}
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="p-4 bg-muted border-b border-border">
+                <h2 className="font-semibold">Promotions</h2>
+              </div>
 
-			showToast(
-				"success",
-				"Success",
-				"Order created successfully!",
-				true,
-				5000,
-			);
+              <div className="p-4">
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    value={promotionCode}
+                    onChange={(e) => setPromotionCode(e.target.value)}
+                    placeholder="Enter promotion code"
+                    className="flex-1"
+                  />
+                  <Button variant="default" onClick={handleApplyPromotion}>
+                    Apply
+                  </Button>
+                </div>
 
-			// Redirect to order confirmation or order details
-			router.push(`/marketplace/orders/${data.createOrder.id}`);
-		} catch (error: any) {
-			showToast("error", "Error", error.message || "Failed to create order");
-		} finally {
-			setIsProcessing(false);
-		}
-	};
+                {showPromotionError && (
+                  <p className="text-destructive text-sm mt-2">
+                    Promotion code is invalid or doesn't apply to this business
+                  </p>
+                )}
 
-	if (userLoading) {
-		return <Loader loading={true} />;
-	}
+                {appliedPromotions.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <h3 className="font-medium">Applied Promotions:</h3>
+                    {appliedPromotions.map((promo, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-muted rounded-lg"
+                      >
+                        <span>
+                          {promo.name} (
+                          {promo.discountType === "PERCENTAGE"
+                            ? `${promo.discountValue}%`
+                            : formatPrice(promo.discountValue)}{" "}
+                          off)
+                        </span>
+                        <CheckCircle2 className="h-4 w-4 text-success" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
-	if (!userLoading && (!user || role !== "client")) {
-		return (
-			<div className="max-w-3xl mx-auto p-6">
-				<div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
-					<div className="text-center max-w-md">
-						<div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-							<ShoppingCart className="h-10 w-10 text-primary" />
-						</div>
-						<h2 className="text-xl font-semibold mb-2">
-							You Can't Buy Yet, You Need An Account
-						</h2>
-						<p className="text-muted-foreground mb-6">
-							2 minutes processing, get an client account to begin processing
-							transactions
-						</p>
-						<Button
-							size="lg"
-							onClick={() => router.push("/login")}
-							className="bg-primary hover:bg-accent text-primary-foreground"
-						>
-							<Plus className="h-5 w-5 mr-2" />
-							Go To Login
-						</Button>
-					</div>
-				</div>
-			</div>
-		);
-	}
+          {/* Right Column - Order Summary */}
+          <div className="lg:col-span-1">
+            <OrderSummary
+              items={groupedOrders[activeBusinessIndex]?.items}
+              deliveryFee={groupedOrders[activeBusinessIndex]?.deliveryFee}
+              total={groupedOrders[activeBusinessIndex]?.total}
+              uTnAmount={groupedOrders[activeBusinessIndex]?.total / 10}
+              onCheckout={handleCheckout}
+              isProcessing={isProcessing}
+            />
 
-	if (!userLoading && user && role === "business") {
-		return (
-			<div className="max-w-3xl mx-auto p-6">
-				<div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
-					<div className="text-center max-w-md">
-						<div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-							<ShoppingCart className="h-10 w-10 text-primary" />
-						</div>
-						<h2 className="text-xl font-semibold mb-2">
-							You Can't Buy Your Own Products
-						</h2>
-						<p className="text-muted-foreground mb-6">
-							Want to buy something for a client? Create a new sale to begin
-							processing transactions
-						</p>
-						<Button
-							size="lg"
-							onClick={() => router.push("/business/sales")}
-							className="bg-primary hover:bg-accent text-primary-foreground"
-						>
-							<Plus className="h-5 w-5 mr-2" />
-							Go To Sales
-						</Button>
-					</div>
-				</div>
-			</div>
-		);
-	}
+            {/* Business Details */}
+            <div className="mt-6 bg-card border border-border rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                  <ShoppingBag className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-medium">
+                    Business {activeBusinessIndex + 1}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Estimated delivery: 1-3 days
+                  </p>
+                </div>
+              </div>
 
-	const detailsProvided = requiresDetails && isPaymentDetailsValid();
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Business Type</span>
+                  <span>Electronics & Gadgets</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Return Policy</span>
+                  <span>14 days</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Shipping</span>
+                  <span>Free on orders over $1500</span>
+                </div>
+              </div>
+            </div>
 
-	return (
-		<div className="min-h-screen bg-background text-gray-100 py-8">
-			<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-				{/* Header */}
-				<div className="mb-8">
-					<Link
-						href="/marketplace"
-						className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4 dark:text-gray-400 dark:hover:text-gray-600"
-					>
-						<ArrowLeft className="h-4 w-4 mr-2" />
-						Back to Products
-					</Link>
-					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
-						Checkout
-					</h1>
-				</div>
+            {/* Unified Payment Info */}
+            {groupedOrders.length > 1 && useUnifiedPayment && (
+              <div className="mt-4 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
+                  <div>
+                    <h3 className="font-medium text-primary">
+                      Unified Payment
+                    </h3>
+                    <p className="text-sm mt-1">
+                      USCOR will handle payments to each business. You'll pay
+                      once and we'll distribute funds.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-					{/* Order Form */}
-					<div className="space-y-6">
-						<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-							<CardHeader>
-								<CardTitle>Delivery Information</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<div className="space-y-4">
-									{/* Country */}
-									<div>
-										<Label htmlFor="country">Country *</Label>
-										<select
-											id="country"
-											className="w-full bg-card mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-											value={country}
-											onChange={(e) => setCountry(e.target.value)}
-											required
-										>
-											<option value="">Select Country</option>
-											<option value="DRC">DRC</option>
-											<option value="KENYA">Kenya</option>
-											<option value="UGANDA">Uganda</option>
-											<option value="RWANDA">Rwanda</option>
-											<option value="BURUNDI">Burundi</option>
-											<option value="TANZANIA">Tanzania</option>
-										</select>
-									</div>
-
-									{/* Address for Rwanda using known locations */}
-									{country === "RWANDA" ? (
-										<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-											<div>
-												<Label htmlFor="province">Province *</Label>
-												<select
-													id="province"
-													className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													value={province}
-													onChange={(e) => setProvince(e.target.value)}
-													disabled={!rwanda}
-												>
-													<option value="">Select Province</option>
-													{provinces.map((p) => (
-														<option key={p} value={p}>
-															{p}
-														</option>
-													))}
-												</select>
-											</div>
-											<div>
-												<Label htmlFor="district">District *</Label>
-												<select
-													id="district"
-													className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													value={district}
-													onChange={(e) => setDistrict(e.target.value)}
-													disabled={!province}
-												>
-													<option value="">Select District</option>
-													{districts.map((d) => (
-														<option key={d} value={d}>
-															{d}
-														</option>
-													))}
-												</select>
-											</div>
-											<div>
-												<Label htmlFor="sector">Sector *</Label>
-												<select
-													id="sector"
-													className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													value={sector}
-													onChange={(e) => setSector(e.target.value)}
-													disabled={!district}
-												>
-													<option value="">Select Sector</option>
-													{sectors.map((s) => (
-														<option key={s} value={s}>
-															{s}
-														</option>
-													))}
-												</select>
-											</div>
-											<div>
-												<Label htmlFor="cell">Cell *</Label>
-												<select
-													id="cell"
-													className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													value={cell}
-													onChange={(e) => setCell(e.target.value)}
-													disabled={!sector}
-												>
-													<option value="">Select Cell</option>
-													{cells.map((c) => (
-														<option key={c} value={c}>
-															{c}
-														</option>
-													))}
-												</select>
-											</div>
-											<div className="sm:col-span-2">
-												<Label htmlFor="village">Village *</Label>
-												<select
-													id="village"
-													className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													value={village}
-													onChange={(e) => setVillage(e.target.value)}
-													disabled={!cell}
-												>
-													<option value="">Select Village</option>
-													{villages.map((v) => (
-														<option key={v} value={v}>
-															{v}
-														</option>
-													))}
-												</select>
-											</div>
-										</div>
-									) : (
-										<div>
-											<Label htmlFor="deliveryAddress">
-												Delivery Address *
-											</Label>
-											<textarea
-												id="deliveryAddress"
-												placeholder="Enter your full delivery address"
-												value={deliveryAddress}
-												onChange={(e) => setDeliveryAddress(e.target.value)}
-												className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md mt-1"
-												rows={3}
-												required
-											/>
-										</div>
-									)}
-								</div>
-							</CardContent>
-						</Card>
-
-						<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-							<CardHeader className="flex items-center justify-between">
-								<CardTitle>Payment Method</CardTitle>
-								{paymentMethod === "TOKEN" && (
-									<span className="text-xs text-muted-foreground">
-										1 uTn = $10 — You will pay{" "}
-										<strong>{uTnAmount.toFixed(2)} uTn</strong>
-									</span>
-								)}
-								{detailsProvided && (
-									<span className="inline-flex items-center text-green-700 bg-green-50 border border-green-200 text-xs font-medium px-2 py-1 rounded">
-										<CheckCircle2 className="h-3.5 w-3.5 mr-1" /> Details
-										provided
-									</span>
-								)}
-							</CardHeader>
-							<CardContent>
-								<div className="space-y-4">
-									<RadioGroup
-										value={paymentMethod}
-										onValueChange={(v) =>
-											handleSelectPaymentMethod(v as PaymentMethodId)
-										}
-									>
-										<div className="space-y-3">
-											{PAYMENT_METHODS.map((method) => {
-												const Icon = method.icon;
-												return (
-													<div
-														key={method.id}
-														className="flex items-center justify-between gap-4"
-													>
-														<div className="flex items-center space-x-3">
-															<RadioGroupItem
-																value={method.id}
-																id={method.id}
-															/>
-															<Label
-																htmlFor={method.id}
-																className="flex items-center space-x-3 cursor-pointer"
-															>
-																<Icon className="h-5 w-5 text-gray-600" />
-																<span>{method.label}</span>
-															</Label>
-														</div>
-														{["MOBILE_MONEY", "CARD"].includes(method.id) &&
-															paymentMethod === method.id && (
-																<Button
-																	variant="outline"
-																	size="sm"
-																	onClick={() => setShowPaymentModal(true)}
-																>
-																	{detailsProvided
-																		? "Edit details"
-																		: "Enter details"}
-																</Button>
-															)}
-													</div>
-												);
-											})}
-										</div>
-									</RadioGroup>
-								</div>
-							</CardContent>
-						</Card>
-					</div>
-
-					{/* Order Summary */}
-					<div className="space-y-6">
-						<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-							<CardHeader>
-								<CardTitle>Order Summary</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<div className="space-y-4">
-									{/* Cart Items */}
-									<div className="space-y-3">
-										{items.map(({ product }, index) => (
-											<div key={index} className="flex items-center space-x-3">
-												<div className="flex-1">
-													<p className="font-medium text-sm">{product.title}</p>
-													<p className="text-xs text-gray-600">Quantity: 1</p>
-												</div>
-												<p className="font-medium">
-													{formatPrice(product.price)}
-												</p>
-											</div>
-										))}
-									</div>
-
-									<Separator />
-
-									{/* Totals */}
-									<div className="space-y-2">
-										<div className="flex justify-between text-sm">
-											<span>Subtotal</span>
-											<span>{formatPrice(subtotal)}</span>
-										</div>
-										<div className="flex justify-between text-sm">
-											<span>Delivery Fee</span>
-											<span>{formatPrice(deliveryFee)}</span>
-										</div>
-										<Separator />
-										<div className="flex justify-between font-medium">
-											<span>Total</span>
-											<span>{formatPrice(total)}</span>
-										</div>
-									</div>
-								</div>
-							</CardContent>
-						</Card>
-
-						{/* Place Order Button */}
-						<Button
-							onClick={handleSubmit}
-							disabled={
-								isProcessing ||
-								!country ||
-								!addressValid ||
-								!paymentMethod ||
-								(requiresDetails && !isPaymentDetailsValid())
-							}
-							className="w-full"
-							size="lg"
-						>
-							{isProcessing ? (
-								<>
-									<Loader2 className="h-4 w-4 mr-2 animate-spin" />
-									Processing Order...
-								</>
-							) : (
-								`Place Order - ${formatPrice(total)}`
-							)}
-						</Button>
-					</div>
-				</div>
-			</div>
-
-			{/* Payment Details Modal */}
-			<ResponsiveModal
-				isOpen={showPaymentModal}
-				setIsOpen={setShowPaymentModal}
-				title="Enter Payment Details"
-				description={
-					paymentMethod
-						? `Provide details for ${paymentMethod.replace("_", " ").toLowerCase()}`
-						: undefined
-				}
-				size="md"
-			>
-				<div className="space-y-4">
-					{/* {paymentMethod === 'MOBILE_MONEY' && (
-            <>
-              
-            </>
-          )} */}
-					{paymentMethod === "MOBILE_MONEY" && (
-						<div className="space-y-3">
-							<div>
-								<label className="text-sm font-medium">
-									Mobile Money Provider
-								</label>
-								<select
-									className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-									value={paymentDetails.mobileMoneyProvider || ""}
-									onChange={(e) =>
-										setPaymentDetails({
-											...paymentDetails,
-											mobileMoneyProvider: e.target.value,
-										})
-									}
-								>
-									<option value="">Select Provider</option>
-									<option value="MTN_MONEY">MTN Money</option>
-									<option value="AIRTEL_MONEY">Airtel Money</option>
-									<option value="ORANGE_MONEY">Orange Money</option>
-									<option value="MPESA">M-Pesa</option>
-								</select>
-							</div>
-							<div>
-								<label className="text-sm font-medium">Country</label>
-								<select
-									className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-									value={paymentDetails.country || ""}
-									onChange={(e) =>
-										setPaymentDetails({
-											...paymentDetails,
-											country: e.target.value,
-										})
-									}
-								>
-									<option value="">Select Country</option>
-									<option value="DRC">DRC</option>
-									<option value="KENYA">Kenya</option>
-									<option value="UGANDA">Uganda</option>
-									<option value="RWANDA">Rwanda</option>
-									<option value="BURUNDI">Burundi</option>
-									<option value="TANZANIA">Tanzania</option>
-								</select>
-							</div>
-							{paymentDetails.mobileMoneyProvider && paymentDetails.country && (
-								<div className="bg-muted p-3 rounded-md">
-									<p className="text-sm font-medium mb-2">Payment Code:</p>
-									<code className="text-lg font-mono bg-background p-2 rounded border">
-										{paymentDetails.country ? (
-											<>
-												<PaymentCode
-													productOwnerCodes={{
-														MTN_MOMO: "234576",
-														AIRTEL_MONEY: "234577",
-														ORANGE_MONEY: "234578",
-														M_PESA: "234579",
-													}}
-													country={paymentDetails.country}
-													provider={paymentDetails.mobileMoneyProvider}
-													amount={total.toFixed(0)}
-												/>
-												<div className="space-y-2">
-													<Label htmlFor="momoProvider">Provider</Label>
-													<input
-														id="momoProvider"
-														value={paymentDetails.mobileMoneyProvider}
-														onChange={(e) =>
-															setPaymentDetails((s) => ({
-																...s,
-																mobileMoneyProvider: e.target.value,
-															}))
-														}
-														placeholder="e.g. MTN, Airtel"
-														className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													/>
-												</div>
-												<div className="space-y-2">
-													<Label htmlFor="momoPhone">Phone number</Label>
-													<input
-														id="momoPhone"
-														value={paymentDetails.mobileMoneyPhone}
-														onChange={(e) =>
-															setPaymentDetails((s) => ({
-																...s,
-																mobileMoneyPhone: formatMomoPhone(
-																	e.target.value,
-																),
-															}))
-														}
-														placeholder="e.g. 078 123 4567"
-														inputMode="numeric"
-														className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-													/>
-												</div>
-											</>
-										) : (
-											<span>{"We Generating code..."}</span>
-										)}
-									</code>
-									<p className="text-xs text-muted-foreground mt-2">
-										Dial this code on your mobile phone to complete payment
-									</p>
-								</div>
-							)}
-							<div>
-								<label className="text-sm font-medium">
-									Transaction ID (Optional)
-								</label>
-								<Input
-									placeholder="Enter operator transaction ID"
-									value={paymentDetails.paymentTransactionId || ""}
-									onChange={(e) =>
-										setPaymentDetails({
-											...paymentDetails,
-											paymentTransactionId: e.target.value,
-										})
-									}
-								/>
-							</div>
-						</div>
-					)}
-
-					{paymentMethod === "CARD" && (
-						<>
-							<div className="space-y-2">
-								<Label htmlFor="cardName">Name on card</Label>
-								<input
-									id="cardName"
-									value={paymentDetails.cardName}
-									onChange={(e) =>
-										setPaymentDetails((s) => ({
-											...s,
-											cardName: e.target.value,
-										}))
-									}
-									placeholder="Full name"
-									className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-								/>
-							</div>
-							<div className="space-y-2">
-								<Label htmlFor="cardNumber">Card number</Label>
-								<input
-									id="cardNumber"
-									value={paymentDetails.cardNumber}
-									onChange={(e) =>
-										setPaymentDetails((s) => ({
-											...s,
-											cardNumber: formatCardNumber(e.target.value),
-										}))
-									}
-									placeholder="1234 5678 9012 3456"
-									inputMode="numeric"
-									className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-								/>
-							</div>
-							<div className="grid grid-cols-2 gap-4">
-								<div className="space-y-2">
-									<Label htmlFor="cardExpiry">Expiry (MM/YY)</Label>
-									<input
-										id="cardExpiry"
-										value={paymentDetails.cardExpiry}
-										onChange={(e) =>
-											setPaymentDetails((s) => ({
-												...s,
-												cardExpiry: formatExpiry(e.target.value),
-											}))
-										}
-										placeholder="MM/YY"
-										inputMode="numeric"
-										className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-									/>
-								</div>
-								<div className="space-y-2">
-									<Label htmlFor="cardCvv">CVV</Label>
-									<input
-										id="cardCvv"
-										value={paymentDetails.cardCvv}
-										onChange={(e) =>
-											setPaymentDetails((s) => ({
-												...s,
-												cardCvv: formatCvv(e.target.value),
-											}))
-										}
-										placeholder="123"
-										inputMode="numeric"
-										className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
-									/>
-								</div>
-							</div>
-						</>
-					)}
-
-					<div className="flex items-center justify-end gap-2 pt-2">
-						<Button
-							variant="outline"
-							onClick={() => setShowPaymentModal(false)}
-						>
-							Cancel
-						</Button>
-						<Button
-							onClick={() => {
-								if (!isPaymentDetailsValid()) return;
-								setShowPaymentModal(false);
-							}}
-							disabled={!isPaymentDetailsValid()}
-						>
-							Save details
-						</Button>
-					</div>
-				</div>
-			</ResponsiveModal>
-		</div>
-	);
+        {/* Mobile Order Summary */}
+        <div className="lg:hidden mt-6">
+          <OrderSummary
+            items={groupedOrders[activeBusinessIndex]?.items}
+            deliveryFee={groupedOrders[activeBusinessIndex]?.deliveryFee}
+            total={groupedOrders[activeBusinessIndex]?.total}
+            uTnAmount={groupedOrders[activeBusinessIndex]?.total / 10}
+            onCheckout={handleCheckout}
+            isProcessing={isProcessing}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }

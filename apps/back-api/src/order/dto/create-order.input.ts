@@ -26,6 +26,11 @@ export class CreateOrderInput {
 	@IsOptional()
 	@IsString()
 	deliveryAddress?: string;
+	
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	clientOrderId?: string;
 
 	@Field({ nullable: true })
 	@IsOptional()

@@ -43,6 +43,7 @@ export const GET_CLIENT_ORDERS = gql`
       items {
         id
         orderNumber
+        clientOrderId
         status
         totalAmount
         createdAt
@@ -69,8 +70,15 @@ export const GET_CLIENT_ORDERS = gql`
           last4
         }
         deliveryAddress {
+          id
+          createdAt
+          updatedAt
+          clientId
+          country
           street
           city
+          postalCode
+          isDefault
         }
       }
       total
@@ -221,31 +229,31 @@ export const ADD_CLIENT_ADDRESS = gql`
   mutation AddClientAddress($clientId: String!, $input: AddressInput!) {
     addClientAddress(clientId: $clientId, input: $input) {
       id
-    fullName
-    email
-    phone
-    avatar
-    loyaltyPoints
-    loyaltyTier
-    totalSpent
-    totalOrders
-    addresses {
-      id
-      street
-      city
-      country
-      postalCode
-      isDefault
-    }
-    paymentMethods {
-      id
-      type
-      provider
-      last4
-      isDefault
-    }
-    createdAt
-    updatedAt
+      fullName
+      email
+      phone
+      avatar
+      loyaltyPoints
+      loyaltyTier
+      totalSpent
+      totalOrders
+      addresses {
+        id
+        street
+        city
+        country
+        postalCode
+        isDefault
+      }
+      paymentMethods {
+        id
+        type
+        provider
+        last4
+        isDefault
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -353,6 +361,7 @@ export const ON_ORDER_UPDATED = gql`
     orderUpdated(clientId: $clientId) {
       id
       orderNumber
+      clientOrderId
       status
       totalAmount
       createdAt

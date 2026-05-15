@@ -23,6 +23,9 @@ export class OrderEntity {
 	deliveryAddress?: DeliveryAddressEntity;
 
 	@Field({ nullable: true })
+	clientOrderId?: string;
+
+	@Field({ nullable: true })
 	qrCode?: string;
 
 	@Field()
