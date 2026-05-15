@@ -47,7 +47,7 @@ type TypedChatEntity = Omit<ChatEntity, "messages" | "negotiationType"> & {
 type ChatsPageProps = {};
 
 export default function ChatsPage({}: ChatsPageProps) {
-  const { user } = useMe();
+  const { user, role } = useMe();
   const [selectedChat, setSelectedChat] = useState<TypedChatEntity | null>(
     null,
   );
@@ -58,19 +58,38 @@ export default function ChatsPage({}: ChatsPageProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
 
+  const vars =
+    role === "worker"
+      ? {
+          workerId: user?.id,
+          // businessId: "7659de10-20da-4819-9285-f220cb0b0940",
+          status: filterStatus || undefined,
+          negotiationType: filterType || undefined,
+          search: searchQuery || undefined,
+        }
+      : role === "client"
+        ? {
+            clientId: user?.id,
+            status: filterStatus || undefined,
+            negotiationType: filterType || undefined,
+            search: searchQuery || undefined,
+          }
+        : role === "business"
+          ? {
+              businessId: user?.id,
+              status: filterStatus || undefined,
+              negotiationType: filterType || undefined,
+              search: searchQuery || undefined,
+            }
+          : {};
+
   const {
     data: chatsData,
     loading: chatsLoading,
     error: chatsError,
     refetch: refetchChats,
   } = useQuery(GET_CHATS, {
-    variables: {
-      workerId: user?.id,
-      businessId: "7659de10-20da-4819-9285-f220cb0b0940",
-      status: filterStatus || undefined,
-      negotiationType: filterType || undefined,
-      search: searchQuery || undefined,
-    },
+    variables: vars,
     skip: !user?.id,
   });
 

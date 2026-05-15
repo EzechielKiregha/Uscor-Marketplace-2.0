@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/toast-provider";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,11 +19,10 @@ import {
   Loader2,
   X,
 } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/app/context/use-cart";
-import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
+import { GET_ORDER_BY_ID, GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import { useQuery, useApolloClient } from "@apollo/client";
+import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 
 export default function OrderConfirmationPage() {
   const router = useRouter();
@@ -41,6 +40,7 @@ export default function OrderConfirmationPage() {
   const [receiptData, setReceiptData] = useState<any>(null);
   const { showToast } = useToast();
   const apolloClient = useApolloClient();
+  const [generateOrderReceipt] = useMutation(GENERATE_ORDER_RECEIPT);
 
   const orderId = searchParams.get("orderId");
 
@@ -131,13 +131,48 @@ export default function OrderConfirmationPage() {
       const paymentAmount =
         orderData.payment?.amount ?? productsTotal + orderData.deliveryFee;
 
+      const receiptProducts = (orderData.products || []).map((item: any) => ({
+        id: item.product.id,
+        title: item.product.title,
+        price: item.product.price,
+        quantity: item.quantity,
+        businessId: item.product.businessId,
+        image: item.product.medias?.[0]?.url ?? null,
+      }));
+
+      const receiptBusinesses = Object.fromEntries(
+        Object.entries(businessMap).map(([businessId, business]) => [
+          businessId,
+          {
+            id: business.id,
+            name: business.name,
+            avatar: business.avatar,
+            businessType: business.businessType,
+          },
+        ]),
+      );
+
       setReceiptData({
         orderId: orderData.id,
-        client: orderData.client,
-        deliveryAddress: orderData.deliveryAddress,
-        payment: orderData.payment,
-        products: orderData.products,
-        businesses: businessMap,
+        client: {
+          id: orderData.client.id,
+          fullName: orderData.client.fullName,
+          email: orderData.client.email,
+        },
+        deliveryAddress: {
+          street: orderData.deliveryAddress?.street,
+          city: orderData.deliveryAddress?.city,
+          country: orderData.deliveryAddress?.country,
+          postalCode: orderData.deliveryAddress?.postalCode,
+        },
+        payment: {
+          amount: orderData.payment?.amount,
+          method: orderData.payment?.method,
+          status: orderData.payment?.status,
+          qrCode: orderData.payment?.qrCode,
+        },
+        products: receiptProducts,
+        businesses: receiptBusinesses,
         subtotal: productsTotal,
         deliveryFee: orderData.deliveryFee,
         total: paymentAmount,
@@ -151,33 +186,58 @@ export default function OrderConfirmationPage() {
   }, [orderId, queryLoading, error, data, clearCart, apolloClient]);
 
   const handleDownloadReceipt = async () => {
+    if (!order || !receiptData) return;
+
     setIsDownloading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 750));
+      const response = await generateOrderReceipt({
+        variables: {
+          input: {
+            orderId: order.id,
+            email: order.client?.email,
+          },
+        },
+      });
 
-      setIsDownloading(false);
+      const receiptUrl = response?.data?.generateOrderReceipt?.receiptUrl;
+      const fileName = response?.data?.generateOrderReceipt?.fileName;
+
+      if (receiptUrl) {
+        const link = document.createElement("a");
+        link.href = receiptUrl;
+        link.target = "_blank";
+        link.rel = "noreferrer noopener";
+        if (fileName) {
+          link.download = fileName;
+        }
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        const payload = JSON.stringify(receiptData, null, 2);
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `receipt_${order.id}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
       setShowReceipt(true);
-
-      const payload = JSON.stringify(receiptData || order, null, 2);
-      const blob = new Blob([payload], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `receipt_${order.id}.txt`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
       showToast(
         "success",
-        "Receipt Downloaded",
-        "Your receipt has been downloaded",
+        "Receipt Prepared",
+        "Your receipt is ready for download.",
       );
     } catch (error) {
+      console.error("Receipt generation failed:", error);
+      showToast("error", "Receipt Failed", "Could not generate receipt.");
+    } finally {
       setIsDownloading(false);
-      showToast("error", "Download Failed", "Failed to download receipt");
     }
   };
 

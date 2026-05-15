@@ -3,7 +3,7 @@
 import { DollarSign, LogOutIcon, Settings, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { logout } from "@/lib/auth";
-import type { BusinessEntity, ClientEntity, WorkerEntity } from "@/lib/types";
+import { BusinessEntity, ClientEntity, WorkerEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./PopOver";

@@ -236,7 +236,7 @@ export class ChatResolver {
 	async getUnreadCount(
 		@Args("userId", { type: () => String })
 		userId: string,
-	) {
+	) {	
 		return this.chatService.getUnreadCount(userId);
 	}
 

@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { jwtDecode } from "jwt-decode";
 import { getAccessToken, logout } from "@/lib/auth";
 import { client } from "./apollo-client";
-import type {
+import {
 	AdminEntity,
 	BusinessEntity,
 	ClientEntity,

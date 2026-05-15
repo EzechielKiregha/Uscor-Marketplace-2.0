@@ -14,7 +14,7 @@ import {
 	ON_FREELANCE_SERVICE_UPDATED,
 	UPDATE_FREELANCE_SERVICE,
 } from "@/graphql/freelance.gql";
-import type { FreelanceServiceEntity } from "@/lib/types";
+import { FreelanceServiceEntity  } from "@/lib/types";
 
 export const useFreelanceServices = (businessId: string) => {
 	const [selectedServiceId, setSelectedServiceId] = useState<string | null>(

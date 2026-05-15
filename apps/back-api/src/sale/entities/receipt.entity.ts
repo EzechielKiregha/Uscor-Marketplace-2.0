@@ -1,6 +1,6 @@
 import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { SaleStatus } from "../../generated/prisma/enums";
 import { IsOptional } from "class-validator";
+import { SaleStatus } from "../../generated/prisma/enums";
 
 // Enums
 registerEnumType(SaleStatus, {

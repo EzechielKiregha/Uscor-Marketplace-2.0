@@ -73,7 +73,7 @@ export class ChatService {
 						where: { id },
 					});
 			const worker =
-				client || business
+				client && business
 					? null
 					: await this.prisma.worker.findUnique({
 							where: { id },
@@ -89,10 +89,10 @@ export class ChatService {
 		}
 
 		// Validate participant requirements
-		if (negotiationType === "REOWNERSHIP" && participantsData.length !== 2) {
+		if (negotiationType === "REOWNERSHIP" && participantsData.length < 2) {
 			throw new Error("REOWNERSHIP chats require exactly two businesses");
 		}
-		if (negotiationType === "PURCHASE" && participantsData.length !== 2) {
+		if (negotiationType === "PURCHASE" && participantsData.length < 2) {
 			throw new Error("PURCHASE chats require one client and one business");
 		}
 

@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
 import { BusinessModule } from "../business/business.module";
 import { BusinessService } from "../business/business.service";
+import { PrismaModule } from "../prisma/prisma.module";
 import { PrismaService } from "../prisma/prisma.service";
 import { ProductModule } from "../product/product.module";
 import { ProductService } from "../product/product.service";
@@ -11,7 +12,6 @@ import { WorkerModule } from "../worker/worker.module";
 import { WorkerService } from "../worker/worker.service";
 import { InventoryResolver } from "./inventory.resolver";
 import { InventoryService } from "./inventory.service";
-import { PrismaModule } from "../prisma/prisma.module";
 
 const pubSub = new PubSub();
 // Module
@@ -29,6 +29,12 @@ const pubSub = new PubSub();
 			useValue: pubSub,
 		},
 	],
-	imports: [StoreModule, ProductModule, BusinessModule, WorkerModule, PrismaModule],
+	imports: [
+		StoreModule,
+		ProductModule,
+		BusinessModule,
+		WorkerModule,
+		PrismaModule,
+	],
 })
 export class InventoryModule {}

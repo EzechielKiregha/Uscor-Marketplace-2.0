@@ -32,8 +32,10 @@ export class ProductResolver {
 	@Mutation(() => ProductEntity)
 	async createProduct(
 		@Context() context,
-		@Args("input", { type: () => CreateProductInput }) input: CreateProductInput,
-		@Args("mediaInput", { type: () => AddMediaInput }) mediaInput: AddMediaInput,
+		@Args("input", { type: () => CreateProductInput })
+		input: CreateProductInput,
+		@Args("mediaInput", { type: () => AddMediaInput })
+		mediaInput: AddMediaInput,
 	) {
 		const user = context.req.user;
 		if (user.role === "business" && user.id !== input.businessId) {
@@ -141,8 +143,10 @@ export class ProductResolver {
 		@Context() context,
 		@Args("id", { type: () => String })
 		id: string,
-		@Args("input", { type: () => UpdateProductInput }) input: UpdateProductInput,
-		@Args("mediaInput", { type: () => AddMediaInput }) mediaInput: AddMediaInput,
+		@Args("input", { type: () => UpdateProductInput })
+		input: UpdateProductInput,
+		@Args("mediaInput", { type: () => AddMediaInput })
+		mediaInput: AddMediaInput,
 	) {
 		const user = context.req.user;
 		const product = await this.productService.findOne(id);

@@ -1,4 +1,3 @@
-// app/client/_components/OrderHistory.tsx
 "use client";
 
 import { useQuery } from "@apollo/client";
@@ -19,6 +18,8 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
+import { CartItem, useCart } from "@/app/context/use-cart";
+import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
 
 interface OrderHistoryProps {
   client: any;
@@ -29,6 +30,8 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
   const [statusFilter, setStatusFilter] = useState("");
   const [activeOrder, setActiveOrder] = useState<any>(null);
   const { showToast } = useToast();
+  const { addItem } = useCart();
+  const [openCart, setOpenCart] = useState(false);
 
   const {
     data: ordersData,
@@ -42,7 +45,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
   });
 
   const orders =
-    (ordersData?.clientOrders?.items).filter(
+    ordersData?.clientOrders?.items?.filter(
       (order: any) => !order?.clientOrderId,
     ) || [];
   const totalOrders = ordersData?.clientOrders?.total || 0;
@@ -107,19 +110,32 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
   };
 
   const handleReorder = (_order: any) => {
-    // In a real app, this would create a new order with the same items
-    showToast("success", "Success", "Items added to cart for reorder");
+    _order.items.forEach((item: CartItem) => {
+      addItem(item, item.quantity);
+      // console.log("Added to cart:", item);
+    });
 
-    // Navigate to cart
-    setTimeout(() => {
-      window.location.href = "/cart";
-    }, 1000);
+    setOpenCart(true);
+
+    showToast(
+      "success",
+      "Success",
+      "Items added to cart for reorder",
+      true,
+      3000,
+    );
   };
 
   const handleReview = (order: any) => {
     // In a real app, this would open a review modal
     setActiveOrder(order);
-    showToast("info", "Review", "You can leave a review for this order");
+    showToast(
+      "info",
+      "Review",
+      "You can leave a review for this order",
+      true,
+      3000,
+    );
   };
 
   const filteredOrders = orders.filter(
@@ -459,7 +475,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                 <div>
                   <h2 className="text-xl font-bold">Order Details</h2>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Order #{activeOrder.orderNumber}
+                    Order #{activeOrder.orderNumber.substring(0, 8)}
                   </p>
                 </div>
                 <Button
@@ -532,7 +548,9 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                         </div>
                         <div className="flex justify-between">
                           <span>Delivery:</span>
-                          <span>$0.00</span>
+                          <span>
+                            ${activeOrder.deliveryFee?.toFixed(2) || "0.00"}
+                          </span>
                         </div>
                         <div className="flex justify-between font-bold pt-2 border-t border-border">
                           <span>Total:</span>
@@ -806,6 +824,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
           <Button variant="outline">Next</Button>
         </div>
       )}
+      <CartDrawer isOpen={openCart} onClose={() => setOpenCart(!openCart)} />
     </div>
   );
 }

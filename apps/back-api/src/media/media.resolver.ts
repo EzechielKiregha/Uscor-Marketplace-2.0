@@ -4,7 +4,5 @@ import { MediaService } from "./media.service";
 
 @Resolver(() => MediaEntity)
 export class MediaResolver {
-	constructor(
-		private mediaService: MediaService
-	) {}
+	constructor(readonly _mediaService: MediaService) {}
 }

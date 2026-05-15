@@ -1,13 +1,13 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { AuditLogEntity } from "../../audit/entities/audit-log.entity";
 import { BusinessEntity } from "../../business/entities/business.entity";
+import { ChatParticipantEntity } from "../../chat/entities/chat-participants.entity";
 import { WorkerServiceAssignmentEntity } from "../../freelance-service/entities/freelance-service.entity";
 import { KnowYourCustomerEntity } from "../../know-your-customer/entities/know-your-customer.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 import { ChatEntityWorker } from "./chat.entity";
 import { SaleEntityWorker } from "./sale.entity";
 import { ShiftEntityWorker } from "./shift.entity";
-import { ChatParticipantEntity } from "../../chat/entities/chat-participants.entity";
 
 @ObjectType()
 export class WorkerEntity {
@@ -28,7 +28,7 @@ export class WorkerEntity {
 
 	@Field({ nullable: true })
 	role?: string;
-	
+
 	@Field({ nullable: true })
 	bio?: string;
 

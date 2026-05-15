@@ -373,6 +373,7 @@ export const OrderScalarFieldEnum = {
   deliveryFee: 'deliveryFee',
   deliveryAddress: 'deliveryAddress',
   clientOrderId: 'clientOrderId',
+  receiptUrl: 'receiptUrl',
   qrCode: 'qrCode',
   totalAmount: 'totalAmount',
   createdAt: 'createdAt',

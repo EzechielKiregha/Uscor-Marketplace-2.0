@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"maxSize": 10
+		"includes": ["./**/*.ts", "./**/*.tsx"] 
 	},
 	"formatter": {
 		"enabled": true,
@@ -16,15 +16,27 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": false,
+			"recommended": true,
 			"correctness": {
 				"noUnusedImports": "off",
 				"noUnusedVariables": "off",
-				"noUnusedFunctionParameters": "off"
+				"noUnusedFunctionParameters": "off",
+				"useParseIntRadix": "off",
+				"noConstructorReturn": "off"
 			},
 			"suspicious": {
-				"noImplicitAnyLet": "off",
-				"noExplicitAny": "off"
+				"noExplicitAny": "off",
+				"noNonNullAssertedOptionalChain": "off",
+				"noGlobalAssign": "off",
+				"noImplicitAnyLet": "off"
+			},
+			"complexity": {
+				"useOptionalChain": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off",
+				"useTemplate": "off",
+				"useImportType": "off"
 			}
 		}
 	},

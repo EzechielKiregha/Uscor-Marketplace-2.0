@@ -30,7 +30,13 @@ export default function CartItem({
         {item.product.medias?.[0]?.url ? (
           <img
             src={item.product.medias[0].url}
-            alt={item.product.title}
+            alt={item.product.title || item.product.name}
+            className="w-full h-full object-cover"
+          />
+        ) : item.product.media?.[0]?.url ? (
+          <img
+            src={item.product.media[0].url}
+            alt={item.product.title || item.product.name}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -43,7 +49,7 @@ export default function CartItem({
       <div className="ml-4 flex flex-1 flex-col">
         <div>
           <div className="flex justify-between text-base font-medium">
-            <h3>{item.product.title}</h3>
+            <h3>{item.product.title || item.product.name}</h3>
             <p className="ml-4">${item.product.price.toFixed(2)}</p>
           </div>
         </div>

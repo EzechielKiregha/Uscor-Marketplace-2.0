@@ -6,6 +6,10 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/app/context/use-cart";
 import ProductDetailsModal from "./ProductDetailsModal";
+import { useMutation } from "@apollo/client";
+import { CREATE_CHAT } from "@/graphql/chat.gql";
+import { useMe } from "@/lib/useMe";
+import NewChatSession from "./NewChatSession";
 
 interface ProductCardProps {
   product: any;
@@ -13,11 +17,33 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, viewMode }: ProductCardProps) {
+  const { user } = useMe();
   const [showDetails, setShowDetails] = useState(false);
   const { showToast } = useToast();
+  const [openChat, setOpenChat] = useState(false);
 
   const { addItem } = useCart();
   const [_isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
+    onCompleted: (_data) => {
+      showToast(
+        "success",
+        "Chat Opened",
+        "You can now chat with the business about this product",
+        true,
+        5000,
+      );
+    },
+    onError: (error) => {
+      showToast(
+        "error",
+        "Failed",
+        `Failed to start chat: ${error.message}`,
+        true,
+        5000,
+      );
+    },
+  });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -69,18 +95,30 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
     setShowDetails(true);
   };
 
-  const handleChat = () => {
-    // In a real app, this would open a chat with the business
-    showToast(
-      "success",
-      "Chat Opened",
-      "You can now chat with the business about this product",
-    );
-
-    // Navigate to chat
-    setTimeout(() => {
-      window.location.href = `/chats?businessId=${product.business.id}&productId=${product.id}`;
-    }, 1000);
+  const handleChat = (
+    workerId?: string,
+    negotiationType: string = "PURCHASE",
+  ) => {
+    if (!user) {
+      showToast(
+        "error",
+        "Failed",
+        "Please log in to start a chat.",
+        true,
+        5000,
+      );
+      return;
+    }
+    createChat({
+      variables: {
+        input: {
+          productId: product.id,
+          participantIds: [user.id, product.business?.id, workerId!],
+          isSecure: true,
+          negotiationType: negotiationType,
+        },
+      },
+    });
   };
 
   const handleAddToCart = () => {
@@ -202,10 +240,18 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
           <ProductDetailsModal
             product={product}
             onClose={() => setShowDetails(false)}
-            onChat={handleChat}
             onAddToCart={handleAddToCart}
+            onOpenChat={() => setOpenChat(true)}
           />
         )}
+        <NewChatSession
+          isOpen={openChat}
+          onClose={() => setOpenChat(!openChat)}
+          storeId={product?.store?.id}
+          onChat={(workerId: string, negotiationType: string) => {
+            handleChat(workerId, negotiationType);
+          }}
+        />
       </>
     );
   }
@@ -313,10 +359,18 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
         <ProductDetailsModal
           product={product}
           onClose={() => setShowDetails(false)}
-          onChat={handleChat}
+          onOpenChat={() => setOpenChat(true)}
           onAddToCart={handleAddToCart}
         />
       )}
+      <NewChatSession
+        isOpen={openChat}
+        onClose={() => setOpenChat(!openChat)}
+        storeId={product?.store?.id}
+        onChat={(workerId: string, negotiationType: string) => {
+          handleChat(workerId, negotiationType);
+        }}
+      />
     </>
   );
 }

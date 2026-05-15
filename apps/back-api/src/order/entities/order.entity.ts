@@ -24,6 +24,9 @@ export class OrderEntity {
 
 	@Field({ nullable: true })
 	clientOrderId?: string;
+	
+	@Field({ nullable: true })
+	receiptUrl?: string;
 
 	@Field({ nullable: true })
 	qrCode?: string;
@@ -90,4 +93,19 @@ export class PaginatedOrdersResponse {
 
 	@Field(() => Int)
 	limit: number;
+}
+
+@ObjectType()
+export class OrderReceiptEntity {
+	@Field()
+	receiptUrl: string;
+
+	@Field()
+	fileName: string;
+
+	@Field()
+	mediaId: string;
+
+	@Field()
+	emailSent: boolean;
 }

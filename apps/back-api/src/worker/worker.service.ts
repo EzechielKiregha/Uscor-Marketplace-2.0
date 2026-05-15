@@ -50,7 +50,7 @@ export class WorkerService {
 						chat: {
 							include: {
 								messages: true,
-							}
+							},
 						},
 					},
 				},
@@ -86,7 +86,7 @@ export class WorkerService {
 						freelanceService: true,
 					},
 				},
-				chatParticipants : true,
+				chatParticipants: true,
 				sales: true,
 				shifts: true,
 				medias: true,
@@ -115,7 +115,7 @@ export class WorkerService {
 						chat: {
 							include: {
 								messages: true,
-							}
+							},
 						},
 					},
 				},
@@ -178,7 +178,7 @@ export class WorkerService {
 						chat: {
 							include: {
 								messages: true,
-							}
+							},
 						},
 					},
 				},
@@ -475,7 +475,7 @@ export class WorkerService {
 				client: true,
 				worker: true,
 				store: true,
-				returns: true
+				returns: true,
 			},
 		});
 	}
@@ -664,12 +664,12 @@ export class WorkerService {
 		const items = await this.prisma.chat.findMany({
 			include: {
 				messages: true,
-				participants:{
+				participants: {
 					include: {
 						business: true,
 						client: true,
-					}
-				}
+					},
+				},
 			},
 			skip: (page - 1) * limit,
 			take: limit,

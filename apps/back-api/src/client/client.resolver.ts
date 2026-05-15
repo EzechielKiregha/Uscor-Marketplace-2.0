@@ -36,7 +36,7 @@ export class ClientResolver {
 		description: "Creates a new client with hashed password.",
 	})
 	async createClient(
-		@Args("createClientInput")
+		@Args("createClientInput", { type: () => CreateClientInput })
 		createClientInput: CreateClientInput,
 	) {
 		return this.clientService.create(createClientInput);
@@ -48,7 +48,7 @@ export class ClientResolver {
 		description: "Creates a new client for POS with minimal info.",
 	})
 	async createClientForPOS(
-		@Args("createClientInput")
+		@Args("createClientInput", { type: () => CreateClientForPOSInput })
 		createClientInput: CreateClientForPOSInput,
 	) {
 		return this.clientService.createForPOS(createClientInput);

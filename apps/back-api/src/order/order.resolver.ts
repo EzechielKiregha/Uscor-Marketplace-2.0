@@ -14,8 +14,13 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { CreateOrderInput } from "./dto/create-order.input";
 import { ProcessPaymentInput } from "./dto/process-payment.input";
+import { GenerateOrderReceiptInput } from "./dto/receipt.input";
 import { UpdateOrderInput } from "./dto/update-order.input";
-import { OrderEntity, PaginatedOrdersResponse } from "./entities/order.entity";
+import {
+	OrderEntity,
+	OrderReceiptEntity,
+	PaginatedOrdersResponse,
+} from "./entities/order.entity";
 import { OrderService } from "./order.service";
 
 // Resolver
@@ -220,6 +225,19 @@ export class OrderResolver {
 		});
 
 		return processedOrder;
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("client")
+	@Mutation(() => OrderReceiptEntity, {
+		description: "Generates a PDF receipt for the order.",
+	})
+	async generateOrderReceipt(
+		@Args("input") input: GenerateOrderReceiptInput,
+		@Context() context,
+	) {
+		const user = context.req.user;
+		return this.orderService.generateReceipt(input, user);
 	}
 
 	// Subscriptions

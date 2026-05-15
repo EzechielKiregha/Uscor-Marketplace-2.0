@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useCart } from "@/app/context/use-cart";
-import type { ProductEntity } from "@/lib/types";
+import { ProductEntity } from "@/lib/types";
 import { Button, buttonVariants } from "./ui/button";
 
 const AddToCartButton = ({ product }: { product: ProductEntity }) => {

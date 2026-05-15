@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
+import { PrismaModule } from "../prisma/prisma.module";
 import { PrismaService } from "../prisma/prisma.service";
 import { FreelanceServiceResolver } from "./freelance-service.resolver";
 import { FreelanceServiceService } from "./freelance-service.service";
-import { PrismaModule } from "../prisma/prisma.module";
 
 const pubSub = new PubSub();
 // Module
@@ -14,6 +14,6 @@ const pubSub = new PubSub();
 		PrismaService,
 		{ provide: "PUB_SUB", useValue: pubSub },
 	],
-		imports: [PrismaModule]
+	imports: [PrismaModule],
 })
 export class FreelanceServiceModule {}

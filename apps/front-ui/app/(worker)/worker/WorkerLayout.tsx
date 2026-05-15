@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
-import type { StoreEntity } from "@/lib/types";
+import { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
@@ -76,6 +76,30 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<WorkerSection>("pos");
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedSection =
+      typeof window !== "undefined"
+        ? window.localStorage.getItem("workerActiveSection")
+        : null;
+
+    if (
+      storedSection === "pos" ||
+      storedSection === "inventory" ||
+      storedSection === "shifts" ||
+      storedSection === "chats" ||
+      storedSection === "reports" ||
+      storedSection === "profile"
+    ) {
+      setActiveSection(storedSection);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("workerActiveSection", activeSection);
+    }
+  }, [activeSection]);
 
   // Always call all hooks at the top level, regardless of conditions
   const {

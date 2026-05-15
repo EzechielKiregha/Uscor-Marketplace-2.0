@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { Field, InputType } from "@nestjs/graphql";
 import { IsOptional, IsString } from "class-validator";
+import { PrismaModule } from "../prisma/prisma.module";
 import { PrismaService } from "../prisma/prisma.service";
 import { CategoryResolver } from "./category.resolver";
 import { CategoryService } from "./category.service";
-import { PrismaModule } from "../prisma/prisma.module";
 
 @InputType()
 export class UpdateCategoryInput {
@@ -24,6 +24,6 @@ export class UpdateCategoryInput {
 
 @Module({
 	providers: [CategoryResolver, CategoryService, PrismaService],
-		imports: [PrismaModule]
+	imports: [PrismaModule],
 })
 export class CategoryModule {}

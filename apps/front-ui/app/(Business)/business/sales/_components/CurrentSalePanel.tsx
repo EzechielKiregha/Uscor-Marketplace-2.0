@@ -26,7 +26,7 @@ import {
   REMOVE_SALE_PRODUCT,
   UPDATE_SALE_PRODUCT,
 } from "@/graphql/sales.gql";
-import type { ProductEntity } from "@/lib/types";
+import { ProductEntity } from "@/lib/types";
 import ClientSelectionModal from "./ClientSelectionModal";
 import NewSaleModal from "./NewSaleModal";
 import { useSales } from "../../_hooks/use-sales";

@@ -9,6 +9,7 @@ export const GET_ORDER_BY_ID = gql`
     order(id: $id) {
     id
     deliveryFee
+    receiptUrl
     clientOrderId
     deliveryAddress {
       id
@@ -61,6 +62,7 @@ export const GET_CLIENT_ORDERS = gql`
       items {
         id
         deliveryFee
+        receiptUrl
         deliveryAddress {
           id
           createdAt
@@ -114,6 +116,7 @@ export const GET_BUSINESS_ORDERS = gql`
       items {
         id
         deliveryFee
+        receiptUrl
         deliveryAddress {
           id
       createdAt
@@ -171,6 +174,7 @@ export const GET_BUSINESS_ORDERS = gql`
 //     createOrder(input: $input) {
 //     id
 //     deliveryFee
+//     receiptUrl
 //     deliveryAddress {
 //       street
 //       city
@@ -213,6 +217,7 @@ export const GET_BUSINESS_ORDERS = gql`
 //     updateOrder(id: $id, input: $input) {
 //     id
 //     deliveryFee
+//     receiptUrl
 //     deliveryAddress {
 //       street
 //       city
@@ -311,6 +316,7 @@ export const PROCESS_ORDER_PAYMENT = gql`
     processOrderPayment(orderId: $orderId, input: $input) {
     id
     deliveryFee
+    receiptUrl
     deliveryAddress {
       street
       city
@@ -348,6 +354,17 @@ export const PROCESS_ORDER_PAYMENT = gql`
   
 `;
 
+export const GENERATE_ORDER_RECEIPT = gql`
+  mutation GenerateOrderReceipt($input: GenerateOrderReceiptInput!) {
+    generateOrderReceipt(input: $input) {
+      receiptUrl
+      fileName
+      mediaId
+      emailSent
+    }
+  }
+`;
+
 // ======================
 // NEW ENTITIES FOR BUSINESS-GROUPED ORDERS
 // ======================
@@ -379,6 +396,7 @@ export const BUSINESS_GROUPED_ORDER_ENTITY = gql`
     }
     subtotal
     deliveryFee
+    receiptUrl
     total
     payment {
       id
@@ -436,6 +454,7 @@ export const GET_ORDERS = gql`
       items {
         id
         deliveryFee
+        receiptUrl
         deliveryAddress {
           id
       createdAt
@@ -548,6 +567,7 @@ export const CREATE_ORDER = gql`
     createOrder(input: $input) {
       id
       deliveryFee
+      receiptUrl
       deliveryAddress {
         street
         city
@@ -589,6 +609,7 @@ export const UPDATE_ORDER = gql`
     updateOrder(id: $id, input: $input) {
       id
       deliveryFee
+      receiptUrl
       deliveryAddress {
         street
         city
@@ -651,6 +672,7 @@ export const ON_ORDER_CREATED = gql`
     orderCreated(clientId: $clientId, businessId: $businessId) {
     id
     deliveryFee
+    receiptUrl
     deliveryAddress {
       street
       city
@@ -693,6 +715,7 @@ export const ON_ORDER_UPDATED = gql`
     orderUpdated(clientId: $clientId, businessId: $businessId) {
     id
     deliveryFee
+    receiptUrl
     deliveryAddress {
       street
       city
@@ -735,6 +758,7 @@ export const ON_ORDER_PAYMENT_PROCESSED = gql`
     orderPaymentProcessed(orderId: $orderId) {
     id
     deliveryFee
+    receiptUrl
     deliveryAddress {
       street
       city

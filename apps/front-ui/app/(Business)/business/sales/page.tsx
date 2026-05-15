@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/seraui/Loader";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
-import type { StoreEntity } from "@/lib/types";
+import { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import CreateStoreModal from "../_components/modals/CreateStoreModal";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";

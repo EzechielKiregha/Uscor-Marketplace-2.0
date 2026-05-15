@@ -7,8 +7,10 @@ export interface CartItem {
   product: {
     id: string;
     title: string;
+    name: string;
     price: number;
     medias?: { url: string }[];
+    media?: { url: string }[];
     businessId: string;
   };
   quantity: number;

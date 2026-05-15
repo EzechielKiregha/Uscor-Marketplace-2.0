@@ -98,6 +98,8 @@ export enum NegotiationType {
 	FREELANCEORDER = "FREELANCEORDER",
 	PURCHASE = "PURCHASE",
 	GENERAL = "GENERAL",
+	COMPLAINT = "COMPLAINT",
+	SUPPORT = "SUPPORT",
 }
 
 export enum TokenTransactionType {

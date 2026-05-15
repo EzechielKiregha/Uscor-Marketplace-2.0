@@ -69,7 +69,7 @@ export class CloseSaleInput {
 	@IsString()
 	saleId: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	clientId?: string;
 

@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
+import { PrismaModule } from "../prisma/prisma.module";
 import { PrismaService } from "../prisma/prisma.service";
 import { AnnouncementResolver } from "./announcement.resolver";
 import { AnnouncementService } from "./announcement.service";
-import { PrismaModule } from "../prisma/prisma.module";
 
 const pubSub = new PubSub();
 

@@ -11,7 +11,7 @@ import {
   GET_PRODUCTS,
   SEARCHED_PRODUCTS,
 } from "@/graphql/product.gql";
-import type { ProductEntity } from "@/lib/types";
+import { ProductEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import CreateProductModal from "../_components/modals/CreateProductModal";
 import { useOpenCreateProductModal } from "../_hooks/use-open-create-product-modal";

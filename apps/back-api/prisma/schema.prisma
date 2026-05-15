@@ -104,6 +104,8 @@ enum NegotiationType {
   FREELANCEORDER
   PURCHASE
   GENERAL
+  COMPLAINT
+  SUPPORT
 }
 
 enum TokenTransactionType {
@@ -495,6 +497,7 @@ model Order {
   deliveryFee          Float                 @default(0)
   deliveryAddress      String?
   clientOrderId        String?
+  receiptUrl           String?
   qrCode               String?
   payment              PaymentTransaction?
   totalAmount          Float                 @default(0)

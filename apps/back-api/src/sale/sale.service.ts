@@ -1,6 +1,9 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { put } from "@vercel/blob";
 import { subDays } from "date-fns";
 import { PubSub } from "graphql-subscriptions";
+import * as puppeteer from "puppeteer";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
 	Country,
@@ -28,12 +31,9 @@ import {
 import { CreateReturnInput } from "./dto/create-return.input";
 import { CreateSaleInput } from "./dto/create-sale.input";
 import { GenerateReceiptInput } from "./dto/receipt.input";
+import { SaleProductInput } from "./dto/sale-product.input";
 import { UpdateSaleInput } from "./dto/update-sale.input";
 import { UpdateSaleProductInput } from "./dto/update-sale-product.input";
-import { SaleProductInput } from "./dto/sale-product.input";
-import * as puppeteer from 'puppeteer';
-import { put } from '@vercel/blob';
-import { ConfigService } from "@nestjs/config";
 
 // Chart data point types
 interface DailyChartPoint {
@@ -67,10 +67,8 @@ export class SaleService {
 		private configService: ConfigService,
 		private storeService: StoreService,
 		private workerService: WorkerService,
-		private businessService: BusinessService,
 		private productService: ProductService,
 		private accountRechargeService: AccountRechargeService,
-		private tokenTransactionService: TokenTransactionService,
 		private paymentTransactionService: PaymentTransactionService,
 		private loyaltyService: LoyaltyService,
 		@Inject("PUB_SUB") private pubSub: PubSub,
@@ -351,15 +349,16 @@ export class SaleService {
 					},
 				});
 				if (loyaltyProgram) {
-					const points = createdSale.totalAmount * loyaltyProgram.pointsPerPurchase;
+					const points =
+						createdSale.totalAmount * loyaltyProgram.pointsPerPurchase;
 					await this.loyaltyService.createPointsTransaction(
-					{
-						clientId: sale.clientId!,
-						loyaltyProgramId: loyaltyProgram.id,
-						points,
-					},
-					user,
-				);
+						{
+							clientId: sale.clientId!,
+							loyaltyProgramId: loyaltyProgram.id,
+							points,
+						},
+						user,
+					);
 				}
 			}
 
@@ -562,7 +561,8 @@ export class SaleService {
 	}
 
 	async close(closeSaleInput: CloseSaleInput, user: AuthPayload) {
-		const { saleId, clientId, paymentMethod, status, paymentDetails } = closeSaleInput;
+		const { saleId, clientId, paymentMethod, status, paymentDetails } =
+			closeSaleInput;
 
 		const sale = await this.prisma.sale.findUnique({
 			where: { id: saleId },
@@ -601,13 +601,13 @@ export class SaleService {
 				if (loyaltyProgram) {
 					const points = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
 					await this.loyaltyService.createPointsTransaction(
-					{
-						clientId: sale.clientId!,
-						loyaltyProgramId: loyaltyProgram.id,
-						points,
-					},
-					user,
-				);
+						{
+							clientId: sale.clientId!,
+							loyaltyProgramId: loyaltyProgram.id,
+							points,
+						},
+						user,
+					);
 				}
 			}
 
@@ -616,7 +616,7 @@ export class SaleService {
 				data: {
 					paymentMethod: paymentMethod || sale.paymentMethod,
 					status: status || "COMPLETED",
-					client: { connect: { id: clientId }},
+					client: { connect: { id: clientId } },
 				},
 				include: {
 					store: {
@@ -670,18 +670,18 @@ export class SaleService {
 					endTime: null,
 				},
 			});
-			if (!currentShift) throw new Error("Something went while worker's shift")
+			if (!currentShift) throw new Error("Something went while worker's shift");
 			const shift = await tx.shift.update({
-				where : {
+				where: {
 					id: currentShift?.id,
 				},
-				data : {
-					sales : {
-						increment : updated.totalAmount
+				data: {
+					sales: {
+						increment: updated.totalAmount,
 					},
-					transactionCount: { increment : 1}
-				}
-			})
+					transactionCount: { increment: 1 },
+				},
+			});
 
 			// console.log("the shift: ", {shift})
 
@@ -1147,163 +1147,190 @@ export class SaleService {
 	}
 
 	async generateReceipt(input: GenerateReceiptInput, user: AuthPayload) {
-    const { saleId, email } = input;
+		const { saleId, email } = input;
 
-    const sale = await this.prisma.sale.findUnique({
-      where: { id: saleId },
-      include: {
-        store: {
-          include: {
-            business: true
-          }
-        },
-        worker: true,
-        client: true,
-        saleProducts: {
-          include: { 
-            product: true,
-          }
-        }
-      }
-    });
+		const sale = await this.prisma.sale.findUnique({
+			where: { id: saleId },
+			include: {
+				store: {
+					include: {
+						business: true,
+					},
+				},
+				worker: true,
+				client: true,
+				saleProducts: {
+					include: {
+						product: true,
+					},
+				},
+			},
+		});
 
-    if (!sale) throw new Error('Sale not found');
+		if (!sale) throw new Error("Sale not found");
 
-    // Verify store access
-    await this.verifyStoreAccess(sale.storeId, user);
+		// Verify store access
+		await this.verifyStoreAccess(sale.storeId, user);
 
-    if (user.role === 'WORKER' && sale.workerId !== user.id) {
-      throw new Error('Workers can only generate receipts for their own sales');
-    }
+		if (user.role === "WORKER" && sale.workerId !== user.id) {
+			throw new Error("Workers can only generate receipts for their own sales");
+		}
 
-    // Calculate loyalty points if applicable
-    let pointsEarned = 0;
-    if (sale.clientId) {
-      const loyaltyProgram = await this.prisma.loyaltyProgram.findFirst({
-        where: {
-          businessId: sale.store.businessId,
-        },
-      });
-      if (loyaltyProgram) {
-        // Assuming pointsPerPurchase is the multiplier (e.g., 0.1 for 10% back as points)
-        pointsEarned = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
-      }
-    }
+		// Calculate loyalty points if applicable
+		let pointsEarned = 0;
+		if (sale.clientId) {
+			const loyaltyProgram = await this.prisma.loyaltyProgram.findFirst({
+				where: {
+					businessId: sale.store.businessId,
+				},
+			});
+			if (loyaltyProgram) {
+				// Assuming pointsPerPurchase is the multiplier (e.g., 0.1 for 10% back as points)
+				pointsEarned = sale.totalAmount * loyaltyProgram.pointsPerPurchase;
+			}
+		}
 
-    // Generate HTML receipt
-    const html = this.generateReceiptHTML(sale, pointsEarned);
+		// Generate HTML receipt
+		const html = this.generateReceiptHTML(sale, pointsEarned);
 
-    // Generate PDF Buffer in memory using Puppeteer
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] // Important for deployment environments like Vercel
-    });
-    
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20px',
-        bottom: '20px',
-        left: '20px',
-        right: '20px'
-      }
-    });
-    
-    await browser.close();
+		// Generate PDF Buffer in memory using Puppeteer
+		const browser = await puppeteer.launch({
+			headless: true,
+			args: ["--no-sandbox", "--disable-setuid-sandbox"], // Important for deployment environments like Vercel
+		});
 
-    // Prepare filename for Vercel Blob
-    const fileName = `receipt_${sale.id.substring(0, 8)}_${Date.now()}.pdf`;
+		const page = await browser.newPage();
+		await page.setContent(html, { waitUntil: "networkidle0" });
 
-    // Upload PDF buffer to Vercel Blob
-    const blobToken = this.configService.get<string>("NEST_PUBLIC_BLOB_READ_WRITE_TOKEN"); // Ensure this is set in your environment
-    if (!blobToken) {
-      this.logger.error('NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN is missing in environment variables.');
-      throw new Error('Blob upload configuration error. Please contact support.');
-    }
+		const pdfBuffer = await page.pdf({
+			format: "A4",
+			printBackground: true,
+			margin: {
+				top: "20px",
+				bottom: "20px",
+				left: "20px",
+				right: "20px",
+			},
+		});
 
-    const blob = await put(`receipts/${fileName}`, Buffer.from(pdfBuffer), {
-      access: 'public', // Make the receipt publicly accessible via the URL
-      contentType: 'application/pdf', // Explicitly set the content type
-      token: blobToken,
-    });
+		await browser.close();
 
-    // Create a Media record to store the receipt metadata
-    const mediaRecord = await this.prisma.media.create({
-      data: {
-        url: blob.url,
-        type: 'DOCUMENT',
-        size: BigInt(pdfBuffer.length),
-        pathname: blob.pathname,
-        storeId: sale.storeId,
-        businessId: sale.store.businessId,
-      }
-    });
+		// Prepare filename for Vercel Blob
+		const fileName = `receipt_${sale.id.substring(0, 8)}_${Date.now()}.pdf`;
 
-    // Update the Sale record with the receipt URL
-    await this.prisma.sale.update({
-      where: { id: saleId },
-      data: {
-        receiptUrl: blob.url,
-      }
-    });
+		// Upload PDF buffer to Vercel Blob
+		const blobToken = this.configService.get<string>(
+			"NEST_PUBLIC_BLOB_READ_WRITE_TOKEN",
+		); // Ensure this is set in your environment
+		if (!blobToken) {
+			this.logger.error(
+				"NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN is missing in environment variables.",
+			);
+			throw new Error(
+				"Blob upload configuration error. Please contact support.",
+			);
+		}
 
-    // Send email if provided (logic remains the same, now using the public URL)
-    let emailSent = false;
-    if (email && sale.client?.email) {
-      try {
-        // In a real app, integrate with your email service (e.g., SendGrid, Nodemailer)
-        console.log(`Simulated sending receipt email to ${email} with URL: ${blob.url}`);
-        // Example: await this.emailService.sendReceipt(email, blob.url, sale);
-        emailSent = true;
-      } catch (emailError) {
-        this.logger.error(`Failed to send email receipt to ${email}`, emailError);
-        emailSent = false; 
-      }
-    }
+		const blob = await put(`receipts/${fileName}`, Buffer.from(pdfBuffer), {
+			access: "public", // Make the receipt publicly accessible via the URL
+			contentType: "application/pdf", // Explicitly set the content type
+			token: blobToken,
+		});
 
-    // Return the public URL and email status
-    return {
-      receiptUrl: blob.url, // Return the public URL instead of a local path
-      emailSent,
-      fileName, // Optionally return filename if needed elsewhere
-      mediaId: mediaRecord.id // Return the ID of the created Media record
-    };
-  }
+		// Create a Media record to store the receipt metadata
+		const mediaRecord = await this.prisma.media.create({
+			data: {
+				url: blob.url,
+				type: "DOCUMENT",
+				size: BigInt(pdfBuffer.length),
+				pathname: blob.pathname,
+				storeId: sale.storeId,
+				businessId: sale.store.businessId,
+			},
+		});
 
-  private generateReceiptHTML(sale: any, pointsEarned: number): string {
-    // Format business type with appropriate icon
-    const getBusinessTypeIcon = (type: string) => {
-      switch (type) {
-        case 'ARTISAN': return '🎨';
-        case 'BOOKSTORE': return '📚';
-        case 'ELECTRONICS': return '🔌';
-        case 'HARDWARE': return '🔨';
-        case 'GROCERY': return '🛒';
-        case 'CAFE': return '☕';
-        case 'RESTAURANT': return '🍽️';
-        case 'RETAIL': return '🏬';
-        case 'BAR': return '🍷';
-        case 'CLOTHING': return '👕';
-        default: return '🏢';
-      }
-    };
+		// Update the Sale record with the receipt URL
+		await this.prisma.sale.update({
+			where: { id: saleId },
+			data: {
+				receiptUrl: blob.url,
+			},
+		});
 
-    // Format payment method
-    const formatPaymentMethod = (method: string) => {
-      switch (method) {
-        case 'MOBILE_MONEY': return '📱 Mobile Money';
-        case 'CASH': return '💵 Cash';
-        case 'CARD': return '💳 Card';
-        case 'TOKEN': return '🪙 USCOR Token';
-        default: return method;
-      }
-    };
+		// Send email if provided (logic remains the same, now using the public URL)
+		let emailSent = false;
+		if (email && sale.client?.email) {
+			try {
+				// In a real app, integrate with your email service (e.g., SendGrid, Nodemailer)
+				console.log(
+					`Simulated sending receipt email to ${email} with URL: ${blob.url}`,
+				);
+				// Example: await this.emailService.sendReceipt(email, blob.url, sale);
+				emailSent = true;
+			} catch (emailError) {
+				this.logger.error(
+					`Failed to send email receipt to ${email}`,
+					emailError,
+				);
+				emailSent = false;
+			}
+		}
 
-    return `
+		// Return the public URL and email status
+		return {
+			receiptUrl: blob.url, // Return the public URL instead of a local path
+			emailSent,
+			fileName, // Optionally return filename if needed elsewhere
+			mediaId: mediaRecord.id, // Return the ID of the created Media record
+		};
+	}
+
+	private generateReceiptHTML(sale: any, pointsEarned: number): string {
+		// Format business type with appropriate icon
+		const getBusinessTypeIcon = (type: string) => {
+			switch (type) {
+				case "ARTISAN":
+					return "🎨";
+				case "BOOKSTORE":
+					return "📚";
+				case "ELECTRONICS":
+					return "🔌";
+				case "HARDWARE":
+					return "🔨";
+				case "GROCERY":
+					return "🛒";
+				case "CAFE":
+					return "☕";
+				case "RESTAURANT":
+					return "🍽️";
+				case "RETAIL":
+					return "🏬";
+				case "BAR":
+					return "🍷";
+				case "CLOTHING":
+					return "👕";
+				default:
+					return "🏢";
+			}
+		};
+
+		// Format payment method
+		const formatPaymentMethod = (method: string) => {
+			switch (method) {
+				case "MOBILE_MONEY":
+					return "📱 Mobile Money";
+				case "CASH":
+					return "💵 Cash";
+				case "CARD":
+					return "💳 Card";
+				case "TOKEN":
+					return "🪙 USCOR Token";
+				default:
+					return method;
+			}
+		};
+
+		return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -1556,17 +1583,29 @@ export class SaleService {
       <div class="business-name">${sale.store.business.name}</div>
       <div class="business-type">
         ${getBusinessTypeIcon(sale.store.business.businessType)} 
-        ${sale.store.business.businessType === 'ARTISAN' ? 'Artisan & Handcrafted Goods' :
-         sale.store.business.businessType === 'BOOKSTORE' ? 'Bookstore & Stationery' :
-         sale.store.business.businessType === 'ELECTRONICS' ? 'Electronics & Gadgets' :
-         sale.store.business.businessType === 'HARDWARE' ? 'Hardware & Tools' :
-         sale.store.business.businessType === 'GROCERY' ? 'Grocery & Convenience' :
-         sale.store.business.businessType === 'CAFE' ? 'Café & Coffee Shops' :
-         sale.store.business.businessType === 'RESTAURANT' ? 'Restaurant & Dining' :
-         sale.store.business.businessType === 'RETAIL' ? 'Retail & General Stores' :
-         sale.store.business.businessType === 'BAR' ? 'Bar & Pub' :
-         sale.store.business.businessType === 'CLOTHING' ? 'Clothing & Accessories' :
-         sale.store.business.businessType}
+        ${
+					sale.store.business.businessType === "ARTISAN"
+						? "Artisan & Handcrafted Goods"
+						: sale.store.business.businessType === "BOOKSTORE"
+							? "Bookstore & Stationery"
+							: sale.store.business.businessType === "ELECTRONICS"
+								? "Electronics & Gadgets"
+								: sale.store.business.businessType === "HARDWARE"
+									? "Hardware & Tools"
+									: sale.store.business.businessType === "GROCERY"
+										? "Grocery & Convenience"
+										: sale.store.business.businessType === "CAFE"
+											? "Café & Coffee Shops"
+											: sale.store.business.businessType === "RESTAURANT"
+												? "Restaurant & Dining"
+												: sale.store.business.businessType === "RETAIL"
+													? "Retail & General Stores"
+													: sale.store.business.businessType === "BAR"
+														? "Bar & Pub"
+														: sale.store.business.businessType === "CLOTHING"
+															? "Clothing & Accessories"
+															: sale.store.business.businessType
+				}
       </div>
       <div class="receipt-title">RECEIPT #${sale.id.substring(0, 8)}</div>
     </div>
@@ -1579,37 +1618,48 @@ export class SaleService {
       </div>
       <div class="meta-item">
         <span class="meta-label">Date</span>
-        <span class="meta-value">${new Date(sale.createdAt).toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })}</span>
+        <span class="meta-value">${new Date(sale.createdAt).toLocaleDateString(
+					"en-US",
+					{
+						year: "numeric",
+						month: "short",
+						day: "numeric",
+						hour: "2-digit",
+						minute: "2-digit",
+					},
+				)}</span>
       </div>
       <div class="meta-item">
         <span class="meta-label">Cashier</span>
-        <span class="meta-value">${sale.worker?.fullName || 'N/A'}</span>
+        <span class="meta-value">${sale.worker?.fullName || "N/A"}</span>
       </div>
-      ${sale.client ? `
+      ${
+				sale.client
+					? `
       <div class="meta-item">
         <span class="meta-label">Customer</span>
         <span class="meta-value">${sale.client.fullName}</span>
-      </div>` : ''}
+      </div>`
+					: ""
+			}
     </div>
     
     <!-- Items -->
     <div class="items-section">
       <div class="section-title">Items Purchased</div>
       <div class="items-list">
-        ${sale.saleProducts.map((sp: any) => `
+        ${sale.saleProducts
+					.map(
+						(sp: any) => `
           <div class="item-row">
             <div class="item-name">${sp.product.title}</div>
             <div class="item-quantity">×${sp.quantity}</div>
             <div class="item-price">$${(sp.price * sp.quantity).toFixed(2)}</div>
           </div>
-          ${sp.modifiers ? `<div class="modifiers">(${sp.modifiers})</div>` : ''}
-        `).join('')}
+          ${sp.modifiers ? `<div class="modifiers">(${sp.modifiers})</div>` : ""}
+        `,
+					)
+					.join("")}
       </div>
       
       <div class="totals-section">
@@ -1617,18 +1667,22 @@ export class SaleService {
           <span class="total-label">Subtotal</span>
           <span class="total-value">$${sale.totalAmount.toFixed(2)}</span>
         </div>
-        ${sale.discount > 0 ? `
+        ${
+					sale.discount > 0
+						? `
         <div class="total-row">
           <span class="total-label">Discount</span>
           <span class="total-value">-$${sale.discount.toFixed(2)}</span>
-        </div>` : ''}
+        </div>`
+						: ""
+				}
         <div class="total-row">
           <span class="total-label">Tax</span>
           <span class="total-value">$${(sale.totalAmount * 0.18).toFixed(2)}</span>
         </div>
         <div class="total-row grand-total">
           <span class="total-label grand-total-label">TOTAL</span>
-          <span class="total-value grand-total-value">$${(sale.totalAmount - sale.discount + (sale.totalAmount * 0.18)).toFixed(2)}</span>
+          <span class="total-value grand-total-value">$${(sale.totalAmount - sale.discount + sale.totalAmount * 0.18).toFixed(2)}</span>
         </div>
         
         <div class="total-row">
@@ -1639,13 +1693,17 @@ export class SaleService {
     </div>
     
     <!-- Loyalty Points -->
-    ${pointsEarned > 0 ? `
+    ${
+			pointsEarned > 0
+				? `
     <div class="loyalty-section">
       <div class="loyalty-title">LOYALTY PROGRAM</div>
       <div>You earned</div>
       <div class="loyalty-points">${pointsEarned.toFixed(2)} points</div>
       <div>on this purchase</div>
-    </div>` : ''}
+    </div>`
+				: ""
+		}
     
     <!-- Footer -->
     <div class="footer">
@@ -1663,31 +1721,31 @@ export class SaleService {
 </body>
 </html>
     `;
-  }
+	}
 
-  private async verifyStoreAccess(storeId: string, user: AuthPayload) {
-    const store = await this.prisma.store.findUnique({
-      where: { id: storeId },
-      include: { business: true }
-    });
+	private async verifyStoreAccess(storeId: string, user: AuthPayload) {
+		const store = await this.prisma.store.findUnique({
+			where: { id: storeId },
+			include: { business: true },
+		});
 
-    if (!store) throw new Error('Store not found');
+		if (!store) throw new Error("Store not found");
 
-    if (user.role === 'ADMIN') return; // Admins have full access
+		if (user.role === "ADMIN") return; // Admins have full access
 
-    if (user.role === 'WORKER') {
-      const worker = await this.prisma.worker.findUnique({
-        where: { id: user.id }
-      });
-      if (worker?.businessId !== store.businessId) {
-        throw new Error('Worker does not belong to this business');
-      }
-    } else if (user.role === 'BUSINESS') {
-      if (user.id !== store.businessId) {
-        throw new Error('Business does not own this store');
-      }
-    }
-  }
+		if (user.role === "WORKER") {
+			const worker = await this.prisma.worker.findUnique({
+				where: { id: user.id },
+			});
+			if (worker?.businessId !== store.businessId) {
+				throw new Error("Worker does not belong to this business");
+			}
+		} else if (user.role === "BUSINESS") {
+			if (user.id !== store.businessId) {
+				throw new Error("Business does not own this store");
+			}
+		}
+	}
 
 	// Add these methods to your existing SaleService class
 

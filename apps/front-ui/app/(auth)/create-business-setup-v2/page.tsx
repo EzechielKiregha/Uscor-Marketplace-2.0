@@ -57,7 +57,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UPDATE_BUSINESS } from "@/graphql/business.gql";
-import type { BusinessEntity } from "@/lib/types";
+import { BusinessEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 
 // Business types configuration

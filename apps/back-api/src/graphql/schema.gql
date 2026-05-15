@@ -294,6 +294,7 @@ type OrderItemEntity {
   id: String!
   name: String!
   price: Float!
+  businessId: String
   quantity: Int!
   media: [MediaEntity!]
 }
@@ -303,6 +304,7 @@ type OrderEntity {
   deliveryFee: Float!
   deliveryAddress: DeliveryAddressEntity
   clientOrderId: String
+  receiptUrl: String
   qrCode: String
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -324,6 +326,13 @@ type PaginatedOrdersResponse {
   total: Int!
   page: Int!
   limit: Int!
+}
+
+type OrderReceiptEntity {
+  receiptUrl: String!
+  fileName: String!
+  mediaId: String!
+  emailSent: Boolean!
 }
 
 type PostTransactionEntity {
@@ -438,6 +447,19 @@ type ClientEntity {
   paymentMethods: [PaymentMethodEntity!]
 }
 
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  chat: ChatEntity
+  createdAt: DateTime!
+}
+
 type KnowYourCustomerEntity {
   id: String!
   status: String!
@@ -501,19 +523,6 @@ type ShiftEntityWorker {
   transactionCount: Float
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type ChatParticipantEntity {
-  id: String!
-  chatId: String!
-  clientId: String
-  client: ClientEntity
-  businessId: String
-  business: BusinessEntity
-  workerId: String
-  worker: WorkerEntity
-  chat: ChatEntity
-  createdAt: DateTime!
 }
 
 type WorkerEntity {
@@ -639,6 +648,8 @@ enum NegotiationType {
   FREELANCEORDER
   PURCHASE
   GENERAL
+  COMPLAINT
+  SUPPORT
 }
 
 type PromotionEntity {
@@ -1797,6 +1808,9 @@ type Mutation {
   """Process payment for an order."""
   processOrderPayment(orderId: String!, input: ProcessPaymentInput!): OrderEntity!
 
+  """Generates a PDF receipt for the order."""
+  generateOrderReceipt(input: GenerateOrderReceiptInput!): OrderReceiptEntity!
+
   """Creates a token transaction."""
   createTokenTransaction(createTokenTransactionInput: CreateTokenTransactionInput!): TokenTransactionEntity!
 
@@ -2094,6 +2108,11 @@ input ProcessPaymentInput {
   status: String
   transactionId: String
   method: String
+}
+
+input GenerateOrderReceiptInput {
+  orderId: String!
+  email: String
 }
 
 input CreateTokenTransactionInput {

@@ -121,6 +121,17 @@ export class UserService {
 						},
 					},
 					kyc: true,
+					chatParticipants: {
+						include: {
+							chat: {
+								select: {
+									id: true,
+									status: true,
+									messages: true,
+								},
+							},
+						},
+					},
 				},
 			}),
 			this.prisma.worker.count({ where }),

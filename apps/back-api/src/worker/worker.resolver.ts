@@ -97,10 +97,10 @@ class ChatsPagedResult {
 	limit: number;
 }
 
-
 @Resolver(() => WorkerEntity)
 export class WorkerResolver {
-	constructor(private readonly workerService: WorkerService,
+	constructor(
+		private readonly workerService: WorkerService,
 		@Inject("PUB_SUB") private pubSub: PubSub,
 	) {}
 
@@ -113,7 +113,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker", "business")
+	@Roles("worker", "business", "client")
 	@Query(() => [WorkerEntity], {
 		name: "workers",
 	})
@@ -128,7 +128,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker", "business")
+	@Roles("worker", "business", "client")
 	@Query(() => WorkerEntity, { name: "worker" })
 	async getWorker(
 		@Args("id", { type: () => String })
@@ -150,7 +150,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker")
+	@Roles("worker", "business")
 	@Mutation(() => WorkerEntity)
 	async deleteWorker(
 		@Args("id", { type: () => String })
@@ -160,7 +160,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker")
+	@Roles("worker", "business")
 	@Mutation(() => WorkerEntity)
 	async updateWorkerProfile(
 		@Args("id", { type: () => String })
@@ -171,7 +171,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker")
+	@Roles("worker", "business")
 	@Query(() => WorkerDashboardEntity, {
 		name: "workerDashboard",
 	})
@@ -183,7 +183,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker")
+	@Roles("worker", "business")
 	@Query(() => WorkerDashboardStatsEntity, {
 		name: "workerDashboardStats",
 	})
@@ -195,7 +195,7 @@ export class WorkerResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("worker")
+	@Roles("worker", "business")
 	@Mutation(() => SaleEntityWorker)
 	async createSale(@Args("input") input: CreateSaleInput) {
 		const sale = await this.workerService.createSale(input);

@@ -16,18 +16,19 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/app/context/use-cart";
+import NewChatSession from "./NewChatSession";
 
 interface ProductDetailsModalProps {
   product: any;
   onClose: () => void;
-  onChat: () => void;
+  onOpenChat: (open: boolean) => void;
   onAddToCart: () => void;
 }
 
 export default function ProductDetailsModal({
   product,
   onClose,
-  onChat,
+  onOpenChat,
   onAddToCart,
 }: ProductDetailsModalProps) {
   const [quantity, setQuantity] = useState(1);
@@ -316,7 +317,7 @@ export default function ProductDetailsModal({
                   variant="outline"
                   size="lg"
                   className="h-12 text-lg"
-                  onClick={onChat}
+                  onClick={() => onOpenChat(true)}
                 >
                   <MessageSquare className="h-5 w-5 mr-2" />
                   Chat with Seller

@@ -2,7 +2,7 @@
 import { X } from "lucide-react";
 import { PRODUCT_CATEGORIES } from "@/config/product-categories";
 import { useCart } from "@/app/context/use-cart";
-import type { ProductEntity } from "@/lib/types";
+import { ProductEntity } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 
 const CartItem = ({ product }: { product: ProductEntity }) => {

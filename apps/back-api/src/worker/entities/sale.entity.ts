@@ -1,10 +1,10 @@
 import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { ClientEntity } from "../../client/entities/client.entity";
+import { SaleStatus } from "../../generated/prisma/enums";
+import { PaymentMethod } from "../../payment-transaction/dto/create-payment-transaction.input";
 import { StoreEntity } from "../../store/entities/store.entity";
 import { SaleProductEntityWorker } from "./sale-product.entity";
 import { WorkerEntity } from "./worker.entity";
-import { PaymentMethod } from "../../payment-transaction/dto/create-payment-transaction.input";
-import { SaleStatus } from "../../generated/prisma/enums";
 
 registerEnumType(SaleStatus, {
 	name: "SaleStatus",

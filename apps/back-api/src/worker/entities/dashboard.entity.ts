@@ -1,87 +1,87 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { ClientEntity } from "../../client/entities/client.entity";
 import { IsOptional } from "class-validator";
+import { ClientEntity } from "../../client/entities/client.entity";
 
 @ObjectType()
 export class WorkerPerformanceEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	totalSales: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	totalTransactions: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	customerSatisfaction: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	attendanceRate: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	shiftsCompleted: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	personalSales: number;
 }
 
 @ObjectType()
 export class TopSellingProductEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	id: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	title: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	quantitySold: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	revenue: number;
 }
 
 @ObjectType()
 export class RecentOrderEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	id: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	orderNumber: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	totalAmount: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	status: string;
 
-	@Field(() => ClientEntity, {nullable: true})
+	@Field(() => ClientEntity, { nullable: true })
 	@IsOptional()
 	client: ClientEntity;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	createdAt: Date;
 }
 
 @ObjectType()
 export class CurrentShiftEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	id: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	startTime: Date;
 
@@ -96,19 +96,19 @@ export class CurrentShiftEntity {
 
 @ObjectType()
 export class WorkerDashboardEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	todaySales: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	todayOrders: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	lowStockItems: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	activeChats: number;
 
@@ -118,11 +118,11 @@ export class WorkerDashboardEntity {
 	@IsOptional()
 	currentShift?: CurrentShiftEntity;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	salesThisWeek: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	salesThisMonth: number;
 
@@ -147,42 +147,42 @@ export class WorkerDashboardEntity {
 
 @ObjectType()
 export class WorkerDashboardStatsEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	todaySales: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	todayTransactions: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	currentShiftSales: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	currentShiftDuration: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	lowStockProducts: number;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	upcomingChats: number;
 }
 
 @ObjectType()
 export class MobileMoneyPaymentResponseEntity {
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	success: boolean;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	transactionId: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	@IsOptional()
 	status: string;
 

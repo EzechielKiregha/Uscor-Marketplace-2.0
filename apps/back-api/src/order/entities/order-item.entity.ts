@@ -12,6 +12,9 @@ export class OrderItemEntity {
 	@Field(() => Float)
 	price: number;
 
+	@Field({nullable: true})
+	businessId?: string;
+
 	@Field(() => Int)
 	quantity: number;
 

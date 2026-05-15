@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { ProductEntity } from "@/lib/types";
+import { ProductEntity } from "@/lib/types";
 import { p } from "framer-motion/client";
 import { useCart } from "@/app/context/use-cart";
 

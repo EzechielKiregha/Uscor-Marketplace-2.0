@@ -125,7 +125,9 @@ export const NegotiationType = {
   REOWNERSHIP: 'REOWNERSHIP',
   FREELANCEORDER: 'FREELANCEORDER',
   PURCHASE: 'PURCHASE',
-  GENERAL: 'GENERAL'
+  GENERAL: 'GENERAL',
+  COMPLAINT: 'COMPLAINT',
+  SUPPORT: 'SUPPORT'
 } as const
 
 export type NegotiationType = (typeof NegotiationType)[keyof typeof NegotiationType]

@@ -29,9 +29,11 @@ export const GET_WORKERS = gql`
           title
         }
       }
-      chats {
-        id
-        status
+      chatParticipants {
+        chat {
+          id
+          status
+        }
       }
     }
   }
@@ -60,9 +62,11 @@ export const GET_WORKER_BY_ID = gql`
         id
         title
       }
-      chats {
-        id
-        status
+      chatParticipants {
+        chat {
+          id
+          status
+        }
       }
     }
   }

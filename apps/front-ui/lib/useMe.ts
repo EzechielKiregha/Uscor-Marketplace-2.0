@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchMe } from "./fetchMe";
-import type {
+import {
 	AdminEntity,
 	BusinessEntity,
 	ClientEntity,

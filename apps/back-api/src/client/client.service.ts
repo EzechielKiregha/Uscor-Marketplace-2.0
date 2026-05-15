@@ -343,7 +343,7 @@ export class ClientService {
 							}
 						: null,
 					deliveryAddress: this.prisma.address.findUnique({
-						where: { id: order?.deliveryAddress!},
+						where: { id: order?.deliveryAddress! },
 					}),
 				};
 			});

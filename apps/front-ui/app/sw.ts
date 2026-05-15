@@ -1,7 +1,7 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 import { defaultCache } from "@serwist/turbopack/worker";
-import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import { PrecacheEntry, SerwistGlobalConfig  } from "serwist";
 import { Serwist } from "serwist";
 
 // This declares the value of `injectionPoint` to TypeScript.

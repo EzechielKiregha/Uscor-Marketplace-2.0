@@ -6,6 +6,7 @@ import {
   BriefcaseBusiness,
   Gift,
   Home,
+  Menu,
   MessageSquare,
   Settings,
   ShieldCheck,
@@ -13,30 +14,75 @@ import {
   Star,
   User,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loader from "@/components/seraui/Loader";
 import { Button } from "@/components/ui/button";
 import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 import ClientChatsPage from "./_components/ClientChatPage";
 import LoyaltyDashboard from "./_components/LoyaltyDashboard";
 import OrderHistory from "./_components/OrderHistory";
 import ProfileOverview from "./_components/ProfileOverview";
 import Recommendations from "./_components/Recommendations";
-import Reviews from "./_components/Reviews";
+import ReviewsPage from "./_components/Reviews";
 import SettingsPanel from "./_components/SettingsPanel";
+import ChatsPage from "@/app/(worker)/worker/_components/ChatsPage";
+
+type ClientSection =
+  | "profile"
+  | "chat"
+  | "orders"
+  | "loyalty"
+  | "recommendations"
+  | "reviews"
+  | "settings";
+
+type ClientSideLink = {
+  section: ClientSection;
+  icon: any;
+  label: string;
+};
 
 export default function ClientPanel() {
   const { user, loading: authLoading } = useMe();
-  const [activeSection, setActiveSection] = useState<
-    | "profile"
-    | "chat"
-    | "orders"
-    | "loyalty"
-    | "recommendations"
-    | "reviews"
-    | "settings"
-  >("profile");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<ClientSection>("profile");
+
+  useEffect(() => {
+    const storedSection =
+      typeof window !== "undefined"
+        ? window.localStorage.getItem("clientActiveSection")
+        : null;
+
+    if (
+      storedSection === "profile" ||
+      storedSection === "chat" ||
+      storedSection === "orders" ||
+      storedSection === "loyalty" ||
+      storedSection === "recommendations" ||
+      storedSection === "reviews" ||
+      storedSection === "settings"
+    ) {
+      setActiveSection(storedSection);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("clientActiveSection", activeSection);
+    }
+  }, [activeSection]);
+
+  const clientSideLinks: ClientSideLink[] = [
+    { section: "profile", icon: User, label: "Profile" },
+    { section: "orders", icon: ShoppingBag, label: "Order History" },
+    { section: "chat", icon: MessageSquare, label: "My Chats" },
+    { section: "loyalty", icon: Star, label: "Loyalty Program" },
+    { section: "recommendations", icon: Home, label: "Recommendations" },
+    { section: "reviews", icon: MessageSquare, label: "Reviews" },
+    { section: "settings", icon: Settings, label: "Account Settings" },
+  ];
 
   const {
     data: clientData,
@@ -70,153 +116,100 @@ export default function ClientPanel() {
     );
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden sticky top-8">
-              <div className="p-4 bg-muted border-b border-border">
-                <h2 className="font-semibold">Client Dashboard</h2>
-              </div>
+    <div className="min-h-screen bg-background flex">
+      {/* Mobile Menu Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden fixed top-4 left-4 z-50"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
 
-              <div className="p-4 space-y-1">
+      {/* Sidebar */}
+      <div
+        className={`
+        fixed md:relative
+        inset-y-0 left-0 z-40
+        w-64 bg-card border-r border-border
+        transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        transition-transform duration-300 ease-in-out
+        md:translate-x-0
+      `}
+      >
+        <div className="flex flex-col h-full">
+          {/* Navigation */}
+          <nav className="flex-1 p-4 space-y-1">
+            {clientSideLinks.map((item) => {
+              const isActive = activeSection === item.section;
+              const Icon = item.icon;
+              return (
                 <Button
-                  variant={activeSection === "profile" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("profile")}
+                  key={item.section}
+                  variant="ghost"
+                  className={cn(
+                    `flex justify-start border-b-0 border-orange-700 w-full px-4 py-2 gap-1.5 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]`,
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground",
+                  )}
+                  onClick={() => {
+                    setActiveSection(item.section);
+                    setIsSidebarOpen(false);
+                  }}
                 >
-                  <User className="h-4 w-4 mr-2" />
-                  Profile Overview
+                  <Icon className="h-4 w-4" />
+                  {item.label}
                 </Button>
+              );
+            })}
+          </nav>
 
-                <Button
-                  variant={activeSection === "chat" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("chat")}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  My Chats
-                </Button>
+          {/* Quick Actions */}
+          <div className="p-4 border-t border-border space-y-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start text-xs"
+              onClick={() => (window.location.href = "/marketplace")}
+            >
+              <ShoppingBag className="h-3 w-3 mr-2" />
+              Browse Marketplace
+            </Button>
 
-                <Button
-                  variant={activeSection === "orders" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("orders")}
-                >
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  Order History
-                </Button>
-
-                <Button
-                  variant={activeSection === "loyalty" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("loyalty")}
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  Loyalty Program
-                </Button>
-
-                <Button
-                  variant={
-                    activeSection === "recommendations" ? "secondary" : "ghost"
-                  }
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("recommendations")}
-                >
-                  <Home className="h-4 w-4 mr-2" />
-                  Recommendations
-                </Button>
-
-                <Button
-                  variant={activeSection === "reviews" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("reviews")}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Reviews
-                </Button>
-
-                <Button
-                  variant={activeSection === "settings" ? "secondary" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveSection("settings")}
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  Account Settings
-                </Button>
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="mt-6 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
-              <h3 className="font-semibold mb-3">Quick Actions</h3>
-
-              <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => (window.location.href = "/marketplace")}
-                >
-                  <ShoppingBag className="h-4 w-4 mr-2" />
-                  Browse Marketplace
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() =>
-                    (window.location.href = "/all-businesses?loyalty=true")
-                  }
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  Find Loyalty Businesses
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() =>
-                    (window.location.href = "/all-businesses?promotions=true")
-                  }
-                >
-                  <Gift className="h-4 w-4 mr-2" />
-                  View Available Promotions
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() =>
-                    (window.location.href = "/all-businesses?b2b=true")
-                  }
-                >
-                  <BriefcaseBusiness className="h-4 w-4 mr-2" />
-                  Find B2B Businesses
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() =>
-                    (window.location.href = "/all-businesses?verified=true")
-                  }
-                >
-                  <ShieldCheck className="h-4 w-4 mr-2" />
-                  Verified Businesses
-                </Button>
-              </div>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start text-xs"
+              onClick={() =>
+                (window.location.href = "/all-businesses?verified=true")
+              }
+            >
+              <ShieldCheck className="h-3 w-3 mr-2" />
+              Verified Businesses
+            </Button>
           </div>
+        </div>
+      </div>
 
-          {/* Main Content Area */}
-          <div className="lg:col-span-3 space-y-6">
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1">
+        <div className="container mx-auto px-4 py-8">
+          <div className="space-y-6">
             {activeSection === "profile" && (
               <ProfileOverview client={clientData.client} />
             )}
-            {activeSection === "chat" && (
-              <ClientChatsPage client={clientData.client} />
-            )}
+            {activeSection === "chat" && <ClientChatsPage />}
+            {/* {activeSection === "chat" && <ChatsPage />} */}
             {activeSection === "orders" && (
               <OrderHistory client={clientData.client} />
             )}
@@ -227,7 +220,7 @@ export default function ClientPanel() {
               <Recommendations client={clientData.client} />
             )}
             {activeSection === "reviews" && (
-              <Reviews client={clientData.client} />
+              <ReviewsPage client={clientData.client} />
             )}
             {activeSection === "settings" && (
               <SettingsPanel client={clientData.client} />

@@ -1,16 +1,24 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { put } from "@vercel/blob";
+import * as puppeteer from "puppeteer";
+import { AuthPayload } from "../auth/entities/auth-payload.entity";
 import { PaymentStatus } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
 import { TokenTransactionService } from "../token-transaction/token-transaction.service";
 import { CreateOrderInput } from "./dto/create-order.input";
+import { GenerateOrderReceiptInput } from "./dto/receipt.input";
 import { UpdateOrderInput } from "./dto/update-order.input";
+
 // Service
 @Injectable()
 export class OrderService {
+	private readonly logger = new Logger(OrderService.name);
 	constructor(
 		private prisma: PrismaService,
 		private tokenTransactionService: TokenTransactionService,
+		private configService: ConfigService,
 	) {}
 
 	async create(createOrderInput: CreateOrderInput) {
@@ -66,6 +74,7 @@ export class OrderService {
 		const order = await this.prisma.order.create({
 			data: {
 				...orderData,
+				totalAmount,
 				client: { connect: { id: clientId } },
 				payment: {
 					create: {
@@ -89,6 +98,7 @@ export class OrderService {
 				deliveryFee: true,
 				deliveryAddress: true,
 				qrCode: true,
+				receiptUrl: true,
 				createdAt: true,
 				updatedAt: true,
 				client: {
@@ -220,13 +230,277 @@ export class OrderService {
 		return {
 			...order,
 			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress!},
+				where: { id: order?.deliveryAddress! },
 			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
 				...op,
 			})),
 		};
+	}
+
+	async generateReceipt(input: GenerateOrderReceiptInput, user: AuthPayload) {
+		const { orderId, email } = input;
+		const order = await this.prisma.order.findUnique({
+			where: { id: orderId },
+			include: {
+				client: {
+					select: {
+						id: true,
+						fullName: true,
+						email: true,
+					},
+				},
+				payment: {
+					select: {
+						id: true,
+						amount: true,
+						method: true,
+						status: true,
+						transactionDate: true,
+						qrCode: true,
+						createdAt: true,
+					},
+				},
+				products: {
+					include: {
+						product: {
+							select: {
+								id: true,
+								businessId: true,
+								title: true,
+								price: true,
+								medias: {
+									select: { url: true },
+									take: 1,
+								},
+							},
+						},
+					},
+				},
+			},
+		});
+
+		if (!order) {
+			throw new Error("Order not found");
+		}
+
+		if (order.clientId !== user.id) {
+			throw new Error(
+				"Clients can only generate receipts for their own orders",
+			);
+		}
+
+		const deliveryAddress = order.deliveryAddress
+			? await this.prisma.address.findUnique({
+					where: { id: order.deliveryAddress },
+				})
+			: null;
+
+		const html = this.generateOrderReceiptHTML({
+			...order,
+			deliveryAddress,
+		});
+
+		const browser = await puppeteer.launch({
+			headless: true,
+			args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		});
+
+		const page = await browser.newPage();
+		await page.setContent(html, { waitUntil: "networkidle0" });
+
+		const pdfBuffer = await page.pdf({
+			format: "A4",
+			printBackground: true,
+			margin: {
+				top: "20px",
+				bottom: "20px",
+				left: "20px",
+				right: "20px",
+			},
+		});
+
+		await browser.close();
+
+		const fileName = `order_receipt_${order.id.substring(0, 8)}_${Date.now()}.pdf`;
+		const blobToken = this.configService.get<string>(
+			"NEST_PUBLIC_BLOB_READ_WRITE_TOKEN",
+		);
+		if (!blobToken) {
+			this.logger.error(
+				"NEST_PUBLIC_BLOB_READ_WRITE_TOKEN is missing in environment variables.",
+			);
+			throw new Error(
+				"Receipt upload configuration error. Please contact support.",
+			);
+		}
+
+		const blob = await put(
+			`order-receipts/${fileName}`,
+			Buffer.from(pdfBuffer),
+			{
+				access: "public",
+				contentType: "application/pdf",
+				token: blobToken,
+			},
+		);
+
+		const businessId = order.products?.[0]?.product?.businessId;
+		const mediaRecord = await this.prisma.media.create({
+			data: {
+				url: blob.url,
+				type: "DOCUMENT",
+				size: BigInt(pdfBuffer.length),
+				pathname: blob.pathname,
+				clientId: order.clientId,
+				businessId,
+			},
+		});
+
+		await this.prisma.order.update({
+			where: { id : order.id},
+			data: { receiptUrl: blob.url}
+		})
+
+		let emailSent = false;
+		if (email && order.client?.email) {
+			try {
+				console.log(
+					`Simulated sending order receipt email to ${email} with URL: ${blob.url}`,
+				);
+				emailSent = true;
+			} catch (emailError) {
+				this.logger.error(
+					`Failed to send order receipt email to ${email}`,
+					emailError,
+				);
+				emailSent = false;
+			}
+		}
+
+		return {
+			receiptUrl: blob.url,
+			fileName,
+			mediaId: mediaRecord.id,
+			emailSent,
+		};
+	}
+
+	private generateOrderReceiptHTML(order: any): string {
+		const formatPaymentMethod = (method: string) => {
+			switch (method) {
+				case "MOBILE_MONEY":
+					return "Mobile Money";
+				case "CASH":
+					return "Cash";
+				case "CARD":
+					return "Card";
+				case "TOKEN":
+					return "USCOR Token";
+				default:
+					return method;
+			}
+		};
+
+		const itemsHtml = order.products
+			.map((item: any) => {
+				const product = item.product || {};
+				return `
+					<tr>
+						<td>${product.title || "Item"}</td>
+						<td>${item.quantity}</td>
+						<td>$${(product.price || 0).toFixed(2)}</td>
+						<td>$${((product.price || 0) * item.quantity).toFixed(2)}</td>
+					</tr>
+				`;
+			})
+			.join("\n");
+
+		const deliveryAddressLine = order.deliveryAddress
+			? `${order.deliveryAddress.street || ""}, ${order.deliveryAddress.city || ""}${order.deliveryAddress.postalCode ? ", " + order.deliveryAddress.postalCode : ""}${order.deliveryAddress.country ? ", " + order.deliveryAddress.country : ""}`
+			: "Not provided";
+
+		const subtotal = order.products.reduce(
+			(sum: number, item: any) =>
+				sum + (item.product?.price || 0) * item.quantity,
+			0,
+		);
+		const total = order.payment?.amount ?? subtotal + (order.deliveryFee || 0);
+
+		return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Order Receipt ${order.id.substring(0, 8)}</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #111827; padding: 24px; }
+    .header { border-bottom: 1px solid #e5e7eb; padding-bottom: 18px; margin-bottom: 24px; }
+    .header h1 { font-size: 24px; margin-bottom: 4px; }
+    .header p { color: #6b7280; margin: 0; }
+    .section { margin-bottom: 24px; }
+    .section h2 { font-size: 16px; margin-bottom: 12px; }
+    .table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    .table th { background: #f9fafb; color: #374151; }
+    .summary { width: 100%; margin-top: 16px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .summary-row strong { color: #111827; }
+    .footer { padding-top: 16px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Order Receipt</h1>
+    <p>Order #: ${order.id}</p>
+    <p>Date: ${new Date(order.createdAt).toLocaleDateString("en-US")}</p>
+  </div>
+
+  <div class="section">
+    <h2>Client</h2>
+    <p>${order.client?.fullName || "Customer"}</p>
+    <p>${order.client?.email || ""}</p>
+  </div>
+
+  <div class="section">
+    <h2>Delivery</h2>
+    <p>${deliveryAddressLine}</p>
+  </div>
+
+  <div class="section">
+    <h2>Payment</h2>
+    <p>Method: ${formatPaymentMethod(order.payment?.method || "")}</p>
+    <p>Status: ${order.payment?.status || "Pending"}</p>
+  </div>
+
+  <div class="section">
+    <h2>Items</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsHtml}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary">
+    <div class="summary-row"><span>Subtotal</span><strong>$${subtotal.toFixed(2)}</strong></div>
+    <div class="summary-row"><span>Delivery Fee</span><strong>$${(order.deliveryFee || 0).toFixed(2)}</strong></div>
+    <div class="summary-row"><span>Total</span><strong>$${total.toFixed(2)}</strong></div>
+  </div>
+
+  <div class="footer">
+    <p>Thank you for shopping with us.</p>
+  </div>
+</body>
+</html>`;
 	}
 
 	async findAll() {
@@ -340,7 +614,7 @@ export class OrderService {
 		return {
 			...order,
 			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress!},
+				where: { id: order?.deliveryAddress! },
 			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
@@ -407,7 +681,7 @@ export class OrderService {
 		return {
 			...order,
 			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress!},
+				where: { id: order?.deliveryAddress! },
 			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
@@ -567,7 +841,7 @@ export class OrderService {
 		const transformedOrders = orders.map((order) => ({
 			...order,
 			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress!},
+				where: { id: order?.deliveryAddress! },
 			}),
 			status: order.payment?.status || "PENDING",
 			products: order.products?.map((op) => ({
@@ -734,7 +1008,7 @@ export class OrderService {
 						}
 					: null,
 				deliveryAddress: this.prisma.address.findUnique({
-					where: { id: order?.deliveryAddress!},
+					where: { id: order?.deliveryAddress! },
 				}),
 			};
 		});

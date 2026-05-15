@@ -43,6 +43,7 @@ export const GET_CLIENT_ORDERS = gql`
       items {
         id
         orderNumber
+        receiptUrl
         clientOrderId
         status
         totalAmount
@@ -52,6 +53,7 @@ export const GET_CLIENT_ORDERS = gql`
           name
           price
           quantity
+          businessId
           media {
             url
           }
@@ -361,6 +363,7 @@ export const ON_ORDER_UPDATED = gql`
     orderUpdated(clientId: $clientId) {
       id
       orderNumber
+      receiptUrl
       clientOrderId
       status
       totalAmount

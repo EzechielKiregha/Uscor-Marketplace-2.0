@@ -30,6 +30,10 @@ export const GET_PRODUCTS = gql`
         name
         avatar
       }
+      store {
+        id
+        name
+      }
     }
   }
 `;
@@ -58,6 +62,10 @@ export const GET_PRODUCTS_BY_NAME = gql`
         id
         name
         avatar
+      }
+      store {
+        id
+        name
       }
     }
   }
@@ -117,6 +125,10 @@ export const GET_PRODUCT_BY_ID = gql`
         id
         name
         avatar
+      }
+      store {
+        id
+        name
       }
     }
   }
@@ -211,6 +223,10 @@ export const CREATE_PRODUCT = gql`
         name
         avatar
       }
+      store {
+        id
+        name
+      }
     }
   }
 `;
@@ -240,6 +256,10 @@ export const UPDATE_PRODUCT = gql`
       id
       name
       avatar
+    }
+    store {
+      id
+      name
     }
   }
   }
@@ -303,6 +323,10 @@ export const ON_PRODUCT_CREATED = gql`
       name
       avatar
     }
+    store {
+      id
+      name
+    }
   }
   }
 `;
@@ -332,6 +356,10 @@ export const ON_PRODUCT_UPDATED = gql`
       id
       name
       avatar
+    }
+    store {
+      id
+      name
     }
   }
   }

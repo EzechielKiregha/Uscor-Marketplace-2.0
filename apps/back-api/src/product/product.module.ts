@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
+import { MediaModule } from "../media/media.module";
 import { MediaService } from "../media/media.service";
+import { PrismaModule } from "../prisma/prisma.module";
 import { PrismaService } from "../prisma/prisma.service";
 import { ProductResolver } from "./product.resolver";
 import { ProductService } from "./product.service";
-import { PrismaModule } from "../prisma/prisma.module";
-import { MediaModule } from "../media/media.module";
 
 const pubSub = new PubSub();
 
