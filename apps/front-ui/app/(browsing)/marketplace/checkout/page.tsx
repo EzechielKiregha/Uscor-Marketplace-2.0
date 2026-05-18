@@ -39,13 +39,13 @@ interface RwandaLocation {
   data: Record<string, Array<Record<string, string>>>;
 }
 
-interface CheckoutPageProps {
-  params: {
-    businessId?: string;
-  };
-}
+// interface CheckoutPageProps {
+//   params: {
+//     businessId?: string;
+//   };
+// }
 
-export default function CheckoutPage({ params }: CheckoutPageProps) {
+export default function CheckoutPage() {
   const router = useRouter();
   const { getItemCount, items, clearCart } = useCart();
   const { showToast } = useToast();
