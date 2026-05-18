@@ -29,6 +29,7 @@ import { useMe } from "@/lib/useMe";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import NotificationsPopover from "@/components/seraui/Notifications";
+import FloatingChat from "@/components/FloatingChat";
 
 const workerSideLinks = [
   { section: "pos", icon: ShoppingCart, label: "Point of Sale" },

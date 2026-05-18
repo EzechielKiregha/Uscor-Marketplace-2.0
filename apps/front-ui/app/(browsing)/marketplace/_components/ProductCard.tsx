@@ -8,8 +8,8 @@ import { useCart } from "@/app/context/use-cart";
 import ProductDetailsModal from "./ProductDetailsModal";
 import { useMutation } from "@apollo/client";
 import { CREATE_CHAT } from "@/graphql/chat.gql";
-import { useMe } from "@/lib/useMe";
-import NewChatSession from "./NewChatSession";
+import NewChatSession from "../../../../components/chat/NewChatSession";
+import BusinessTypeIcon from "./BusinessTypeIcons";
 
 interface ProductCardProps {
   product: any;
@@ -17,33 +17,12 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, viewMode }: ProductCardProps) {
-  const { user } = useMe();
   const [showDetails, setShowDetails] = useState(false);
   const { showToast } = useToast();
   const [openChat, setOpenChat] = useState(false);
 
   const { addItem } = useCart();
   const [_isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [createChat, { loading: chatLoading }] = useMutation(CREATE_CHAT, {
-    onCompleted: (_data) => {
-      showToast(
-        "success",
-        "Chat Opened",
-        "You can now chat with the business about this product",
-        true,
-        5000,
-      );
-    },
-    onError: (error) => {
-      showToast(
-        "error",
-        "Failed",
-        `Failed to start chat: ${error.message}`,
-        true,
-        5000,
-      );
-    },
-  });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -63,62 +42,8 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
     return product.price * (1 - promotion.discountPercentage / 100);
   };
 
-  // Get business type icon
-  const getBusinessTypeIcon = () => {
-    switch (product.business.businessType) {
-      case "ARTISAN":
-        return "🎨";
-      case "BOOKSTORE":
-        return "📚";
-      case "ELECTRONICS":
-        return "🔌";
-      case "HARDWARE":
-        return "🔨";
-      case "GROCERY":
-        return "🛒";
-      case "CAFE":
-        return "☕";
-      case "RESTAURANT":
-        return "🍽️";
-      case "RETAIL":
-        return "🏬";
-      case "BAR":
-        return "🍷";
-      case "CLOTHING":
-        return "👕";
-      default:
-        return "🏢";
-    }
-  };
-
   const handleViewDetails = () => {
     setShowDetails(true);
-  };
-
-  const handleChat = (
-    workerId?: string,
-    negotiationType: string = "PURCHASE",
-  ) => {
-    if (!user) {
-      showToast(
-        "error",
-        "Failed",
-        "Please log in to start a chat.",
-        true,
-        5000,
-      );
-      return;
-    }
-    createChat({
-      variables: {
-        input: {
-          productId: product.id,
-          participantIds: [user.id, product.business?.id, workerId!],
-          isSecure: true,
-          negotiationType: negotiationType,
-        },
-      },
-    });
   };
 
   const handleAddToCart = () => {
@@ -161,7 +86,10 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
             {/* Business Info */}
             <div className="flex items-center gap-2 mb-2">
               <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-sm">
-                {getBusinessTypeIcon()}
+                {BusinessTypeIcon({
+                  businessType: product.business.businessType,
+                  className: "h-5 w-5 text-primary",
+                })}
               </div>
               <div>
                 <h3 className="font-medium text-sm truncate">
@@ -248,8 +176,14 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
           isOpen={openChat}
           onClose={() => setOpenChat(!openChat)}
           storeId={product?.store?.id}
-          onChat={(workerId: string, negotiationType: string) => {
-            handleChat(workerId, negotiationType);
+          onChatCreated={(chatId: string) => {
+            showToast(
+              "success",
+              "Chat Opened",
+              "You can now chat with the business about this product",
+              true,
+              5000,
+            );
           }}
         />
       </>
@@ -288,7 +222,10 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
               {/* Business Info */}
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-sm">
-                  {getBusinessTypeIcon()}
+                  {BusinessTypeIcon({
+                    businessType: product.business.businessType,
+                    className: "h-5 w-5 text-primary",
+                  })}
                 </div>
                 <h3 className="font-medium text-sm">{product.business.name}</h3>
                 {product.business.kycStatus === "VERIFIED" && (
@@ -367,8 +304,14 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
         isOpen={openChat}
         onClose={() => setOpenChat(!openChat)}
         storeId={product?.store?.id}
-        onChat={(workerId: string, negotiationType: string) => {
-          handleChat(workerId, negotiationType);
+        onChatCreated={(chatId: string) => {
+          showToast(
+            "success",
+            "Chat Opened",
+            "You can now chat with the business about this product",
+            true,
+            5000,
+          );
         }}
       />
     </>

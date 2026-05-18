@@ -6,30 +6,37 @@ import { Suspense, useEffect, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { client } from "@/lib/apollo-client";
 import { useLoading } from "./context/loadingContext";
+import FloatingChat from "@/components/FloatingChat";
+import { ToastProvider } from "@/components/toast-provider";
 
 export default function ClientWrapper({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	const { isLoading, setIsLoading } = useLoading();
-	const pathname = usePathname();
-	const [prevPath, setPrevPath] = useState(pathname);
-	const router = useRouter();
-	useEffect(() => {
-		if (pathname !== prevPath) {
-			setIsLoading(false); // Stop loading when the path changes
-			setPrevPath(pathname); // Update the previous path
-			router.refresh();
-		}
-	}, [router, pathname, prevPath, setIsLoading]);
+  const { isLoading, setIsLoading } = useLoading();
+  const pathname = usePathname();
+  const [prevPath, setPrevPath] = useState(pathname);
+  const router = useRouter();
+  useEffect(() => {
+    if (pathname !== prevPath) {
+      setIsLoading(false); // Stop loading when the path changes
+      setPrevPath(pathname); // Update the previous path
+      router.refresh();
+    }
+  }, [router, pathname, prevPath, setIsLoading]);
 
-	return (
-		<>
-			{isLoading && <LoadingSpinner />}
-			<ApolloProvider client={client}>
-				<Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
-			</ApolloProvider>
-		</>
-	);
+  return (
+    <>
+      {isLoading && <LoadingSpinner />}
+      <ApolloProvider client={client}>
+        <Suspense fallback={<LoadingSpinner />}>
+          <ToastProvider>
+            {children}
+            <FloatingChat />
+          </ToastProvider>
+        </Suspense>
+      </ApolloProvider>
+    </>
+  );
 }

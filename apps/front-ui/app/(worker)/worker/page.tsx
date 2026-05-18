@@ -18,7 +18,7 @@ import { GET_STORES } from "@/graphql/store.gql";
 import NewSaleModal from "@/app/(Business)/business/sales/_components/NewSaleModal";
 import { StoreEntity } from "@/lib/types";
 import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
-import ClientChatsPage from "@/app/(Client)/client/_components/ClientChatPage";
+import ChatPage from "@/components/chat/ChatComponent";
 
 export default function WorkerPage() {
   const { user, loading: authLoading, role } = useMe();
@@ -204,7 +204,7 @@ export default function WorkerPage() {
           <ShiftsPage selectedStoreId={selectedStoreId} />
         )}
         {/* {activeSection === "chats" && <ChatsPage />} */}
-        {activeSection === "chats" && <ClientChatsPage />}
+        {activeSection === "chats" && <ChatPage />}
         {activeSection === "reports" && (
           <ReportsPage selectedStoreId={selectedStoreId} />
         )}

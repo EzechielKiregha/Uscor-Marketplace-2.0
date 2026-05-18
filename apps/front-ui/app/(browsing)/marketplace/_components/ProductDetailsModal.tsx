@@ -16,7 +16,7 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/app/context/use-cart";
-import NewChatSession from "./NewChatSession";
+import NewChatSession from "../../../../components/chat/NewChatSession";
 
 interface ProductDetailsModalProps {
   product: any;

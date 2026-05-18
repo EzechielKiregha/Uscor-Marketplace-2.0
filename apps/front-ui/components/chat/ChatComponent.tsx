@@ -1,24 +1,44 @@
-// app/business/chats/page.tsx
+// app/chat/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { MessageSquare, Search, Loader2, AlertCircle } from "lucide-react";
+import {
+  MessageSquare,
+  Search,
+  Loader2,
+  AlertCircle,
+  X,
+  ChevronLeft,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/toast-provider";
 import { GET_CHATS } from "@/graphql/chat.gql";
-import FloatingChat from "@/components/FloatingChat";
 import { useMe } from "@/lib/useMe";
-import ChatModal from "@/components/chat/ChatModal";
+import ChatModal from "./ChatModal";
 
-export default function BusinessChatsPage() {
+export default function ChatPage() {
   const { user, role, loading: authLoading } = useMe();
   const { showToast } = useToast();
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [chatType, setChatType] = useState<
+    "client" | "worker" | "business" | null
+  >(null);
+
+  // Determine chat type based on user role
+  useEffect(() => {
+    if (role === "client") {
+      setChatType("client");
+    } else if (role === "worker") {
+      setChatType("worker");
+    } else if (role === "business") {
+      setChatType("business");
+    }
+  }, [role]);
 
   const {
     data: chatsData,
@@ -27,10 +47,14 @@ export default function BusinessChatsPage() {
     refetch,
   } = useQuery(GET_CHATS, {
     variables: {
-      businessId: user?.id,
+      [chatType === "client"
+        ? "clientId"
+        : chatType === "worker"
+          ? "workerId"
+          : "businessId"]: user?.id,
       search: searchTerm,
     },
-    skip: !user?.id,
+    skip: !user?.id || !chatType,
     pollInterval: 10000,
   });
 
@@ -82,9 +106,9 @@ export default function BusinessChatsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-bold">Business Chat</h1>
+              <h1 className="text-2xl font-bold">Chat with USCOR</h1>
               <p className="text-muted-foreground">
-                Connect with clients and manage conversations
+                Connect with businesses, clients, or workers
               </p>
             </div>
             <Button variant="outline" onClick={() => setIsChatModalOpen(true)}>
@@ -99,11 +123,10 @@ export default function BusinessChatsPage() {
                 <MessageSquare className="h-8 w-8 text-muted-foreground" />
               </div>
               <h2 className="text-xl font-semibold mb-2">
-                Welcome to USCOR Business Chat
+                Welcome to USCOR Chat
               </h2>
               <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                Sign in to access your conversations with clients and manage
-                customer service
+                Sign in to access your conversations based on your account type
               </p>
 
               <div className="flex flex-col sm:flex-row justify-center gap-3">
@@ -144,10 +167,30 @@ export default function BusinessChatsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Business Conversations</h1>
-            <p className="text-muted-foreground">
-              Manage conversations with your clients and customers
-            </p>
+            {chatType === "client" && (
+              <>
+                <h1 className="text-2xl font-bold">Client Conversations</h1>
+                <p className="text-muted-foreground">
+                  Connect with businesses for purchases and services
+                </p>
+              </>
+            )}
+            {chatType === "worker" && (
+              <>
+                <h1 className="text-2xl font-bold">Worker Conversations</h1>
+                <p className="text-muted-foreground">
+                  Manage conversations with clients and businesses
+                </p>
+              </>
+            )}
+            {chatType === "business" && (
+              <>
+                <h1 className="text-2xl font-bold">Business Conversations</h1>
+                <p className="text-muted-foreground">
+                  Manage conversations with clients and workers
+                </p>
+              </>
+            )}
           </div>
           <Button
             className="bg-primary hover:bg-accent text-primary-foreground"
@@ -195,7 +238,12 @@ export default function BusinessChatsPage() {
             <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-medium mb-2">No conversations yet</h3>
             <p className="text-muted-foreground mb-6">
-              Start a new conversation to connect with clients and customers
+              {chatType === "client" &&
+                "Start a new conversation to connect with businesses"}
+              {chatType === "worker" &&
+                "Start a new conversation to connect with clients and businesses"}
+              {chatType === "business" &&
+                "Start a new conversation to connect with clients and workers"}
             </p>
             <Button
               className="bg-primary hover:bg-accent text-primary-foreground"
@@ -233,16 +281,36 @@ export default function BusinessChatsPage() {
                       onClick={() => handleChatSelect(chat.id)}
                     >
                       <div className="flex items-center gap-3">
-                        {chat.client?.avatar ? (
+                        {chatType === "client" && chat.business?.avatar ? (
+                          <img
+                            src={chat.business.avatar}
+                            alt={chat.business.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        ) : chatType === "business" && chat.client?.avatar ? (
                           <img
                             src={chat.client.avatar}
                             alt={chat.client.fullName}
                             className="w-10 h-10 rounded-full object-cover"
                           />
+                        ) : chatType === "worker" &&
+                          (chat.client?.avatar || chat.business?.avatar) ? (
+                          <img
+                            src={chat.client?.avatar || chat.business?.avatar}
+                            alt={chat.client?.fullName || chat.business?.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                             <span className="text-muted-foreground">
-                              {chat.client?.fullName?.charAt(0) || "C"}
+                              {chatType === "client" &&
+                                (chat.business?.name?.charAt(0) || "B")}
+                              {chatType === "business" &&
+                                (chat.client?.fullName?.charAt(0) || "C")}
+                              {chatType === "worker" &&
+                                (chat.client?.fullName?.charAt(0) ||
+                                  chat.business?.name?.charAt(0) ||
+                                  "P")}
                             </span>
                           </div>
                         )}
@@ -251,12 +319,19 @@ export default function BusinessChatsPage() {
                           <div className="flex justify-between items-start">
                             <div>
                               <h3 className="font-medium truncate">
-                                {chat.client?.fullName}
+                                {chatType === "client" && chat.business?.name}
+                                {chatType === "business" &&
+                                  chat.client?.fullName}
+                                {chatType === "worker" &&
+                                  (chat.client?.fullName ||
+                                    chat.business?.name)}
                               </h3>
                               <p className="text-sm text-muted-foreground truncate mt-1 line-clamp-1">
                                 {lastMessage ? (
                                   <>
                                     {lastMessage.senderType === "BUSINESS" &&
+                                      "You: "}
+                                    {lastMessage.senderType === "WORKER" &&
                                       "You: "}
                                     {lastMessage.content}
                                   </>
@@ -312,7 +387,11 @@ export default function BusinessChatsPage() {
         )}
 
         {/* Chat Modal */}
-        <ChatModal isOpen={isChatModalOpen} onClose={handleChatClose} />
+        <ChatModal
+          isOpen={isChatModalOpen}
+          chatId={activeChatId!}
+          onClose={handleChatClose}
+        />
 
         {/* Floating Chat Button */}
         {/* <FloatingChat /> */}

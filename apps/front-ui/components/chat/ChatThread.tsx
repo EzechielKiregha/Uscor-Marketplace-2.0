@@ -1,103 +1,98 @@
+// marketplace/_components/ChatThread.tsx
 "use client";
-import { useMutation, useSubscription } from "@apollo/client";
-import { ArrowLeft } from "lucide-react";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
+
+import { useState, useEffect, useRef } from "react";
+import { useMutation, useSubscription, useQuery } from "@apollo/client";
 import {
-  GET_UNREAD_COUNT,
-  MARK_MESSAGES_AS_READ,
-  ON_MESSAGE_RECEIVED,
-} from "@/graphql/chat.gql";
-import { useRealTimeMessages } from "@/hooks/useRealTimeMessages";
-import { Button } from "../ui/button";
-import ScrollArea from "../ui/ScrollArea";
+  ArrowLeft,
+  Send,
+  Plus,
+  X,
+  Loader2,
+  AlertCircle,
+  MessageCircle,
+  Store,
+  User,
+} from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import MessageBubble from "./MessageBubble";
+import {
+  GET_CHAT_BY_ID,
+  SEND_MESSAGE,
+  ON_MESSAGE_RECEIVED,
+  MARK_MESSAGES_AS_READ,
+  GET_UNREAD_COUNT,
+} from "@/graphql/chat.gql";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { useMe } from "@/lib/useMe";
+import BusinessTypeIcon from "@/app/(browsing)/marketplace/_components/BusinessTypeIcons";
 
 interface ChatThreadProps {
-  chat: any;
+  chatId: string;
   userId: string;
   userRole: "business" | "client" | "worker" | "admin";
-  onSendMessage: (content: string) => Promise<void>;
-  loading?: boolean;
-  onBack?: () => void;
+  onBack: () => void;
+  onClose: () => void;
 }
 
 export default function ChatThread({
-  chat,
+  chatId,
   userId,
   userRole,
-  onSendMessage,
-  loading,
   onBack,
+  onClose,
 }: ChatThreadProps) {
+  const { user, role, loading: meLoading } = useMe();
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [newMessageIndicatorVisible, setNewMessageIndicatorVisible] =
+    useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+  const wasAtBottomRef = useRef(true);
+  const initialScrollSetRef = useRef(true);
+  const previousMessageCountRef = useRef(0);
 
+  const {
+    data: chatData,
+    loading: chatLoading,
+    error: chatError,
+    refetch,
+  } = useQuery(GET_CHAT_BY_ID, {
+    variables: { id: chatId },
+    skip: !chatId,
+  });
+
+  const [sendMessage] = useMutation(SEND_MESSAGE);
   const [markMessagesAsRead] = useMutation(MARK_MESSAGES_AS_READ);
 
-  // Real-time message handler (combines GraphQL + Pusher)
-  const { handleMessageFromGraphQL } = useRealTimeMessages({
-    chatId: chat?.id || null,
-    onMessageReceived: (message) => {
-      // Update message list with the new message
-      console.log(
-        "[ChatThread] Message received, updating local state:",
-        message.id,
-      );
-      setLocalMessages((prevMessages) => {
-        const exists = prevMessages.some((msg) => msg.id === message.id);
-        if (exists) {
-          console.log(
-            "[ChatThread] ⚠️ Message already exists in local state:",
-            message.id,
-          );
-          return prevMessages;
-        }
-        return [...prevMessages, message];
-      });
-    },
-    enabled: true,
-  });
+  const chat = chatData?.chat;
 
-  // GraphQL real-time subscription
-  console.log(
-    "[ChatThread] Setting up GraphQL subscription for chat:",
-    chat?.id,
-  );
+  // Handle real-time message updates
   useSubscription(ON_MESSAGE_RECEIVED, {
-    variables: { chatId: chat?.id || "" },
-    skip: !chat?.id,
+    variables: { chatId },
     onData: ({ data }) => {
-      console.log("[ChatThread] GraphQL subscription data received:", {
-        hasChatId: !!chat?.id,
-        hasMessage: !!data.data?.messageReceived,
-        messageId: data.data?.messageReceived?.id,
-      });
-      if (data.data?.messageReceived) {
-        console.log(
-          "[ChatThread] ✓ Processing GraphQL message:",
-          data.data.messageReceived.id,
-        );
-        handleMessageFromGraphQL(data.data.messageReceived);
-      } else {
-        console.warn("[ChatThread] ✗ No messageReceived in subscription data");
+      if (data.data?.messageReceived?.chatId === chatId) {
+        refetch();
       }
     },
-    onError: (error) => {
-      console.error("[ChatThread] ✗ GraphQL subscription error:", error);
-    },
   });
 
-  // Local state for messages to ensure immediate updates
-  const [localMessages, setLocalMessages] = useState<any[]>([]);
+  // Handle real-time chat updates
+  // useSubscription(ON_CHAT_UPDATED, {
+  //   variables: { userId },
+  //   onData: ({ data }) => {
+  //     if (data.data?.chatStatusUpdated?.id === chatId) {
+  //       refetch();
+  //     }
+  //   },
+  // });
 
-  useEffect(() => {
-    // Sync local messages with chat prop
-    setLocalMessages(Array.isArray(chat?.messages) ? chat.messages : []);
-  }, [chat?.id, chat?.messages]); // Reset when chat changes
-
+  // Mark messages as read when opening/visiting a chat
   useEffect(() => {
     // mark messages as read for this user when opening/visiting a chat
     if (!chat?.id || !userId) return;
@@ -114,32 +109,107 @@ export default function ChatThread({
     } catch (_e) {
       // swallow
     }
-  }, [chat?.id, userId, markMessagesAsRead]);
+  }, [chatId, userId, markMessagesAsRead]);
+
+  const scrollToBottom = (smooth = true) => {
+    const root = scrollAreaRef.current;
+    const viewport = root?.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+
+    if (viewport) {
+      viewport.scrollTo({
+        top: viewport.scrollHeight,
+        behavior: smooth ? "smooth" : "auto",
+      });
+    } else {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: smooth ? "smooth" : "auto",
+      });
+    }
+  };
+
+  // Track whether the user is scrolled near the bottom and hide the indicator when they return.
+  useEffect(() => {
+    const root = scrollAreaRef.current;
+    if (!root) return;
+
+    const viewport = root.querySelector<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    if (!viewport) return;
+
+    const handleScroll = () => {
+      const atBottom =
+        viewport.scrollHeight - (viewport.scrollTop + viewport.clientHeight) <
+        50;
+      wasAtBottomRef.current = atBottom;
+      if (atBottom) {
+        setNewMessageIndicatorVisible(false);
+      }
+    };
+
+    handleScroll();
+    viewport.addEventListener("scroll", handleScroll);
+    return () => viewport.removeEventListener("scroll", handleScroll);
+  }, [chatId]);
 
   useEffect(() => {
-    // smooth scroll the scroll area to bottom when messages change
-    if (scrollAreaRef.current) {
-      // scroll the container to the bottom
-      try {
-        scrollAreaRef.current.scrollTo({
-          top: scrollAreaRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      } catch (_e) {
-        // fallback
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const messages = chat?.messages;
+    if (!messages) return;
+
+    const currentMessageCount = messages.length;
+    const lastMessage = messages[currentMessageCount - 1];
+    const isNewMessage = currentMessageCount > previousMessageCountRef.current;
+    const isOwnMessage = lastMessage?.senderId === userId;
+    const shouldAutoScroll =
+      initialScrollSetRef.current || wasAtBottomRef.current || isOwnMessage;
+
+    if (initialScrollSetRef.current) {
+      scrollToBottom(false);
+      initialScrollSetRef.current = false;
+      setNewMessageIndicatorVisible(false);
+    } else if (isNewMessage) {
+      if (shouldAutoScroll) {
+        scrollToBottom(true);
+        setNewMessageIndicatorVisible(false);
+      } else {
+        setNewMessageIndicatorVisible(true);
       }
-    } else {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, []);
+
+    previousMessageCountRef.current = currentMessageCount;
+  }, [chat?.messages, userId]);
 
   const handleSend = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() || !chatId || isSending) return;
+
     setIsSending(true);
-    await onSendMessage(message);
-    setMessage("");
-    setIsSending(false);
+
+    try {
+      await sendMessage({
+        variables: {
+          input: {
+            chatId,
+            content: message,
+            senderType:
+              userRole === "business"
+                ? "BUSINESS"
+                : userRole === "worker"
+                  ? "WORKER"
+                  : "CLIENT",
+            senderId: userId,
+          },
+        },
+      });
+
+      setMessage("");
+      refetch();
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -147,104 +217,383 @@ export default function ChatThread({
       e.preventDefault();
       handleSend();
     }
+
+    // Handle typing indicator
+    if (e.key !== "Enter" && !isTyping) {
+      setIsTyping(true);
+      // Reset typing indicator after 2 seconds of inactivity
+      setTimeout(() => setIsTyping(false), 2000);
+    }
   };
 
-  if (loading)
-    return (
-      <div className="text-center">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-muted-foreground">Loading data...</p>
-      </div>
-    );
-  if (!chat)
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-red-600">No chat found</p>
-      </div>
-    );
+  const getParticipantName = () => {
+    if (!chat?.participants) return "Unknown";
 
-  return (
-    <div className="flex flex-col h-full w-full overflow-x-hidden">
-      {/* Chat Header */}
-      <div className="border-b border-border p-2 sm:p-3 md:p-4 flex items-center justify-between bg-background sticky top-0 z-10 w-full max-w-full overflow-x-hidden">
-        <div className="flex items-center gap-2 sm:gap-3 w-full max-w-full overflow-x-hidden">
-          {onBack && (
-            <button onClick={onBack} className="md:hidden mr-2">
-              <ArrowLeft />
-            </button>
-          )}
-          <div className="flex items-start gap-2 sm:gap-3 w-full max-w-full">
-            <img
-              src={chat.product?.title || "avatar.png"}
-              alt={chat.product?.title}
-              className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0"
-              onError={(event) => {
-                event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(chat.product?.title?.charAt(0) || "C")}`;
-              }}
-            />
-            <div className="min-w-0 flex-1">
-              {/* Business name and product title: truncate, reduce size on small screens */}
-              <div className="flex items-center gap-2">
-                <div className="font-semibold truncate text-sm md:text-base lg:text-lg">
-                  {chat.product?.business.name}
-                </div>
-              </div>
-              {/* Description: hide on very small screens, truncate otherwise */}
-              {/* <div className="text-xs sm:text-sm text-gray-500 truncate hidden max-w-[60%] lg:max-w-[50%] xs:block sm:block">
-                {chat.service?.description || chat.product?.description || ''}
-              </div> */}
-              <div className="text-orange-600 text-xs sm:text-sm truncate max-w-[60%] md:max-w-[50%]">
-                {chat.product?.title}
+    if (userRole === "business" || userRole === "worker") {
+      const clientPart = chat.participants.find((p: any) => p.client);
+      return (
+        clientPart?.client?.fullName || clientPart?.client?.username || "Client"
+      );
+    } else if (userRole === "client") {
+      const businessPart = chat.participants.find((p: any) => p.business);
+      return businessPart?.business?.name || "Business";
+    }
+
+    return "Unknown";
+  };
+
+  const getParticipantAvatar = () => {
+    if (!chat?.participants) return null;
+
+    if (userRole === "business" || userRole === "worker") {
+      const clientPart = chat.participants.find((p: any) => p.client);
+      return clientPart?.client?.avatar || null;
+    } else if (userRole === "client") {
+      const businessPart = chat.participants.find((p: any) => p.business);
+      return businessPart?.business?.avatar || null;
+    }
+
+    return null;
+  };
+
+  const getMessageStatus = (message: any) => {
+    if (message.senderId === userId) {
+      if (message.isRead) {
+        return "read";
+        // } else if (message.status === "delivered") {
+        //   return "delivered";
+        // } else if (message.status === "pending") {
+        //   return "pending";
+        // } else if (message.status === "error") {
+        //   return "error";
+      } else {
+        return "sent";
+      }
+    }
+    return "sent";
+  };
+
+  if (chatLoading || meLoading) {
+    return (
+      <div className="flex flex-col h-full">
+        {/* Header Skeleton */}
+        <div className="p-4 border-b border-border flex items-center gap-3 animate-pulse">
+          <div className="w-10 h-10 rounded-full bg-muted" />
+          <div className="flex-1">
+            <div className="h-5 bg-muted rounded w-3/4" />
+            <div className="h-4 bg-muted rounded w-1/2 mt-1" />
+          </div>
+          <div className="w-8 h-8 rounded-full bg-muted" />
+        </div>
+
+        {/* Messages Skeleton */}
+        <ScrollArea className="flex-1 min-h-0 overflow-hidden p-4 space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className={`flex ${i % 2 === 0 ? "justify-end" : "justify-start"}`}
+            >
+              <div
+                className={`max-w-[75%] rounded-2xl p-3 ${
+                  i % 2 === 0
+                    ? "bg-primary text-primary-foreground rounded-tr-none"
+                    : "bg-muted rounded-tl-none"
+                }`}
+              >
+                <div className="h-3 bg-muted rounded w-full" />
+                {i % 3 === 0 && (
+                  <div className="h-3 bg-muted rounded w-3/4 mt-1" />
+                )}
               </div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-400 whitespace-nowrap ml-2">
-              {new Date(chat.createdAt).toLocaleDateString()}
-            </div>
+          ))}
+        </ScrollArea>
+
+        {/* Input Skeleton */}
+        <div className="p-4 border-t border-border space-y-3">
+          <div className="h-10 bg-muted rounded-lg" />
+          <div className="flex justify-between">
+            <div className="w-8 h-8 rounded-full bg-muted" />
+            <div className="w-8 h-8 rounded-full bg-muted" />
           </div>
         </div>
       </div>
+    );
+  }
+
+  if (chatError) {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="p-4 border-b border-border flex items-center">
+          <Button variant="ghost" size="icon" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div className="ml-3">
+            <h2 className="font-semibold">Error</h2>
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col items-center justify-center p-6">
+          <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+          <h3 className="text-lg font-medium mb-2">
+            Failed to load conversation
+          </h3>
+          <p className="text-center text-muted-foreground mb-6">
+            {chatError.message ||
+              "There was an error loading this conversation. Please try again later."}
+          </p>
+          <Button variant="outline" onClick={() => refetch()}>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!chat) {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="p-4 border-b border-border flex items-center">
+          <Button variant="ghost" size="icon" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div className="ml-3">
+            <h2 className="font-semibold">Conversation</h2>
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col items-center justify-center p-6">
+          <MessageCircle className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">Conversation not found</h3>
+          <p className="text-center text-muted-foreground mb-6">
+            The conversation you're looking for doesn't exist or has been
+            deleted.
+          </p>
+          <Button variant="outline" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Messages
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full min-h-0">
+      {/* Header */}
+      <div className="p-4 border-b border-border flex items-center">
+        <Button variant="ghost" size="icon" onClick={onBack}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+
+        <div className="ml-3 flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            {getParticipantAvatar() ? (
+              <img
+                src={getParticipantAvatar()}
+                alt={getParticipantName()}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                {userRole === "business" ? (
+                  <User className="h-5 w-5 text-primary" />
+                ) : (
+                  <Store className="h-5 w-5 text-primary" />
+                )}
+              </div>
+            )}
+            <h2 className="font-semibold truncate">{getParticipantName()}</h2>
+          </div>
+
+          <div className="flex items-center gap-1 mt-1">
+            {chat.business?.businessType && (
+              <span className="text-xs bg-muted px-2 py-0.5 rounded-full flex items-center gap-1">
+                {BusinessTypeIcon({
+                  businessType: chat.business.businessType,
+                  className: "h-5 w-5 text-primary",
+                })}
+                {chat.business.businessType === "ARTISAN" && "Artisan"}
+                {chat.business.businessType === "BOOKSTORE" && "Bookstore"}
+                {chat.business.businessType === "ELECTRONICS" && "Electronics"}
+                {chat.business.businessType === "HARDWARE" && "Hardware"}
+                {chat.business.businessType === "GROCERY" && "Grocery"}
+                {chat.business.businessType === "CAFE" && "Café"}
+                {chat.business.businessType === "RESTAURANT" && "Restaurant"}
+                {chat.business.businessType === "RETAIL" && "Retail"}
+                {chat.business.businessType === "BAR" && "Bar"}
+                {chat.business.businessType === "CLOTHING" && "Clothing"}
+                {!chat.business.businessType && "Business"}
+              </span>
+            )}
+            {chat.negotiationType === "REOWNERSHIP" && (
+              <span className="text-xs bg-warning/10 text-warning px-2 py-0.5 rounded-full">
+                Reownership
+              </span>
+            )}
+            {chat.negotiationType === "FREELANCE_ORDER" && (
+              <span className="text-xs bg-success/10 text-success px-2 py-0.5 rounded-full">
+                Freelance
+              </span>
+            )}
+            {chat.negotiationType === "PURCHASE" && (
+              <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                Purchase
+              </span>
+            )}
+          </div>
+        </div>
+
+        <Button variant="ghost" size="icon" onClick={onClose}>
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+
       {/* Messages */}
-      {/* <div className="flex-1 h-90  w-full max-w-full"> */}
       <ScrollArea
-        className="flex-1 h-[68%] bg-card min-h-0 p-2 sm:p-3 md:p-4 space-y-2 sm:space-y-3 md:space-y-4"
+        className="flex-1 min-h-0 overflow-hidden p-4 space-y-2"
         ref={scrollAreaRef}
       >
-        {localMessages.map((msg: any) => (
-          <div key={msg.id} className="max-w-full wrap-break-word">
-            <MessageBubble
-              message={msg.content || msg.message}
-              senderId={msg.senderId}
-              senderType={msg.senderType}
-              createdAt={msg.createdAt}
-              isCurrentUser={msg.senderId === userId}
-              userRole={userRole}
-            />
+        {chat.messages && chat.messages.length > 0 ? (
+          <>
+            {chat.messages.map((msg: any, index: number) => {
+              const isLastInGroup =
+                index === chat.messages.length - 1 ||
+                chat.messages[index + 1].senderId !== msg.senderId;
+              const isFirstInGroup =
+                index === 0 ||
+                chat.messages[index - 1].senderId !== msg.senderId;
+
+              return (
+                <MessageBubble
+                  key={msg.id}
+                  message={msg.content}
+                  senderId={msg.senderId}
+                  createdAt={msg.createdAt}
+                  status={getMessageStatus(msg)}
+                  isLastInGroup={isLastInGroup}
+                  isFirstInGroup={isFirstInGroup}
+                />
+              );
+            })}
+
+            {newMessageIndicatorVisible && (
+              <div className="sticky bottom-0 z-10 flex justify-center">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    scrollToBottom(true);
+                    setNewMessageIndicatorVisible(false);
+                  }}
+                  className="rounded-full px-3 py-1.5"
+                >
+                  New message
+                </Button>
+              </div>
+            )}
+
+            {isTyping && (
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                </div>
+                <div className="bg-muted rounded-2xl rounded-bl-none p-3">
+                  <div className="flex space-x-1.5">
+                    <div
+                      className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                      style={{ animationDelay: "0ms" }}
+                    />
+                    <div
+                      className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                      style={{ animationDelay: "150ms" }}
+                    />
+                    <div
+                      className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                      style={{ animationDelay: "300ms" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-center p-8">
+            <MessageCircle className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium mb-2">No messages yet</h3>
+            <p className="text-muted-foreground mb-6">
+              Start the conversation by sending a message to{" "}
+              {getParticipantName()}
+            </p>
           </div>
-        ))}
+        )}
+
         <div ref={messagesEndRef} />
       </ScrollArea>
-      {/* </div> */}
-      {/* Message Input */}
-      <div className="border-t border-border p-2 sm:p-3 md:p-4 bg-background sticky bottom-0 z-10 w-full max-w-full overflow-x-hidden">
-        <div className="flex items-end gap-2">
-          <div className="flex-1 relative">
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="w-full p-2 sm:p-2.5 md:p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-10 max-h-30 text-sm md:text-base max-w-full overflow-x-hidden"
-              rows={1}
-              disabled={isSending}
-            />
-          </div>
+
+      {/* Input Area */}
+      <div className="p-4 border-t border-border space-y-3">
+        <div className="relative">
+          <Input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Type your message..."
+            className="pr-10 h-11 text-base"
+            disabled={isSending}
+          />
           <Button
-            className={`shrink-0 text-white mb-1.5 lg:mb-3 md:mb-3 ${!message.trim() || isSending ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={!message.trim() || isSending}
+            size="icon"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:bg-accent text-primary-foreground"
             onClick={handleSend}
+            disabled={isSending || !message.trim()}
           >
-            {isSending ? "Sending..." : "Send"}
+            {isSending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon">
+              <Plus className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </Button>
+          </div>
+
+          <div className="text-sm text-muted-foreground">
+            {chat.messages && chat.messages.length > 0 ? (
+              <>
+                Last message:{" "}
+                {format(
+                  new Date(chat.messages[chat.messages.length - 1].createdAt),
+                  "HH:mm",
+                )}
+              </>
+            ) : (
+              "Start a conversation"
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -41,12 +41,12 @@ export const GET_CHATS = gql`
             id
             url
           }
-          }
-          service {
-            id
-            title
-            description
-            business { id name }
+        }
+        service {
+          id
+          title
+          description
+          business { id name }
         }
         participants {
           id
@@ -61,17 +61,20 @@ export const GET_CHATS = gql`
             id
             name
             avatar
+            businessType
           }
           workerId
           worker {
             id
             fullName
+            avatar
           }
         }
         messages {
           id
           content
           senderId
+          isRead
           createdAt
         }
       }
@@ -95,25 +98,29 @@ export const GET_CHAT_BY_ID = gql`
         price
         business { id name }
       }
-      client {
-        id
-        fullName
-        avatar
-      }
-      business {
-        id
-        name
-        avatar
-      }
-      worker {
-        id
-        fullName
-        avatar
+      participants {
+        client {
+          id
+          fullName
+          avatar
+        }
+        business {
+          id
+          name
+          avatar
+          businessType
+        }
+        worker {
+          id
+          fullName
+          avatar
+        }
       }
       messages {
         id
         content
         senderType
+        isRead
         senderId
         createdAt
       }
@@ -219,6 +226,7 @@ export const GET_CHATS_BY_PARTICIPANT = gql`
         id
         content
         senderId
+        isRead
         createdAt
       }
     }

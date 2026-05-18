@@ -20,14 +20,13 @@ import { Button } from "@/components/ui/button";
 import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
 import { cn } from "@/lib/utils";
-import ClientChatsPage from "./_components/ClientChatPage";
 import LoyaltyDashboard from "./_components/LoyaltyDashboard";
 import OrderHistory from "./_components/OrderHistory";
 import ProfileOverview from "./_components/ProfileOverview";
 import Recommendations from "./_components/Recommendations";
 import ReviewsPage from "./_components/Reviews";
 import SettingsPanel from "./_components/SettingsPanel";
-import ChatsPage from "@/app/(worker)/worker/_components/ChatsPage";
+import ChatPage from "../../../components/chat/ChatComponent";
 
 type ClientSection =
   | "profile"
@@ -78,7 +77,7 @@ export default function ClientPanel() {
     { section: "profile", icon: User, label: "Profile" },
     { section: "orders", icon: ShoppingBag, label: "Order History" },
     { section: "chat", icon: MessageSquare, label: "My Chats" },
-    { section: "loyalty", icon: Star, label: "Loyalty Program" },
+    // { section: "loyalty", icon: Star, label: "Loyalty Program" },
     { section: "recommendations", icon: Home, label: "Recommendations" },
     { section: "reviews", icon: MessageSquare, label: "Reviews" },
     { section: "settings", icon: Settings, label: "Account Settings" },
@@ -208,7 +207,7 @@ export default function ClientPanel() {
             {activeSection === "profile" && (
               <ProfileOverview client={clientData.client} />
             )}
-            {activeSection === "chat" && <ClientChatsPage />}
+            {activeSection === "chat" && <ChatPage />}
             {/* {activeSection === "chat" && <ChatsPage />} */}
             {activeSection === "orders" && (
               <OrderHistory client={clientData.client} />

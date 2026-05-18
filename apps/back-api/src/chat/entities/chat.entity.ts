@@ -1,10 +1,11 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { MediaEntity } from "src/media/entities/media.entity";
+import { WorkerEntity } from "src/worker/entities";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { ChatMessageEntity } from "../../chat/entities/chat-nessage.entity";
 import { FreelanceServiceEntity } from "../../freelance-service/entities/freelance-service.entity";
 import { ChatStatus, NegotiationType } from "../dto/create-chat.input";
 import { ChatParticipantEntity } from "./chat-participants.entity";
-import { MediaEntity } from "src/media/entities/media.entity";
 
 @ObjectType()
 export class ChatProductInfo {
@@ -106,14 +107,14 @@ export class ChatEntity {
 	@Field({ nullable: true })
 	businessId?: string;
 
-	@Field(() => ChatUserInfo, { nullable: true })
-	business?: ChatUserInfo;
+	@Field(() => BusinessEntity, { nullable: true })
+	business?: BusinessEntity;
 
 	@Field({ nullable: true })
 	workerId?: string;
 
-	@Field(() => ChatUserInfo, { nullable: true })
-	worker?: ChatUserInfo;
+	@Field(() => WorkerEntity, { nullable: true })
+	worker?: WorkerEntity;
 
 	@Field(() => [ChatParticipantEntity])
 	participants: ChatParticipantEntity[];

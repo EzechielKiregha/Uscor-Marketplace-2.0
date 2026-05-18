@@ -15,6 +15,9 @@ export class ChatMessageEntity {
 	@Field({ nullable: true })
 	senderType?: string;
 
+	@Field(() => Boolean, { nullable: true })
+	isRead?: boolean;
+
 	@Field(() => String, { nullable: true })
 	senderId?: string | null;
 

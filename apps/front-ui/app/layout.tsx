@@ -89,13 +89,9 @@ export default function RootLayout({
               <main className="relative flex flex-col min-h-screen">
                 <ClientWrapper>
                   {process.env.NODE_ENV === "production" ? (
-                    <ToastProvider>
-                      <SerwistProvider swUrl="/sw.js">
-                        {children}
-                      </SerwistProvider>
-                    </ToastProvider>
+                    <SerwistProvider swUrl="/sw.js">{children}</SerwistProvider>
                   ) : (
-                    <ToastProvider>{children}</ToastProvider>
+                    <>{children}</>
                   )}
                 </ClientWrapper>
               </main>

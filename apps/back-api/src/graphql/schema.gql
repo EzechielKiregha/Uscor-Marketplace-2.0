@@ -16,16 +16,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type ChatMessageEntity {
-  id: String!
-  chatId: String!
-  content: String
-  senderType: String
-  senderId: String
-  sender: ChatUserInfo
-  createdAt: DateTime!
-}
-
 type MediaEntity {
   id: String!
   url: String!
@@ -53,27 +43,31 @@ type PaginatedAuditLogsResponse {
   limit: Int!
 }
 
-type PaymentMethodEntity {
-  id: String
-  type: String
-  provider: String
-  accountNumber: String
-  expiryMonth: Int
-  expiryYear: Int
-  cardToken: String
-  last4: String
-  isDefault: Boolean
-  createdAt: DateTime
-  updatedAt: DateTime
+type ChatParticipantEntity {
+  id: String!
+  chatId: String!
+  clientId: String
+  client: ClientEntity
+  businessId: String
+  business: BusinessEntity
+  workerId: String
+  worker: WorkerEntity
+  chat: ChatEntity
+  createdAt: DateTime!
 }
 
-type OrderProductEntity {
+type KnowYourCustomerEntity {
   id: String!
-  orderId: String!
-  productId: String!
-  quantity: Int!
-  order: OrderEntity!
-  product: ProductEntity!
+  status: String!
+  documentUrl: String!
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+  businessId: String
+  clientId: String
+  workerId: String
+  business: BusinessEntity
+  client: ClientEntity
+  worker: WorkerEntity
 }
 
 type InventoryEntity {
@@ -278,6 +272,143 @@ type StoreEntity {
   products: [ProductEntity!]
 }
 
+type SaleProductEntityWorker {
+  id: String!
+  saleId: String!
+  productId: String!
+  product: ProductEntity
+  quantity: Float!
+  price: Float!
+  modifiers: String
+  createdAt: DateTime!
+}
+
+type SaleEntityWorker {
+  id: String!
+  storeId: String!
+  store: StoreEntity
+  workerId: String
+  worker: WorkerEntity
+  clientId: String
+  client: ClientEntity
+  totalAmount: Float!
+  discount: Float
+  paymentMethod: PaymentMethod
+  status: SaleStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  saleProducts: [SaleProductEntityWorker!]
+  returns: [SaleReturnEntity!]
+}
+
+type SaleReturnEntity {
+  id: String!
+  saleId: String!
+  reason: String!
+  status: String!
+  createdAt: DateTime!
+}
+
+type ShiftEntityWorker {
+  id: String!
+  workerId: String!
+  worker: WorkerEntity
+  storeId: String!
+  store: StoreEntity
+  startTime: DateTime!
+  endTime: DateTime
+  sales: Float
+  transactionCount: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type WorkerEntity {
+  id: String
+  email: String
+  fullName: String
+  avatar: String
+  phone: String
+  role: String
+  bio: String
+  isVerified: Boolean
+  lastLogin: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  business: BusinessEntity
+  kyc: KnowYourCustomerEntity
+  sales: [SaleEntityWorker!]
+  shifts: [ShiftEntityWorker!]
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]
+  chatParticipants: [ChatParticipantEntity!]
+  medias: [MediaEntity!]
+  auditLogs: [AuditLogEntity!]
+}
+
+type FreelanceServiceEntity {
+  id: String!
+  title: String!
+  description: String
+  isHourly: Boolean!
+  rate: Float!
+  category: FreelanceServiceCategory
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity!
+  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
+  medias: [MediaEntity!]
+}
+
+enum FreelanceServiceCategory {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  MECHANIC
+  TUTOR
+  CLEANER
+  OTHER
+}
+
+type WorkerServiceAssignmentEntity {
+  id: String!
+  freelanceServiceId: String
+  workerId: String
+  freelanceService: FreelanceServiceEntity
+  worker: WorkerEntity!
+  role: String
+  assignedAt: DateTime!
+}
+
+type PaginatedFreelanceServicesResponse {
+  items: [FreelanceServiceEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type PaymentMethodEntity {
+  id: String
+  type: String
+  provider: String
+  accountNumber: String
+  expiryMonth: Int
+  expiryYear: Int
+  cardToken: String
+  last4: String
+  isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type OrderProductEntity {
+  id: String!
+  orderId: String!
+  productId: String!
+  quantity: Int!
+  order: OrderEntity!
+  product: ProductEntity!
+}
+
 type DeliveryAddressEntity {
   createdAt: DateTime
   id: String
@@ -447,145 +578,114 @@ type ClientEntity {
   paymentMethods: [PaymentMethodEntity!]
 }
 
-type ChatParticipantEntity {
+type ChatMessageEntityV2 {
   id: String!
   chatId: String!
-  clientId: String
-  client: ClientEntity
-  businessId: String
-  business: BusinessEntity
-  workerId: String
-  worker: WorkerEntity
-  chat: ChatEntity
+  content: String!
+  senderType: MessageSenderType!
+  senderId: String!
   createdAt: DateTime!
 }
 
-type KnowYourCustomerEntity {
-  id: String!
-  status: String!
-  documentUrl: String!
-  submittedAt: DateTime!
-  verifiedAt: DateTime
-  businessId: String
-  clientId: String
-  workerId: String
-  business: BusinessEntity
-  client: ClientEntity
-  worker: WorkerEntity
+enum MessageSenderType {
+  WORKER
+  CLIENT
+  BUSINESS
 }
 
-type SaleProductEntityWorker {
+type ChatEntityWorker {
   id: String!
-  saleId: String!
+  status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  messages: [ChatMessageEntityV2!]
+  business: BusinessEntity
+  client: ClientEntity
+}
+
+type WorkerPerformanceEntity {
+  totalSales: Float
+  totalTransactions: Float
+  customerSatisfaction: Float
+  attendanceRate: Float
+  shiftsCompleted: Float
+  personalSales: Float
+}
+
+type TopSellingProductEntity {
+  id: String
+  title: String
+  quantitySold: Float
+  revenue: Float
+}
+
+type RecentOrderEntity {
+  id: String
+  orderNumber: String
+  totalAmount: Float
+  status: String
+  client: ClientEntity
+  createdAt: DateTime
+}
+
+type CurrentShiftEntity {
+  id: String
+  startTime: DateTime
+  sales: Float
+  transactions: Float
+}
+
+type WorkerDashboardEntity {
+  todaySales: Float
+  todayOrders: Float
+  lowStockItems: Float
+  activeChats: Float
+  currentShift: CurrentShiftEntity
+  salesThisWeek: Float
+  salesThisMonth: Float
+  topSellingProducts: [TopSellingProductEntity!]
+  recentOrders: [RecentOrderEntity!]
+  workerPerformance: WorkerPerformanceEntity
+}
+
+type WorkerDashboardStatsEntity {
+  todaySales: Float
+  todayTransactions: Float
+  currentShiftSales: Float
+  currentShiftDuration: Float
+  lowStockProducts: Float
+  upcomingChats: Float
+}
+
+type MobileMoneyPaymentResponseEntity {
+  success: Boolean
+  transactionId: String
+  status: String
+  ussdCode: String
+}
+
+type InventoryAdjustmentEntityWorker {
+  id: String!
   productId: String!
   product: ProductEntity
+  storeId: String!
+  store: StoreEntity
+  adjustmentType: AdjustmentType!
   quantity: Float!
-  price: Float!
-  modifiers: String
-  createdAt: DateTime!
-}
-
-type SaleEntityWorker {
-  id: String!
-  storeId: String!
-  store: StoreEntity
-  workerId: String
-  worker: WorkerEntity
-  clientId: String
-  client: ClientEntity
-  totalAmount: Float!
-  discount: Float
-  paymentMethod: PaymentMethod
-  status: SaleStatus!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  saleProducts: [SaleProductEntityWorker!]
-  returns: [SaleReturnEntity!]
-}
-
-type SaleReturnEntity {
-  id: String!
-  saleId: String!
-  reason: String!
-  status: String!
-  createdAt: DateTime!
-}
-
-type ShiftEntityWorker {
-  id: String!
-  workerId: String!
-  worker: WorkerEntity
-  storeId: String!
-  store: StoreEntity
-  startTime: DateTime!
-  endTime: DateTime
-  sales: Float
-  transactionCount: Float
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type WorkerEntity {
-  id: String
-  email: String
-  fullName: String
-  avatar: String
-  phone: String
-  role: String
-  bio: String
-  isVerified: Boolean
-  lastLogin: DateTime
+  reason: String
   createdAt: DateTime
   updatedAt: DateTime
-  business: BusinessEntity
-  kyc: KnowYourCustomerEntity
-  sales: [SaleEntityWorker!]
-  shifts: [ShiftEntityWorker!]
-  workerServiceAssignments: [WorkerServiceAssignmentEntity!]
-  chatParticipants: [ChatParticipantEntity!]
-  medias: [MediaEntity!]
-  auditLogs: [AuditLogEntity!]
 }
 
-type FreelanceServiceEntity {
+type ChatMessageEntity {
   id: String!
-  title: String!
-  description: String
-  isHourly: Boolean!
-  rate: Float!
-  category: FreelanceServiceCategory
+  chatId: String!
+  content: String
+  senderType: String
+  isRead: Boolean
+  senderId: String
+  sender: ChatUserInfo
   createdAt: DateTime!
-  updatedAt: DateTime!
-  business: BusinessEntity!
-  workerServiceAssignments: [WorkerServiceAssignmentEntity!]!
-  medias: [MediaEntity!]
-}
-
-enum FreelanceServiceCategory {
-  PLUMBER
-  ELECTRICIAN
-  CARPENTER
-  MECHANIC
-  TUTOR
-  CLEANER
-  OTHER
-}
-
-type WorkerServiceAssignmentEntity {
-  id: String!
-  freelanceServiceId: String
-  workerId: String
-  freelanceService: FreelanceServiceEntity
-  worker: WorkerEntity!
-  role: String
-  assignedAt: DateTime!
-}
-
-type PaginatedFreelanceServicesResponse {
-  items: [FreelanceServiceEntity!]!
-  total: Int!
-  page: Int!
-  limit: Int!
 }
 
 type ChatProductInfo {
@@ -628,9 +728,9 @@ type ChatEntity {
   clientId: String
   client: ChatUserInfo
   businessId: String
-  business: ChatUserInfo
+  business: BusinessEntity
   workerId: String
-  worker: ChatUserInfo
+  worker: WorkerEntity
   participants: [ChatParticipantEntity!]!
   messages: [ChatMessageEntity!]!
   unreadCount: Float!
@@ -1182,105 +1282,6 @@ type PaginatedDisputesResponse {
   total: Int!
   page: Int!
   limit: Int!
-}
-
-type ChatMessageEntityV2 {
-  id: String!
-  chatId: String!
-  content: String!
-  senderType: MessageSenderType!
-  senderId: String!
-  createdAt: DateTime!
-}
-
-enum MessageSenderType {
-  WORKER
-  CLIENT
-  BUSINESS
-}
-
-type ChatEntityWorker {
-  id: String!
-  status: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  messages: [ChatMessageEntityV2!]
-  business: BusinessEntity
-  client: ClientEntity
-}
-
-type WorkerPerformanceEntity {
-  totalSales: Float
-  totalTransactions: Float
-  customerSatisfaction: Float
-  attendanceRate: Float
-  shiftsCompleted: Float
-  personalSales: Float
-}
-
-type TopSellingProductEntity {
-  id: String
-  title: String
-  quantitySold: Float
-  revenue: Float
-}
-
-type RecentOrderEntity {
-  id: String
-  orderNumber: String
-  totalAmount: Float
-  status: String
-  client: ClientEntity
-  createdAt: DateTime
-}
-
-type CurrentShiftEntity {
-  id: String
-  startTime: DateTime
-  sales: Float
-  transactions: Float
-}
-
-type WorkerDashboardEntity {
-  todaySales: Float
-  todayOrders: Float
-  lowStockItems: Float
-  activeChats: Float
-  currentShift: CurrentShiftEntity
-  salesThisWeek: Float
-  salesThisMonth: Float
-  topSellingProducts: [TopSellingProductEntity!]
-  recentOrders: [RecentOrderEntity!]
-  workerPerformance: WorkerPerformanceEntity
-}
-
-type WorkerDashboardStatsEntity {
-  todaySales: Float
-  todayTransactions: Float
-  currentShiftSales: Float
-  currentShiftDuration: Float
-  lowStockProducts: Float
-  upcomingChats: Float
-}
-
-type MobileMoneyPaymentResponseEntity {
-  success: Boolean
-  transactionId: String
-  status: String
-  ussdCode: String
-}
-
-type InventoryAdjustmentEntityWorker {
-  id: String!
-  productId: String!
-  product: ProductEntity
-  storeId: String!
-  store: StoreEntity
-  adjustmentType: AdjustmentType!
-  quantity: Float!
-  reason: String
-  createdAt: DateTime
-  updatedAt: DateTime
 }
 
 type SalesPagedResult {

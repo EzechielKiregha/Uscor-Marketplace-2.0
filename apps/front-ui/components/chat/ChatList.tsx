@@ -1,9 +1,22 @@
 "use client";
+
 import { useQuery } from "@apollo/client";
-import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
-import { ChatEntity } from "@/lib/types";
+import { GET_CHATS, GET_UNREAD_COUNT } from "@/graphql/chat.gql";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  User,
+  Store,
+  MessageCircle,
+  CheckCircle,
+  Clock,
+  ChevronRight,
+} from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Button } from "../ui/button";
 import { useMe } from "@/lib/useMe";
-import ScrollArea from "../ui/ScrollArea";
+import { useEffect, useState } from "react";
+import BusinessTypeIcon from "@/app/(browsing)/marketplace/_components/BusinessTypeIcons";
 
 interface ChatListProps {
   chats: any[];
@@ -20,160 +33,258 @@ export default function ChatList({
 }: ChatListProps) {
   const { user, role, loading: meLoading } = useMe();
   const userId = user?.id;
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  const { data: unreadData } = useQuery(GET_UNREAD_COUNT, {
-    variables: { userId },
-    skip: !userId,
-    fetchPolicy: "network-only",
+  const { data: unreadData, refetch: refetchUnread } = useQuery(
+    GET_UNREAD_COUNT,
+    {
+      variables: { userId: user?.id },
+      skip: !user?.id,
+      // pollInterval: 5000,
+    },
+  );
+
+  useEffect(() => {
+    if (unreadData?.unreadCount) {
+      setUnreadCount(unreadData.unreadCount);
+    }
+  }, [unreadData]);
+
+  const {
+    data: chatsData,
+    loading: chatsLoading,
+    refetch,
+  } = useQuery(GET_CHATS, {
+    variables: {
+      [userRole === "business"
+        ? "businessId"
+        : userRole === "worker"
+          ? "workerId"
+          : "clientId"]: userId,
+    },
+    skip: !userId || !userRole,
+    pollInterval: 10000,
   });
 
-  // Build unread map and total
-  const unreadMap: Record<string, number> = {};
-  let totalUnread = 0;
-  if (unreadData?.unreadChatCount) {
-    totalUnread = unreadData.unreadChatCount.totalUnread || 0;
-    (unreadData.unreadChatCount.chatsWithUnread || []).forEach((c: any) => {
-      unreadMap[c.chatId] = c.unreadCount || 0;
-    });
-  }
+  const allChats = chatsData?.chats?.items || chats;
 
-  // Sort chats: unread first (higher unread count first), then by newest
-  const sortedChats = chats.slice().sort((a: any, b: any) => {
-    const ua = unreadMap[a.id] || 0;
-    const ub = unreadMap[b.id] || 0;
-    if (ua !== ub) return ub - ua; // higher unread first
+  const getChatUnreadCount = (chatId: string) => {
+    return (
+      unreadData?.chatsWithUnread?.filter((c: any) => c.chatId === chatId)?.[0]
+        ?.unreadCount || 0
+    );
+  };
 
-    // Determine last message timestamp (use messages[0] if messages are sorted desc, otherwise compute max)
-    const getLastMsgTime = (c: any) => {
-      if (!c) return 0;
-      if (c.messages && c.messages.length > 0) {
-        // find newest message by createdAt
-        let max = 0;
-        c.messages.forEach((m: any) => {
-          const t = new Date(m.createdAt || 0).getTime();
-          if (t > max) max = t;
-        });
-        if (max > 0) return max;
-      }
-      return new Date(c.updatedAt || c.createdAt || 0).getTime();
-    };
-
-    const da = getLastMsgTime(a);
-    const db = getLastMsgTime(b);
-    return db - da;
-  });
-  // Helper to get the main participant for display
-  function getMainParticipant(chat: ChatEntity): {
-    name: string;
-    avatar?: string;
-  } {
-    // console.log('Chat participants:', chat.participants);
-
+  const getMainParticipant = (chat: any) => {
     if (chat.participants && chat.participants.length > 0) {
-      if (userRole === "business") {
-        const clientPart = chat.participants.find((p) => p.client);
+      if (userRole === "business" || userRole === "worker") {
+        const clientPart = chat.participants.find((p: any) => p.client);
         if (clientPart?.client) {
           return {
-            name:
-              clientPart.client.fullName ||
-              clientPart.client.username ||
-              "Client",
+            name: clientPart.client.fullName || "Client",
             avatar: (clientPart.client as any).avatar,
+            type: "client",
           };
         }
       } else if (userRole === "client") {
-        const businessPart = chat.participants.find((p) => p.business);
+        const businessPart = chat.participants.find((p: any) => p.business);
         if (businessPart?.business) {
           return {
             name: businessPart.business.name || "Business",
             avatar: businessPart.business.avatar,
+            type: "business",
           };
         }
       }
-      // Fallback: show first participant
-      const first = chat.participants[0];
-      if (first.client)
-        return {
-          name: first.client.fullName || first.client.username || "Client",
-          avatar: (first.client as any).avatar,
-        };
-      if (first.business)
-        return {
-          name: first.business.name || "Business",
-          avatar: first.business.avatar,
-        };
-      if (first.worker)
-        return { name: first.worker.fullName || "Worker", avatar: undefined };
     }
-    return { name: "Chat", avatar: undefined };
+    return { name: "Unknown", avatar: null, type: "unknown" };
+  };
+
+  const getLastMessage = (chat: any) => {
+    if (chat.messages && chat.messages.length > 0) {
+      const lastMessage = chat.messages[chat.messages.length - 1];
+      return {
+        content: lastMessage.content,
+        isSender: lastMessage.senderId === userId,
+        createdAt: lastMessage.createdAt,
+      };
+    }
+    return {
+      content: "No messages yet",
+      isSender: false,
+      createdAt: chat.createdAt,
+    };
+  };
+
+  const getMessageStatusIcon = (chat: any) => {
+    if (!chat.messages || chat.messages.length === 0) return null;
+
+    const lastMessage = chat.messages[chat.messages.length - 1];
+    if (lastMessage.senderId !== userId) return null;
+
+    if (lastMessage.isRead) {
+      return <CheckCircle className="h-3 w-3 text-primary" />;
+    } else if (lastMessage.status === "delivered") {
+      return <CheckCircle className="h-3 w-3 text-muted-foreground" />;
+    } else if (lastMessage.status === "pending") {
+      return <Clock className="h-3 w-3 text-muted-foreground" />;
+    }
+    return <CheckCircle className="h-3 w-3 text-muted-foreground" />;
+  };
+
+  if (chatsLoading || meLoading) {
+    return (
+      <div className="flex flex-col h-full">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="p-3 border-b border-border animate-pulse">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-muted" />
+              <div className="flex-1 min-w-0">
+                <div className="h-4 bg-muted rounded w-3/4 mb-1" />
+                <div className="h-3 bg-muted rounded w-1/2" />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                <div className="h-3 bg-muted rounded w-8" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (allChats.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+          <MessageCircle className="h-8 w-8 text-muted-foreground" />
+        </div>
+        <h3 className="text-lg font-medium mb-1">No conversations yet</h3>
+        <p className="text-sm text-muted-foreground mb-6">
+          Start a new conversation to connect with businesses or clients
+        </p>
+        <Button className="bg-primary hover:bg-accent text-primary-foreground">
+          <MessageCircle className="h-4 w-4 mr-2" />
+          Start New Conversation
+        </Button>
+      </div>
+    );
   }
 
   return (
-    // Make this a flex column child that can shrink/grow so it works inside responsive layouts
-    <div className="flex-1 bg-card min-h-0">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-        <div className="font-semibold">Messages</div>
-        {totalUnread > 0 && (
-          <div className="text-xs bg-destructive text-destructive-foreground px-2 py-0.5 rounded-full">
-            {totalUnread}
-          </div>
-        )}
-      </div>
-      <ScrollArea className="h-full min-h-0 overflow-y-auto overflow-x-hidden">
-        {sortedChats.map((chat) => {
+    <ScrollArea className="h-full">
+      <div className="space-y-1">
+        {allChats.map((chat: any) => {
           const participant = getMainParticipant(chat);
+          const lastMessage = getLastMessage(chat);
+
           return (
             <div
               key={chat.id}
-              className={`p-2 sm:p-3 md:p-4 border-b border-border cursor-pointer hover:bg-muted/50 transition-colors duration-150 ${activeChatId === chat.id ? "bg-muted" : ""}`}
+              className={`p-3 cursor-pointer transition-colors rounded-lg ${
+                activeChatId === chat.id ? "bg-muted/70" : "hover:bg-muted/50"
+              }`}
               onClick={() => onSelect(chat.id)}
-              style={{ WebkitTapHighlightColor: "transparent" }}
             >
-              <div className="flex items-center gap-2 sm:gap-3">
-                <img
-                  src={participant.avatar || "avatar.png"}
-                  alt={participant.name}
-                  className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover flex-shrink-0"
-                  onError={(event) => {
-                    event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(participant.name.charAt(0))}`;
-                  }}
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold truncate text-sm sm:text-base md:text-lg">
-                    {participant.name}{" "}
-                    <span className="text-orange-600 text-xs sm:text-sm">
-                      {chat.product?.title}
-                    </span>
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-500 truncate">
-                    {chat.service?.description ||
-                      chat.product?.description ||
-                      ""}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  {unreadMap[chat.id] > 0 && (
-                    <div className="text-xs bg-destructive text-destructive-foreground px-2 py-0.5 rounded-full">
-                      {unreadMap[chat.id]}
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  {participant.avatar ? (
+                    <img
+                      src={participant.avatar}
+                      alt={participant.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                      {participant.type === "business" ? (
+                        <Store className="h-5 w-5 text-primary" />
+                      ) : (
+                        <User className="h-5 w-5 text-primary" />
+                      )}
                     </div>
                   )}
-                  <div className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">
-                    {new Date(chat.createdAt).toLocaleDateString()}
-                  </div>
+                  {getChatUnreadCount(chat.id) > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
+                      {getChatUnreadCount(chat.id) > 9
+                        ? "9+"
+                        : getChatUnreadCount(chat.id)}
+                    </span>
+                  )}
                 </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium truncate">
+                        {participant.name}
+                      </h3>
+                      <div className="flex items-center gap-1 mt-1">
+                        {participant.type === "business" && (
+                          <span className="text-xs bg-muted px-2 py-0.5 rounded-full flex items-center gap-1">
+                            {BusinessTypeIcon({
+                              businessType: chat.business.businessType,
+                              className: "h-5 w-5 text-primary",
+                            })}
+                            {chat.business?.businessType === "ARTISAN" &&
+                              "Artisan"}
+                            {chat.business?.businessType === "BOOKSTORE" &&
+                              "Bookstore"}
+                            {chat.business?.businessType === "ELECTRONICS" &&
+                              "Electronics"}
+                            {chat.business?.businessType === "HARDWARE" &&
+                              "Hardware"}
+                            {chat.business?.businessType === "GROCERY" &&
+                              "Grocery"}
+                            {chat.business?.businessType === "CAFE" && "Café"}
+                            {chat.business?.businessType === "RESTAURANT" &&
+                              "Restaurant"}
+                            {chat.business?.businessType === "RETAIL" &&
+                              "Retail"}
+                            {chat.business?.businessType === "BAR" && "Bar"}
+                            {chat.business?.businessType === "CLOTHING" &&
+                              "Clothing"}
+                            {!chat.business?.businessType && "Business"}
+                          </span>
+                        )}
+                        {chat.negotiationType === "REOWNERSHIP" && (
+                          <span className="text-xs bg-warning/10 text-warning px-2 py-0.5 rounded-full">
+                            Reownership
+                          </span>
+                        )}
+                        {chat.negotiationType === "FREELANCE_ORDER" && (
+                          <span className="text-xs bg-success/10 text-success px-2 py-0.5 rounded-full">
+                            Freelance
+                          </span>
+                        )}
+                        {chat.negotiationType === "PURCHASE" && (
+                          <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                            Purchase
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground mb-1">
+                        {formatDistanceToNow(new Date(lastMessage.createdAt), {
+                          addSuffix: true,
+                          locale: fr,
+                        })}
+                      </p>
+                      {getMessageStatusIcon(chat)}
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground truncate mt-1 line-clamp-1">
+                    {lastMessage.isSender && "You: "} {lastMessage.content}
+                  </p>
+                </div>
+
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </div>
             </div>
           );
         })}
-      </ScrollArea>
-      {chats.length === 0 && (
-        <div className="text-center py-12">
-          <h3 className="text-lg font-medium mb-2">No messages yet</h3>
-          <p className="text-muted-foreground">
-            You don't have any messages to display
-          </p>
-        </div>
-      )}
-    </div>
+      </div>
+    </ScrollArea>
   );
 }
