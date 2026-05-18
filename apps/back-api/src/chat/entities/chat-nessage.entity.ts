@@ -9,8 +9,8 @@ export class ChatMessageEntity {
 	@Field()
 	chatId: string;
 
-	@Field()
-	content: string;
+	@Field({ nullable: true })
+	content?: string;
 
 	@Field({ nullable: true })
 	senderType?: string;

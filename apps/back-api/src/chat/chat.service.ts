@@ -13,11 +13,12 @@ import {
 	type SendMessageInput,
 } from "./dto/create-chat.input";
 import { UpdateChatInput } from "./dto/update-chat.input";
-
 // Service
 @Injectable()
 export class ChatService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService
+	) {}
 
 	async create(createChatInput: CreateChatInput) {
 		const { productId, serviceId, participantIds, isSecure, negotiationType } =
@@ -155,7 +156,6 @@ export class ChatService {
 		if (chat.isSecure && chat.negotiationType === "REOWNERSHIP") {
 			console.log(`Secure message logged for chat ${chatId}`);
 		}
-
 		return this.prisma.chatMessage.create({
 			data: {
 				chat: { connect: { id: chatId } },
@@ -513,6 +513,9 @@ export class ChatService {
 							isPhysical: true,
 							business: {
 								select: { id: true, name: true },
+							},
+							medias: {
+								select: { id: true, url: true },
 							},
 						},
 					},

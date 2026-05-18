@@ -1,9 +1,14 @@
 "use client";
-import { useMutation } from "@apollo/client";
+import { useMutation, useSubscription } from "@apollo/client";
 import { ArrowLeft } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { GET_UNREAD_COUNT, MARK_MESSAGES_AS_READ } from "@/graphql/chat.gql";
+import {
+  GET_UNREAD_COUNT,
+  MARK_MESSAGES_AS_READ,
+  ON_MESSAGE_RECEIVED,
+} from "@/graphql/chat.gql";
+import { useRealTimeMessages } from "@/hooks/useRealTimeMessages";
 import { Button } from "../ui/button";
 import ScrollArea from "../ui/ScrollArea";
 import MessageBubble from "./MessageBubble";
@@ -31,6 +36,67 @@ export default function ChatThread({
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
   const [markMessagesAsRead] = useMutation(MARK_MESSAGES_AS_READ);
+
+  // Real-time message handler (combines GraphQL + Pusher)
+  const { handleMessageFromGraphQL } = useRealTimeMessages({
+    chatId: chat?.id || null,
+    onMessageReceived: (message) => {
+      // Update message list with the new message
+      console.log(
+        "[ChatThread] Message received, updating local state:",
+        message.id,
+      );
+      setLocalMessages((prevMessages) => {
+        const exists = prevMessages.some((msg) => msg.id === message.id);
+        if (exists) {
+          console.log(
+            "[ChatThread] ⚠️ Message already exists in local state:",
+            message.id,
+          );
+          return prevMessages;
+        }
+        return [...prevMessages, message];
+      });
+    },
+    enabled: true,
+  });
+
+  // GraphQL real-time subscription
+  console.log(
+    "[ChatThread] Setting up GraphQL subscription for chat:",
+    chat?.id,
+  );
+  useSubscription(ON_MESSAGE_RECEIVED, {
+    variables: { chatId: chat?.id || "" },
+    skip: !chat?.id,
+    onData: ({ data }) => {
+      console.log("[ChatThread] GraphQL subscription data received:", {
+        hasChatId: !!chat?.id,
+        hasMessage: !!data.data?.messageReceived,
+        messageId: data.data?.messageReceived?.id,
+      });
+      if (data.data?.messageReceived) {
+        console.log(
+          "[ChatThread] ✓ Processing GraphQL message:",
+          data.data.messageReceived.id,
+        );
+        handleMessageFromGraphQL(data.data.messageReceived);
+      } else {
+        console.warn("[ChatThread] ✗ No messageReceived in subscription data");
+      }
+    },
+    onError: (error) => {
+      console.error("[ChatThread] ✗ GraphQL subscription error:", error);
+    },
+  });
+
+  // Local state for messages to ensure immediate updates
+  const [localMessages, setLocalMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Sync local messages with chat prop
+    setLocalMessages(Array.isArray(chat?.messages) ? chat.messages : []);
+  }, [chat?.id, chat?.messages]); // Reset when chat changes
 
   useEffect(() => {
     // mark messages as read for this user when opening/visiting a chat
@@ -122,9 +188,6 @@ export default function ChatThread({
                 <div className="font-semibold truncate text-sm md:text-base lg:text-lg">
                   {chat.product?.business.name}
                 </div>
-                {/* <div className="text-orange-600 text-xs sm:text-sm truncate max-w-[40%] md:max-w-[30%] hidden xs:block sm:block">
-                  {chat.product?.title}
-                </div> */}
               </div>
               {/* Description: hide on very small screens, truncate otherwise */}
               {/* <div className="text-xs sm:text-sm text-gray-500 truncate hidden max-w-[60%] lg:max-w-[50%] xs:block sm:block">
@@ -146,7 +209,7 @@ export default function ChatThread({
         className="flex-1 h-[68%] bg-card min-h-0 p-2 sm:p-3 md:p-4 space-y-2 sm:space-y-3 md:space-y-4"
         ref={scrollAreaRef}
       >
-        {chat.messages.map((msg: any) => (
+        {localMessages.map((msg: any) => (
           <div key={msg.id} className="max-w-full wrap-break-word">
             <MessageBubble
               message={msg.content || msg.message}

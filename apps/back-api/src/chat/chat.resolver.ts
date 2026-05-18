@@ -28,13 +28,17 @@ import {
 } from "./dto/create-chat.input";
 import { UpdateChatInput } from "./dto/update-chat.input";
 import { ChatEntity, chatNotification } from "./entities/chat.entity";
+import { PusherService } from "./pusher.service";
 
 // Resolver
 @Resolver(() => ChatEntity)
 export class ChatResolver {
 	private pubSub = new PubSub();
 
-	constructor(private readonly chatService: ChatService) {}
+	constructor(
+		private readonly chatService: ChatService,
+		private readonly pusherService: PusherService,
+	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("client", "business", "worker")
@@ -188,15 +192,71 @@ export class ChatResolver {
 		@Context() context,
 	) {
 		const user = context.req.user;
-		const message = await this.chatService.sendMessage(input, user.id);
+		console.log("[Chat Resolver] sendMessage called:", {
+			chatId: input.chatId,
+			userId: user.id,
+			userRole: user.role,
+		});
 
-		// Publish the message to subscribers
+		const message = await this.chatService.sendMessage(input, user.id);
+		console.log("[Chat Resolver] Message saved to DB:", {
+			messageId: message.id,
+			chatId: input.chatId,
+		});
+
+		// Publish via GraphQL subscriptions (for connected WebSocket clients)
+		console.log("[Chat Resolver] Publishing GraphQL PubSub event for chat:", message);
 		this.pubSub.publish("messageReceived", {
 			messageReceived: message,
 			chatId: input.chatId,
 		});
+		console.log("[Chat Resolver] ✓ GraphQL PubSub published");
+
+		// Trigger Pusher event (for scalability and cross-connection reliability)
+		const pusherPayload = {
+			id: message.id,
+			chatId: input.chatId,
+			message: message.content,
+			content: message.content,
+			senderId: message.senderId,
+			createdAt: message.createdAt,
+			senderType: this.determineSenderType(user.role),
+			sender: message.sender
+				? {
+					id: message.sender.id,
+					fullName: message.sender.fullName,
+					avatar: message.sender.avatar,
+				}
+				: null,
+		};
+
+		console.log("[Chat Resolver] Triggering Pusher event:", {
+			channel: `chat-${input.chatId}`,
+			event: "message",
+			payload: pusherPayload,
+		});
+
+		try {
+			await this.pusherService.trigger(`chat-${input.chatId}`, "message", pusherPayload);
+			console.log("[Chat Resolver] ✓ Pusher event triggered successfully");
+		} catch (error) {
+			console.error("[Chat Resolver] ✗ Pusher trigger failed:", error);
+		}
 
 		return message;
+	}
+
+	/**
+	 * Helper to determine sender type from user role
+	 */
+	private determineSenderType(role: string): string {
+		const roleMap = {
+			client: "CLIENT",
+			business: "BUSINESS",
+			worker: "WORKER",
+			admin: "ADMIN",
+		};
+		return roleMap[role] || role.toUpperCase();
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -236,7 +296,7 @@ export class ChatResolver {
 	async getUnreadCount(
 		@Args("userId", { type: () => String })
 		userId: string,
-	) {	
+	) {
 		return this.chatService.getUnreadCount(userId);
 	}
 
@@ -278,7 +338,17 @@ export class ChatResolver {
 	// Subscriptions
 	@Subscription(() => ChatMessageEntity, {
 		filter: (payload, variables) => {
-			return payload.chatId === variables.chatId;
+			const result = payload?.chatId === variables.chatId;
+			console.log("[Chat Resolver] subscription filter messageReceived:", {
+				payload,
+				variables,
+				result,
+			});
+			return result;
+		},
+		resolve: (payload) => {
+			console.log("[Chat Resolver] subscription resolve messageReceived payload:", payload);
+			return payload?.messageReceived;
 		},
 	})
 	messageReceived(

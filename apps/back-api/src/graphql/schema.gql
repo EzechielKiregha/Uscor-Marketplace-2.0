@@ -19,7 +19,7 @@ scalar DateTime
 type ChatMessageEntity {
   id: String!
   chatId: String!
-  content: String!
+  content: String
   senderType: String
   senderId: String
   sender: ChatUserInfo
@@ -595,6 +595,7 @@ type ChatProductInfo {
   price: Float!
   businessId: String
   business: BusinessEntity
+  medias: [MediaEntity!]
   isPhysical: Boolean
 }
 

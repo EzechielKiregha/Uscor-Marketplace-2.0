@@ -37,6 +37,10 @@ export const GET_CHATS = gql`
           title
           description
           business { id name }
+          medias {
+            id
+            url
+          }
           }
           service {
             id

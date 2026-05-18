@@ -16,6 +16,7 @@ import { AuthModule } from "./auth/auth.module";
 import { BusinessModule } from "./business/business.module";
 import { CategoryModule } from "./category/category.module";
 import { ChatModule } from "./chat/chat.module";
+import { PusherService } from "./chat/pusher.service";
 import { ChatNessageModule } from "./chat-nessage/chat-nessage.module";
 import { ClientModule } from "./client/client.module";
 import { DisputeModule } from "./dispute/dispute.module";
@@ -109,6 +110,7 @@ import { WorkerModule } from "./worker/worker.module";
 			provide: "PUB_SUB",
 			useValue: new PubSub(),
 		},
+		PusherService,
 	],
 })
 export class AppModule {}

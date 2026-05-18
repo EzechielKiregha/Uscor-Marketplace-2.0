@@ -4,6 +4,7 @@ import { ChatMessageEntity } from "../../chat/entities/chat-nessage.entity";
 import { FreelanceServiceEntity } from "../../freelance-service/entities/freelance-service.entity";
 import { ChatStatus, NegotiationType } from "../dto/create-chat.input";
 import { ChatParticipantEntity } from "./chat-participants.entity";
+import { MediaEntity } from "src/media/entities/media.entity";
 
 @ObjectType()
 export class ChatProductInfo {
@@ -24,6 +25,9 @@ export class ChatProductInfo {
 
 	@Field(() => BusinessEntity, { nullable: true })
 	business?: BusinessEntity;
+
+	@Field(() => [MediaEntity], { nullable: true })
+	medias?: MediaEntity[];
 
 	@Field({ nullable: true })
 	isPhysical?: boolean;

@@ -21,7 +21,7 @@ export class PrismaService
 		super({
 			log:
 				process.env.NODE_ENV !== "production"
-					? ["query", "info", "warn", "error"]
+					? ["warn", "error"]
 					: undefined,
 		});
 
