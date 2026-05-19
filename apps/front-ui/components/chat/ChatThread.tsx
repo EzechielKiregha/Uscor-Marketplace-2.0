@@ -82,16 +82,6 @@ export default function ChatThread({
     },
   });
 
-  // Handle real-time chat updates
-  // useSubscription(ON_CHAT_UPDATED, {
-  //   variables: { userId },
-  //   onData: ({ data }) => {
-  //     if (data.data?.chatStatusUpdated?.id === chatId) {
-  //       refetch();
-  //     }
-  //   },
-  // });
-
   // Mark messages as read when opening/visiting a chat
   useEffect(() => {
     // mark messages as read for this user when opening/visiting a chat
@@ -411,20 +401,21 @@ export default function ChatThread({
             {chat.business?.businessType && (
               <span className="text-xs bg-muted px-2 py-0.5 rounded-full flex items-center gap-1">
                 {BusinessTypeIcon({
-                  businessType: chat.business.businessType,
+                  businessType: chat?.business?.businessType,
                   className: "h-5 w-5 text-primary",
                 })}
-                {chat.business.businessType === "ARTISAN" && "Artisan"}
-                {chat.business.businessType === "BOOKSTORE" && "Bookstore"}
-                {chat.business.businessType === "ELECTRONICS" && "Electronics"}
-                {chat.business.businessType === "HARDWARE" && "Hardware"}
-                {chat.business.businessType === "GROCERY" && "Grocery"}
-                {chat.business.businessType === "CAFE" && "Café"}
-                {chat.business.businessType === "RESTAURANT" && "Restaurant"}
-                {chat.business.businessType === "RETAIL" && "Retail"}
-                {chat.business.businessType === "BAR" && "Bar"}
-                {chat.business.businessType === "CLOTHING" && "Clothing"}
-                {!chat.business.businessType && "Business"}
+                {chat?.business?.businessType === "ARTISAN" && "Artisan"}
+                {chat?.business?.businessType === "BOOKSTORE" && "Bookstore"}
+                {chat?.business?.businessType === "ELECTRONICS" &&
+                  "Electronics"}
+                {chat?.business?.businessType === "HARDWARE" && "Hardware"}
+                {chat?.business?.businessType === "GROCERY" && "Grocery"}
+                {chat?.business?.businessType === "CAFE" && "Café"}
+                {chat?.business?.businessType === "RESTAURANT" && "Restaurant"}
+                {chat?.business?.businessType === "RETAIL" && "Retail"}
+                {chat?.business?.businessType === "BAR" && "Bar"}
+                {chat?.business?.businessType === "CLOTHING" && "Clothing"}
+                {!chat?.business?.businessType && "Business"}
               </span>
             )}
             {chat.negotiationType === "REOWNERSHIP" && (

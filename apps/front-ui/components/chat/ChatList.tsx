@@ -222,7 +222,7 @@ export default function ChatList({
                         {participant.type === "business" && (
                           <span className="text-xs bg-muted px-2 py-0.5 rounded-full flex items-center gap-1">
                             {BusinessTypeIcon({
-                              businessType: chat.business.businessType,
+                              businessType: chat?.business?.businessType,
                               className: "h-5 w-5 text-primary",
                             })}
                             {chat.business?.businessType === "ARTISAN" &&
