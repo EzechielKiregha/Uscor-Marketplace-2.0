@@ -52,6 +52,7 @@
 		"idb": "^8.0.3",
 		"payload": "^3.84.1",
 		"postcss": "^8.5.10",
+		"qrcode": "^1.5.4",
 		"react-hook-form": "^7.74.0",
 		"react-is": "^19.2.5",
 		"react-use": "^17.6.0",

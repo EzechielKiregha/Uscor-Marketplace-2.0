@@ -143,7 +143,7 @@ export default function AddressSelector({
           <p className="text-sm mt-1">Add a new address to get started</p>
         </div>
       ) : (
-        <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+        <div className="space-y-3 max-h-75 overflow-y-auto pr-2">
           {addresses.map((address) => (
             <div
               key={address.id}

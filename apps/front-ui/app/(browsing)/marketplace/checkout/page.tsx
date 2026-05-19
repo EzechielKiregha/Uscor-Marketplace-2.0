@@ -75,11 +75,6 @@ export default function CheckoutPage() {
   const uTnAmount = total / 10; // 1 uTn = $10
 
   useEffect(() => {
-    if (getItemCount() === 0) {
-      router.push("/marketplace");
-      return;
-    }
-
     // Group items by business
     const businessGroups = items.reduce((groups: any, item) => {
       const businessId = item.product.businessId;
@@ -236,7 +231,7 @@ export default function CheckoutPage() {
           input: {
             clientId: user?.id,
             deliveryFee,
-            deliveryAddress: `${selectedAddress.street}, ${selectedAddress.city}`,
+            deliveryAddress: selectedAddress.id,
             qrCode,
             orderProducts,
             payment: {
@@ -270,7 +265,7 @@ export default function CheckoutPage() {
               clientId: user?.id,
               clientOrderId, // Link to main client order
               deliveryFee: order.deliveryFee,
-              deliveryAddress: `${selectedAddress.street}, ${selectedAddress.city}`,
+              deliveryAddress: selectedAddress.id,
               orderProducts: businessOrderProducts,
               payment: {
                 method: useUnifiedPayment
@@ -293,9 +288,9 @@ export default function CheckoutPage() {
         true,
         5000,
       );
+      router.push(`/marketplace/orders/confirmation?orderId=${clientOrderId}`);
       // Clear cart and redirect to order confirmation
       clearCart();
-      router.push(`/marketplace/orders/confirmation?orderId=${clientOrderId}`);
     } catch (error) {
       console.error("Checkout error:", error);
       showToast(
@@ -307,8 +302,18 @@ export default function CheckoutPage() {
     }
   };
 
-  if (items.length === 0) {
-    return null; // This should be handled by the useEffect redirect
+  if (getItemCount() === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
+          <Button variant="default" onClick={() => router.push("/marketplace")}>
+            <ShoppingBag className="h-5 w-5 mr-2" />
+            Start Shopping
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (

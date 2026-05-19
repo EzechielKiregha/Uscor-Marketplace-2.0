@@ -318,8 +318,15 @@ export const PROCESS_ORDER_PAYMENT = gql`
     deliveryFee
     receiptUrl
     deliveryAddress {
+      id
+      createdAt
+      updatedAt
+      clientId
+      country
       street
       city
+      postalCode
+      isDefault
     }
     qrCode
     createdAt

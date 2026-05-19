@@ -131,13 +131,13 @@ export default function ClientPanel() {
         className={`
         fixed md:relative
         inset-y-0 left-0 z-40
-        w-64 bg-card border-r border-border
+        w-64 bg-card border-r border-orange-500/60
         transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
         transition-transform duration-300 ease-in-out
         md:translate-x-0
       `}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-[85vh]">
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1">
             {clientSideLinks.map((item) => {
@@ -166,7 +166,7 @@ export default function ClientPanel() {
           </nav>
 
           {/* Quick Actions */}
-          <div className="p-4 border-t border-border space-y-2">
+          <div className="p-4 bottom-1 border-t border-orange-500/60 space-y-2">
             <Button
               variant="outline"
               size="sm"

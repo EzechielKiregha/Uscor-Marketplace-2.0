@@ -727,18 +727,24 @@ export class MarketplaceResolver {
 	}
 
 	@Subscription(() => ProductEntity, {
-		filter: (payload, variables) => payload.businessId === variables.businessId,
+		filter: (payload, variables) => variables.businessId == null || payload.businessId === variables.businessId,
 		resolve: (payload) => payload.productCreated,
 	})
-	productAdded(@Args("businessId") _businessId: string) {
+	productAdded(
+		@Args("businessId", { type: () => String, nullable: true })
+		_businessId?: string,
+	) {
 		return this.pubSub.asyncIterableIterator("productCreated");
 	}
 
 	@Subscription(() => FreelanceServiceEntity, {
-		filter: (payload, variables) => payload.businessId === variables.businessId,
+		filter: (payload, variables) => variables.businessId == null || payload.businessId === variables.businessId,
 		resolve: (payload) => payload.freelanceServiceCreated,
 	})
-	serviceAdded(@Args("businessId") _businessId: string) {
+	serviceAdded(
+		@Args("businessId", { type: () => String, nullable: true })
+		_businessId?: string,
+	) {
 		return this.pubSub.asyncIterableIterator("freelanceServiceCreated");
 	}
 }

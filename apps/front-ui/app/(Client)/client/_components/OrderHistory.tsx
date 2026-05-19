@@ -1,11 +1,13 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   ArrowRight,
   Calendar,
   CheckCircle,
   CreditCard,
+  Download,
+  Loader2,
   MapPin,
   Search,
   ShoppingBag,
@@ -20,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 import { CartItem, useCart } from "@/app/context/use-cart";
 import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
+import { GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
 
 interface OrderHistoryProps {
   client: any;
@@ -32,6 +35,9 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
   const { showToast } = useToast();
   const { addItem } = useCart();
   const [openCart, setOpenCart] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [generateOrderReceipt] = useMutation(GENERATE_ORDER_RECEIPT);
+  const [showReceipt, setShowReceipt] = useState(false);
 
   const {
     data: ordersData,
@@ -146,6 +152,49 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
         item.name.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
   );
+
+  const handleDownloadReceipt = async (order: any) => {
+    setIsDownloading(true);
+
+    try {
+      const response = await generateOrderReceipt({
+        variables: {
+          input: {
+            orderId: order.id,
+            email: order.client?.email,
+          },
+        },
+      });
+
+      const receiptUrl = response?.data?.generateOrderReceipt?.receiptUrl;
+      const fileName = response?.data?.generateOrderReceipt?.fileName;
+
+      if (receiptUrl) {
+        const link = document.createElement("a");
+        link.href = receiptUrl;
+        link.target = "_blank";
+        link.rel = "noreferrer noopener";
+        if (fileName) {
+          link.download = fileName;
+        }
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      setShowReceipt(true);
+      showToast(
+        "success",
+        "Receipt Prepared",
+        "Your receipt is ready for download.",
+      );
+    } catch (error) {
+      console.error("Receipt generation failed:", error);
+      showToast("error", "Receipt Failed", "Could not generate receipt.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (ordersLoading) {
     return (
@@ -459,8 +508,89 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                     <ShoppingBag className="h-4 w-4 mr-2" />
                     Reorder
                   </Button>
+                  <Button
+                    className="w-full bg-primary hover:bg-accent text-primary-foreground"
+                    onClick={() => {
+                      if (order.receiptUrl) {
+                        window.open(order.receiptUrl, "_blank");
+                        return;
+                      } else {
+                        handleDownloadReceipt(order);
+                      }
+                    }}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Downloading...
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4 mr-2" />
+                        {order.receiptUrl ? "View Receipt" : "Download Receipt"}
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
+              {showReceipt && (
+                <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                  <div className="bg-card border border-border rounded-lg w-full max-w-md">
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h2 className="text-xl font-bold">
+                            Receipt Downloaded
+                          </h2>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Your receipt has been saved to your device
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setShowReceipt(false)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="p-4 bg-muted rounded-lg mb-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <Download className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="font-medium">
+                              receipt_{order.id}.pdf
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {(
+                                order.items.reduce(
+                                  (sum: number, item: any) =>
+                                    sum + item.price * item.quantity,
+                                  0,
+                                ) + order.deliveryFee
+                              ).toFixed(2)}{" "}
+                              USD
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-3">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowReceipt(false)}
+                        >
+                          Close
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}

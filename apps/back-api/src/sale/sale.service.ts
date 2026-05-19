@@ -4,6 +4,7 @@ import { put } from "@vercel/blob";
 import { subDays } from "date-fns";
 import { PubSub } from "graphql-subscriptions";
 import * as puppeteer from "puppeteer";
+import QRCode from "qrcode";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
 	Country,
@@ -24,10 +25,7 @@ import { StoreService } from "../store/store.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
 import { TokenTransactionService } from "../token-transaction/token-transaction.service";
 import { WorkerService } from "../worker/worker.service";
-import {
-	CloseSaleInput,
-	PaymentDetailsInput,
-} from "./dto/close-sale.input";
+import { CloseSaleInput, PaymentDetailsInput } from "./dto/close-sale.input";
 import { CreateReturnInput } from "./dto/create-return.input";
 import { CreateSaleInput } from "./dto/create-sale.input";
 import { GenerateReceiptInput } from "./dto/receipt.input";
@@ -1169,6 +1167,10 @@ export class SaleService {
 
 		if (!sale) throw new Error("Sale not found");
 
+		const qrData =
+			"https://uscor-marketplace-2-0-front-ui.vercel.app/sale-status?id=" + sale.id || "";
+		const qrBase64 = await QRCode.toDataURL(qrData);
+
 		// Verify store access
 		await this.verifyStoreAccess(sale.storeId, user);
 
@@ -1191,7 +1193,7 @@ export class SaleService {
 		}
 
 		// Generate HTML receipt
-		const html = this.generateReceiptHTML(sale, pointsEarned);
+		const html = this.generateReceiptHTML(sale, pointsEarned, qrBase64);
 
 		// Generate PDF Buffer in memory using Puppeteer
 		const browser = await puppeteer.launch({
@@ -1285,7 +1287,11 @@ export class SaleService {
 		};
 	}
 
-	private generateReceiptHTML(sale: any, pointsEarned: number): string {
+	private generateReceiptHTML(
+		sale: any,
+		pointsEarned: number,
+		qrBase64: any,
+	): string {
 		// Format business type with appropriate icon
 		const getBusinessTypeIcon = (type: string) => {
 			switch (type) {
@@ -1713,8 +1719,10 @@ export class SaleService {
       <div>+250 788 123 456</div>
       
       <div class="qr-code">
-        <div class="qr-placeholder">QR CODE</div>
-        <div>Scan for next purchase</div>
+        <div class="qr-placeholder">
+			<img src="${qrBase64}" width="120" />
+		</div>
+        <div>Scan to Check Sale Status</div>
       </div>
     </div>
   </div>

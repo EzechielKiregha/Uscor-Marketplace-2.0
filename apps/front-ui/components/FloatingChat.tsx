@@ -13,9 +13,12 @@ export default function FloatingChat() {
   const [showAnimation, setShowAnimation] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  const hasSeenChat =
+    typeof window !== "undefined" ? localStorage.getItem("hasSeenChat") : null;
+
   // Show animation after component mounts
   useEffect(() => {
-    const timer = setTimeout(() => setShowAnimation(true), 300);
+    const timer = setTimeout(() => setShowAnimation(true), 600);
     return () => clearTimeout(timer);
   }, []);
 
@@ -23,8 +26,11 @@ export default function FloatingChat() {
   useEffect(() => {
     if (!user && !authLoading && !isOpen) {
       const timer = setTimeout(() => {
-        if (!isOpen) setIsOpen(true);
-      }, 5000);
+        if (!isOpen && !hasSeenChat) {
+          localStorage.setItem("hasSeenChat", "true");
+          setIsOpen(true);
+        }
+      }, 8000);
       return () => clearTimeout(timer);
     }
   }, [user, authLoading, isOpen]);

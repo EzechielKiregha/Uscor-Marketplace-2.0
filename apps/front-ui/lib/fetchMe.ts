@@ -119,7 +119,7 @@ export async function fetchMe(): Promise<MeResult> {
 	const id = payload.sub;
 	const role = payload.role;
 
-	console.log("fetchMe: decoded JWT payload: ", payload);
+	// console.log("fetchMe: decoded JWT payload: ", payload);
 
 	if (!id || !["client", "business", "worker", "admin"].includes(role)) {
 		console.warn("Invalid JWT payload: missing id or invalid role");
@@ -162,7 +162,7 @@ export async function fetchMe(): Promise<MeResult> {
 					fetchPolicy: "cache-first",
 				});
 
-				console.log("fetchMe: fetched admin data: ", data.admin);
+				// console.log("fetchMe: fetched admin data: ", data.admin);
 
 				if (!data.admin) throw new Error("Admin not found");
 				return { role: "admin", id, user: data.admin };

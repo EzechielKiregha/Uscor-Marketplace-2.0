@@ -205,7 +205,7 @@ export const SEARCH_MARKETPLACE = gql`
 // ======================
 
 export const ON_PRODUCT_ADDED = gql`
-  subscription OnProductAdded($businessId: String!) {
+  subscription OnProductAdded($businessId: String) {
     productAdded(businessId: $businessId) {
       id
       title
@@ -246,7 +246,7 @@ export const ON_PRODUCT_ADDED = gql`
 `;
 
 export const ON_SERVICE_ADDED = gql`
-  subscription OnServiceAdded($businessId: String!) {
+  subscription OnServiceAdded($businessId: String) {
     serviceAdded(businessId: $businessId) {
       id
       title

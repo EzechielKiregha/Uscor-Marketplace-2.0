@@ -650,7 +650,14 @@ export default function OrderConfirmationPage() {
               <div className="p-4 bg-muted/50 border-t border-border">
                 <Button
                   className="w-full bg-primary hover:bg-accent text-primary-foreground"
-                  onClick={handleDownloadReceipt}
+                  onClick={() => {
+                    if (order.receiptUrl) {
+                      window.open(order.receiptUrl, "_blank");
+                      return;
+                    } else {
+                      handleDownloadReceipt();
+                    }
+                  }}
                   disabled={isDownloading}
                 >
                   {isDownloading ? (
@@ -661,7 +668,7 @@ export default function OrderConfirmationPage() {
                   ) : (
                     <>
                       <Download className="h-4 w-4 mr-2" />
-                      Download Receipt
+                      {order.receiptUrl ? "View Receipt" : "Download Receipt"}
                     </>
                   )}
                 </Button>

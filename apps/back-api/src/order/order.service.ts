@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { put } from "@vercel/blob";
 import * as puppeteer from "puppeteer";
+import QRCode from "qrcode";
 import { AuthPayload } from "../auth/entities/auth-payload.entity";
 import { PaymentStatus } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
@@ -241,6 +242,7 @@ export class OrderService {
 
 	async generateReceipt(input: GenerateOrderReceiptInput, user: AuthPayload) {
 		const { orderId, email } = input;
+		
 		const order = await this.prisma.order.findUnique({
 			where: { id: orderId },
 			include: {
@@ -285,6 +287,9 @@ export class OrderService {
 			throw new Error("Order not found");
 		}
 
+		const qrData = 'https://uscor-marketplace-2-0-front-ui.vercel.app/order-status?id=' + order.id || "";
+		const qrBase64 = await QRCode.toDataURL(qrData);
+
 		if (order.clientId !== user.id) {
 			throw new Error(
 				"Clients can only generate receipts for their own orders",
@@ -300,6 +305,7 @@ export class OrderService {
 		const html = this.generateOrderReceiptHTML({
 			...order,
 			deliveryAddress,
+			qrBase64,
 		});
 
 		const browser = await puppeteer.launch({
@@ -359,9 +365,9 @@ export class OrderService {
 		});
 
 		await this.prisma.order.update({
-			where: { id : order.id},
-			data: { receiptUrl: blob.url}
-		})
+			where: { id: order.id },
+			data: { receiptUrl: blob.url },
+		});
 
 		let emailSent = false;
 		if (email && order.client?.email) {
@@ -391,34 +397,68 @@ export class OrderService {
 		const formatPaymentMethod = (method: string) => {
 			switch (method) {
 				case "MOBILE_MONEY":
-					return "Mobile Money";
+					return "📱 Mobile Money";
 				case "CASH":
-					return "Cash";
+					return "💵 Cash";
 				case "CARD":
-					return "Card";
+					return "💳 Card";
 				case "TOKEN":
-					return "USCOR Token";
+					return "🪙 USCOR Token";
 				default:
 					return method;
+			}
+		};
+
+		const formatOrderStatus = (status: string) => {
+			switch (status) {
+				case "PENDING":
+					return "🕒 Pending";
+				case "PROCESSING":
+					return "⚙️ Processing";
+				case "SHIPPED":
+					return "🚚 Shipped";
+				case "DELIVERED":
+					return "✅ Delivered";
+				case "CANCELLED":
+					return "❌ Cancelled";
+				default:
+					return status || "Pending";
 			}
 		};
 
 		const itemsHtml = order.products
 			.map((item: any) => {
 				const product = item.product || {};
+
 				return `
-					<tr>
-						<td>${product.title || "Item"}</td>
-						<td>${item.quantity}</td>
-						<td>$${(product.price || 0).toFixed(2)}</td>
-						<td>$${((product.price || 0) * item.quantity).toFixed(2)}</td>
-					</tr>
+					<div class="item-row">
+						<div class="item-details">
+							<div class="item-name">${product.title || "Item"}</div>
+							<div class="item-meta">
+								Qty: ${item.quantity} × $${(product.price || 0).toFixed(2)}
+							</div>
+						</div>
+
+						<div class="item-price">
+							$${((product.price || 0) * item.quantity).toFixed(2)}
+						</div>
+					</div>
 				`;
 			})
-			.join("\n");
+			.join("");
 
 		const deliveryAddressLine = order.deliveryAddress
-			? `${order.deliveryAddress.street || ""}, ${order.deliveryAddress.city || ""}${order.deliveryAddress.postalCode ? ", " + order.deliveryAddress.postalCode : ""}${order.deliveryAddress.country ? ", " + order.deliveryAddress.country : ""}`
+			? `${order.deliveryAddress.street || ""}, ${
+					order.deliveryAddress.city || ""
+				}${
+					order.deliveryAddress.postalCode
+						? ", " + order.deliveryAddress.postalCode
+						: ""
+				}${
+					order.deliveryAddress.country
+						? ", " + order.deliveryAddress.country
+						: ""
+				}`
 			: "Not provided";
 
 		const subtotal = order.products.reduce(
@@ -426,81 +466,506 @@ export class OrderService {
 				sum + (item.product?.price || 0) * item.quantity,
 			0,
 		);
-		const total = order.payment?.amount ?? subtotal + (order.deliveryFee || 0);
 
-		return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Order Receipt ${order.id.substring(0, 8)}</title>
-  <style>
-    body { font-family: Arial, sans-serif; color: #111827; padding: 24px; }
-    .header { border-bottom: 1px solid #e5e7eb; padding-bottom: 18px; margin-bottom: 24px; }
-    .header h1 { font-size: 24px; margin-bottom: 4px; }
-    .header p { color: #6b7280; margin: 0; }
-    .section { margin-bottom: 24px; }
-    .section h2 { font-size: 16px; margin-bottom: 12px; }
-    .table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-    .table th, .table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-    .table th { background: #f9fafb; color: #374151; }
-    .summary { width: 100%; margin-top: 16px; }
-    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .summary-row strong { color: #111827; }
-    .footer { padding-top: 16px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 13px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>Order Receipt</h1>
-    <p>Order #: ${order.id}</p>
-    <p>Date: ${new Date(order.createdAt).toLocaleDateString("en-US")}</p>
-  </div>
+		const deliveryFee = order.deliveryFee || 0;
+		const tax = subtotal * 0.18;
 
-  <div class="section">
-    <h2>Client</h2>
-    <p>${order.client?.fullName || "Customer"}</p>
-    <p>${order.client?.email || ""}</p>
-  </div>
+		const total = order.payment?.amount ?? subtotal + deliveryFee + tax;
 
-  <div class="section">
-    <h2>Delivery</h2>
-    <p>${deliveryAddressLine}</p>
-  </div>
+		return `
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Order Receipt - ${order.id.substring(0, 8)}</title>
 
-  <div class="section">
-    <h2>Payment</h2>
-    <p>Method: ${formatPaymentMethod(order.payment?.method || "")}</p>
-    <p>Status: ${order.payment?.status || "Pending"}</p>
-  </div>
+	<style>
+		* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		}
 
-  <div class="section">
-    <h2>Items</h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Qty</th>
-          <th>Price</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${itemsHtml}
-      </tbody>
-    </table>
-  </div>
+		body {
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+			Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
-  <div class="summary">
-    <div class="summary-row"><span>Subtotal</span><strong>$${subtotal.toFixed(2)}</strong></div>
-    <div class="summary-row"><span>Delivery Fee</span><strong>$${(order.deliveryFee || 0).toFixed(2)}</strong></div>
-    <div class="summary-row"><span>Total</span><strong>$${total.toFixed(2)}</strong></div>
-  </div>
+		background: #f3f4f6;
+		color: #111827;
+		padding: 20px;
+		}
 
-  <div class="footer">
-    <p>Thank you for shopping with us.</p>
-  </div>
-</body>
-</html>`;
+		.receipt-container {
+		max-width: 420px;
+		margin: 0 auto;
+		background: #ffffff;
+		border-radius: 14px;
+		overflow: hidden;
+		border: 1px solid #e5e7eb;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+		}
+
+		/* HEADER */
+
+		.receipt-header {
+		background: linear-gradient(135deg, #f97316, #ea580c);
+		padding: 24px 20px;
+		color: white;
+		text-align: center;
+		position: relative;
+		}
+
+		.brand-logo {
+		width: 68px;
+		height: 68px;
+		border-radius: 999px;
+		background: rgba(255,255,255,0.18);
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		margin: 0 auto 14px;
+		font-size: 30px;
+		backdrop-filter: blur(8px);
+		border: 1px solid rgba(255,255,255,0.25);
+		}
+
+		.brand-name {
+		font-size: 22px;
+		font-weight: 700;
+		letter-spacing: 0.3px;
+		}
+
+		.receipt-title {
+		margin-top: 10px;
+		font-size: 14px;
+		font-weight: 500;
+		opacity: 0.92;
+		letter-spacing: 1px;
+		}
+
+		.order-badge {
+		margin-top: 14px;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+
+		padding: 8px 14px;
+		border-radius: 999px;
+
+		background: rgba(255,255,255,0.15);
+		border: 1px solid rgba(255,255,255,0.2);
+
+		font-size: 13px;
+		font-weight: 600;
+		}
+
+		/* META */
+
+		.receipt-meta {
+		background: #f9fafb;
+		padding: 18px 20px;
+		border-bottom: 1px solid #e5e7eb;
+		}
+
+		.meta-item {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 12px;
+		font-size: 14px;
+		}
+
+		.meta-item:last-child {
+		margin-bottom: 0;
+		}
+
+		.meta-label {
+		color: #6b7280;
+		font-weight: 500;
+		}
+
+		.meta-value {
+		color: #111827;
+		font-weight: 600;
+		text-align: right;
+		}
+
+		/* SECTIONS */
+
+		.section {
+		padding: 20px;
+		border-bottom: 1px solid #f3f4f6;
+		}
+
+		.section-title {
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 0.8px;
+		text-transform: uppercase;
+		color: #374151;
+		margin-bottom: 14px;
+		}
+
+		/* DELIVERY */
+
+		.delivery-card {
+		background: #fff7ed;
+		border: 1px solid #fed7aa;
+		border-radius: 12px;
+		padding: 14px;
+		}
+
+		.delivery-address {
+		font-size: 14px;
+		line-height: 1.6;
+		color: #374151;
+		}
+
+		/* ITEMS */
+
+		.items-list {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		}
+
+		.item-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 14px;
+		padding-bottom: 14px;
+		border-bottom: 1px dashed #e5e7eb;
+		}
+
+		.item-row:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+		}
+
+		.item-details {
+		flex: 1;
+		}
+
+		.item-name {
+		font-size: 14px;
+		font-weight: 600;
+		color: #111827;
+		margin-bottom: 4px;
+		}
+
+		.item-meta {
+		font-size: 12px;
+		color: #6b7280;
+		}
+
+		.item-price {
+		font-size: 14px;
+		font-weight: 700;
+		color: #f97316;
+		white-space: nowrap;
+		}
+
+		/* TOTALS */
+
+		.totals-section {
+		padding: 20px;
+		background: #fcfcfc;
+		}
+
+		.total-row {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 12px;
+		font-size: 14px;
+		}
+
+		.total-label {
+		color: #6b7280;
+		}
+
+		.total-value {
+		font-weight: 600;
+		color: #111827;
+		}
+
+		.grand-total {
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 2px solid #e5e7eb;
+		}
+
+		.grand-total .total-label {
+		font-size: 16px;
+		font-weight: 700;
+		color: #111827;
+		}
+
+		.grand-total .total-value {
+		font-size: 20px;
+		font-weight: 800;
+		color: #f97316;
+		}
+
+		/* PAYMENT */
+
+		.payment-card {
+		background: #f9fafb;
+		border-radius: 12px;
+		padding: 14px;
+		border: 1px solid #e5e7eb;
+		}
+
+		.payment-row {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+		font-size: 14px;
+		}
+
+		.payment-row:last-child {
+		margin-bottom: 0;
+		}
+
+		/* FOOTER */
+
+		.footer {
+		text-align: center;
+		padding: 24px 20px;
+		background: #f9fafb;
+		}
+
+		.footer-logo {
+		font-size: 22px;
+		margin-bottom: 10px;
+		color: #f97316;
+		font-weight: 700;
+		}
+
+		.footer-text {
+		font-size: 13px;
+		color: #6b7280;
+		line-height: 1.7;
+		}
+
+		.thank-you {
+		color: #111827;
+		font-weight: 600;
+		margin-bottom: 8px;
+		}
+
+		.qr-placeholder {
+		width: 90px;
+		height: 90px;
+		background: #e5e7eb;
+		border-radius: 10px;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		margin: 18px auto 8px;
+		color: #9ca3af;
+		font-size: 12px;
+		font-weight: 600;
+		}
+
+		@media print {
+		body {
+			background: white;
+			padding: 0;
+		}
+
+		.receipt-container {
+			box-shadow: none;
+			border: none;
+		}
+		}
+	</style>
+	</head>
+
+	<body>
+	<div class="receipt-container">
+
+		<!-- HEADER -->
+		<div class="receipt-header">
+
+		<div class="brand-logo">
+			📦
+		</div>
+
+		<div class="brand-name">
+			Uscor Marketplace
+		</div>
+
+		<div class="receipt-title">
+			ORDER RECEIPT #${order.id.substring(0, 8)}
+		</div>
+
+		<div class="order-badge">
+			${formatOrderStatus(order.status)}
+		</div>
+		</div>
+
+		<!-- META -->
+		<div class="receipt-meta">
+
+		<div class="meta-item">
+			<span class="meta-label">Customer</span>
+			<span class="meta-value">
+			${order.client?.fullName || "Customer"}
+			</span>
+		</div>
+
+		${
+			order.client?.email
+				? `
+		<div class="meta-item">
+			<span class="meta-label">Email</span>
+			<span class="meta-value">
+			${order.client.email}
+			</span>
+		</div>
+		`
+				: ""
+		}
+
+		<div class="meta-item">
+			<span class="meta-label">Date</span>
+			<span class="meta-value">
+			${new Date(order.createdAt).toLocaleDateString("en-US", {
+				year: "numeric",
+				month: "short",
+				day: "numeric",
+				hour: "2-digit",
+				minute: "2-digit",
+			})}
+			</span>
+		</div>
+
+		<div class="meta-item">
+			<span class="meta-label">Order ID</span>
+			<span class="meta-value">
+			${order.id.substring(0, 12)}
+			</span>
+		</div>
+		</div>
+
+		<!-- DELIVERY -->
+		<div class="section">
+
+		<div class="section-title">
+			Delivery Address
+		</div>
+
+		<div class="delivery-card">
+			<div class="delivery-address">
+			${deliveryAddressLine}
+			</div>
+		</div>
+		</div>
+
+		<!-- ITEMS -->
+		<div class="section">
+
+		<div class="section-title">
+			Ordered Items
+		</div>
+
+		<div class="items-list">
+			${itemsHtml}
+		</div>
+		</div>
+
+		<!-- PAYMENT -->
+		<div class="section">
+
+		<div class="section-title">
+			Payment Information
+		</div>
+
+		<div class="payment-card">
+
+			<div class="payment-row">
+			<span>Method</span>
+			<strong>
+				${formatPaymentMethod(order.payment?.method || "")}
+			</strong>
+			</div>
+
+			<div class="payment-row">
+			<span>Status</span>
+			<strong>
+				${order.payment?.status || "Pending"}
+			</strong>
+			</div>
+
+		</div>
+		</div>
+
+		<!-- TOTALS -->
+		<div class="totals-section">
+
+		<div class="total-row">
+			<span class="total-label">Subtotal</span>
+			<span class="total-value">
+			$${subtotal.toFixed(2)}
+			</span>
+		</div>
+
+		<div class="total-row">
+			<span class="total-label">Tax (18%)</span>
+			<span class="total-value">
+			$${tax.toFixed(2)}
+			</span>
+		</div>
+
+		<div class="total-row">
+			<span class="total-label">Delivery Fee</span>
+			<span class="total-value">
+			$${deliveryFee.toFixed(2)}
+			</span>
+		</div>
+
+		<div class="total-row grand-total">
+			<span class="total-label">TOTAL</span>
+			<span class="total-value">
+			$${total.toFixed(2)}
+			</span>
+		</div>
+		</div>
+
+		<!-- FOOTER -->
+		<div class="footer">
+
+		<div class="footer-logo">
+			Uscor Marketplace
+		</div>
+
+		<div class="thank-you">
+			Thank you for your order!
+		</div>
+
+		<div class="footer-text">
+			Your satisfaction is our priority.<br />
+			www.uscor.rw<br />
+			+250 790 802 201
+		</div>
+
+		<div class="qr-placeholder">
+			<img src="${order.qrBase64}" width="120" />
+		</div>
+
+		<div class="footer-text">
+			Scan for order tracking
+		</div>
+		</div>
+	</div>
+	</body>
+	</html>
+		`;
 	}
 
 	async findAll() {
@@ -866,7 +1331,7 @@ export class OrderService {
 
 		const [orders, total] = await Promise.all([
 			this.prisma.order.findMany({
-				where: { clientId },
+				where: { clientId, clientOrderId: null },
 				skip,
 				take: limit,
 				orderBy: { createdAt: "desc" },
@@ -928,7 +1393,7 @@ export class OrderService {
 				},
 			}),
 			this.prisma.order.count({
-				where: { clientId },
+				where: { clientId, clientOrderId: undefined },
 			}),
 		]);
 
@@ -973,31 +1438,14 @@ export class OrderService {
 				media: op.product?.medias?.map((m: any) => ({ url: m.url })),
 			}));
 
-			// deliveryAddress transformation: try JSON parse, fallback split
-			// let deliveryAddress: any = null;
-			// if (order.deliveryAddress) {
-			// 	try {
-			// 		const parsed = JSON.parse(order.deliveryAddress);
-			// 		deliveryAddress = {
-			// 			street: parsed.street || order.deliveryAddress,
-			// 			city: parsed.city || null,
-			// 		};
-			// 	} catch (_e) {
-			// 		const parts = (order.deliveryAddress || "").split(",");
-			// 		deliveryAddress = {
-			// 			street:
-			// 				parts.slice(0, -1).join(",").trim() || order.deliveryAddress,
-			// 			city: parts.slice(-1)[0]?.trim() || null,
-			// 		};
-			// 	}
-			// }
-
 			return {
 				id: order.id,
-				orderNumber: order.id,
+				orderNumber: order.id.substring(0, 8).toUpperCase(),
 				status: order.payment?.status || "PENDING",
 				totalAmount: order.totalAmount,
 				createdAt: order.createdAt,
+				receiptUrl: order.receiptUrl || null,
+				clientOrderId: order.clientOrderId || null,
 				items,
 				business,
 				store,
