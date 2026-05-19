@@ -51,6 +51,7 @@
 		"puppeteer": "^24.43.0",
 		"pusher": "^5.3.3",
 		"pusher-js": "^8.5.0",
+		"qrcode": "^1.5.4",
 		"reflect-metadata": "^0.2.2",
 		"rxjs": "^7.8.1",
 		"semver": "^7.5.4"
