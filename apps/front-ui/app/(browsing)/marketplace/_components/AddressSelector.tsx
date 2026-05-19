@@ -13,6 +13,7 @@ import {
   ADD_CLIENT_ADDRESS,
   GET_CLIENT_PROFILE,
 } from "@/graphql/client-panel.gql";
+import { set } from "date-fns";
 
 interface AddressSelectorProps {
   selectedAddress?: Address | null;
@@ -77,14 +78,7 @@ export default function AddressSelector({
     }
 
     try {
-      // In a real app, this would save to the database
-      const mockAddress: Address = {
-        id: Date.now().toString(),
-        ...newAddress,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      await addAddress({
+      const result = await addAddress({
         variables: {
           clientId: user?.id,
           input: {
@@ -97,8 +91,10 @@ export default function AddressSelector({
         },
       });
 
-      setAddresses([...addresses, mockAddress]);
-      onSelect(mockAddress);
+      setAddresses([...addresses, result.data.addClientAddress]);
+
+      // setAddresses([...addresses, mockAddress]);
+      onSelect(result.data.addClientAddress);
       setShowNewAddressForm(false);
       setNewAddress({
         street: "",
