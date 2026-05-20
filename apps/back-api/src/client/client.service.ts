@@ -309,24 +309,6 @@ export class ClientService {
 						: null,
 				}));
 
-				// let deliveryAddress: any = null;
-				// if (order.deliveryAddress) {
-				// 	try {
-				// 		const parsed = JSON.parse(order.deliveryAddress);
-				// 		deliveryAddress = {
-				// 			street: parsed.street || order.deliveryAddress,
-				// 			city: parsed.city || null,
-				// 		};
-				// 	} catch (_e) {
-				// 		const parts = (order.deliveryAddress || "").split(",");
-				// 		deliveryAddress = {
-				// 			street:
-				// 				parts.slice(0, -1).join(",").trim() || order.deliveryAddress,
-				// 			city: parts.slice(-1)[0]?.trim() || null,
-				// 		};
-				// 	}
-				// }
-
 				return {
 					id: order.id,
 					orderNumber: order.id,

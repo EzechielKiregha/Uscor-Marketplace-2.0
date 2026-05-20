@@ -1,345 +1,618 @@
-// app/business/loyalty/_components/LoyaltyProgramOverview.tsx
+// app/business/loyalty/_components/LoyaltyProgramOverview.tsx (Updated)
 "use client";
 
-import { useQuery } from "@apollo/client";
+import { useState, useEffect, useMemo } from "react";
+import { useQuery, useMutation } from "@apollo/client";
 import {
-	ArrowDownRight,
-	ArrowUpRight,
-	Gift,
-	Star,
-	TrendingUp,
-	Users,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import {
-	Bar,
-	BarChart,
-	CartesianGrid,
-	Line,
-	LineChart,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from "recharts";
+  GET_LOYALTY_PROGRAM_BY_ID,
+  GET_LOYALTY_ANALYTICS,
+  GET_LOYALTY_TIERS,
+  GET_POINTS_TRANSACTIONS,
+} from "@/graphql/loyalty.gql";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_CUSTOMER_POINTS } from "@/graphql/loyalty.gql";
+import {
+  Star,
+  Users,
+  TrendingUp,
+  Gift,
+  BarChart,
+  LineChart,
+  Download,
+  Plus,
+  Edit,
+  Trash2,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Filter,
+  Search,
+} from "lucide-react";
+import {
+  Bar,
+  BarChart as BarChartRecharts,
+  Line,
+  LineChart as LineChartRecharts,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Pie,
+  Cell,
+  PieChart,
+} from "recharts";
+import { useToast } from "@/components/toast-provider";
 import { useMe } from "@/lib/useMe";
+import Loader from "@/components/seraui/Loader";
+import { Input } from "@/components/ui/input";
+import { BusinessEntity } from "@/lib/types";
 
 interface LoyaltyProgramOverviewProps {
-	program: any; // Replace with LoyaltyProgramEntity
-	analytics: any;
-	loading: boolean;
+  programId: string;
+  onEditProgram: () => void;
+  onDeleteProgram: (id: string) => void;
 }
 
 export default function LoyaltyProgramOverview({
-	program,
-	analytics,
-	loading,
+  programId,
+  onEditProgram,
+  onDeleteProgram,
 }: LoyaltyProgramOverviewProps) {
-	const [selectedPeriod, setSelectedPeriod] = useState<
-		"day" | "week" | "month"
-	>("month");
-	const [_customerSearch, _setCustomerSearch] = useState("");
-	const user = useMe();
+  const { user } = useMe();
+  const { showToast } = useToast();
+  const [selectedPeriod, setSelectedPeriod] = useState<
+    "day" | "week" | "month"
+  >("month");
+  const [selectedTier, setSelectedTier] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-	const {
-		data: customersData,
-		loading: customersLoading,
-		refetch: refetchCustomers,
-	} = useQuery(GET_CUSTOMER_POINTS, {
-		variables: {
-			businessId: user?.id,
-			clientId: "current-client-id",
-		},
-		skip: !program?.id,
-	});
+  const currentUser = user as BusinessEntity;
 
-	useEffect(() => {
-		if (program?.id) {
-			refetchCustomers();
-		}
-	}, [program, refetchCustomers]);
+  const {
+    data: programData,
+    loading: programLoading,
+    error: programError,
+    refetch: refetchProgram,
+  } = useQuery(GET_LOYALTY_PROGRAM_BY_ID, {
+    variables: { id: programId },
+    skip: !programId,
+  });
 
-	if (loading)
-		return (
-			<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-				<CardContent className="h-[600px] flex items-center justify-center">
-					<div className="text-center">
-						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-						<p className="text-muted-foreground">Loading data...</p>
-					</div>
-				</CardContent>
-			</Card>
-		);
+  const {
+    data: analyticsData,
+    loading: analyticsLoading,
+    error: analyticsError,
+    refetch: refetchAnalytics,
+  } = useQuery(GET_LOYALTY_ANALYTICS, {
+    variables: {
+      businessId: user?.id || "",
+      period: selectedPeriod,
+    },
+    skip: !user?.id,
+  });
 
-	if (!program) return null;
+  const {
+    data: tiersData,
+    loading: tiersLoading,
+    error: tiersError,
+    refetch: refetchTiers,
+  } = useQuery(GET_LOYALTY_TIERS, {
+    variables: { loyaltyProgramId: programId },
+    skip: !programId,
+  });
 
-	// Sample data for charts - in real app, use analytics data
-	const pointsByDay = [
-		{ name: "Mon", earned: 120, redeemed: 45 },
-		{ name: "Tue", earned: 180, redeemed: 60 },
-		{ name: "Wed", earned: 220, redeemed: 80 },
-		{ name: "Thu", earned: 150, redeemed: 50 },
-		{ name: "Fri", earned: 250, redeemed: 90 },
-		{ name: "Sat", earned: 300, redeemed: 120 },
-		{ name: "Sun", earned: 200, redeemed: 70 },
-	];
+  const {
+    data: transactionsData,
+    loading: transactionsLoading,
+    error: transactionsError,
+    refetch: refetchTransactions,
+  } = useQuery(GET_POINTS_TRANSACTIONS, {
+    variables: {
+      loyaltyProgramId: programId,
+      type: selectedTier || undefined,
+      page: 1,
+      limit: 10,
+    },
+    skip: !programId,
+  });
 
-	const topCustomers = [
-		{ name: "Sarah J.", points: 1250, spent: 350 },
-		{ name: "Michael T.", points: 980, spent: 285 },
-		{ name: "Elena R.", points: 875, spent: 240 },
-		{ name: "David K.", points: 750, spent: 210 },
-		{ name: "Maria L.", points: 625, spent: 185 },
-	];
+  const program = programData?.loyaltyProgram;
+  const analytics = analyticsData?.loyaltyAnalytics;
+  const tiers = tiersData?.loyaltyTiers || [];
+  const transactions = transactionsData?.pointsTransactions?.items || [];
 
-	return (
-		<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-			{/* Left Column - Program Stats */}
-			<div className="lg:col-span-1 space-y-6">
-				<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-					<CardHeader>
-						<CardTitle className="text-lg flex items-center gap-2">
-							<Star className="h-5 w-5 text-primary" />
-							Program Overview
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-4">
-							<div className="p-4 bg-muted rounded-lg">
-								<h3 className="font-medium mb-2">How It Works</h3>
-								<p className="text-sm text-muted-foreground">
-									Customers earn{" "}
-									<span className="font-medium">
-										{program.pointsPerPurchase}
-									</span>{" "}
-									points for every <span className="font-medium">$1</span>{" "}
-									spent. They can redeem{" "}
-									<span className="font-medium">
-										{program.minimumPointsToRedeem}
-									</span>{" "}
-									points for discounts or free products.
-								</p>
-							</div>
+  // Sample data for charts (in real app, this comes from analytics)
+  const pointsByDay = [
+    { name: "Mon", earned: 120, redeemed: 45 },
+    { name: "Tue", earned: 190, redeemed: 60 },
+    { name: "Wed", earned: 150, redeemed: 35 },
+    { name: "Thu", earned: 210, redeemed: 80 },
+    { name: "Fri", earned: 280, redeemed: 120 },
+    { name: "Sat", earned: 320, redeemed: 150 },
+    { name: "Sun", earned: 240, redeemed: 90 },
+  ];
 
-							<div className="grid grid-cols-2 gap-4">
-								<div className="p-3 bg-muted rounded-lg">
-									<div className="flex items-center gap-2 mb-1">
-										<Users className="h-4 w-4 text-primary" />
-										<span className="text-sm text-muted-foreground">
-											Members
-										</span>
-									</div>
-									<p className="text-2xl font-bold">
-										{analytics?.totalMembers || 0}
-									</p>
-									<p className="text-xs text-success flex items-center gap-1">
-										<ArrowUpRight className="h-3 w-3" />
-										{analytics?.activeMembers || 0} active
-									</p>
-								</div>
+  const customerTiers = [
+    { name: "Bronze", value: analytics?.bronzeMembers || 45 },
+    { name: "Silver", value: analytics?.silverMembers || 30 },
+    { name: "Gold", value: analytics?.goldMembers || 15 },
+    { name: "Platinum", value: analytics?.platinumMembers || 5 },
+  ];
 
-								<div className="p-3 bg-muted rounded-lg">
-									<div className="flex items-center gap-2 mb-1">
-										<Star className="h-4 w-4 text-primary" />
-										<span className="text-sm text-muted-foreground">
-											Points
-										</span>
-									</div>
-									<p className="text-2xl font-bold">
-										{analytics?.pointsEarned || 0}
-									</p>
-									<p className="text-xs text-destructive flex items-center gap-1">
-										<ArrowDownRight className="h-3 w-3" />
-										{analytics?.pointsRedeemed || 0} redeemed
-									</p>
-								</div>
-							</div>
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-							<div className="p-3 bg-muted rounded-lg">
-								<div className="flex items-center gap-2 mb-1">
-									<TrendingUp className="h-4 w-4 text-primary" />
-									<span className="text-sm text-muted-foreground">
-										Redemption Rate
-									</span>
-								</div>
-								<div className="flex items-center justify-between">
-									<div className="w-full bg-border rounded-full h-2">
-										<div
-											className="bg-primary h-2 rounded-full"
-											style={{
-												width: `${(analytics?.redemptionRate || 0) * 100}%`,
-											}}
-										></div>
-									</div>
-									<span className="ml-2 text-sm font-medium">
-										{(analytics?.redemptionRate * 100).toFixed(1)}%
-									</span>
-								</div>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+  if (programLoading || analyticsLoading || tiersLoading)
+    return <Loader loading={true} />;
+  if (programError || analyticsError || tiersError) {
+    return (
+      <div className="text-center py-12">
+        <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
+        <h3 className="text-lg font-medium mb-2">Error Loading Program</h3>
+        <p className="text-muted-foreground mb-6">
+          {programError?.message ||
+            analyticsError?.message ||
+            tiersError?.message ||
+            "Failed to load program data"}
+        </p>
+        <Button
+          variant="outline"
+          onClick={() => {
+            refetchProgram();
+            refetchAnalytics();
+            refetchTiers();
+          }}
+        >
+          Try Again
+        </Button>
+      </div>
+    );
+  }
 
-				<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-					<CardHeader>
-						<div className="flex justify-between items-center">
-							<CardTitle className="text-lg">Top Customers</CardTitle>
-							<Button variant="outline" size="sm">
-								View All
-							</Button>
-						</div>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-3">
-							{topCustomers.map((customer, index) => (
-								<div key={index} className="flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm">
-											{customer.name.charAt(0)}
-										</div>
-										<div>
-											<p className="font-medium">{customer.name}</p>
-											<p className="text-xs text-muted-foreground">
-												${customer.spent} spent
-											</p>
-										</div>
-									</div>
-									<div className="text-right">
-										<p className="font-medium">{customer.points}</p>
-										<p className="text-xs text-muted-foreground">points</p>
-									</div>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
-			</div>
+  if (!program) {
+    return (
+      <div className="text-center py-12">
+        <Star className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <h3 className="text-lg font-medium mb-2">Program Not Found</h3>
+        <p className="text-muted-foreground mb-6">
+          The loyalty program you're looking for doesn't exist or has been
+          removed.
+        </p>
+        <Button
+          variant="outline"
+          onClick={() => (window.location.href = "/business/loyalty")}
+        >
+          Back to Programs
+        </Button>
+      </div>
+    );
+  }
 
-			{/* Right Column - Charts & Details */}
-			<div className="lg:col-span-2 space-y-6">
-				<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-					<CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-						<CardTitle className="text-lg">Points Activity</CardTitle>
-						<div className="flex gap-1">
-							<Button
-								variant={selectedPeriod === "day" ? "default" : "outline"}
-								size="sm"
-								onClick={() => setSelectedPeriod("day")}
-							>
-								Day
-							</Button>
-							<Button
-								variant={selectedPeriod === "week" ? "default" : "outline"}
-								size="sm"
-								onClick={() => setSelectedPeriod("week")}
-							>
-								Week
-							</Button>
-							<Button
-								variant={selectedPeriod === "month" ? "default" : "outline"}
-								size="sm"
-								onClick={() => setSelectedPeriod("month")}
-							>
-								Month
-							</Button>
-						</div>
-					</CardHeader>
-					<CardContent>
-						<div className="h-[300px]">
-							<ResponsiveContainer width="100%" height="100%">
-								<BarChart data={pointsByDay}>
-									<CartesianGrid strokeDasharray="3 3" />
-									<XAxis dataKey="name" />
-									<YAxis />
-									<Tooltip />
-									<Bar
-										dataKey="earned"
-										fill="hsl(var(--primary))"
-										name="Points Earned"
-									/>
-									<Bar
-										dataKey="redeemed"
-										fill="hsl(var(--accent))"
-										name="Points Redeemed"
-									/>
-								</BarChart>
-							</ResponsiveContainer>
-						</div>
-					</CardContent>
-				</Card>
+  // Filter transactions based on search
+  const filteredTransactions = transactions.filter(
+    (transaction: any) =>
+      transaction.client.fullName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      transaction.client.email
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      transaction.type.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
-				<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-					<CardHeader>
-						<CardTitle className="text-lg flex items-center gap-2">
-							<Gift className="h-5 w-5" />
-							Customer Engagement
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="h-[250px]">
-							<ResponsiveContainer width="100%" height="100%">
-								<LineChart data={pointsByDay}>
-									<CartesianGrid strokeDasharray="3 3" />
-									<XAxis dataKey="name" />
-									<YAxis />
-									<Tooltip />
-									<Line
-										type="monotone"
-										dataKey="earned"
-										stroke="hsl(var(--primary))"
-										strokeWidth={2}
-										name="Points Earned"
-									/>
-								</LineChart>
-							</ResponsiveContainer>
-						</div>
+  return (
+    <div className="space-y-6">
+      {/* Program Header */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="p-6 bg-muted border-b border-border">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <Star className="h-6 w-6 text-primary" />
+                {program.name}
+              </h2>
+              <p className="text-muted-foreground mt-1">
+                {program.description}
+              </p>
+            </div>
 
-						<div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-							<div className="p-4 bg-muted rounded-lg">
-								<h3 className="font-medium mb-2">Repeat Customers</h3>
-								<p className="text-2xl font-bold">
-									{analytics?.activeMembers || 0}
-								</p>
-								<p className="text-sm text-muted-foreground">
-									{analytics
-										? Math.round(
-												(analytics.activeMembers / analytics.totalMembers) *
-													100,
-											)
-										: 0}
-									% of members
-								</p>
-							</div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export Data
+              </Button>
+              <Button variant="outline" size="sm" onClick={onEditProgram}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Program
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => onDeleteProgram(program.id)}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Program
+              </Button>
+            </div>
+          </div>
+        </div>
 
-							<div className="p-4 bg-muted rounded-lg">
-								<h3 className="font-medium mb-2">Avg. Points per Sale</h3>
-								<p className="text-2xl font-bold">
-									{program.pointsPerPurchase.toFixed(1)}
-								</p>
-								<p className="text-sm text-muted-foreground">
-									{program.minimumPointsToRedeem} points = $1 value
-								</p>
-							</div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="border border-border rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <Users className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Members</p>
+                  <p className="text-xl font-bold">
+                    {analytics?.totalMembers || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-							<div className="p-4 bg-muted rounded-lg">
-								<h3 className="font-medium mb-2">Redemption Value</h3>
-								<p className="text-2xl font-bold">
-									$
-									{(
-										program.minimumPointsToRedeem / program.pointsPerPurchase
-									).toFixed(2)}
-								</p>
-								<p className="text-sm text-muted-foreground">
-									Average value per redemption
-								</p>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-			</div>
-		</div>
-	);
+            <div className="border border-border rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
+                  <Star className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Points Earned</p>
+                  <p className="text-xl font-bold">
+                    {analytics?.pointsEarned || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-border rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
+                  <Gift className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    Points Redeemed
+                  </p>
+                  <p className="text-xl font-bold">
+                    {analytics?.pointsRedeemed || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-border rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    Redemption Rate
+                  </p>
+                  <p className="text-xl font-bold">
+                    {analytics?.redemptionRate
+                      ? `${(analytics.redemptionRate * 100).toFixed(1)}%`
+                      : "0%"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Program Configuration */}
+          <div className="border border-border rounded-lg p-4 mb-6 bg-muted">
+            <h3 className="font-semibold mb-3">Program Configuration</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-3 bg-background rounded-lg border border-border">
+                <p className="text-sm text-muted-foreground">
+                  Points per $1 spent
+                </p>
+                <p className="text-xl font-bold">
+                  {program.pointsPerPurchase} pts
+                </p>
+              </div>
+
+              <div className="p-3 bg-background rounded-lg border border-border">
+                <p className="text-sm text-muted-foreground">
+                  Minimum points to redeem
+                </p>
+                <p className="text-xl font-bold">
+                  {program.minimumPointsToRedeem} pts
+                </p>
+              </div>
+
+              <div className="p-3 bg-background rounded-lg border border-border">
+                <p className="text-sm text-muted-foreground">
+                  Value of redemption
+                </p>
+                <p className="text-xl font-bold">
+                  ${(program.minimumPointsToRedeem / 10).toFixed(2)}
+                </p>
+              </div>
+
+              <div className="p-3 bg-background rounded-lg border border-border">
+                <p className="text-sm text-muted-foreground">Active Tiers</p>
+                <p className="text-xl font-bold">{tiers.length}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* Points Earned vs Redeemed */}
+            <div className="border border-border rounded-lg overflow-hidden">
+              <div className="p-4 bg-muted border-b border-border">
+                <h3 className="font-semibold">Points Activity</h3>
+              </div>
+
+              <div className="p-4 h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChartRecharts data={pointsByDay}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar
+                      dataKey="earned"
+                      name="Points Earned"
+                      fill="hsl(var(--primary))"
+                    />
+                    <Bar
+                      dataKey="redeemed"
+                      name="Points Redeemed"
+                      fill="hsl(var(--success))"
+                    />
+                  </BarChartRecharts>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Customer Tiers */}
+            <div className="border border-border rounded-lg overflow-hidden">
+              <div className="p-4 bg-muted border-b border-border">
+                <h3 className="font-semibold">Customer Tiers</h3>
+              </div>
+
+              <div className="p-4 h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={customerTiers}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label={({ name, percent }) =>
+                        `${name} ${percent ? (percent * 100).toFixed(0) : 0}%`
+                      }
+                    >
+                      {customerTiers.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value) => [`${value} customers`, "Count"]}
+                    />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          {/* Top Customers */}
+          <div className="border border-border rounded-lg overflow-hidden">
+            <div className="p-4 bg-muted border-b border-border">
+              <h3 className="font-semibold">Top Customers</h3>
+            </div>
+
+            <div className="divide-y divide-border">
+              {analytics?.topCustomers
+                ?.slice(0, 5)
+                .map((customer: any, index: number) => (
+                  <div
+                    key={customer.clientId}
+                    className="p-4 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm">
+                        {customer.clientName?.charAt(0) || "C"}
+                      </div>
+                      <div>
+                        <p className="font-medium">{customer.clientName}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {customer.totalSpent?.toFixed(2)} spent
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold">{customer.totalPoints} pts</p>
+                      <p className="text-sm text-muted-foreground">
+                        points earned
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="font-semibold">Recent Transactions</h2>
+            <p className="text-sm text-muted-foreground">
+              Points earned and redeemed by your customers
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <div className="relative w-full sm:w-64">
+              <Input
+                type="text"
+                placeholder="Search transactions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
+
+            <select
+              value={selectedTier || ""}
+              onChange={(e) => setSelectedTier(e.target.value || null)}
+              className="p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+            >
+              <option value="">All Types</option>
+              <option value="EARNED">Earned Points</option>
+              <option value="REDEEMED">Redeemed Points</option>
+            </select>
+
+            <select
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value as any)}
+              className="p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+            >
+              <option value="day">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="p-4">
+          {transactionsLoading ? (
+            <div className="space-y-3">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="flex justify-between items-center p-3 border border-border rounded-lg animate-pulse"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-muted" />
+                    <div>
+                      <div className="h-4 bg-muted rounded w-32 mb-1" />
+                      <div className="h-3 bg-muted rounded w-24" />
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="h-4 bg-muted rounded w-16 mb-1" />
+                    <div className="h-3 bg-muted rounded w-12" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredTransactions.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Gift className="h-8 w-8 mx-auto mb-3" />
+              <p>No recent transactions</p>
+              <p className="text-sm mt-1">
+                Points earned and redeemed will appear here
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {filteredTransactions.map((transaction: any) => (
+                <div
+                  key={transaction.id}
+                  className="flex justify-between items-center p-3 border border-border rounded-lg hover:bg-muted/50"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm">
+                      {transaction.client.fullName?.charAt(0) || "C"}
+                    </div>
+                    <div>
+                      <p className="font-medium">
+                        {transaction.client.fullName}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(transaction.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <p
+                      className={`font-bold ${
+                        transaction.type === "EARNED"
+                          ? "text-success"
+                          : "text-destructive"
+                      }`}
+                    >
+                      {transaction.type === "EARNED" ? "+" : "-"}
+                      {transaction.points} pts
+                    </p>
+                    <p className="text-sm text-muted-foreground capitalize">
+                      {transaction.type}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Business Type Specific Information */}
+      <div className="bg-card border border-border rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <Star className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-semibold">
+              Optimizing Loyalty Programs for East Africa
+            </h3>
+
+            {currentUser?.businessType === "ARTISAN" && (
+              <p className="text-sm text-muted-foreground mt-1">
+                For artisan businesses, consider offering "Custom Order Points"
+                where customers earn bonus points for placing custom orders.
+                This encourages repeat customers for your unique, handcrafted
+                products.
+              </p>
+            )}
+
+            {currentUser?.businessType === "CAFE" && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Cafés benefit from "Buy 9, Get 1 Free" loyalty programs (90
+                points = free drink). This encourages daily customers to return
+                and increases average transaction value.
+              </p>
+            )}
+
+            {currentUser?.businessType === "HARDWARE" && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Hardware stores should reward customers with points for tool
+                purchases and offer discounts on accessories or repair services.
+                This builds long-term customer relationships.
+              </p>
+            )}
+
+            {currentUser?.businessType !== "ARTISAN" &&
+              currentUser?.businessType !== "CAFE" &&
+              currentUser?.businessType !== "HARDWARE" && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  For East African markets, consider smaller point thresholds to
+                  drive more frequent engagement. The average customer spends
+                  $20-50 per visit, so setting redemption thresholds at 100-200
+                  points ($10-$20 value) works well for local markets.
+                </p>
+              )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

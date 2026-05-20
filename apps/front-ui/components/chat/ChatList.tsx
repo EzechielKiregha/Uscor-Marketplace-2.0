@@ -93,6 +93,7 @@ export default function ChatList({
             name: businessPart.business.name || "Business",
             avatar: businessPart.business.avatar,
             type: "business",
+            businessType: businessPart.business.businessType as string,
           };
         }
       }
@@ -222,28 +223,31 @@ export default function ChatList({
                         {participant.type === "business" && (
                           <span className="text-xs bg-muted px-2 py-0.5 rounded-full flex items-center gap-1">
                             {BusinessTypeIcon({
-                              businessType: chat?.business?.businessType,
+                              businessType: participant.businessType!,
                               className: "h-5 w-5 text-primary",
                             })}
-                            {chat.business?.businessType === "ARTISAN" &&
-                              "Artisan"}
-                            {chat.business?.businessType === "BOOKSTORE" &&
-                              "Bookstore"}
-                            {chat.business?.businessType === "ELECTRONICS" &&
-                              "Electronics"}
-                            {chat.business?.businessType === "HARDWARE" &&
-                              "Hardware"}
-                            {chat.business?.businessType === "GROCERY" &&
-                              "Grocery"}
-                            {chat.business?.businessType === "CAFE" && "Café"}
-                            {chat.business?.businessType === "RESTAURANT" &&
-                              "Restaurant"}
-                            {chat.business?.businessType === "RETAIL" &&
-                              "Retail"}
-                            {chat.business?.businessType === "BAR" && "Bar"}
-                            {chat.business?.businessType === "CLOTHING" &&
-                              "Clothing"}
-                            {!chat.business?.businessType && "Business"}
+                            {participant.businessType?.toUpperCase() ===
+                              "ARTISAN" && "Artisan"}
+                            {participant.businessType?.toUpperCase() ===
+                              "BOOKSTORE" && "Bookstore"}
+                            {participant.businessType?.toUpperCase() ===
+                              "ELECTRONICS" && "Electronics"}
+                            {participant.businessType?.toUpperCase() ===
+                              "HARDWARE" && "Hardware"}
+                            {participant.businessType?.toUpperCase() ===
+                              "GROCERY" && "Grocery"}
+                            {participant.businessType?.toUpperCase() ===
+                              "CAFE" && "Café"}
+                            {participant.businessType?.toUpperCase() ===
+                              "RESTAURANT" && "Restaurant"}
+                            {participant.businessType?.toUpperCase() ===
+                              "RETAIL" && "Retail"}
+                            {participant.businessType?.toUpperCase() ===
+                              "BAR" && "Bar"}
+                            {participant.businessType?.toUpperCase() ===
+                              "CLOTHING" && "Clothing"}
+                            {!participant.businessType?.toUpperCase() &&
+                              "Business"}
                           </span>
                         )}
                         {chat.negotiationType === "REOWNERSHIP" && (

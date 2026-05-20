@@ -12,6 +12,7 @@ import {
   UPDATE_CLIENT_PROFILE,
 } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
+import { put } from "@vercel/blob";
 
 interface ProfileOverviewProps {
   client: any;
@@ -26,7 +27,7 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
     phone: "",
     avatar: "",
   });
-  const [_avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -101,15 +102,36 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
     setIsSubmitting(true);
 
     try {
-      // In a real app, we'd upload the avatar file first
-      // For now, we'll just use the preview URL
+      // Handle avatar upload if needed
+      let avatarUrl = client?.avatar || "";
+      if (avatarFile) {
+        const blobToken = process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN;
+        if (!blobToken && avatarFile instanceof File) {
+          throw new Error(
+            "Vercel Blob token is missing. Please configure NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN.",
+          );
+        }
+
+        if (avatarFile instanceof File) {
+          const blob = await put(
+            `business/medias/${Date.now()}-${avatarFile.name}`,
+            avatarFile,
+            {
+              access: "public",
+              token: blobToken,
+            },
+          );
+          avatarUrl = blob.url;
+        }
+      }
 
       await updateProfile({
         variables: {
-          id: client.id,
           input: {
+            id: client.id,
             fullName: formData.fullName,
             phone: formData.phone,
+            avatar: avatarUrl,
           },
         },
       });

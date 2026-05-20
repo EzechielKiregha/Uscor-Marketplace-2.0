@@ -182,7 +182,7 @@ export default function ChatModal({ isOpen, onClose, chatId }: ChatModalProps) {
           onClick={handleClose}
         />
 
-        <div className="fixed bottom-0 right-0 w-full md:w-[400px] h-[90vh] md:h-[700px] bg-card border border-border rounded-t-xl md:rounded-xl shadow-2xl transform transition-all duration-300 ease-in-out">
+        <div className="fixed bottom-2 right-2 w-full md:w-100 h-[90vh] md:h-175 bg-card border border-border rounded-t-xl md:rounded-xl shadow-2xl transform transition-all duration-300 ease-in-out">
           <div className="flex flex-col h-full min-h-0">
             {/* Header */}
             <div className="p-4 border-b border-border flex items-center justify-between">
@@ -329,7 +329,7 @@ export default function ChatModal({ isOpen, onClose, chatId }: ChatModalProps) {
         onClick={handleClose}
       />
 
-      <div className="fixed bottom-0 right-0 w-full md:w-[400px] h-[90vh] md:h-[700px] bg-card border border-border rounded-t-xl md:rounded-xl shadow-2xl transform transition-all duration-300 ease-in-out">
+      <div className="fixed bottom-2 right-2 w-full md:w-100 h-[90vh] md:h-175 bg-card border border-border rounded-t-xl md:rounded-xl shadow-2xl transform transition-all duration-300 ease-in-out">
         <div className="flex flex-col h-full">
           {/* Chat List View */}
           {!activeChatId && !showNewChat && !showFAQs && (

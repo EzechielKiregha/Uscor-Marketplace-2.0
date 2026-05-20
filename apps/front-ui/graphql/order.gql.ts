@@ -314,49 +314,49 @@ export const REMOVE_ORDER_PRODUCT = gql`
 export const PROCESS_ORDER_PAYMENT = gql`
   mutation ProcessOrderPayment($orderId: String!, $input: ProcessPaymentInput!) {
     processOrderPayment(orderId: $orderId, input: $input) {
-    id
-    deliveryFee
-    receiptUrl
-    deliveryAddress {
       id
+      deliveryFee
+      receiptUrl
+      deliveryAddress {
+        id
+        createdAt
+        updatedAt
+        clientId
+        country
+        street
+        city
+        postalCode
+        isDefault
+      }
+      qrCode
       createdAt
       updatedAt
       clientId
-      country
-      street
-      city
-      postalCode
-      isDefault
-    }
-    qrCode
-    createdAt
-    updatedAt
-    clientId
-    client {
-      id
-      fullName
-      email
-    }
-    payment {
-      id
-      amount
-      method
-      status
-    }
-    products {
-      id
-      quantity
-      product {
+      client {
         id
-        title
-        price
-        medias {
-          url
+        fullName
+        email
+      }
+      payment {
+        id
+        amount
+        method
+        status
+      }
+      products {
+        id
+        quantity
+        product {
+          id
+          title
+          price
+          medias {
+            url
+          }
         }
       }
+      status
     }
-    status
-  }
   }
   
 `;

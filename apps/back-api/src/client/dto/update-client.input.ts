@@ -12,4 +12,9 @@ export class UpdateClientInput extends PartialType(CreateClientInput) {
 	@IsOptional()
 	@IsString()
 	kycId?: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	avatar?: string;
 }

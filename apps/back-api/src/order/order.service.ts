@@ -1539,6 +1539,14 @@ export class OrderService {
 			},
 		});
 
+		// await this.prisma.pointsTransaction.create({
+		// 	data: {
+		// 		clientId: order.clientId,
+		// 		points: Math.floor((updatedOrder.payment?.amount || 0) / 10),
+
+		// 	}
+		// })
+
 		// Transform the data to match frontend expectations
 		return {
 			...updatedOrder,

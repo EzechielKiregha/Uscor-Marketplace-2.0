@@ -1,220 +1,227 @@
-// app/business/loyalty/page.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { Download, Plus, Star } from "lucide-react";
-import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { GET_STORES } from "@/graphql/store.gql";
-import { StoreEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
-import CustomerPointsManagement from "./_components/CustomerPointsManagement";
+import {
+  Star,
+  Users,
+  TrendingUp,
+  Gift,
+  BarChart,
+  Settings,
+  Plus,
+  Filter,
+} from "lucide-react";
 import LoyaltyProgramOverview from "./_components/LoyaltyProgramOverview";
 import ProgramConfiguration from "./_components/ProgramConfiguration";
+import CustomerPointsManagement from "./_components/CustomerPointsManagement";
 import RedemptionProcess from "./_components/RedemptionProcess";
+import CreateLoyaltyProgramModal from "./_components/CreateLoyaltyProgramModal";
 import { useLoyalty } from "./_hooks/use-loyalty";
+import { useMe } from "@/lib/useMe";
+import Loader from "@/components/seraui/Loader";
 
 export default function LoyaltyProgramPage() {
   const { user, role, loading: authLoading } = useMe();
-  // const { isOpen, setIsOpen } = useOpenCreateStoreModal();
-  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<
     "overview" | "configuration" | "customers" | "redemption"
   >("overview");
+  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(
+    null,
+  );
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const {
-    data: storesData,
-    loading: storesLoading,
-    error: storesError,
-  } = useQuery(GET_STORES, {
-    variables: { businessId: user?.id },
-    skip: !user?.id,
-  });
-
-  const {
-    getPrograms,
-    getSelectedProgram,
-    getAnalytics,
-    programsLoading,
-    analyticsLoading,
-  } = useLoyalty(user?.id || "");
-
-  // Auto-select first store if none selected
-  useEffect(() => {
-    if (
-      storesData?.stores &&
-      storesData.stores.length > 0 &&
-      !selectedStoreId
-    ) {
-      setSelectedStoreId(storesData.stores[0].id);
-    }
-  }, [storesData, selectedStoreId]);
-
-  if (authLoading || storesLoading) return <Loader loading={true} />;
-  if (storesError)
-    return <div>Error loading stores: {storesError.message}</div>;
+  const { getPrograms, programsLoading } = useLoyalty(user?.id || "");
 
   const programs = getPrograms();
-  const selectedProgram = getSelectedProgram();
-  const analytics = getAnalytics();
+
+  const selectedProgram =
+    programs.find((p: any) => p.id === selectedProgramId) || programs[0];
+
+  useEffect(() => {
+    if (programs.length > 0 && !selectedProgramId) {
+      setSelectedProgramId(programs[0].id);
+    }
+  }, [programs, selectedProgramId]);
+
+  if (authLoading || programsLoading) return <Loader loading={true} />;
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Business Access Required</h1>
+          <p className="text-muted-foreground mt-2">
+            You need to be logged in as a business owner to access loyalty
+            programs
+          </p>
+          <Button
+            variant="default"
+            className="mt-4"
+            onClick={() => {
+              const currentPath = encodeURIComponent(window.location.pathname);
+              window.location.href = `/login?redirect=${currentPath}`;
+            }}
+          >
+            Log In
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const handleProgramCreated = (newProgram: any) => {
+    // refetch();
+    setSelectedProgramId(newProgram.id);
+    setActiveTab("overview");
+    setShowCreateModal(false);
+  };
+
+  const handleProgramUpdated = (updatedProgram: any) => {
+    setSelectedProgramId(updatedProgram.id);
+    setActiveTab("overview");
+  };
+
+  const handleProgramDeleted = (deletedProgramId: string) => {
+    // refetch();
+    if (selectedProgramId === deletedProgramId) {
+      setSelectedProgramId(programs[0]?.id || null);
+    }
+  };
 
   return (
     <div className="space-y-6">
-      {/* Store Selector */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Loyalty Program</h1>
-          <p className="text-muted-foreground">
-            Reward customers and grow your local community
-          </p>
+      <div>
+        <h1 className="text-2xl font-bold">Loyalty Program</h1>
+        <p className="text-muted-foreground">
+          Reward customers and build lasting relationships
+        </p>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-wrap gap-1">
+          <Button
+            variant={activeTab === "overview" ? "default" : "outline"}
+            onClick={() => setActiveTab("overview")}
+            className="flex items-center gap-2"
+          >
+            <Star className="h-4 w-4" />
+            Overview
+          </Button>
+          <Button
+            variant={activeTab === "configuration" ? "default" : "outline"}
+            onClick={() => setActiveTab("configuration")}
+            className="flex items-center gap-2"
+          >
+            <Settings className="h-4 w-4" />
+            Configuration
+          </Button>
+          <Button
+            variant={activeTab === "customers" ? "default" : "outline"}
+            onClick={() => setActiveTab("customers")}
+            className="flex items-center gap-2"
+          >
+            <Users className="h-4 w-4" />
+            Customers
+          </Button>
+          <Button
+            variant={activeTab === "redemption" ? "default" : "outline"}
+            onClick={() => setActiveTab("redemption")}
+            className="flex items-center gap-2"
+          >
+            <Gift className="h-4 w-4" />
+            Redemption
+          </Button>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          {storesData?.stores && storesData.stores.length > 1 && (
-            <select
-              title="selected store ID"
-              value={selectedStoreId || ""}
-              onChange={(e) => setSelectedStoreId(e.target.value)}
-              className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              {storesData.stores.map((store: StoreEntity) => (
-                <option key={store.id} value={store.id}>
-                  {store.name} {store.address ? `• ${store.address}` : ""}
-                </option>
-              ))}
-            </select>
-          )}
+        <div className="flex flex-wrap gap-2">
+          <select
+            value={selectedProgramId || ""}
+            onChange={(e) => setSelectedProgramId(e.target.value || null)}
+            className="p-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            {programs.map((program: any) => (
+              <option key={program.id} value={program.id}>
+                {program.name}
+              </option>
+            ))}
+          </select>
 
-          <div className="flex gap-1">
-            <Button
-              variant={activeTab === "overview" ? "default" : "outline"}
-              onClick={() => setActiveTab("overview")}
-            >
-              Overview
-            </Button>
-            <Button
-              variant={activeTab === "configuration" ? "default" : "outline"}
-              onClick={() => setActiveTab("configuration")}
-            >
-              Configuration
-            </Button>
-            <Button
-              variant={activeTab === "customers" ? "default" : "outline"}
-              onClick={() => setActiveTab("customers")}
-            >
-              Customers
-            </Button>
-            <Button
-              variant={activeTab === "redemption" ? "default" : "outline"}
-              onClick={() => setActiveTab("redemption")}
-            >
-              Redemption
-            </Button>
-          </div>
-
-          {programs.length === 0 && (
-            <Button variant="default" size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Program
-            </Button>
-          )}
+          <Button variant="default" onClick={() => setShowCreateModal(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Program
+          </Button>
         </div>
       </div>
 
-      {/* Program Selection */}
-      {programs.length > 0 ? (
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {programs.map((program: any) => (
-              <Button
-                key={program.id}
-                variant={
-                  selectedProgram?.id === program.id ? "default" : "outline"
-                }
-                className="whitespace-nowrap"
-                onClick={() => setActiveTab("overview")}
-              >
-                {program.name}
-              </Button>
-            ))}
-          </div>
+      {/* Main Content */}
+      <div>
+        {programs.length === 0 ? (
+          <div className="text-center py-12 bg-card border border-border rounded-lg">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <Star className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-xl font-medium mb-2">
+              No Loyalty Programs Yet
+            </h3>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              Create your first loyalty program to reward customers and build
+              lasting relationships. Perfect for artisans, wood workers, and
+              small retailers to encourage repeat customers.
+            </p>
 
-          <div className="flex gap-2">
-            <Button variant="outline" size="icon">
-              <Download className="h-4 w-4" />
-            </Button>
             <Button
               variant="default"
-              size="sm"
-              onClick={() => setActiveTab("configuration")}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Edit Program
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="text-center py-12 bg-card rounded-lg border border-orange-400/60 dark:border-orange-500/70">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <Star className="h-8 w-8 text-primary" />
-            </div>
-          </div>
-          <h3 className="text-xl font-medium mb-2">No Loyalty Program Yet</h3>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            Create a loyalty program to reward your customers and build a
-            community around your local business. Perfect for artisans,
-            craftsmen, and small retailers to encourage repeat customers.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-accent text-primary-foreground"
-              onClick={() => setActiveTab("configuration")}
+              className="h-11 px-6"
+              onClick={() => setShowCreateModal(true)}
             >
               <Plus className="h-5 w-5 mr-2" />
               Create Your First Program
             </Button>
-            <Button variant="outline" size="lg">
-              Learn How It Works
-            </Button>
           </div>
-        </div>
-      )}
+        ) : (
+          <>
+            {activeTab === "overview" && (
+              <LoyaltyProgramOverview
+                programId={selectedProgramId || programs[0].id}
+                onEditProgram={() => setActiveTab("configuration")}
+                onDeleteProgram={handleProgramDeleted}
+              />
+            )}
 
-      {/* Main Content */}
-      {programs.length > 0 && (
-        <div className="space-y-6">
-          {activeTab === "overview" && (
-            <LoyaltyProgramOverview
-              program={selectedProgram}
-              analytics={analytics}
-              loading={programsLoading || analyticsLoading}
-            />
-          )}
+            {activeTab === "configuration" && selectedProgram && (
+              <ProgramConfiguration
+                program={selectedProgram}
+                loading={programsLoading}
+                onProgramUpdated={handleProgramUpdated}
+              />
+            )}
 
-          {activeTab === "configuration" && (
-            <ProgramConfiguration
-              program={selectedProgram}
-              loading={programsLoading}
-            />
-          )}
+            {activeTab === "customers" && selectedProgramId && (
+              <CustomerPointsManagement
+                programId={selectedProgramId}
+                loading={programsLoading}
+                // businessId={user.business.id}
+              />
+            )}
 
-          {activeTab === "customers" && (
-            <CustomerPointsManagement
-              programId={selectedProgram?.id || ""}
-              loading={programsLoading}
-            />
-          )}
+            {activeTab === "redemption" && selectedProgramId && (
+              <RedemptionProcess
+                programId={selectedProgramId}
+                loading={programsLoading}
+                // businessId={user.business.id}
+              />
+            )}
+          </>
+        )}
+      </div>
 
-          {activeTab === "redemption" && (
-            <RedemptionProcess
-              programId={selectedProgram?.id || ""}
-              loading={programsLoading}
-            />
-          )}
-        </div>
+      {/* Create Loyalty Program Modal */}
+      {showCreateModal && (
+        <CreateLoyaltyProgramModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onProgramCreated={handleProgramCreated}
+        />
       )}
     </div>
   );
