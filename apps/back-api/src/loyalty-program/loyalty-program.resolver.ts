@@ -13,16 +13,22 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import {
 	CreateLoyaltyProgramInput,
+	CreateLoyaltyTierInput,
 	CreatePointsTransactionInput,
 	EarnPointsInput,
 	RedeemPointsInput,
+	UpdateLoyaltyTierInput,
 } from "./dto/loyalty-program.input";
 import { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
 import { ClientPointsBalanceEntity } from "./entities/client-points-balance.entity";
 import { CustomerPointsEntity } from "./entities/customer-points.entity";
 import { LoyaltyAnalyticsEntity } from "./entities/loyalty-analytics.entity";
 import { LoyaltyProgramEntity } from "./entities/loyalty-program.entity";
-import { PointsTransactionEntity } from "./entities/points-transaction.entity";
+import { LoyaltyTierEntity } from "./entities/loyalty-tier.entity";
+import {
+	PointsTransactionEntity,
+	PointsTransactionsConnectionEntity,
+} from "./entities/points-transaction.entity";
 import { LoyaltyService } from "./loyalty-program.service";
 // Resolver
 @Resolver(() => LoyaltyProgramEntity)
@@ -242,6 +248,96 @@ export class LoyaltyResolver {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("business", "worker")
+	@Query(() => PointsTransactionsConnectionEntity, {
+		name: "pointsTransactions",
+		description: "Retrieves paginated points transactions.",
+	})
+	async getPointsTransactions(
+		@Args("loyaltyProgramId", { type: () => String })
+		loyaltyProgramId: string,
+		@Args("clientId", { type: () => String, nullable: true })
+		clientId: string,
+		@Args("type", { type: () => String, nullable: true })
+		type: string,
+		@Args("startDate", { type: () => Date, nullable: true })
+		startDate: Date,
+		@Args("endDate", { type: () => Date, nullable: true })
+		endDate: Date,
+		@Args("page", { type: () => Number, defaultValue: 1 })
+		page: number,
+		@Args("limit", { type: () => Number, defaultValue: 20 })
+		limit: number,
+		@Context() context,
+	) {
+		return this.loyaltyService.getPointsTransactions(
+			loyaltyProgramId,
+			clientId,
+			type,
+			startDate,
+			endDate,
+			page,
+			limit,
+			context.req.user,
+		);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Query(() => [LoyaltyTierEntity], {
+		name: "loyaltyTiers",
+		description: "Retrieves loyalty tiers for a loyalty program.",
+	})
+	async getLoyaltyTiers(
+		@Args("loyaltyProgramId", { type: () => String })
+		loyaltyProgramId: string,
+		@Context() context,
+	) {
+		return this.loyaltyService.getLoyaltyTiers(
+			loyaltyProgramId,
+			context.req.user,
+		);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business")
+	@Mutation(() => LoyaltyTierEntity, {
+		description: "Creates a loyalty tier.",
+	})
+	async createLoyaltyTier(
+		@Args("input") input: CreateLoyaltyTierInput,
+		@Context() context,
+	) {
+		return this.loyaltyService.createLoyaltyTier(input, context.req.user);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business")
+	@Mutation(() => LoyaltyTierEntity, {
+		description: "Updates a loyalty tier.",
+	})
+	async updateLoyaltyTier(
+		@Args("input") input: UpdateLoyaltyTierInput,
+		@Context() context,
+	) {
+		return this.loyaltyService.updateLoyaltyTier(input, context.req.user);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business")
+	@Mutation(() => Boolean, {
+		description: "Deletes a loyalty tier.",
+	})
+	async deleteLoyaltyTier(
+		@Args("id", { type: () => String })
+		id: string,
+		@Context() context,
+	) {
+		await this.loyaltyService.deleteLoyaltyTier(id, context.req.user);
+		return true;
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
 	@Mutation(() => PointsTransactionEntity, {
 		description: "Redeems points for a customer.",
 	})
@@ -283,6 +379,14 @@ export class LoyaltyResolver {
 
 		// Delete all associated transactions first
 		await this.loyaltyService.prisma.pointsTransaction.deleteMany({
+			where: { loyaltyProgramId: id },
+		});
+
+		// Delete all associated tier benefits and tiers
+		await this.loyaltyService.prisma.loyaltyTierBenefit.deleteMany({
+			where: { tier: { loyaltyProgramId: id } },
+		});
+		await this.loyaltyService.prisma.loyaltyTier.deleteMany({
 			where: { loyaltyProgramId: id },
 		});
 

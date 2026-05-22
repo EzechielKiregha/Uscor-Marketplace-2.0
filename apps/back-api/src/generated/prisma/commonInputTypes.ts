@@ -721,6 +721,23 @@ export type EnumRechargeMethodNullableWithAggregatesFilter<$PrismaModel = never>
   _max?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
 }
 
+export type EnumLoyaltyTransactionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoyaltyTransactionType | Prisma.EnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel> | $Enums.LoyaltyTransactionType
+}
+
+export type EnumLoyaltyTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoyaltyTransactionType | Prisma.EnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoyaltyTransactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.LoyaltyTransactionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel>
+}
+
 export type EnumAnnouncementPriorityNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.AnnouncementPriority | Prisma.EnumAnnouncementPriorityFieldRefInput<$PrismaModel> | null
   in?: $Enums.AnnouncementPriority[] | Prisma.ListEnumAnnouncementPriorityFieldRefInput<$PrismaModel> | null
@@ -1441,6 +1458,23 @@ export type NestedEnumRechargeMethodNullableWithAggregatesFilter<$PrismaModel = 
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumRechargeMethodNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoyaltyTransactionType | Prisma.EnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel> | $Enums.LoyaltyTransactionType
+}
+
+export type NestedEnumLoyaltyTransactionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LoyaltyTransactionType | Prisma.EnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LoyaltyTransactionType[] | Prisma.ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLoyaltyTransactionTypeWithAggregatesFilter<$PrismaModel> | $Enums.LoyaltyTransactionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLoyaltyTransactionTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumAnnouncementPriorityNullableFilter<$PrismaModel = never> = {

@@ -21,6 +21,15 @@ export class CustomerPointsEntity {
 	@Field(() => Float)
 	totalPoints: number;
 
+	@Field(() => Float)
+	pointsUsed: number;
+
+	@Field(() => Float)
+	pointsAvailable: number;
+
+	@Field({ nullable: true })
+	tier?: string;
+
 	@Field(() => LoyaltyProgramEntity)
 	program: LoyaltyProgramEntity;
 

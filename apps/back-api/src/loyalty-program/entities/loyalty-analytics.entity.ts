@@ -44,6 +44,18 @@ export class LoyaltyAnalyticsEntity {
 	@Field(() => Float)
 	redemptionRate: number;
 
+	@Field(() => Int)
+	bronzeMembers: number;
+
+	@Field(() => Int)
+	silverMembers: number;
+
+	@Field(() => Int)
+	goldMembers: number;
+
+	@Field(() => Int)
+	platinumMembers: number;
+
 	@Field(() => [TopCustomerEntity])
 	topCustomers: TopCustomerEntity[];
 

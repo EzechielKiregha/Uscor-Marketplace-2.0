@@ -142,6 +142,14 @@ export const TokenTransactionType = {
 export type TokenTransactionType = (typeof TokenTransactionType)[keyof typeof TokenTransactionType]
 
 
+export const LoyaltyTransactionType = {
+  EARNED: 'EARNED',
+  REDEEMED: 'REDEEMED'
+} as const
+
+export type LoyaltyTransactionType = (typeof LoyaltyTransactionType)[keyof typeof LoyaltyTransactionType]
+
+
 export const ChatStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',

@@ -114,6 +114,11 @@ enum TokenTransactionType {
   REPOST_COMMISSION
 }
 
+enum LoyaltyTransactionType {
+  EARNED
+  REDEEMED
+}
+
 enum ChatStatus {
   PENDING
   ACTIVE
@@ -1088,13 +1093,14 @@ model ClientPaymentMethod {
 }
 
 model PointsTransaction {
-  id              String         @id @default(uuid())
+  id              String                 @id @default(uuid())
   clientId        String
-  client          Client         @relation(fields: [clientId], references: [id])
+  client          Client                 @relation(fields: [clientId], references: [id])
   loyaltyProgramId String
-  loyaltyProgram  LoyaltyProgram @relation(fields: [loyaltyProgramId], references: [id])
-  points          Float          @default(0)
-  createdAt       DateTime       @default(now())
+  loyaltyProgram  LoyaltyProgram         @relation(fields: [loyaltyProgramId], references: [id])
+  points          Float                  @default(0)
+  type            LoyaltyTransactionType @default(EARNED)
+  createdAt       DateTime               @default(now())
 }
 
 model Return {

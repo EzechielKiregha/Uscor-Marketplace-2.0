@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 // ======================
 
 export const LOYALTY_PROGRAM_ENTITY = gql`
-  fragment LoyaltyProgramEntity on LoyaltyProgram {
+  fragment LoyaltyProgram on LoyaltyProgramEntity {
     id
     name
     description
@@ -44,7 +44,7 @@ export const LOYALTY_PROGRAM_ENTITY = gql`
 `;
 
 export const LOYALTY_TIER_ENTITY = gql`
-  fragment LoyaltyTierEntity on LoyaltyTier {
+  fragment LoyaltyTier on LoyaltyTierEntity {
     id
     name
     minPoints
@@ -56,7 +56,7 @@ export const LOYALTY_TIER_ENTITY = gql`
 `;
 
 export const POINTS_TRANSACTION_ENTITY = gql`
-  fragment PointsTransactionEntity on PointsTransaction {
+  fragment PointsTransaction on PointsTransactionEntity {
     id
     clientId
     client {
@@ -76,7 +76,7 @@ export const POINTS_TRANSACTION_ENTITY = gql`
 `;
 
 export const LOYALTY_ANALYTICS_ENTITY = gql`
-  fragment LoyaltyAnalyticsEntity on LoyaltyAnalytics {
+  fragment LoyaltyAnalytics on LoyaltyAnalyticsEntity {
     totalMembers
     activeMembers
     pointsEarned
@@ -107,7 +107,7 @@ export const LOYALTY_ANALYTICS_ENTITY = gql`
 export const GET_LOYALTY_PROGRAMS = gql`
   query GetLoyaltyPrograms($businessId: String!) {
     loyaltyPrograms(businessId: $businessId) {
-      ...LoyaltyProgramEntity
+      ...LoyaltyProgram
     }
   }
   ${LOYALTY_PROGRAM_ENTITY}
@@ -116,7 +116,7 @@ export const GET_LOYALTY_PROGRAMS = gql`
 export const GET_LOYALTY_PROGRAM_BY_ID = gql`
   query GetLoyaltyProgramById($id: String!) {
     loyaltyProgram(id: $id) {
-      ...LoyaltyProgramEntity
+      ...LoyaltyProgram
     }
   }
   ${LOYALTY_PROGRAM_ENTITY}
@@ -125,7 +125,7 @@ export const GET_LOYALTY_PROGRAM_BY_ID = gql`
 export const GET_LOYALTY_TIERS = gql`
   query GetLoyaltyTiers($loyaltyProgramId: String!) {
     loyaltyTiers(loyaltyProgramId: $loyaltyProgramId) {
-      ...LoyaltyTierEntity
+      ...LoyaltyTier
     }
   }
   ${LOYALTY_TIER_ENTITY}
@@ -151,7 +151,7 @@ export const GET_POINTS_TRANSACTIONS = gql`
       limit: $limit
     ) {
       items {
-        ...PointsTransactionEntity
+        ...PointsTransaction
       }
       total
       page
@@ -164,7 +164,7 @@ export const GET_POINTS_TRANSACTIONS = gql`
 export const GET_LOYALTY_ANALYTICS = gql`
   query GetLoyaltyAnalytics($businessId: String!, $period: String = "month") {
     loyaltyAnalytics(businessId: $businessId, period: $period) {
-      ...LoyaltyAnalyticsEntity
+      ...LoyaltyAnalytics
     }
   }
   ${LOYALTY_ANALYTICS_ENTITY}
@@ -200,7 +200,7 @@ export const GET_CUSTOMER_POINTS = gql`
 export const CREATE_LOYALTY_PROGRAM = gql`
   mutation CreateLoyaltyProgram($input: CreateLoyaltyProgramInput!) {
     createLoyaltyProgram(input: $input) {
-      ...LoyaltyProgramEntity
+      ...LoyaltyProgram
     }
   }
   ${LOYALTY_PROGRAM_ENTITY}
@@ -209,7 +209,7 @@ export const CREATE_LOYALTY_PROGRAM = gql`
 export const UPDATE_LOYALTY_PROGRAM = gql`
   mutation UpdateLoyaltyProgram($id: String!, $input: UpdateLoyaltyProgramInput!) {
     updateLoyaltyProgram(id: $id, input: $input) {
-      ...LoyaltyProgramEntity
+      ...LoyaltyProgram
     }
   }
   ${LOYALTY_PROGRAM_ENTITY}
@@ -226,7 +226,7 @@ export const DELETE_LOYALTY_PROGRAM = gql`
 export const EARN_POINTS = gql`
   mutation EarnPoints($input: EarnPointsInput!) {
     earnPoints(input: $input) {
-      ...PointsTransactionEntity
+      ...PointsTransaction
     }
   }
   ${POINTS_TRANSACTION_ENTITY}
@@ -235,7 +235,7 @@ export const EARN_POINTS = gql`
 export const REDEEM_POINTS = gql`
   mutation RedeemPoints($input: RedeemPointsInput!) {
     redeemPoints(input: $input) {
-      ...PointsTransactionEntity
+      ...PointsTransaction
     }
   }
   ${POINTS_TRANSACTION_ENTITY}
@@ -244,7 +244,7 @@ export const REDEEM_POINTS = gql`
 export const CREATE_LOYALTY_TIER = gql`
   mutation CreateLoyaltyTier($input: CreateLoyaltyTierInput!) {
     createLoyaltyTier(input: $input) {
-      ...LoyaltyTierEntity
+      ...LoyaltyTier
     }
   }
   ${LOYALTY_TIER_ENTITY}
@@ -253,7 +253,7 @@ export const CREATE_LOYALTY_TIER = gql`
 export const UPDATE_LOYALTY_TIER = gql`
   mutation UpdateLoyaltyTier($id: String!, $input: UpdateLoyaltyTierInput!) {
     updateLoyaltyTier(id: $id, input: $input) {
-      ...LoyaltyTierEntity
+      ...LoyaltyTier
     }
   }
   ${LOYALTY_TIER_ENTITY}
@@ -274,7 +274,7 @@ export const DELETE_LOYALTY_TIER = gql`
 export const ON_LOYALTY_PROGRAM_CREATED = gql`
   subscription OnLoyaltyProgramCreated($businessId: String!) {
     loyaltyProgramCreated(businessId: $businessId) {
-      ...LoyaltyProgramEntity
+      ...LoyaltyProgram
     }
   }
   ${LOYALTY_PROGRAM_ENTITY}
@@ -283,7 +283,7 @@ export const ON_LOYALTY_PROGRAM_CREATED = gql`
 export const ON_LOYALTY_PROGRAM_UPDATED = gql`
   subscription OnLoyaltyProgramUpdated($businessId: String!) {
     loyaltyProgramUpdated(businessId: $businessId) {
-      ...LoyaltyProgramEntity
+      ...LoyaltyProgram
     }
   }
   ${LOYALTY_PROGRAM_ENTITY}
@@ -292,7 +292,7 @@ export const ON_LOYALTY_PROGRAM_UPDATED = gql`
 export const ON_POINTS_EARNED = gql`
   subscription OnPointsEarned($businessId: String!) {
     pointsEarned(businessId: $businessId) {
-      ...PointsTransactionEntity
+      ...PointsTransaction
     }
   }
   ${POINTS_TRANSACTION_ENTITY}
@@ -301,7 +301,7 @@ export const ON_POINTS_EARNED = gql`
 export const ON_POINTS_REDEEMED = gql`
   subscription OnPointsRedeemed($businessId: String!) {
     pointsRedeemed(businessId: $businessId) {
-      ...PointsTransactionEntity
+      ...PointsTransaction
     }
   }
   ${POINTS_TRANSACTION_ENTITY}

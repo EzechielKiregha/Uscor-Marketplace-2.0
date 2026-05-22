@@ -1,5 +1,14 @@
 import { Field, Float, InputType } from "@nestjs/graphql";
-import { IsNumber, IsString, Min } from "class-validator";
+import { Type } from "class-transformer";
+import {
+  ArrayMinSize,
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+  ValidateNested,
+} from "class-validator";
 
 // DTOs
 @InputType()
@@ -81,4 +90,59 @@ export class RedeemPointsInput {
 	@Field({ nullable: true })
 	@IsString()
 	rewardDescription?: string;
+}
+
+@InputType()
+export class LoyaltyTierBenefitInput {
+	@Field()
+	@IsString()
+	description: string;
+}
+
+@InputType()
+export class CreateLoyaltyTierInput {
+	@Field()
+	@IsString()
+	loyaltyProgramId: string;
+
+	@Field()
+	@IsString()
+	name: string;
+
+	@Field(() => Float)
+	@IsNumber()
+	@Min(0)
+	minPoints: number;
+
+	@Field(() => [LoyaltyTierBenefitInput], { nullable: true })
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => LoyaltyTierBenefitInput)
+	benefits?: LoyaltyTierBenefitInput[];
+}
+
+@InputType()
+export class UpdateLoyaltyTierInput {
+	@Field()
+	@IsString()
+	id: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	name?: string;
+
+	@Field(() => Float, { nullable: true })
+	@IsOptional()
+	@IsNumber()
+	@Min(0)
+	minPoints?: number;
+
+	@Field(() => [LoyaltyTierBenefitInput], { nullable: true })
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => LoyaltyTierBenefitInput)
+	benefits?: LoyaltyTierBenefitInput[];
 }

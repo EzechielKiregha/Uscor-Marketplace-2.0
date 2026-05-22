@@ -4,7 +4,6 @@ import Loader from "@/components/seraui/Loader";
 import { useMe } from "@/lib/useMe";
 import BusinessHeader from "./business/_components/BusinessHeader";
 import BusinessSidebar from "./business/_components/BusinessSidebar";
-import FloatingChat from "@/components/FloatingChat";
 
 export default function ClientSideLayout({
   children,
@@ -19,7 +18,7 @@ export default function ClientSideLayout({
   if (error || role !== "business") return <div>Unauthorized</div>;
 
   return (
-    <div className="flex min-h-screen  text-foreground">
+    <div className="flex min-h-screen bg-background text-foreground">
       <BusinessSidebar business={user} isOpen={isSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <BusinessHeader

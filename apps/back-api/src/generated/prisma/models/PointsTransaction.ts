@@ -39,6 +39,7 @@ export type PointsTransactionMinAggregateOutputType = {
   clientId: string | null
   loyaltyProgramId: string | null
   points: number | null
+  type: $Enums.LoyaltyTransactionType | null
   createdAt: Date | null
 }
 
@@ -47,6 +48,7 @@ export type PointsTransactionMaxAggregateOutputType = {
   clientId: string | null
   loyaltyProgramId: string | null
   points: number | null
+  type: $Enums.LoyaltyTransactionType | null
   createdAt: Date | null
 }
 
@@ -55,6 +57,7 @@ export type PointsTransactionCountAggregateOutputType = {
   clientId: number
   loyaltyProgramId: number
   points: number
+  type: number
   createdAt: number
   _all: number
 }
@@ -73,6 +76,7 @@ export type PointsTransactionMinAggregateInputType = {
   clientId?: true
   loyaltyProgramId?: true
   points?: true
+  type?: true
   createdAt?: true
 }
 
@@ -81,6 +85,7 @@ export type PointsTransactionMaxAggregateInputType = {
   clientId?: true
   loyaltyProgramId?: true
   points?: true
+  type?: true
   createdAt?: true
 }
 
@@ -89,6 +94,7 @@ export type PointsTransactionCountAggregateInputType = {
   clientId?: true
   loyaltyProgramId?: true
   points?: true
+  type?: true
   createdAt?: true
   _all?: true
 }
@@ -184,6 +190,7 @@ export type PointsTransactionGroupByOutputType = {
   clientId: string
   loyaltyProgramId: string
   points: number
+  type: $Enums.LoyaltyTransactionType
   createdAt: Date
   _count: PointsTransactionCountAggregateOutputType | null
   _avg: PointsTransactionAvgAggregateOutputType | null
@@ -215,6 +222,7 @@ export type PointsTransactionWhereInput = {
   clientId?: Prisma.StringFilter<"PointsTransaction"> | string
   loyaltyProgramId?: Prisma.StringFilter<"PointsTransaction"> | string
   points?: Prisma.FloatFilter<"PointsTransaction"> | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFilter<"PointsTransaction"> | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFilter<"PointsTransaction"> | Date | string
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   loyaltyProgram?: Prisma.XOR<Prisma.LoyaltyProgramScalarRelationFilter, Prisma.LoyaltyProgramWhereInput>
@@ -225,6 +233,7 @@ export type PointsTransactionOrderByWithRelationInput = {
   clientId?: Prisma.SortOrder
   loyaltyProgramId?: Prisma.SortOrder
   points?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   client?: Prisma.ClientOrderByWithRelationInput
   loyaltyProgram?: Prisma.LoyaltyProgramOrderByWithRelationInput
@@ -238,6 +247,7 @@ export type PointsTransactionWhereUniqueInput = Prisma.AtLeast<{
   clientId?: Prisma.StringFilter<"PointsTransaction"> | string
   loyaltyProgramId?: Prisma.StringFilter<"PointsTransaction"> | string
   points?: Prisma.FloatFilter<"PointsTransaction"> | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFilter<"PointsTransaction"> | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFilter<"PointsTransaction"> | Date | string
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   loyaltyProgram?: Prisma.XOR<Prisma.LoyaltyProgramScalarRelationFilter, Prisma.LoyaltyProgramWhereInput>
@@ -248,6 +258,7 @@ export type PointsTransactionOrderByWithAggregationInput = {
   clientId?: Prisma.SortOrder
   loyaltyProgramId?: Prisma.SortOrder
   points?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PointsTransactionCountOrderByAggregateInput
   _avg?: Prisma.PointsTransactionAvgOrderByAggregateInput
@@ -264,12 +275,14 @@ export type PointsTransactionScalarWhereWithAggregatesInput = {
   clientId?: Prisma.StringWithAggregatesFilter<"PointsTransaction"> | string
   loyaltyProgramId?: Prisma.StringWithAggregatesFilter<"PointsTransaction"> | string
   points?: Prisma.FloatWithAggregatesFilter<"PointsTransaction"> | number
+  type?: Prisma.EnumLoyaltyTransactionTypeWithAggregatesFilter<"PointsTransaction"> | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PointsTransaction"> | Date | string
 }
 
 export type PointsTransactionCreateInput = {
   id?: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutPointsTransactionsInput
   loyaltyProgram: Prisma.LoyaltyProgramCreateNestedOneWithoutPointsTransactionsInput
@@ -280,12 +293,14 @@ export type PointsTransactionUncheckedCreateInput = {
   clientId: string
   loyaltyProgramId: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
 }
 
 export type PointsTransactionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutPointsTransactionsNestedInput
   loyaltyProgram?: Prisma.LoyaltyProgramUpdateOneRequiredWithoutPointsTransactionsNestedInput
@@ -296,6 +311,7 @@ export type PointsTransactionUncheckedUpdateInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   loyaltyProgramId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -304,12 +320,14 @@ export type PointsTransactionCreateManyInput = {
   clientId: string
   loyaltyProgramId: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
 }
 
 export type PointsTransactionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -318,6 +336,7 @@ export type PointsTransactionUncheckedUpdateManyInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   loyaltyProgramId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -336,6 +355,7 @@ export type PointsTransactionCountOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   loyaltyProgramId?: Prisma.SortOrder
   points?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -348,6 +368,7 @@ export type PointsTransactionMaxOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   loyaltyProgramId?: Prisma.SortOrder
   points?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -356,6 +377,7 @@ export type PointsTransactionMinOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   loyaltyProgramId?: Prisma.SortOrder
   points?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -447,9 +469,14 @@ export type PointsTransactionUncheckedUpdateManyWithoutLoyaltyProgramNestedInput
   deleteMany?: Prisma.PointsTransactionScalarWhereInput | Prisma.PointsTransactionScalarWhereInput[]
 }
 
+export type EnumLoyaltyTransactionTypeFieldUpdateOperationsInput = {
+  set?: $Enums.LoyaltyTransactionType
+}
+
 export type PointsTransactionCreateWithoutClientInput = {
   id?: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
   loyaltyProgram: Prisma.LoyaltyProgramCreateNestedOneWithoutPointsTransactionsInput
 }
@@ -458,6 +485,7 @@ export type PointsTransactionUncheckedCreateWithoutClientInput = {
   id?: string
   loyaltyProgramId: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
 }
 
@@ -495,12 +523,14 @@ export type PointsTransactionScalarWhereInput = {
   clientId?: Prisma.StringFilter<"PointsTransaction"> | string
   loyaltyProgramId?: Prisma.StringFilter<"PointsTransaction"> | string
   points?: Prisma.FloatFilter<"PointsTransaction"> | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFilter<"PointsTransaction"> | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFilter<"PointsTransaction"> | Date | string
 }
 
 export type PointsTransactionCreateWithoutLoyaltyProgramInput = {
   id?: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutPointsTransactionsInput
 }
@@ -509,6 +539,7 @@ export type PointsTransactionUncheckedCreateWithoutLoyaltyProgramInput = {
   id?: string
   clientId: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
 }
 
@@ -542,12 +573,14 @@ export type PointsTransactionCreateManyClientInput = {
   id?: string
   loyaltyProgramId: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
 }
 
 export type PointsTransactionUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   loyaltyProgram?: Prisma.LoyaltyProgramUpdateOneRequiredWithoutPointsTransactionsNestedInput
 }
@@ -556,6 +589,7 @@ export type PointsTransactionUncheckedUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   loyaltyProgramId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -563,6 +597,7 @@ export type PointsTransactionUncheckedUpdateManyWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   loyaltyProgramId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -570,12 +605,14 @@ export type PointsTransactionCreateManyLoyaltyProgramInput = {
   id?: string
   clientId: string
   points?: number
+  type?: $Enums.LoyaltyTransactionType
   createdAt?: Date | string
 }
 
 export type PointsTransactionUpdateWithoutLoyaltyProgramInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutPointsTransactionsNestedInput
 }
@@ -584,6 +621,7 @@ export type PointsTransactionUncheckedUpdateWithoutLoyaltyProgramInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -591,6 +629,7 @@ export type PointsTransactionUncheckedUpdateManyWithoutLoyaltyProgramInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumLoyaltyTransactionTypeFieldUpdateOperationsInput | $Enums.LoyaltyTransactionType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -601,6 +640,7 @@ export type PointsTransactionSelect<ExtArgs extends runtime.Types.Extensions.Int
   clientId?: boolean
   loyaltyProgramId?: boolean
   points?: boolean
+  type?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   loyaltyProgram?: boolean | Prisma.LoyaltyProgramDefaultArgs<ExtArgs>
@@ -611,6 +651,7 @@ export type PointsTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.T
   clientId?: boolean
   loyaltyProgramId?: boolean
   points?: boolean
+  type?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   loyaltyProgram?: boolean | Prisma.LoyaltyProgramDefaultArgs<ExtArgs>
@@ -621,6 +662,7 @@ export type PointsTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   clientId?: boolean
   loyaltyProgramId?: boolean
   points?: boolean
+  type?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   loyaltyProgram?: boolean | Prisma.LoyaltyProgramDefaultArgs<ExtArgs>
@@ -631,10 +673,11 @@ export type PointsTransactionSelectScalar = {
   clientId?: boolean
   loyaltyProgramId?: boolean
   points?: boolean
+  type?: boolean
   createdAt?: boolean
 }
 
-export type PointsTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "loyaltyProgramId" | "points" | "createdAt", ExtArgs["result"]["pointsTransaction"]>
+export type PointsTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "loyaltyProgramId" | "points" | "type" | "createdAt", ExtArgs["result"]["pointsTransaction"]>
 export type PointsTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   loyaltyProgram?: boolean | Prisma.LoyaltyProgramDefaultArgs<ExtArgs>
@@ -659,6 +702,7 @@ export type $PointsTransactionPayload<ExtArgs extends runtime.Types.Extensions.I
     clientId: string
     loyaltyProgramId: string
     points: number
+    type: $Enums.LoyaltyTransactionType
     createdAt: Date
   }, ExtArgs["result"]["pointsTransaction"]>
   composites: {}
@@ -1089,6 +1133,7 @@ export interface PointsTransactionFieldRefs {
   readonly clientId: Prisma.FieldRef<"PointsTransaction", 'String'>
   readonly loyaltyProgramId: Prisma.FieldRef<"PointsTransaction", 'String'>
   readonly points: Prisma.FieldRef<"PointsTransaction", 'Float'>
+  readonly type: Prisma.FieldRef<"PointsTransaction", 'LoyaltyTransactionType'>
   readonly createdAt: Prisma.FieldRef<"PointsTransaction", 'DateTime'>
 }
     

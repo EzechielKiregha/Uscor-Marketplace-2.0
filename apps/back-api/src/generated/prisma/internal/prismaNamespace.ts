@@ -5627,6 +5627,7 @@ export const PointsTransactionScalarFieldEnum = {
   clientId: 'clientId',
   loyaltyProgramId: 'loyaltyProgramId',
   points: 'points',
+  type: 'type',
   createdAt: 'createdAt'
 } as const
 
@@ -6152,6 +6153,20 @@ export type EnumAdjustmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'AdjustmentType[]'
  */
 export type ListEnumAdjustmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdjustmentType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LoyaltyTransactionType'
+ */
+export type EnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoyaltyTransactionType'>
+    
+
+
+/**
+ * Reference to a field of type 'LoyaltyTransactionType[]'
+ */
+export type ListEnumLoyaltyTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoyaltyTransactionType[]'>
     
 
 

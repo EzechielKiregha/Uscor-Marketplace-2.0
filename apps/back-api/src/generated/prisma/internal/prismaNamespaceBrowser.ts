@@ -880,6 +880,7 @@ export const PointsTransactionScalarFieldEnum = {
   clientId: 'clientId',
   loyaltyProgramId: 'loyaltyProgramId',
   points: 'points',
+  type: 'type',
   createdAt: 'createdAt'
 } as const
 

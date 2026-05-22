@@ -4,9 +4,11 @@ import { ClientService } from "../client/client.service";
 import { PrismaService } from "../prisma/prisma.service";
 import {
 	CreateLoyaltyProgramInput,
+	CreateLoyaltyTierInput,
 	CreatePointsTransactionInput,
 	EarnPointsInput,
 	RedeemPointsInput,
+	UpdateLoyaltyTierInput,
 } from "./dto/loyalty-program.input";
 import { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
 
@@ -49,7 +51,7 @@ export class LoyaltyService {
 					select: {
 						id: true,
 						name: true,
-						createdAt: true,
+						businessType: true,
 					},
 				},
 				pointsTransactions: {
@@ -62,6 +64,9 @@ export class LoyaltyService {
 							},
 						},
 					},
+				},
+				tiers: {
+					include: { benefits: true },
 				},
 			},
 		});
@@ -100,7 +105,7 @@ export class LoyaltyService {
 					select: {
 						id: true,
 						name: true,
-						createdAt: true,
+						businessType: true,
 					},
 				},
 				pointsTransactions: {
@@ -113,6 +118,9 @@ export class LoyaltyService {
 							},
 						},
 					},
+				},
+				tiers: {
+					include: { benefits: true },
 				},
 			},
 		});
@@ -148,6 +156,7 @@ export class LoyaltyService {
 					connect: { id: loyaltyProgramId },
 				},
 				points,
+				type: points >= 0 ? "EARNED" : "REDEEMED",
 			},
 			include: {
 				client: {
@@ -279,7 +288,7 @@ export class LoyaltyService {
 			where: { businessId },
 			include: {
 				business: {
-					select: { id: true, name: true },
+					select: { id: true, name: true, businessType: true },
 				},
 				pointsTransactions: {
 					include: {
@@ -291,6 +300,9 @@ export class LoyaltyService {
 							},
 						},
 					},
+				},
+				tiers: {
+					include: { benefits: true },
 				},
 			},
 		});
@@ -301,7 +313,7 @@ export class LoyaltyService {
 			where: { id },
 			include: {
 				business: {
-					select: { id: true, name: true },
+					select: { id: true, name: true, businessType: true },
 				},
 				pointsTransactions: {
 					include: {
@@ -313,6 +325,9 @@ export class LoyaltyService {
 							},
 						},
 					},
+				},
+				tiers: {
+					include: { benefits: true },
 				},
 			},
 		});
@@ -339,6 +354,11 @@ export class LoyaltyService {
 
 		const program = await this.prisma.loyaltyProgram.findFirst({
 			where: { businessId },
+			include: {
+				tiers: {
+					include: { benefits: true },
+				},
+			},
 		});
 
 		if (!program) {
@@ -353,13 +373,22 @@ export class LoyaltyService {
 			orderBy: { createdAt: "desc" },
 		});
 
-		const totalPoints = transactions.reduce(
-			(sum, transaction) => sum + transaction.points,
-			0,
+		const totalEarned = transactions
+			.filter((t) => t.points > 0)
+			.reduce((sum, t) => sum + t.points, 0);
+		const totalRedeemed = Math.abs(
+			transactions
+				.filter((t) => t.points < 0)
+				.reduce((sum, t) => sum + t.points, 0),
 		);
+		const pointsAvailable = totalEarned - totalRedeemed;
+		const tier = this.getTierNameForPoints(program.tiers, pointsAvailable);
 
 		return {
-			totalPoints,
+			totalPoints: totalEarned,
+			pointsUsed: totalRedeemed,
+			pointsAvailable,
+			tier,
 			program: {
 				id: program.id,
 				name: program.name,
@@ -370,7 +399,7 @@ export class LoyaltyService {
 				id: t.id,
 				points: t.points,
 				createdAt: t.createdAt,
-				type: t.points > 0 ? "EARNED" : "REDEEMED",
+				type: t.points >= 0 ? "EARNED" : "REDEEMED",
 			})),
 		};
 	}
@@ -384,6 +413,11 @@ export class LoyaltyService {
 
 		const program = await this.prisma.loyaltyProgram.findFirst({
 			where: { businessId },
+			include: {
+				tiers: {
+					include: { benefits: true },
+				},
+			},
 		});
 
 		if (!program) {
@@ -393,12 +427,15 @@ export class LoyaltyService {
 				pointsEarned: 0,
 				pointsRedeemed: 0,
 				redemptionRate: 0,
+				bronzeMembers: 0,
+				silverMembers: 0,
+				goldMembers: 0,
+				platinumMembers: 0,
 				topCustomers: [],
 				pointsByDay: [],
 			};
 		}
 
-		// Calculate date range based on period
 		const now = new Date();
 		const startDate = new Date();
 		if (period === "week") {
@@ -424,11 +461,19 @@ export class LoyaltyService {
 			},
 		});
 
-		const totalMembers = await this.prisma.pointsTransaction.groupBy({
-			by: ["clientId"],
+		const allTransactions = await this.prisma.pointsTransaction.findMany({
 			where: { loyaltyProgramId: program.id },
+			include: {
+				client: {
+					select: {
+						id: true,
+						fullName: true,
+					},
+				},
+			},
 		});
 
+		const totalMembers = new Set(allTransactions.map((t) => t.clientId)).size;
 		const pointsEarned = transactions
 			.filter((t) => t.points > 0)
 			.reduce((sum, t) => sum + t.points, 0);
@@ -438,18 +483,98 @@ export class LoyaltyService {
 				.reduce((sum, t) => sum + t.points, 0),
 		);
 
+		const activeMembers = transactions.length
+			? new Set(transactions.map((t) => t.clientId)).size
+			: 0;
+
+		const pointsByDayMap = new Map<
+			string,
+			{ earned: number; redeemed: number }
+		>();
+		for (const transaction of transactions) {
+			const day = transaction.createdAt.toISOString().slice(0, 10);
+			if (!pointsByDayMap.has(day)) {
+				pointsByDayMap.set(day, { earned: 0, redeemed: 0 });
+			}
+			const bucket = pointsByDayMap.get(day)!;
+			if (transaction.points >= 0) {
+				bucket.earned += transaction.points;
+			} else {
+				bucket.redeemed += Math.abs(transaction.points);
+			}
+		}
+
+		const pointsByDay: Array<{
+			date: string;
+			earned: number;
+			redeemed: number;
+		}> = [];
+		const dateCursor = new Date(startDate);
+		while (dateCursor <= now) {
+			const day = dateCursor.toISOString().slice(0, 10);
+			const bucket = pointsByDayMap.get(day) ?? { earned: 0, redeemed: 0 };
+			pointsByDay.push({
+				date: day,
+				earned: bucket.earned,
+				redeemed: bucket.redeemed,
+			});
+			dateCursor.setDate(dateCursor.getDate() + 1);
+		}
+
+		const totalPointsByClient = new Map<
+			string,
+			{
+				clientName: string;
+				totalPoints: number;
+				totalSpent: number;
+				netPoints: number;
+			}
+		>();
+		for (const transaction of allTransactions) {
+			const existing = totalPointsByClient.get(transaction.clientId) ?? {
+				clientName: transaction.client.fullName ?? "",
+				totalPoints: 0,
+				totalSpent: 0,
+				netPoints: 0,
+			};
+			existing.netPoints += transaction.points;
+			if (transaction.points > 0) {
+				existing.totalPoints += transaction.points;
+				existing.totalSpent += program.pointsPerPurchase
+					? transaction.points / program.pointsPerPurchase
+					: 0;
+			}
+			totalPointsByClient.set(transaction.clientId, existing);
+		}
+
+		const topCustomers = Array.from(totalPointsByClient.entries())
+			.map(([clientId, summary]) => ({
+				clientId,
+				clientName: summary.clientName,
+				totalPoints: summary.totalPoints,
+				totalSpent: summary.totalSpent,
+			}))
+			.sort((a, b) => b.totalPoints - a.totalPoints)
+			.slice(0, 5);
+
+		const tierCounts = this.calculateTierCounts(
+			program.tiers,
+			totalPointsByClient,
+		);
+
 		return {
-			totalMembers: totalMembers.length,
-			activeMembers:
-				transactions.length > 0
-					? new Set(transactions.map((t) => t.clientId)).size
-					: 0,
+			totalMembers,
+			activeMembers,
 			pointsEarned,
 			pointsRedeemed,
 			redemptionRate:
 				pointsEarned > 0 ? (pointsRedeemed / pointsEarned) * 100 : 0,
-			topCustomers: [], // TODO: Implement top customers calculation
-			pointsByDay: [], // TODO: Implement points by day calculation
+			bronzeMembers: tierCounts.bronze,
+			silverMembers: tierCounts.silver,
+			goldMembers: tierCounts.gold,
+			platinumMembers: tierCounts.platinum,
+			topCustomers,
+			pointsByDay,
 		};
 	}
 
@@ -482,6 +607,7 @@ export class LoyaltyService {
 					connect: { id: loyaltyProgramId },
 				},
 				points: Math.abs(points), // Ensure positive for earning
+				type: "EARNED",
 			},
 			include: {
 				client: {
@@ -550,6 +676,7 @@ export class LoyaltyService {
 					connect: { id: loyaltyProgramId },
 				},
 				points: -Math.abs(points), // Negative for redemption
+				type: "REDEEMED",
 			},
 			include: {
 				client: {
@@ -570,5 +697,206 @@ export class LoyaltyService {
 				},
 			},
 		});
+	}
+
+	private getTierNameForPoints(
+		tiers: Array<{ name: string; minPoints: number }> = [],
+		points: number,
+	) {
+		const sortedTiers = [...tiers].sort((a, b) => b.minPoints - a.minPoints);
+		const found = sortedTiers.find((tier) => points >= tier.minPoints);
+		return found?.name ?? null;
+	}
+
+	private calculateTierCounts(
+		tiers: Array<{ name: string; minPoints: number }> = [],
+		clientPoints: Map<string, { netPoints: number }> = new Map(),
+	) {
+		const counts = {
+			bronze: 0,
+			silver: 0,
+			gold: 0,
+			platinum: 0,
+		};
+		const sortedTiers = [...tiers].sort((a, b) => b.minPoints - a.minPoints);
+		for (const summary of clientPoints.values()) {
+			const tier = sortedTiers.find(
+				(tierDef) => summary.netPoints >= tierDef.minPoints,
+			);
+			if (!tier) {
+				continue;
+			}
+			const name = tier.name.toLowerCase();
+			if (name.includes("bronze")) counts.bronze += 1;
+			if (name.includes("silver")) counts.silver += 1;
+			if (name.includes("gold")) counts.gold += 1;
+			if (name.includes("platinum")) counts.platinum += 1;
+		}
+		return counts;
+	}
+
+	async getPointsTransactions(
+		loyaltyProgramId: string,
+		clientId: string | null,
+		type: string | null,
+		startDate: Date | null,
+		endDate: Date | null,
+		page: number,
+		limit: number,
+		user: { id: string; role: string },
+	) {
+		const loyaltyProgram = await this.prisma.loyaltyProgram.findUnique({
+			where: { id: loyaltyProgramId },
+			include: { business: true },
+		});
+		if (!loyaltyProgram) {
+			throw new Error("Loyalty program not found");
+		}
+		await this.businessService.verifyBusinessAccess(
+			loyaltyProgram.businessId,
+			user,
+		);
+
+		const where: any = { loyaltyProgramId };
+		if (clientId) where.clientId = clientId;
+		if (type) where.type = type;
+		if (startDate) where.createdAt = { ...where.createdAt, gte: startDate };
+		if (endDate) where.createdAt = { ...where.createdAt, lte: endDate };
+
+		const total = await this.prisma.pointsTransaction.count({ where });
+		const items = await this.prisma.pointsTransaction.findMany({
+			where,
+			orderBy: { createdAt: "desc" },
+			skip: (page - 1) * limit,
+			take: limit,
+			include: {
+				client: {
+					select: {
+						id: true,
+						fullName: true,
+						email: true,
+					},
+				},
+				loyaltyProgram: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
+		});
+
+		return { items, total, page, limit };
+	}
+
+	async getLoyaltyTiers(
+		loyaltyProgramId: string,
+		user: { id: string; role: string },
+	) {
+		const program = await this.prisma.loyaltyProgram.findUnique({
+			where: { id: loyaltyProgramId },
+			include: { business: true },
+		});
+		if (!program) {
+			throw new Error("Loyalty program not found");
+		}
+		await this.businessService.verifyBusinessAccess(program.businessId, user);
+
+		return this.prisma.loyaltyTier.findMany({
+			where: { loyaltyProgramId },
+			include: { benefits: true },
+		});
+	}
+
+	async createLoyaltyTier(
+		input: CreateLoyaltyTierInput,
+		user: { id: string; role: string },
+	) {
+		const program = await this.prisma.loyaltyProgram.findUnique({
+			where: { id: input.loyaltyProgramId },
+			include: { business: true },
+		});
+		if (!program) {
+			throw new Error("Loyalty program not found");
+		}
+		if (user.role !== "business") {
+			throw new Error("Only business owners can create loyalty tiers");
+		}
+		await this.businessService.verifyBusinessAccess(program.businessId, user);
+
+		return this.prisma.loyaltyTier.create({
+			data: {
+				loyaltyProgram: { connect: { id: input.loyaltyProgramId } },
+				name: input.name,
+				minPoints: input.minPoints,
+				benefits: {
+					create:
+						input.benefits?.map((benefit) => ({
+							description: benefit.description,
+						})) ?? [],
+				},
+			},
+			include: { benefits: true },
+		});
+	}
+
+	async updateLoyaltyTier(
+		input: UpdateLoyaltyTierInput,
+		user: { id: string; role: string },
+	) {
+		const tier = await this.prisma.loyaltyTier.findUnique({
+			where: { id: input.id },
+			include: { loyaltyProgram: { include: { business: true } } },
+		});
+		if (!tier) {
+			throw new Error("Loyalty tier not found");
+		}
+		if (user.role !== "business") {
+			throw new Error("Only business owners can update loyalty tiers");
+		}
+		await this.businessService.verifyBusinessAccess(
+			tier.loyaltyProgram.businessId,
+			user,
+		);
+
+		return this.prisma.loyaltyTier.update({
+			where: { id: input.id },
+			data: {
+				name: input.name,
+				minPoints: input.minPoints,
+				benefits: input.benefits
+					? {
+							deleteMany: {},
+							create: input.benefits.map((benefit) => ({
+								description: benefit.description,
+							})),
+						}
+					: undefined,
+			},
+			include: { benefits: true },
+		});
+	}
+
+	async deleteLoyaltyTier(id: string, user: { id: string; role: string }) {
+		const tier = await this.prisma.loyaltyTier.findUnique({
+			where: { id },
+			include: { loyaltyProgram: { include: { business: true } } },
+		});
+		if (!tier) {
+			throw new Error("Loyalty tier not found");
+		}
+		if (user.role !== "business") {
+			throw new Error("Only business owners can delete loyalty tiers");
+		}
+		await this.businessService.verifyBusinessAccess(
+			tier.loyaltyProgram.businessId,
+			user,
+		);
+
+		await this.prisma.loyaltyTierBenefit.deleteMany({
+			where: { tierId: id },
+		});
+
+		return this.prisma.loyaltyTier.delete({ where: { id } });
 	}
 }

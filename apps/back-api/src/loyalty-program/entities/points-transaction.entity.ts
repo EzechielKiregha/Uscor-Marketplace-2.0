@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType } from "@nestjs/graphql";
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 import { ClientEntity } from "../../client/entities/client.entity";
 import { LoyaltyProgramEntity } from "./loyalty-program.entity";
 
@@ -23,5 +23,23 @@ export class PointsTransactionEntity {
 	points: number;
 
 	@Field()
+	type: string;
+
+	@Field()
 	createdAt: Date;
+}
+
+@ObjectType()
+export class PointsTransactionsConnectionEntity {
+	@Field(() => [PointsTransactionEntity])
+	items: PointsTransactionEntity[];
+
+	@Field(() => Int)
+	total: number;
+
+	@Field(() => Int)
+	page: number;
+
+	@Field(() => Int)
+	limit: number;
 }

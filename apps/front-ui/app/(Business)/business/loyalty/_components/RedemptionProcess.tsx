@@ -146,7 +146,7 @@ export default function RedemptionProcess({
 	if (loading || customersLoading)
 		return (
 			<Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-				<CardContent className="h-[500px] flex items-center justify-center">
+				<CardContent className="h-125 flex items-center justify-center">
 					<div className="text-center">
 						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
 						<p className="text-muted-foreground">Loading data...</p>
@@ -277,7 +277,7 @@ export default function RedemptionProcess({
 
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										<div>
-											<label className="block text-sm font-medium mb-1 flex items-center gap-2">
+											<label className="block text-sm font-medium mb-1 items-center gap-2">
 												<CreditCard className="h-4 w-4" />
 												Transaction Amount
 											</label>
@@ -302,7 +302,7 @@ export default function RedemptionProcess({
 										</div>
 
 										<div>
-											<label className="block text-sm font-medium mb-1 flex items-center gap-2">
+											<label className="block text-sm font-medium mb-1 items-center gap-2">
 												<Gift className="h-4 w-4" />
 												Points to Redeem
 											</label>
@@ -456,24 +456,24 @@ export default function RedemptionProcess({
 								<Star className="h-4 w-4 text-primary" />
 								For Local Artisans & Craftsmen
 							</h3>
-							<ul className="space-y-2 mt-2">
+							<ul className="space-y-2 mt-2">	
 								<li className="flex items-start gap-2">
-									<CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+									<CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
 									<span>Build customer loyalty for your handmade products</span>
 								</li>
 								<li className="flex items-start gap-2">
-									<CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+									<CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
 									<span>
 										Reward customers while helping them access more affordable
 										local products
 									</span>
 								</li>
 								<li className="flex items-start gap-2">
-									<CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+									<CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
 									<span>Create a community around your locally-made goods</span>
 								</li>
 								<li className="flex items-start gap-2">
-									<CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+									<CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
 									<span>Encourage repeat customers from your neighborhood</span>
 								</li>
 							</ul>

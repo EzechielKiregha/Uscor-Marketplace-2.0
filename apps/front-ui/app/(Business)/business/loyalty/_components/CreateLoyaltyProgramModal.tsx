@@ -3,7 +3,10 @@
 
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_LOYALTY_PROGRAM } from "@/graphql/loyalty.gql";
+import {
+  CREATE_LOYALTY_PROGRAM,
+  CREATE_LOYALTY_TIER,
+} from "@/graphql/loyalty.gql";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,6 +70,7 @@ export default function CreateLoyaltyProgramModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [createLoyaltyProgram] = useMutation(CREATE_LOYALTY_PROGRAM);
+  const [createLoyaltyTier] = useMutation(CREATE_LOYALTY_TIER);
 
   const currentUser = user as BusinessEntity;
 
@@ -152,15 +156,30 @@ export default function CreateLoyaltyProgramModal({
             description: formData.description,
             pointsPerPurchase: formData.pointsPerPurchase,
             minimumPointsToRedeem: formData.minimumPointsToRedeem,
-            tiers: tiers.map((tier) => ({
-              name: tier.name,
-              minPoints: tier.minPoints,
-              benefits: tier.benefits,
-            })),
           },
         },
       });
 
+      if (!data || !data.createLoyaltyProgram) {
+        throw new Error("No data returned from server");
+      }
+
+      const programId = data.createLoyaltyProgram.id;
+
+      await Promise.all(
+        tiers.map((tier) =>
+          createLoyaltyTier({
+            variables: {
+              input: {
+                loyaltyProgramId: programId,
+                name: tier.name,
+                minPoints: tier.minPoints,
+                benefits: tier.benefits,
+              },
+            },
+          }),
+        ),
+      );
       showToast("success", "Success", "Loyalty program created successfully");
       onProgramCreated(data.createLoyaltyProgram);
       onClose();

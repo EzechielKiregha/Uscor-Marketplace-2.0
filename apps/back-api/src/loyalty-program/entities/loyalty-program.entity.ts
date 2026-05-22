@@ -1,5 +1,6 @@
 import { Field, Float, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
+import { LoyaltyTierEntity } from "./loyalty-tier.entity";
 import { PointsTransactionEntity } from "./points-transaction.entity";
 
 @ObjectType()
@@ -30,6 +31,11 @@ export class LoyaltyProgramEntity {
 
 	@Field(() => Float, { nullable: true })
 	minimumPointsToRedeem?: number;
+
+	@Field(() => [LoyaltyTierEntity], {
+		nullable: true,
+	})
+	tiers?: LoyaltyTierEntity[];
 
 	@Field(() => [PointsTransactionEntity], {
 		nullable: true,

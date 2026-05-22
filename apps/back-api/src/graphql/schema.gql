@@ -852,6 +852,18 @@ type AdEntity {
   product: ProductEntity!
 }
 
+type LoyaltyTierBenefitEntity {
+  id: String!
+  description: String!
+}
+
+type LoyaltyTierEntity {
+  id: String!
+  name: String!
+  minPoints: Float!
+  benefits: [LoyaltyTierBenefitEntity!]
+}
+
 type PointsTransactionEntity {
   id: String!
   clientId: String!
@@ -859,7 +871,15 @@ type PointsTransactionEntity {
   loyaltyProgramId: String!
   loyaltyProgram: LoyaltyProgramEntity!
   points: Float!
+  type: String!
   createdAt: DateTime!
+}
+
+type PointsTransactionsConnectionEntity {
+  items: [PointsTransactionEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type LoyaltyProgramEntity {
@@ -871,6 +891,7 @@ type LoyaltyProgramEntity {
   pointsPerPurchase: Float!
   pointsPerDollar: Float!
   minimumPointsToRedeem: Float
+  tiers: [LoyaltyTierEntity!]
   pointsTransactions: [PointsTransactionEntity!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1364,6 +1385,9 @@ type PointsTransactionSummaryEntity {
 
 type CustomerPointsEntity {
   totalPoints: Float!
+  pointsUsed: Float!
+  pointsAvailable: Float!
+  tier: String
   program: LoyaltyProgramEntity!
   transactions: [PointsTransactionSummaryEntity!]!
 }
@@ -1387,6 +1411,10 @@ type LoyaltyAnalyticsEntity {
   pointsEarned: Float!
   pointsRedeemed: Float!
   redemptionRate: Float!
+  bronzeMembers: Int!
+  silverMembers: Int!
+  goldMembers: Int!
+  platinumMembers: Int!
   topCustomers: [TopCustomerEntity!]!
   pointsByDay: [PointsByDayEntity!]!
 }
@@ -1719,6 +1747,12 @@ type Query {
   """Retrieves loyalty program analytics."""
   loyaltyAnalytics(businessId: String!, period: String! = "month"): LoyaltyAnalyticsEntity!
 
+  """Retrieves paginated points transactions."""
+  pointsTransactions(loyaltyProgramId: String!, clientId: String, type: String, startDate: DateTime, endDate: DateTime, page: Float! = 1, limit: Float! = 20): PointsTransactionsConnectionEntity!
+
+  """Retrieves loyalty tiers for a loyalty program."""
+  loyaltyTiers(loyaltyProgramId: String!): [LoyaltyTierEntity!]!
+
   """Retrieves inventory for a store."""
   inventory(storeId: String, productId: String, lowStockOnly: Boolean, page: Float! = 1, limit: Float! = 20): PaginatedInventoryResponse!
 
@@ -1991,6 +2025,15 @@ type Mutation {
 
   """Awards points to a customer."""
   earnPoints(input: EarnPointsInput!): PointsTransactionEntity!
+
+  """Creates a loyalty tier."""
+  createLoyaltyTier(input: CreateLoyaltyTierInput!): LoyaltyTierEntity!
+
+  """Updates a loyalty tier."""
+  updateLoyaltyTier(input: UpdateLoyaltyTierInput!): LoyaltyTierEntity!
+
+  """Deletes a loyalty tier."""
+  deleteLoyaltyTier(id: String!): Boolean!
 
   """Redeems points for a customer."""
   redeemPoints(input: RedeemPointsInput!): PointsTransactionEntity!
@@ -2551,6 +2594,24 @@ input EarnPointsInput {
   loyaltyProgramId: String!
   points: Float!
   orderId: String
+}
+
+input CreateLoyaltyTierInput {
+  loyaltyProgramId: String!
+  name: String!
+  minPoints: Float!
+  benefits: [LoyaltyTierBenefitInput!]
+}
+
+input LoyaltyTierBenefitInput {
+  description: String!
+}
+
+input UpdateLoyaltyTierInput {
+  id: String!
+  name: String
+  minPoints: Float
+  benefits: [LoyaltyTierBenefitInput!]
 }
 
 input RedeemPointsInput {
