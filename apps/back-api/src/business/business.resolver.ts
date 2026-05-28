@@ -174,6 +174,23 @@ export class BusinessResolver {
 		}
 		return this.businessService.findOne(id);
 	}
+	// @UseGuards(JwtAuthGuard, RolesGuard)
+	// @Roles("business", "client")
+	@Query(() => BusinessEntity, {
+		name: "businessByPhone",
+		description: "Retrieves a single business by phone number.",
+	})
+	async getBusinessByPhone(
+		@Args("phone", { type: () => String })
+		phone: string,
+		// @Context() context,
+	) {
+		// const user = context.req.user;
+		// if (user.role === "business") {
+		// 	throw new Error("Businesses can only access their own data");
+		// }
+		return this.businessService.findOneByPhone(phone);
+	}
 
 	// @Query(() => [ProductEntity], { name: 'businessProducts' })
 	// async businessProducts(

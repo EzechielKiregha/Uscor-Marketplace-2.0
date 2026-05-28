@@ -33,6 +33,8 @@ type MediaEntity {
   type: String!
   productId: String!
   createdAt: DateTime!
+  pathname: String!
+  size: Int!
   product: ProductEntity!
 }
 
@@ -257,9 +259,28 @@ type ShiftEntity {
   store: StoreEntity
   startTime: DateTime
   endTime: DateTime
+  status: ShiftStatus!
   sales: Float
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+enum ShiftStatus {
+  ACTIVE
+  COMPLETED
+  INPROGRESS
+}
+
+type StoreDailyStats {
+  todaySales: Float!
+  todayTransactions: Int!
+  lowStockItems: Int!
+}
+
+type StoreInventoryStats {
+  lowStockItems: Int!
+  outOfStockItems: Int!
+  totalItems: Int!
 }
 
 type StoreEntity {
@@ -277,6 +298,9 @@ type StoreEntity {
   sales: [SaleEntity!]
   shifts: [ShiftEntity!]
   products: [ProductEntity!]
+  workers: [WorkerEntity!]
+  dailyStats: StoreDailyStats
+  inventoryStats: StoreInventoryStats
 }
 
 type DeliveryAddressEntity {
@@ -520,6 +544,7 @@ type ShiftEntityWorker {
   store: StoreEntity
   startTime: DateTime!
   endTime: DateTime
+  status: ShiftStatus!
   sales: Float
   transactionCount: Float
   createdAt: DateTime!
@@ -546,6 +571,7 @@ type WorkerEntity {
   chatParticipants: [ChatParticipantEntity!]
   medias: [MediaEntity!]
   auditLogs: [AuditLogEntity!]
+  stores: [StoreEntity!]
 }
 
 type FreelanceServiceEntity {
@@ -818,6 +844,7 @@ type ProductEntity {
   description: String
   price: Float!
   stockQuantity: Int
+  minQuantity: Int
   quantity: Int
   media: MediaEntity
   businessId: String!
@@ -831,12 +858,12 @@ type ProductEntity {
   business: BusinessEntity
   store: StoreEntity
   category: CategoryEntity
-  reviews: [ReviewEntity!]!
-  orders: [OrderProductEntity!]!
-  chats: [ChatEntity!]!
-  reposts: [RepostedProductEntity!]!
-  reowns: [ReOwnedProductEntity!]!
-  ads: [AdEntity!]!
+  reviews: [ReviewEntity!]
+  orders: [OrderProductEntity!]
+  chats: [ChatEntity!]
+  reposts: [RepostedProductEntity!]
+  reowns: [ReOwnedProductEntity!]
+  ads: [AdEntity!]
   promotions: [PromotionEntity!]
 }
 
@@ -1010,6 +1037,21 @@ enum TokenTransactionType {
   REPOST_COMMISSION
 }
 
+type TokenBalanceEntity {
+  totalTokens: Float!
+  availableTokens: Float!
+  pendingTokens: Float!
+  reservedTokens: Float!
+  transactions: [TokenTransactionEntity!]!
+}
+
+type TokenTransactionPageEntity {
+  items: [TokenTransactionEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
 type AccountRechargeEntity {
   id: String!
   amount: Float!
@@ -1042,6 +1084,21 @@ enum Country {
   RWANDA
   BURUNDI
   TANZANIA
+}
+
+type AccountBalanceEntity {
+  totalAmount: Float!
+  availableAmount: Float!
+  pendingAmount: Float!
+  reservedAmount: Float!
+  transactions: [AccountRechargeEntity!]!
+}
+
+type AccountRechargePageEntity {
+  items: [AccountRechargeEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type Admin {
@@ -1333,6 +1390,129 @@ type ChatsPagedResult {
   limit: Int!
 }
 
+type StoreReportResponse {
+  reportUrl: String!
+  fileName: String!
+  mediaId: ID!
+}
+
+type ReportHistoryEntity {
+  id: ID!
+  reportType: ReportType!
+  period: String!
+  generatedAt: DateTime!
+  url: String!
+  fileName: String!
+  storeId: String!
+}
+
+enum ReportType {
+  STORE_OVERVIEW
+  SALES_PERFORMANCE
+  WORKER_PERFORMANCE
+  INVENTORY
+  CLIENT_LOYALTY
+  SHIFTS
+  ORDERS_TRANSFERS
+}
+
+type TopSellingProduct {
+  id: String!
+  title: String!
+  quantitySold: Int!
+  revenue: Float!
+}
+
+type RecentSale {
+  id: String!
+  totalAmount: Float!
+  status: String!
+  createdAt: DateTime!
+  worker: WorkerEntity
+}
+
+type InventoryStatus {
+  totalItems: Int!
+  lowStockCount: Int!
+  outOfStockCount: Int!
+  inStockCount: Int!
+}
+
+type ShiftStats {
+  totalShifts: Int!
+  completedShifts: Int!
+  activeShifts: Int!
+  averageSalesPerShift: Float!
+}
+
+type StoreDashboardStatsEntity {
+  activeWorkers: Int!
+  todaySales: Float!
+  todayTransactions: Int!
+  lowStockItems: Int!
+  outOfStockItems: Int!
+  activeShifts: Int!
+  totalProducts: Int!
+  totalSales: Int!
+  totalRevenue: Float!
+  averageTicket: Float!
+  topSellingProducts: [TopSellingProduct!]!
+  recentSales: [RecentSale!]!
+  inventoryStatus: InventoryStatus!
+  shiftStats: ShiftStats!
+}
+
+type StoreInventoryItem {
+  id: String!
+  productId: String!
+  product: ProductEntity
+  quantity: Int!
+  minQuantity: Int!
+  status: String!
+}
+
+type StoreInventoryEntity {
+  items: [StoreInventoryItem!]!
+  totalItems: Int!
+  lowStockCount: Int!
+  outOfStockCount: Int!
+}
+
+type WorkerPerformance {
+  workerId: String!
+  workerName: String!
+  sales: Float!
+  hoursWorked: Float!
+  completionRate: Float!
+}
+
+type DailySalesReport {
+  date: String!
+  sales: Float!
+  orders: Int!
+}
+
+type TopProductReport {
+  id: String!
+  title: String!
+  quantitySold: Int!
+  revenue: Float!
+}
+
+type StoreReportEntity {
+  totalSales: Float!
+  totalOrders: Int!
+  averageTicket: Float!
+  topProducts: [TopProductReport!]!
+  workerPerformance: [WorkerPerformance!]!
+  dailySales: [DailySalesReport!]!
+}
+
+type StoreSuccessResponse {
+  success: Boolean!
+  message: String!
+}
+
 type ProductStats {
   total: Int!
   lowStock: Int!
@@ -1429,6 +1609,28 @@ type PaginatedProductsResponse {
 type SearchMarketplaceResponse {
   products: [ProductEntity!]!
   services: [FreelanceServiceEntity!]!
+}
+
+type KycSubmission {
+  id: String!
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
+  status: KycStatus!
+  rejectionReason: String
+  notes: String
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  business: BusinessEntity!
+}
+
+type KycSubmissionPagination {
+  items: [KycSubmission!]!
+  total: Float!
+  page: Float!
+  limit: Float!
 }
 
 type DailyCount {
@@ -1602,23 +1804,29 @@ type Query {
   clientOrders(clientId: String!, page: Int! = 1, limit: Int! = 20, status: String): PaginatedOrdersResponse!
 
   """Retrieves token transactions for a business."""
-  tokenTransactions: [TokenTransactionEntity!]!
+  tokenTransactions(businessId: String!, type: String, isRedeemed: Boolean, isReleased: Boolean, startDate: DateTime, endDate: DateTime, page: Int, limit: Int): TokenTransactionPageEntity!
+
+  """Retrieves the token balance for a business."""
+  tokenBalance(businessId: String!): TokenBalanceEntity!
 
   """Retrieves a single token transaction by ID."""
   tokenTransaction(id: String!): TokenTransactionEntity!
 
   """Retrieves account recharges for a user."""
-  accountRecharges: [AccountRechargeEntity!]!
+  accountRecharges(userId: String!, userType: String!, method: String, status: String, origin: String, startDate: DateTime, endDate: DateTime, page: Int, limit: Int): AccountRechargePageEntity!
 
   """Retrieves a single account recharge by ID."""
   accountRecharge(id: String!): AccountRechargeEntity!
 
   """Retrieves the account balance for a user."""
-  accountBalance: Float!
+  accountBalance(userId: String!, userType: String!): AccountBalanceEntity!
 
   """Retrieve businesses with pagination and filtering."""
   businesses(search: String, businessType: String, hasLoyalty: Boolean, hasPromotions: Boolean, isB2BEnabled: Boolean, isVerified: Boolean, sort: String, page: Int, limit: Int): PaginatedBusinesses!
   business(id: String!): BusinessSettingsEntity!
+
+  """Retrieves a single business by phone number."""
+  businessByPhone(phone: String!): BusinessEntity!
   businessServices(businessId: String!, category: String, search: String, page: Int, limit: Int): [FreelanceServiceEntity!]!
   businessDashboard: BusinessDashboardResponse!
   businessTypes: [BusinessTypeEntity!]!
@@ -1632,6 +1840,9 @@ type Query {
 
   """Find client by email."""
   clientByEmail(email: String!): ClientEntity
+
+  """Find client by phone."""
+  clientByPhone(phone: String!): ClientEntity
   clientReviews(clientId: String!, page: Int, limit: Int): PaginatedReviews!
   clientPromotions(clientId: String!): [PromotionEntity!]!
   clientRecommendations(clientId: String!): [RecommendationEntity!]!
@@ -1685,6 +1896,9 @@ type Query {
   """Retrieves a single payment transaction by ID."""
   paymentTransaction(id: String!): PaymentTransactionEntity!
 
+  """Retrieves the latest pending payment transaction for the user."""
+  latestPaymentTransaction(phone: String!): PaymentTransactionEntity
+
   """Retrieves freelance services with pagination and filters."""
   freelanceServices(category: String, minRate: Float, maxRate: Float, isHourly: Boolean, businessId: String, search: String, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceServicesResponse!
 
@@ -1722,9 +1936,13 @@ type Query {
 
   """Retrieves a single store by ID."""
   store(id: String!): StoreEntity!
-
-  """Retrieves statistics for a store."""
   storeStatistics(storeId: String!): StoreStatistics!
+  storeDashboardStats(storeId: String!): StoreDashboardStatsEntity!
+  storeWorkers(storeId: String!): [WorkerEntity!]!
+  storeReports(storeId: String!, period: String! = "week"): StoreReportEntity!
+  storeShifts(storeId: String!, status: ShiftStatus): [ShiftEntityWorker!]!
+  storeInventory(storeId: String!): StoreInventoryEntity!
+  reportHistory(storeId: String!): [ReportHistoryEntity!]!
 
   """Retrieves points transactions for a client."""
   pointsTransactionsByClient(clientId: String!): [PointsTransactionEntity!]!
@@ -1795,6 +2013,7 @@ type Query {
   auditLogs(action: String, adminId: String, startDate: DateTime, endDate: DateTime, page: Int = 1, limit: Int = 10): PaginatedAuditLogsResponse!
   platformMetrics: PlatformMetrics!
   platformSettings: PlatformSettings!
+  kycSubmissions(search: String, status: KycStatus, businessType: String, page: Int! = 1, limit: Int! = 10): KycSubmissionPagination!
 }
 
 input SignInInput {
@@ -1818,10 +2037,10 @@ input GetUsersInput {
 }
 
 type Mutation {
-  createProduct(input: CreateProductInput!, mediaInput: AddMediaInput!): ProductEntity!
+  createProduct(input: CreateProductInput!, mediaInputs: [AddMediaInput!]): ProductEntity!
 
   """Updates a product's details."""
-  updateProduct(id: String!, input: UpdateProductInput!, mediaInput: AddMediaInput!): ProductEntity!
+  updateProduct(id: String!, input: UpdateProductInput!, mediaInputs: [AddMediaInput!]): ProductEntity!
 
   """Deletes a product."""
   deleteProduct(id: String!): ProductEntity!
@@ -1950,7 +2169,7 @@ type Mutation {
   createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
 
   """Updates a payment transaction’s status or QR code."""
-  updatePaymentTransaction(id: String!, input: UpdatePaymentTransactionInput!): PaymentTransactionEntity!
+  updatePaymentTransaction(input: UpdatePaymentTransactionInput!, id: String!, phone: String): PaymentTransactionEntity!
 
   """Deletes a payment transaction."""
   deletePaymentTransaction(id: String!): PaymentTransactionEntity!
@@ -2013,6 +2232,15 @@ type Mutation {
 
   """Deletes a store."""
   deleteStore(id: String!): StoreEntity!
+
+  """Adds a worker to a store."""
+  addWorkerToStore(input: AddWorkerToStoreInput!, inputWorker: CreateWorkerInput): WorkerEntity!
+
+  """Removes a worker from a store."""
+  removeWorkerFromStore(storeId: String!, workerId: String!): StoreSuccessResponse!
+
+  """Generates and uploads a PDF report"""
+  generateStoreReport(input: GenerateStoreReportInput!): StoreReportResponse!
 
   """Creates a new loyalty program."""
   createLoyaltyProgram(input: CreateLoyaltyProgramInput!): LoyaltyProgramEntity!
@@ -2191,6 +2419,7 @@ input UpdateAccountRechargeInput {
   amount: Float
   method: RechargeMethod
   origin: Country
+  status: String
 }
 
 input CreateBusinessInput {
@@ -2298,12 +2527,14 @@ input CreateWorkerInput {
   fullName: String
   avatar: String
   role: WorkerRole!
-  bio: String
-  phone: String
+  bio: String! = "false"
+  phone: String! = "false"
   password: String!
   isVerified: Boolean! = false
   businessId: String
   kycId: String
+  createNewWorker: Boolean
+  storeId: String
 }
 
 enum WorkerRole {
@@ -2318,12 +2549,14 @@ input UpdateWorkerInput {
   fullName: String
   avatar: String
   role: WorkerRole
-  bio: String
-  phone: String
+  bio: String = "false"
+  phone: String = "false"
   password: String
   isVerified: Boolean = false
   businessId: String
   kycId: String
+  createNewWorker: Boolean
+  storeId: String
   id: String
 }
 
@@ -2568,6 +2801,20 @@ input UpdateStoreInput {
   address: String
 }
 
+input AddWorkerToStoreInput {
+  createNewWorker: Boolean
+  email: String!
+  storeId: String!
+}
+
+input GenerateStoreReportInput {
+  storeId: ID!
+  reportType: ReportType!
+  period: String! = "month"
+  startDate: DateTime
+  endDate: DateTime
+}
+
 input CreateLoyaltyProgramInput {
   businessId: String!
   name: String!
@@ -2754,6 +3001,9 @@ type Subscription {
   orderCreated(clientId: String!, businessId: String!): OrderEntity!
   orderUpdated(clientId: String!, businessId: String!): OrderEntity!
   orderPaymentProcessed(orderId: String!): OrderEntity!
+  tokenTransactionCreated(businessId: String!): TokenTransactionEntity!
+  accountRechargeCreated(userId: String!, userType: String!): AccountRechargeEntity!
+  accountBalanceUpdated(userId: String!, userType: String!): AccountBalanceEntity!
   businessUpdated(businessId: String!): BusinessEntity!
   businessAdded: BusinessEntity!
   saleCreated(storeId: String!): SaleEntity!
@@ -2769,6 +3019,8 @@ type Subscription {
   freelanceServiceUpdated(businessId: String!): FreelanceServiceEntity!
   freelanceOrderCreated(clientId: String!): FreelanceOrderEntity!
   freelanceOrderUpdated(businessId: String!): FreelanceOrderEntity!
+  workerAddedToStore(storeId: String!): WorkerEntity!
+  workerRemovedFromStore(storeId: String!): StoreSuccessResponse!
   loyaltyProgramCreated(businessId: String!): LoyaltyProgramEntity!
   loyaltyProgramUpdated(businessId: String!): LoyaltyProgramEntity!
   pointsEarned(businessId: String!): PointsTransactionEntity!

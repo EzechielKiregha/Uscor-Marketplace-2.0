@@ -30,9 +30,15 @@ import {
 } from "@/graphql/worker.gql";
 import { useMe } from "@/lib/useMe";
 
-type ProfilePageProps = {};
+type ProfilePageProps = {
+  viewMode?: "worker" | "business"; // New prop
+  workerId?: string;
+};
 
-export default function ProfilePage({}: ProfilePageProps) {
+export default function ProfilePage({
+  viewMode = "worker",
+  workerId,
+}: ProfilePageProps) {
   const { user } = useMe();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -46,24 +52,27 @@ export default function ProfilePage({}: ProfilePageProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
+
+  const effectiveWorkerId =
+    viewMode === "business" && workerId ? workerId : user?.id;
   const {
     data: workerData,
     loading: workerLoading,
     error: workerError,
     refetch: refetchWorker,
   } = useQuery(GET_WORKER_PROFILE, {
-    variables: { id: user?.id },
-    skip: !user?.id,
+    variables: { id: effectiveWorkerId },
+    skip: !effectiveWorkerId,
   });
 
   const { data: shiftsData, loading: shiftsLoading } = useQuery(
     GET_WORKER_SHIFTS,
     {
       variables: {
-        workerId: user?.id,
+        workerId: effectiveWorkerId,
         limit: 10,
       },
-      skip: !user?.id,
+      skip: !effectiveWorkerId,
     },
   );
 
@@ -160,9 +169,9 @@ export default function ProfilePage({}: ProfilePageProps) {
 
       await updateProfile({
         variables: {
-          id: user?.id,
+          id: effectiveWorkerId,
           updateWorkerInput: {
-            id: user?.id,
+            id: effectiveWorkerId,
             fullName: formData.fullName,
             email: formData.email,
             phone: formData.phone,

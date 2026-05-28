@@ -1,25 +1,33 @@
-import { UseGuards } from "@nestjs/common";
+import { Inject, UseGuards } from "@nestjs/common";
 import {
 	Args,
 	Context,
 	Float,
+	Int,
 	Mutation,
 	Query,
 	Resolver,
+	Subscription,
 } from "@nestjs/graphql";
+import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { AccountRechargeService } from "./account-recharge.service";
 import { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
 import { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
-import { AccountRechargeEntity } from "./entities/account-recharge.entity";
+import {
+	AccountBalanceEntity,
+	AccountRechargeEntity,
+	AccountRechargePageEntity,
+} from "./entities/account-recharge.entity";
 
 // Resolver
 @Resolver(() => AccountRechargeEntity)
 export class AccountRechargeResolver {
 	constructor(
 		private readonly accountRechargeService: AccountRechargeService,
+		@Inject("PUB_SUB") private readonly pubSub: PubSub,
 	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -33,22 +41,62 @@ export class AccountRechargeResolver {
 		@Context() context,
 	) {
 		const user = context.req.user;
-		return this.accountRechargeService.create(
+		const created = await this.accountRechargeService.create(
 			createAccountRechargeInput,
 			user.id,
 			user.role,
 		);
+
+		await this.pubSub.publish("ACCOUNT_RECHARGE_CREATED", {
+			accountRechargeCreated: created,
+		});
+
+		const balance = await this.accountRechargeService.getBalance(
+			user.id,
+			user.role,
+		);
+		await this.pubSub.publish("ACCOUNT_BALANCE_UPDATED", {
+			userId: user.id,
+			accountBalanceUpdated: balance,
+		});
+
+		return created;
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("business", "client")
-	@Query(() => [AccountRechargeEntity], {
+	@Query(() => AccountRechargePageEntity, {
 		name: "accountRecharges",
 		description: "Retrieves account recharges for a user.",
 	})
-	async getAccountRecharges(@Context() context) {
-		const _user = context.req.user;
-		return this.accountRechargeService.findAll();
+	async getAccountRecharges(
+		@Args("userId", { type: () => String }) userId: string,
+		@Args("userType", { type: () => String }) userType: string,
+		@Args("method", { type: () => String, nullable: true }) method?: string,
+		@Args("status", { type: () => String, nullable: true }) status?: string,
+		@Args("origin", { type: () => String, nullable: true }) origin?: string,
+		@Args("startDate", { type: () => Date, nullable: true }) startDate?: Date,
+		@Args("endDate", { type: () => Date, nullable: true }) endDate?: Date,
+		@Args("page", { type: () => Int, nullable: true }) page = 1,
+		@Args("limit", { type: () => Int, nullable: true }) limit = 10,
+		@Context() context?: any,
+	) {
+		const user = context.req.user;
+		const normalizedType = userType?.toLowerCase();
+		if (user.id !== userId || user.role !== normalizedType) {
+			throw new Error("Unauthorized access to account recharge history");
+		}
+		return this.accountRechargeService.findAll(
+			user.id,
+			user.role,
+			method as any,
+			status,
+			origin,
+			startDate,
+			endDate,
+			page,
+			limit,
+		);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -77,12 +125,23 @@ export class AccountRechargeResolver {
 		@Context() context,
 	) {
 		const user = context.req.user;
-		return this.accountRechargeService.update(
+		const updated = await this.accountRechargeService.update(
 			id,
 			updateAccountRechargeInput,
 			user.id,
 			user.role,
 		);
+
+		const balance = await this.accountRechargeService.getBalance(
+			user.id,
+			user.role,
+		);
+		await this.pubSub.publish("ACCOUNT_BALANCE_UPDATED", {
+			userId: user.id,
+			accountBalanceUpdated: balance,
+		});
+
+		return updated;
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -96,17 +155,80 @@ export class AccountRechargeResolver {
 		@Context() context,
 	) {
 		const user = context.req.user;
-		return this.accountRechargeService.remove(id, user.id, user.role);
+		const deleted = await this.accountRechargeService.remove(
+			id,
+			user.id,
+			user.role,
+		);
+
+		const balance = await this.accountRechargeService.getBalance(
+			user.id,
+			user.role,
+		);
+		await this.pubSub.publish("ACCOUNT_BALANCE_UPDATED", {
+			userId: user.id,
+			accountBalanceUpdated: balance,
+		});
+
+		return deleted;
 	}
 
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "client")
-	@Query(() => Float, {
+	// @UseGuards(JwtAuthGuard, RolesGuard)
+	// @Roles("business", "client")
+	@Query(() => AccountBalanceEntity, {
 		name: "accountBalance",
 		description: "Retrieves the account balance for a user.",
 	})
-	async getAccountBalance(@Context() context) {
-		const user = context.req.user;
-		return this.accountRechargeService.getBalance(user.id, user.role);
+	async getAccountBalance(
+		@Args("userId", { type: () => String }) userId: string,
+		@Args("userType", { type: () => String }) userType: string,
+		@Context() context,
+	) {
+		// const user = context.req.user;
+		const normalizedType = userType?.toLowerCase();
+		// if (user.id !== userId || user.role !== normalizedType) {
+		// 	throw new Error("Unauthorized access to account balance");
+		// }
+		if (normalizedType === "business" ) {
+			return this.accountRechargeService.getBalance(userId, normalizedType);
+		} else if (normalizedType === "client") {
+			return this.accountRechargeService.getBalance(userId, normalizedType);
+		} else {
+			throw new Error("Invalid user type");
+		}
+	}
+
+	@Subscription(() => AccountRechargeEntity, {
+		name: "accountRechargeCreated",
+		filter: (payload, variables) => {
+			const role = variables.userType?.toLowerCase();
+			if (role === "business") {
+				return payload.accountRechargeCreated.businessId === variables.userId;
+			}
+			if (role === "client") {
+				return payload.accountRechargeCreated.clientId === variables.userId;
+			}
+			return false;
+		},
+	})
+	accountRechargeCreated(
+		@Args("userId", { type: () => String }) userId: string,
+		@Args("userType", { type: () => String }) userType: string,
+	) {
+		return (this.pubSub as any).asyncIterator("ACCOUNT_RECHARGE_CREATED");
+	}
+
+	@Subscription(() => AccountBalanceEntity, {
+		name: "accountBalanceUpdated",
+		filter: (payload, variables) => {
+			const role = variables.userType?.toLowerCase();
+			return payload.accountBalanceUpdated && payload.userId === variables.userId;
+		},
+	})
+	accountBalanceUpdated(
+		@Args("userId", { type: () => String }) userId: string,
+		@Args("userType", { type: () => String }) userType: string,
+	) {
+		return (this.pubSub as any).asyncIterator("ACCOUNT_BALANCE_UPDATED");
 	}
 }

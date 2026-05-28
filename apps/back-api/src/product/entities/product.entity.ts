@@ -22,18 +22,21 @@ export class ProductEntity {
 	@Field({ nullable: true })
 	name?: string;
 
-	@Field({ nullable: true })
-	description?: string;
+	@Field(() => String, { nullable: true })
+	description?: string | null;
 
 	@Field(() => Float)
 	price: number;
 
 	// Frontend expects 'stockQuantity'
 	@Field(() => Int, { nullable: true })
-	stockQuantity: number;
+	stockQuantity?: number;
 
 	@Field(() => Int, { nullable: true })
-	quantity: number;
+	minQuantity?: number;
+
+	@Field(() => Int, { nullable: true })
+	quantity?: number;
 
 	// A single primary media object for lists
 	@Field(() => MediaEntity, { nullable: true })
@@ -42,8 +45,8 @@ export class ProductEntity {
 	@Field()
 	businessId: string;
 
-	@Field({ nullable: true })
-	storeId: string;
+	@Field(() => String,{ nullable: true })
+	storeId?: string | null;
 
 	@Field()
 	isPhysical: boolean;
@@ -73,23 +76,23 @@ export class ProductEntity {
 	@Field(() => CategoryEntity, { nullable: true })
 	category?: CategoryEntity;
 
-	@Field(() => [ReviewEntity]) // Reviews for the product
-	reviews: ReviewEntity[];
+	@Field(() => [ReviewEntity], { nullable: true}) // Reviews for the product
+	reviews?: ReviewEntity[];
 
-	@Field(() => [OrderProductEntity]) // Orders containing the product
-	orders: OrderProductEntity[];
+	@Field(() => [OrderProductEntity], { nullable: true}) // Orders containing the product
+	orders?: OrderProductEntity[];
 
-	@Field(() => [ChatEntity]) // Chats related to the product
-	chats: ChatEntity[];
+	@Field(() => [ChatEntity], { nullable: true}) // Chats related to the product
+	chats?: ChatEntity[];
 
-	@Field(() => [RepostedProductEntity]) // Reposted versions of the product
-	reposts: RepostedProductEntity[];
+	@Field(() => [RepostedProductEntity], { nullable: true}) // Reposted versions of the product
+	reposts?: RepostedProductEntity[];
 
-	@Field(() => [ReOwnedProductEntity]) // Reowned versions of the product
-	reowns: ReOwnedProductEntity[];
+	@Field(() => [ReOwnedProductEntity], { nullable: true}) // Reowned versions of the product
+	reowns?: ReOwnedProductEntity[];
 
-	@Field(() => [AdEntity]) // Ads for the product
-	ads: AdEntity[];
+	@Field(() => [AdEntity], { nullable: true}) // Ads for the product
+	ads?: AdEntity[];
 
 	@Field(() => [PromotionEntity], {
 		nullable: true,

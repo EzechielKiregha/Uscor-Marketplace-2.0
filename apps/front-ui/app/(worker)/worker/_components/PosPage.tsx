@@ -11,11 +11,20 @@ import SalesHistoryPanel from "@/app/(Business)/business/sales/_components/Sales
 
 interface PosPageProps {
   selectedStoreId: string | null;
+  viewMode?: "worker" | "business"; // New prop
+  workerId?: string;
 }
 
-export default function PosPage({ selectedStoreId }: PosPageProps) {
+export default function PosPage({
+  selectedStoreId,
+  viewMode = "worker",
+  workerId,
+}: PosPageProps) {
   const { user, role } = useMe();
   const { isOnline } = useIndexedDB();
+
+  const effectiveWorkerId =
+    viewMode === "business" && workerId ? workerId : user?.id;
 
   const {
     getCurrentSale,
@@ -23,7 +32,7 @@ export default function PosPage({ selectedStoreId }: PosPageProps) {
     createSale,
     activeSalesLoading,
     salesHistoryLoading,
-  } = useSales(selectedStoreId || "", user?.id || "", role || "");
+  } = useSales(selectedStoreId || "", effectiveWorkerId || "", role || "");
 
   if (activeSalesLoading) return <Loader loading={true} />;
 
@@ -52,7 +61,7 @@ export default function PosPage({ selectedStoreId }: PosPageProps) {
             sale={getCurrentSale()}
             onNewSale={createSale}
             userRole={role || ""}
-            userId={user?.id || ""}
+            userId={effectiveWorkerId || ""}
           />
         </div>
 

@@ -1,4 +1,3 @@
-// app/business/loyalty/_components/RedemptionProcess.tsx
 "use client";
 
 import { useMutation, useQuery } from "@apollo/client";

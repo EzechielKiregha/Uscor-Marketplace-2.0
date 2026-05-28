@@ -14,13 +14,14 @@ export class BusinessService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createBusinessInput: CreateBusinessInput) {
-		const { password, ...businessData } = createBusinessInput;
+		const { password, phone, ...businessData } = createBusinessInput;
 		const hashedPassword = await hash(password);
 
 		return this.prisma.business.create({
 			data: {
 				...businessData,
 				password: hashedPassword,
+				phone: phone || Math.random().toString().slice(2, 11), // Generate random 9-digit phone if not provided
 			},
 			select: {
 				id: true,
@@ -398,6 +399,21 @@ export class BusinessService {
 					},
 				},
 			} as any,
+		});
+
+		// Normalize store product shapes
+		if (business?.stores) {
+			business.stores = business.stores.map((s: any) => ({
+				...s,
+				products: (s.products || []).map((p: any) => this.normalizeProduct(p)),
+			}));
+		}
+
+		return business;
+	}
+	async findOneByPhone(phone: string) {
+		const business: any = await this.prisma.business.findUnique({
+			where: { phone: phone },
 		});
 
 		// Normalize store product shapes

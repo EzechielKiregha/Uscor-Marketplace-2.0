@@ -218,6 +218,19 @@ export class ClientResolver {
 	) {
 		return this.clientService.findByEmail(email);
 	}
+	// @UseGuards(JwtAuthGuard, RolesGuard)
+	// @Roles("business", "worker")
+	@Query(() => ClientEntity, {
+		name: "clientByPhone",
+		nullable: true,
+		description: "Find client by phone.",
+	})
+	async getClientByPhone(
+		@Args("phone", { type: () => String })
+		phone: string,
+	) {
+		return this.clientService.findByPhone(phone);
+	}
 
 	@Query(() => PaginatedReviews, {
 		name: "clientReviews",

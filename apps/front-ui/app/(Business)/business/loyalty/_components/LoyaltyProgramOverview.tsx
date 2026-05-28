@@ -569,7 +569,7 @@ export default function LoyaltyProgramOverview({
       {/* Business Type Specific Information */}
       <div className="bg-card border border-border rounded-xl p-4">
         <div className="flex items-start gap-3">
-          <Star className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+          <Star className="h-5 w-5 text-primary mt-0.5 shrink-0" />
           <div>
             <h3 className="font-semibold">
               Optimizing Loyalty Programs for East Africa

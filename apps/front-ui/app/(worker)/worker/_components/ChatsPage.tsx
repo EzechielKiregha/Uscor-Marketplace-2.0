@@ -44,9 +44,15 @@ type TypedChatEntity = Omit<ChatEntity, "messages" | "negotiationType"> & {
   negotiationType?: ChatEntity["negotiationType"] | "FREELANCE_ORDER";
 };
 
-type ChatsPageProps = {};
+type ChatsPageProps = {
+  viewMode?: "worker" | "business"; // New prop
+  workerId?: string;
+};
 
-export default function ChatsPage({}: ChatsPageProps) {
+export default function ChatsPage({
+  viewMode = "worker",
+  workerId,
+}: ChatsPageProps) {
   const { user, role } = useMe();
   const [selectedChat, setSelectedChat] = useState<TypedChatEntity | null>(
     null,
@@ -58,10 +64,13 @@ export default function ChatsPage({}: ChatsPageProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
 
+  const effectiveWorkerId =
+    viewMode === "business" && workerId ? workerId : user?.id;
+
   const vars =
     role === "worker"
       ? {
-          workerId: user?.id,
+          workerId: effectiveWorkerId,
           // businessId: "7659de10-20da-4819-9285-f220cb0b0940",
           status: filterStatus || undefined,
           negotiationType: filterType || undefined,
@@ -69,14 +78,14 @@ export default function ChatsPage({}: ChatsPageProps) {
         }
       : role === "client"
         ? {
-            clientId: user?.id,
+            clientId: effectiveWorkerId,
             status: filterStatus || undefined,
             negotiationType: filterType || undefined,
             search: searchQuery || undefined,
           }
         : role === "business"
           ? {
-              businessId: user?.id,
+              businessId: effectiveWorkerId,
               status: filterStatus || undefined,
               negotiationType: filterType || undefined,
               search: searchQuery || undefined,
@@ -90,7 +99,7 @@ export default function ChatsPage({}: ChatsPageProps) {
     refetch: refetchChats,
   } = useQuery(GET_CHATS, {
     variables: vars,
-    skip: !user?.id,
+    skip: !effectiveWorkerId,
   });
 
   const {
@@ -122,8 +131,8 @@ export default function ChatsPage({}: ChatsPageProps) {
 
   // Handle real-time chat updates
   useSubscription(ON_CHAT_STATUS_UPDATED, {
-    variables: { userId: user?.id || "" },
-    skip: !user?.id,
+    variables: { userId: effectiveWorkerId || "" },
+    skip: !effectiveWorkerId,
     onData: ({ data }) => {
       if (data.data?.chatStatusUpdated) {
         refetchChats();
@@ -150,7 +159,7 @@ export default function ChatsPage({}: ChatsPageProps) {
             chatId: selectedChat.id,
             content: messageInput,
             senderType: "WORKER",
-            senderId: user?.id,
+            senderId: effectiveWorkerId,
           },
         },
       });

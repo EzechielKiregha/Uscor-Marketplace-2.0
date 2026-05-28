@@ -25,6 +25,8 @@ export class ProductService {
 						id: true,
 						url: true,
 						type: true,
+						pathname: true,
+						size: true
 					},
 				},
 				business: {
@@ -53,6 +55,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,
@@ -114,6 +118,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,
@@ -225,6 +231,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,
@@ -267,6 +275,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,
@@ -311,6 +321,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,
@@ -349,6 +361,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,
@@ -391,6 +405,8 @@ export class ProductService {
 			include: {
 				medias: {
 					select: {
+						pathname: true,
+						size: true,
 						id: true,
 						url: true,
 						type: true,

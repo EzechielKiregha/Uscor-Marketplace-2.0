@@ -5527,6 +5527,7 @@ export const ShiftScalarFieldEnum = {
   storeId: 'storeId',
   startTime: 'startTime',
   endTime: 'endTime',
+  status: 'status',
   sales: 'sales',
   transactionCount: 'transactionCount',
   refundTotal: 'refundTotal',
@@ -6153,6 +6154,20 @@ export type EnumAdjustmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'AdjustmentType[]'
  */
 export type ListEnumAdjustmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdjustmentType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ShiftStatus'
+ */
+export type EnumShiftStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShiftStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ShiftStatus[]'
+ */
+export type ListEnumShiftStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ShiftStatus[]'>
     
 
 

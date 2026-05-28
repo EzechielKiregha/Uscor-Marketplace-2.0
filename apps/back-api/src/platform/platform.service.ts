@@ -195,4 +195,68 @@ export class PlatformService {
 			last30Days,
 		};
 	}
+
+	async getKycSubmissions(
+		search?: string,
+		status?: string,
+		businessType?: string,
+		page = 1,
+		limit = 10,
+	) {
+		const client = this.prisma as any;
+		const skip = (page - 1) * limit;
+
+		const where: any = {};
+		if (status) {
+			where.status = status;
+		}
+
+		if (search || businessType) {
+			where.business = {
+				AND: [],
+			};
+			if (search) {
+				where.business.AND.push({
+					OR: [
+						{ name: { contains: search, mode: "insensitive" } },
+						{ email: { contains: search, mode: "insensitive" } },
+					],
+				});
+			}
+			if (businessType) {
+				where.business.AND.push({
+					businessType: { contains: businessType, mode: "insensitive" },
+				});
+			}
+		}
+
+		const [items, total] = await Promise.all([
+			client.kycDocument.findMany({
+				where,
+				skip,
+				take: limit,
+				include: {
+					business: {
+						include: {
+							kyc: true,
+						},
+					},
+				},
+				orderBy: {
+					createdAt: "desc",
+				},
+			}),
+			client.kycDocument.count({ where }),
+		]);
+
+		return {
+			items: items.map((item: any) => ({
+				...item,
+				notes: item.business?.kyc?.notes || null,
+			})),
+			total,
+			page,
+			limit,
+		};
+	}
 }

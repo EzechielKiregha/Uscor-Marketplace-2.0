@@ -19,6 +19,22 @@ export const SEARCH_CLIENTS = gql`
 `;
 
 // 📦 Get Client by Email
+export const GET_CLIENT_BY_PHONE = gql`
+  query GetClientByPhone($phone: String!) {
+    clientByPhone(phone: $phone) {
+      id
+      username
+      email
+      fullName
+      phone
+      address
+      avatar
+      isVerified
+    }
+  }
+`;
+
+// 📦 Get Client by Email
 export const GET_CLIENT_BY_EMAIL = gql`
   query GetClientByEmail($email: String!) {
     clientByEmail(email: $email) {

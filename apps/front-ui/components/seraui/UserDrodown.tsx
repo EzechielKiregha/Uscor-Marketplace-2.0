@@ -1,6 +1,12 @@
 "use client";
 
-import { DollarSign, LogOutIcon, Settings, UserIcon } from "lucide-react";
+import {
+  DollarSign,
+  LogOutIcon,
+  Settings,
+  UserIcon,
+  Wallet,
+} from "lucide-react";
 import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { BusinessEntity, ClientEntity, WorkerEntity } from "@/lib/types";
@@ -9,7 +15,7 @@ import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./PopOver";
 
 export default function UserDropdown() {
-  const { user, role, loading, error } = useMe();
+  const { user, role, loading, error, points } = useMe();
 
   if (loading)
     return (
@@ -69,6 +75,16 @@ export default function UserDropdown() {
         return "/";
     }
   };
+  const getWalletLink = () => {
+    switch (role) {
+      case "client":
+        return "/client/wallet";
+      case "business":
+        return "/business/wallet";
+      default:
+        return "/";
+    }
+  };
 
   return (
     <Popover>
@@ -84,7 +100,7 @@ export default function UserDropdown() {
           </span>
           {role !== "business" && (
             <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
-              125 pts
+              {points} pts
             </span>
           )}
         </div>
@@ -125,11 +141,11 @@ export default function UserDropdown() {
             )}
           </Link>
           <Link
-            href="/settings"
+            href={getWalletLink()}
             className="flex items-center px-4 py-2 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
           >
-            <Settings className="w-4 h-4 mr-3 opacity-70" />
-            Settings
+            <Wallet className="w-4 h-4 mr-3 opacity-70" />
+            Wallet
           </Link>
           <Link
             href="/pricing"

@@ -38,9 +38,15 @@ import { useMe } from "@/lib/useMe";
 
 interface ReportsPageProps {
   selectedStoreId: string | null;
+  viewMode?: "worker" | "business"; // New prop
+  workerId?: string;
 }
 
-export default function ReportsPage({ selectedStoreId }: ReportsPageProps) {
+export default function ReportsPage({
+  selectedStoreId,
+  viewMode = "worker",
+  workerId,
+}: ReportsPageProps) {
   const { user } = useMe();
   const [timeRange, setTimeRange] = useState<
     "today" | "week" | "month" | "quarter"
@@ -48,7 +54,12 @@ export default function ReportsPage({ selectedStoreId }: ReportsPageProps) {
   const [reportType, setReportType] = useState<
     "sales" | "inventory" | "performance"
   >("sales");
-  const { showToast } = useToast();
+
+  const effectiveWorkerId =
+    viewMode === "business" && workerId ? workerId : user?.id;
+
+  const showActions = viewMode === "worker";
+
   const {
     data: reportsData,
     loading: reportsLoading,
@@ -56,22 +67,22 @@ export default function ReportsPage({ selectedStoreId }: ReportsPageProps) {
     refetch: refetchReports,
   } = useQuery(GET_WORKER_REPORTS, {
     variables: {
-      workerId: user?.id,
+      workerId: effectiveWorkerId,
       storeId: selectedStoreId,
       timeRange,
       reportType,
     },
-    skip: !user?.id,
+    skip: !effectiveWorkerId,
   });
 
   const { data: performanceD, loading: performanceLoading } = useQuery(
     GET_WORKER_PERFORMANCE,
     {
       variables: {
-        workerId: user?.id,
+        workerId: effectiveWorkerId,
         storeId: selectedStoreId,
       },
-      skip: !user?.id,
+      skip: !effectiveWorkerId,
     },
   );
 
@@ -79,11 +90,11 @@ export default function ReportsPage({ selectedStoreId }: ReportsPageProps) {
     GET_WORKER_SALES_HISTORY,
     {
       variables: {
-        workerId: user?.id,
+        workerId: effectiveWorkerId,
         storeId: selectedStoreId,
         timeRange,
       },
-      skip: !user?.id,
+      skip: !effectiveWorkerId,
     },
   );
 
@@ -147,10 +158,14 @@ export default function ReportsPage({ selectedStoreId }: ReportsPageProps) {
           </select>
         </div>
 
-        <Button variant="outline">
-          <Download className="h-4 w-4 mr-2" />
-          Export Report
-        </Button>
+        {showActions && (
+          <div className="flex justify-end">
+            <Button variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Export Report
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Summary Cards */}

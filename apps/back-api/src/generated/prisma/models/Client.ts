@@ -204,7 +204,7 @@ export type ClientGroupByOutputType = {
   fullName: string | null
   avatar: string | null
   address: string | null
-  phone: string | null
+  phone: string
   password: string
   isVerified: boolean
   notes: string | null
@@ -242,7 +242,7 @@ export type ClientWhereInput = {
   fullName?: Prisma.StringNullableFilter<"Client"> | string | null
   avatar?: Prisma.StringNullableFilter<"Client"> | string | null
   address?: Prisma.StringNullableFilter<"Client"> | string | null
-  phone?: Prisma.StringNullableFilter<"Client"> | string | null
+  phone?: Prisma.StringFilter<"Client"> | string
   password?: Prisma.StringFilter<"Client"> | string
   isVerified?: Prisma.BoolFilter<"Client"> | boolean
   notes?: Prisma.StringNullableFilter<"Client"> | string | null
@@ -273,7 +273,7 @@ export type ClientOrderByWithRelationInput = {
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -301,13 +301,13 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   username?: string
   email?: string
+  phone?: string
   AND?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
   OR?: Prisma.ClientWhereInput[]
   NOT?: Prisma.ClientWhereInput | Prisma.ClientWhereInput[]
   fullName?: Prisma.StringNullableFilter<"Client"> | string | null
   avatar?: Prisma.StringNullableFilter<"Client"> | string | null
   address?: Prisma.StringNullableFilter<"Client"> | string | null
-  phone?: Prisma.StringNullableFilter<"Client"> | string | null
   password?: Prisma.StringFilter<"Client"> | string
   isVerified?: Prisma.BoolFilter<"Client"> | boolean
   notes?: Prisma.StringNullableFilter<"Client"> | string | null
@@ -329,7 +329,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   sales?: Prisma.SaleListRelationFilter
   pointsTransactions?: Prisma.PointsTransactionListRelationFilter
   medias?: Prisma.MediaListRelationFilter
-}, "id" | "username" | "email">
+}, "id" | "username" | "email" | "phone">
 
 export type ClientOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -338,7 +338,7 @@ export type ClientOrderByWithAggregationInput = {
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -361,7 +361,7 @@ export type ClientScalarWhereWithAggregatesInput = {
   fullName?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   avatar?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
-  phone?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
+  phone?: Prisma.StringWithAggregatesFilter<"Client"> | string
   password?: Prisma.StringWithAggregatesFilter<"Client"> | string
   isVerified?: Prisma.BoolWithAggregatesFilter<"Client"> | boolean
   notes?: Prisma.StringNullableWithAggregatesFilter<"Client"> | string | null
@@ -378,7 +378,7 @@ export type ClientCreateInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -409,7 +409,7 @@ export type ClientUncheckedCreateInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -440,7 +440,7 @@ export type ClientUpdateInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -471,7 +471,7 @@ export type ClientUncheckedUpdateInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -502,7 +502,7 @@ export type ClientCreateManyInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -519,7 +519,7 @@ export type ClientUpdateManyMutationInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -536,7 +536,7 @@ export type ClientUncheckedUpdateManyInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -822,7 +822,7 @@ export type ClientCreateWithoutMediasInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -852,7 +852,7 @@ export type ClientUncheckedCreateWithoutMediasInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -898,7 +898,7 @@ export type ClientUpdateWithoutMediasInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -928,7 +928,7 @@ export type ClientUncheckedUpdateWithoutMediasInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -958,7 +958,7 @@ export type ClientCreateWithoutOrdersInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -988,7 +988,7 @@ export type ClientUncheckedCreateWithoutOrdersInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1034,7 +1034,7 @@ export type ClientUpdateWithoutOrdersInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1064,7 +1064,7 @@ export type ClientUncheckedUpdateWithoutOrdersInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1094,7 +1094,7 @@ export type ClientCreateWithoutReviewsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1124,7 +1124,7 @@ export type ClientUncheckedCreateWithoutReviewsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1170,7 +1170,7 @@ export type ClientUpdateWithoutReviewsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1200,7 +1200,7 @@ export type ClientUncheckedUpdateWithoutReviewsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1230,7 +1230,7 @@ export type ClientCreateWithoutChatParticipantsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1260,7 +1260,7 @@ export type ClientUncheckedCreateWithoutChatParticipantsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1306,7 +1306,7 @@ export type ClientUpdateWithoutChatParticipantsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1336,7 +1336,7 @@ export type ClientUncheckedUpdateWithoutChatParticipantsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1366,7 +1366,7 @@ export type ClientCreateWithoutKycInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1396,7 +1396,7 @@ export type ClientUncheckedCreateWithoutKycInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1442,7 +1442,7 @@ export type ClientUpdateWithoutKycInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1472,7 +1472,7 @@ export type ClientUncheckedUpdateWithoutKycInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1502,7 +1502,7 @@ export type ClientCreateWithoutRechargesInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1532,7 +1532,7 @@ export type ClientUncheckedCreateWithoutRechargesInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1578,7 +1578,7 @@ export type ClientUpdateWithoutRechargesInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1608,7 +1608,7 @@ export type ClientUncheckedUpdateWithoutRechargesInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1638,7 +1638,7 @@ export type ClientCreateWithoutFreelanceOrdersInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1668,7 +1668,7 @@ export type ClientUncheckedCreateWithoutFreelanceOrdersInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1714,7 +1714,7 @@ export type ClientUpdateWithoutFreelanceOrdersInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1744,7 +1744,7 @@ export type ClientUncheckedUpdateWithoutFreelanceOrdersInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1774,7 +1774,7 @@ export type ClientCreateWithoutReferralsMadeInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1804,7 +1804,7 @@ export type ClientUncheckedCreateWithoutReferralsMadeInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1839,7 +1839,7 @@ export type ClientCreateWithoutReferralsReceivedInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1869,7 +1869,7 @@ export type ClientUncheckedCreateWithoutReferralsReceivedInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -1915,7 +1915,7 @@ export type ClientUpdateWithoutReferralsMadeInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1945,7 +1945,7 @@ export type ClientUncheckedUpdateWithoutReferralsMadeInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1986,7 +1986,7 @@ export type ClientUpdateWithoutReferralsReceivedInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2016,7 +2016,7 @@ export type ClientUncheckedUpdateWithoutReferralsReceivedInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2046,7 +2046,7 @@ export type ClientCreateWithoutPostTransactionsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2076,7 +2076,7 @@ export type ClientUncheckedCreateWithoutPostTransactionsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2122,7 +2122,7 @@ export type ClientUpdateWithoutPostTransactionsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2152,7 +2152,7 @@ export type ClientUncheckedUpdateWithoutPostTransactionsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2182,7 +2182,7 @@ export type ClientCreateWithoutSalesInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2212,7 +2212,7 @@ export type ClientUncheckedCreateWithoutSalesInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2258,7 +2258,7 @@ export type ClientUpdateWithoutSalesInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2288,7 +2288,7 @@ export type ClientUncheckedUpdateWithoutSalesInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2318,7 +2318,7 @@ export type ClientCreateWithoutAddressesInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2348,7 +2348,7 @@ export type ClientUncheckedCreateWithoutAddressesInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2394,7 +2394,7 @@ export type ClientUpdateWithoutAddressesInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2424,7 +2424,7 @@ export type ClientUncheckedUpdateWithoutAddressesInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2454,7 +2454,7 @@ export type ClientCreateWithoutPaymentMethodsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2484,7 +2484,7 @@ export type ClientUncheckedCreateWithoutPaymentMethodsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2530,7 +2530,7 @@ export type ClientUpdateWithoutPaymentMethodsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2560,7 +2560,7 @@ export type ClientUncheckedUpdateWithoutPaymentMethodsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2590,7 +2590,7 @@ export type ClientCreateWithoutPointsTransactionsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2620,7 +2620,7 @@ export type ClientUncheckedCreateWithoutPointsTransactionsInput = {
   fullName?: string | null
   avatar?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   notes?: string | null
@@ -2666,7 +2666,7 @@ export type ClientUpdateWithoutPointsTransactionsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2696,7 +2696,7 @@ export type ClientUncheckedUpdateWithoutPointsTransactionsInput = {
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2987,7 +2987,7 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     fullName: string | null
     avatar: string | null
     address: string | null
-    phone: string | null
+    phone: string
     password: string
     isVerified: boolean
     notes: string | null

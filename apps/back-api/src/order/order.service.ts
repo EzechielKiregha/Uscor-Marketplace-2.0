@@ -22,8 +22,65 @@ export class OrderService {
 		private configService: ConfigService,
 	) {}
 
+	private async earnPoints(order: any, half: "initial" | "remaining") {
+		if (!order?.client?.id || !order?.products?.length) {
+			return;
+		}
+
+		const businessTotals = order.products.reduce(
+			(acc: Record<string, { subtotal: number; loyaltyProgramId?: string; pointsPerPurchase?: number }>, item: any) => {
+				const businessId = item.product?.businessId;
+				const price = item.product?.price ?? 0;
+				if (!businessId) return acc;
+
+				if (!acc[businessId]) {
+					acc[businessId] = { subtotal: 0 };
+				}
+				acc[businessId].subtotal += price * item.quantity;
+				return acc;
+			}, {}
+		);
+
+		const businessIds = Object.keys(businessTotals);
+		if (!businessIds.length) {
+			return;
+		}
+
+		const loyaltyPrograms = await this.prisma.loyaltyProgram.findMany({
+			where: { businessId: { in: businessIds } },
+		});
+
+		const programByBusinessId = new Map(
+			loyaltyPrograms.map((program) => [program.businessId, program]),
+		);
+
+		for (const businessId of businessIds) {
+			const program = programByBusinessId.get(businessId);
+			if (!program) continue;
+
+			const subtotal = businessTotals[businessId].subtotal;
+			const totalPoints = subtotal * (program.pointsPerPurchase ?? 0);
+			const firstHalf = Math.floor(totalPoints / 2);
+			const secondHalf = Math.ceil(totalPoints / 2);
+			const pointsToCreate = half === "initial" ? firstHalf : secondHalf;
+
+			if (pointsToCreate <= 0) {
+				continue;
+			}
+
+			await this.prisma.pointsTransaction.create({
+				data: {
+					clientId: order.client.id,
+					loyaltyProgramId: program.id,
+					points: pointsToCreate,
+					type: "EARNED",
+				},
+			});
+		}
+	}
+
 	async create(createOrderInput: CreateOrderInput) {
-		const { clientId, orderProducts, payment, ...orderData } = createOrderInput;
+		const { clientId, orderProducts, payment, clientOrderId, ...orderData } = createOrderInput;
 
 		// Validate client
 		const client = await this.prisma.client.findUnique({
@@ -225,6 +282,10 @@ export class OrderService {
 					},
 				},
 			});
+		}
+
+		if (!clientOrderId) {
+			await this.earnPoints(order, "initial");
 		}
 
 		// Transform the data to match frontend expectations
@@ -1539,13 +1600,7 @@ export class OrderService {
 			},
 		});
 
-		// await this.prisma.pointsTransaction.create({
-		// 	data: {
-		// 		clientId: order.clientId,
-		// 		points: Math.floor((updatedOrder.payment?.amount || 0) / 10),
-
-		// 	}
-		// })
+		await this.earnPoints(updatedOrder, "remaining");
 
 		// Transform the data to match frontend expectations
 		return {

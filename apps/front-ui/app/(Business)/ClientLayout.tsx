@@ -26,7 +26,7 @@ export default function ClientSideLayout({
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={() => setIsSidebarOpen((s) => !s)}
         />
-        <main className="p-2 w-full h-full min-h-0 overflow-x-hidden">
+        <main className="p-4 w-full h-full min-h-0 overflow-x-hidden">
           {children}
         </main>
       </div>

@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, Int, ObjectType } from "@nestjs/graphql";
 import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
@@ -17,6 +17,12 @@ export class MediaEntity {
 
 	@Field()
 	createdAt: Date;
+
+	@Field()
+	pathname: string;
+
+	@Field(() => Int)
+	size: bigint;
 
 	// Relations
 	@Field(() => ProductEntity) // Product associated with the media

@@ -4,6 +4,50 @@ import { gql } from "@apollo/client";
 // USER MANAGEMENT QUERIES
 // ======================
 
+export const GET_KYC_SUBMISSIONS = gql`
+  query GetKycSubmissions(
+    $search: String
+    $status: KycStatus
+    $businessType: String
+    $page: Int = 1
+    $limit: Int = 10
+  ) {
+    kycSubmissions(
+      search: $search
+      status: $status
+      businessType: $businessType
+      page: $page
+      limit: $limit
+    ) {
+      items {
+        id
+        businessId
+        documentType
+        documentUrl
+        status
+        submittedAt
+        verifiedAt
+        rejectionReason
+        notes
+        createdAt
+        updatedAt
+        business {
+          id
+          name
+          email
+          businessType
+          address
+          phone
+          avatar
+        }
+      }
+      total
+      page
+      limit
+    }
+  }
+`;
+
 export const GET_USERS = gql`
   query GetUsers(
     $input: GetUsersInput!

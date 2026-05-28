@@ -1,10 +1,10 @@
 import { Field, InputType, registerEnumType } from "@nestjs/graphql";
 import {
-	IsBoolean,
-	IsEmail,
-	IsEnum,
-	IsOptional,
-	IsString,
+    IsBoolean,
+    IsEmail,
+    IsEnum,
+    IsOptional,
+    IsString,
 } from "class-validator";
 
 export enum WorkerRole {
@@ -38,11 +38,15 @@ export class CreateWorkerInput {
 	@IsEnum(WorkerRole)
 	role: WorkerRole;
 
-	@Field({ nullable: true })
-	bio?: string;
+    @Field({ defaultValue: false })
+	@IsOptional()
+    @IsString()
+    bio?: string;
 
-	@Field({ nullable: true })
-	phone?: string;
+    @Field({ defaultValue: false })
+    @IsOptional()
+    @IsString()
+    phone?: string;
 
 	@Field()
 	@IsString()
@@ -61,4 +65,14 @@ export class CreateWorkerInput {
 	@IsOptional()
 	@IsString()
 	kycId?: string;
+
+    @Field(() => Boolean, { nullable: true })
+    @IsOptional()
+    @IsBoolean()
+    createNewWorker?: boolean;
+
+    @Field({ nullable: true })
+    @IsOptional()
+    @IsString()
+    storeId?: string;
 }

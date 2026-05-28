@@ -115,6 +115,21 @@ export const GET_BUSINESS_DASHBOARD = gql`
 `;
 
 // 📦 Get Business by ID
+export const GET_BUSINESS_BY_PHONE = gql`
+  query GetBusinessByPhone($phone: String!) {
+    businessByPhone(phone: $phone) {
+      id
+      name
+      email
+      description
+      address
+      phone
+      avatar
+    }
+  }
+`;
+
+// 📦 Get Business by ID
 export const GET_BUSINESS_BY_ID = gql`
   query GetBusinessById($id: String!) {
     business(id: $id) {

@@ -55,9 +55,15 @@ function useShiftDuration(startTime?: string) {
 
 interface ShiftsPageProps {
   selectedStoreId: string | null;
+  viewMode?: "worker" | "business"; // New prop
+  workerId?: string;
 }
 
-export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
+export default function ShiftsPage({
+  selectedStoreId,
+  viewMode = "worker",
+  workerId,
+}: ShiftsPageProps) {
   const { user } = useMe();
   const { isOnline, saveOfflineOperation, handleSync } = useIndexedDB();
 
@@ -66,6 +72,8 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     "week",
   );
   const { showToast } = useToast();
+  const effectiveWorkerId =
+    viewMode === "business" && workerId ? workerId : user?.id;
 
   const {
     data: currentShiftData,
@@ -73,10 +81,10 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     refetch: refetchCurrentShift,
   } = useQuery(GET_WORKER_CURRENT_SHIFT, {
     variables: {
-      workerId: user?.id,
+      workerId: effectiveWorkerId,
       storeId: selectedStoreId,
     },
-    skip: !user?.id,
+    skip: !effectiveWorkerId,
   });
 
   const startDate = useMemo(() => {
@@ -99,11 +107,11 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
     refetch: refetchShifts,
   } = useQuery(GET_WORKER_SHIFTS, {
     variables: {
-      workerId: user?.id,
+      workerId: effectiveWorkerId,
       storeId: selectedStoreId,
       startDate,
     },
-    skip: !user?.id,
+    skip: !effectiveWorkerId,
   });
 
   const [startShift] = useMutation(START_SHIFT);
@@ -129,7 +137,7 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
       // Handle offline shift start
       const offlineShift = {
         id: `offline_${Date.now()}`,
-        workerId: user?.id,
+        workerId: effectiveWorkerId,
         storeId: selectedStoreId,
         startTime: new Date().toISOString(),
         status: "ACTIVE",
@@ -154,7 +162,7 @@ export default function ShiftsPage({ selectedStoreId }: ShiftsPageProps) {
         const { data } = await startShift({
           variables: {
             input: {
-              workerId: user?.id,
+              workerId: effectiveWorkerId,
               storeId: selectedStoreId,
               startTime: new Date().toISOString(),
             },

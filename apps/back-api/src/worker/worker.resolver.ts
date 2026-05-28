@@ -136,6 +136,15 @@ export class WorkerResolver {
 	) {
 		return this.workerService.findOne(id);
 	}
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("worker", "business", "client")
+	@Query(() => WorkerEntity, { name: "worker" })
+	async getWorkerById(
+		@Args("id", { type: () => String })
+		id: string,
+	) {
+		return this.workerService.findOne(id);
+	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("worker", "business")

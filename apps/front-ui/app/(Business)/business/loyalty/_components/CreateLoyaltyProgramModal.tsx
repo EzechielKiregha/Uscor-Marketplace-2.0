@@ -305,7 +305,7 @@ export default function CreateLoyaltyProgramModal({
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium mb-1 flex items-center gap-2"
+                  className="block text-sm font-medium mb-1 items-center gap-2"
                 >
                   <Star className="h-4 w-4 text-muted-foreground" />
                   Program Name
@@ -348,7 +348,7 @@ export default function CreateLoyaltyProgramModal({
               <div>
                 <label
                   htmlFor="pointsPerPurchase"
-                  className="block text-sm font-medium mb-1 flex items-center gap-2"
+                  className="block text-sm font-medium mb-1 items-center gap-2"
                 >
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   Points per $1 Spent
@@ -382,7 +382,7 @@ export default function CreateLoyaltyProgramModal({
               <div>
                 <label
                   htmlFor="minimumPointsToRedeem"
-                  className="block text-sm font-medium mb-1 flex items-center gap-2"
+                  className="block text-sm font-medium mb-1 items-center gap-2"
                 >
                   <Gift className="h-4 w-4 text-muted-foreground" />
                   Minimum Points to Redeem
@@ -529,7 +529,7 @@ export default function CreateLoyaltyProgramModal({
             {/* East Africa Specific Tips */}
             <div className="border border-border rounded-lg p-4 bg-muted">
               <div className="flex items-start gap-3">
-                <Star className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <Star className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                 <div>
                   <h3 className="font-semibold">
                     Tips for East African Markets

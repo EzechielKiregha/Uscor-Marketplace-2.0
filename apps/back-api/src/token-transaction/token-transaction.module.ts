@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { PubSub } from "graphql-subscriptions";
 import { AccountRechargeModule } from "../account-recharge/account-recharge.module";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import { PrismaModule } from "../prisma/prisma.module";
@@ -13,6 +14,10 @@ import { TokenTransactionService } from "./token-transaction.service";
 		TokenTransactionService,
 		PrismaService,
 		AccountRechargeService,
+		{
+			provide: "PUB_SUB",
+			useValue: new PubSub(),
+		},
 	],
 	imports: [AccountRechargeModule, PrismaModule],
 })

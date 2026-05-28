@@ -1,7 +1,7 @@
 import {
-	Injectable,
-	NotFoundException,
-	UnauthorizedException,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
 } from "@nestjs/common";
 import { hash } from "argon2";
 import { PrismaService } from "../prisma/prisma.service";
@@ -22,24 +22,27 @@ export class WorkerService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createWorkerInput: CreateWorkerInput) {
-		const { password, businessId, kycId, role, ...workerData } =
+		const { password, businessId, kycId, role, phone, createNewWorker, storeId, ...workerData } =
 			createWorkerInput;
 		const hashedPassword = await hash(password);
 
-		if (!businessId) return new UnauthorizedException("Business ID is missing");
+		if (!businessId) throw new UnauthorizedException("Business ID is missing");
 
-		return this.prisma.worker.create({
+        const worker = await this.prisma.worker.create({
 			data: {
 				...workerData,
 				role: role || WorkerRole.STAFF,
 				password: hashedPassword,
+				phone: phone || Math.random().toString().slice(2, 11), // Generate random 9-digit phone if not provided
 				business: {
 					connect: { id: businessId },
 				},
+				stores: createNewWorker ? { connect: { id: storeId } } : undefined,
 				kyc: kycId ? { connect: { id: kycId } } : undefined,
 			},
 			include: {
-				business: true,
+                business: true,
+                stores: true,
 				kyc: true,
 				shifts: true,
 				sales: true,
@@ -61,6 +64,8 @@ export class WorkerService {
 				},
 			},
 		});
+
+		return worker
 	}
 
 	async findAll(storeId?: string) {
@@ -104,6 +109,7 @@ export class WorkerService {
 						stores: true,
 					},
 				},
+                stores: true,
 				kyc: true,
 				workerServiceAssignments: {
 					include: {
@@ -142,6 +148,58 @@ export class WorkerService {
 
 		if (!worker) {
 			throw new NotFoundException(`Worker with ID ${id} not found`);
+		}
+
+		return worker;
+	}
+	async findOneByEmain(email: string) {
+		const worker = await this.prisma.worker.findUnique({
+			where: { email: email },
+			include: {
+				business: {
+					include: {
+						stores: true,
+					},
+				},
+                stores: true,
+				kyc: true,
+				workerServiceAssignments: {
+					include: {
+						freelanceService: true,
+					},
+				},
+				chatParticipants: {
+					include: {
+						chat: {
+							include: {
+								messages: true,
+							},
+						},
+					},
+				},
+				sales: {
+					include: {
+						saleProducts: {
+							include: {
+								product: true,
+							},
+						},
+						client: true,
+						store: true,
+					},
+				},
+				shifts: {
+					include: {
+						store: true,
+					},
+				},
+				medias: true,
+				auditLogs: true,
+			},
+		});
+
+		if (!worker) {
+			return null;
 		}
 
 		return worker;

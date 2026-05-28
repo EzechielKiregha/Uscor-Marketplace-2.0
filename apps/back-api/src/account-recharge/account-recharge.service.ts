@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { RechargeMethod } from "../generated/prisma/enums";
+import { PaymentStatus, RechargeMethod } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
 import { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
@@ -96,47 +96,30 @@ export class AccountRechargeService {
 		});
 	}
 
+	private buildOwnerWhere(userId: string, userRole: string) {
+		if (userRole === "business") {
+			return { businessId: userId };
+		}
+		if (userRole === "client") {
+			return { clientId: userId };
+		}
+		throw new Error("Invalid user role for account balance query");
+	}
+
 	async getBalance(
 		userId: string,
 		userRole: string,
 		method?: RechargeMethod,
-	): Promise<number> {
-		let recharges;
-		if (method) {
-			recharges = await this.prisma.accountRecharge.findMany({
-				where: {
-					OR: [
-						{
-							businessId: userRole === "business" ? userId : undefined,
-						},
-						{
-							clientId: userRole === "client" ? userId : undefined,
-						},
-					],
-					method: method,
-				},
-				select: { amount: true },
-			});
-		} else {
-			recharges = await this.prisma.accountRecharge.findMany({
-				where: {
-					OR: [
-						{
-							businessId: userRole === "business" ? userId : undefined,
-						},
-						{
-							clientId: userRole === "client" ? userId : undefined,
-						},
-					],
-				},
-				select: { amount: true },
-			});
-		}
-		return recharges.reduce((sum, recharge) => sum + recharge.amount, 0);
-	}
+	) {
+		const ownerWhere = this.buildOwnerWhere(userId, userRole);
+		const where: any = {
+			...ownerWhere,
+			method: method || undefined,
+		};
 
-	async findAll() {
-		return this.prisma.accountRecharge.findMany({
+		const recharges = await this.prisma.accountRecharge.findMany({
+			where,
+			orderBy: { transactionDate: "desc" },
 			include: {
 				client: {
 					select: {
@@ -165,6 +148,92 @@ export class AccountRechargeService {
 				},
 			},
 		});
+
+		const totalAmount = recharges.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const availableAmount = recharges
+			.filter((recharge) => recharge.status === "COMPLETED")
+			.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const pendingAmount = recharges
+			.filter((recharge) => recharge.status === "PENDING")
+			.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const reservedAmount = pendingAmount;
+
+		return {
+			totalAmount,
+			availableAmount,
+			pendingAmount,
+			reservedAmount,
+			transactions: recharges,
+		};
+	}
+
+	async findAll(
+		userId: string,
+		userRole: string,
+		method?: RechargeMethod,
+		status?: string,
+		origin?: string,
+		startDate?: Date,
+		endDate?: Date,
+		page = 1,
+		limit = 10,
+	) {
+		const ownerWhere = this.buildOwnerWhere(userId, userRole);
+		const where: any = {
+			...ownerWhere,
+			method: method || undefined,
+			status: status || undefined,
+			origin: origin || undefined,
+			transactionDate:
+				startDate || endDate
+					? {
+						gte: startDate || undefined,
+						lte: endDate || undefined,
+					}
+					: undefined,
+		};
+
+		const total = await this.prisma.accountRecharge.count({ where });
+		const items = await this.prisma.accountRecharge.findMany({
+			where,
+			skip: (page - 1) * limit,
+			take: limit,
+			orderBy: { transactionDate: "desc" },
+			include: {
+				client: {
+					select: {
+						id: true,
+						username: true,
+						email: true,
+						createdAt: true,
+					},
+				},
+				business: {
+					select: {
+						id: true,
+						name: true,
+						email: true,
+						createdAt: true,
+					},
+				},
+				tokenTransaction: {
+					select: {
+						id: true,
+						businessId: true,
+						amount: true,
+						type: true,
+						createdAt: true,
+					},
+				},
+			},
+		});
+
+		return {
+			items,
+			total,
+			page,
+			limit,
+		};
 	}
 
 	async findOne(id: string) {
@@ -217,10 +286,15 @@ export class AccountRechargeService {
 			throw new Error("Businesses can only update their own recharges");
 		}
 
-		const { amount, method, origin } = updateAccountRechargeInput;
+		const { amount, method, origin, status } = updateAccountRechargeInput;
 		return this.prisma.accountRecharge.update({
 			where: { id },
-			data: { amount, method, origin },
+			data: {
+				amount,
+				method,
+				origin,
+				status: status ? (PaymentStatus[status as keyof typeof PaymentStatus] as PaymentStatus) : undefined,
+			},
 			include: {
 				client: {
 					select: {

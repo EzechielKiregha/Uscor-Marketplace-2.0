@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/toast-provider";
@@ -21,6 +21,10 @@ import {
   APPLY_PROMOTION,
   CREATE_ORDER,
 } from "@/graphql/order.gql";
+import {
+  GET_LOYALTY_PROGRAMS,
+  GET_CUSTOMER_POINTS,
+} from "@/graphql/loyalty.gql";
 import { formatPrice } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,6 +41,16 @@ interface RwandaLocation {
   statusCode: number;
   message: string;
   data: Record<string, Array<Record<string, string>>>;
+}
+
+function getTierForPoints(tiers: any[] = [], points: number) {
+  if (!tiers?.length) return null;
+  return (
+    [...tiers]
+      .sort((a, b) => a.minPoints - b.minPoints)
+      .reverse()
+      .find((tier) => points >= tier.minPoints) || tiers[0]
+  );
 }
 
 // interface CheckoutPageProps {
@@ -64,6 +78,44 @@ export default function CheckoutPage() {
   const { loading: userLoading, user } = useMe();
 
   const [createOrder] = useMutation(CREATE_ORDER);
+
+  const activeBusinessOrder = groupedOrders[activeBusinessIndex];
+  const activeBusinessId = activeBusinessOrder?.businessId;
+
+  const { data: loyaltyProgramsData } = useQuery(GET_LOYALTY_PROGRAMS, {
+    variables: { businessId: activeBusinessId || "" },
+    skip: !activeBusinessId,
+  });
+
+  const { data: customerPointsData } = useQuery(GET_CUSTOMER_POINTS, {
+    variables: {
+      businessId: activeBusinessId || "",
+      clientId: user?.id || "",
+    },
+    skip: !activeBusinessId || !user?.id,
+  });
+
+  const loyaltyProgram =
+    loyaltyProgramsData?.loyaltyPrograms?.[0] ||
+    customerPointsData?.customerPoints?.program;
+  const currentBusinessPoints =
+    customerPointsData?.customerPoints?.totalPoints ?? 0;
+  const pointsToEarnNow = loyaltyProgram
+    ? Math.floor(
+        ((activeBusinessOrder?.subtotal ?? 0) *
+          (loyaltyProgram.pointsPerPurchase ?? 0)) /
+          2,
+      )
+    : 0;
+  const projectedPointsAfterPayment = currentBusinessPoints + pointsToEarnNow;
+  const currentTier = getTierForPoints(
+    loyaltyProgram?.tiers,
+    currentBusinessPoints,
+  );
+  const projectedTier = getTierForPoints(
+    loyaltyProgram?.tiers,
+    projectedPointsAfterPayment,
+  );
 
   // Calculate totals
   const subtotal = items.reduce(
@@ -512,6 +564,53 @@ export default function CheckoutPage() {
                   <span>Free on orders over $1500</span>
                 </div>
               </div>
+
+              {loyaltyProgram ? (
+                <div className="mt-4 p-4 bg-background rounded-lg border border-border">
+                  <h3 className="font-semibold mb-3">
+                    Loyalty Program Summary
+                  </h3>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between">
+                      <span>Program</span>
+                      <span>{loyaltyProgram.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Current tier</span>
+                      <span>{currentTier?.name ?? "Member"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Current points</span>
+                      <span>{currentBusinessPoints}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Points to earn now</span>
+                      <span>{pointsToEarnNow}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Projected after payment</span>
+                      <span>{projectedPointsAfterPayment}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Projected tier</span>
+                      <span>
+                        {projectedTier?.name ?? currentTier?.name ?? "Member"}
+                      </span>
+                    </div>
+                    <div className="rounded-lg bg-primary/5 p-3 text-xs text-muted-foreground">
+                      Half of this business order's earned points are registered
+                      now, with the remaining loyalty rewards processed after
+                      payment completion.
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                activeBusinessId && (
+                  <div className="mt-4 p-4 bg-muted rounded-lg border border-border text-sm">
+                    This business does not have an active loyalty program.
+                  </div>
+                )
+              )}
             </div>
 
             {/* Unified Payment Info */}

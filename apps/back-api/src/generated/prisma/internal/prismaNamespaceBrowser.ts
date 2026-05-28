@@ -780,6 +780,7 @@ export const ShiftScalarFieldEnum = {
   storeId: 'storeId',
   startTime: 'startTime',
   endTime: 'endTime',
+  status: 'status',
   sales: 'sales',
   transactionCount: 'transactionCount',
   refundTotal: 'refundTotal',

@@ -198,6 +198,7 @@ export type StoreWhereInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentListRelationFilter
   shifts?: Prisma.ShiftListRelationFilter
   products?: Prisma.ProductListRelationFilter
+  workers?: Prisma.WorkerListRelationFilter
   medias?: Prisma.MediaListRelationFilter
 }
 
@@ -216,6 +217,7 @@ export type StoreOrderByWithRelationInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentOrderByRelationAggregateInput
   shifts?: Prisma.ShiftOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
+  workers?: Prisma.WorkerOrderByRelationAggregateInput
   medias?: Prisma.MediaOrderByRelationAggregateInput
 }
 
@@ -237,6 +239,7 @@ export type StoreWhereUniqueInput = Prisma.AtLeast<{
   inventoryAdjustments?: Prisma.InventoryAdjustmentListRelationFilter
   shifts?: Prisma.ShiftListRelationFilter
   products?: Prisma.ProductListRelationFilter
+  workers?: Prisma.WorkerListRelationFilter
   medias?: Prisma.MediaListRelationFilter
 }, "id">
 
@@ -278,6 +281,7 @@ export type StoreCreateInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -295,6 +299,7 @@ export type StoreUncheckedCreateInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -312,6 +317,7 @@ export type StoreUpdateInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -329,6 +335,7 @@ export type StoreUncheckedUpdateInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -444,6 +451,44 @@ export type StoreUncheckedUpdateManyWithoutBusinessNestedInput = {
   connect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
   update?: Prisma.StoreUpdateWithWhereUniqueWithoutBusinessInput | Prisma.StoreUpdateWithWhereUniqueWithoutBusinessInput[]
   updateMany?: Prisma.StoreUpdateManyWithWhereWithoutBusinessInput | Prisma.StoreUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.StoreScalarWhereInput | Prisma.StoreScalarWhereInput[]
+}
+
+export type StoreCreateNestedManyWithoutWorkersInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutWorkersInput, Prisma.StoreUncheckedCreateWithoutWorkersInput> | Prisma.StoreCreateWithoutWorkersInput[] | Prisma.StoreUncheckedCreateWithoutWorkersInput[]
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutWorkersInput | Prisma.StoreCreateOrConnectWithoutWorkersInput[]
+  connect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+}
+
+export type StoreUncheckedCreateNestedManyWithoutWorkersInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutWorkersInput, Prisma.StoreUncheckedCreateWithoutWorkersInput> | Prisma.StoreCreateWithoutWorkersInput[] | Prisma.StoreUncheckedCreateWithoutWorkersInput[]
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutWorkersInput | Prisma.StoreCreateOrConnectWithoutWorkersInput[]
+  connect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+}
+
+export type StoreUpdateManyWithoutWorkersNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutWorkersInput, Prisma.StoreUncheckedCreateWithoutWorkersInput> | Prisma.StoreCreateWithoutWorkersInput[] | Prisma.StoreUncheckedCreateWithoutWorkersInput[]
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutWorkersInput | Prisma.StoreCreateOrConnectWithoutWorkersInput[]
+  upsert?: Prisma.StoreUpsertWithWhereUniqueWithoutWorkersInput | Prisma.StoreUpsertWithWhereUniqueWithoutWorkersInput[]
+  set?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  disconnect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  delete?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  connect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  update?: Prisma.StoreUpdateWithWhereUniqueWithoutWorkersInput | Prisma.StoreUpdateWithWhereUniqueWithoutWorkersInput[]
+  updateMany?: Prisma.StoreUpdateManyWithWhereWithoutWorkersInput | Prisma.StoreUpdateManyWithWhereWithoutWorkersInput[]
+  deleteMany?: Prisma.StoreScalarWhereInput | Prisma.StoreScalarWhereInput[]
+}
+
+export type StoreUncheckedUpdateManyWithoutWorkersNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutWorkersInput, Prisma.StoreUncheckedCreateWithoutWorkersInput> | Prisma.StoreCreateWithoutWorkersInput[] | Prisma.StoreUncheckedCreateWithoutWorkersInput[]
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutWorkersInput | Prisma.StoreCreateOrConnectWithoutWorkersInput[]
+  upsert?: Prisma.StoreUpsertWithWhereUniqueWithoutWorkersInput | Prisma.StoreUpsertWithWhereUniqueWithoutWorkersInput[]
+  set?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  disconnect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  delete?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  connect?: Prisma.StoreWhereUniqueInput | Prisma.StoreWhereUniqueInput[]
+  update?: Prisma.StoreUpdateWithWhereUniqueWithoutWorkersInput | Prisma.StoreUpdateWithWhereUniqueWithoutWorkersInput[]
+  updateMany?: Prisma.StoreUpdateManyWithWhereWithoutWorkersInput | Prisma.StoreUpdateManyWithWhereWithoutWorkersInput[]
   deleteMany?: Prisma.StoreScalarWhereInput | Prisma.StoreScalarWhereInput[]
 }
 
@@ -576,6 +621,7 @@ export type StoreCreateWithoutBusinessInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -592,6 +638,7 @@ export type StoreUncheckedCreateWithoutBusinessInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -633,6 +680,61 @@ export type StoreScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Store"> | Date | string
 }
 
+export type StoreCreateWithoutWorkersInput = {
+  id?: string
+  name: string
+  address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutStoresInput
+  sales?: Prisma.SaleCreateNestedManyWithoutStoreInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutStoreInput
+  transferOrdersFrom?: Prisma.TransferOrderCreateNestedManyWithoutFromStoreInput
+  transferOrdersTo?: Prisma.TransferOrderCreateNestedManyWithoutToStoreInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
+  shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutWorkersInput = {
+  id?: string
+  businessId: string
+  name: string
+  address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutStoreInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutStoreInput
+  transferOrdersFrom?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutFromStoreInput
+  transferOrdersTo?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutToStoreInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
+  shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutWorkersInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutWorkersInput, Prisma.StoreUncheckedCreateWithoutWorkersInput>
+}
+
+export type StoreUpsertWithWhereUniqueWithoutWorkersInput = {
+  where: Prisma.StoreWhereUniqueInput
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutWorkersInput, Prisma.StoreUncheckedUpdateWithoutWorkersInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutWorkersInput, Prisma.StoreUncheckedCreateWithoutWorkersInput>
+}
+
+export type StoreUpdateWithWhereUniqueWithoutWorkersInput = {
+  where: Prisma.StoreWhereUniqueInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutWorkersInput, Prisma.StoreUncheckedUpdateWithoutWorkersInput>
+}
+
+export type StoreUpdateManyWithWhereWithoutWorkersInput = {
+  where: Prisma.StoreScalarWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateManyMutationInput, Prisma.StoreUncheckedUpdateManyWithoutWorkersInput>
+}
+
 export type StoreCreateWithoutProductsInput = {
   id?: string
   name: string
@@ -646,6 +748,7 @@ export type StoreCreateWithoutProductsInput = {
   transferOrdersTo?: Prisma.TransferOrderCreateNestedManyWithoutToStoreInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -662,6 +765,7 @@ export type StoreUncheckedCreateWithoutProductsInput = {
   transferOrdersTo?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutToStoreInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -694,6 +798,7 @@ export type StoreUpdateWithoutProductsInput = {
   transferOrdersTo?: Prisma.TransferOrderUpdateManyWithoutToStoreNestedInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -710,6 +815,7 @@ export type StoreUncheckedUpdateWithoutProductsInput = {
   transferOrdersTo?: Prisma.TransferOrderUncheckedUpdateManyWithoutToStoreNestedInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -727,6 +833,7 @@ export type StoreCreateWithoutMediasInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
 }
 
 export type StoreUncheckedCreateWithoutMediasInput = {
@@ -743,6 +850,7 @@ export type StoreUncheckedCreateWithoutMediasInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
 }
 
 export type StoreCreateOrConnectWithoutMediasInput = {
@@ -775,6 +883,7 @@ export type StoreUpdateWithoutMediasInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutMediasInput = {
@@ -791,6 +900,7 @@ export type StoreUncheckedUpdateWithoutMediasInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
 }
 
 export type StoreCreateWithoutSalesInput = {
@@ -806,6 +916,7 @@ export type StoreCreateWithoutSalesInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -822,6 +933,7 @@ export type StoreUncheckedCreateWithoutSalesInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -854,6 +966,7 @@ export type StoreUpdateWithoutSalesInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -870,6 +983,7 @@ export type StoreUncheckedUpdateWithoutSalesInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -886,6 +1000,7 @@ export type StoreCreateWithoutPurchaseOrdersInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -902,6 +1017,7 @@ export type StoreUncheckedCreateWithoutPurchaseOrdersInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -934,6 +1050,7 @@ export type StoreUpdateWithoutPurchaseOrdersInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -950,6 +1067,7 @@ export type StoreUncheckedUpdateWithoutPurchaseOrdersInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -966,6 +1084,7 @@ export type StoreCreateWithoutTransferOrdersFromInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -982,6 +1101,7 @@ export type StoreUncheckedCreateWithoutTransferOrdersFromInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -1003,6 +1123,7 @@ export type StoreCreateWithoutTransferOrdersToInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -1019,6 +1140,7 @@ export type StoreUncheckedCreateWithoutTransferOrdersToInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -1051,6 +1173,7 @@ export type StoreUpdateWithoutTransferOrdersFromInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -1067,6 +1190,7 @@ export type StoreUncheckedUpdateWithoutTransferOrdersFromInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -1094,6 +1218,7 @@ export type StoreUpdateWithoutTransferOrdersToInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -1110,6 +1235,7 @@ export type StoreUncheckedUpdateWithoutTransferOrdersToInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -1126,6 +1252,7 @@ export type StoreCreateWithoutInventoryAdjustmentsInput = {
   transferOrdersTo?: Prisma.TransferOrderCreateNestedManyWithoutToStoreInput
   shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -1142,6 +1269,7 @@ export type StoreUncheckedCreateWithoutInventoryAdjustmentsInput = {
   transferOrdersTo?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutToStoreInput
   shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -1174,6 +1302,7 @@ export type StoreUpdateWithoutInventoryAdjustmentsInput = {
   transferOrdersTo?: Prisma.TransferOrderUpdateManyWithoutToStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -1190,6 +1319,7 @@ export type StoreUncheckedUpdateWithoutInventoryAdjustmentsInput = {
   transferOrdersTo?: Prisma.TransferOrderUncheckedUpdateManyWithoutToStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -1206,6 +1336,7 @@ export type StoreCreateWithoutShiftsInput = {
   transferOrdersTo?: Prisma.TransferOrderCreateNestedManyWithoutToStoreInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaCreateNestedManyWithoutStoreInput
 }
 
@@ -1222,6 +1353,7 @@ export type StoreUncheckedCreateWithoutShiftsInput = {
   transferOrdersTo?: Prisma.TransferOrderUncheckedCreateNestedManyWithoutToStoreInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutStoresInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutStoreInput
 }
 
@@ -1254,6 +1386,7 @@ export type StoreUpdateWithoutShiftsInput = {
   transferOrdersTo?: Prisma.TransferOrderUpdateManyWithoutToStoreNestedInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -1270,6 +1403,7 @@ export type StoreUncheckedUpdateWithoutShiftsInput = {
   transferOrdersTo?: Prisma.TransferOrderUncheckedUpdateManyWithoutToStoreNestedInput
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
@@ -1294,6 +1428,7 @@ export type StoreUpdateWithoutBusinessInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
 }
 
@@ -1310,11 +1445,55 @@ export type StoreUncheckedUpdateWithoutBusinessInput = {
   inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
   shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutStoresNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StoreUpdateWithoutWorkersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutStoresNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutStoreNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutStoreNestedInput
+  transferOrdersFrom?: Prisma.TransferOrderUpdateManyWithoutFromStoreNestedInput
+  transferOrdersTo?: Prisma.TransferOrderUpdateManyWithoutToStoreNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUpdateManyWithoutStoreNestedInput
+  shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutWorkersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutStoreNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutStoreNestedInput
+  transferOrdersFrom?: Prisma.TransferOrderUncheckedUpdateManyWithoutFromStoreNestedInput
+  transferOrdersTo?: Prisma.TransferOrderUncheckedUpdateManyWithoutToStoreNestedInput
+  inventoryAdjustments?: Prisma.InventoryAdjustmentUncheckedUpdateManyWithoutStoreNestedInput
+  shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateManyWithoutWorkersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1334,6 +1513,7 @@ export type StoreCountOutputType = {
   inventoryAdjustments: number
   shifts: number
   products: number
+  workers: number
   medias: number
 }
 
@@ -1345,6 +1525,7 @@ export type StoreCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   inventoryAdjustments?: boolean | StoreCountOutputTypeCountInventoryAdjustmentsArgs
   shifts?: boolean | StoreCountOutputTypeCountShiftsArgs
   products?: boolean | StoreCountOutputTypeCountProductsArgs
+  workers?: boolean | StoreCountOutputTypeCountWorkersArgs
   medias?: boolean | StoreCountOutputTypeCountMediasArgs
 }
 
@@ -1410,6 +1591,13 @@ export type StoreCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types.
 /**
  * StoreCountOutputType without action
  */
+export type StoreCountOutputTypeCountWorkersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkerWhereInput
+}
+
+/**
+ * StoreCountOutputType without action
+ */
 export type StoreCountOutputTypeCountMediasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MediaWhereInput
 }
@@ -1430,6 +1618,7 @@ export type StoreSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   inventoryAdjustments?: boolean | Prisma.Store$inventoryAdjustmentsArgs<ExtArgs>
   shifts?: boolean | Prisma.Store$shiftsArgs<ExtArgs>
   products?: boolean | Prisma.Store$productsArgs<ExtArgs>
+  workers?: boolean | Prisma.Store$workersArgs<ExtArgs>
   medias?: boolean | Prisma.Store$mediasArgs<ExtArgs>
   _count?: boolean | Prisma.StoreCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["store"]>
@@ -1473,6 +1662,7 @@ export type StoreInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   inventoryAdjustments?: boolean | Prisma.Store$inventoryAdjustmentsArgs<ExtArgs>
   shifts?: boolean | Prisma.Store$shiftsArgs<ExtArgs>
   products?: boolean | Prisma.Store$productsArgs<ExtArgs>
+  workers?: boolean | Prisma.Store$workersArgs<ExtArgs>
   medias?: boolean | Prisma.Store$mediasArgs<ExtArgs>
   _count?: boolean | Prisma.StoreCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1494,6 +1684,7 @@ export type $StorePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     inventoryAdjustments: Prisma.$InventoryAdjustmentPayload<ExtArgs>[]
     shifts: Prisma.$ShiftPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
+    workers: Prisma.$WorkerPayload<ExtArgs>[]
     medias: Prisma.$MediaPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1905,6 +2096,7 @@ export interface Prisma__StoreClient<T, Null = never, ExtArgs extends runtime.Ty
   inventoryAdjustments<T extends Prisma.Store$inventoryAdjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$inventoryAdjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shifts<T extends Prisma.Store$shiftsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$shiftsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Store$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workers<T extends Prisma.Store$workersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$workersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   medias<T extends Prisma.Store$mediasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$mediasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2502,6 +2694,30 @@ export type Store$productsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[]
+}
+
+/**
+ * Store.workers
+ */
+export type Store$workersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Worker
+   */
+  select?: Prisma.WorkerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Worker
+   */
+  omit?: Prisma.WorkerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkerInclude<ExtArgs> | null
+  where?: Prisma.WorkerWhereInput
+  orderBy?: Prisma.WorkerOrderByWithRelationInput | Prisma.WorkerOrderByWithRelationInput[]
+  cursor?: Prisma.WorkerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkerScalarFieldEnum | Prisma.WorkerScalarFieldEnum[]
 }
 
 /**

@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery } from "@apollo/client";
 import { Edit, Package, Plus, Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/seraui/Loader";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -11,30 +11,42 @@ import {
   GET_PRODUCTS,
   SEARCHED_PRODUCTS,
 } from "@/graphql/product.gql";
-import { ProductEntity } from "@/lib/types";
+import { BusinessEntity, ProductEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import CreateProductModal from "../_components/modals/CreateProductModal";
 import { useOpenCreateProductModal } from "../_hooks/use-open-create-product-modal";
+import { useProductSubscriptions } from "../_hooks/useProductSubscriptions";
 
 export default function BusinessProductsPage() {
   const { isOpen, setIsOpen } = useOpenCreateProductModal();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const showToast = useToast().showToast;
-  const _bUser = useMe();
+  const { user: bUser } = useMe();
+  const [products, setProducts] = useState<ProductEntity[]>([]);
 
   const {
     data: productsData,
     loading,
     error,
-    refetch,
   } = useQuery(SEARCHED_PRODUCTS, {
     variables: {
       title: searchTerm,
     },
   });
-  // 1
 
+  const { data: fetchedProducts, loading: productsLoading } =
+    useQuery(GET_PRODUCTS);
+
+  useEffect(() => {
+    if (productsData?.searchedProducts) {
+      setProducts(productsData?.searchedProducts);
+    }
+
+    if (fetchedProducts?.products) {
+      setProducts(fetchedProducts?.products);
+    }
+  }, [productsData, fetchedProducts]);
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [GET_PRODUCTS],
   });
@@ -51,13 +63,14 @@ export default function BusinessProductsPage() {
   };
 
   const filteredProducts =
-    productsData?.searchedProducts?.filter(
+    products?.filter(
       (product: ProductEntity) =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
-  if (loading && searchTerm.trim() === "") return <Loader loading={true} />;
+  if ((loading && searchTerm.trim() === "") || productsLoading)
+    return <Loader loading={true} />;
   if (error) return <div>Error loading products</div>;
 
   return (

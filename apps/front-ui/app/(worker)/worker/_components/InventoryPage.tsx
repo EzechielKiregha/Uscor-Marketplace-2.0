@@ -27,9 +27,15 @@ import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
 
 interface InventoryPageProps {
   selectedStoreId: string | null;
+  viewMode?: "worker" | "business"; // New prop
+  workerId?: string;
 }
 
-export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
+export default function InventoryPage({
+  selectedStoreId,
+  viewMode = "worker",
+  workerId,
+}: InventoryPageProps) {
   const { user } = useMe();
   const {
     isOnline,
@@ -48,6 +54,9 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
   const [adjustmentReason, setAdjustmentReason] = useState("");
   const { showToast } = useToast();
 
+  const effectiveWorkerId =
+    viewMode === "business" && workerId ? workerId : user?.id;
+
   const {
     data: inventoryData,
     loading: inventoryLoading,
@@ -56,7 +65,7 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
     variables: {
       storeId: selectedStoreId,
     },
-    skip: !user?.id,
+    skip: !effectiveWorkerId,
   });
 
   const [createInventoryAdjustment] = useMutation(CREATE_INVENTORY_ADJUSTMENT);
@@ -64,7 +73,9 @@ export default function InventoryPage({ selectedStoreId }: InventoryPageProps) {
   const { getInventory } = useInventory(
     selectedStoreId || "",
     user && typeof user === "object" && "business" in user
-      ? user.business?.id || ""
+      ? viewMode === "business"
+        ? user?.id
+        : user.business?.id || ""
       : "",
   );
 

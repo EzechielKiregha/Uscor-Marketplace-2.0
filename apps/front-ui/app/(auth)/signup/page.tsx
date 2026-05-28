@@ -3,635 +3,640 @@ import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select } from "@radix-ui/react-select";
 import {
-	ArrowLeftIcon,
-	ArrowRightIcon,
-	CheckIcon,
-	EyeIcon,
-	EyeOffIcon,
-	LockIcon,
-	MailIcon,
-	UserIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  EyeIcon,
+  EyeOffIcon,
+  LockIcon,
+  MailIcon,
+  UserIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { GlowButton } from "@/components/seraui/GlowButton";
 import { useToast } from "@/components/toast-provider";
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
-	CREATE_BUSINESS,
-	CREATE_CLIENT,
-	CREATE_WORKER,
-	getLoginMutation,
+  CREATE_BUSINESS,
+  CREATE_CLIENT,
+  CREATE_WORKER,
+  getLoginMutation,
 } from "@/graphql/auth.gql";
 import { setAuthToken } from "@/lib/auth";
 
 // ✅ Main business types for navigation (added)
 const businessTypes = [
-	{
-		href: "/signup?businessType=ARTISAN",
-		label: "Artisan & Handcrafted Goods",
-	},
-	{ href: "/signup?businessType=BOOKSTORE", label: "Bookstore & Stationery" },
-	{ href: "/signup?businessType=ELECTRONICS", label: "Electronics & Gadgets" },
-	{ href: "/signup?businessType=HARDWARE", label: "Hardware & Tools" },
-	{ href: "/signup?businessType=GROCERY", label: "Grocery & Convenience" },
-	{ href: "/signup?businessType=CAFE", label: "Café & Coffee Shops" },
-	{ href: "/signup?businessType=RESTAURANT", label: "Restaurant & Dining" },
-	{ href: "/signup?businessType=RETAIL", label: "Retail & General Stores" },
-	{ href: "/signup?businessType=BAR", label: "Bar & Pub" },
-	{ href: "/signup?businessType=CLOTHING", label: "Clothing & Accessories" },
+  {
+    href: "/signup?businessType=ARTISAN",
+    label: "Artisan & Handcrafted Goods",
+  },
+  { href: "/signup?businessType=BOOKSTORE", label: "Bookstore & Stationery" },
+  { href: "/signup?businessType=ELECTRONICS", label: "Electronics & Gadgets" },
+  { href: "/signup?businessType=HARDWARE", label: "Hardware & Tools" },
+  { href: "/signup?businessType=GROCERY", label: "Grocery & Convenience" },
+  { href: "/signup?businessType=CAFE", label: "Café & Coffee Shops" },
+  { href: "/signup?businessType=RESTAURANT", label: "Restaurant & Dining" },
+  { href: "/signup?businessType=RETAIL", label: "Retail & General Stores" },
+  { href: "/signup?businessType=BAR", label: "Bar & Pub" },
+  { href: "/signup?businessType=CLOTHING", label: "Clothing & Accessories" },
 ];
 
 // Zod Schema
 const schema = z
-	.object({
-		role: z.enum(["Client", "Business", "Worker"], {
-			message: "Please select a role",
-		}),
-		fullName: z.string().min(2, "Full name must be at least 2 characters"),
-		phone: z.string().optional(),
-		email: z.string().email("Invalid email address"),
-		password: z.string().min(6, "Password must be at least 6 characters"),
-		workerRole: z.enum(["ADMIN", "STAFF", "MANAGER", "FREELANCER"]).optional(),
-		businessId: z.string().optional(),
-		businessType: z.string().optional(),
-	})
-	.refine(
-		(data) => data.role !== "Worker" || (data.workerRole && data.businessId),
-		{
-			message: "Worker role and business ID are required for Worker accounts",
-			path: ["workerRole"],
-		},
-	);
+  .object({
+    role: z.enum(["Client", "Business", "Worker"], {
+      message: "Please select a role",
+    }),
+    fullName: z.string().min(2, "Full name must be at least 2 characters"),
+    phone: z.string().optional(),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    workerRole: z.enum(["ADMIN", "STAFF", "MANAGER", "FREELANCER"]).optional(),
+    businessId: z.string().optional(),
+    businessType: z.string().optional(),
+  })
+  .refine(
+    (data) => data.role !== "Worker" || (data.workerRole && data.businessId),
+    {
+      message: "Worker role and business ID are required for Worker accounts",
+      path: ["workerRole"],
+    },
+  );
 
 type FormData = z.infer<typeof schema>;
 
 export default function SignupPage() {
-	const [step, setStep] = useState(1);
-	const [showPassword, setShowPassword] = useState(false);
-	const router = useRouter();
-	const form = useForm<FormData>({
-		resolver: zodResolver(schema),
-		defaultValues: { role: "Client" },
-	});
+  const [step, setStep] = useState(1);
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { role: "Client" },
+  });
 
-	const params = useSearchParams();
-	const businessType = params.get("businessType");
-	localStorage.setItem("businessType", businessType || "NA");
+  const params = useSearchParams();
+  const businessType = params.get("businessType");
 
-	const { handleSubmit, watch, setValue } = form;
-	const [createClient, { loading: clientLoading, error: clientError }] =
-		useMutation(CREATE_CLIENT);
-	const [createBusiness, { loading: businessLoading, error: businessError }] =
-		useMutation(CREATE_BUSINESS);
-	const [createWorker, { loading: workerLoading, error: workerError }] =
-		useMutation(CREATE_WORKER);
-	const [signInBusiness] = useMutation(getLoginMutation("Business"));
-	const role = watch("role");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("businessType", businessType || "NA");
+    }
+  }, [businessType]);
 
-	const loading = clientLoading || businessLoading || workerLoading;
-	const _error = clientError || businessError || workerError;
-	const { showToast } = useToast();
+  const { handleSubmit, watch, setValue } = form;
+  const [createClient, { loading: clientLoading, error: clientError }] =
+    useMutation(CREATE_CLIENT);
+  const [createBusiness, { loading: businessLoading, error: businessError }] =
+    useMutation(CREATE_BUSINESS);
+  const [createWorker, { loading: workerLoading, error: workerError }] =
+    useMutation(CREATE_WORKER);
+  const [signInBusiness] = useMutation(getLoginMutation("Business"));
+  const role = watch("role");
 
-	const handleNext = () => {
-		if (step < 4) setStep(step + 1);
-	};
+  const loading = clientLoading || businessLoading || workerLoading;
+  const _error = clientError || businessError || workerError;
+  const { showToast } = useToast();
 
-	const onSubmit = async (data: FormData) => {
-		try {
-			let result;
-			if (data.role === "Client") {
-				result = await createClient({
-					variables: {
-						createClientInput: {
-							email: data.email,
-							password: data.password,
-							username: data.fullName.trim(),
-							fullName: data.fullName,
-							phone: data.phone,
-							isVerified: false,
-						},
-					},
-				});
-				result = result.data.createClient;
-			} else if (data.role === "Business") {
-				result = await createBusiness({
-					variables: {
-						createBusinessInput: {
-							email: data.email,
-							password: data.password,
-							name: data.fullName,
-							phone: data.phone,
-							businessType: data.businessType || businessType || "NA",
-						},
-					},
-				});
-				const createdBusiness = result.data.createBusiness;
-				// Auto-login the business so we can fetch preferences and proceed to setup
-				const { data: signIn } = await signInBusiness({
-					variables: {
-						SignInInput: { email: data.email, password: data.password },
-					},
-				});
-				if (
-					signIn?.signBusinessIn?.accessToken &&
-					signIn?.signBusinessIn?.refreshToken
-				) {
-					setAuthToken(
-						signIn.signBusinessIn.accessToken,
-						signIn.signBusinessIn.refreshToken,
-					);
-				}
-				result = createdBusiness;
-			} else if (data.role === "Worker") {
-				result = await createWorker({
-					variables: {
-						createWorkerInput: {
-							email: data.email,
-							password: data.password,
-							fullName: data.fullName,
-							role: data.workerRole,
-							businessId: data.businessId,
-							isVerified: false,
-						},
-					},
-				});
-				result = result.data.createWorker;
-			}
-			showToast(
-				"success",
-				"Success",
-				"Account Was Created",
-				true,
-				8000,
-				"bottom-right",
-			);
-			if (data.role === "Business") {
-				router.push("/create-business-setup");
-			} else {
-				router.push("/login");
-			}
-		} catch (err: any) {
-			showToast("error", "Failed", err.message, true, 8000, "bottom-right");
-		}
-	};
+  const handleNext = () => {
+    if (step < 4) setStep(step + 1);
+  };
 
-	return (
-		<div className="relative w-full flex items-center justify-center min-h-screen bg-background px-4">
-			<div className="w-full max-w-sm p-6 space-y-6 bg-card rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
-				{/* Progress Bar */}
-				<div className="mb-6">
-					<div className="flex justify-between items-center mb-3">
-						<span className="text-sm font-medium text-darkGray dark:text-lightGray">
-							Step {step} of 4
-						</span>
-						<span className="text-sm text-secondary-light dark:text-secondary-dark">
-							{Math.round((step / 4) * 100)}%
-						</span>
-					</div>
-					<div className="w-full bg-secondary-light dark:bg-secondary-dark rounded-full h-2 overflow-hidden">
-						<div
-							className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
-							style={{ width: `${(step / 4) * 100}%` }}
-						/>
-					</div>
-				</div>
+  const onSubmit = async (data: FormData) => {
+    try {
+      let result;
+      if (data.role === "Client") {
+        result = await createClient({
+          variables: {
+            createClientInput: {
+              email: data.email,
+              password: data.password,
+              username: data.fullName.trim(),
+              fullName: data.fullName,
+              phone: data.phone,
+              isVerified: false,
+            },
+          },
+        });
+        result = result.data.createClient;
+      } else if (data.role === "Business") {
+        result = await createBusiness({
+          variables: {
+            createBusinessInput: {
+              email: data.email,
+              password: data.password,
+              name: data.fullName,
+              phone: data.phone,
+              businessType: data.businessType || businessType || "NA",
+            },
+          },
+        });
+        const createdBusiness = result.data.createBusiness;
+        // Auto-login the business so we can fetch preferences and proceed to setup
+        const { data: signIn } = await signInBusiness({
+          variables: {
+            SignInInput: { email: data.email, password: data.password },
+          },
+        });
+        if (
+          signIn?.signBusinessIn?.accessToken &&
+          signIn?.signBusinessIn?.refreshToken
+        ) {
+          setAuthToken(
+            signIn.signBusinessIn.accessToken,
+            signIn.signBusinessIn.refreshToken,
+          );
+        }
+        result = createdBusiness;
+      } else if (data.role === "Worker") {
+        result = await createWorker({
+          variables: {
+            createWorkerInput: {
+              email: data.email,
+              password: data.password,
+              fullName: data.fullName,
+              role: data.workerRole,
+              businessId: data.businessId,
+              isVerified: false,
+            },
+          },
+        });
+        result = result.data.createWorker;
+      }
+      showToast(
+        "success",
+        "Success",
+        "Account Was Created",
+        true,
+        8000,
+        "bottom-right",
+      );
+      if (data.role === "Business") {
+        router.push("/create-business-setup");
+      } else {
+        router.push("/login");
+      }
+    } catch (err: any) {
+      showToast("error", "Failed", err.message, true, 8000, "bottom-right");
+    }
+  };
 
-				{/* Main Card */}
-				<div className="bg-card p-6">
-					<div className="text-center mb-6">
-						<div className="inline-flex items-center justify-center w-12 h-12 bg-secondary-light dark:bg-secondary-dark rounded-full mb-4">
-							<UserIcon />
-						</div>
-						<h1 className="text-2xl font-semibold text-darkGray dark:text-lightGray mb-2">
-							Create Account
-						</h1>
-						<p className="text-sm text-secondary-light dark:text-secondary-dark">
-							{step === 1 && "Select your account type"}
-							{step === 2 && "Enter your personal information"}
-							{step === 3 && "Set up your credentials"}
-							{step === 4 && "Review your details"}
-						</p>
-					</div>
+  return (
+    <div className="relative w-full flex items-center justify-center min-h-screen bg-background px-4">
+      <div className="w-full max-w-sm p-6 space-y-6 bg-card rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-sm font-medium text-darkGray dark:text-lightGray">
+              Step {step} of 4
+            </span>
+            <span className="text-sm text-secondary-light dark:text-secondary-dark">
+              {Math.round((step / 4) * 100)}%
+            </span>
+          </div>
+          <div className="w-full bg-secondary-light dark:bg-secondary-dark rounded-full h-2 overflow-hidden">
+            <div
+              className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${(step / 4) * 100}%` }}
+            />
+          </div>
+        </div>
 
-					<Form {...form}>
-						<form
-							onSubmit={handleSubmit(onSubmit)}
-							className="space-y-4 items-center"
-						>
-							{/* Step 1: Role Selection */}
-							{step === 1 && (
-								<div className="space-y-4">
-									<FormField
-										control={form.control}
-										name="role"
-										render={({ field }) => (
-											<FormItem className="form-item justify-center items-center w-full">
-												<FormLabel>Account Type</FormLabel>
-												<FormControl>
-													<Select
-														value={field.value}
-														onValueChange={field.onChange}
-														defaultValue="Client"
-													>
-														<FormControl>
-															<SelectTrigger className="form-field w-full">
-																<SelectValue placeholder="Select role" />
-															</SelectTrigger>
-														</FormControl>
-														<SelectContent className="form-field w-full">
-															<SelectItem value="Client">Client</SelectItem>
-															<SelectItem value="Business">Business</SelectItem>
-															<SelectItem value="Worker">Worker</SelectItem>
-														</SelectContent>
-													</Select>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
+        {/* Main Card */}
+        <div className="bg-card p-6">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-secondary-light dark:bg-secondary-dark rounded-full mb-4">
+              <UserIcon />
+            </div>
+            <h1 className="text-2xl font-semibold text-darkGray dark:text-lightGray mb-2">
+              Create Account
+            </h1>
+            <p className="text-sm text-secondary-light dark:text-secondary-dark">
+              {step === 1 && "Select your account type"}
+              {step === 2 && "Enter your personal information"}
+              {step === 3 && "Set up your credentials"}
+              {step === 4 && "Review your details"}
+            </p>
+          </div>
 
-									<GlowButton
-										type="button"
-										onClick={handleNext}
-										disabled={!role}
-										className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
-									>
-										Next Step <ArrowRightIcon />
-									</GlowButton>
-								</div>
-							)}
+          <Form {...form}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-4 items-center"
+            >
+              {/* Step 1: Role Selection */}
+              {step === 1 && (
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem className="form-item justify-center items-center w-full">
+                        <FormLabel>Account Type</FormLabel>
+                        <FormControl>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            defaultValue="Client"
+                          >
+                            <FormControl>
+                              <SelectTrigger className="form-field w-full">
+                                <SelectValue placeholder="Select role" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="form-field w-full">
+                              <SelectItem value="Client">Client</SelectItem>
+                              <SelectItem value="Business">Business</SelectItem>
+                              <SelectItem value="Worker">Worker</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-							{/* Step 2: Personal Info */}
-							{step === 2 && (
-								<div className="space-y-4">
-									<FormField
-										control={form.control}
-										name="fullName"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>
-													{role === "Business" ? "Business Name" : "Full Name"}
-												</FormLabel>
-												<FormControl>
-													<input
-														{...field}
-														placeholder={
-															role === "Business"
-																? "Enter your business name"
-																: "Enter your full name"
-														}
-														className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
+                  <GlowButton
+                    type="button"
+                    onClick={handleNext}
+                    disabled={!role}
+                    className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
+                  >
+                    Next Step <ArrowRightIcon />
+                  </GlowButton>
+                </div>
+              )}
 
-									<FormField
-										control={form.control}
-										name="phone"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Phone (Optional)</FormLabel>
-												<FormControl>
-													<input
-														{...field}
-														placeholder="Enter your phone number"
-														className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
+              {/* Step 2: Personal Info */}
+              {step === 2 && (
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {role === "Business" ? "Business Name" : "Full Name"}
+                        </FormLabel>
+                        <FormControl>
+                          <input
+                            {...field}
+                            placeholder={
+                              role === "Business"
+                                ? "Enter your business name"
+                                : "Enter your full name"
+                            }
+                            className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-									{role === "Business" && !businessType && (
-										<FormField
-											control={form.control}
-											name="businessType"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Business Type</FormLabel>
-													<FormControl>
-														<Select
-															value={field.value ?? ""}
-															onValueChange={(val) => {
-																field.onChange(val);
-																setValue("businessType", val);
-															}}
-														>
-															<SelectTrigger className="form-field w-full">
-																<SelectValue placeholder="Select business type" />
-															</SelectTrigger>
-															<SelectContent className="form-field w-full">
-																{businessTypes.map((bt) => {
-																	const value =
-																		bt.href.split("=")[1] ?? bt.label;
-																	return (
-																		<SelectItem key={value} value={value}>
-																			{bt.label}
-																		</SelectItem>
-																	);
-																})}
-															</SelectContent>
-														</Select>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-									)}
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone </FormLabel>
+                        <FormControl>
+                          <input
+                            {...field}
+                            placeholder="Enter your phone number"
+                            className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-									{role === "Worker" && (
-										<>
-											<FormField
-												control={form.control}
-												name="workerRole"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Worker Role</FormLabel>
-														<FormControl>
-															<select
-																{...field}
-																className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
-															>
-																<option value="">Select role</option>
-																<option value="ADMIN">Admin</option>
-																<option value="STAFF">Staff</option>
-																<option value="MANAGER">Manager</option>
-																<option value="FREELANCER">Freelancer</option>
-															</select>
+                  {role === "Business" && !businessType && (
+                    <FormField
+                      control={form.control}
+                      name="businessType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Business Type</FormLabel>
+                          <FormControl>
+                            <Select
+                              value={field.value ?? ""}
+                              onValueChange={(val) => {
+                                field.onChange(val);
+                                setValue("businessType", val);
+                              }}
+                            >
+                              <SelectTrigger className="form-field w-full">
+                                <SelectValue placeholder="Select business type" />
+                              </SelectTrigger>
+                              <SelectContent className="form-field w-full">
+                                {businessTypes.map((bt) => {
+                                  const value =
+                                    bt.href.split("=")[1] ?? bt.label;
+                                  return (
+                                    <SelectItem key={value} value={value}>
+                                      {bt.label}
+                                    </SelectItem>
+                                  );
+                                })}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-															<Select
-																value={field.value}
-																onValueChange={field.onChange}
-																defaultValue="Client"
-															>
-																<FormControl>
-																	<SelectTrigger className="form-field">
-																		<SelectValue placeholder="Select role" />
-																	</SelectTrigger>
-																</FormControl>
-																<SelectContent className="form-field">
-																	<SelectItem value="ADMIN">Admin</SelectItem>
-																	<SelectItem value="STAFF">Staff</SelectItem>
-																	<SelectItem value="MANAGER">
-																		Manager
-																	</SelectItem>
-																	<SelectItem value="FREELANCER">
-																		Freelancer
-																	</SelectItem>
-																	<SelectItem value="SUPERVISOR">
-																		Supervisor
-																	</SelectItem>
-																	<SelectItem value="PRIMARY">
-																		Primary
-																	</SelectItem>
-																	<SelectItem value="ASSISTANT">
-																		Assistant
-																	</SelectItem>
-																</SelectContent>
-															</Select>
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
+                  {role === "Worker" && (
+                    <>
+                      <FormField
+                        control={form.control}
+                        name="workerRole"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Worker Role</FormLabel>
+                            <FormControl>
+                              <select
+                                {...field}
+                                className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                              >
+                                <option value="">Select role</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="STAFF">Staff</option>
+                                <option value="MANAGER">Manager</option>
+                                <option value="FREELANCER">Freelancer</option>
+                              </select>
 
-											<FormField
-												control={form.control}
-												name="businessId"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Business ID (Optional)</FormLabel>
-														<FormControl>
-															<input
-																{...field}
-																placeholder="Enter associated business ID"
-																className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
-															/>
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-										</>
-									)}
-									<GlowButton
-										type="button"
-										onClick={handleNext}
-										disabled={
-											!watch("fullName") ||
-											(role === "Worker" && !watch("workerRole"))
-										}
-										className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
-									>
-										Next Step <ArrowRightIcon />
-									</GlowButton>
-								</div>
-							)}
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue="Client"
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="form-field">
+                                    <SelectValue placeholder="Select role" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="form-field">
+                                  <SelectItem value="ADMIN">Admin</SelectItem>
+                                  <SelectItem value="STAFF">Staff</SelectItem>
+                                  <SelectItem value="MANAGER">
+                                    Manager
+                                  </SelectItem>
+                                  <SelectItem value="FREELANCER">
+                                    Freelancer
+                                  </SelectItem>
+                                  <SelectItem value="SUPERVISOR">
+                                    Supervisor
+                                  </SelectItem>
+                                  <SelectItem value="PRIMARY">
+                                    Primary
+                                  </SelectItem>
+                                  <SelectItem value="ASSISTANT">
+                                    Assistant
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-							{/* Step 3: Credentials */}
-							{step === 3 && (
-								<div className="space-y-4">
-									<FormField
-										control={form.control}
-										name="email"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Email</FormLabel>
-												<FormControl>
-													<div className="relative">
-														<div className="absolute left-3 top-1/2 -translate-y-1/2">
-															<MailIcon />
-														</div>
-														<input
-															{...field}
-															type="email"
-															placeholder="name@example.com"
-															className="w-full pl-9 text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
-														/>
-													</div>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<div className="relative">
-										<FormField
-											control={form.control}
-											name="password"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Password</FormLabel>
-													<FormControl>
-														<div className="relative">
-															<div className="absolute left-3 top-1/2 -translate-y-1/2">
-																<LockIcon />
-															</div>
-															<input
-																{...field}
-																type={showPassword ? "text" : "password"}
-																placeholder="Create a password"
-																className="w-full pl-9 pr-10 text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
-															/>
-															<GlowButton
-																type="button"
-																onClick={() => setShowPassword(!showPassword)}
-																className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-light dark:text-secondary-dark hover:text-primary"
-															>
-																{showPassword ? <EyeOffIcon /> : <EyeIcon />}
-															</GlowButton>
-														</div>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-									</div>
-									<GlowButton
-										type="button"
-										onClick={handleNext}
-										disabled={!watch("email") || !watch("password")}
-										className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
-									>
-										Next Step <ArrowRightIcon />
-									</GlowButton>
-								</div>
-							)}
+                      <FormField
+                        control={form.control}
+                        name="businessId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Business ID (Optional)</FormLabel>
+                            <FormControl>
+                              <input
+                                {...field}
+                                placeholder="Enter associated business ID"
+                                className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+                  <GlowButton
+                    type="button"
+                    onClick={handleNext}
+                    disabled={
+                      !watch("fullName") ||
+                      (role === "Worker" && !watch("workerRole"))
+                    }
+                    className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
+                  >
+                    Next Step <ArrowRightIcon />
+                  </GlowButton>
+                </div>
+              )}
 
-							{/* Step 4: Review */}
-							{step === 4 && (
-								<div className="space-y-4">
-									<div className="bg-secondary-light dark:bg-secondary-dark border border-secondary-light dark:border-secondary-dark p-4 rounded-md">
-										<h3 className="font-medium text-darkGray dark:text-lightGray mb-3 flex items-center gap-2">
-											<CheckIcon /> Review Details
-										</h3>
-										<div className="space-y-2 text-sm">
-											<div className="flex justify-between items-center py-1">
-												<span className="text-secondary-light dark:text-secondary-dark">
-													Account Type:
-												</span>
-												<span className="text-darkGray dark:text-lightGray font-medium">
-													{role}
-												</span>
-											</div>
-											<div className="flex justify-between items-center py-1">
-												<span className="text-secondary-light dark:text-secondary-dark">
-													{role === "Business" ? "Business Name" : "Full Name"}:
-												</span>
-												<span className="text-darkGray dark:text-lightGray font-medium">
-													{watch("fullName")}
-												</span>
-											</div>
-											<div className="flex justify-between items-center py-1">
-												<span className="text-secondary-light dark:text-secondary-dark">
-													Email:
-												</span>
-												<span className="text-darkGray dark:text-lightGray font-medium">
-													{watch("email")}
-												</span>
-											</div>
-											<div className="flex justify-between items-center py-1">
-												<span className="text-secondary-light dark:text-secondary-dark">
-													Password:
-												</span>
-												<span className="text-darkGray dark:text-lightGray font-medium">
-													••••••••
-												</span>
-											</div>
-											{watch("phone") && (
-												<div className="flex justify-between items-center py-1">
-													<span className="text-secondary-light dark:text-secondary-dark">
-														Phone:
-													</span>
-													<span className="text-darkGray dark:text-lightGray font-medium">
-														{watch("phone")}
-													</span>
-												</div>
-											)}
-											{role === "Worker" && watch("workerRole") && (
-												<div className="flex justify-between items-center py-1">
-													<span className="text-secondary-light dark:text-secondary-dark">
-														Worker Role:
-													</span>
-													<span className="text-darkGray dark:text-lightGray font-medium">
-														{watch("workerRole")}
-													</span>
-												</div>
-											)}
-											{role === "Worker" && watch("businessId") && (
-												<div className="flex justify-between items-center py-1">
-													<span className="text-secondary-light dark:text-secondary-dark">
-														Business ID:
-													</span>
-													<span className="text-darkGray dark:text-lightGray font-medium">
-														{watch("businessId")}
-													</span>
-												</div>
-											)}
-										</div>
-									</div>
-									<GlowButton
-										type="submit"
-										disabled={loading}
-										className="w-full bg-primary rounded-md cursor-pointer py-1"
-									>
-										{loading ? (
-											<div className="flex items-center justify-center gap-2">
-												<div className="animate-spin rounded-full h-4 w-4 border-2 border-white dark:border-darkGray border-t-transparent"></div>
-												Creating account...
-											</div>
-										) : (
-											"Create Account"
-										)}
-									</GlowButton>
-								</div>
-							)}
-						</form>
-					</Form>
+              {/* Step 3: Credentials */}
+              {step === 3 && (
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                              <MailIcon />
+                            </div>
+                            <input
+                              {...field}
+                              type="email"
+                              placeholder="name@example.com"
+                              className="w-full pl-9 text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="relative">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                                <LockIcon />
+                              </div>
+                              <input
+                                {...field}
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Create a password"
+                                className="w-full pl-9 pr-10 text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+                              />
+                              <GlowButton
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary-light dark:text-secondary-dark hover:text-primary"
+                              >
+                                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                              </GlowButton>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <GlowButton
+                    type="button"
+                    onClick={handleNext}
+                    disabled={!watch("email") || !watch("password")}
+                    className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
+                  >
+                    Next Step <ArrowRightIcon />
+                  </GlowButton>
+                </div>
+              )}
 
-					{/* Back Button */}
-					{step > 1 && (
-						<GlowButton
-							onClick={() => setStep(step - 1)}
-							className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
-						>
-							<ArrowLeftIcon /> Back to previous step
-						</GlowButton>
-					)}
+              {/* Step 4: Review */}
+              {step === 4 && (
+                <div className="space-y-4">
+                  <div className="bg-secondary-light dark:bg-secondary-dark border border-secondary-light dark:border-secondary-dark p-4 rounded-md">
+                    <h3 className="font-medium text-darkGray dark:text-lightGray mb-3 flex items-center gap-2">
+                      <CheckIcon /> Review Details
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-center py-1">
+                        <span className="text-secondary-light dark:text-secondary-dark">
+                          Account Type:
+                        </span>
+                        <span className="text-darkGray dark:text-lightGray font-medium">
+                          {role}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-1">
+                        <span className="text-secondary-light dark:text-secondary-dark">
+                          {role === "Business" ? "Business Name" : "Full Name"}:
+                        </span>
+                        <span className="text-darkGray dark:text-lightGray font-medium">
+                          {watch("fullName")}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-1">
+                        <span className="text-secondary-light dark:text-secondary-dark">
+                          Email:
+                        </span>
+                        <span className="text-darkGray dark:text-lightGray font-medium">
+                          {watch("email")}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-1">
+                        <span className="text-secondary-light dark:text-secondary-dark">
+                          Password:
+                        </span>
+                        <span className="text-darkGray dark:text-lightGray font-medium">
+                          ••••••••
+                        </span>
+                      </div>
+                      {watch("phone") && (
+                        <div className="flex justify-between items-center py-1">
+                          <span className="text-secondary-light dark:text-secondary-dark">
+                            Phone:
+                          </span>
+                          <span className="text-darkGray dark:text-lightGray font-medium">
+                            {watch("phone")}
+                          </span>
+                        </div>
+                      )}
+                      {role === "Worker" && watch("workerRole") && (
+                        <div className="flex justify-between items-center py-1">
+                          <span className="text-secondary-light dark:text-secondary-dark">
+                            Worker Role:
+                          </span>
+                          <span className="text-darkGray dark:text-lightGray font-medium">
+                            {watch("workerRole")}
+                          </span>
+                        </div>
+                      )}
+                      {role === "Worker" && watch("businessId") && (
+                        <div className="flex justify-between items-center py-1">
+                          <span className="text-secondary-light dark:text-secondary-dark">
+                            Business ID:
+                          </span>
+                          <span className="text-darkGray dark:text-lightGray font-medium">
+                            {watch("businessId")}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <GlowButton
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-primary rounded-md cursor-pointer py-1"
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white dark:border-darkGray border-t-transparent"></div>
+                        Creating account...
+                      </div>
+                    ) : (
+                      "Create Account"
+                    )}
+                  </GlowButton>
+                </div>
+              )}
+            </form>
+          </Form>
 
-					{/* Footer */}
-					<div className="mt-6 text-center">
-						<p className="text-sm text-secondary-light dark:text-secondary-dark">
-							Already have an account?{" "}
-							<a
-								href="/login"
-								className="text-primary font-medium hover:underline"
-							>
-								Sign in
-							</a>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+          {/* Back Button */}
+          {step > 1 && (
+            <GlowButton
+              onClick={() => setStep(step - 1)}
+              className="mt-4 w-full text-secondary-light dark:text-secondary-dark hover:text-primary transition-colors text-sm font-medium flex items-center justify-center gap-2"
+            >
+              <ArrowLeftIcon /> Back to previous step
+            </GlowButton>
+          )}
+
+          {/* Footer */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-secondary-light dark:text-secondary-dark">
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="text-primary font-medium hover:underline"
+              >
+                Sign in
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

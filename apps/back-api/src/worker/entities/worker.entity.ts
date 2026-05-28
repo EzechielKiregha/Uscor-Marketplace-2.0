@@ -5,7 +5,7 @@ import { ChatParticipantEntity } from "../../chat/entities/chat-participants.ent
 import { WorkerServiceAssignmentEntity } from "../../freelance-service/entities/freelance-service.entity";
 import { KnowYourCustomerEntity } from "../../know-your-customer/entities/know-your-customer.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
-import { ChatEntityWorker } from "./chat.entity";
+import { StoreEntity } from "../../store/entities/store.entity";
 import { SaleEntityWorker } from "./sale.entity";
 import { ShiftEntityWorker } from "./shift.entity";
 
@@ -17,8 +17,8 @@ export class WorkerEntity {
 	@Field({ nullable: true })
 	email?: string;
 
-	@Field({ nullable: true })
-	fullName?: string;
+	@Field(() => String,{ nullable: true })
+	fullName?: string | null;
 
 	@Field({ nullable: true })
 	avatar?: string;
@@ -73,4 +73,7 @@ export class WorkerEntity {
 		nullable: true,
 	})
 	auditLogs?: AuditLogEntity[];
+
+	@Field(() => [StoreEntity], { nullable: true })
+	stores?: StoreEntity[];
 }

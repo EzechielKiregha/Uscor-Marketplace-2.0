@@ -43,7 +43,7 @@ export class FreelanceOrderService {
 			"client",
 			RechargeMethod.TOKEN,
 		);
-		return balance >= amount;
+		return (balance.totalAmount / 10) >= amount;
 	}
 
 	async create(
@@ -460,8 +460,8 @@ export class FreelanceOrderService {
 					return new Error("Freelance order payment was not found");
 
 				await this.paymentTransactionService.update(
-					order.payment.id,
 					{ status: PaymentStatus.COMPLETED },
+					order.payment.id,
 					order.clientId,
 				);
 

@@ -63,6 +63,7 @@ export default function BusinessDashboardPage() {
       status: statusFilter || undefined,
       date: dateFilter || undefined,
     },
+    skip: !user?.id, // Skip query if user ID is not available
   });
   const {
     data: businessData,
@@ -348,37 +349,38 @@ export default function BusinessDashboardPage() {
             </tr>
           </thead>
           <tbody>
-            {data.businessOrders.items.map((order: OrderEntity) => (
-              <tr
-                key={order.id}
-                className="border-b border-border hover:bg-muted/50"
-              >
-                <td className="py-3">{order.id.substring(0, 8)}...</td>
-                <td className="py-3">{order.client.email}</td>
-                <td className="py-3">
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </td>
-                <td className="py-3">${order.payment?.amount.toFixed(2)}</td>
-                <td className="py-3">
-                  {getStatusBadge(order.payment?.status ?? "Undefined")}
-                </td>
-                <td className="py-3">{order.products?.length}</td>
-                <td className="py-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      setIsOpenOrder({
-                        openOrderDetailsModal: true,
-                        orderId: order.id,
-                      })
-                    }
-                  >
-                    View Details
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {data?.businessOrders?.items &&
+              data?.businessOrders?.items?.map((order: OrderEntity) => (
+                <tr
+                  key={order.id}
+                  className="border-b border-border hover:bg-muted/50"
+                >
+                  <td className="py-3">{order.id.substring(0, 8)}...</td>
+                  <td className="py-3">{order.client.email}</td>
+                  <td className="py-3">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="py-3">${order.payment?.amount.toFixed(2)}</td>
+                  <td className="py-3">
+                    {getStatusBadge(order.payment?.status ?? "Undefined")}
+                  </td>
+                  <td className="py-3">{order.products?.length}</td>
+                  <td className="py-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        setIsOpenOrder({
+                          openOrderDetailsModal: true,
+                          orderId: order.id,
+                        })
+                      }
+                    >
+                      View Details
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

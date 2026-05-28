@@ -1,39 +1,43 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { ShiftStatus } from "../../generated/prisma/enums";
 import { StoreEntity } from "../../store/entities/store.entity";
 import { WorkerEntity } from "./worker.entity";
 
 @ObjectType()
 export class ShiftEntityWorker {
-	@Field()
-	id: string;
+    @Field()
+    id: string;
 
-	@Field()
-	workerId: string;
+    @Field()
+    workerId: string;
 
-	@Field(() => WorkerEntity, { nullable: true })
-	worker?: WorkerEntity;
+    @Field(() => WorkerEntity, { nullable: true })
+    worker?: WorkerEntity;
 
-	@Field()
-	storeId: string;
+    @Field()
+    storeId: string;
 
-	@Field(() => StoreEntity, { nullable: true })
-	store?: StoreEntity;
+    @Field(() => StoreEntity, { nullable: true })
+    store?: StoreEntity;
 
-	@Field()
-	startTime: Date;
+    @Field()
+    startTime: Date;
 
-	@Field({ nullable: true })
-	endTime?: Date;
+    @Field({ nullable: true })
+    endTime?: Date;
 
-	@Field({ nullable: true })
-	sales?: number;
+    @Field(() => ShiftStatus)
+    status: ShiftStatus;
 
-	@Field({ nullable: true })
-	transactionCount?: number;
+    @Field({ nullable: true })
+    sales?: number;
 
-	@Field()
-	createdAt: Date;
+    @Field({ nullable: true })
+    transactionCount?: number;
 
-	@Field()
-	updatedAt: Date;
+    @Field()
+    createdAt: Date;
+
+    @Field()
+    updatedAt: Date;
 }

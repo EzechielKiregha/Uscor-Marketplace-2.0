@@ -297,9 +297,10 @@ export class TokenTransactionService {
 		return updatedTransaction;
 	}
 
-	async findAll(businessId: string) {
-		return this.prisma.tokenTransaction.findMany({
+	async getBalance(businessId: string) {
+		const transactions = await this.prisma.tokenTransaction.findMany({
 			where: { businessId },
+			orderBy: { createdAt: "desc" },
 			include: {
 				business: {
 					select: {
@@ -332,6 +333,96 @@ export class TokenTransactionService {
 				},
 			},
 		});
+
+		const totalTokens = transactions.reduce((sum, tx) => sum + tx.amount, 0);
+		const availableTokens = transactions
+			.filter((tx) => tx.isRedeemed && tx.isReleased)
+			.reduce((sum, tx) => sum + tx.amount, 0);
+		const pendingTokens = transactions
+			.filter((tx) => (tx.isRedeemed && !tx.isReleased) || (!tx.isRedeemed && tx.isReleased))
+			.reduce((sum, tx) => sum + tx.amount, 0);
+		const reservedTokens = transactions
+			.filter((tx) => !tx.isRedeemed && !tx.isReleased)
+			.reduce((sum, tx) => sum + tx.amount, 0);
+
+		return {
+			totalTokens,
+			availableTokens,
+			pendingTokens,
+			reservedTokens,
+			transactions,
+		};
+	}
+
+	async findAll(
+		businessId: string,
+		type?: string,
+		isRedeemed?: boolean,
+		isReleased?: boolean,
+		startDate?: Date,
+		endDate?: Date,
+		page = 1,
+		limit = 10,
+	) {
+		const where: any = {
+			businessId,
+			type: type || undefined,
+			isRedeemed: typeof isRedeemed === "boolean" ? isRedeemed : undefined,
+			isReleased: typeof isReleased === "boolean" ? isReleased : undefined,
+			createdAt:
+				startDate || endDate
+					? {
+						gte: startDate || undefined,
+						lte: endDate || undefined,
+					}
+					: undefined,
+		};
+
+		const total = await this.prisma.tokenTransaction.count({ where });
+		const items = await this.prisma.tokenTransaction.findMany({
+			where,
+			skip: (page - 1) * limit,
+			take: limit,
+			orderBy: { createdAt: "desc" },
+			include: {
+				business: {
+					select: {
+						id: true,
+						name: true,
+						email: true,
+						createdAt: true,
+					},
+				},
+				reOwnedProduct: {
+					select: {
+						id: true,
+						newProductId: true,
+						originalProductId: true,
+						oldOwnerId: true,
+						newOwnerId: true,
+						quantity: true,
+						oldPrice: true,
+						newPrice: true,
+						createdAt: true,
+					},
+				},
+				repostedProduct: {
+					select: {
+						id: true,
+						productId: true,
+						businessId: true,
+						createdAt: true,
+					},
+				},
+			},
+		});
+
+		return {
+			items,
+			total,
+			page,
+			limit,
+		};
 	}
 
 	async findOne(id: string, businessId: string) {

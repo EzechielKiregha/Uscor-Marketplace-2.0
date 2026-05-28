@@ -196,50 +196,16 @@ export const GET_RELATED_PRODUCTS = gql`
 // ======================
 // MUTATIONS
 // ======================
-
-export const CREATE_PRODUCT = gql`
-  mutation CreateProduct($input: CreateProductInput!, $mediaInput: AddMediaInput!) {
-    createProduct(input: $input, mediaInput: $mediaInput) {
-      id
-      title
-      description
-      price
-      quantity
-      featured
-      createdAt
-      updatedAt
-      category {
-        id
-        name
-        description
-      }
-      medias {
-        id
-        url
-        type
-      }
-      business {
-        id
-        name
-        avatar
-      }
-      store {
-        id
-        name
-      }
-    }
-  }
-`;
-
-export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct($id: String!, $input: UpdateProductInput!, $mediaInput: AddMediaInput!) {
-    updateProduct(id: $id, input: $input, mediaInput: $mediaInput) {
+const PRODUCT_FIELDS = gql`
+  fragment ProductFields on ProductEntity {
     id
     title
     description
     price
     quantity
     featured
+    isPhysical
+    approvedForSale
     createdAt
     updatedAt
     category {
@@ -250,7 +216,9 @@ export const UPDATE_PRODUCT = gql`
     medias {
       id
       url
+      pathname
       type
+      size
     }
     business {
       id
@@ -262,8 +230,35 @@ export const UPDATE_PRODUCT = gql`
       name
     }
   }
+`;
+ 
+// ── Mutations ─────────────────────────────────────────────────────────────────
+ 
+export const CREATE_PRODUCT = gql`
+  ${PRODUCT_FIELDS}
+  mutation CreateProduct(
+    $input: CreateProductInput!
+    $mediaInputs: [AddMediaInput!]
+  ) {
+    createProduct(input: $input, mediaInputs: $mediaInputs) {
+      ...ProductFields
+    }
   }
 `;
+ 
+export const UPDATE_PRODUCT = gql`
+  ${PRODUCT_FIELDS}
+  mutation UpdateProduct(
+    $id: String!
+    $input: UpdateProductInput!
+    $mediaInputs: [AddMediaInput!]
+  ) {
+    updateProduct(id: $id, input: $input, mediaInputs: $mediaInputs) {
+      ...ProductFields
+    }
+  }
+`;
+ 
 
 export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: String!) {
@@ -297,70 +292,23 @@ export const REMOVE_PRODUCT_MEDIA = gql`
 // SUBSCRIPTIONS
 // ======================
 
+
+// ── Subscriptions ─────────────────────────────────────────────────────────────
+ 
 export const ON_PRODUCT_CREATED = gql`
+  ${PRODUCT_FIELDS}
   subscription OnProductCreated($businessId: String!) {
     productCreated(businessId: $businessId) {
-    id
-    title
-    description
-    price
-    quantity
-    featured
-    createdAt
-    updatedAt
-    category {
-      id
-      name
-      description
+      ...ProductFields
     }
-    medias {
-      id
-      url
-      type
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    store {
-      id
-      name
-    }
-  }
   }
 `;
-
+ 
 export const ON_PRODUCT_UPDATED = gql`
+  ${PRODUCT_FIELDS}
   subscription OnProductUpdated($businessId: String!) {
     productUpdated(businessId: $businessId) {
-    id
-    title
-    description
-    price
-    quantity
-    featured
-    createdAt
-    updatedAt
-    category {
-      id
-      name
-      description
+      ...ProductFields
     }
-    medias {
-      id
-      url
-      type
-    }
-    business {
-      id
-      name
-      avatar
-    }
-    store {
-      id
-      name
-    }
-  }
   }
 `;

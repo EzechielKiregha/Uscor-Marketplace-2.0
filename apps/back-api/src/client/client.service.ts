@@ -15,13 +15,14 @@ export class ClientService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createClientInput: CreateClientInput) {
-		const { password, ...clientData } = createClientInput;
+		const { password, phone, ...clientData } = createClientInput;
 		const hashedPassword = await hash(password);
 
 		return this.prisma.client.create({
 			data: {
 				...clientData,
 				password: hashedPassword,
+				phone: phone || Math.random().toString().slice(2, 11), // Generate random 9-digit phone if not provided
 			},
 			select: {
 				id: true,
@@ -337,6 +338,24 @@ export class ClientService {
 	async findByEmail(email: string) {
 		return this.prisma.client.findUnique({
 			where: { email },
+			select: {
+				id: true,
+				username: true,
+				email: true,
+				fullName: true,
+				address: true,
+				phone: true,
+				avatar: true,
+				isVerified: true,
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+	}
+
+	async findByPhone(phone: string) {
+		return this.prisma.client.findUnique({
+			where: { phone },
 			select: {
 				id: true,
 				username: true,

@@ -131,6 +131,18 @@ export const GET_LOYALTY_TIERS = gql`
   ${LOYALTY_TIER_ENTITY}
 `;
 
+export const GET_POINTS_TRANSACTIONS_BY_CLIENT = gql`
+  query GetPointsTransactionsByClient(
+    $clientId: String
+  ) {
+    pointsTransactionsByClient(
+      clientId: $clientId
+    ) {
+      ...PointsTransaction
+    }
+  }
+  ${POINTS_TRANSACTION_ENTITY}
+`;
 export const GET_POINTS_TRANSACTIONS = gql`
   query GetPointsTransactions(
     $loyaltyProgramId: String!
@@ -138,8 +150,8 @@ export const GET_POINTS_TRANSACTIONS = gql`
     $type: String
     $startDate: DateTime
     $endDate: DateTime
-    $page: Int = 1
-    $limit: Int = 20
+    $page: Float = 1
+    $limit: Float = 20
   ) {
     pointsTransactions(
       loyaltyProgramId: $loyaltyProgramId

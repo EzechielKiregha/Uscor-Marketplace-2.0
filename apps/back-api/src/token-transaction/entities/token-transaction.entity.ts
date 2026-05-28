@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType } from "@nestjs/graphql";
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { ReOwnedProductEntity } from "../../re-owned-product/entities/re-owned-product.entity";
 import { RepostedProductEntity } from "../../reposted-product/entities/reposted-product.entity";
@@ -45,4 +45,37 @@ export class TokenTransactionEntity {
 
 	@Field()
 	createdAt: Date;
+}
+
+@ObjectType()
+export class TokenBalanceEntity {
+	@Field(() => Float)
+	totalTokens: number;
+
+	@Field(() => Float)
+	availableTokens: number;
+
+	@Field(() => Float)
+	pendingTokens: number;
+
+	@Field(() => Float)
+	reservedTokens: number;
+
+	@Field(() => [TokenTransactionEntity])
+	transactions: TokenTransactionEntity[];
+}
+
+@ObjectType()
+export class TokenTransactionPageEntity {
+	@Field(() => [TokenTransactionEntity])
+	items: TokenTransactionEntity[];
+
+	@Field(() => Int)
+	total: number;
+
+	@Field(() => Int)
+	page: number;
+
+	@Field(() => Int)
+	limit: number;
 }

@@ -1,4 +1,4 @@
-import { Field, Float, ObjectType } from "@nestjs/graphql";
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { ClientEntity } from "../../client/entities/client.entity";
 import { TokenTransactionEntity } from "../../token-transaction/entities/token-transaction.entity";
@@ -38,7 +38,6 @@ export class AccountRechargeEntity {
 	})
 	tokenTransaction?: TokenTransactionEntity;
 
-	// New fields to match frontend expectations
 	@Field()
 	status: string;
 
@@ -50,4 +49,37 @@ export class AccountRechargeEntity {
 
 	@Field()
 	createdAt: Date;
+}
+
+@ObjectType()
+export class AccountBalanceEntity {
+	@Field(() => Float)
+	totalAmount: number;
+
+	@Field(() => Float)
+	availableAmount: number;
+
+	@Field(() => Float)
+	pendingAmount: number;
+
+	@Field(() => Float)
+	reservedAmount: number;
+
+	@Field(() => [AccountRechargeEntity])
+	transactions: AccountRechargeEntity[];
+}
+
+@ObjectType()
+export class AccountRechargePageEntity {
+	@Field(() => [AccountRechargeEntity])
+	items: AccountRechargeEntity[];
+
+	@Field(() => Int)
+	total: number;
+
+	@Field(() => Int)
+	page: number;
+
+	@Field(() => Int)
+	limit: number;
 }

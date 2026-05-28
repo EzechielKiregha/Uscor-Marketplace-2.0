@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType, Float, Int } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { InventoryAdjustmentEntity } from "../../inventory/entities/inventory.entity";
 import { PurchaseOrderEntity } from "../../inventory/entities/purchase-order.entity";
@@ -6,6 +6,31 @@ import { TransferOrderEntity } from "../../inventory/entities/transfer-order.ent
 import { ProductEntity } from "../../product/entities/product.entity";
 import { SaleEntity } from "../../sale/entities/sale.entity";
 import { ShiftEntity } from "../../shift/entities/shift.entity";
+import { WorkerEntity } from "../../worker/entities/worker.entity";
+
+@ObjectType()
+export class StoreDailyStats {
+	@Field(() => Float)
+	todaySales: number;
+
+	@Field(() => Int)
+	todayTransactions: number;
+
+	@Field(() => Int)
+	lowStockItems: number;
+}
+
+@ObjectType()
+export class StoreInventoryStats {
+	@Field(() => Int)
+	lowStockItems: number;
+
+	@Field(() => Int)
+	outOfStockItems: number;
+
+	@Field(() => Int)
+	totalItems: number;
+}
 
 @ObjectType()
 export class StoreEntity {
@@ -61,4 +86,13 @@ export class StoreEntity {
 		nullable: true,
 	})
 	products?: ProductEntity[];
+
+	@Field(() => [WorkerEntity], { nullable: true })
+	workers?: WorkerEntity[];
+
+	@Field(() => StoreDailyStats, { nullable: true })
+	dailyStats?: StoreDailyStats;
+
+	@Field(() => StoreInventoryStats, { nullable: true })
+	inventoryStats?: StoreInventoryStats;
 }

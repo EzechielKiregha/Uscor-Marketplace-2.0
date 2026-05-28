@@ -142,6 +142,15 @@ export const TokenTransactionType = {
 export type TokenTransactionType = (typeof TokenTransactionType)[keyof typeof TokenTransactionType]
 
 
+export const ShiftStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  INPROGRESS: 'INPROGRESS'
+} as const
+
+export type ShiftStatus = (typeof ShiftStatus)[keyof typeof ShiftStatus]
+
+
 export const LoyaltyTransactionType = {
   EARNED: 'EARNED',
   REDEEMED: 'REDEEMED'

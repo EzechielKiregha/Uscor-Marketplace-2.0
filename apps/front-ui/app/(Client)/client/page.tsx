@@ -13,6 +13,7 @@ import {
   ShoppingBag,
   Star,
   User,
+  Wallet,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Loader from "@/components/seraui/Loader";
@@ -77,7 +78,7 @@ export default function ClientPanel() {
     { section: "profile", icon: User, label: "Profile" },
     { section: "orders", icon: ShoppingBag, label: "Order History" },
     { section: "chat", icon: MessageSquare, label: "My Chats" },
-    // { section: "loyalty", icon: Star, label: "Loyalty Program" },
+    { section: "loyalty", icon: Star, label: "Loyalty Program" },
     { section: "recommendations", icon: Home, label: "Recommendations" },
     { section: "reviews", icon: MessageSquare, label: "Reviews" },
     { section: "settings", icon: Settings, label: "Account Settings" },
@@ -167,6 +168,16 @@ export default function ClientPanel() {
 
           {/* Quick Actions */}
           <div className="p-4 bottom-1 border-t border-orange-500/60 space-y-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-start text-xs"
+              onClick={() => (window.location.href = "/client/wallet")}
+            >
+              <Wallet className="h-3 w-3 mr-2" />
+              My Wallet
+            </Button>
+
             <Button
               variant="outline"
               size="sm"

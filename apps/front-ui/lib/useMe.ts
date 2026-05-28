@@ -9,6 +9,8 @@ import {
 	ClientEntity,
 	WorkerEntity,
 } from "./types";
+import { useQuery } from "@apollo/client";
+import { GET_POINTS_TRANSACTIONS, GET_POINTS_TRANSACTIONS_BY_CLIENT } from "@/graphql/loyalty.gql";
 
 type MeResult =
 	| { role: "client"; id: string; user: ClientEntity }
@@ -21,6 +23,7 @@ export function useMe() {
 	const [user, setUser] = useState<
 		ClientEntity | BusinessEntity | WorkerEntity | AdminEntity | null
 	>(null);
+	const [points, setPoints] = useState<number>(0);
 	const [role, setRole] = useState<
 		"client" | "business" | "worker" | "admin" | null
 	>(null);
@@ -28,6 +31,28 @@ export function useMe() {
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 	const path = usePathname();
+
+	const {
+		data,
+	} = useQuery(GET_POINTS_TRANSACTIONS_BY_CLIENT, {
+		variables: {
+			clientId: role === "client" ? id : undefined,
+		},
+		skip: !id || !role || role === "worker" || role === "admin" || role === "business",
+	});
+
+	useEffect(() => {
+		if (data && data.pointsTransactions) {
+			console.log("Fetched points transactions:", data.pointsTransactions);
+			// Calculate total points from transactions
+			const totalPoints = data.pointsTransactionsByClient.reduce(
+				(sum: number, transaction: any) => sum + transaction.points,
+				0
+			);
+			setPoints(totalPoints);
+		}
+	}, [data]);
+
 
 	useEffect(() => {
 		let mounted = true;
@@ -85,5 +110,5 @@ export function useMe() {
 
 	// }, [error]);
 
-	return { loading, user, role, id, error };
+	return { loading, user, role, id, error, points };
 }

@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsEnum, IsNumber, IsOptional, Min } from "class-validator";
+import { IsEnum, IsNumber, IsOptional, IsString, Min } from "class-validator";
 import { Country, RechargeMethod } from "./create-account-recharge.input";
 
 @InputType()
@@ -19,4 +19,9 @@ export class UpdateAccountRechargeInput {
 	@IsOptional()
 	@IsEnum(Country)
 	origin?: Country;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	status?: string;
 }

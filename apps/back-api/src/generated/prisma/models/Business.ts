@@ -345,7 +345,7 @@ export type BusinessGroupByOutputType = {
   avatar: string | null
   coverImage: string | null
   address: string | null
-  phone: string | null
+  phone: string
   password: string
   isVerified: boolean
   businessType: string | null
@@ -401,7 +401,7 @@ export type BusinessWhereInput = {
   avatar?: Prisma.StringNullableFilter<"Business"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Business"> | string | null
   address?: Prisma.StringNullableFilter<"Business"> | string | null
-  phone?: Prisma.StringNullableFilter<"Business"> | string | null
+  phone?: Prisma.StringFilter<"Business"> | string
   password?: Prisma.StringFilter<"Business"> | string
   isVerified?: Prisma.BoolFilter<"Business"> | boolean
   businessType?: Prisma.StringNullableFilter<"Business"> | string | null
@@ -457,7 +457,7 @@ export type BusinessOrderByWithRelationInput = {
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   businessType?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -508,6 +508,7 @@ export type BusinessOrderByWithRelationInput = {
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  phone?: string
   AND?: Prisma.BusinessWhereInput | Prisma.BusinessWhereInput[]
   OR?: Prisma.BusinessWhereInput[]
   NOT?: Prisma.BusinessWhereInput | Prisma.BusinessWhereInput[]
@@ -516,7 +517,6 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   avatar?: Prisma.StringNullableFilter<"Business"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Business"> | string | null
   address?: Prisma.StringNullableFilter<"Business"> | string | null
-  phone?: Prisma.StringNullableFilter<"Business"> | string | null
   password?: Prisma.StringFilter<"Business"> | string
   isVerified?: Prisma.BoolFilter<"Business"> | boolean
   businessType?: Prisma.StringNullableFilter<"Business"> | string | null
@@ -562,7 +562,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   medias?: Prisma.MediaListRelationFilter
   promotions?: Prisma.PromotionListRelationFilter
   disputes?: Prisma.DisputeListRelationFilter
-}, "id" | "email">
+}, "id" | "email" | "phone">
 
 export type BusinessOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -572,7 +572,7 @@ export type BusinessOrderByWithAggregationInput = {
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   businessType?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -613,7 +613,7 @@ export type BusinessScalarWhereWithAggregatesInput = {
   avatar?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
-  phone?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
+  phone?: Prisma.StringWithAggregatesFilter<"Business"> | string
   password?: Prisma.StringWithAggregatesFilter<"Business"> | string
   isVerified?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
   businessType?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
@@ -646,7 +646,7 @@ export type BusinessCreateInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -702,7 +702,7 @@ export type BusinessUncheckedCreateInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -758,7 +758,7 @@ export type BusinessUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -814,7 +814,7 @@ export type BusinessUncheckedUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -870,7 +870,7 @@ export type BusinessCreateManyInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -903,7 +903,7 @@ export type BusinessUpdateManyMutationInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -936,7 +936,7 @@ export type BusinessUncheckedUpdateManyInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1532,7 +1532,7 @@ export type BusinessCreateWithoutPaymentConfigInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -1587,7 +1587,7 @@ export type BusinessUncheckedCreateWithoutPaymentConfigInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -1658,7 +1658,7 @@ export type BusinessUpdateWithoutPaymentConfigInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1713,7 +1713,7 @@ export type BusinessUncheckedUpdateWithoutPaymentConfigInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1768,7 +1768,7 @@ export type BusinessCreateWithoutHardwareConfigInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -1823,7 +1823,7 @@ export type BusinessUncheckedCreateWithoutHardwareConfigInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -1894,7 +1894,7 @@ export type BusinessUpdateWithoutHardwareConfigInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1949,7 +1949,7 @@ export type BusinessUncheckedUpdateWithoutHardwareConfigInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2004,7 +2004,7 @@ export type BusinessCreateWithoutKycDocumentsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2059,7 +2059,7 @@ export type BusinessUncheckedCreateWithoutKycDocumentsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2130,7 +2130,7 @@ export type BusinessUpdateWithoutKycDocumentsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2185,7 +2185,7 @@ export type BusinessUncheckedUpdateWithoutKycDocumentsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2240,7 +2240,7 @@ export type BusinessCreateWithoutWorkersInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2295,7 +2295,7 @@ export type BusinessUncheckedCreateWithoutWorkersInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2366,7 +2366,7 @@ export type BusinessUpdateWithoutWorkersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2421,7 +2421,7 @@ export type BusinessUncheckedUpdateWithoutWorkersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2476,7 +2476,7 @@ export type BusinessCreateWithoutProductsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2531,7 +2531,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2602,7 +2602,7 @@ export type BusinessUpdateWithoutProductsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2657,7 +2657,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2712,7 +2712,7 @@ export type BusinessCreateWithoutMediasInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2767,7 +2767,7 @@ export type BusinessUncheckedCreateWithoutMediasInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -2838,7 +2838,7 @@ export type BusinessUpdateWithoutMediasInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2893,7 +2893,7 @@ export type BusinessUncheckedUpdateWithoutMediasInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2948,7 +2948,7 @@ export type BusinessCreateWithoutChatParticipantsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3003,7 +3003,7 @@ export type BusinessUncheckedCreateWithoutChatParticipantsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3074,7 +3074,7 @@ export type BusinessUpdateWithoutChatParticipantsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3129,7 +3129,7 @@ export type BusinessUncheckedUpdateWithoutChatParticipantsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3184,7 +3184,7 @@ export type BusinessCreateWithoutRepostedItemsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3239,7 +3239,7 @@ export type BusinessUncheckedCreateWithoutRepostedItemsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3310,7 +3310,7 @@ export type BusinessUpdateWithoutRepostedItemsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3365,7 +3365,7 @@ export type BusinessUncheckedUpdateWithoutRepostedItemsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3420,7 +3420,7 @@ export type BusinessCreateWithoutReownedItemsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3475,7 +3475,7 @@ export type BusinessUncheckedCreateWithoutReownedItemsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3554,7 +3554,7 @@ export type BusinessScalarWhereInput = {
   avatar?: Prisma.StringNullableFilter<"Business"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Business"> | string | null
   address?: Prisma.StringNullableFilter<"Business"> | string | null
-  phone?: Prisma.StringNullableFilter<"Business"> | string | null
+  phone?: Prisma.StringFilter<"Business"> | string
   password?: Prisma.StringFilter<"Business"> | string
   isVerified?: Prisma.BoolFilter<"Business"> | boolean
   businessType?: Prisma.StringNullableFilter<"Business"> | string | null
@@ -3587,7 +3587,7 @@ export type BusinessCreateWithoutTokenTransactionsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3642,7 +3642,7 @@ export type BusinessUncheckedCreateWithoutTokenTransactionsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3713,7 +3713,7 @@ export type BusinessUpdateWithoutTokenTransactionsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3768,7 +3768,7 @@ export type BusinessUncheckedUpdateWithoutTokenTransactionsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3823,7 +3823,7 @@ export type BusinessCreateWithoutKycInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3878,7 +3878,7 @@ export type BusinessUncheckedCreateWithoutKycInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -3949,7 +3949,7 @@ export type BusinessUpdateWithoutKycInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4004,7 +4004,7 @@ export type BusinessUncheckedUpdateWithoutKycInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4059,7 +4059,7 @@ export type BusinessCreateWithoutRechargesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4114,7 +4114,7 @@ export type BusinessUncheckedCreateWithoutRechargesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4185,7 +4185,7 @@ export type BusinessUpdateWithoutRechargesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4240,7 +4240,7 @@ export type BusinessUncheckedUpdateWithoutRechargesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4295,7 +4295,7 @@ export type BusinessCreateWithoutAdsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4350,7 +4350,7 @@ export type BusinessUncheckedCreateWithoutAdsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4421,7 +4421,7 @@ export type BusinessUpdateWithoutAdsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4476,7 +4476,7 @@ export type BusinessUncheckedUpdateWithoutAdsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4531,7 +4531,7 @@ export type BusinessCreateWithoutFreelanceServicesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4586,7 +4586,7 @@ export type BusinessUncheckedCreateWithoutFreelanceServicesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4657,7 +4657,7 @@ export type BusinessUpdateWithoutFreelanceServicesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4712,7 +4712,7 @@ export type BusinessUncheckedUpdateWithoutFreelanceServicesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4767,7 +4767,7 @@ export type BusinessCreateWithoutFreelanceOrderBusinessInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4822,7 +4822,7 @@ export type BusinessUncheckedCreateWithoutFreelanceOrderBusinessInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -4893,7 +4893,7 @@ export type BusinessUpdateWithoutFreelanceOrderBusinessInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4948,7 +4948,7 @@ export type BusinessUncheckedUpdateWithoutFreelanceOrderBusinessInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5003,7 +5003,7 @@ export type BusinessCreateWithoutReferralsMadeInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5058,7 +5058,7 @@ export type BusinessUncheckedCreateWithoutReferralsMadeInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5118,7 +5118,7 @@ export type BusinessCreateWithoutReferralsReceivedInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5173,7 +5173,7 @@ export type BusinessUncheckedCreateWithoutReferralsReceivedInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5244,7 +5244,7 @@ export type BusinessUpdateWithoutReferralsMadeInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5299,7 +5299,7 @@ export type BusinessUncheckedUpdateWithoutReferralsMadeInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5365,7 +5365,7 @@ export type BusinessUpdateWithoutReferralsReceivedInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5420,7 +5420,7 @@ export type BusinessUncheckedUpdateWithoutReferralsReceivedInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5475,7 +5475,7 @@ export type BusinessCreateWithoutPostOfSalesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5530,7 +5530,7 @@ export type BusinessUncheckedCreateWithoutPostOfSalesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5601,7 +5601,7 @@ export type BusinessUpdateWithoutPostOfSalesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5656,7 +5656,7 @@ export type BusinessUncheckedUpdateWithoutPostOfSalesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5711,7 +5711,7 @@ export type BusinessCreateWithoutStoresInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5766,7 +5766,7 @@ export type BusinessUncheckedCreateWithoutStoresInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -5837,7 +5837,7 @@ export type BusinessUpdateWithoutStoresInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5892,7 +5892,7 @@ export type BusinessUncheckedUpdateWithoutStoresInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5947,7 +5947,7 @@ export type BusinessCreateWithoutPurchaseOrdersInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6002,7 +6002,7 @@ export type BusinessUncheckedCreateWithoutPurchaseOrdersInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6073,7 +6073,7 @@ export type BusinessUpdateWithoutPurchaseOrdersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6128,7 +6128,7 @@ export type BusinessUncheckedUpdateWithoutPurchaseOrdersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6183,7 +6183,7 @@ export type BusinessCreateWithoutLoyaltyProgramsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6238,7 +6238,7 @@ export type BusinessUncheckedCreateWithoutLoyaltyProgramsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6309,7 +6309,7 @@ export type BusinessUpdateWithoutLoyaltyProgramsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6364,7 +6364,7 @@ export type BusinessUncheckedUpdateWithoutLoyaltyProgramsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6419,7 +6419,7 @@ export type BusinessCreateWithoutPromotionsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6474,7 +6474,7 @@ export type BusinessUncheckedCreateWithoutPromotionsInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6550,7 +6550,7 @@ export type BusinessCreateWithoutDisputesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6605,7 +6605,7 @@ export type BusinessUncheckedCreateWithoutDisputesInput = {
   avatar?: string | null
   coverImage?: string | null
   address?: string | null
-  phone?: string | null
+  phone: string
   password: string
   isVerified?: boolean
   businessType?: string | null
@@ -6676,7 +6676,7 @@ export type BusinessUpdateWithoutDisputesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6731,7 +6731,7 @@ export type BusinessUncheckedUpdateWithoutDisputesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6786,7 +6786,7 @@ export type BusinessUpdateWithoutReownedItemsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6841,7 +6841,7 @@ export type BusinessUncheckedUpdateWithoutReownedItemsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6896,7 +6896,7 @@ export type BusinessUncheckedUpdateManyWithoutReownedItemsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6929,7 +6929,7 @@ export type BusinessUpdateWithoutPromotionsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6984,7 +6984,7 @@ export type BusinessUncheckedUpdateWithoutPromotionsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7039,7 +7039,7 @@ export type BusinessUncheckedUpdateManyWithoutPromotionsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7487,7 +7487,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     avatar: string | null
     coverImage: string | null
     address: string | null
-    phone: string | null
+    phone: string
     password: string
     isVerified: boolean
     businessType: string | null

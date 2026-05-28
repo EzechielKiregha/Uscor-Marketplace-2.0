@@ -28,34 +28,35 @@ export class ProductResolver {
 	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business")
-	@Mutation(() => ProductEntity)
-	async createProduct(
-		@Context() context,
-		@Args("input", { type: () => CreateProductInput })
-		input: CreateProductInput,
-		@Args("mediaInput", { type: () => AddMediaInput })
-		mediaInput: AddMediaInput,
-	) {
-		const user = context.req.user;
-		if (user.role === "business" && user.id !== input.businessId) {
-			throw new Error(
-				"Businesses can only create products for their own account",
-			);
-		}
-		const product = await this.productService.create(input);
-
-		if (mediaInput) {
-			await this.mediaService.addToProduct(product.id, mediaInput);
-		}
-		// Publish subscription event
-		this.pubSub.publish("productCreated", {
-			productCreated: product,
-			businessId: input.businessId,
-		});
-
-		return product;
-	}
+@Roles("business")
+@Mutation(() => ProductEntity)
+async createProduct(
+  @Context() context,
+  @Args("input", { type: () => CreateProductInput })
+  input: CreateProductInput,
+  @Args("mediaInputs", { type: () => [AddMediaInput], nullable: true })
+  mediaInputs: AddMediaInput[],
+) {
+  const user = context.req.user;
+  if (user.role === "business" && user.id !== input.businessId) {
+    throw new Error("Businesses can only create products for their own account");
+  }
+ 
+  const product = await this.productService.create(input);
+ 
+  if (mediaInputs?.length) {
+    await Promise.all(
+      mediaInputs.map((m) => this.mediaService.addToProduct(product.id, m)),
+    );
+  }
+ 
+  this.pubSub.publish("productCreated", {
+    productCreated: product,
+    businessId: input.businessId,
+  });
+ 
+  return product;
+}
 
 	@Query(() => [ProductEntity], {
 		name: "products",
@@ -135,41 +136,39 @@ export class ProductResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business")
-	@Mutation(() => ProductEntity, {
-		description: "Updates a product's details.",
-	})
-	async updateProduct(
-		@Context() context,
-		@Args("id", { type: () => String })
-		id: string,
-		@Args("input", { type: () => UpdateProductInput })
-		input: UpdateProductInput,
-		@Args("mediaInput", { type: () => AddMediaInput })
-		mediaInput: AddMediaInput,
-	) {
-		const user = context.req.user;
-		const product = await this.productService.findOne(id);
-
-		if (!product) throw new NotFoundException("No product found");
-
-		if (user.role === "business" && user.id !== product.businessId) {
-			throw new Error("Businesses can only update their own products");
-		}
-		if (mediaInput) {
-			await this.mediaService.addToProduct(id, mediaInput);
-		}
-
-		const updatedProduct = this.productService.update(id, input);
-
-		// Publish subscription event
-		this.pubSub.publish("productUpdated", {
-			productUpdated: updatedProduct,
-			businessId: product.businessId,
-		});
-
-		return updatedProduct;
-	}
+@Roles("business")
+@Mutation(() => ProductEntity, { description: "Updates a product's details." })
+async updateProduct(
+  @Context() context,
+  @Args("id", { type: () => String }) id: string,
+  @Args("input", { type: () => UpdateProductInput })
+  input: UpdateProductInput,
+  @Args("mediaInputs", { type: () => [AddMediaInput], nullable: true })
+  mediaInputs: AddMediaInput[],
+) {
+  const user = context.req.user;
+  const product = await this.productService.findOne(id);
+ 
+  if (!product) throw new NotFoundException("No product found");
+  if (user.role === "business" && user.id !== product.businessId) {
+    throw new Error("Businesses can only update their own products");
+  }
+ 
+  if (mediaInputs?.length) {
+    await Promise.all(
+      mediaInputs.map((m) => this.mediaService.addToProduct(id, m)),
+    );
+  }
+ 
+  const updatedProduct = await this.productService.update(id, input);
+ 
+  this.pubSub.publish("productUpdated", {
+    productUpdated: updatedProduct,
+    businessId: product.businessId,
+  });
+ 
+  return updatedProduct;
+}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("business")
@@ -250,20 +249,22 @@ export class ProductResolver {
 
 	// Subscriptions
 	@Subscription(() => ProductEntity, {
-		filter: (payload, variables) => {
-			return payload.businessId === variables.businessId;
-		},
+	filter: (payload, variables) =>
+		payload.businessId === variables.businessId,
 	})
-	productCreated(@Args("businessId") _businessId: string) {
-		return this.pubSub.asyncIterator("productCreated");
+	productCreated(
+	@Args("businessId", { type: () => String }) businessId: string,
+	) {
+	return this.pubSub.asyncIterator("productCreated");
 	}
-
+	
 	@Subscription(() => ProductEntity, {
-		filter: (payload, variables) => {
-			return payload.businessId === variables.businessId;
-		},
+	filter: (payload, variables) =>
+		payload.businessId === variables.businessId,
 	})
-	productUpdated(@Args("businessId") _businessId: string) {
-		return this.pubSub.asyncIterator("productUpdated");
+	productUpdated(
+	@Args("businessId", { type: () => String }) businessId: string,
+	) {
+	return this.pubSub.asyncIterator("productUpdated");
 	}
 }

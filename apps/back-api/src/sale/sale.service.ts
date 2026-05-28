@@ -180,7 +180,7 @@ export class SaleService {
 				clientId ? "client" : "business",
 				RechargeMethod.TOKEN,
 			);
-			if (balance < finalTotal) {
+			if ((balance.totalAmount / 10) < finalTotal) { 
 				throw new Error("Insufficient balance for token payment");
 			}
 			await this.accountRechargeService.create(

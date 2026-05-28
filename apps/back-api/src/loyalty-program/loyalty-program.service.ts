@@ -186,7 +186,7 @@ export class LoyaltyService {
 		if (!client) {
 			throw new Error("Client not found");
 		}
-		await this.businessService.verifyBusinessAccess(null, user);
+		// await this.businessService.verifyBusinessAccess(null, user);
 
 		return this.prisma.pointsTransaction.findMany({
 			where: { clientId },

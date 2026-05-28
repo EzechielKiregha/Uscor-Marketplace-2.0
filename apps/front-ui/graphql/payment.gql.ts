@@ -51,7 +51,23 @@ export const GET_PAYMENT_TRANSACTIONS = gql`
     }
   }
 `;
-
+export const GET_PAYMENT_LATEST_TRANSACTION = gql`
+  query GetLatestPaymentTransaction {
+    latestPaymentTransaction {
+      id
+      amount
+      method
+      status
+      transactionDate
+      qrCode
+      createdAt
+      order {
+        id
+        deliveryFee
+      }
+    }
+  }
+`;
 export const GET_PAYMENT_TRANSACTION_BY_ID = gql`
   query GetPaymentTransactionById($id: String!) {
     paymentTransaction(id: $id) {
