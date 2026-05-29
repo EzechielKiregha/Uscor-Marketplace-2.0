@@ -1,36 +1,43 @@
 // app/business/loyalty/_components/CreateLoyaltyProgramModal.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
-import {
-  CREATE_LOYALTY_PROGRAM,
-  CREATE_LOYALTY_TIER,
-} from "@/graphql/loyalty.gql";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Star,
-  Users,
-  Gift,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle,
-  Plus,
-  Trash2,
-  X,
-  Loader2,
-} from "lucide-react";
-import { useToast } from "@/components/toast-provider";
-import { useMe } from "@/lib/useMe";
+  CREATE_LOYALTY_PROGRAM,
+  CREATE_LOYALTY_TIER,
+} from "@/graphql/loyalty.gql";
 import { BusinessEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
+import { useMutation } from "@apollo/client";
+import {
+  AlertTriangle,
+  Gift,
+  Loader2,
+  Plus,
+  Star,
+  Trash2,
+  TrendingUp,
+  Users,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface CreateLoyaltyProgramModalProps {
   isOpen: boolean;
   onClose: () => void;
   onProgramCreated: (program: any) => void;
 }
+
+type Benefit = { description: string };
+
+type Tier = {
+  name: string;
+  minPoints: number;
+  benefits: Benefit[];
+};
 
 export default function CreateLoyaltyProgramModal({
   isOpen,
@@ -49,20 +56,23 @@ export default function CreateLoyaltyProgramModal({
     {
       name: "Bronze",
       minPoints: 0,
-      benefits: ["10% discount on special occasions"],
+      benefits: [{ description: "10% discount on special occasions" }],
     },
     {
       name: "Silver",
       minPoints: 500,
-      benefits: ["15% discount on purchases", "Early access to sales"],
+      benefits: [
+        { description: "15% discount on purchases" },
+        { description: "Early access to sales" },
+      ],
     },
     {
       name: "Gold",
       minPoints: 1000,
       benefits: [
-        "20% discount on purchases",
-        "Free delivery",
-        "VIP customer service",
+        { description: "20% discount on purchases" },
+        { description: "Free delivery" },
+        { description: "VIP customer service" },
       ],
     },
   ]);
@@ -87,20 +97,23 @@ export default function CreateLoyaltyProgramModal({
         {
           name: "Bronze",
           minPoints: 0,
-          benefits: ["10% discount on special occasions"],
+          benefits: [{ description: "10% discount on special occasions" }],
         },
         {
           name: "Silver",
           minPoints: 500,
-          benefits: ["15% discount on purchases", "Early access to sales"],
+          benefits: [
+            { description: "15% discount on purchases" },
+            { description: "Early access to sales" },
+          ],
         },
         {
           name: "Gold",
           minPoints: 1000,
           benefits: [
-            "20% discount on purchases",
-            "Free delivery",
-            "VIP customer service",
+            { description: "20% discount on purchases" },
+            { description: "Free delivery" },
+            { description: "VIP customer service" },
           ],
         },
       ]);
@@ -225,7 +238,7 @@ export default function CreateLoyaltyProgramModal({
       {
         name: `Tier ${prev.length + 1}`,
         minPoints: prev[prev.length - 1]?.minPoints + 500 || 1000,
-        benefits: ["Custom benefit"],
+        benefits: [{ description: "Custom benefit" }],
       },
     ]);
   };
@@ -240,7 +253,10 @@ export default function CreateLoyaltyProgramModal({
     setTiers((prev) =>
       prev.map((tier, i) =>
         i === index
-          ? { ...tier, benefits: [...tier.benefits, "New benefit"] }
+          ? {
+              ...tier,
+              benefits: [...tier.benefits, { description: "New benefit" }],
+            }
           : tier,
       ),
     );
@@ -257,7 +273,7 @@ export default function CreateLoyaltyProgramModal({
           ? {
               ...tier,
               benefits: tier.benefits.map((benefit, j) =>
-                j === benefitIndex ? value : benefit,
+                j === benefitIndex ? { description: value } : benefit,
               ),
             }
           : tier,
@@ -497,7 +513,7 @@ export default function CreateLoyaltyProgramModal({
                           <div key={benefitIndex} className="flex gap-2">
                             <Input
                               type="text"
-                              value={benefit}
+                              value={benefit.description}
                               onChange={(e) =>
                                 handleUpdateBenefit(
                                   index,

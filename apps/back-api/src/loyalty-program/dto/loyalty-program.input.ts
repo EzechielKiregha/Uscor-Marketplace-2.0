@@ -1,13 +1,12 @@
 import { Field, Float, InputType } from "@nestjs/graphql";
 import { Type } from "class-transformer";
 import {
-  ArrayMinSize,
-  IsArray,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-  ValidateNested,
+    IsArray,
+    IsNumber,
+    IsOptional,
+    IsString,
+    Min,
+    ValidateNested
 } from "class-validator";
 
 // DTOs
