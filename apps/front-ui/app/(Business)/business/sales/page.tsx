@@ -1,14 +1,14 @@
 // app/business/sales/page.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { Plus, Search, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
 import Loader from "@/components/seraui/Loader";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import { Plus, Search, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 import CreateStoreModal from "../_components/modals/CreateStoreModal";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import { useSales } from "../_hooks/use-sales";
@@ -29,14 +29,6 @@ export default function SalesManagementPage() {
     error: storesError,
   } = useQuery(GET_STORES);
 
-  const {
-    getCurrentSale,
-    getSalesHistory,
-    createSale,
-    activeSalesLoading,
-    salesHistoryLoading,
-  } = useSales(selectedStoreId || "", user?.id || "", role || "");
-
   // Auto-select first store if none selected
   useEffect(() => {
     if (
@@ -47,6 +39,14 @@ export default function SalesManagementPage() {
       setSelectedStoreId(storesData.stores[0].id);
     }
   }, [storesData, selectedStoreId]);
+
+  const {
+    getCurrentSale,
+    getSalesHistory,
+    createSale,
+    activeSalesLoading,
+    salesHistoryLoading,
+  } = useSales(selectedStoreId!, user?.id || "", role!);
 
   if (authLoading || storesLoading) return <Loader loading={true} />;
   if (storesError)

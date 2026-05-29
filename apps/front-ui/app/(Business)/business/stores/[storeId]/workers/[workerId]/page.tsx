@@ -1,49 +1,45 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { GET_WORKER_BY_ID } from "@/graphql/worker.gql";
 import { useQuery } from "@apollo/client";
 import {
-  GET_WORKER_BY_ID,
-  GET_WORKER_SALES,
-  GET_WORKER_SHIFTS,
-  GET_WORKER_INVENTORY,
-} from "@/graphql/worker.gql";
-import { Button } from "@/components/ui/button";
-import {
-  User,
+  ArrowLeft,
   BarChart,
   Clock,
-  Package,
-  ShoppingCart,
-  MessageSquare,
-  Settings,
-  TrendingUp,
   DollarSign,
-  Eye,
   Edit,
-  ArrowLeft,
+  MessageSquare,
+  Package,
+  Settings,
+  ShoppingCart,
+  TrendingUp,
+  User,
 } from "lucide-react";
+import { use, useState } from "react";
 
 // Import the existing worker components
-import ReportsPage from "@/app/(worker)/worker/_components/ReportsPage";
-import ShiftsPage from "@/app/(worker)/worker/_components/ShiftsPage";
+import ChatsPage from "@/app/(worker)/worker/_components/ChatsPage";
 import InventoryPage from "@/app/(worker)/worker/_components/InventoryPage";
 import PosPage from "@/app/(worker)/worker/_components/PosPage";
-import ChatsPage from "@/app/(worker)/worker/_components/ChatsPage";
 import ProfilePage from "@/app/(worker)/worker/_components/ProfilePage";
-import { useMe } from "@/lib/useMe";
+import ReportsPage from "@/app/(worker)/worker/_components/ReportsPage";
+import ShiftsPage from "@/app/(worker)/worker/_components/ShiftsPage";
 import Loader from "@/components/seraui/Loader";
 import { GET_WORKER_PERFORMANCE } from "@/graphql/reports.gql";
+import { useMe } from "@/lib/useMe";
 
 interface WorkerDetailPageProps {
-  params: {
+  params: Promise<{
     storeId: string;
     workerId: string;
-  };
+  }>;
 }
 
 export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
-  const { user, role, loading: authLoading } = useMe();
+  const { storeId, workerId } = use(params);
+
+  const { loading: authLoading } = useMe();
   const [activeTab, setActiveTab] = useState<
     | "overview"
     | "reports"
@@ -59,18 +55,18 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
     loading: workerLoading,
     error: workerError,
   } = useQuery(GET_WORKER_BY_ID, {
-    variables: { id: params.workerId },
-    skip: !params.workerId,
+    variables: { id: workerId },
+    skip: !workerId,
   });
 
   const { data: performanceData, loading: performanceLoading } = useQuery(
     GET_WORKER_PERFORMANCE,
     {
       variables: {
-        workerId: params.workerId,
-        storeId: params.storeId,
+        workerId: workerId,
+        storeId: storeId,
       },
-      skip: !params.workerId || !params.storeId,
+      skip: !workerId || !storeId,
     },
   );
 
@@ -95,7 +91,7 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
             variant="ghost"
             size="icon"
             onClick={() =>
-              (window.location.href = `/business/stores/${params.storeId}`)
+              (window.location.href = `/business/stores/${storeId}`)
             }
           >
             <ArrowLeft className="h-4 w-4" />
@@ -267,42 +263,42 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
 
         {activeTab === "reports" && (
           <ReportsPage
-            selectedStoreId={params.storeId}
+            selectedStoreId={storeId}
             viewMode="business"
-            workerId={params.workerId}
+            workerId={workerId}
           />
         )}
 
         {activeTab === "pos" && (
           <PosPage
-            selectedStoreId={params.storeId}
+            selectedStoreId={storeId}
             viewMode="business"
-            workerId={params.workerId}
+            workerId={workerId}
           />
         )}
 
         {activeTab === "inventory" && (
           <InventoryPage
-            selectedStoreId={params.storeId}
+            selectedStoreId={storeId}
             viewMode="business"
-            workerId={params.workerId}
+            workerId={workerId}
           />
         )}
 
         {activeTab === "shifts" && (
           <ShiftsPage
-            selectedStoreId={params.storeId}
+            selectedStoreId={storeId}
             viewMode="business"
-            workerId={params.workerId}
+            workerId={workerId}
           />
         )}
 
         {activeTab === "chats" && (
-          <ChatsPage viewMode="business" workerId={params.workerId} />
+          <ChatsPage viewMode="business" workerId={workerId} />
         )}
 
         {activeTab === "profile" && (
-          <ProfilePage viewMode="business" workerId={params.workerId} />
+          <ProfilePage viewMode="business" workerId={workerId} />
         )}
       </div>
     </div>

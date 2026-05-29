@@ -1,28 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useCart } from "@/app/context/use-cart";
 import { useToast } from "@/components/toast-provider";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import { GENERATE_ORDER_RECEIPT, GET_ORDER_BY_ID } from "@/graphql/order.gql";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client";
 import {
-  CheckCircle2,
-  Package,
-  MapPin,
-  CreditCard,
-  Smartphone,
-  Truck,
   ArrowLeft,
+  CheckCircle2,
+  CreditCard,
   Download,
-  MessageSquare,
-  RefreshCw,
-  Star,
   Loader2,
+  MapPin,
+  Package,
+  RefreshCw,
+  Smartphone,
+  Star,
+  Truck,
   X,
 } from "lucide-react";
-import { useCart } from "@/app/context/use-cart";
-import { GET_ORDER_BY_ID, GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import { useQuery, useMutation, useApolloClient } from "@apollo/client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function OrderConfirmationPage() {
   const router = useRouter();
@@ -365,27 +364,8 @@ export default function OrderConfirmationPage() {
     );
   }
 
-  // Group products by business
-  const businessGroups = order.products.reduce((groups: any, item: any) => {
-    const businessId = item.product.businessId;
-    const business =
-      businessMap[businessId] ||
-      item.product.business ||
-      ({ id: businessId, name: "Business", businessType: "RETAIL" } as any);
+  const businessGroups = order.businessGroups || [];
 
-    if (!groups[businessId]) {
-      groups[businessId] = {
-        business,
-        items: [],
-        subtotal: 0,
-      };
-    }
-
-    groups[businessId].items.push(item);
-    groups[businessId].subtotal += item.product.price * item.quantity;
-
-    return groups;
-  }, {});
   return (
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -430,7 +410,73 @@ export default function OrderConfirmationPage() {
             </div>
 
             {/* Business Groups */}
-            {Object.values(businessGroups).map((group: any, index: number) => (
+
+            {businessGroups.map((group: any) => (
+              <div
+                key={group.id}
+                className="bg-card border border-border rounded-lg overflow-hidden"
+              >
+                <div className="p-4 bg-muted border-b border-border flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {/* Business avatar + name */}
+                    <h2 className="font-semibold">{group.business.name}</h2>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleContactSeller(group.business.id)}
+                  >
+                    Chat
+                  </Button>
+                </div>
+
+                <div className="p-4">
+                  {group.items.map((item: any) => (
+                    <div key={item.id} className="flex items-start gap-3 mb-4">
+                      <div className="h-16 w-16 shrink-0 rounded-md overflow-hidden border border-border">
+                        {item.product.medias?.[0]?.url ? (
+                          <img
+                            src={item.product.medias[0].url}
+                            alt={item.product.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <span className="text-muted-foreground">
+                              No Image
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium truncate">
+                          {item.product.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          Quantity: {item.quantity}
+                        </p>
+                        <p className="font-medium mt-1">
+                          ${(item.product.price * item.quantity).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="pt-3 border-t border-border">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span>${group.subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between font-bold">
+                      <span>Total</span>
+                      <span>${group.total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* {Object.values(businessGroups).map((group: any, index: number) => (
               <div
                 key={index}
                 className="bg-card border border-border rounded-lg overflow-hidden"
@@ -486,7 +532,6 @@ export default function OrderConfirmationPage() {
                 </div>
 
                 <div className="p-4">
-                  {/* Products */}
                   <div className="space-y-3 mb-4">
                     {group.items.map((item: any, itemIndex: number) => (
                       <div key={itemIndex} className="flex items-start gap-3">
@@ -520,7 +565,6 @@ export default function OrderConfirmationPage() {
                     ))}
                   </div>
 
-                  {/* Business Totals */}
                   <div className="pt-3 border-t border-border">
                     <div className="flex justify-between mb-1">
                       <span className="text-muted-foreground">Subtotal</span>
@@ -541,7 +585,7 @@ export default function OrderConfirmationPage() {
                   </div>
                 </div>
               </div>
-            ))}
+            ))} */}
 
             {/* Delivery Information */}
             <div className="bg-card border border-border rounded-lg p-4">
@@ -556,12 +600,13 @@ export default function OrderConfirmationPage() {
               </div>
 
               <div className="bg-muted rounded-lg p-4">
-                <p>{order.deliveryAddress.street}</p>
+                <p>{order?.deliveryAddress?.street}</p>
                 <p>
-                  {order.deliveryAddress.city}, {order.deliveryAddress.country}
+                  {order?.deliveryAddress?.city},{" "}
+                  {order?.deliveryAddress?.country}
                 </p>
-                {order.deliveryAddress.postalCode && (
-                  <p>Postal Code: {order.deliveryAddress.postalCode}</p>
+                {order?.deliveryAddress?.postalCode && (
+                  <p>Postal Code: {order?.deliveryAddress?.postalCode}</p>
                 )}
               </div>
 

@@ -118,6 +118,12 @@ enum ShiftStatus {
   COMPLETED
   INPROGRESS
 }
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  PROCESSING
+  CANCELLED
+}
 
 enum LoyaltyTransactionType {
   EARNED
@@ -241,6 +247,7 @@ model Business {
 
   promotions Promotion[] @relation("BusinessPromotions")
   disputes Dispute[]
+  orderBusinessGroups OrderBusinessGroup[]
 }
 
 model PaymentConfig {
@@ -464,6 +471,7 @@ model Product {
   transferOrderProducts        TransferOrderProduct[]
   purchaseOrderProducts        PurchaseOrderProduct[]
   inventoryAdjustments InventoryAdjustment[]
+  orderItems OrderItem[]
 
   // Foreign keys
   @@index([businessId])
@@ -508,9 +516,12 @@ model Order {
   deliveryFee          Float                 @default(0)
   deliveryAddress      String?
   clientOrderId        String?
+  status               OrderStatus @default(PENDING)
   receiptUrl           String?
   qrCode               String?
   payment              PaymentTransaction?
+  // Business groups - this is the key
+  businessGroups       OrderBusinessGroup[]
   totalAmount          Float                 @default(0)
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
@@ -518,6 +529,41 @@ model Order {
   // Speed up queries like “orders by client” and “recent orders”
   @@index([clientId])
   @@index([createdAt])
+}
+
+model OrderBusinessGroup {
+  id            String   @id @default(cuid())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  businessId    String
+  business      Business @relation(fields: [businessId], references: [id])
+
+  subtotal      Float
+  deliveryFee   Float    @default(5.0)
+  total         Float
+
+  status        OrderStatus @default(PENDING)  // Business can update this
+
+  items         OrderItem[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([orderId, businessId])
+}
+
+model OrderItem {
+  id                 String            @id @default(cuid())
+  orderBusinessGroupId String
+  orderBusinessGroup   OrderBusinessGroup @relation(fields: [orderBusinessGroupId], references: [id], onDelete: Cascade)
+
+  productId          String
+  product            Product           @relation(fields: [productId], references: [id])
+  quantity           Int
+  price              Float             // Snapshot price at purchase
+
+  createdAt          DateTime          @default(now())
 }
 
 // Join table for many-to-many between Order and Product

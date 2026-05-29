@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
-	Country,
-	RechargeMethod,
+    Country,
+    RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
 import { BusinessService } from "../business/business.service";
 import { ClientService } from "../client/client.service";
@@ -21,7 +21,7 @@ export class PaymentTransactionService {
 		private readonly clientService: ClientService,
 	) {}
 
-	async validateTokenBalance(
+	async validateBalance(
 		clientId: string,
 		amount: number,
 		method: RechargeMethod,
@@ -86,7 +86,7 @@ export class PaymentTransactionService {
 
 		// Validate token balance for TOKEN method
 		if (method === PaymentMethod.TOKEN) {
-			const hasEnoughTokens = await this.validateTokenBalance(
+			const hasEnoughTokens = await this.validateBalance(
 				clientId,
 				amount || 0,
 				RechargeMethod.TOKEN,
@@ -133,26 +133,29 @@ export class PaymentTransactionService {
 
 	async update(
 		updatePaymentTransactionInput: UpdatePaymentTransactionInput,
-		id?: string,
+		transId?: string,
 		userId?: string,
 		phone?: string,
 	) {
-		this.clientService.findByPhone(phone || "").then((client) => {
-			if (client) {
-				userId = client.id;
-			}
-		});
+        let id = transId
+		if (phone) {
+            await this.clientService.findByPhone(phone).then((client) => {
+                if (client) {
+                    userId = client.id;
+                }
+            });
 
-		this.businessService.findOneByPhone(phone || "").then((business) => {
-			if (business) {
-				userId = business.id;
-			}
-		});
+            await this.businessService.findOneByPhone(phone).then((business) => {
+                if (business) {
+                    userId = business.id;
+                }
+            });
 
-		const latestTransaction = await this.findLatest(phone!);
-		if (latestTransaction) {
-			id = latestTransaction.id;
-		}
+            const latestTransaction = await this.findLatest(phone);
+            if (latestTransaction) {
+                id = latestTransaction.id;
+            }
+        }
 
 		const { status, qrCode } = updatePaymentTransactionInput;
 		const transaction = await this.findOne(id!);
@@ -197,7 +200,7 @@ export class PaymentTransactionService {
 			transaction.status !== PaymentStatus.COMPLETED
 		) {
 			if (transaction.method === PaymentMethod.TOKEN) {
-				const hasEnoughTokens = await this.validateTokenBalance(
+				const hasEnoughTokens = await this.validateBalance(
 					order.clientId,
 					transaction.amount,
 					RechargeMethod.TOKEN,
@@ -219,7 +222,7 @@ export class PaymentTransactionService {
 				);
 			} else if (transaction.method === PaymentMethod.MOBILE_MONEY) {
 				let mtd = RechargeMethod.AIRTEL_MONEY;
-				let hasEnoughBalance = await this.validateTokenBalance(
+				let hasEnoughBalance = await this.validateBalance(
 					order.clientId,
 					transaction.amount,
 					mtd,
@@ -227,21 +230,21 @@ export class PaymentTransactionService {
 
 				if (!hasEnoughBalance) {
 					mtd = RechargeMethod.MTN_MONEY;
-					hasEnoughBalance = await this.validateTokenBalance(
+					hasEnoughBalance = await this.validateBalance(
 						order.clientId,
 						transaction.amount,
 						mtd,
 					);
 					if (!hasEnoughBalance) {
 						mtd = RechargeMethod.ORANGE_MONEY;
-						hasEnoughBalance = await this.validateTokenBalance(
+						hasEnoughBalance = await this.validateBalance(
 							order.clientId,
 							transaction.amount,
 							mtd,
 						);
 						if (!hasEnoughBalance) {
 							mtd = RechargeMethod.MPESA;
-							hasEnoughBalance = await this.validateTokenBalance(
+							hasEnoughBalance = await this.validateBalance(
 								order.clientId,
 								transaction.amount,
 								mtd,
@@ -362,15 +365,16 @@ export class PaymentTransactionService {
 		}));
 	}
 
-	async findLatest(phone: string, userId?: string, role?: string) {
-		this.clientService.findByPhone(phone || "").then((client) => {
+	async findLatest(phone: string, userId?: string, ) {
+        let role
+		await this.clientService.findByPhone(phone).then((client) => {
 			if (client) {
 				userId = client.id;
 				role = "client";
 			}
 		});
 
-		this.businessService.findOneByPhone(phone || "").then((business) => {
+		await this.businessService.findOneByPhone(phone).then((business) => {
 			if (business) {
 				userId = business.id;
 				role = "business";
@@ -381,7 +385,7 @@ export class PaymentTransactionService {
 			status: PaymentStatus.PENDING,
 		};
 		if (role === "client") {
-			where.order = { clientId: userId };
+			where.order = { clientId: userId, clientOrderId: undefined };
 		} else if (role === "business") {
 			where.order = {
 				products: {
@@ -420,6 +424,8 @@ export class PaymentTransactionService {
 		});
 
 		if (!transaction) return null;
+
+        console.log({transaction})
 
 		return {
 			...transaction,

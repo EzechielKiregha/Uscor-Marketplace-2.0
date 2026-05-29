@@ -1,30 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MapPin, Plus, CheckCircle } from "lucide-react";
-import { useToast } from "@/components/toast-provider";
-import { useMe } from "@/lib/useMe";
-import { Address } from "@/lib/types";
-import { useMutation, useQuery } from "@apollo/client";
 import {
   ADD_CLIENT_ADDRESS,
   GET_CLIENT_PROFILE,
 } from "@/graphql/client-panel.gql";
-import { set } from "date-fns";
+import { Address } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { CheckCircle, MapPin, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface AddressSelectorProps {
   selectedAddress?: Address | null;
   onSelect: (address: Address) => void;
   onAddNew: () => void;
+  clientId: string;
 }
 
 export default function AddressSelector({
   selectedAddress,
   onSelect,
   onAddNew,
+  clientId,
 }: AddressSelectorProps) {
   const { user, loading: meLoading } = useMe();
   const { showToast } = useToast();
@@ -40,16 +41,16 @@ export default function AddressSelector({
   });
 
   const { data, refetch } = useQuery(GET_CLIENT_PROFILE, {
-    variables: { id: user?.id },
+    variables: { id: clientId },
   });
 
   const [addAddress] = useMutation(ADD_CLIENT_ADDRESS);
 
   useEffect(() => {
-    if (user?.id) {
+    if (clientId) {
       fetchAddresses();
     }
-  }, [user]);
+  }, [data]);
 
   const fetchAddresses = async () => {
     try {
@@ -80,7 +81,7 @@ export default function AddressSelector({
     try {
       const result = await addAddress({
         variables: {
-          clientId: user?.id,
+          clientId: clientId,
           input: {
             street: newAddress.street,
             city: newAddress.city,

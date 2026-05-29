@@ -1,11 +1,11 @@
 import { Inject, NotFoundException, UseGuards } from "@nestjs/common";
 import {
-	Args,
-	Context,
-	Mutation,
-	Query,
-	Resolver,
-	Subscription,
+    Args,
+    Context,
+    Mutation,
+    Query,
+    Resolver,
+    Subscription,
 } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
@@ -69,10 +69,10 @@ async createProduct(
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("business", "client")
 	@Query(() => [ProductEntity], {
-		name: "businessProducts",
+		name: "fetchedBusinessProducts",
 		description: "Retrieves all products with their relations.",
 	})
-	async businessProducts(@Context() context: any) {
+	async fetchedBusinessProducts(@Context() context: any) {
 		const user = context.req.user;
 		return this.productService.businessProducts(user.id);
 	}

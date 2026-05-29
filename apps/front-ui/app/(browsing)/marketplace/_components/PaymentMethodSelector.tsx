@@ -1,13 +1,13 @@
 // marketplace/_components/PaymentMethodSelector.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { CreditCard, Smartphone, Banknote, AlertTriangle } from "lucide-react";
 import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AlertTriangle, Banknote, CreditCard, Smartphone } from "lucide-react";
+import { useState } from "react";
 import PaymentCode from "../checkout/paymentCode";
 
 interface PaymentMethod {
@@ -22,6 +22,10 @@ interface PaymentMethodSelectorProps {
   selectedMethod: string | null;
   onMethodSelect: (method: string) => void;
   amount: number;
+  balance: {
+    mainBalance: number;
+    tokenBalance: number;
+  };
   businessName: string;
   isBusinessPayment: boolean;
 }
@@ -31,6 +35,7 @@ export default function PaymentMethodSelector({
   selectedMethod,
   onMethodSelect,
   amount,
+  balance,
   businessName,
   isBusinessPayment,
 }: PaymentMethodSelectorProps) {
@@ -44,6 +49,9 @@ export default function PaymentMethodSelector({
     cardExpiry: "",
     cardCvv: "",
   });
+
+  const hasEnoughBalance = balance.mainBalance > amount;
+  const hasEnoughToken = balance.tokenBalance > amount;
 
   const paymentMethods: PaymentMethod[] = [
     {
@@ -157,7 +165,7 @@ export default function PaymentMethodSelector({
       {filteredMethods.length === 0 ? (
         <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
           <div className="flex items-start">
-            <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 mr-2 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 mr-2 shrink-0" />
             <div>
               <p className="text-sm font-medium text-destructive">
                 No payment methods available
@@ -224,7 +232,7 @@ export default function PaymentMethodSelector({
             </div>
           )}
 
-          {selectedMethod === "MOBILE_MONEY" && (
+          {/* {selectedMethod === "MOBILE_MONEY" && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -272,9 +280,9 @@ export default function PaymentMethodSelector({
                 Get Payment Code
               </Button>
             </div>
-          )}
+          )} */}
 
-          {selectedMethod === "CARD" && (
+          {/* {selectedMethod === "CARD" && (
             <div className="space-y-3">
               <div className="space-y-1">
                 <Label htmlFor="cardName">Cardholder Name</Label>
@@ -344,13 +352,16 @@ export default function PaymentMethodSelector({
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
           {selectedMethod === "CASH" && (
             <div className="text-sm">
-              <p>Pay in cash when your order is delivered</p>
+              <p>Sorry you cannot pay in cash Online</p>
               <p className="text-muted-foreground mt-1">
-                Make sure to have the exact amount ready
+                To have the exact Product with all your preferences
+              </p>
+              <p className="text-muted-foreground mt-1">
+                Make sure to head straight to this {businessName} stores
               </p>
             </div>
           )}

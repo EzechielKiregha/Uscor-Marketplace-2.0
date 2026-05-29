@@ -6,106 +6,110 @@ import { OrderProductEntity } from "../../order-product/entities/order-product.e
 import { PaymentTransactionEntity } from "../../payment-transaction/entities/payment-transaction.entity";
 import { StoreEntity } from "../../store/entities/store.entity";
 import { DeliveryAddressEntity } from "./delivery-address.entity";
+import { OrderBusinessGroupEntity } from "./order-business-group.entity";
 import { OrderItemEntity } from "./order-item.entity";
 
 @ObjectType()
 export class OrderEntity {
-	@Field()
-	id: string;
+    @Field()
+    id: string;
 
-	@Field(() => Float)
-	deliveryFee: number;
+    @Field(() => Float)
+    deliveryFee: number;
 
-	// deliveryAddress will be returned as an object with { street, city }
-	@Field(() => DeliveryAddressEntity, {
-		nullable: true,
-	})
-	deliveryAddress?: DeliveryAddressEntity;
+    // deliveryAddress will be returned as an object with { street, city }
+    @Field(() => DeliveryAddressEntity, {
+        nullable: true,
+    })
+    deliveryAddress?: DeliveryAddressEntity;
 
-	@Field({ nullable: true })
-	clientOrderId?: string;
-	
-	@Field({ nullable: true })
-	receiptUrl?: string;
+    @Field({ nullable: true })
+    clientOrderId?: string;
 
-	@Field({ nullable: true })
-	qrCode?: string;
+    @Field({ nullable: true })
+    receiptUrl?: string;
 
-	@Field()
-	createdAt: Date;
+    @Field({ nullable: true })
+    qrCode?: string;
 
-	@Field()
-	updatedAt: Date;
+    @Field()
+    createdAt: Date;
 
-	@Field({ nullable: true })
-	clientId?: string;
+    @Field()
+    updatedAt: Date;
 
-	@Field(() => ClientEntity)
-	client: ClientEntity;
+    @Field({ nullable: true })
+    clientId?: string;
 
-	@Field(() => PaymentTransactionEntity, {
-		nullable: true,
-	})
-	payment?: PaymentTransactionEntity;
+    @Field(() => ClientEntity)
+    client: ClientEntity;
 
-	@Field(() => [OrderProductEntity], {
-		nullable: true,
-	})
-	products?: OrderProductEntity[];
+    @Field(() => PaymentTransactionEntity, {
+        nullable: true,
+    })
+    payment?: PaymentTransactionEntity;
 
-	// For front-end compatibility
-	@Field({ nullable: true })
-	orderNumber?: string;
+    @Field(() => [OrderProductEntity], {
+        nullable: true,
+    })
+    products?: OrderProductEntity[];
 
-	@Field({ nullable: true })
-	status?: string;
+    // For front-end compatibility
+    @Field({ nullable: true })
+    orderNumber?: string;
 
-	@Field(() => [OrderItemEntity], {
-		nullable: true,
-	})
-	items?: OrderItemEntity[];
+    @Field({ nullable: true })
+    status?: string;
 
-	@Field(() => BusinessEntity, { nullable: true })
-	business?: BusinessEntity;
+    @Field(() => [OrderItemEntity], {
+        nullable: true,
+    })
+    items?: OrderItemEntity[];
 
-	@Field(() => StoreEntity, { nullable: true })
-	store?: StoreEntity;
+    @Field(() => BusinessEntity, { nullable: true })
+    business?: BusinessEntity;
 
-	@Field(() => PaymentMethodEntity, {
-		nullable: true,
-	})
-	paymentMethod?: PaymentMethodEntity;
+    @Field(() => StoreEntity, { nullable: true })
+    store?: StoreEntity;
 
-	@Field(() => Float, { nullable: true })
-	totalAmount?: number;
+    @Field(() => PaymentMethodEntity, {
+        nullable: true,
+    })
+    paymentMethod?: PaymentMethodEntity;
+
+    @Field(() => Float, { nullable: true })
+    totalAmount?: number;
+
+    @Field(() => [OrderBusinessGroupEntity], { nullable: true })
+    businessGroups?: OrderBusinessGroupEntity[]; // ← New: Main change
 }
 
 @ObjectType()
 export class PaginatedOrdersResponse {
-	@Field(() => [OrderEntity])
-	items: OrderEntity[];
+    @Field(() => [OrderEntity])
+    items: OrderEntity[];
 
-	@Field(() => Int)
-	total: number;
+    @Field(() => Int)
+    total: number;
 
-	@Field(() => Int)
-	page: number;
+    @Field(() => Int)
+    page: number;
 
-	@Field(() => Int)
-	limit: number;
+    @Field(() => Int)
+    limit: number;
 }
 
 @ObjectType()
 export class OrderReceiptEntity {
-	@Field()
-	receiptUrl: string;
+    @Field()
+    receiptUrl: string;
 
-	@Field()
-	fileName: string;
+    @Field()
+    fileName: string;
 
-	@Field()
-	mediaId: string;
+    @Field()
+    mediaId: string;
 
-	@Field()
-	emailSent: boolean;
+    @Field()
+    emailSent: boolean;
 }

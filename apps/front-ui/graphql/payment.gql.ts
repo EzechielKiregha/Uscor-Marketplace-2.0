@@ -52,8 +52,8 @@ export const GET_PAYMENT_TRANSACTIONS = gql`
   }
 `;
 export const GET_PAYMENT_LATEST_TRANSACTION = gql`
-  query GetLatestPaymentTransaction {
-    latestPaymentTransaction {
+  query GetLatestPaymentTransaction($phone: String!) {
+    latestPaymentTransaction(phone: $phone) {
       id
       amount
       method

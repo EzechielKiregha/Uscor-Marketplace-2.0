@@ -1,13 +1,13 @@
 import { UseGuards } from "@nestjs/common";
 import {
-	Args,
-	Context,
-	Int,
-	Mutation,
-	Parent,
-	Query,
-	ResolveField,
-	Resolver,
+    Args,
+    Context,
+    Int,
+    Mutation,
+    Parent,
+    Query,
+    ResolveField,
+    Resolver,
 } from "@nestjs/graphql";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
@@ -17,8 +17,8 @@ import { SuccessResponse } from "../common/dto/success.dto";
 import { ClientService } from "./client.service";
 import { AddressInput } from "./dto/address.input";
 import {
-	CreateClientForPOSInput,
-	CreateClientInput,
+    CreateClientForPOSInput,
+    CreateClientInput,
 } from "./dto/create-client.input";
 import { PaymentMethodInput } from "./dto/payment-method.input";
 import { UpdateClientInput } from "./dto/update-client.input";
@@ -229,6 +229,7 @@ export class ClientResolver {
 		@Args("phone", { type: () => String })
 		phone: string,
 	) {
+        console.log({phone})
 		return this.clientService.findByPhone(phone);
 	}
 

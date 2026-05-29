@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/toast-provider";
-import {
-  ShoppingCart,
-  Package,
-  AlertTriangle,
-  CheckCircle,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle, ShoppingCart } from "lucide-react";
 
 interface OrderSummaryProps {
   items: any[];
@@ -16,6 +10,7 @@ interface OrderSummaryProps {
   uTnAmount: number;
   onCheckout: () => void;
   isProcessing?: boolean;
+  isUsingUnifiedPayment?: boolean;
 }
 
 export default function OrderSummary({
@@ -24,6 +19,7 @@ export default function OrderSummary({
   total,
   uTnAmount,
   onCheckout,
+  isUsingUnifiedPayment,
   isProcessing = false,
 }: OrderSummaryProps) {
   return (
@@ -82,20 +78,22 @@ export default function OrderSummary({
       </div>
 
       <div className="p-4 bg-muted/50 border-t border-border">
-        <Button
-          className="w-full bg-primary hover:bg-accent text-primary-foreground h-12 text-lg"
-          onClick={onCheckout}
-          disabled={isProcessing}
-        >
-          {isProcessing ? (
-            <>
-              <span className="animate-spin rounded-full h-4 w-4 mr-2 border-2 border-white border-t-transparent"></span>
-              Processing...
-            </>
-          ) : (
-            <>Checkout • ${total?.toFixed(2)}</>
-          )}
-        </Button>
+        {!isUsingUnifiedPayment && (
+          <Button
+            className="w-full bg-primary hover:bg-accent text-primary-foreground h-12 text-lg"
+            onClick={onCheckout}
+            disabled={isProcessing}
+          >
+            {isProcessing ? (
+              <>
+                <span className="animate-spin rounded-full h-4 w-4 mr-2 border-2 border-white border-t-transparent"></span>
+                Processing...
+              </>
+            ) : (
+              <>Checkout • ${total?.toFixed(2)}</>
+            )}
+          </Button>
+        )}
 
         <div className="mt-3 flex items-center justify-center text-sm text-muted-foreground">
           <AlertTriangle className="h-4 w-4 mr-1" />

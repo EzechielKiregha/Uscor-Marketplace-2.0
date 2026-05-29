@@ -1,5 +1,37 @@
 import { gql } from "@apollo/client";
 
+export const ORDER_BUSINESS_GROUP_FRAGMENT = gql`
+  fragment OrderBusinessGroupFragment on OrderBusinessGroupEntity {
+    id
+    orderId
+    businessId
+    subtotal
+    deliveryFee
+    total
+    status
+    createdAt
+    business {
+      id
+      name
+      avatar
+      businessType
+    }
+    items {
+      id
+      quantity
+      price
+      product {
+        id
+        title
+        price
+        medias {
+          url
+        }
+      }
+    }
+  }
+`;
+
 // ======================
 // QUERIES
 // ======================
@@ -7,53 +39,56 @@ import { gql } from "@apollo/client";
 export const GET_ORDER_BY_ID = gql`
   query GetOrderById($id: String!) {
     order(id: $id) {
-    id
-    deliveryFee
-    receiptUrl
-    clientOrderId
-    deliveryAddress {
-      id
-      createdAt
-      updatedAt
-      clientId
-      country
-      street
-      city
-      postalCode
-      isDefault
-    }
-    qrCode
-    createdAt
-    updatedAt
-    clientId
-    client {
-      id
-      fullName
-      email
-    }
-    payment {
-      id
-      amount
-      method
-      status
-    }
-    products {
-      id
-      quantity
-      product {
         id
-        title
-        businessId
-        price
-        medias {
-          url
+        deliveryFee
+        receiptUrl
+        clientOrderId
+        deliveryAddress {
+        id
+        createdAt
+        updatedAt
+        clientId
+        country
+        street
+        city
+        postalCode
+        isDefault
         }
-      }
+        qrCode
+        createdAt
+        updatedAt
+        clientId
+        client {
+        id
+        fullName
+        email
+        }
+        payment {
+        id
+        amount
+        method
+        status
+        }
+        products {
+        id
+        quantity
+        product {
+            id
+            title
+            businessId
+            price
+            medias {
+            url
+            }
+        }
+        }
+        status
+        businessGroups {
+            ...OrderBusinessGroupFragment
+        }
     }
-    status
   }
-  }
-  
+  ${ORDER_BUSINESS_GROUP_FRAGMENT}
 `;
 
 export const GET_CLIENT_ORDERS = gql`
@@ -101,207 +136,72 @@ export const GET_CLIENT_ORDERS = gql`
             }
           }
         }
+          businessGroups {
+          ...OrderBusinessGroupFragment
+        }
       }
       total
       page
       limit
     }
   }
-  
+    ${ORDER_BUSINESS_GROUP_FRAGMENT}
 `;
 
 export const GET_BUSINESS_ORDERS = gql`
   query GetBusinessOrders($businessId: String!, $page: Int = 1, $limit: Int = 20) {
     businessOrders(businessId: $businessId, page: $page, limit: $limit) {
-      items {
+    items {
         id
         deliveryFee
         receiptUrl
         deliveryAddress {
-          id
-      createdAt
-      updatedAt
-      clientId
-      country
-      street
-      city
-      postalCode
-      isDefault
+            id
+            createdAt
+            updatedAt
+            clientId
+            country
+            street
+            city
+            postalCode
+            isDefault
         }
         qrCode
         createdAt
         updatedAt
         clientId
         client {
-          id
-          fullName
-          email
+            id
+            fullName
+            email
         }
         payment {
-          id
-          amount
-          method
-          status
+            id
+            amount
+            method
+            status
         }
         products {
-          id
-          quantity
-          product {
             id
-            title
-            price
-            medias {
-              url
+            quantity
+            product {
+                id
+                title
+                price
+                medias {
+                url
+                }
             }
-          }
         }
         status
-      }
-      total
-      page
-      limit
+    }
+    total
+    page
+    limit
     }
   }
   
 `;
-
-// ======================
-// MUTATIONS
-// ======================
-
-// export const CREATE_ORDER = gql`
-//   mutation CreateOrder($input: CreateOrderInput!) {
-//     createOrder(input: $input) {
-//     id
-//     deliveryFee
-//     receiptUrl
-//     deliveryAddress {
-//       street
-//       city
-//     }
-//     qrCode
-//     createdAt
-//     updatedAt
-//     clientId
-//     client {
-//       id
-//       fullName
-//       email
-//     }
-//     payment {
-//       id
-//       amount
-//       method
-//       status
-//     }
-//     products {
-//       id
-//       quantity
-//       product {
-//         id
-//         title
-//         price
-//         medias {
-//           url
-//         }
-//       }
-//     }
-//     status
-//   }
-//   }
-  
-// `;
-
-// export const UPDATE_ORDER = gql`
-//   mutation UpdateOrder($id: String!, $input: UpdateOrderInput!) {
-//     updateOrder(id: $id, input: $input) {
-//     id
-//     deliveryFee
-//     receiptUrl
-//     deliveryAddress {
-//       street
-//       city
-//     }
-//     qrCode
-//     createdAt
-//     updatedAt
-//     clientId
-//     client {
-//       id
-//       fullName
-//       email
-//     }
-//     payment {
-//       id
-//       amount
-//       method
-//       status
-//     }
-//     products {
-//       id
-//       quantity
-//       product {
-//         id
-//         title
-//         price
-//         medias {
-//           url
-//         }
-//       }
-//     }
-//     status
-//   }
-//   }
-  
-// `;
-
-// export const ADD_ORDER_PRODUCT = gql`
-//   mutation AddOrderProduct($orderId: String!, $input: AddOrderProductInput!) {
-//     addOrderProduct(orderId: $orderId, input: $input) {
-//     id
-//     orderId
-//     productId
-//     quantity
-//     order {
-//       id
-//       createdAt
-//     }
-//     product {
-//       id
-//       title
-//       price
-//       medias {
-//         url
-//       }
-//     }
-//   }
-//   }
-  
-// `;
-
-// export const UPDATE_ORDER_PRODUCT = gql`
-//   mutation UpdateOrderProduct($id: String!, $input: UpdateOrderProductInput!) {
-//     updateOrderProduct(id: $id, input: $input) {
-//     id
-//     orderId
-//     productId
-//     quantity
-//     order {
-//       id
-//       createdAt
-//     }
-//     product {
-//       id
-//       title
-//       price
-//       medias {
-//         url
-//       }
-//     }
-//   }
-//   }
-  
-// `;
 
 export const REMOVE_ORDER_PRODUCT = gql`
   mutation RemoveOrderProduct($id: String!) {
@@ -538,6 +438,15 @@ export const GET_PROMOTIONS = gql`
 // ======================
 // MUTATIONS
 // ======================
+
+export const UPDATE_BUSINESS_ORDER_STATUS = gql`
+  mutation UpdateBusinessOrderStatus($id: String!, $status: OrderStatus!) {
+    updateBusinessOrderStatus(id: $id, status: $status) {
+      id
+      status
+    }
+  }
+`;
 
 export const CREATE_GROUPED_ORDER = gql`
   mutation CreateGroupedOrder($input: CreateGroupedOrderInput!) {

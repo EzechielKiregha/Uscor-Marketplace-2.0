@@ -151,6 +151,16 @@ export const ShiftStatus = {
 export type ShiftStatus = (typeof ShiftStatus)[keyof typeof ShiftStatus]
 
 
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  PROCESSING: 'PROCESSING',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
 export const LoyaltyTransactionType = {
   EARNED: 'EARNED',
   REDEEMED: 'REDEEMED'

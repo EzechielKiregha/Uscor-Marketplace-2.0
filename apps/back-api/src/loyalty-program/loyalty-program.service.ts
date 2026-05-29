@@ -3,12 +3,12 @@ import { BusinessService } from "../business/business.service";
 import { ClientService } from "../client/client.service";
 import { PrismaService } from "../prisma/prisma.service";
 import {
-	CreateLoyaltyProgramInput,
-	CreateLoyaltyTierInput,
-	CreatePointsTransactionInput,
-	EarnPointsInput,
-	RedeemPointsInput,
-	UpdateLoyaltyTierInput,
+    CreateLoyaltyProgramInput,
+    CreateLoyaltyTierInput,
+    CreatePointsTransactionInput,
+    EarnPointsInput,
+    RedeemPointsInput,
+    UpdateLoyaltyTierInput,
 } from "./dto/loyalty-program.input";
 import { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
 
@@ -180,7 +180,7 @@ export class LoyaltyService {
 
 	async getPointsTransactionsByClient(
 		clientId: string,
-		user: { id: string; role: string },
+		// user: { id: string; role: string },
 	) {
 		const client = await this.clientService.findOne(clientId);
 		if (!client) {

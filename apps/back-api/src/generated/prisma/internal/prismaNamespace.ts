@@ -405,6 +405,8 @@ export const ModelName = {
   Product: 'Product',
   Media: 'Media',
   Order: 'Order',
+  OrderBusinessGroup: 'OrderBusinessGroup',
+  OrderItem: 'OrderItem',
   OrderProduct: 'OrderProduct',
   Review: 'Review',
   Chat: 'Chat',
@@ -464,7 +466,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "paymentConfig" | "hardwareConfig" | "kycDocument" | "pricingPlan" | "pricingFeature" | "hardwareRecommendation" | "businessType" | "client" | "worker" | "admin" | "category" | "product" | "media" | "order" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "loyaltyTier" | "loyaltyTierBenefit" | "promotion" | "address" | "clientPaymentMethod" | "pointsTransaction" | "return" | "stripeCustomer" | "platformSettings" | "announcement" | "auditLog" | "dispute" | "disputeMessage"
+    modelProps: "business" | "paymentConfig" | "hardwareConfig" | "kycDocument" | "pricingPlan" | "pricingFeature" | "hardwareRecommendation" | "businessType" | "client" | "worker" | "admin" | "category" | "product" | "media" | "order" | "orderBusinessGroup" | "orderItem" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "loyaltyTier" | "loyaltyTierBenefit" | "promotion" | "address" | "clientPaymentMethod" | "pointsTransaction" | "return" | "stripeCustomer" | "platformSettings" | "announcement" | "auditLog" | "dispute" | "disputeMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1575,6 +1577,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.OrderCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.OrderCountAggregateOutputType> | number
+        }
+      }
+    }
+    OrderBusinessGroup: {
+      payload: Prisma.$OrderBusinessGroupPayload<ExtArgs>
+      fields: Prisma.OrderBusinessGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderBusinessGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderBusinessGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderBusinessGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderBusinessGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>
+        }
+        findMany: {
+          args: Prisma.OrderBusinessGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>[]
+        }
+        create: {
+          args: Prisma.OrderBusinessGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>
+        }
+        createMany: {
+          args: Prisma.OrderBusinessGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderBusinessGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderBusinessGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>
+        }
+        update: {
+          args: Prisma.OrderBusinessGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderBusinessGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderBusinessGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderBusinessGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderBusinessGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderBusinessGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderBusinessGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderBusinessGroup>
+        }
+        groupBy: {
+          args: Prisma.OrderBusinessGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderBusinessGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderBusinessGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderBusinessGroupCountAggregateOutputType> | number
+        }
+      }
+    }
+    OrderItem: {
+      payload: Prisma.$OrderItemPayload<ExtArgs>
+      fields: Prisma.OrderItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>
+        }
+        findMany: {
+          args: Prisma.OrderItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>[]
+        }
+        create: {
+          args: Prisma.OrderItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>
+        }
+        createMany: {
+          args: Prisma.OrderItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>
+        }
+        update: {
+          args: Prisma.OrderItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderItemPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderItem>
+        }
+        groupBy: {
+          args: Prisma.OrderItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderItemCountAggregateOutputType> | number
         }
       }
     }
@@ -5120,6 +5270,7 @@ export const OrderScalarFieldEnum = {
   deliveryFee: 'deliveryFee',
   deliveryAddress: 'deliveryAddress',
   clientOrderId: 'clientOrderId',
+  status: 'status',
   receiptUrl: 'receiptUrl',
   qrCode: 'qrCode',
   totalAmount: 'totalAmount',
@@ -5128,6 +5279,33 @@ export const OrderScalarFieldEnum = {
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const OrderBusinessGroupScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  businessId: 'businessId',
+  subtotal: 'subtotal',
+  deliveryFee: 'deliveryFee',
+  total: 'total',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderBusinessGroupScalarFieldEnum = (typeof OrderBusinessGroupScalarFieldEnum)[keyof typeof OrderBusinessGroupScalarFieldEnum]
+
+
+export const OrderItemScalarFieldEnum = {
+  id: 'id',
+  orderBusinessGroupId: 'orderBusinessGroupId',
+  productId: 'productId',
+  quantity: 'quantity',
+  price: 'price',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
 
 
 export const OrderProductScalarFieldEnum = {
@@ -5948,6 +6126,20 @@ export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'OrderStatus'
+ */
+export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderStatus[]'
+ */
+export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ChatStatus'
  */
 export type EnumChatStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatStatus'>
@@ -6328,6 +6520,8 @@ export type GlobalOmitConfig = {
   product?: Prisma.ProductOmit
   media?: Prisma.MediaOmit
   order?: Prisma.OrderOmit
+  orderBusinessGroup?: Prisma.OrderBusinessGroupOmit
+  orderItem?: Prisma.OrderItemOmit
   orderProduct?: Prisma.OrderProductOmit
   review?: Prisma.ReviewOmit
   chat?: Prisma.ChatOmit

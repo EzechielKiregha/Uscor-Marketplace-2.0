@@ -178,6 +178,7 @@ export class BusinessResolver {
 	// @Roles("business", "client")
 	@Query(() => BusinessEntity, {
 		name: "businessByPhone",
+        nullable: true,
 		description: "Retrieves a single business by phone number.",
 	})
 	async getBusinessByPhone(

@@ -1,6 +1,30 @@
 // app/business/_components/modals/ProductForm.tsx
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { CREATE_CATEGORY, GET_CATEGORIES } from "@/graphql/category.gql";
+import {
+  CREATE_PRODUCT,
+  GET_PRODUCTS,
+  GET_PRODUCTS_BY_BUSINESS_ID,
+  UPDATE_PRODUCT,
+} from "@/graphql/product.gql";
+import { GET_STORES } from "@/graphql/store.gql";
+import { BusinessEntity, StoreEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -26,39 +50,12 @@ import {
   Sofa,
   Sparkles,
   Store,
-  Trash2,
   UtensilsCrossed,
   Wine,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { CREATE_CATEGORY, GET_CATEGORIES } from "@/graphql/category.gql";
-import {
-  CREATE_PRODUCT,
-  GET_PRODUCTS,
-  UPDATE_PRODUCT,
-} from "@/graphql/product.gql";
-import { GET_STORES } from "@/graphql/store.gql";
-import { BusinessEntity, StoreEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
-import { cn } from "@/lib/utils";
-import { useStateList } from "react-use";
 
 // ─── Category definitions per business type ──────────────────────────────────
 
@@ -820,10 +817,10 @@ export default function ProductForm({
   const { data: catData, loading: catLoading } = useQuery(GET_CATEGORIES);
 
   const [createProduct] = useMutation(CREATE_PRODUCT, {
-    refetchQueries: [GET_PRODUCTS],
+    refetchQueries: [GET_PRODUCTS_BY_BUSINESS_ID, GET_PRODUCTS],
   });
   const [updateProduct] = useMutation(UPDATE_PRODUCT, {
-    refetchQueries: [GET_PRODUCTS],
+    refetchQueries: [GET_PRODUCTS_BY_BUSINESS_ID, GET_PRODUCTS],
   });
 
   // Auto-select first store

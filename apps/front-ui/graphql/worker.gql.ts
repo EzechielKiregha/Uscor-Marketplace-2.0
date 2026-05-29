@@ -58,10 +58,12 @@ export const GET_WORKER_BY_ID = gql`
         id
         status
       }
-      freelanceServices {
-        id
-        title
-      }
+      workerServiceAssignments{
+        freelanceService {
+            id
+            title
+        }
+    }
       chatParticipants {
         chat {
           id

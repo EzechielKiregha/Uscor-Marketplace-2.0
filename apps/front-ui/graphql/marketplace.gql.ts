@@ -44,6 +44,7 @@ export const GET_MARKETPLACE_DATA = gql`
           avatar
           businessType
           kycStatus
+          isB2BEnabled
         }
         store {
           id
@@ -95,6 +96,7 @@ export const GET_MARKETPLACE_DATA = gql`
           avatar
           businessType
           kycStatus
+          isB2BEnabled
         }
         medias {
           url
@@ -149,6 +151,7 @@ export const SEARCH_MARKETPLACE = gql`
           avatar
           businessType
           kycStatus
+          isB2BEnabled
         }
         store {
           id
@@ -183,6 +186,7 @@ export const SEARCH_MARKETPLACE = gql`
           avatar
           businessType
           kycStatus
+          isB2BEnabled
         }
         medias {
           url

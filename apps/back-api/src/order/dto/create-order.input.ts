@@ -55,6 +55,21 @@ export class CreateOrderProductInput {
 	@IsString()
 	productId: string;
 
+	@Field()
+	@IsString()
+    @IsOptional()
+	businessId?: string;
+
+    @Field(() => Float)
+    @IsNumber()
+    @IsOptional()
+    price?: number;
+
+    @Field(() => Float)
+    @IsNumber()
+    @IsOptional()
+    deliveryFee?: number;
+
 	@Field(() => Int)
 	@IsNumber()
 	@Min(1)

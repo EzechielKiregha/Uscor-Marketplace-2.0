@@ -60,7 +60,7 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
       <>
         <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
           {/* Product Image */}
-          <div className="h-48 bg-muted relative">
+          <div className="h-72 bg-muted relative">
             {product.medias && product.medias.length > 0 ? (
               <img
                 src={product.medias[0].url}
@@ -101,9 +101,20 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
                   </p>
                 )}
               </div>
-              {product.business.kycStatus === "VERIFIED" && (
-                <ShieldCheck className="h-4 w-4 text-primary ml-1" />
-              )}
+              <div className="flex items-center flex-wrap gap-1 ml-auto">
+                {product.business.isVerified && (
+                  <div className="flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-medium">
+                    <ShieldCheck className="h-3 w-3" />
+                    Verified
+                  </div>
+                )}
+
+                {product.business.isB2BEnabled && (
+                  <div className="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-medium">
+                    B2B
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Product Title */}
@@ -228,9 +239,21 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
                   })}
                 </div>
                 <h3 className="font-medium text-sm">{product.business.name}</h3>
-                {product.business.kycStatus === "VERIFIED" && (
-                  <ShieldCheck className="h-4 w-4 text-primary ml-1" />
-                )}
+
+                <div className="flex items-center flex-wrap gap-1">
+                  {product.business.isVerified && (
+                    <div className="flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      <ShieldCheck className="h-3 w-3" />
+                      Verified
+                    </div>
+                  )}
+
+                  {product.business.isB2BEnabled && (
+                    <div className="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      B2B
+                    </div>
+                  )}
+                </div>
                 {product.store && (
                   <span className="text-xs text-muted-foreground ml-1">
                     • {product.store.name}

@@ -4,8 +4,8 @@ import { PaymentMethod, RechargeMethod } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
 import { AddressInput } from "./dto/address.input";
 import {
-	CreateClientForPOSInput,
-	CreateClientInput,
+    CreateClientForPOSInput,
+    CreateClientInput,
 } from "./dto/create-client.input";
 import { PaymentMethodInput } from "./dto/payment-method.input";
 import { UpdateClientInput } from "./dto/update-client.input";
@@ -354,7 +354,7 @@ export class ClientService {
 	}
 
 	async findByPhone(phone: string) {
-		return this.prisma.client.findUnique({
+        const client = await this.prisma.client.findUnique({
 			where: { phone },
 			select: {
 				id: true,
@@ -369,6 +369,9 @@ export class ClientService {
 				updatedAt: true,
 			},
 		});
+
+        console.log({client})
+		return client
 	}
 
 	async getClientReviews(clientId: string, page = 1, limit = 10) {
@@ -558,7 +561,7 @@ export class ClientService {
 				data: { isDefault: false },
 			});
 		}
-		return this.prisma.address.create({
+        const address = this.prisma.address.create({
 			data: {
 				street: input.street,
 				city: input.city,
@@ -568,6 +571,7 @@ export class ClientService {
 				client: { connect: { id: clientId } },
 			},
 		});
+		return address
 	}
 
 	async updateAddress(

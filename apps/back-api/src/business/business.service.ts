@@ -413,7 +413,7 @@ export class BusinessService {
 	}
 	async findOneByPhone(phone: string) {
 		const business: any = await this.prisma.business.findUnique({
-			where: { phone: phone },
+			where: { phone },
 		});
 
 		// Normalize store product shapes
@@ -423,6 +423,8 @@ export class BusinessService {
 				products: (s.products || []).map((p: any) => this.normalizeProduct(p)),
 			}));
 		}
+
+        console.log({business})
 
 		return business;
 	}

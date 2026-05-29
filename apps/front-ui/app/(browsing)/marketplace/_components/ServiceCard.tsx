@@ -1,13 +1,13 @@
 "use client";
 
-import { useMutation } from "@apollo/client";
-import { MapPin, MessageSquare, ShieldCheck, Users } from "lucide-react";
-import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { CREATE_CHAT } from "@/graphql/chat.gql";
-import ServiceDetailsModal from "./ServiceDetailsModal";
+import { useMutation } from "@apollo/client";
+import { MapPin, MessageSquare, ShieldCheck, Users } from "lucide-react";
+import { useState } from "react";
 import BusinessTypeIcon from "./BusinessTypeIcons";
+import ServiceDetailsModal from "./ServiceDetailsModal";
 
 interface ServiceCardProps {
   service: any;
@@ -121,11 +121,20 @@ export default function ServiceCard({ service, viewMode }: ServiceCardProps) {
                 <h3 className="font-medium text-sm truncate">
                   {service.business.name}
                 </h3>
-                {service.business.kycStatus === "VERIFIED" && (
-                  <span className="text-xs bg-primary/10 text-primary px-1 py-0.5 rounded">
-                    Verified
-                  </span>
-                )}
+                <div className="flex items-center flex-wrap gap-1">
+                  {service.business.isVerified && (
+                    <div className="flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      <ShieldCheck className="h-3 w-3" />
+                      Verified
+                    </div>
+                  )}
+
+                  {service.business.isB2BEnabled && (
+                    <div className="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      B2B
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -260,9 +269,20 @@ export default function ServiceCard({ service, viewMode }: ServiceCardProps) {
                   })}
                 </div>
                 <h3 className="font-medium text-sm">{service.business.name}</h3>
-                {service.business.kycStatus === "VERIFIED" && (
-                  <ShieldCheck className="h-4 w-4 text-primary ml-1" />
-                )}
+                <div className="flex items-center flex-wrap gap-1">
+                  {service.business.isVerified && (
+                    <div className="flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      <ShieldCheck className="h-3 w-3" />
+                      Verified
+                    </div>
+                  )}
+
+                  {service.business.isB2BEnabled && (
+                    <div className="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      B2B
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Service Title */}

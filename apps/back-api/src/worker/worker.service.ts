@@ -152,6 +152,7 @@ export class WorkerService {
 
 		return worker;
 	}
+    
 	async findOneByEmain(email: string) {
 		const worker = await this.prisma.worker.findUnique({
 			where: { email: email },

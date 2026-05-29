@@ -1,23 +1,23 @@
 import { UseGuards } from "@nestjs/common";
 import {
-	Args,
-	Context,
-	Mutation,
-	Query,
-	Resolver,
-	Subscription,
+    Args,
+    Context,
+    Mutation,
+    Query,
+    Resolver,
+    Subscription,
 } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import {
-	CreateLoyaltyProgramInput,
-	CreateLoyaltyTierInput,
-	CreatePointsTransactionInput,
-	EarnPointsInput,
-	RedeemPointsInput,
-	UpdateLoyaltyTierInput,
+    CreateLoyaltyProgramInput,
+    CreateLoyaltyTierInput,
+    CreatePointsTransactionInput,
+    EarnPointsInput,
+    RedeemPointsInput,
+    UpdateLoyaltyTierInput,
 } from "./dto/loyalty-program.input";
 import { UpdateLoyaltyProgramInput } from "./dto/update-loyalty-program.input";
 import { ClientPointsBalanceEntity } from "./entities/client-points-balance.entity";
@@ -26,8 +26,8 @@ import { LoyaltyAnalyticsEntity } from "./entities/loyalty-analytics.entity";
 import { LoyaltyProgramEntity } from "./entities/loyalty-program.entity";
 import { LoyaltyTierEntity } from "./entities/loyalty-tier.entity";
 import {
-	PointsTransactionEntity,
-	PointsTransactionsConnectionEntity,
+    PointsTransactionEntity,
+    PointsTransactionsConnectionEntity,
 } from "./entities/points-transaction.entity";
 import { LoyaltyService } from "./loyalty-program.service";
 // Resolver
@@ -89,7 +89,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Mutation(() => PointsTransactionEntity, {
 		description: "Creates a points transaction.",
 	})
@@ -102,7 +102,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Query(() => [PointsTransactionEntity], {
 		name: "pointsTransactionsByClient",
 		description: "Retrieves points transactions for a client.",
@@ -114,7 +114,7 @@ export class LoyaltyResolver {
 	) {
 		return this.loyaltyService.getPointsTransactionsByClient(
 			clientId,
-			context.req.user,
+			// context.req.user,
 		);
 	}
 
@@ -138,7 +138,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Query(() => ClientPointsBalanceEntity, {
 		name: "clientPointsBalance",
 		description: "Retrieves total points for a client.",
@@ -170,7 +170,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Query(() => LoyaltyProgramEntity, {
 		name: "loyaltyProgram",
 		description: "Retrieves a loyalty program by ID.",
@@ -184,7 +184,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Query(() => CustomerPointsEntity, {
 		name: "customerPoints",
 		description: "Retrieves customer points and transactions.",
@@ -227,7 +227,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Mutation(() => PointsTransactionEntity, {
 		description: "Awards points to a customer.",
 	})
@@ -247,7 +247,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Query(() => PointsTransactionsConnectionEntity, {
 		name: "pointsTransactions",
 		description: "Retrieves paginated points transactions.",
@@ -282,7 +282,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Query(() => [LoyaltyTierEntity], {
 		name: "loyaltyTiers",
 		description: "Retrieves loyalty tiers for a loyalty program.",
@@ -337,7 +337,7 @@ export class LoyaltyResolver {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles("business", "worker")
+	@Roles("business", "worker", "client")
 	@Mutation(() => PointsTransactionEntity, {
 		description: "Redeems points for a customer.",
 	})

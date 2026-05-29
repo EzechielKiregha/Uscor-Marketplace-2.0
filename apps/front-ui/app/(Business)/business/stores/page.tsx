@@ -379,7 +379,7 @@ export default function StoresPage() {
       <div className="bg-card border border-border rounded-lg overflow-hidden">
         <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
           <h2 className="font-semibold">
-            View All Repports: {selectedStore.name}
+            View All Repports: {selectedStore?.name}
           </h2>
           <Button
             variant="default"
@@ -409,9 +409,10 @@ export default function StoresPage() {
       {/* Add Worker Modal */}
       <AddWorkerModal
         isOpen={isAddOpen}
-        onClose={() =>
-          setIsAddOpen({ openAddWorkerModal: false, storeId: null })
-        }
+        onClose={() => {
+          setIsAddOpen({ openAddWorkerModal: false, storeId: null });
+          refetch();
+        }}
         storeId={selectedStoreId!}
         businessId={user ? user.id : ""}
       />

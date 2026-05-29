@@ -3,495 +3,643 @@ import { ConfigService } from "@nestjs/config";
 import { put } from "@vercel/blob";
 import * as puppeteer from "puppeteer";
 import QRCode from "qrcode";
+import { UpdatePaymentTransactionInput } from "src/payment-transaction/dto/update-payment-transaction.input";
 import { AuthPayload } from "../auth/entities/auth-payload.entity";
 import { PaymentStatus } from "../generated/prisma/enums";
+import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
 import { TokenTransactionService } from "../token-transaction/token-transaction.service";
-import { CreateOrderInput } from "./dto/create-order.input";
+import { CreateOrderInput, CreateOrderProductInput } from "./dto/create-order.input";
 import { GenerateOrderReceiptInput } from "./dto/receipt.input";
 import { UpdateOrderInput } from "./dto/update-order.input";
+import { OrderBusinessGroupEntity } from "./entities/order-business-group.entity";
 
 // Service
 @Injectable()
 export class OrderService {
-	private readonly logger = new Logger(OrderService.name);
-	constructor(
-		private prisma: PrismaService,
-		private tokenTransactionService: TokenTransactionService,
-		private configService: ConfigService,
-	) {}
+    private readonly logger = new Logger(OrderService.name);
+    constructor(
+        private prisma: PrismaService,
+        private tokenTransactionService: TokenTransactionService,
+        private paymentTransaction: PaymentTransactionService,
+        private configService: ConfigService,
+    ) {}
 
-	private async earnPoints(order: any, half: "initial" | "remaining") {
-		if (!order?.client?.id || !order?.products?.length) {
-			return;
-		}
+    private async earnPoints(order: any, half: "initial" | "remaining") {
+        if (!order?.client?.id || !order?.products?.length) {
+            return;
+        }
 
-		const businessTotals = order.products.reduce(
-			(acc: Record<string, { subtotal: number; loyaltyProgramId?: string; pointsPerPurchase?: number }>, item: any) => {
-				const businessId = item.product?.businessId;
-				const price = item.product?.price ?? 0;
-				if (!businessId) return acc;
+        const businessTotals = order.products.reduce(
+            (
+                acc: Record<
+                    string,
+                    {
+                        subtotal: number;
+                        loyaltyProgramId?: string;
+                        pointsPerPurchase?: number;
+                    }
+                >,
+                item: any,
+            ) => {
+                const businessId = item.product?.businessId;
+                const price = item.product?.price ?? 0;
+                if (!businessId) return acc;
 
-				if (!acc[businessId]) {
-					acc[businessId] = { subtotal: 0 };
-				}
-				acc[businessId].subtotal += price * item.quantity;
-				return acc;
-			}, {}
-		);
+                if (!acc[businessId]) {
+                    acc[businessId] = { subtotal: 0 };
+                }
+                acc[businessId].subtotal += price * item.quantity;
+                return acc;
+            },
+            {},
+        );
 
-		const businessIds = Object.keys(businessTotals);
-		if (!businessIds.length) {
-			return;
-		}
+        const businessIds = Object.keys(businessTotals);
+        if (!businessIds.length) {
+            return;
+        }
 
-		const loyaltyPrograms = await this.prisma.loyaltyProgram.findMany({
-			where: { businessId: { in: businessIds } },
-		});
+        const loyaltyPrograms = await this.prisma.loyaltyProgram.findMany({
+            where: { businessId: { in: businessIds } },
+        });
 
-		const programByBusinessId = new Map(
-			loyaltyPrograms.map((program) => [program.businessId, program]),
-		);
+        const programByBusinessId = new Map(
+            loyaltyPrograms.map((program) => [program.businessId, program]),
+        );
 
-		for (const businessId of businessIds) {
-			const program = programByBusinessId.get(businessId);
-			if (!program) continue;
+        for (const businessId of businessIds) {
+            const program = programByBusinessId.get(businessId);
+            if (!program) continue;
 
-			const subtotal = businessTotals[businessId].subtotal;
-			const totalPoints = subtotal * (program.pointsPerPurchase ?? 0);
-			const firstHalf = Math.floor(totalPoints / 2);
-			const secondHalf = Math.ceil(totalPoints / 2);
-			const pointsToCreate = half === "initial" ? firstHalf : secondHalf;
+            const subtotal = businessTotals[businessId].subtotal;
+            const totalPoints = subtotal * (program.pointsPerPurchase ?? 0);
+            const firstHalf = Math.floor(totalPoints / 2);
+            const secondHalf = Math.ceil(totalPoints / 2);
+            const pointsToCreate = half === "initial" ? firstHalf : secondHalf;
 
-			if (pointsToCreate <= 0) {
-				continue;
-			}
+            if (pointsToCreate <= 0) {
+                continue;
+            }
 
-			await this.prisma.pointsTransaction.create({
-				data: {
-					clientId: order.client.id,
-					loyaltyProgramId: program.id,
-					points: pointsToCreate,
-					type: "EARNED",
-				},
-			});
-		}
-	}
+            await this.prisma.pointsTransaction.create({
+                data: {
+                    clientId: order.client.id,
+                    loyaltyProgramId: program.id,
+                    points: pointsToCreate,
+                    type: "EARNED",
+                },
+            });
+        }
+    }
 
-	async create(createOrderInput: CreateOrderInput) {
-		const { clientId, orderProducts, payment, clientOrderId, ...orderData } = createOrderInput;
+    async create(createOrderInput: CreateOrderInput) {
+        const {
+            clientId,
+            orderProducts,
+            payment,
+            clientOrderId,
+            ...orderData
+        } = createOrderInput;
 
-		// Validate client
-		const client = await this.prisma.client.findUnique({
-			where: { id: clientId },
-		});
-		if (!client) {
-			throw new Error("Client not found");
-		}
+        // Group items by business (from frontend logic)
+        const businessGroups = clientOrderId ? this.groupItemsByBusiness(orderProducts) : []
 
-		// Validate products and stock
-		for (const op of orderProducts) {
-			const product = await this.prisma.product.findUnique({
-				where: { id: op.productId },
-				select: {
-					id: true,
-					quantity: true,
-					price: true,
-				},
-			});
-			if (!product) {
-				throw new Error(`Product ${op.productId} not found`);
-			}
-			if (product.quantity < op.quantity) {
-				throw new Error(`Insufficient stock for product ${op.productId}`);
-			}
-		}
+        // Validate client
+        const client = await this.prisma.client.findUnique({
+            where: { id: clientId },
+        });
+        if (!client) {
+            throw new Error("Client not found");
+        }
 
-		// Calculate total amount
-		const productTotal = (
-			await Promise.all(
-				orderProducts.map(async (op) => {
-					const product = await this.prisma.product.findUnique({
-						where: { id: op.productId },
-					});
+        // Validate products and stock
+        for (const op of orderProducts) {
+            const product = await this.prisma.product.findUnique({
+                where: { id: op.productId },
+                select: {
+                    id: true,
+                    quantity: true,
+                    price: true,
+                },
+            });
+            if (!product) {
+                throw new Error(`Product ${op.productId} not found`);
+            }
+            if (product.quantity < op.quantity) {
+                throw new Error(
+                    `Insufficient stock for product ${op.productId}`,
+                );
+            }
+        }
 
-					if (!product) throw new Error("Product not found");
+        // Calculate total amount
+        const productTotal = (
+            await Promise.all(
+                orderProducts.map(async (op) => {
+                    const product = await this.prisma.product.findUnique({
+                        where: { id: op.productId },
+                    });
 
-					return product.price * op.quantity;
-				}),
-			)
-		).reduce((sum, val) => sum + val, 0);
-		const totalAmount = productTotal + (orderData.deliveryFee || 0);
+                    if (!product) throw new Error("Product not found");
 
-		// if (payment.amount !== totalAmount) {
-		//   throw new Error(`Payment amount (${payment.amount}) does not match total (${totalAmount})`);
-		// }
+                    return product.price * op.quantity;
+                }),
+            )
+        ).reduce((sum, val) => sum + val, 0);
+        const totalAmount = productTotal;
 
-		// Create order
-		const order = await this.prisma.order.create({
-			data: {
-				...orderData,
-				totalAmount,
-				client: { connect: { id: clientId } },
-				payment: {
-					create: {
-						amount: totalAmount,
-						method: payment.method,
-						status: payment.status || PaymentStatus.PENDING,
-						qrCode: payment.qrCode,
-					},
-				},
-				products: {
-					create: orderProducts.map((item) => ({
-						product: {
-							connect: { id: item.productId },
-						},
-						quantity: item.quantity,
-					})),
-				},
-			},
-			select: {
-				id: true,
-				deliveryFee: true,
-				deliveryAddress: true,
-				qrCode: true,
-				receiptUrl: true,
-				createdAt: true,
-				updatedAt: true,
-				client: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				payment: {
-					select: {
-						id: true,
-						amount: true,
-						method: true,
-						status: true,
-						transactionDate: true,
-						qrCode: true,
-						createdAt: true,
-					},
-				},
-				products: {
-					select: {
-						id: true,
-						quantity: true,
-						createdAt: true,
-						product: {
-							select: {
-								id: true,
-								businessId: true,
-								title: true,
-								price: true,
-								createdAt: true,
-								medias: {
-									select: {
-										url: true,
-									},
-									take: 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+        // if (payment.amount !== totalAmount) {
+        //   throw new Error(`Payment amount (${payment.amount}) does not match total (${totalAmount})`);
+        // }
 
-		// Update stock
-		await Promise.all(
-			order.products.map((op: { quantity: number; product: { id: string } }) =>
-				this.prisma.product.update({
-					where: { id: op.product.id },
-					data: {
-						stock: { decrement: op.quantity },
-					},
-				}),
-			),
-		);
+        // Create order
+        const order = await this.prisma.order.create({
+            data: {
+                ...orderData,
+                totalAmount,
+                client: { connect: { id: clientId } },
+                clientOrderId: clientOrderId ?? undefined,
+                payment: {
+                    create: {
+                        amount: totalAmount,
+                        method: payment.method,
+                        status: PaymentStatus.PENDING,
+                        qrCode: payment.qrCode,
+                    },
+                },
+                products: {
+                    create: orderProducts.map((item) => ({
+                        product: {
+                            connect: { id: item.productId },
+                        },
+                        quantity: item.quantity,
+                    })),
+                },
+            },
+            select: {
+                id: true,
+                deliveryFee: true,
+                deliveryAddress: true,
+                qrCode: true,
+                receiptUrl: true,
+                createdAt: true,
+                updatedAt: true,
+                client: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        createdAt: true,
+                    },
+                },
+                payment: {
+                    select: {
+                        id: true,
+                        amount: true,
+                        method: true,
+                        status: true,
+                        transactionDate: true,
+                        qrCode: true,
+                        createdAt: true,
+                    },
+                },
+                products: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        createdAt: true,
+                        product: {
+                            select: {
+                                id: true,
+                                businessId: true,
+                                title: true,
+                                price: true,
+                                createdAt: true,
+                                medias: {
+                                    select: {
+                                        url: true,
+                                    },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                },
+                businessGroups: {
+        include: {
+          business: true,
+          items: {
+            include: {
+              product: {
+                include: { medias: { take: 1 } },
+              },
+            },
+          },
+        },
+      },
+            },
+        });
 
-		// Handle profit-sharing for re-owned products and commissions for reposted products
-		for (const op of order.products) {
-			// ReOwnedProduct profit-sharing
-			const reOwnedProduct = await this.prisma.reOwnedProduct.findFirst({
-				where: {
-					newProductId: op.product.id,
-				},
-				select: {
-					id: true,
-					oldOwnerId: true,
-					oldPrice: true,
-					newPrice: true,
-					quantity: true,
-				},
-			});
-			if (reOwnedProduct) {
-				const markup = reOwnedProduct.newPrice - reOwnedProduct.oldPrice;
-				if (markup > 0) {
-					const profitShare = markup * 0.2 * op.quantity; // 20% of markup per unit
-					await this.tokenTransactionService.create({
-						businessId: reOwnedProduct.oldOwnerId,
-						reOwnedProductId: reOwnedProduct.id,
-						amount: profitShare,
-						type: TokenTransactionType.PROFIT_SHARE,
-					});
-				}
-			}
+        // Create Business Groups + Items
+        if (!clientOrderId) {
+            for (const group of Object.values(businessGroups as OrderBusinessGroupEntity[])) {
+                await this.prisma.orderBusinessGroup.create({
+                    data: {
+                        orderId: order.id,
+                        businessId: group.businessId,
+                        subtotal: group.subtotal,
+                        deliveryFee: group.deliveryFee,
+                        total: group.total,
+                        items: {
+                            create: group.items.map((item) => ({
+                                productId: item.productId,
+                                quantity: item.quantity,
+                                price: item.price || 0, // You should pass price
+                            })),
+                        },
+                    },
+                });
+            }
+        }
 
-			// RepostedProduct commission
-			const repostedProduct = await this.prisma.repostedProduct.findFirst({
-				where: { productId: op.product.id },
-				select: {
-					id: true,
-					businessId: true,
-				},
-			});
-			if (repostedProduct) {
-				const product = await this.prisma.product.findUnique({
-					where: { id: op.product.id },
-					select: { price: true },
-				});
+        // Update stock
+        await Promise.all(
+            order.products.map(
+                (op: { quantity: number; product: { id: string } }) =>
+                    this.prisma.product.update({
+                        where: { id: op.product.id },
+                        data: {
+                            stock: { decrement: op.quantity },
+                        },
+                    }),
+            ),
+        );
 
-				if (!product) throw new Error("Product not found");
+        // Handle profit-sharing for re-owned products and commissions for reposted products
+        for (const op of order.products) {
+            // ReOwnedProduct profit-sharing
+            const reOwnedProduct = await this.prisma.reOwnedProduct.findFirst({
+                where: {
+                    newProductId: op.product.id,
+                },
+                select: {
+                    id: true,
+                    oldOwnerId: true,
+                    oldPrice: true,
+                    newPrice: true,
+                    quantity: true,
+                },
+            });
+            if (reOwnedProduct) {
+                const markup =
+                    reOwnedProduct.newPrice - reOwnedProduct.oldPrice;
+                if (markup > 0) {
+                    const profitShare = markup * 0.2 * op.quantity; // 20% of markup per unit
+                    await this.tokenTransactionService.create({
+                        businessId: reOwnedProduct.oldOwnerId,
+                        reOwnedProductId: reOwnedProduct.id,
+                        amount: profitShare,
+                        type: TokenTransactionType.PROFIT_SHARE,
+                    });
+                }
+            }
 
-				const commission = product.price * 0.002 * op.quantity; // 0.02% commission per unit
-				await this.tokenTransactionService.create({
-					businessId: repostedProduct.businessId,
-					repostedProductId: repostedProduct.id,
-					amount: commission,
-					type: TokenTransactionType.REPOST_COMMISSION,
-				});
-			}
-		}
+            // RepostedProduct commission
+            const repostedProduct = await this.prisma.repostedProduct.findFirst(
+                {
+                    where: { productId: op.product.id },
+                    select: {
+                        id: true,
+                        businessId: true,
+                    },
+                },
+            );
+            if (repostedProduct) {
+                const product = await this.prisma.product.findUnique({
+                    where: { id: op.product.id },
+                    select: { price: true },
+                });
 
-		// Update totalProductsSold for businesses
-		const businessIds = [
-			...new Set(order.products.map((op) => op.product.businessId)),
-		];
-		if (businessIds.length > 0) {
-			await this.prisma.business.updateMany({
-				where: { id: { in: businessIds } },
-				data: {
-					totalProductsSold: {
-						increment: order.products.reduce((sum, op) => sum + op.quantity, 0),
-					},
-				},
-			});
-		}
+                if (!product) throw new Error("Product not found");
 
-		if (!clientOrderId) {
-			await this.earnPoints(order, "initial");
-		}
+                const commission = product.price * 0.002 * op.quantity; // 0.02% commission per unit
+                await this.tokenTransactionService.create({
+                    businessId: repostedProduct.businessId,
+                    repostedProductId: repostedProduct.id,
+                    amount: commission,
+                    type: TokenTransactionType.REPOST_COMMISSION,
+                });
+            }
+        }
 
-		// Transform the data to match frontend expectations
-		return {
-			...order,
-			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress! },
-			}),
-			status: order.payment?.status || "PENDING",
-			products: order.products?.map((op) => ({
-				...op,
-			})),
-		};
-	}
+        // Update totalProductsSold for businesses
+        const businessIds = [
+            ...new Set(order.products.map((op) => op.product.businessId)),
+        ];
+        if (businessIds.length > 0) {
+            await this.prisma.business.updateMany({
+                where: { id: { in: businessIds } },
+                data: {
+                    totalProductsSold: {
+                        increment: order.products.reduce(
+                            (sum, op) => sum + op.quantity,
+                            0,
+                        ),
+                    },
+                },
+            });
+        }
 
-	async generateReceipt(input: GenerateOrderReceiptInput, user: AuthPayload) {
-		const { orderId, email } = input;
-		
-		const order = await this.prisma.order.findUnique({
-			where: { id: orderId },
-			include: {
-				client: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-					},
-				},
-				payment: {
-					select: {
-						id: true,
-						amount: true,
-						method: true,
-						status: true,
-						transactionDate: true,
-						qrCode: true,
-						createdAt: true,
-					},
-				},
-				products: {
-					include: {
-						product: {
-							select: {
-								id: true,
-								businessId: true,
-								title: true,
-								price: true,
-								medias: {
-									select: { url: true },
-									take: 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+        if (!clientOrderId) {
+            await this.earnPoints(order, "initial");
+        }
 
-		if (!order) {
-			throw new Error("Order not found");
-		}
+        // Transform the data to match frontend expectations
+        return {
+            ...order,
+            deliveryAddress: await this.prisma.address.findUnique({
+                where: { id: order?.deliveryAddress! },
+            }),
+            status: order.payment?.status || "PENDING",
+            products: order.products?.map((op) => ({
+                ...op,
+            })),
+        };
+    }
 
-		const qrData = 'https://uscor-marketplace-2-0-front-ui.vercel.app/order-status?id=' + order.id || "";
-		const qrBase64 = await QRCode.toDataURL(qrData);
+    // Helper method
+    private groupItemsByBusiness(orderProducts: CreateOrderProductInput[]) {
+        // You can enhance this to fetch prices if needed
+        return orderProducts.reduce((groups: any, item) => {
+            const businessId = item.businessId! ;
+            if (!groups[businessId]) {
+                groups[businessId] = {
+                    businessId,
+                    items: [],
+                    subtotal: 0,
+                    deliveryFee: 5.0,
+                    total: 5.0,
+                };
+            }
+            groups[businessId].items.push(item);
+            groups[businessId].subtotal += item.price! * item.quantity;
+            groups[businessId].total =
+                groups[businessId].subtotal + groups[businessId].deliveryFee;
+            return groups;
+        }, {});
+    }
 
-		if (order.clientId !== user.id) {
-			throw new Error(
-				"Clients can only generate receipts for their own orders",
-			);
-		}
+    // Get orders for a specific business
+    async getBusinessOrders(businessId: string) {
+    return this.prisma.orderBusinessGroup.findMany({
+        where: { businessId },
+        include: {
+        order: {
+            include: {
+            client: true,
+            payment: true,
+            },
+        },
+        items: {
+            include: {
+            product: {
+                include: { medias: { take: 1 } },
+            },
+            },
+        },
+        business: true,
+        },
+        orderBy: { createdAt: 'desc' },
+    });
+    }
 
-		const deliveryAddress = order.deliveryAddress
-			? await this.prisma.address.findUnique({
-					where: { id: order.deliveryAddress },
-				})
-			: null;
+    // Get full order with business groups (for client)
+    async findOneWithGroups(orderId: string, userId: string) {
+    const order = await this.prisma.order.findUnique({
+        where: { id: orderId },
+        include: {
+        client: true,
+        payment: true,
+        businessGroups: {
+            include: {
+            business: true,
+            items: {
+                include: {
+                product: {
+                    include: { medias: { take: 1 } },
+                },
+                },
+            },
+            },
+        },
+        },
+    });
 
-		const html = this.generateOrderReceiptHTML({
-			...order,
-			deliveryAddress,
-			qrBase64,
-		});
+    if (!order) throw new Error("Order not found");
 
-		const browser = await puppeteer.launch({
-			headless: true,
-			args: ["--no-sandbox", "--disable-setuid-sandbox"],
-		});
+    // Security check
+    if (order.clientId !== userId) {
+        throw new Error("Not authorized");
+    }
 
-		const page = await browser.newPage();
-		await page.setContent(html, { waitUntil: "networkidle0" });
+    return order;
+    }
 
-		const pdfBuffer = await page.pdf({
-			format: "A4",
-			printBackground: true,
-			margin: {
-				top: "20px",
-				bottom: "20px",
-				left: "20px",
-				right: "20px",
-			},
-		});
+    async generateReceipt(input: GenerateOrderReceiptInput, user: AuthPayload) {
+        const { orderId, email } = input;
 
-		await browser.close();
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            include: {
+                client: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                    },
+                },
+                payment: {
+                    select: {
+                        id: true,
+                        amount: true,
+                        method: true,
+                        status: true,
+                        transactionDate: true,
+                        qrCode: true,
+                        createdAt: true,
+                    },
+                },
+                products: {
+                    include: {
+                        product: {
+                            select: {
+                                id: true,
+                                businessId: true,
+                                title: true,
+                                price: true,
+                                medias: {
+                                    select: { url: true },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
 
-		const fileName = `order_receipt_${order.id.substring(0, 8)}_${Date.now()}.pdf`;
-		const blobToken = this.configService.get<string>(
-			"NEST_PUBLIC_BLOB_READ_WRITE_TOKEN",
-		);
-		if (!blobToken) {
-			this.logger.error(
-				"NEST_PUBLIC_BLOB_READ_WRITE_TOKEN is missing in environment variables.",
-			);
-			throw new Error(
-				"Receipt upload configuration error. Please contact support.",
-			);
-		}
+        if (!order) {
+            throw new Error("Order not found");
+        }
 
-		const blob = await put(
-			`order-receipts/${fileName}`,
-			Buffer.from(pdfBuffer),
-			{
-				access: "public",
-				contentType: "application/pdf",
-				token: blobToken,
-			},
-		);
+        const qrData =
+            "https://uscor-marketplace-2-0-front-ui.vercel.app/order-status?id=" +
+                order.id || "";
+        const qrBase64 = await QRCode.toDataURL(qrData);
 
-		const businessId = order.products?.[0]?.product?.businessId;
-		const mediaRecord = await this.prisma.media.create({
-			data: {
-				url: blob.url,
-				type: "DOCUMENT",
-				size: BigInt(pdfBuffer.length),
-				pathname: blob.pathname,
-				clientId: order.clientId,
-				businessId,
-			},
-		});
+        if (order.clientId !== user.id) {
+            throw new Error(
+                "Clients can only generate receipts for their own orders",
+            );
+        }
 
-		await this.prisma.order.update({
-			where: { id: order.id },
-			data: { receiptUrl: blob.url },
-		});
+        const deliveryAddress = order.deliveryAddress
+            ? await this.prisma.address.findUnique({
+                  where: { id: order.deliveryAddress },
+              })
+            : null;
 
-		let emailSent = false;
-		if (email && order.client?.email) {
-			try {
-				console.log(
-					`Simulated sending order receipt email to ${email} with URL: ${blob.url}`,
-				);
-				emailSent = true;
-			} catch (emailError) {
-				this.logger.error(
-					`Failed to send order receipt email to ${email}`,
-					emailError,
-				);
-				emailSent = false;
-			}
-		}
+        const html = this.generateOrderReceiptHTML({
+            ...order,
+            deliveryAddress,
+            qrBase64,
+        });
 
-		return {
-			receiptUrl: blob.url,
-			fileName,
-			mediaId: mediaRecord.id,
-			emailSent,
-		};
-	}
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        });
 
-	private generateOrderReceiptHTML(order: any): string {
-		const formatPaymentMethod = (method: string) => {
-			switch (method) {
-				case "MOBILE_MONEY":
-					return "📱 Mobile Money";
-				case "CASH":
-					return "💵 Cash";
-				case "CARD":
-					return "💳 Card";
-				case "TOKEN":
-					return "🪙 USCOR Token";
-				default:
-					return method;
-			}
-		};
+        const page = await browser.newPage();
+        await page.setContent(html, { waitUntil: "networkidle0" });
 
-		const formatOrderStatus = (status: string) => {
-			switch (status) {
-				case "PENDING":
-					return "🕒 Pending";
-				case "PROCESSING":
-					return "⚙️ Processing";
-				case "SHIPPED":
-					return "🚚 Shipped";
-				case "DELIVERED":
-					return "✅ Delivered";
-				case "CANCELLED":
-					return "❌ Cancelled";
-				default:
-					return status || "Pending";
-			}
-		};
+        const pdfBuffer = await page.pdf({
+            format: "A4",
+            printBackground: true,
+            margin: {
+                top: "20px",
+                bottom: "20px",
+                left: "20px",
+                right: "20px",
+            },
+        });
 
-		const itemsHtml = order.products
-			.map((item: any) => {
-				const product = item.product || {};
+        await browser.close();
 
-				return `
+        const fileName = `order_receipt_${order.id.substring(0, 8)}_${Date.now()}.pdf`;
+        const blobToken = this.configService.get<string>(
+            "NEST_PUBLIC_BLOB_READ_WRITE_TOKEN",
+        );
+        if (!blobToken) {
+            this.logger.error(
+                "NEST_PUBLIC_BLOB_READ_WRITE_TOKEN is missing in environment variables.",
+            );
+            throw new Error(
+                "Receipt upload configuration error. Please contact support.",
+            );
+        }
+
+        const blob = await put(
+            `order-receipts/${fileName}`,
+            Buffer.from(pdfBuffer),
+            {
+                access: "public",
+                contentType: "application/pdf",
+                token: blobToken,
+            },
+        );
+
+        const businessId = order.products?.[0]?.product?.businessId;
+        const mediaRecord = await this.prisma.media.create({
+            data: {
+                url: blob.url,
+                type: "DOCUMENT",
+                size: BigInt(pdfBuffer.length),
+                pathname: blob.pathname,
+                clientId: order.clientId,
+                businessId,
+            },
+        });
+
+        await this.prisma.order.update({
+            where: { id: order.id },
+            data: { receiptUrl: blob.url },
+        });
+
+        let emailSent = false;
+        if (email && order.client?.email) {
+            try {
+                console.log(
+                    `Simulated sending order receipt email to ${email} with URL: ${blob.url}`,
+                );
+                emailSent = true;
+            } catch (emailError) {
+                this.logger.error(
+                    `Failed to send order receipt email to ${email}`,
+                    emailError,
+                );
+                emailSent = false;
+            }
+        }
+
+        return {
+            receiptUrl: blob.url,
+            fileName,
+            mediaId: mediaRecord.id,
+            emailSent,
+        };
+    }
+
+    private generateOrderReceiptHTML(order: any): string {
+        const formatPaymentMethod = (method: string) => {
+            switch (method) {
+                case "MOBILE_MONEY":
+                    return "📱 Mobile Money";
+                case "CASH":
+                    return "💵 Cash";
+                case "CARD":
+                    return "💳 Card";
+                case "TOKEN":
+                    return "🪙 USCOR Token";
+                default:
+                    return method;
+            }
+        };
+
+        const formatOrderStatus = (status: string) => {
+            switch (status) {
+                case "PENDING":
+                    return "🕒 Pending";
+                case "PROCESSING":
+                    return "⚙️ Processing";
+                case "SHIPPED":
+                    return "🚚 Shipped";
+                case "DELIVERED":
+                    return "✅ Delivered";
+                case "CANCELLED":
+                    return "❌ Cancelled";
+                default:
+                    return status || "Pending";
+            }
+        };
+
+        const itemsHtml = order.products
+            .map((item: any) => {
+                const product = item.product || {};
+
+                return `
 					<div class="item-row">
 						<div class="item-details">
 							<div class="item-name">${product.title || "Item"}</div>
@@ -505,35 +653,35 @@ export class OrderService {
 						</div>
 					</div>
 				`;
-			})
-			.join("");
+            })
+            .join("");
 
-		const deliveryAddressLine = order.deliveryAddress
-			? `${order.deliveryAddress.street || ""}, ${
-					order.deliveryAddress.city || ""
-				}${
-					order.deliveryAddress.postalCode
-						? ", " + order.deliveryAddress.postalCode
-						: ""
-				}${
-					order.deliveryAddress.country
-						? ", " + order.deliveryAddress.country
-						: ""
-				}`
-			: "Not provided";
+        const deliveryAddressLine = order.deliveryAddress
+            ? `${order.deliveryAddress.street || ""}, ${
+                  order.deliveryAddress.city || ""
+              }${
+                  order.deliveryAddress.postalCode
+                      ? ", " + order.deliveryAddress.postalCode
+                      : ""
+              }${
+                  order.deliveryAddress.country
+                      ? ", " + order.deliveryAddress.country
+                      : ""
+              }`
+            : "Not provided";
 
-		const subtotal = order.products.reduce(
-			(sum: number, item: any) =>
-				sum + (item.product?.price || 0) * item.quantity,
-			0,
-		);
+        const subtotal = order.products.reduce(
+            (sum: number, item: any) =>
+                sum + (item.product?.price || 0) * item.quantity,
+            0,
+        );
 
-		const deliveryFee = order.deliveryFee || 0;
-		const tax = subtotal * 0.18;
+        const deliveryFee = order.deliveryFee || 0;
+        const tax = subtotal * 0.18;
 
-		const total = order.payment?.amount ?? subtotal + deliveryFee + tax;
+        const total = order.payment?.amount ?? subtotal + deliveryFee + tax;
 
-		return `
+        return `
 	<!DOCTYPE html>
 	<html>
 	<head>
@@ -881,8 +1029,8 @@ export class OrderService {
 		</div>
 
 		${
-			order.client?.email
-				? `
+            order.client?.email
+                ? `
 		<div class="meta-item">
 			<span class="meta-label">Email</span>
 			<span class="meta-value">
@@ -890,19 +1038,19 @@ export class OrderService {
 			</span>
 		</div>
 		`
-				: ""
-		}
+                : ""
+        }
 
 		<div class="meta-item">
 			<span class="meta-label">Date</span>
 			<span class="meta-value">
 			${new Date(order.createdAt).toLocaleDateString("en-US", {
-				year: "numeric",
-				month: "short",
-				day: "numeric",
-				hour: "2-digit",
-				minute: "2-digit",
-			})}
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            })}
 			</span>
 		</div>
 
@@ -1027,588 +1175,657 @@ export class OrderService {
 	</body>
 	</html>
 		`;
-	}
+    }
 
-	async findAll() {
-		const orders = await this.prisma.order.findMany({
-			include: {
-				client: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				payment: {
-					select: {
-						id: true,
-						amount: true,
-						method: true,
-						status: true,
-						transactionDate: true,
-						qrCode: true,
-						createdAt: true,
-					},
-				},
-				products: {
-					select: {
-						id: true,
-						quantity: true,
-						createdAt: true,
-						product: {
-							select: {
-								id: true,
-								businessId: true,
-								title: true,
-								price: true,
-								createdAt: true,
-								medias: {
-									select: {
-										url: true,
-									},
-									take: 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+    async findAll() {
+        const orders = await this.prisma.order.findMany({
+            include: {
+                client: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        createdAt: true,
+                    },
+                },
+                payment: {
+                    select: {
+                        id: true,
+                        amount: true,
+                        method: true,
+                        status: true,
+                        transactionDate: true,
+                        qrCode: true,
+                        createdAt: true,
+                    },
+                },
+                products: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        createdAt: true,
+                        product: {
+                            select: {
+                                id: true,
+                                businessId: true,
+                                title: true,
+                                price: true,
+                                createdAt: true,
+                                medias: {
+                                    select: {
+                                        url: true,
+                                    },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                },
+                businessGroups: {
+        include: {
+          business: true,
+          items: {
+            include: {
+              product: {
+                include: { medias: { take: 1 } },
+              },
+            },
+          },
+        },
+      },
+            },
+        });
 
-		// Transform the data to match frontend expectations
-		return orders.map((order) => ({
-			...order,
-			status: order.payment?.status || "PENDING",
-			products: order.products?.map((op) => ({
-				...op,
-			})),
-		}));
-	}
+        // Transform the data to match frontend expectations
+        return orders.map((order) => ({
+            ...order,
+            status: order.payment?.status || "PENDING",
+            products: order.products?.map((op) => ({
+                ...op,
+            })),
+        }));
+    }
 
-	async findOne(id: string) {
-		const order = await this.prisma.order.findUnique({
-			where: { id },
-			include: {
-				client: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				payment: {
-					select: {
-						id: true,
-						amount: true,
-						method: true,
-						status: true,
-						transactionDate: true,
-						qrCode: true,
-						createdAt: true,
-					},
-				},
-				products: {
-					select: {
-						id: true,
-						quantity: true,
-						createdAt: true,
-						product: {
-							select: {
-								id: true,
-								businessId: true,
-								title: true,
-								price: true,
-								createdAt: true,
-								medias: {
-									select: {
-										url: true,
-									},
-									take: 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+    async findOne(id: string) {
+        const order = await this.prisma.order.findUnique({
+            where: { id },
+            include: {
+                client: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        createdAt: true,
+                    },
+                },
+                payment: {
+                    select: {
+                        id: true,
+                        amount: true,
+                        method: true,
+                        status: true,
+                        transactionDate: true,
+                        qrCode: true,
+                        createdAt: true,
+                    },
+                },
+                products: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        createdAt: true,
+                        product: {
+                            select: {
+                                id: true,
+                                businessId: true,
+                                title: true,
+                                price: true,
+                                createdAt: true,
+                                medias: {
+                                    select: {
+                                        url: true,
+                                    },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                },
+                businessGroups: {
+                    include: {
+                    business: true,
+                    items: {
+                        include: {
+                        product: {
+                            include: { medias: { take: 1 } },
+                        },
+                        },
+                    },
+                    },
+                },
+            },
+        });
 
-		if (!order) return null;
+        if (!order) return null;
 
-		// Transform the data to match frontend expectations
-		return {
-			...order,
-			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress! },
-			}),
-			status: order.payment?.status || "PENDING",
-			products: order.products?.map((op) => ({
-				...op,
-			})),
-		};
-	}
+        // Transform the data to match frontend expectations
+        return {
+            ...order,
+            deliveryAddress: await this.prisma.address.findUnique({
+                where: { id: order?.deliveryAddress! },
+            }),
+            status: order.payment?.status || "PENDING",
+            products: order.products?.map((op) => ({
+                ...op,
+            })),
+        };
+    }
 
-	async update(id: string, updateOrderInput: UpdateOrderInput) {
-		const { ...orderData } = updateOrderInput;
-		const order = await this.prisma.order.update({
-			where: { id },
-			data: {
-				deliveryAddress: orderData.deliveryAddress,
-				qrCode: orderData.qrCode,
-				deliveryFee: orderData.deliveryFee,
-			},
-			include: {
-				client: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				payment: {
-					select: {
-						id: true,
-						amount: true,
-						method: true,
-						status: true,
-						transactionDate: true,
-						qrCode: true,
-						createdAt: true,
-					},
-				},
-				products: {
-					select: {
-						id: true,
-						quantity: true,
-						createdAt: true,
-						product: {
-							select: {
-								id: true,
-								businessId: true,
-								title: true,
-								price: true,
-								createdAt: true,
-								medias: {
-									select: {
-										url: true,
-									},
-									take: 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+    async update(id: string, updateOrderInput: UpdateOrderInput) {
+        const { ...orderData } = updateOrderInput;
+        const order = await this.prisma.order.update({
+            where: { id },
+            data: {
+                deliveryAddress: orderData.deliveryAddress,
+                qrCode: orderData.qrCode,
+                deliveryFee: orderData.deliveryFee,
+            },
+            include: {
+                client: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        createdAt: true,
+                    },
+                },
+                payment: {
+                    select: {
+                        id: true,
+                        amount: true,
+                        method: true,
+                        status: true,
+                        transactionDate: true,
+                        qrCode: true,
+                        createdAt: true,
+                    },
+                },
+                products: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        createdAt: true,
+                        product: {
+                            select: {
+                                id: true,
+                                businessId: true,
+                                title: true,
+                                price: true,
+                                createdAt: true,
+                                medias: {
+                                    select: {
+                                        url: true,
+                                    },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                },
+                businessGroups: {
+        include: {
+          business: true,
+          items: {
+            include: {
+              product: {
+                include: { medias: { take: 1 } },
+              },
+            },
+          },
+        },
+      },
+            },
+        });
 
-		// Transform the data to match frontend expectations
-		return {
-			...order,
-			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress! },
-			}),
-			status: order.payment?.status || "PENDING",
-			products: order.products?.map((op) => ({
-				...op,
-			})),
-		};
-	}
+        // Transform the data to match frontend expectations
+        return {
+            ...order,
+            deliveryAddress: await this.prisma.address.findUnique({
+                where: { id: order?.deliveryAddress! },
+            }),
+            status: order.payment?.status || "PENDING",
+            products: order.products?.map((op) => ({
+                ...op,
+            })),
+        };
+    }
 
-	async remove(id: string) {
-		return this.prisma.order.delete({
-			where: { id },
-			select: {
-				id: true,
-				deliveryFee: true,
-			},
-		});
-	}
+    async remove(id: string) {
+        return this.prisma.order.delete({
+            where: { id },
+            select: {
+                id: true,
+                deliveryFee: true,
+            },
+        });
+    }
 
-	async findBusinessOrders(
-		businessId: string,
-		page: number = 1,
-		limit: number = 20,
-		search?: string,
-		status?: string,
-		date?: string,
-	) {
-		const skip = (page - 1) * limit;
+    async findBusinessOrders(
+        businessId: string,
+        page: number = 1,
+        limit: number = 20,
+        search?: string,
+        status?: string,
+        date?: string,
+    ) {
+        const skip = (page - 1) * limit;
 
-		// Build where clause
-		const where: any = {
-			products: {
-				some: {
-					product: {
-						businessId: businessId,
-					},
-				},
-			},
-		};
+        // Build where clause
+        const where: any = {
+            products: {
+                some: {
+                    product: {
+                        businessId: businessId,
+                    },
+                },
+            },
+        };
 
-		// Add search filter
-		if (search) {
-			where.OR = [
-				{
-					client: {
-						fullName: {
-							contains: search,
-							mode: "insensitive",
-						},
-					},
-				},
-				{
-					id: {
-						contains: search,
-						mode: "insensitive",
-					},
-				},
-			];
-		}
+        // Add search filter
+        if (search) {
+            where.OR = [
+                {
+                    client: {
+                        fullName: {
+                            contains: search,
+                            mode: "insensitive",
+                        },
+                    },
+                },
+                {
+                    id: {
+                        contains: search,
+                        mode: "insensitive",
+                    },
+                },
+            ];
+        }
 
-		// Add status filter
-		if (status) {
-			where.payment = {
-				status: status,
-			};
-		}
+        // Add status filter
+        if (status) {
+            where.payment = {
+                status: status,
+            };
+        }
 
-		// Add date filter
-		if (date) {
-			const now = new Date();
-			let startDate: Date;
-			const endDate: Date = now;
+        // Add date filter
+        if (date) {
+            const now = new Date();
+            let startDate: Date;
+            const endDate: Date = now;
 
-			switch (date) {
-				case "TODAY":
-					startDate = new Date(
-						now.getFullYear(),
-						now.getMonth(),
-						now.getDate(),
-					);
-					break;
-				case "THIS_WEEK": {
-					const dayOfWeek = now.getDay();
-					startDate = new Date(now.getTime() - dayOfWeek * 24 * 60 * 60 * 1000);
-					startDate.setHours(0, 0, 0, 0);
-					break;
-				}
-				case "THIS_MONTH":
-					startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-					break;
-				case "THIS_YEAR":
-					startDate = new Date(now.getFullYear(), 0, 1);
-					break;
-				default:
-					startDate = new Date(0);
-			}
+            switch (date) {
+                case "TODAY":
+                    startDate = new Date(
+                        now.getFullYear(),
+                        now.getMonth(),
+                        now.getDate(),
+                    );
+                    break;
+                case "THIS_WEEK": {
+                    const dayOfWeek = now.getDay();
+                    startDate = new Date(
+                        now.getTime() - dayOfWeek * 24 * 60 * 60 * 1000,
+                    );
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                }
+                case "THIS_MONTH":
+                    startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                    break;
+                case "THIS_YEAR":
+                    startDate = new Date(now.getFullYear(), 0, 1);
+                    break;
+                default:
+                    startDate = new Date(0);
+            }
 
-			where.createdAt = {
-				gte: startDate,
-				lte: endDate,
-			};
-		}
+            where.createdAt = {
+                gte: startDate,
+                lte: endDate,
+            };
+        }
 
-		const [orders, total] = await Promise.all([
-			this.prisma.order.findMany({
-				where,
-				skip,
-				take: limit,
-				orderBy: { createdAt: "desc" },
-				include: {
-					client: {
-						select: {
-							id: true,
-							fullName: true,
-							email: true,
-							createdAt: true,
-						},
-					},
-					payment: {
-						select: {
-							id: true,
-							amount: true,
-							method: true,
-							status: true,
-							transactionDate: true,
-							qrCode: true,
-							createdAt: true,
-						},
-					},
-					products: {
-						select: {
-							id: true,
-							quantity: true,
-							createdAt: true,
-							product: {
-								select: {
-									id: true,
-									businessId: true,
-									title: true,
-									price: true,
-									createdAt: true,
-									medias: {
-										select: {
-											url: true,
-										},
-										take: 1,
-									},
-								},
-							},
-						},
-					},
-				},
-			}),
-			this.prisma.order.count({ where }),
-		]);
+        const [orders, total] = await Promise.all([
+            this.prisma.order.findMany({
+                where : { 
+                    ...where,
+                    clientOrderId: {
+                        not : null
+                    },
+                },
+                skip,
+                take: limit,
+                orderBy: { createdAt: "desc" },
+                include: { 
+                    client: {
+                        select: {
+                            id: true,
+                            fullName: true,
+                            email: true,
+                            createdAt: true,
+                        },
+                    },
+                    payment: {
+                        select: {
+                            id: true,
+                            amount: true,
+                            method: true,
+                            status: true,
+                            transactionDate: true,
+                            qrCode: true,
+                            createdAt: true,
+                        },
+                    },
+                    products: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            createdAt: true,
+                            product: {
+                                select: {
+                                    id: true,
+                                    businessId: true,
+                                    title: true,
+                                    price: true,
+                                    createdAt: true,
+                                    medias: {
+                                        select: {
+                                            url: true,
+                                        },
+                                        take: 1,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            }),
+            this.prisma.order.count({ where }),
+        ]);
 
-		// Transform the data to match frontend expectations
-		const transformedOrders = orders.map((order) => ({
-			...order,
-			deliveryAddress: this.prisma.address.findUnique({
-				where: { id: order?.deliveryAddress! },
-			}),
-			status: order.payment?.status || "PENDING",
-			products: order.products?.map((op) => ({
-				...op,
-			})),
-		}));
+        // Transform the data to match frontend expectations
+        const transformedOrders = await Promise.all( 
+            orders.map(async (order) => ({
+                ...order,
+                deliveryAddress: await this.prisma.address.findUnique({
+                    where: { id: order?.deliveryAddress! },
+                }),
+                status: order.payment?.status || "PENDING",
+                products: order.products?.map((op) => ({
+                    ...op,
+                })),
+            }))
+        )
 
-		return {
-			items: transformedOrders,
-			total,
-			page,
-			limit,
-		};
-	}
+        return {
+            items: transformedOrders,
+            total,
+            page,
+            limit,
+        };
+    }
 
-	async findClientOrders(
-		clientId: string,
-		page: number = 1,
-		limit: number = 20,
-	) {
-		const skip = (page - 1) * limit;
+    async findClientOrders(
+        clientId: string,
+        page: number = 1,
+        limit: number = 20,
+    ) {
+        const skip = (page - 1) * limit;
 
-		const [orders, total] = await Promise.all([
-			this.prisma.order.findMany({
-				where: { clientId, clientOrderId: null },
-				skip,
-				take: limit,
-				orderBy: { createdAt: "desc" },
-				include: {
-					client: {
-						select: {
-							id: true,
-							fullName: true,
-							email: true,
-							createdAt: true,
-						},
-					},
-					payment: {
-						select: {
-							id: true,
-							amount: true,
-							method: true,
-							status: true,
-							transactionDate: true,
-							qrCode: true,
-							createdAt: true,
-						},
-					},
-					products: {
-						select: {
-							id: true,
-							quantity: true,
-							createdAt: true,
-							product: {
-								select: {
-									id: true,
-									businessId: true,
-									title: true,
-									price: true,
-									createdAt: true,
-									medias: {
-										select: {
-											url: true,
-										},
-										take: 1,
-									},
-									business: {
-										select: {
-											id: true,
-											name: true,
-											avatar: true,
-										},
-									},
-									store: {
-										select: {
-											id: true,
-											name: true,
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			}),
-			this.prisma.order.count({
-				where: { clientId, clientOrderId: undefined },
-			}),
-		]);
+        const [orders, total] = await Promise.all([
+            this.prisma.order.findMany({
+                where: { clientId, clientOrderId: null },
+                skip,
+                take: limit,
+                orderBy: { createdAt: "desc" },
+                include: {
+                    client: {
+                        select: {
+                            id: true,
+                            fullName: true,
+                            email: true,
+                            createdAt: true,
+                        },
+                    },
+                    payment: {
+                        select: {
+                            id: true,
+                            amount: true,
+                            method: true,
+                            status: true,
+                            transactionDate: true,
+                            qrCode: true,
+                            createdAt: true,
+                        },
+                    },
+                    products: {
+                        select: {
+                            id: true,
+                            quantity: true,
+                            createdAt: true,
+                            product: {
+                                select: {
+                                    id: true,
+                                    businessId: true,
+                                    title: true,
+                                    price: true,
+                                    createdAt: true,
+                                    medias: {
+                                        select: {
+                                            url: true,
+                                        },
+                                        take: 1,
+                                    },
+                                    business: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            avatar: true,
+                                        },
+                                    },
+                                    store: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            }),
+            this.prisma.order.count({
+                where: { clientId, clientOrderId: undefined },
+            }),
+        ]);
 
-		// Build business map from product businessIds
-		const businessIds = new Set<string>();
-		for (const o of orders) {
-			for (const op of o.products || []) {
-				const bId = op.product?.businessId || op.product?.business?.id;
-				if (bId) businessIds.add(bId);
-			}
-		}
-		const businesses = businessIds.size
-			? await this.prisma.business.findMany({
-					where: {
-						id: {
-							in: Array.from(businessIds),
-						},
-					},
-					select: {
-						id: true,
-						name: true,
-						avatar: true,
-					},
-				})
-			: [];
-		const businessMap: Record<string, any> = {};
-		for (const b of businesses) businessMap[b.id] = b;
+        // Build business map from product businessIds
+        const businessIds = new Set<string>();
+        for (const o of orders) {
+            for (const op of o.products || []) {
+                const bId = op.product?.businessId || op.product?.business?.id;
+                if (bId) businessIds.add(bId);
+            }
+        }
+        const businesses = businessIds.size
+            ? await this.prisma.business.findMany({
+                  where: {
+                      id: {
+                          in: Array.from(businessIds),
+                      },
+                  },
+                  select: {
+                      id: true,
+                      name: true,
+                      avatar: true,
+                  },
+              })
+            : [];
+        const businessMap: Record<string, any> = {};
+        for (const b of businesses) businessMap[b.id] = b;
 
-		const transformedOrders = orders.map((order) => {
-			const firstProduct = order.products?.find((p: any) => !!p.product);
-			const bizId = firstProduct?.product?.businessId;
-			const business =
-				firstProduct?.product?.business || (bizId ? businessMap[bizId] : null);
-			const store = firstProduct?.product?.store || null;
+        const transformedOrders = orders.map((order) => {
+            const firstProduct = order.products?.find((p: any) => !!p.product);
+            const bizId = firstProduct?.product?.businessId;
+            const business =
+                firstProduct?.product?.business ||
+                (bizId ? businessMap[bizId] : null);
+            const store = firstProduct?.product?.store || null;
 
-			// items array expected by frontend
-			const items = (order.products || []).map((op: any) => ({
-				id: op.product?.id || op.id,
-				name: op.product?.title || op.product?.name || "",
-				price: op.product?.price || 0,
-				quantity: op.quantity || 0,
-				media: op.product?.medias?.map((m: any) => ({ url: m.url })),
-			}));
+            // items array expected by frontend
+            const items = (order.products || []).map((op: any) => ({
+                id: op.product?.id || op.id,
+                name: op.product?.title || op.product?.name || "",
+                price: op.product?.price || 0,
+                quantity: op.quantity || 0,
+                media: op.product?.medias?.map((m: any) => ({ url: m.url })),
+            }));
 
-			return {
-				id: order.id,
-				orderNumber: order.id.substring(0, 8).toUpperCase(),
-				status: order.payment?.status || "PENDING",
-				totalAmount: order.totalAmount,
-				createdAt: order.createdAt,
-				receiptUrl: order.receiptUrl || null,
-				clientOrderId: order.clientOrderId || null,
-				items,
-				business,
-				store,
-				paymentMethod: order.payment
-					? {
-							type: order.payment.method,
-							last4: null,
-						}
-					: null,
-				deliveryAddress: this.prisma.address.findUnique({
-					where: { id: order?.deliveryAddress! },
-				}),
-			};
-		});
+            return {
+                id: order.id,
+                orderNumber: order.id.substring(0, 8).toUpperCase(),
+                status: order.payment?.status || "PENDING",
+                totalAmount: order.totalAmount,
+                createdAt: order.createdAt,
+                receiptUrl: order.receiptUrl || null,
+                clientOrderId: order.clientOrderId || null,
+                items,
+                business,
+                store,
+                paymentMethod: order.payment
+                    ? {
+                          type: order.payment.method,
+                          last4: null,
+                      }
+                    : null,
+                deliveryAddress: this.prisma.address.findUnique({
+                    where: { id: order?.deliveryAddress! },
+                }),
+            };
+        });
 
-		return {
-			items: transformedOrders,
-			total,
-			page,
-			limit,
-		};
-	}
+        return {
+            items: transformedOrders,
+            total,
+            page,
+            limit,
+        };
+    }
 
-	async processPayment(orderId: string, input: any) {
-		const order = await this.prisma.order.findUnique({
-			where: { id: orderId },
-			include: { payment: true },
-		});
+    async processPayment(orderId: string, input: any) {
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            include: { payment: true },
+        });
 
-		if (!order) {
-			throw new Error("Order not found");
-		}
+        if (!order) {
+            throw new Error("Order not found");
+        }
 
-		if (!order.payment) {
-			throw new Error("No payment found for this order");
-		}
+        if (!order.payment) {
+            throw new Error("No payment found for this order");
+        }
 
-		// Update payment status
-		const updatedOrder = await this.prisma.order.update({
-			where: { id: orderId },
-			data: {
-				payment: {
-					update: {
-						status: input.status || "COMPLETED",
-						transactionDate: new Date(),
-					},
-				},
-			},
-			include: {
-				client: {
-					select: {
-						id: true,
-						fullName: true,
-						email: true,
-						createdAt: true,
-					},
-				},
-				payment: {
-					select: {
-						id: true,
-						amount: true,
-						method: true,
-						status: true,
-						transactionDate: true,
-						qrCode: true,
-						createdAt: true,
-					},
-				},
-				products: {
-					select: {
-						id: true,
-						quantity: true,
-						createdAt: true,
-						product: {
-							select: {
-								id: true,
-								businessId: true,
-								title: true,
-								price: true,
-								createdAt: true,
-								medias: {
-									select: {
-										url: true,
-									},
-									take: 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+        const paymentInput: UpdatePaymentTransactionInput = {
+            qrCode: order.qrCode || "No QRCode",
+            status: PaymentStatus.COMPLETED,
+        };
 
-		await this.earnPoints(updatedOrder, "remaining");
+        await this.paymentTransaction.update(
+            paymentInput,
+            order.payment.id,
+            order.clientId,
+        );
 
-		// Transform the data to match frontend expectations
-		return {
-			...updatedOrder,
-			status: updatedOrder.payment?.status || "PENDING",
-			products: updatedOrder.products?.map((op) => ({
-				...op,
-			})),
-		};
-	}
+        // Update payment status
+        const updatedOrder = await this.prisma.order.update({
+            where: { id: order.id },
+            data: {
+                payment: {
+                    update: {
+                        status: input.status || "COMPLETED",
+                        transactionDate: new Date(),
+                    },
+                },
+            },
+            include: {
+                client: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        createdAt: true,
+                    },
+                },
+                payment: {
+                    select: {
+                        id: true,
+                        amount: true,
+                        method: true,
+                        status: true,
+                        transactionDate: true,
+                        qrCode: true,
+                        createdAt: true,
+                    },
+                },
+                products: {
+                    select: {
+                        id: true,
+                        quantity: true,
+                        createdAt: true,
+                        product: {
+                            select: {
+                                id: true,
+                                businessId: true,
+                                title: true,
+                                price: true,
+                                createdAt: true,
+                                medias: {
+                                    select: {
+                                        url: true,
+                                    },
+                                    take: 1,
+                                },
+                            },
+                        },
+                    },
+                },
+                businessGroups: {
+        include: {
+          business: true,
+          items: {
+            include: {
+              product: {
+                include: { medias: { take: 1 } },
+              },
+            },
+          },
+        },
+      },
+            },
+        });
+
+        await this.earnPoints(updatedOrder, "remaining");
+
+        // Transform the data to match frontend expectations
+        return {
+            ...updatedOrder,
+            status: updatedOrder.payment?.status || "PENDING",
+            products: updatedOrder.products?.map((op) => ({
+                ...op,
+            })),
+        };
+    }
 }

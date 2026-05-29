@@ -115,6 +115,16 @@ export type Media = Prisma.MediaModel
  */
 export type Order = Prisma.OrderModel
 /**
+ * Model OrderBusinessGroup
+ * 
+ */
+export type OrderBusinessGroup = Prisma.OrderBusinessGroupModel
+/**
+ * Model OrderItem
+ * 
+ */
+export type OrderItem = Prisma.OrderItemModel
+/**
  * Model OrderProduct
  * 
  */

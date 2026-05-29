@@ -133,7 +133,7 @@ export const GET_LOYALTY_TIERS = gql`
 
 export const GET_POINTS_TRANSACTIONS_BY_CLIENT = gql`
   query GetPointsTransactionsByClient(
-    $clientId: String
+    $clientId: String!
   ) {
     pointsTransactionsByClient(
       clientId: $clientId

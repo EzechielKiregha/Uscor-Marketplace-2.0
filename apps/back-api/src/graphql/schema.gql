@@ -315,6 +315,27 @@ type DeliveryAddressEntity {
   isDefault: Boolean
 }
 
+type OrderBusinessGroupEntity {
+  id: String!
+  orderId: String!
+  businessId: String!
+  business: BusinessEntity!
+  subtotal: Float!
+  deliveryFee: Float!
+  total: Float!
+  status: String!
+  items: [OrderItem!]!
+  createdAt: DateTime!
+}
+
+type OrderItem {
+  id: String!
+  productId: String!
+  quantity: Int!
+  price: Float!
+  product: ProductEntity!
+}
+
 type OrderItemEntity {
   id: String!
   name: String!
@@ -344,6 +365,7 @@ type OrderEntity {
   store: StoreEntity
   paymentMethod: PaymentMethodEntity
   totalAmount: Float
+  businessGroups: [OrderBusinessGroupEntity!]
 }
 
 type PaginatedOrdersResponse {
@@ -1774,7 +1796,9 @@ type BusinessSettingsEntity {
 type Query {
   """Retrieves all products with their relations."""
   products: [ProductEntity!]!
-  businessProducts(businessId: String!, storeId: String, category: String, search: String, page: Int, limit: Int): [ProductEntity!]!
+
+  """Retrieves all products with their relations."""
+  fetchedBusinessProducts: [ProductEntity!]!
 
   """Retrieves all featured products with their relations."""
   featuredProducts: [ProductEntity!]!
@@ -1790,6 +1814,7 @@ type Query {
 
   """Retrieves searched products."""
   searchedProducts(title: String!): [ProductEntity!]!
+  myBusinessOrders: [OrderBusinessGroupEntity!]!
 
   """Retrieves orders."""
   orders: [OrderEntity!]!
@@ -1823,10 +1848,11 @@ type Query {
 
   """Retrieve businesses with pagination and filtering."""
   businesses(search: String, businessType: String, hasLoyalty: Boolean, hasPromotions: Boolean, isB2BEnabled: Boolean, isVerified: Boolean, sort: String, page: Int, limit: Int): PaginatedBusinesses!
+  businessProducts(businessId: String!, storeId: String, category: String, search: String, page: Int, limit: Int): [ProductEntity!]!
   business(id: String!): BusinessSettingsEntity!
 
   """Retrieves a single business by phone number."""
-  businessByPhone(phone: String!): BusinessEntity!
+  businessByPhone(phone: String!): BusinessEntity
   businessServices(businessId: String!, category: String, search: String, page: Int, limit: Int): [FreelanceServiceEntity!]!
   businessDashboard: BusinessDashboardResponse!
   businessTypes: [BusinessTypeEntity!]!
@@ -2354,6 +2380,9 @@ input CreateOrderInput {
 
 input CreateOrderProductInput {
   productId: String!
+  businessId: String!
+  price: Float!
+  deliveryFee: Float!
   quantity: Int!
 }
 

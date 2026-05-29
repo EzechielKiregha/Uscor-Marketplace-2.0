@@ -1,18 +1,11 @@
 "use client";
-import { createContext, useContext, createElement, ReactNode } from 'react';
+import { ProductEntity } from '@/lib/types';
+import { createContext, createElement, ReactNode, useContext } from 'react';
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface CartItem {
-  product: {
-    id: string;
-    title: string;
-    name: string;
-    price: number;
-    medias?: { url: string }[];
-    media?: { url: string }[];
-    businessId: string;
-  };
+  product: ProductEntity
   quantity: number;
 }
 

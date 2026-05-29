@@ -64,6 +64,8 @@ export const ModelName = {
   Product: 'Product',
   Media: 'Media',
   Order: 'Order',
+  OrderBusinessGroup: 'OrderBusinessGroup',
+  OrderItem: 'OrderItem',
   OrderProduct: 'OrderProduct',
   Review: 'Review',
   Chat: 'Chat',
@@ -373,6 +375,7 @@ export const OrderScalarFieldEnum = {
   deliveryFee: 'deliveryFee',
   deliveryAddress: 'deliveryAddress',
   clientOrderId: 'clientOrderId',
+  status: 'status',
   receiptUrl: 'receiptUrl',
   qrCode: 'qrCode',
   totalAmount: 'totalAmount',
@@ -381,6 +384,33 @@ export const OrderScalarFieldEnum = {
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const OrderBusinessGroupScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  businessId: 'businessId',
+  subtotal: 'subtotal',
+  deliveryFee: 'deliveryFee',
+  total: 'total',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderBusinessGroupScalarFieldEnum = (typeof OrderBusinessGroupScalarFieldEnum)[keyof typeof OrderBusinessGroupScalarFieldEnum]
+
+
+export const OrderItemScalarFieldEnum = {
+  id: 'id',
+  orderBusinessGroupId: 'orderBusinessGroupId',
+  productId: 'productId',
+  quantity: 'quantity',
+  price: 'price',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
 
 
 export const OrderProductScalarFieldEnum = {

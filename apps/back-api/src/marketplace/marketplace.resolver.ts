@@ -1,18 +1,18 @@
 import { Inject } from "@nestjs/common";
 import {
-	Args,
-	Float,
-	Int,
-	Query,
-	Resolver,
-	Subscription,
+    Args,
+    Float,
+    Int,
+    Query,
+    Resolver,
+    Subscription,
 } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
 import { BusinessTypeEntity } from "../business/entities/business-type.entity";
 import { CategoryEntity } from "../category/entities/category.entity";
 import {
-	FreelanceServiceEntity,
-	PaginatedFreelanceServicesResponse,
+    FreelanceServiceEntity,
+    PaginatedFreelanceServicesResponse,
 } from "../freelance-service/entities/freelance-service.entity";
 import { FreelanceServiceService } from "../freelance-service/freelance-service.service";
 import { PrismaService } from "../prisma/prisma.service";
@@ -162,6 +162,8 @@ export class MarketplaceResolver {
 							avatar: true,
 							businessType: true,
 							kycStatus: true,
+                            isVerified: true,
+                            isB2BEnabled: true,
 						},
 					},
 					store: {
@@ -394,6 +396,8 @@ export class MarketplaceResolver {
 							avatar: true,
 							businessType: true,
 							kycStatus: true,
+                            isVerified: true,
+                            isB2BEnabled: true,
 						},
 					},
 					store: {
@@ -522,7 +526,7 @@ export class MarketplaceResolver {
 		if (businessType) {
 			const skip = (page - 1) * limit;
 			const where: any = {};
-			if (category) where.category = category;
+			if (category) where.category.name = category;
 			if (minPrice !== undefined)
 				where.rate = {
 					...where.rate,
@@ -647,6 +651,8 @@ export class MarketplaceResolver {
 							avatar: true,
 							businessType: true,
 							kycStatus: true,
+                            isVerified: true,
+                            isB2BEnabled: true,
 						},
 					},
 					store: {

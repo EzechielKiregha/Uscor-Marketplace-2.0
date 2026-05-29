@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
-import { client as executeQuery } from "@/lib/apollo-client";
-import { fetchMe } from '@/lib/fetchMe';
-import { BusinessEntity, ClientEntity } from '@/lib/types';
+import { GET_BUSINESS_BY_PHONE } from '@/graphql/business.gql';
+import { GET_CLIENT_BY_PHONE } from '@/graphql/client.gql';
 import { GET_PAYMENT_LATEST_TRANSACTION, UPDATE_PAYMENT_TRANSACTION } from '@/graphql/payment.gql';
 import { GET_ACCOUNT_BALANCE } from '@/graphql/wallet.gql';
+import { client as executeQuery } from "@/lib/apollo-client";
 import africastalking from "africastalking";
+import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.formData();
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const text = (body.get('text') as string) || '';
   
   try {
-    const userResult = await fetchMe();
+    let userResult: any;
     
     let response = '';
     let transactionId = '';
@@ -26,13 +26,27 @@ export async function POST(req: NextRequest) {
     }
     // Step 1: Pay for Order
     else if (text === '1') {
-      const client = userResult?.user as ClientEntity;
-      const role = userResult?.role;
+        userResult =  await executeQuery.query({
+            query: GET_CLIENT_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+        const client = userResult.data.clientByPhone
       
-      if (!client || (!role || role !== 'client')) {
-        const business = userResult?.user as BusinessEntity;
+      if (!client) {
+        userResult = await executeQuery.query({
+            query: GET_BUSINESS_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+
+        const business = userResult.data.businessByPhone
         
-        if (!business || role !== 'business') {
+        if (!business) {
           response = `END ❌ No account found. Please register first.`;
           return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
         }
@@ -40,6 +54,9 @@ export async function POST(req: NextRequest) {
         // Business user
         const paymentResult = await executeQuery.query({
           query: GET_PAYMENT_LATEST_TRANSACTION,
+          variables: {
+            phone: phoneNumber
+          },
           fetchPolicy: 'network-only'
         });
         const latestPayment = paymentResult?.data?.latestPaymentTransaction;
@@ -59,6 +76,9 @@ Amount: $${latestPayment?.amount?.toFixed(2)}
         // Get latest pending payment transaction
         const paymentResult = await executeQuery.query({
           query: GET_PAYMENT_LATEST_TRANSACTION,
+          variables: {
+            phone: phoneNumber
+          },
           fetchPolicy: 'network-only'
         });
         const latestPayment = paymentResult?.data?.latestPaymentTransaction;
@@ -80,6 +100,9 @@ Amount: $${latestPayment?.amount?.toFixed(2)}
       // Get latest pending payment transaction
       const paymentResult = await executeQuery.query({
         query: GET_PAYMENT_LATEST_TRANSACTION,
+        variables: {
+            phone: phoneNumber
+        },
         fetchPolicy: 'network-only'
       });
       const latestPayment = paymentResult?.data?.latestPaymentTransaction;
@@ -99,9 +122,9 @@ Amount: $${latestPayment?.amount?.toFixed(2)}
       const sms = Aclient.SMS;
 
       const res = await sms.send({
-        to: ['+250790802201'],
+        to: [phoneNumber],
         message: `USCOR Payment Confirmation
-User: ${userResult?.user?.fullName || 'Unknown'}
+User: ${userResult?.data?.clientByPhone?.fullName || 'Unknown'}
 Order ID: ${latestPayment?.order?.id?.substring(0, 8)}
 Amount: $${latestPayment?.amount?.toFixed(2)}
 Reference: ${transactionId}`,
@@ -132,13 +155,27 @@ Thank you for using USCOR!`;
     }
     // Step 3: Check Balance
     else if (text === '2') {
-      const client = userResult?.user as ClientEntity;
-      const role = userResult?.role;
+      userResult =  await executeQuery.query({
+            query: GET_CLIENT_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+        const client = userResult.data.clientByPhone
       
-      if (!client || (!role || role !== 'client')) {
-        const business = userResult?.user as BusinessEntity;
+      if (!client) {
+        userResult = await executeQuery.query({
+            query: GET_BUSINESS_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+
+        const business = userResult.data.businessByPhone
         
-        if (!business || role !== 'business') {
+        if (!business) {
           response = `END ❌ No account found.`;
           return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
         }
@@ -187,10 +224,16 @@ USCOR Tokens: ${(balance?.tokenBalance?.totalTokens || 0)} uTn`;
     }
     // Step 5: Convert Tokens to Cash
     else if (text === '3*1') {
-      const client = userResult?.user as ClientEntity;
-      const role = userResult?.role;
+      userResult =  await executeQuery.query({
+            query: GET_CLIENT_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+        const client = userResult.data.clientByPhone
       
-      if (!client || role !== 'client') {
+      if (!client) {
         response = `END ❌ Only clients can convert tokens to cash.`;
         return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }
@@ -233,11 +276,16 @@ Available Tokens: ${tokens} uTn
           response = `END ❌ Invalid option. Please try again.`;
           return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }
+      userResult =  await executeQuery.query({
+            query: GET_CLIENT_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+        const client = userResult.data.clientByPhone
       
-      const client = userResult?.user as ClientEntity;
-      const role = userResult?.role;
-      
-      if (!client || role !== 'client') {
+      if (!client) {
         response = `END ❌ No account found.`;
         return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }
@@ -306,10 +354,16 @@ Select Provider:
         return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }
       
-      const client = userResult?.user as ClientEntity;
-      const role = userResult?.role;
+      userResult =  await executeQuery.query({
+            query: GET_CLIENT_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+        const client = userResult.data.clientByPhone
       
-      if (!client || role !== 'client') {
+      if (!client) {
         response = `END ❌ No account found.`;
         return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }
@@ -338,10 +392,16 @@ Enter amount to convert:
     else if (text.startsWith('3*2*') && text.split('*').length === 4) {
       const amount = text.split('*')[3];
       
-      const client = userResult?.user as ClientEntity;
-      const role = userResult?.role;
+      userResult =  await executeQuery.query({
+            query: GET_CLIENT_BY_PHONE,
+            variables: {
+                phone: phoneNumber
+            },
+            fetchPolicy: "network-only"
+        });
+        const client = userResult.data.clientByPhone
       
-      if (!client || role !== 'client') {
+      if (!client) {
         response = `END ❌ No account found.`;
         return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }

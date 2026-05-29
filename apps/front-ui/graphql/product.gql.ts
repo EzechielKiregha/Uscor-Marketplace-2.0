@@ -29,6 +29,45 @@ export const GET_PRODUCTS = gql`
         id
         name
         avatar
+        isB2BEnabled
+        isVerified
+        businessType
+      }
+      store {
+        id
+        name
+      }
+    }
+  }
+`;
+export const GET_PRODUCTS_BY_BUSINESS_ID = gql`
+  query FetchedBusinessProducts {
+    fetchedBusinessProducts {
+      id
+      title
+      description
+      price
+      quantity
+      featured
+      createdAt
+      updatedAt
+      category {
+        id
+        name
+        description
+      }
+      medias {
+        id
+        url
+        type
+      }
+      business {
+        id
+        name
+        avatar
+        isB2BEnabled
+        businessType
+        isVerified
       }
       store {
         id
@@ -62,6 +101,9 @@ export const GET_PRODUCTS_BY_NAME = gql`
         id
         name
         avatar
+        isB2BEnabled
+        isVerified
+        businessType
       }
       store {
         id
@@ -95,6 +137,9 @@ export const SEARCHED_PRODUCTS = gql`
         id
         name
         avatar
+        isB2BEnabled
+        isVerified
+        businessType
       }
     }
   }
@@ -125,6 +170,9 @@ export const GET_PRODUCT_BY_ID = gql`
         id
         name
         avatar
+        isB2BEnabled
+        isVerified
+        businessType
       }
       store {
         id
@@ -159,6 +207,9 @@ export const GET_FEATURED_PRODUCTS = gql`
         id
         name
         avatar
+        isB2BEnabled
+        isVerified
+        businessType
       }
     }
   }
@@ -188,6 +239,9 @@ export const GET_RELATED_PRODUCTS = gql`
         id
         name
         avatar
+        isB2BEnabled
+        isVerified
+        businessType
       }
     }
   }

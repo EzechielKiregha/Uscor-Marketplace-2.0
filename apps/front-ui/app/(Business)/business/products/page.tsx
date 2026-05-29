@@ -1,21 +1,20 @@
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { Edit, Package, Plus, Search, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
 import Loader from "@/components/seraui/Loader";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
   DELETE_PRODUCT,
-  GET_PRODUCTS,
+  GET_PRODUCTS_BY_BUSINESS_ID,
   SEARCHED_PRODUCTS,
 } from "@/graphql/product.gql";
-import { BusinessEntity, ProductEntity } from "@/lib/types";
+import { ProductEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { Edit, Package, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import CreateProductModal from "../_components/modals/CreateProductModal";
 import { useOpenCreateProductModal } from "../_hooks/use-open-create-product-modal";
-import { useProductSubscriptions } from "../_hooks/useProductSubscriptions";
 
 export default function BusinessProductsPage() {
   const { isOpen, setIsOpen } = useOpenCreateProductModal();
@@ -35,20 +34,21 @@ export default function BusinessProductsPage() {
     },
   });
 
-  const { data: fetchedProducts, loading: productsLoading } =
-    useQuery(GET_PRODUCTS);
+  const { data: fetchedProducts, loading: productsLoading } = useQuery(
+    GET_PRODUCTS_BY_BUSINESS_ID,
+  );
 
   useEffect(() => {
     if (productsData?.searchedProducts) {
       setProducts(productsData?.searchedProducts);
     }
 
-    if (fetchedProducts?.products) {
-      setProducts(fetchedProducts?.products);
+    if (fetchedProducts?.fetchedBusinessProducts) {
+      setProducts(fetchedProducts?.fetchedBusinessProducts);
     }
   }, [productsData, fetchedProducts]);
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
-    refetchQueries: [GET_PRODUCTS],
+    refetchQueries: [GET_PRODUCTS_BY_BUSINESS_ID],
   });
 
   const handleDelete = async (productId: string) => {
