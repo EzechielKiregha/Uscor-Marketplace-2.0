@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
   const phoneNumber = body.get('phoneNumber') as string;
   const text = (body.get('text') as string) || '';
 
-  
   let response = '';
   let rechargeId = '';
   

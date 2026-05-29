@@ -1,5 +1,13 @@
 "use client";
 
+import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
+import { useCart } from "@/app/context/use-cart";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
+import { GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
+import { ProductEntity } from "@/lib/types";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   ArrowRight,
@@ -16,13 +24,6 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
-import { CartItem, useCart } from "@/app/context/use-cart";
-import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
-import { GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
 
 interface OrderHistoryProps {
   client: any;
@@ -116,7 +117,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
   };
 
   const handleReorder = (_order: any) => {
-    _order.items.forEach((item: CartItem) => {
+    _order.items.forEach((item: ProductEntity) => {
       addItem(item, item.quantity);
       // console.log("Added to cart:", item);
     });

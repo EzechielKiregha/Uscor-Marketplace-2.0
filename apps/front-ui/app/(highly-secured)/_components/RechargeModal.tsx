@@ -1,24 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   CREATE_ACCOUNT_RECHARGE,
   GET_MOBILE_MONEY_CODE,
 } from "@/graphql/wallet.gql";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useMutation } from "@apollo/client";
 import {
-  CreditCard,
-  Smartphone,
-  DollarSign,
-  AlertTriangle,
-  CheckCircle,
-  X,
-  Loader2,
   Copy,
+  CreditCard,
+  DollarSign,
+  Loader2,
+  Smartphone,
+  X,
 } from "lucide-react";
-import { useToast } from "@/components/toast-provider";
+import { useEffect, useState } from "react";
 
 interface RechargeModalProps {
   isOpen: boolean;
@@ -235,7 +233,7 @@ export default function RechargeModal({
                   $
                 </span>
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  {amount * 10} uTn
+                  {(amount * 0.1).toFixed(2)} uTn
                 </span>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">

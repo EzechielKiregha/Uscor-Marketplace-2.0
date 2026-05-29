@@ -12,7 +12,7 @@ import {
 } from "@/graphql/loyalty.gql";
 import { CREATE_ORDER } from "@/graphql/order.gql";
 import { GET_ACCOUNT_BALANCE } from "@/graphql/wallet.gql";
-import { Address, BusinessEntity } from "@/lib/types";
+import { Address } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
 import { useMutation, useQuery } from "@apollo/client";
@@ -50,12 +50,6 @@ function getTierForPoints(tiers: any[] = [], points: number) {
       .find((tier) => points >= tier.minPoints) || tiers[0]
   );
 }
-
-// interface CheckoutPageProps {
-//   params: {
-//     businessId?: string;
-//   };
-// }
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -162,8 +156,6 @@ export default function CheckoutPage() {
         groups[businessId].subtotal + groups[businessId].deliveryFee;
       groups[businessId].business = item.product?.business;
 
-      console.log(groups[businessId].business);
-
       return groups;
     }, {});
 
@@ -171,9 +163,15 @@ export default function CheckoutPage() {
 
     // Set default payment method
     if (groupedOrders.length > 0) {
-      setPaymentMethod("TOKEN");
+      setPaymentMethod("MOBILE_MONEY");
     }
   }, [items, router]);
+
+  useEffect(() => {
+    if (useUnifiedPayment) {
+      setPaymentMethod("MOBILE_MONEY");
+    }
+  }, [paymentMethod, useUnifiedPayment]);
 
   //   console.log("Grouped Orders:", groupedOrders);
 
@@ -272,7 +270,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!paymentMethod) {
+    if (!paymentMethod && !useUnifiedPayment) {
       showToast("error", "Payment Error", "Please select a payment method");
       return;
     }
@@ -283,19 +281,13 @@ export default function CheckoutPage() {
       // Helper function to extract only digits
       const onlyDigits = (str: string) => str.replace(/\D/g, "");
 
-      // Prepare all order products for the main client order
-      const orderProducts = items.map(({ product, quantity }) => ({
-        productId: product.id,
-        quantity: quantity,
-      }));
-
       // Generate QR code based on payment method
       let qrCode: string | undefined;
       if (paymentMethod === "TOKEN") {
         qrCode = `uTn:${uTnAmount.toFixed(2)}`;
       } else if (paymentMethod === "MOBILE_MONEY") {
-        const phoneDigits = onlyDigits(paymentDetails.mobileMoneyPhone || "");
-        qrCode = `MOMO:${paymentDetails.mobileMoneyProvider?.trim() || ""}:${phoneDigits}`;
+        const phoneDigits = onlyDigits(user?.phone || "");
+        qrCode = `MOMO:${paymentDetails.mobileMoneyProvider?.trim() || "USCOR201"}:${phoneDigits}`;
       } else if (paymentMethod === "CARD") {
         const last4 = onlyDigits(paymentDetails.cardNumber || "").slice(-4);
         qrCode = `CARD:****${last4}`;
@@ -314,8 +306,9 @@ export default function CheckoutPage() {
               quantity: item.quantity,
               businessId: item.product?.business?.id,
               deliveryFee: 5.0,
-              price: item.product.price,
+              price: Number(item.product.price),
             })),
+            useUnifiedPayment,
             payment: {
               method: paymentMethod,
               status: "PENDING",
@@ -337,13 +330,15 @@ export default function CheckoutPage() {
           ({ product, quantity }: any) => ({
             productId: product.id,
             quantity: quantity,
+            businessId: product?.business?.id,
+            deliveryFee: 5.0,
+            price: Number(product.price),
           }),
         );
 
         return createOrder({
           variables: {
             input: {
-              businessId: order.businessId,
               clientId: user?.id,
               clientOrderId: mainOrderId, // Link to main client order
               deliveryFee: order.deliveryFee,

@@ -2086,6 +2086,9 @@ type Mutation {
   """Deletes an order."""
   deleteOrder(id: String!): OrderEntity!
 
+  """Cancel an order."""
+  cancelOrder(id: String!): OrderEntity!
+
   """Process payment for an order."""
   processOrderPayment(orderId: String!, input: ProcessPaymentInput!): OrderEntity!
 
@@ -2371,6 +2374,7 @@ input UpdateProductInput {
 input CreateOrderInput {
   clientId: String
   deliveryFee: Float!
+  useUnifiedPayment: Boolean!
   deliveryAddress: String
   clientOrderId: String
   qrCode: String

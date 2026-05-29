@@ -5,7 +5,9 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
 import { GENERATE_ORDER_RECEIPT, GET_ORDER_BY_ID } from "@/graphql/order.gql";
-import { useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { GET_ACCOUNT_BALANCE } from "@/graphql/wallet.gql";
+import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -22,8 +24,11 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CancelledOrderFallback from "../../_components/CancelledOrderFallback";
+import MobileMoneyPaymentCard from "../../_components/MobileMoneyPaymentCard";
 
 export default function OrderConfirmationPage() {
+  const { loading: userLoading, user } = useMe();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
@@ -38,7 +43,6 @@ export default function OrderConfirmationPage() {
   const [businessMap, setBusinessMap] = useState<Record<string, any>>({});
   const [receiptData, setReceiptData] = useState<any>(null);
   const { showToast } = useToast();
-  const apolloClient = useApolloClient();
   const [generateOrderReceipt] = useMutation(GENERATE_ORDER_RECEIPT);
 
   const orderId = searchParams.get("orderId");
@@ -52,6 +56,18 @@ export default function OrderConfirmationPage() {
     skip: !orderId,
   });
 
+  const [paymentCancelled, setPaymentCancelled] = useState(
+    () => order?.payment?.status === "CANCELLED",
+  );
+  // Balance query (already in your codebase — wire it here)
+  const balanceResult = useQuery(GET_ACCOUNT_BALANCE, {
+    variables: { userId: order?.client?.id, userType: "CLIENT" },
+    skip: !order?.client?.id,
+  });
+  const balance: number =
+    balanceResult?.data?.accountBalance?.availableAmount ?? 0;
+  const tokenBalance: number =
+    balanceResult?.data?.accountBalance?.tokenBalance?.availableAmount ?? 0;
   useEffect(() => {
     if (!orderId) {
       setLoading(false);
@@ -103,8 +119,7 @@ export default function OrderConfirmationPage() {
         try {
           const responses = await Promise.all(
             businessIds.map((businessId: string) =>
-              apolloClient.query({
-                query: GET_BUSINESS_BY_ID,
+              useQuery(GET_BUSINESS_BY_ID, {
                 variables: { id: businessId },
               }),
             ),
@@ -182,7 +197,7 @@ export default function OrderConfirmationPage() {
     };
 
     processOrder();
-  }, [orderId, queryLoading, error, data, clearCart, apolloClient]);
+  }, [orderId, queryLoading, error, data, clearCart]);
 
   const handleDownloadReceipt = async () => {
     if (!order || !receiptData) return;
@@ -409,8 +424,51 @@ export default function OrderConfirmationPage() {
               </div>
             </div>
 
-            {/* Business Groups */}
+            {/* Mobile Money Payment Card — shown while payment is pending */}
+            {order.payment?.method === "MOBILE_MONEY" &&
+              order.payment?.status !== "PAID" &&
+              !paymentCancelled && (
+                <MobileMoneyPaymentCard
+                  orderId={order.id}
+                  user={user} // { phone, fullName } — phone is used for USSD identification
+                  total={
+                    order.products.reduce(
+                      (sum: number, item: any) =>
+                        sum + item.product.price * item.quantity,
+                      0,
+                    ) + order.deliveryFee
+                  }
+                  onPaymentConfirmed={() =>
+                    useQuery(GET_ORDER_BY_ID, {
+                      variables: { id: orderId },
+                      fetchPolicy: "network-only",
+                    })
+                  }
+                  onOrderCancelled={() => setPaymentCancelled(true)}
+                />
+              )}
 
+            {/* Cancelled Fallback — shown after timeout or explicit cancellation */}
+            {paymentCancelled && (
+              <CancelledOrderFallback
+                amount={
+                  order.products.reduce(
+                    (sum: number, item: any) =>
+                      sum + item.product.price * item.quantity,
+                    0,
+                  ) + order.deliveryFee
+                }
+                balance={balance}
+                tokenBalance={tokenBalance}
+                onSelectMethod={(method) => {
+                  // TODO: call your retry payment mutation here
+                  // e.g. retryPayment({ variables: { orderId: order.id, method } })
+                  console.log("Retry with method:", method);
+                }}
+              />
+            )}
+
+            {/* Business Groups */}
             {businessGroups.map((group: any) => (
               <div
                 key={group.id}

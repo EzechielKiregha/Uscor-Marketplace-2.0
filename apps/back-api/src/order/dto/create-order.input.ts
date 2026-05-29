@@ -1,12 +1,13 @@
 import { Field, Float, InputType, Int } from "@nestjs/graphql";
 import { Type } from "class-transformer";
 import {
-	ArrayMinSize,
-	IsNumber,
-	IsOptional,
-	IsString,
-	Min,
-	ValidateNested,
+    ArrayMinSize,
+    IsBoolean,
+    IsNumber,
+    IsOptional,
+    IsString,
+    Min,
+    ValidateNested,
 } from "class-validator";
 import { CreatePaymentTransactionInput } from "../../payment-transaction/dto/create-payment-transaction.input";
 
@@ -21,6 +22,11 @@ export class CreateOrderInput {
 	@IsNumber()
 	@Min(0)
 	deliveryFee: number;
+
+    @Field(() => Boolean)
+    @IsBoolean()
+    @IsOptional()
+    useUnifiedPayment?: boolean;
 
 	@Field({ nullable: true })
 	@IsOptional()

@@ -276,6 +276,8 @@ export interface WorkerServiceAssignmentEntity {
 export interface OrderEntity {
 	id: string;
 	deliveryFee: number;
+	orderNumber: number;
+	status: string;
 	deliveryAddress?: {
 		street: string;
 		city: string;

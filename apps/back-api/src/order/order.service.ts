@@ -5,7 +5,7 @@ import * as puppeteer from "puppeteer";
 import QRCode from "qrcode";
 import { UpdatePaymentTransactionInput } from "src/payment-transaction/dto/update-payment-transaction.input";
 import { AuthPayload } from "../auth/entities/auth-payload.entity";
-import { PaymentStatus } from "../generated/prisma/enums";
+import { OrderStatus, PaymentStatus } from "../generated/prisma/enums";
 import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
@@ -100,6 +100,7 @@ export class OrderService {
             orderProducts,
             payment,
             clientOrderId,
+            useUnifiedPayment,
             ...orderData
         } = createOrderInput;
 
@@ -1222,17 +1223,17 @@ export class OrderService {
                     },
                 },
                 businessGroups: {
-        include: {
-          business: true,
-          items: {
-            include: {
-              product: {
-                include: { medias: { take: 1 } },
-              },
-            },
-          },
-        },
-      },
+                    include: {
+                        business: true,
+                        items: {
+                            include: {
+                            product: {
+                                include: { medias: { take: 1 } },
+                            },
+                            },
+                        },
+                    },
+                },
             },
         });
 
@@ -1407,6 +1408,20 @@ export class OrderService {
                 id: true,
                 deliveryFee: true,
             },
+        });
+    }
+    async cancelOrder(id: string) {
+        return this.prisma.order.update({
+            where: { id },
+            select: {
+                id: true,
+                status: true,
+            },
+            data: { status: OrderStatus.CANCELLED, 
+                payment: { update : {
+                    status: PaymentStatus.FAILED
+                } }
+             }
         });
     }
 
@@ -1632,6 +1647,9 @@ export class OrderService {
                                             id: true,
                                             name: true,
                                             avatar: true,
+                                            isB2BEnabled: true,
+                                            isVerified: true,
+                                            businessType: true,
                                         },
                                     },
                                     store: {

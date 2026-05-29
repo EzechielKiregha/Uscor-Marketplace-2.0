@@ -34,6 +34,9 @@ export class ProductService {
 						id: true,
 						name: true,
 						avatar: true,
+                        businessType: true,
+                        isB2BEnabled: true,
+                        isVerified: true,
 					},
 				},
 				category: {
@@ -249,6 +252,9 @@ export class ProductService {
 						id: true,
 						name: true,
 						avatar: true,
+                        businessType: true,
+                        isB2BEnabled: true,
+                        isVerified: true,
 					},
 				},
 				category: {
@@ -293,6 +299,9 @@ export class ProductService {
 						id: true,
 						name: true,
 						avatar: true,
+                        businessType: true,
+                        isB2BEnabled: true,
+                        isVerified: true,
 					},
 				},
 				category: {
@@ -339,6 +348,9 @@ export class ProductService {
 						id: true,
 						name: true,
 						avatar: true,
+                        businessType: true,
+                        isB2BEnabled: true,
+                        isVerified: true,
 					},
 				},
 				category: {
@@ -379,6 +391,9 @@ export class ProductService {
 						id: true,
 						name: true,
 						avatar: true,
+                        businessType: true,
+                        isB2BEnabled: true,
+                        isVerified: true,
 					},
 				},
 				category: {
@@ -423,6 +438,9 @@ export class ProductService {
 						id: true,
 						name: true,
 						avatar: true,
+                        businessType: true,
+                        isB2BEnabled: true,
+                        isVerified: true,
 					},
 				},
 				category: {

@@ -235,6 +235,26 @@ export class OrderResolver {
         }
         return this.orderService.remove(id);
     }
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles("client")
+    @Mutation(() => OrderEntity, {
+        description: "Cancel an order.",
+    })
+    async cancelOrder(
+        @Args("id", { type: () => String })
+        id: string,
+        @Context() context,
+    ) {
+        const user = context.req.user;
+        const order = await this.orderService.findOne(id);
+
+        if (!order) throw new Error("Order not found");
+
+        if (order.clientId !== user.id) {
+            throw new Error("Clients can only delete their own orders");
+        }
+        return this.orderService.cancelOrder(id);
+    }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles("business")

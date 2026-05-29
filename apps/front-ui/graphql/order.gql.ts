@@ -519,6 +519,11 @@ export const CREATE_ORDER = gql`
     }
   }
 `;
+export const CANCEL_ORDER = gql`
+    mutation CancelOrder($id: String!) {
+        cancelOrder(id: $id) { id status }
+    }
+`;
 
 export const UPDATE_ORDER = gql`
   mutation UpdateOrder($id: String!, $input: UpdateOrderInput!) {

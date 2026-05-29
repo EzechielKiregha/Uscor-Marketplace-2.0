@@ -2,8 +2,6 @@
 "use client";
 
 import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AlertTriangle, Banknote, CreditCard, Smartphone } from "lucide-react";
@@ -40,7 +38,8 @@ export default function PaymentMethodSelector({
   isBusinessPayment,
 }: PaymentMethodSelectorProps) {
   const { showToast } = useToast();
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showAcountBalancePaymentModal, setShowAcountBalancePaymentModal] =
+    useState(false);
   const [paymentDetails, setPaymentDetails] = useState({
     mobileMoneyProvider: "",
     mobileMoneyPhone: "",
@@ -89,7 +88,7 @@ export default function PaymentMethodSelector({
 
     // Show payment modal for certain methods
     if (["MOBILE_MONEY", "CARD"].includes(methodId)) {
-      setShowPaymentModal(true);
+      setShowAcountBalancePaymentModal(true);
     }
   };
 
@@ -118,7 +117,7 @@ export default function PaymentMethodSelector({
       "Payment Method Set",
       `Payment will be processed via ${selectedMethod}`,
     );
-    setShowPaymentModal(false);
+    setShowAcountBalancePaymentModal(false);
   };
 
   const handleMobileMoneyPayment = () => {
@@ -232,128 +231,6 @@ export default function PaymentMethodSelector({
             </div>
           )}
 
-          {/* {selectedMethod === "MOBILE_MONEY" && (
-            <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label htmlFor="provider">Provider</Label>
-                  <select
-                    id="provider"
-                    value={paymentDetails.mobileMoneyProvider}
-                    onChange={(e) =>
-                      setPaymentDetails({
-                        ...paymentDetails,
-                        mobileMoneyProvider: e.target.value,
-                      })
-                    }
-                    className="w-full p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  >
-                    <option value="">Select provider</option>
-                    <option value="MTN">MTN</option>
-                    <option value="AIRTEL">Airtel</option>
-                    <option value="ORANGE">Orange</option>
-                    <option value="MPESA">M-Pesa</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={paymentDetails.mobileMoneyPhone}
-                    onChange={(e) =>
-                      setPaymentDetails({
-                        ...paymentDetails,
-                        mobileMoneyPhone: e.target.value,
-                      })
-                    }
-                    placeholder="+250 788 123 456"
-                  />
-                </div>
-              </div>
-
-              <Button
-                className="w-full bg-primary hover:bg-accent text-primary-foreground"
-                onClick={handleMobileMoneyPayment}
-              >
-                Get Payment Code
-              </Button>
-            </div>
-          )} */}
-
-          {/* {selectedMethod === "CARD" && (
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <Label htmlFor="cardName">Cardholder Name</Label>
-                <Input
-                  id="cardName"
-                  value={paymentDetails.cardName}
-                  onChange={(e) =>
-                    setPaymentDetails({
-                      ...paymentDetails,
-                      cardName: e.target.value,
-                    })
-                  }
-                  placeholder="John Doe"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <Label htmlFor="cardNumber">Card Number</Label>
-                <Input
-                  id="cardNumber"
-                  type="text"
-                  value={paymentDetails.cardNumber}
-                  onChange={(e) =>
-                    setPaymentDetails({
-                      ...paymentDetails,
-                      cardNumber: e.target.value,
-                    })
-                  }
-                  placeholder="4242 4242 4242 4242"
-                  maxLength={19}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label htmlFor="expiry">Expiry Date</Label>
-                  <Input
-                    id="expiry"
-                    type="text"
-                    value={paymentDetails.cardExpiry}
-                    onChange={(e) =>
-                      setPaymentDetails({
-                        ...paymentDetails,
-                        cardExpiry: e.target.value,
-                      })
-                    }
-                    placeholder="MM/YY"
-                    maxLength={5}
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <Label htmlFor="cvv">CVV</Label>
-                  <Input
-                    id="cvv"
-                    type="text"
-                    value={paymentDetails.cardCvv}
-                    onChange={(e) =>
-                      setPaymentDetails({
-                        ...paymentDetails,
-                        cardCvv: e.target.value,
-                      })
-                    }
-                    placeholder="123"
-                    maxLength={4}
-                  />
-                </div>
-              </div>
-            </div>
-          )} */}
-
           {selectedMethod === "CASH" && (
             <div className="text-sm">
               <p>Sorry you cannot pay in cash Online</p>
@@ -368,12 +245,12 @@ export default function PaymentMethodSelector({
         </div>
       )}
 
-      {showPaymentModal && selectedMethod && (
+      {showAcountBalancePaymentModal && selectedMethod && (
         <PaymentCode
           amount={amount}
           paymentMethod={selectedMethod}
           businessName={businessName}
-          onClose={() => setShowPaymentModal(false)}
+          onClose={() => setShowAcountBalancePaymentModal(false)}
           onConfirm={handleConfirmPayment}
           isBusinessPayment={isBusinessPayment}
         />

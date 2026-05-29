@@ -24,7 +24,6 @@ import { SearchMarketplaceResponse } from "./dto/search-marketplace.response";
 export class MarketplaceResolver {
 	constructor(
 		private readonly prisma: PrismaService,
-		// private readonly productService: ProductService,
 		private readonly freelanceServiceService: FreelanceServiceService,
 		@Inject("PUB_SUB")
 		private readonly pubSub: PubSub,
@@ -344,7 +343,9 @@ export class MarketplaceResolver {
 								name: true,
 								avatar: true,
 								businessType: true,
-								kycStatus: true,
+                                kycStatus: true,
+                                isVerified: true,
+                                isB2BEnabled: true,
 							},
 						},
 						store: {
