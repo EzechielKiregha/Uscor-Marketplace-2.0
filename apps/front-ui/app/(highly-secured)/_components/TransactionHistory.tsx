@@ -1,22 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Search,
-  Filter,
-  DollarSign,
-  Smartphone,
-  CreditCard,
-  ArrowUp,
-  ArrowDown,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle,
-  AlertTriangle,
   Clock,
+  CreditCard,
+  DollarSign,
+  Filter,
+  Search,
+  Smartphone,
 } from "lucide-react";
+import { useState } from "react";
 
 interface TransactionHistoryProps {
   transactions: any[];
@@ -251,7 +245,7 @@ export default function TransactionHistory({
                             : "text-primary"
                         }`}
                       >
-                        {transaction.type === "WITHDRAWAL" ? "-" : "+"}$
+                        {transaction.type === "WITHDRAWAL" ? "-" : "+"}
                         {transaction.amount.toFixed(2)}
                       </span>
                     </td>

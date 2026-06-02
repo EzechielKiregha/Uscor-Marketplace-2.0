@@ -44,43 +44,43 @@ export const GET_ORDER_BY_ID = gql`
         receiptUrl
         clientOrderId
         deliveryAddress {
-        id
-        createdAt
-        updatedAt
-        clientId
-        country
-        street
-        city
-        postalCode
-        isDefault
+            id
+            createdAt
+            updatedAt
+            clientId
+            country
+            street
+            city
+            postalCode
+            isDefault
         }
         qrCode
         createdAt
         updatedAt
         clientId
         client {
-        id
-        fullName
-        email
+            id
+            fullName
+            email
         }
         payment {
-        id
-        amount
-        method
-        status
+            id
+            amount
+            method
+            status
         }
         products {
-        id
-        quantity
-        product {
             id
-            title
-            businessId
-            price
-            medias {
-            url
+            quantity
+            product {
+                id
+                title
+                businessId
+                price
+                medias {
+                    url
+                }
             }
-        }
         }
         status
         businessGroups {

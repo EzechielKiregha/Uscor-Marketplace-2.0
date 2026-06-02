@@ -1,24 +1,18 @@
 "use client";
 
+import MobileMoneyPaymentUI from "@/app/(browsing)/marketplace/_components/MobileMoneyPaymentUI";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  CREATE_ACCOUNT_RECHARGE,
-  GET_MOBILE_MONEY_CODE,
-} from "@/graphql/wallet.gql";
+  CANCEL_PAYMENT_TRANSACTION,
+  CREATE_PAYMENT_TRANSACTION_FOR_ACCOUNT_RECHARGE,
+} from "@/graphql/payment.gql";
 import { useMutation } from "@apollo/client";
-import {
-  Copy,
-  CreditCard,
-  DollarSign,
-  Loader2,
-  Smartphone,
-  X,
-} from "lucide-react";
+import { CreditCard, DollarSign, Loader2, Smartphone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface RechargeModalProps {
+  user: any;
   isOpen: boolean;
   onClose: () => void;
   onRechargeCreated: (recharge: any) => void;
@@ -28,6 +22,7 @@ interface RechargeModalProps {
 }
 
 export default function RechargeModal({
+  user,
   isOpen,
   onClose,
   onRechargeCreated,
@@ -38,16 +33,18 @@ export default function RechargeModal({
   const [amount, setAmount] = useState(10);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [rechargeMethod, setRechargeMethod] = useState(
-    selectedMethod || "MTN_MOMO",
+    selectedMethod || "MOBILE_MONEY",
   );
   const { showToast } = useToast();
   const [country, setCountry] = useState("RWANDA");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [ussdCode, setUssdCode] = useState("");
+  const [paymentId, setPaymentId] = useState("");
   const [showUssdCode, setShowUssdCode] = useState(false);
 
-  const [createRecharge] = useMutation(CREATE_ACCOUNT_RECHARGE);
-  const [getMobileMoneyCode] = useMutation(GET_MOBILE_MONEY_CODE);
+  const [cancelPaymentTransaction] = useMutation(CANCEL_PAYMENT_TRANSACTION);
+  const [createPaymentTransactionForAccountRecharge] = useMutation(
+    CREATE_PAYMENT_TRANSACTION_FOR_ACCOUNT_RECHARGE,
+  );
 
   useEffect(() => {
     if (selectedMethod) {
@@ -56,90 +53,36 @@ export default function RechargeModal({
   }, [selectedMethod]);
 
   const generateUssdCode = async () => {
-    if (amount <= 0 || !phoneNumber) {
-      showToast(
-        "error",
-        "Invalid Input",
-        "Please enter a valid amount and phone number",
-      );
-      return;
-    }
+    setIsSubmitting(true);
 
     try {
-      const { data } = await getMobileMoneyCode({
+      const { data } = await createPaymentTransactionForAccountRecharge({
         variables: {
           input: {
             method: rechargeMethod,
             amount,
-            phoneNumber,
-            country,
+            status: "PENDING",
+            qrCode: "Payment Initialized",
           },
         },
       });
 
-      setUssdCode(data.getMobileMoneyCode.ussdCode);
+      setPaymentId(data.createPaymentTransactionForAccountRecharge?.id);
       setShowUssdCode(true);
+      setIsSubmitting(false);
     } catch (error: any) {
       showToast(
         "error",
         "Error",
         error.message || "Failed to generate USSD code",
       );
-    }
-  };
-
-  const handleRecharge = async () => {
-    if (amount <= 0) {
-      showToast(
-        "error",
-        "Invalid Amount",
-        "Please enter a valid amount greater than 0",
-      );
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const { data } = await createRecharge({
-        variables: {
-          input: {
-            userId,
-            userType,
-            amount,
-            method: rechargeMethod,
-            origin: country,
-            phoneNumber: rechargeMethod.includes("MOMO")
-              ? phoneNumber
-              : undefined,
-          },
-        },
-      });
-
-      onRechargeCreated(data.createAccountRecharge);
-      showToast(
-        "success",
-        "Recharge Successful",
-        `Successfully added $${amount} to your account`,
-      );
-    } catch (error: any) {
-      showToast(
-        "error",
-        "Recharge Failed",
-        error.message || "Failed to recharge account",
-      );
-    } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(ussdCode);
-    showToast("success", "Copied", "USSD code copied to clipboard");
-  };
-
   if (!isOpen) return null;
 
+  const RECHARGE_AMOUNTS = [10000, 25000, 50000, 100000, 200000];
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-card border border-border rounded-lg w-full max-w-md">
@@ -147,8 +90,7 @@ export default function RechargeModal({
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="text-xl font-bold flex items-center gap-2">
-                {rechargeMethod.includes("MOMO") ||
-                rechargeMethod.includes("MONEY") ? (
+                {rechargeMethod.includes("MONEY") ? (
                   <Smartphone className="h-5 w-5 text-primary" />
                 ) : (
                   <CreditCard className="h-5 w-5 text-primary" />
@@ -179,7 +121,7 @@ export default function RechargeModal({
                   onChange={(e) => setCountry(e.target.value)}
                   className="w-full p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
-                  <option value="RWANDA">Rwanda</option>
+                  <option value="RWANDA">Rwanda (advised)</option>
                   <option value="UGANDA">Uganda</option>
                   <option value="KENYA">Kenya</option>
                   <option value="TANZANIA">Tanzania</option>
@@ -201,7 +143,7 @@ export default function RechargeModal({
                   onChange={(e) => setRechargeMethod(e.target.value)}
                   className="w-full p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
-                  <option value="MTN_MOMO">MTN Mobile Money</option>
+                  <option value="MOBILE_MONEY">MTN MOMO (advised)</option>
                   <option value="AIRTEL_MONEY">Airtel Money</option>
                   <option value="ORANGE_MONEY">Orange Money</option>
                   <option value="MPESA">M-Pesa</option>
@@ -211,127 +153,110 @@ export default function RechargeModal({
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="amount"
-                className="block text-sm font-medium mb-1 flex items-center gap-2"
-              >
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                Amount to Recharge
-              </label>
-              <div className="relative">
-                <Input
-                  id="amount"
-                  type="number"
-                  min="1"
-                  step="0.01"
-                  value={amount}
-                  onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
-                  className="pl-9 pr-16"
-                />
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  $
-                </span>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  {(amount * 0.1).toFixed(2)} uTn
-                </span>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                1 uTn = $10 USD value
-              </p>
-            </div>
-
-            {(rechargeMethod.includes("MOMO") ||
-              rechargeMethod.includes("MONEY")) && (
+            {!showUssdCode && (
               <div>
-                <label
-                  htmlFor="phoneNumber"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Phone Number
+                <label className="text-sm font-medium mb-3 flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                  Amount to Recharge
                 </label>
-                <Input
-                  id="phoneNumber"
-                  type="tel"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="+250 788 123 456"
-                />
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Enter your mobile money phone number
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {RECHARGE_AMOUNTS.map((value) => (
+                    <Button
+                      key={value}
+                      type="button"
+                      variant={amount === value ? "default" : "outline"}
+                      className="h-auto py-4 flex flex-col items-center gap-1"
+                      onClick={() => {
+                        setAmount(value);
+                      }}
+                    >
+                      <span className="font-semibold">
+                        RWF {value.toLocaleString()}
+                      </span>
+
+                      <span className="text-xs opacity-70">
+                        {((value / 1500) * 0.1).toFixed(2)} uTn
+                      </span>
+                    </Button>
+                  ))}
+                </div>
+
+                <div className="mt-4 rounded-lg border bg-muted/30 p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">
+                      Selected Amount
+                    </span>
+                    <span className="font-semibold">
+                      RWF {amount.toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-sm text-muted-foreground">
+                      Estimated uTn
+                    </span>
+                    <span className="font-medium">
+                      {((amount / 1500) * 0.1).toFixed(2)} uTn
+                    </span>
+                  </div>
+                </div>
+
+                <p className="mt-2 text-xs text-muted-foreground">
+                  1 uTn = $10 USD value (RWF 15,000)
                 </p>
               </div>
             )}
 
-            {showUssdCode && (
-              <div className="p-4 bg-muted rounded-lg border border-border">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-medium">Payment Instructions</h3>
-                  <Button variant="ghost" size="sm" onClick={handleCopyCode}>
-                    <Copy className="h-4 w-4" />
+            {showUssdCode ? (
+              <MobileMoneyPaymentUI
+                payment={paymentId}
+                user={user} // { phone, fullName } — phone is used for USSD identification
+                total={amount}
+                onPaymentConfirmed={(amount) => {
+                  onRechargeCreated(amount);
+                  setPaymentId("");
+                  setShowUssdCode(false);
+                }}
+                onPaymentCancelled={(payment) => {
+                  cancelPaymentTransaction({
+                    variables: {
+                      id: payment,
+                    },
+                  });
+                  setShowUssdCode(false);
+                }}
+              />
+            ) : (
+              <div className="flex justify-end gap-3 pt-4 border-t border-border">
+                <Button
+                  variant="outline"
+                  onClick={onClose}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                {rechargeMethod.includes("MONEY") && (
+                  <Button
+                    variant="default"
+                    onClick={generateUssdCode}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Smartphone className="h-4 w-4 mr-2" />
+                        Generate Code
+                      </>
+                    )}
                   </Button>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Dial the following code on your phone to complete the payment:
-                </p>
-                <div className="bg-background rounded-lg p-4 text-center">
-                  <p className="text-xl font-mono font-bold text-primary">
-                    {ussdCode}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    This code will charge ${amount.toFixed(2)} to your account
-                  </p>
-                </div>
+                )}
               </div>
             )}
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-border">
-              <Button
-                variant="outline"
-                onClick={onClose}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              {rechargeMethod.includes("MOMO") ||
-              rechargeMethod.includes("MONEY") ? (
-                <Button
-                  variant="default"
-                  onClick={generateUssdCode}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Smartphone className="h-4 w-4 mr-2" />
-                      Generate Code
-                    </>
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  variant="default"
-                  onClick={handleRecharge}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Recharging...
-                    </>
-                  ) : (
-                    <>
-                      <DollarSign className="h-4 w-4 mr-2" />
-                      Recharge Account
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
           </div>
         </div>
       </div>

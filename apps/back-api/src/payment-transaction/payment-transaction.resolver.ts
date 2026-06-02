@@ -31,6 +31,23 @@ export class PaymentTransactionResolver {
 			user.id,
 		);
 	}
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("client", "business")
+	@Mutation(() => PaymentTransactionEntity, {
+		description: "Creates a new payment transaction.",
+        nullable: true
+	})
+	async createPaymentTransactionForAccountRecharge(
+		@Args("input")
+		input: CreatePaymentTransactionInput,
+		@Context() context,
+	) {
+		const user = context.req.user;
+		return this.paymentTransactionService.createRechargePayment(
+			input,
+            user
+		);
+	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles("client", "business")
@@ -62,11 +79,9 @@ export class PaymentTransactionResolver {
 	// @Roles("client", "business")
 	@Query(() => PaymentTransactionEntity, {
 		name: "latestPaymentTransaction",
-		description: "Retrieves the latest pending payment transaction for the user.",
 		nullable: true,
 	})
-	async getLatestPaymentTransaction(@Context() context, @Args("phone",) phone: string) {
-		// const user = context.req.user;
+	async getLatestPaymentTransaction(@Args("phone",{type: () => String}) phone: string) {
 		return this.paymentTransactionService.findLatest(phone);
 	}
 
@@ -85,6 +100,60 @@ export class PaymentTransactionResolver {
 	) {
 		// const user = context.req.user;
 		return this.paymentTransactionService.update(input, id, phone);
+	}
+    
+	@Mutation(() => PaymentTransactionEntity, {
+		description: "Updates a payment transaction’s status or QR code.",
+        nullable: true
+	})
+	async cancelPaymentTransaction(
+		@Context() context,
+		@Args("id", { type: () => String })
+		id: string,
+	) {
+		// const user = context.req.user;
+		return this.paymentTransactionService.cancelPaymentTransaction(id);
+	}
+    
+	@Query(() => PaymentTransactionEntity, {
+		description: "check a payment transaction’s status or QR code.",
+	})
+	async checkPaymentTransactionStatus(
+		@Context() context,
+		@Args("id", { type: () => String })
+		id: string,
+	) {
+		// const user = context.req.user;
+		return this.paymentTransactionService.checkPaymentTransactionStatus(id);
+	}
+	@Mutation(() => PaymentTransactionEntity, {
+		description: "Updates a payment transaction’s status or QR code.",
+        nullable: true
+	})
+	async updatePaymentTransactionForAccountRecharge(
+		@Context() context,
+		@Args("input")
+		input: UpdatePaymentTransactionInput,
+		@Args("id", { type: () => String })
+		id: string,
+		@Args("phone", { type: () => String, nullable: true }) phone?: string,
+	) {
+		// const user = context.req.user;
+		try {
+			return await this.paymentTransactionService.updateRechargePayment(
+				input,
+				id,
+				phone,
+			);
+		} catch (err: any) {
+			console.error('Error in updatePaymentTransactionForAccountRecharge:', {
+				error: err?.message ?? err,
+				id,
+				phone,
+				stack: err?.stack,
+			});
+			throw err;
+		}
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

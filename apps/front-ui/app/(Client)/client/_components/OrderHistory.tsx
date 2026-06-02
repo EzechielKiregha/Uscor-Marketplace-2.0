@@ -305,7 +305,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
         </div>
       </div>
 
-      <div className="divide-y divide-border">
+      <div className="max-h-190 overflow-y-auto divide-y divide-border">
         {filteredOrders.map((order: any) => {
           const deliveryStatus = getDeliveryStatus(order.status);
 

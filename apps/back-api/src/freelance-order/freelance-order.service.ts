@@ -1,23 +1,23 @@
 import { Injectable } from "@nestjs/common";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
-	Country,
-	RechargeMethod,
+    Country,
+    RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
 import {
-	PaymentMethod,
-	PaymentStatus,
+    PaymentMethod,
+    PaymentStatus,
 } from "../payment-transaction/dto/create-payment-transaction.input";
 import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
 import { PrismaService } from "../prisma/prisma.service";
 import {
-	type CreateFreelanceOrderInput,
-	EscrowStatus,
-	FreelanceStatus,
+    type CreateFreelanceOrderInput,
+    EscrowStatus,
+    FreelanceStatus,
 } from "./dto/create-freelance-order.input";
 import {
-	AssignBusinessesInput,
-	UpdateFreelanceOrderInput,
+    AssignBusinessesInput,
+    UpdateFreelanceOrderInput,
 } from "./dto/update-freelance-order.input";
 
 interface FindAllFilters {
@@ -473,7 +473,7 @@ export class FreelanceOrderService {
 					{
 						amount: -order.escrowAmount,
 						method: RechargeMethod.MTN_MONEY,
-						origin: Country.DRC,
+						origin: Country.RWANDA,
 						clientId: order.clientId,
 						businessId: undefined,
 					},
@@ -484,7 +484,7 @@ export class FreelanceOrderService {
 					{
 						amount: businessAmount,
 						method: RechargeMethod.MTN_MONEY,
-						origin: Country.DRC,
+						origin: Country.RWANDA,
 						clientId: undefined,
 						businessId: order.service.businessId,
 					},

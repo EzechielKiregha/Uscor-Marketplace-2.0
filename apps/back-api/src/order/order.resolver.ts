@@ -4,14 +4,11 @@ import {
     Context,
     Int,
     Mutation,
-    Parent,
     Query,
-    ResolveField,
     Resolver,
-    Subscription,
+    Subscription
 } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
-import { BusinessEntity } from "src/business/entities/business.entity";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
@@ -179,10 +176,15 @@ export class OrderResolver {
             type: () => String,
             nullable: true,
         })
-        _status?: string,
-        @Context() _context?: any,
+        status?: string,
+        @Context() context?: any,
     ) {
-        return this.orderService.findClientOrders(clientId, page, limit);
+        return this.orderService.findClientOrders(
+            clientId,
+            page,
+            limit,
+            status,
+        );
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)

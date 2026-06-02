@@ -411,7 +411,13 @@ export default function OrderConfirmationPage() {
                 <div>
                   <h3 className="font-medium">Order Status</h3>
                   <p className="mt-1">
-                    {order.status === "PROCESSING" ? "Processing" : "Shipped"}
+                    {order.status === "PENDING"
+                      ? "Payment Checking"
+                      : order.status === "CANCELLED"
+                        ? "Cancelled"
+                        : order.status === "PROCESSING"
+                          ? "Processing"
+                          : "Shipped"}
                   </p>
                   {estimatedDelivery && (
                     <p className="text-sm text-muted-foreground mt-1">

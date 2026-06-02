@@ -7,31 +7,29 @@ import * as puppeteer from "puppeteer";
 import QRCode from "qrcode";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
-	Country,
-	RechargeMethod,
+    Country,
+    RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
 import { AuthPayload } from "../auth/entities/auth-payload.entity";
-import { BusinessService } from "../business/business.service";
 import { Worker } from "../generated/prisma/client";
 import { LoyaltyService } from "../loyalty-program/loyalty-program.service";
 import {
-	PaymentMethod,
-	PaymentStatus,
+    PaymentMethod,
+    PaymentStatus,
 } from "../payment-transaction/dto/create-payment-transaction.input";
 import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { ProductService } from "../product/product.service";
 import { StoreService } from "../store/store.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
-import { TokenTransactionService } from "../token-transaction/token-transaction.service";
 import { WorkerService } from "../worker/worker.service";
 import { CloseSaleInput, PaymentDetailsInput } from "./dto/close-sale.input";
 import { CreateReturnInput } from "./dto/create-return.input";
 import { CreateSaleInput } from "./dto/create-sale.input";
 import { GenerateReceiptInput } from "./dto/receipt.input";
 import { SaleProductInput } from "./dto/sale-product.input";
-import { UpdateSaleInput } from "./dto/update-sale.input";
 import { UpdateSaleProductInput } from "./dto/update-sale-product.input";
+import { UpdateSaleInput } from "./dto/update-sale.input";
 
 // Chart data point types
 interface DailyChartPoint {
@@ -189,7 +187,7 @@ export class SaleService {
 					businessId: clientId ? undefined : bId,
 					amount: -finalTotal,
 					method: RechargeMethod.TOKEN,
-					origin: Country.DRC,
+					origin: Country.RWANDA,
 				},
 				clientId || bId,
 				clientId ? "client" : "business",
@@ -784,7 +782,7 @@ export class SaleService {
 				businessId: sale.clientId ? undefined : workerInfo.businessId,
 				amount: -tokenAmount,
 				method: RechargeMethod.TOKEN,
-				origin: Country.DRC,
+				origin: Country.RWANDA,
 			},
 			payerId,
 			payerType,
@@ -798,7 +796,7 @@ export class SaleService {
 					businessId: workerInfo.businessId,
 					amount: sale.totalAmount,
 					method: RechargeMethod.TOKEN,
-					origin: Country.DRC,
+					origin: Country.RWANDA,
 				},
 				workerInfo.businessId,
 				"business",
@@ -898,7 +896,7 @@ export class SaleService {
 				businessId: workerInfo.businessId,
 				amount: sale.totalAmount,
 				method: RechargeMethod.TOKEN, // Convert to platform tokens
-				origin: Country.DRC,
+				origin: Country.RWANDA,
 			},
 			workerInfo.businessId,
 			"business",
@@ -991,7 +989,7 @@ export class SaleService {
 						businessId: sale.clientId ? undefined : worker.businessId,
 						amount: sale.totalAmount,
 						method: RechargeMethod.TOKEN,
-						origin: Country.DRC,
+						origin: Country.RWANDA,
 					},
 					sale.clientId || worker.businessId,
 					sale.clientId ? "client" : "business",

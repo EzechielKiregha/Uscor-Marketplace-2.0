@@ -10,7 +10,10 @@ import { PaymentTransactionService } from "../payment-transaction/payment-transa
 import { PrismaService } from "../prisma/prisma.service";
 import { TokenTransactionType } from "../token-transaction/dto/create-token-transaction.input";
 import { TokenTransactionService } from "../token-transaction/token-transaction.service";
-import { CreateOrderInput, CreateOrderProductInput } from "./dto/create-order.input";
+import {
+    CreateOrderInput,
+    CreateOrderProductInput,
+} from "./dto/create-order.input";
 import { GenerateOrderReceiptInput } from "./dto/receipt.input";
 import { UpdateOrderInput } from "./dto/update-order.input";
 import { OrderBusinessGroupEntity } from "./entities/order-business-group.entity";
@@ -105,7 +108,9 @@ export class OrderService {
         } = createOrderInput;
 
         // Group items by business (from frontend logic)
-        const businessGroups = clientOrderId ? this.groupItemsByBusiness(orderProducts) : []
+        const businessGroups = clientOrderId
+            ? this.groupItemsByBusiness(orderProducts)
+            : [];
 
         // Validate client
         const client = await this.prisma.client.findUnique({
@@ -162,12 +167,14 @@ export class OrderService {
                 totalAmount,
                 client: { connect: { id: clientId } },
                 clientOrderId: clientOrderId ?? undefined,
+                status: OrderStatus.PENDING,
                 payment: {
                     create: {
                         amount: totalAmount,
                         method: payment.method,
                         status: PaymentStatus.PENDING,
                         qrCode: payment.qrCode,
+                        client: { connect : { id: clientId}}
                     },
                 },
                 products: {
@@ -229,23 +236,25 @@ export class OrderService {
                     },
                 },
                 businessGroups: {
-        include: {
-          business: true,
-          items: {
-            include: {
-              product: {
-                include: { medias: { take: 1 } },
-              },
-            },
-          },
-        },
-      },
+                    include: {
+                        business: true,
+                        items: {
+                            include: {
+                                product: {
+                                    include: { medias: { take: 1 } },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         });
 
         // Create Business Groups + Items
         if (!clientOrderId) {
-            for (const group of Object.values(businessGroups as OrderBusinessGroupEntity[])) {
+            for (const group of Object.values(
+                businessGroups as OrderBusinessGroupEntity[],
+            )) {
                 await this.prisma.orderBusinessGroup.create({
                     data: {
                         orderId: order.id,
@@ -374,7 +383,7 @@ export class OrderService {
     private groupItemsByBusiness(orderProducts: CreateOrderProductInput[]) {
         // You can enhance this to fetch prices if needed
         return orderProducts.reduce((groups: any, item) => {
-            const businessId = item.businessId! ;
+            const businessId = item.businessId!;
             if (!groups[businessId]) {
                 groups[businessId] = {
                     businessId,
@@ -394,58 +403,58 @@ export class OrderService {
 
     // Get orders for a specific business
     async getBusinessOrders(businessId: string) {
-    return this.prisma.orderBusinessGroup.findMany({
-        where: { businessId },
-        include: {
-        order: {
+        return this.prisma.orderBusinessGroup.findMany({
+            where: { businessId },
             include: {
-            client: true,
-            payment: true,
+                order: {
+                    include: {
+                        client: true,
+                        payment: true,
+                    },
+                },
+                items: {
+                    include: {
+                        product: {
+                            include: { medias: { take: 1 } },
+                        },
+                    },
+                },
+                business: true,
             },
-        },
-        items: {
-            include: {
-            product: {
-                include: { medias: { take: 1 } },
-            },
-            },
-        },
-        business: true,
-        },
-        orderBy: { createdAt: 'desc' },
-    });
+            orderBy: { createdAt: "desc" },
+        });
     }
 
     // Get full order with business groups (for client)
     async findOneWithGroups(orderId: string, userId: string) {
-    const order = await this.prisma.order.findUnique({
-        where: { id: orderId },
-        include: {
-        client: true,
-        payment: true,
-        businessGroups: {
+        const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
             include: {
-            business: true,
-            items: {
-                include: {
-                product: {
-                    include: { medias: { take: 1 } },
-                },
+                client: true,
+                payment: true,
+                businessGroups: {
+                    include: {
+                        business: true,
+                        items: {
+                            include: {
+                                product: {
+                                    include: { medias: { take: 1 } },
+                                },
+                            },
+                        },
+                    },
                 },
             },
-            },
-        },
-        },
-    });
+        });
 
-    if (!order) throw new Error("Order not found");
+        if (!order) throw new Error("Order not found");
 
-    // Security check
-    if (order.clientId !== userId) {
-        throw new Error("Not authorized");
-    }
+        // Security check
+        if (order.clientId !== userId) {
+            throw new Error("Not authorized");
+        }
 
-    return order;
+        return order;
     }
 
     async generateReceipt(input: GenerateOrderReceiptInput, user: AuthPayload) {
@@ -1227,9 +1236,9 @@ export class OrderService {
                         business: true,
                         items: {
                             include: {
-                            product: {
-                                include: { medias: { take: 1 } },
-                            },
+                                product: {
+                                    include: { medias: { take: 1 } },
+                                },
                             },
                         },
                     },
@@ -1294,14 +1303,14 @@ export class OrderService {
                 },
                 businessGroups: {
                     include: {
-                    business: true,
-                    items: {
-                        include: {
-                        product: {
-                            include: { medias: { take: 1 } },
+                        business: true,
+                        items: {
+                            include: {
+                                product: {
+                                    include: { medias: { take: 1 } },
+                                },
+                            },
                         },
-                        },
-                    },
                     },
                 },
             },
@@ -1374,17 +1383,17 @@ export class OrderService {
                     },
                 },
                 businessGroups: {
-        include: {
-          business: true,
-          items: {
-            include: {
-              product: {
-                include: { medias: { take: 1 } },
-              },
-            },
-          },
-        },
-      },
+                    include: {
+                        business: true,
+                        items: {
+                            include: {
+                                product: {
+                                    include: { medias: { take: 1 } },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         });
 
@@ -1417,11 +1426,14 @@ export class OrderService {
                 id: true,
                 status: true,
             },
-            data: { status: OrderStatus.CANCELLED, 
-                payment: { update : {
-                    status: PaymentStatus.FAILED
-                } }
-             }
+            data: {
+                status: OrderStatus.CANCELLED,
+                payment: {
+                    update: {
+                        status: PaymentStatus.FAILED,
+                    },
+                },
+            },
         });
     }
 
@@ -1513,16 +1525,16 @@ export class OrderService {
 
         const [orders, total] = await Promise.all([
             this.prisma.order.findMany({
-                where : { 
+                where: {
                     ...where,
                     clientOrderId: {
-                        not : null
+                        not: null,
                     },
                 },
                 skip,
                 take: limit,
                 orderBy: { createdAt: "desc" },
-                include: { 
+                include: {
                     client: {
                         select: {
                             id: true,
@@ -1570,7 +1582,7 @@ export class OrderService {
         ]);
 
         // Transform the data to match frontend expectations
-        const transformedOrders = await Promise.all( 
+        const transformedOrders = await Promise.all(
             orders.map(async (order) => ({
                 ...order,
                 deliveryAddress: await this.prisma.address.findUnique({
@@ -1580,8 +1592,8 @@ export class OrderService {
                 products: order.products?.map((op) => ({
                     ...op,
                 })),
-            }))
-        )
+            })),
+        );
 
         return {
             items: transformedOrders,
@@ -1595,12 +1607,17 @@ export class OrderService {
         clientId: string,
         page: number = 1,
         limit: number = 20,
+        status?: string,
     ) {
         const skip = (page - 1) * limit;
 
+        const where: any = { clientId: clientId, clientOrderId: null };
+
+        if (status) where.status = OrderStatus[status];
+
         const [orders, total] = await Promise.all([
             this.prisma.order.findMany({
-                where: { clientId, clientOrderId: null },
+                where,
                 skip,
                 take: limit,
                 orderBy: { createdAt: "desc" },
@@ -1714,7 +1731,7 @@ export class OrderService {
             return {
                 id: order.id,
                 orderNumber: order.id.substring(0, 8).toUpperCase(),
-                status: order.payment?.status || "PENDING",
+                status: order.status || "PENDING",
                 totalAmount: order.totalAmount,
                 createdAt: order.createdAt,
                 receiptUrl: order.receiptUrl || null,
@@ -1722,6 +1739,7 @@ export class OrderService {
                 items,
                 business,
                 store,
+                payment: order.payment,
                 paymentMethod: order.payment
                     ? {
                           type: order.payment.method,
@@ -1821,17 +1839,17 @@ export class OrderService {
                     },
                 },
                 businessGroups: {
-        include: {
-          business: true,
-          items: {
-            include: {
-              product: {
-                include: { medias: { take: 1 } },
-              },
-            },
-          },
-        },
-      },
+                    include: {
+                        business: true,
+                        items: {
+                            include: {
+                                product: {
+                                    include: { medias: { take: 1 } },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         });
 

@@ -123,6 +123,9 @@ enum OrderStatus {
   COMPLETED
   PROCESSING
   CANCELLED
+  REFUNDED
+  DELIVERED
+  SHIPPED
 }
 
 enum LoyaltyTransactionType {
@@ -369,6 +372,7 @@ model Client {
   sales Sale[]
   pointsTransactions PointsTransaction[]
   medias Media[]
+  paymentTransactions PaymentTransaction[]
 
   // Common lookup
   @@index([createdAt])
@@ -763,6 +767,8 @@ model Token {
 
 model PaymentTransaction {
   id                   String                @id @default(uuid())
+   clientId         String?         // Add this to make lookups easier
+  client           Client?         @relation(fields: [clientId], references: [id])
   order                Order?                 @relation(fields: [orderId], references: [id])
   orderId              String?                @unique
   status               PaymentStatus         @default(PENDING)
@@ -777,7 +783,6 @@ model PaymentTransaction {
   postTransactions PostTransaction[]
 
   @@index([createdAt])
-
 }
 
 model Ad {

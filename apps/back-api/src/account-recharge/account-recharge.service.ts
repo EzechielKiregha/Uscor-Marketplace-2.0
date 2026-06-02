@@ -96,6 +96,85 @@ export class AccountRechargeService {
 		});
 	}
 
+	// USSD-specific method - bypasses user ownership validation since USSD already verified the user
+	async createFromUSSD(
+		createAccountRechargeInput: CreateAccountRechargeInput,
+	) {
+		const { clientId, businessId, tokenTransactionId, ...data } =
+			createAccountRechargeInput;
+
+		// Minimal validation
+		if (clientId && businessId) {
+			throw new Error("Only one of clientId or businessId should be provided");
+		}
+		if (!clientId && !businessId) {
+			throw new Error("Either clientId or businessId must be provided");
+		}
+
+		// Validate tokenTransactionId if provided
+		if (tokenTransactionId) {
+			const tokenTransaction = await this.prisma.tokenTransaction.findUnique({
+				where: { id: tokenTransactionId },
+			});
+			if (!tokenTransaction) {
+				throw new Error("TokenTransaction not found");
+			}
+			if (
+				tokenTransaction.isRedeemed !== true ||
+				tokenTransaction.isReleased !== true
+			) {
+				throw new Error("TokenTransaction must be both redeemed and released");
+			}
+		}
+
+		return this.prisma.accountRecharge.create({
+			data: {
+				...data,
+                status: PaymentStatus.COMPLETED,
+				client: clientId ? { connect: { id: clientId } } : undefined,
+				business: businessId ? { connect: { id: businessId } } : undefined,
+				tokenTransaction: tokenTransactionId
+					? {
+							connect: { id: tokenTransactionId },
+						}
+					: undefined,
+			},
+			include: {
+				client: clientId
+					? {
+							select: {
+								id: true,
+								username: true,
+								email: true,
+								createdAt: true,
+							},
+						}
+					: false,
+				business: businessId
+					? {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+								createdAt: true,
+							},
+						}
+					: false,
+				tokenTransaction: tokenTransactionId
+					? {
+							select: {
+								id: true,
+								businessId: true,
+								amount: true,
+								type: true,
+								createdAt: true,
+							},
+						}
+					: false,
+			},
+		});
+	}
+
 	private buildOwnerWhere(userId: string, userRole: string) {
 		if (userRole === "business") {
 			return { businessId: userId };
@@ -149,14 +228,29 @@ export class AccountRechargeService {
 			},
 		});
 
-		const totalAmount = recharges.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const totalAmount = recharges.filter((r)=> r.status === PaymentStatus.COMPLETED && r.method !== RechargeMethod.TOKEN).reduce((sum, recharge) => sum + recharge.amount, 0);
 		const availableAmount = recharges
-			.filter((recharge) => recharge.status === "COMPLETED")
+			.filter((recharge) => recharge.status === PaymentStatus.COMPLETED && recharge.method !== RechargeMethod.TOKEN)
 			.reduce((sum, recharge) => sum + recharge.amount, 0);
 		const pendingAmount = recharges
-			.filter((recharge) => recharge.status === "PENDING")
+			.filter((recharge) => recharge.status === PaymentStatus.PENDING && recharge.method !== RechargeMethod.TOKEN)
 			.reduce((sum, recharge) => sum + recharge.amount, 0);
 		const reservedAmount = pendingAmount;
+        
+        // token balance
+		const totalTokens = recharges.filter((r)=> r.method === RechargeMethod.TOKEN).reduce((sum, recharge) => sum + recharge.amount, 0);
+		const availableTokens = recharges
+			.filter((recharge) => recharge.status === PaymentStatus.COMPLETED && recharge.method === RechargeMethod.TOKEN)
+			.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const pendingTokens = recharges
+			.filter((recharge) => recharge.status === PaymentStatus.PENDING && recharge.method === RechargeMethod.TOKEN)
+			.reduce((sum, recharge) => sum + recharge.amount, 0);
+
+        const tokenBalance = {
+            totalTokens,
+            availableTokens,
+            pendingTokens,
+        }
 
 		return {
 			totalAmount,
@@ -164,6 +258,7 @@ export class AccountRechargeService {
 			pendingAmount,
 			reservedAmount,
 			transactions: recharges,
+            tokenBalance,
 		};
 	}
 

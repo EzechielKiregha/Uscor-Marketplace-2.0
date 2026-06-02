@@ -12,8 +12,8 @@ export const GET_PAYMENT_TRANSACTIONS = gql`
     $startDate: DateTime
     $endDate: DateTime
     $status: PaymentStatus
-    $page: Float = 1
-    $limit: Float = 20
+    $page: Int = 1
+    $limit: Int = 20
   ) {
     paymentTransactions(
       orderId: $orderId
@@ -61,10 +61,12 @@ export const GET_PAYMENT_LATEST_TRANSACTION = gql`
       transactionDate
       qrCode
       createdAt
-      order {
+      postTransaction {
         id
-        deliveryFee
-      }
+        amount
+        status
+        createdAt
+        }
     }
   }
 `;
@@ -101,8 +103,8 @@ export const GET_RECHARGES = gql`
     $status: String
     $startDate: DateTime
     $endDate: DateTime
-    $page: Float = 1
-    $limit: Float = 20
+    $page: Int = 1
+    $limit: Int = 20
   ) {
     recharges(
       businessId: $businessId
@@ -146,8 +148,8 @@ export const GET_TOKEN_TRANSACTIONS = gql`
     $type: String
     $isRedeemed: Boolean
     $isReleased: Boolean
-    $page: Float = 1
-    $limit: Float = 20
+    $page: Int = 1
+    $limit: Int = 20
   ) {
     tokenTransactions(
       businessId: $businessId
@@ -208,8 +210,8 @@ export const GET_LOYALTY_PROGRAMS = gql`
 export const GET_POINTS_TRANSACTIONS = gql`
   query GetPointsTransactions(
     $clientId: String!
-    $page: Float = 1
-    $limit: Float = 20
+    $page: Int = 1
+    $limit: Int = 20
   ) {
     pointsTransactions(
       clientId: $clientId
@@ -265,10 +267,23 @@ export const CREATE_PAYMENT_TRANSACTION = gql`
   }
   }
 `;
+export const CREATE_PAYMENT_TRANSACTION_FOR_ACCOUNT_RECHARGE = gql`
+  mutation createPaymentTransactionForAccountRecharge($input: CreatePaymentTransactionInput!) {
+    createPaymentTransactionForAccountRecharge(input: $input) {
+        id
+        amount
+        method
+        status
+        transactionDate
+        qrCode
+        createdAt
+    }
+  }
+`;
 
 export const UPDATE_PAYMENT_TRANSACTION = gql`
-  mutation UpdatePaymentTransaction($id: String!, $input: UpdatePaymentTransactionInput!) {
-    updatePaymentTransaction(id: $id, input: $input) {
+  mutation UpdatePaymentTransaction($id: String!, $input: UpdatePaymentTransactionInput!, $phone: String) {
+    updatePaymentTransaction(id: $id, input: $input, phone: $phone) {
     id
     amount
     method
@@ -288,6 +303,42 @@ export const UPDATE_PAYMENT_TRANSACTION = gql`
       createdAt
     }
   }
+  }
+`;
+export const UPDATE_PAYMENT_TRANSACTION_FOR_ACCOUNT_RECHARGE = gql`
+  mutation updatePaymentTransactionForAccountRecharge($id: String!, $input: UpdatePaymentTransactionInput!, $phone: String) {
+    updatePaymentTransactionForAccountRecharge(id: $id, input: $input, phone: $phone) {
+        id
+        amount
+        method
+        status
+        transactionDate
+        qrCode
+        createdAt
+    }
+  }
+`;
+export const CANCEL_PAYMENT_TRANSACTION = gql`
+  mutation cancelPaymentTransaction($id: String!) {
+    cancelPaymentTransaction(id: $id) {
+        id
+        amount
+        method
+        status
+        transactionDate
+        qrCode
+        createdAt
+    }
+  }
+`;
+export const CHECK_PAYMENT_TRANSACTION_STATUS = gql`
+  query checkPaymentTransactionStatus($id: String!) {
+    checkPaymentTransactionStatus(id: $id) {
+        id
+        amount
+        method
+        status
+    }
   }
 `;
 

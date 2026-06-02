@@ -21,7 +21,7 @@ export class OrderEntity {
     @Field(() => DeliveryAddressEntity, {
         nullable: true,
     })
-    deliveryAddress?: DeliveryAddressEntity;
+    deliveryAddress: DeliveryAddressEntity | null;
 
     @Field({ nullable: true })
     clientOrderId?: string;

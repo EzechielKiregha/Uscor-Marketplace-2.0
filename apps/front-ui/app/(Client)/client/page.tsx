@@ -1,10 +1,13 @@
 // app/client/page.tsx
 "use client";
 
+import Loader from "@/components/seraui/Loader";
+import { Button } from "@/components/ui/button";
+import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
+import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
-  BriefcaseBusiness,
-  Gift,
   Home,
   Menu,
   MessageSquare,
@@ -14,20 +17,17 @@ import {
   Star,
   User,
   Wallet,
+  Wallet2,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-import Loader from "@/components/seraui/Loader";
-import { Button } from "@/components/ui/button";
-import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
-import { useMe } from "@/lib/useMe";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import ChatPage from "../../../components/chat/ChatComponent";
 import LoyaltyDashboard from "./_components/LoyaltyDashboard";
 import OrderHistory from "./_components/OrderHistory";
 import ProfileOverview from "./_components/ProfileOverview";
 import Recommendations from "./_components/Recommendations";
 import ReviewsPage from "./_components/Reviews";
 import SettingsPanel from "./_components/SettingsPanel";
-import ChatPage from "../../../components/chat/ChatComponent";
+import WalletPage from "./wallet/page";
 
 type ClientSection =
   | "profile"
@@ -36,6 +36,7 @@ type ClientSection =
   | "loyalty"
   | "recommendations"
   | "reviews"
+  | "wallet"
   | "settings";
 
 type ClientSideLink = {
@@ -62,6 +63,7 @@ export default function ClientPanel() {
       storedSection === "loyalty" ||
       storedSection === "recommendations" ||
       storedSection === "reviews" ||
+      storedSection === "wallet" ||
       storedSection === "settings"
     ) {
       setActiveSection(storedSection);
@@ -81,6 +83,7 @@ export default function ClientPanel() {
     { section: "loyalty", icon: Star, label: "Loyalty Program" },
     { section: "recommendations", icon: Home, label: "Recommendations" },
     { section: "reviews", icon: MessageSquare, label: "Reviews" },
+    { section: "wallet", icon: Wallet2, label: "Uscor Wallet" },
     { section: "settings", icon: Settings, label: "Account Settings" },
   ];
 
@@ -232,6 +235,7 @@ export default function ClientPanel() {
             {activeSection === "reviews" && (
               <ReviewsPage client={clientData.client} />
             )}
+            {activeSection === "wallet" && <WalletPage />}
             {activeSection === "settings" && (
               <SettingsPanel client={clientData.client} />
             )}

@@ -1,12 +1,12 @@
+import { getAccessToken, logout } from "@/lib/auth";
 import { gql } from "@apollo/client";
 import { jwtDecode } from "jwt-decode";
-import { getAccessToken, logout } from "@/lib/auth";
 import { client } from "./apollo-client";
 import {
-	AdminEntity,
-	BusinessEntity,
-	ClientEntity,
-	WorkerEntity,
+    AdminEntity,
+    BusinessEntity,
+    ClientEntity,
+    WorkerEntity,
 } from "./types";
 
 // GraphQL queries
@@ -14,12 +14,14 @@ export const GET_CLIENT_BY_ID = gql`
   query GetClientById($id: String!) {
     client(id: $id) {
       id
-      username
-      email
       fullName
-      address
+      email
       phone
-      isVerified
+      avatar
+      loyaltyPoints
+      loyaltyTier
+      totalSpent
+      totalOrders
       createdAt
       updatedAt
     }

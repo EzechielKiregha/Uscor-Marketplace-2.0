@@ -1,12 +1,12 @@
 import { Inject, UseGuards } from "@nestjs/common";
 import {
-	Args,
-	Context,
-	Int,
-	Mutation,
-	Query,
-	Resolver,
-	Subscription,
+    Args,
+    Context,
+    Int,
+    Mutation,
+    Query,
+    Resolver,
+    Subscription,
 } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
@@ -16,9 +16,9 @@ import { CreateTokenTransactionInput } from "./dto/create-token-transaction.inpu
 import { RedeemTokenTransactionInput } from "./dto/redeem-token-transaction.input";
 import { ReleaseTokenTransactionInput } from "./dto/release-token-transaction.input";
 import {
-	TokenBalanceEntity,
-	TokenTransactionEntity,
-	TokenTransactionPageEntity,
+    TokenBalanceEntity,
+    TokenTransactionEntity,
+    TokenTransactionPageEntity,
 } from "./entities/token-transaction.entity";
 import { TokenTransactionService } from "./token-transaction.service";
 // Resolver

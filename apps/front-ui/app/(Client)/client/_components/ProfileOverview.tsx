@@ -1,9 +1,6 @@
 // app/client/_components/ProfileOverview.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { Camera, Loader2, Mail, Phone, User, X } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +9,21 @@ import {
   UPDATE_CLIENT_PROFILE,
 } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
+import {
+  Award,
+  Calendar,
+  Camera,
+  DollarSign,
+  Loader2,
+  Mail,
+  Phone,
+  ShoppingBag,
+  User,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ProfileOverviewProps {
   client: any;
@@ -21,12 +32,14 @@ interface ProfileOverviewProps {
 export default function ProfileOverview({ client }: ProfileOverviewProps) {
   const { user } = useMe();
   const { showToast } = useToast();
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
     avatar: "",
   });
+
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,8 +115,8 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
     setIsSubmitting(true);
 
     try {
-      // Handle avatar upload if needed
       let avatarUrl = client?.avatar || "";
+
       if (avatarFile) {
         const blobToken = process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN;
         if (!blobToken && avatarFile instanceof File) {
@@ -136,9 +149,7 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
         },
       });
 
-      // Refetch to get updated data
       await refetch();
-
       setIsEditing(false);
       showToast("success", "Success", "Profile updated successfully");
     } catch (error: any) {
@@ -148,22 +159,28 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
     }
   };
 
+  const progressPercent = Math.min((client.loyaltyPoints / 500) * 100, 100);
+
   return (
-    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+    <div className="bg-card border border-orange-400/40 dark:border-orange-500/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
       {/* Profile Header */}
-      <div className="p-6 bg-muted border-b border-border">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+      <div className="p-6 bg-linear-to-r from-muted/80 via-muted/40 to-transparent border-b border-border/50">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="text-center md:text-left">
-            <h1 className="text-2xl font-bold">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               {isEditing ? "Edit Profile" : "Profile Overview"}
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-sm">
               Manage your personal information and preferences
             </p>
           </div>
 
           {!isEditing && (
-            <Button variant="default" onClick={() => setIsEditing(true)}>
+            <Button
+              variant="default"
+              onClick={() => setIsEditing(true)}
+              className="bg-orange-500 hover:bg-orange-600 text-white shadow-sm transition-all duration-200 hover:shadow-md"
+            >
               <User className="h-4 w-4 mr-2" />
               Edit Profile
             </Button>
@@ -173,107 +190,115 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
 
       <div className="p-6">
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Avatar Section */}
-            <div className="lg:col-span-1 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Left Column: Avatar & Loyalty */}
+            <div className="lg:col-span-1 space-y-6">
+              {/* Avatar Section */}
               <div className="text-center">
-                {isEditing ? (
-                  <div className="relative inline-block">
-                    {formData.avatar ? (
-                      <div className="relative">
-                        <img
-                          src={formData.avatar}
-                          alt="Profile preview"
-                          className="w-24 h-24 rounded-full object-cover mx-auto"
+                <div className="relative inline-block group">
+                  {isEditing ? (
+                    <div className="relative">
+                      {formData.avatar ? (
+                        <div className="relative">
+                          <img
+                            src={formData.avatar}
+                            alt="Profile preview"
+                            className="w-28 h-28 rounded-full object-cover mx-auto ring-4 ring-orange-500/20 shadow-lg transition-transform duration-300 group-hover:scale-105"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleRemoveAvatar}
+                            className="absolute -top-1 -right-1 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600 shadow-md transition-colors"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-28 h-28 rounded-full bg-muted flex items-center justify-center mx-auto ring-4 ring-orange-500/10">
+                          <User className="h-10 w-10 text-muted-foreground" />
+                        </div>
+                      )}
+
+                      <label className="absolute bottom-0 right-0 bg-orange-500 text-white rounded-full p-2 cursor-pointer hover:bg-orange-600 shadow-lg transition-all duration-200 hover:scale-110">
+                        <Camera className="h-4 w-4" />
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept=".jpg,.jpeg,.png,.webp"
+                          onChange={handleFileChange}
                         />
-                        <button
-                          type="button"
-                          onClick={handleRemoveAvatar}
-                          className="absolute -top-2 -right-2 bg-destructive/10 text-destructive p-1 rounded-full hover:bg-destructive/20"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mx-auto">
-                        <User className="h-8 w-8 text-muted-foreground" />
-                      </div>
-                    )}
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="relative inline-block group">
+                      {client.avatar ? (
+                        <img
+                          src={client.avatar}
+                          alt={client.fullName}
+                          className="w-28 h-28 rounded-full object-cover mx-auto ring-4 ring-orange-500/20 shadow-lg transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-28 h-28 rounded-full bg-muted flex items-center justify-center mx-auto ring-4 ring-orange-500/10">
+                          <User className="h-10 w-10 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
 
-                    <label className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-1.5 cursor-pointer hover:bg-accent">
-                      <Camera className="h-4 w-4" />
-                      <input
-                        type="file"
-                        className="hidden"
-                        accept=".jpg,.jpeg,.png,.webp"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                  </div>
-                ) : (
-                  <div className="relative inline-block">
-                    {client.avatar ? (
-                      <img
-                        src={client.avatar}
-                        alt={client.fullName}
-                        className="w-24 h-24 rounded-full object-cover mx-auto"
-                      />
-                    ) : (
-                      <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mx-auto">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <h3 className="font-medium mt-3">{client.fullName}</h3>
+                <h3 className="font-bold text-lg mt-4 text-foreground">
+                  {client.fullName}
+                </h3>
                 <p className="text-sm text-muted-foreground">{client.email}</p>
               </div>
 
               {/* Loyalty Status */}
-              <div className="mt-4 p-4 bg-muted rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">Loyalty Status</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {client.loyaltyTier || "Standard"}
+              <div className="p-5 bg-linear-to-br from-orange-500/10 via-transparent to-transparent border border-orange-500/20 rounded-xl">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Award className="h-4 w-4 text-orange-500" />
+                    <p className="text-sm font-semibold text-foreground">
+                      Loyalty Status
                     </p>
                   </div>
-                  <div className="text-center">
-                    <p className="font-bold">{client.loyaltyPoints}</p>
-                    <p className="text-xs text-muted-foreground">points</p>
-                  </div>
+                  <span className="text-xs font-bold px-2 py-1 bg-orange-500/20 text-orange-600 dark:text-orange-400 rounded-full">
+                    {client.loyaltyTier || "Standard"}
+                  </span>
                 </div>
 
-                <div className="mt-3">
-                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                <div className="text-center mb-4">
+                  <p className="text-3xl font-bold text-foreground">
+                    {client.loyaltyPoints}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Total Points</p>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs text-muted-foreground mb-2 font-medium">
                     <span>Progress</span>
                     <span>{client.loyaltyPoints} / 500</span>
                   </div>
-                  <div className="w-full bg-border rounded-full h-2">
+                  <div className="w-full bg-background/50 border border-border/50 rounded-full h-2.5 overflow-hidden">
                     <div
-                      className="bg-primary h-2 rounded-full"
-                      style={{
-                        width: `${Math.min(client.loyaltyPoints / 5, 100)}%`,
-                      }}
+                      className="bg-linear-to-r from-orange-400 to-orange-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                      style={{ width: `${progressPercent}%` }}
                     ></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Profile Details */}
+            {/* Right Column: Details */}
             <div className="lg:col-span-3 space-y-6">
               {isEditing ? (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="space-y-2">
                       <label
                         htmlFor="fullName"
-                        className=" text-sm font-medium mb-1 flex items-center gap-2"
+                        className="text-sm font-medium text-foreground flex items-center gap-2"
                       >
-                        <User className="h-4 w-4 text-muted-foreground" />
-                        Full Name
+                        <User className="h-4 w-4 text-orange-500" /> Full Name
                       </label>
                       <Input
                         id="fullName"
@@ -281,16 +306,17 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
                         value={formData.fullName}
                         onChange={handleInputChange}
                         placeholder="Your full name"
+                        className="bg-background border-border/60 focus-visible:ring-orange-500/50"
                       />
                     </div>
 
-                    <div>
+                    <div className="space-y-2">
                       <label
                         htmlFor="email"
-                        className=" text-sm font-medium mb-1 flex items-center gap-2"
+                        className="text-sm font-medium text-foreground flex items-center gap-2"
                       >
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        Email Address
+                        <Mail className="h-4 w-4 text-orange-500" /> Email
+                        Address
                       </label>
                       <Input
                         id="email"
@@ -298,18 +324,17 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
                         type="email"
                         value={formData.email}
                         disabled
-                        className="bg-muted"
+                        className="bg-muted/50 border-border/40 text-muted-foreground cursor-not-allowed"
                       />
                     </div>
                   </div>
 
-                  <div>
+                  <div className="space-y-2">
                     <label
                       htmlFor="phone"
-                      className=" text-sm font-medium mb-1 flex items-center gap-2"
+                      className="text-sm font-medium text-foreground flex items-center gap-2"
                     >
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      Phone Number
+                      <Phone className="h-4 w-4 text-orange-500" /> Phone Number
                     </label>
                     <Input
                       id="phone"
@@ -317,10 +342,11 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="+250 788 123 456"
+                      className="bg-background border-border/60 focus-visible:ring-orange-500/50"
                     />
                   </div>
 
-                  <div className="flex justify-end gap-3 pt-4 border-t border-border">
+                  <div className="flex justify-end gap-3 pt-6 mt-6 border-t border-border/50">
                     <Button
                       type="button"
                       variant="outline"
@@ -335,12 +361,13 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
                         setAvatarFile(null);
                       }}
                       disabled={isSubmitting}
+                      className="border-border/60 hover:bg-muted"
                     >
                       Cancel
                     </Button>
                     <Button
                       type="submit"
-                      className="bg-primary hover:bg-accent text-primary-foreground"
+                      className="bg-orange-500 hover:bg-orange-600 text-white shadow-sm transition-all duration-200"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -356,55 +383,80 @@ export default function ProfileOverview({ client }: ProfileOverviewProps) {
                 </>
               ) : (
                 <>
+                  {/* View Mode Info Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className=" text-sm font-medium mb-1">
-                        Full Name
-                      </label>
-                      <p className="font-medium">{client.fullName}</p>
-                    </div>
-
-                    <div>
-                      <label className=" text-sm font-medium mb-1">
-                        Email Address
-                      </label>
-                      <p className="font-medium">{client.email}</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className=" text-sm font-medium mb-1">
-                      Phone Number
-                    </label>
-                    <p className="font-medium">
-                      {client.phone || "Not provided"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className=" text-sm font-medium mb-1">
-                      Member Since
-                    </label>
-                    <p className="font-medium">
-                      {new Date(client.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className=" text-sm font-medium mb-1">
-                        Total Orders
-                      </label>
-                      <p className="font-medium">{client.totalOrders}</p>
-                    </div>
-
-                    <div>
-                      <label className=" text-sm font-medium mb-1">
-                        Total Spent
-                      </label>
-                      <p className="font-medium">
-                        ${client.totalSpent.toFixed(2)}
+                    <div className="p-4 bg-muted/30 border border-border/50 rounded-xl hover:border-orange-500/40 hover:bg-muted/50 transition-all duration-200">
+                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                        <User className="h-3 w-3" /> Full Name
+                      </div>
+                      <p className="text-base font-semibold text-foreground">
+                        {client.fullName}
                       </p>
+                    </div>
+
+                    <div className="p-4 bg-muted/30 border border-border/50 rounded-xl hover:border-orange-500/40 hover:bg-muted/50 transition-all duration-200">
+                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                        <Mail className="h-3 w-3" /> Email Address
+                      </div>
+                      <p className="text-base font-semibold text-foreground break-all">
+                        {client.email}
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-muted/30 border border-border/50 rounded-xl hover:border-orange-500/40 hover:bg-muted/50 transition-all duration-200">
+                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                        <Phone className="h-3 w-3" /> Phone Number
+                      </div>
+                      <p className="text-base font-semibold text-foreground">
+                        {client.phone || (
+                          <span className="italic text-muted-foreground/70 font-normal">
+                            Not provided
+                          </span>
+                        )}
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-muted/30 border border-border/50 rounded-xl hover:border-orange-500/40 hover:bg-muted/50 transition-all duration-200">
+                      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                        <Calendar className="h-3 w-3" /> Member Since
+                      </div>
+                      <p className="text-base font-semibold text-foreground">
+                        {new Date(client.createdAt).toLocaleDateString(
+                          "en-US",
+                          { year: "numeric", month: "long", day: "numeric" },
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Stats Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div className="p-5 bg-linear-to-br from-orange-500/5 to-transparent border border-orange-500/20 rounded-xl flex items-center gap-4">
+                      <div className="p-3 bg-orange-500/10 rounded-lg">
+                        <ShoppingBag className="h-6 w-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          Total Orders
+                        </p>
+                        <p className="text-2xl font-bold text-foreground">
+                          {client.totalOrders}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-5 bg-linear-to-br from-orange-500/5 to-transparent border border-orange-500/20 rounded-xl flex items-center gap-4">
+                      <div className="p-3 bg-orange-500/10 rounded-lg">
+                        <DollarSign className="h-6 w-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          Total Spent
+                        </p>
+                        <p className="text-2xl font-bold text-foreground">
+                          ${client.totalSpent.toFixed(2)}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </>

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
-	Country,
-	RechargeMethod,
+    Country,
+    RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateTokenTransactionInput } from "./dto/create-token-transaction.input";
@@ -171,7 +171,7 @@ export class TokenTransactionService {
 					businessId,
 					amount: tokenTransaction.amount,
 					method: RechargeMethod.MTN_MONEY,
-					origin: Country.DRC,
+					origin: Country.RWANDA,
 					tokenTransactionId: tokenTransaction.id,
 				},
 				businessId,
@@ -183,7 +183,7 @@ export class TokenTransactionService {
 					businessId: tokenTransaction.reOwnedProduct?.oldOwnerId,
 					amount: -tokenTransaction.amount,
 					method: RechargeMethod.TOKEN,
-					origin: Country.DRC,
+					origin: Country.RWANDA,
 					tokenTransactionId: tokenTransaction.id,
 				},
 				tokenTransaction.reOwnedProduct?.oldOwnerId,
@@ -274,7 +274,7 @@ export class TokenTransactionService {
 					businessId: productOwnerId,
 					amount: -tokenTransaction.amount,
 					method: RechargeMethod.TOKEN,
-					origin: Country.DRC,
+					origin: Country.RWANDA,
 					tokenTransactionId: tokenTransaction.id,
 				},
 				productOwnerId,
@@ -286,7 +286,7 @@ export class TokenTransactionService {
 					businessId,
 					amount: tokenTransaction.amount,
 					method: RechargeMethod.MTN_MONEY,
-					origin: Country.DRC,
+					origin: Country.RWANDA,
 					tokenTransactionId: tokenTransaction.id,
 				},
 				businessId,

@@ -397,8 +397,8 @@ type PaymentTransactionEntity {
   transactionDate: DateTime!
   qrCode: String
   createdAt: DateTime!
-  order: OrderEntity!
-  postTransaction: PostTransactionEntity
+  order: OrderEntity
+  postTransaction: [PostTransactionEntity!]
 }
 
 type FreelanceOrderEntity {
@@ -1108,12 +1108,19 @@ enum Country {
   TANZANIA
 }
 
+type TokensBalanceEntity {
+  totalTokens: Float!
+  availableTokens: Float!
+  pendingTokens: Float!
+}
+
 type AccountBalanceEntity {
   totalAmount: Float!
   availableAmount: Float!
   pendingAmount: Float!
   reservedAmount: Float!
   transactions: [AccountRechargeEntity!]!
+  tokenBalance: TokensBalanceEntity
 }
 
 type AccountRechargePageEntity {
@@ -1921,9 +1928,10 @@ type Query {
 
   """Retrieves a single payment transaction by ID."""
   paymentTransaction(id: String!): PaymentTransactionEntity!
-
-  """Retrieves the latest pending payment transaction for the user."""
   latestPaymentTransaction(phone: String!): PaymentTransactionEntity
+
+  """check a payment transaction’s status or QR code."""
+  checkPaymentTransactionStatus(id: String!): PaymentTransactionEntity!
 
   """Retrieves freelance services with pagination and filters."""
   freelanceServices(category: String, minRate: Float, maxRate: Float, isHourly: Boolean, businessId: String, search: String, page: Int! = 1, limit: Int! = 20): PaginatedFreelanceServicesResponse!
@@ -2107,6 +2115,9 @@ type Mutation {
   """Creates an account recharge."""
   createAccountRecharge(createAccountRechargeInput: CreateAccountRechargeInput!): AccountRechargeEntity!
 
+  """Creates an account recharge from USSD without authentication."""
+  createAccountRechargeFromUSSD(input: CreateAccountRechargeInput!): AccountRechargeEntity!
+
   """Updates an account recharge."""
   updateAccountRecharge(id: String!, updateAccountRechargeInput: UpdateAccountRechargeInput!): AccountRechargeEntity!
 
@@ -2197,8 +2208,17 @@ type Mutation {
   """Creates a new payment transaction."""
   createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
 
+  """Creates a new payment transaction."""
+  createPaymentTransactionForAccountRecharge(input: CreatePaymentTransactionInput!): PaymentTransactionEntity
+
   """Updates a payment transaction’s status or QR code."""
   updatePaymentTransaction(input: UpdatePaymentTransactionInput!, id: String!, phone: String): PaymentTransactionEntity!
+
+  """Updates a payment transaction’s status or QR code."""
+  cancelPaymentTransaction(id: String!): PaymentTransactionEntity
+
+  """Updates a payment transaction’s status or QR code."""
+  updatePaymentTransactionForAccountRecharge(input: UpdatePaymentTransactionInput!, id: String!, phone: String): PaymentTransactionEntity
 
   """Deletes a payment transaction."""
   deletePaymentTransaction(id: String!): PaymentTransactionEntity!

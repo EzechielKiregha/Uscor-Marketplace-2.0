@@ -1,13 +1,12 @@
 import { Inject, UseGuards } from "@nestjs/common";
 import {
-	Args,
-	Context,
-	Float,
-	Int,
-	Mutation,
-	Query,
-	Resolver,
-	Subscription,
+    Args,
+    Context,
+    Int,
+    Mutation,
+    Query,
+    Resolver,
+    Subscription
 } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
 import { Roles } from "../auth/decorators/roles.decorator";
@@ -17,9 +16,9 @@ import { AccountRechargeService } from "./account-recharge.service";
 import { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
 import { UpdateAccountRechargeInput } from "./dto/update-account-recharge.input";
 import {
-	AccountBalanceEntity,
-	AccountRechargeEntity,
-	AccountRechargePageEntity,
+    AccountBalanceEntity,
+    AccountRechargeEntity,
+    AccountRechargePageEntity,
 } from "./entities/account-recharge.entity";
 
 // Resolver
@@ -57,6 +56,38 @@ export class AccountRechargeResolver {
 		);
 		await this.pubSub.publish("ACCOUNT_BALANCE_UPDATED", {
 			userId: user.id,
+			accountBalanceUpdated: balance,
+		});
+
+		return created;
+	}
+
+	@Mutation(() => AccountRechargeEntity, {
+		name: "createAccountRechargeFromUSSD",
+		description: "Creates an account recharge from USSD without authentication.",
+	})
+	async createAccountRechargeFromUSSD(
+		@Args("input")
+		input: CreateAccountRechargeInput,
+	) {
+		const created = await this.accountRechargeService.createFromUSSD(
+			input,
+		);
+
+		// Still publish events for real-time updates
+		const userIdentifier = created.clientId || created.businessId;
+		const userType = created.clientId ? "client" : "business";
+
+		await this.pubSub.publish("ACCOUNT_RECHARGE_CREATED", {
+			accountRechargeCreated: created,
+		});
+
+		const balance = await this.accountRechargeService.getBalance(
+			userIdentifier!,
+			userType,
+		);
+		await this.pubSub.publish("ACCOUNT_BALANCE_UPDATED", {
+			userId: userIdentifier,
 			accountBalanceUpdated: balance,
 		});
 

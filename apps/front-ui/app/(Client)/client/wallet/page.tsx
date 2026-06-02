@@ -1,47 +1,41 @@
-// app/wallet/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import {
-  GET_ACCOUNT_BALANCE,
-  GET_TOKEN_BALANCE,
-  GET_ACCOUNT_RECHARGES,
-  GET_TOKEN_TRANSACTIONS,
-  CREATE_ACCOUNT_RECHARGE,
-  WITHDRAW_ACCOUNT_FUNDS,
-  CONVERT_TO_TOKENS,
-  REDEEM_TOKENS,
-  RELEASE_TOKENS,
-} from "@/graphql/wallet.gql";
-import { Button } from "@/components/ui/button";
-import {
-  DollarSign,
-  Coins,
-  CreditCard,
-  Smartphone,
-  ArrowUp,
-  ArrowDown,
-  TrendingUp,
-  TrendingDown,
-  Gift,
-  ShieldCheck,
-  AlertTriangle,
-  Loader2,
-  X,
-  Plus,
-  Download,
-  BarChart,
-  CheckCircle,
-} from "lucide-react";
-import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
-import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
 import ConvertModal from "@/app/(highly-secured)/_components/ConvertModal";
+import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
 import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
 import TransactionHistory from "@/app/(highly-secured)/_components/TransactionHistory";
-import { useMe } from "@/lib/useMe";
-import { useToast } from "@/components/toast-provider";
+import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
 import Loader from "@/components/seraui/Loader";
+import { StatusBadge } from "@/components/StatusBadge";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import {
+  CONVERT_TO_TOKENS,
+  CREATE_ACCOUNT_RECHARGE,
+  GET_ACCOUNT_BALANCE,
+  GET_ACCOUNT_RECHARGES,
+  REDEEM_TOKENS,
+  RELEASE_TOKENS,
+  WITHDRAW_ACCOUNT_FUNDS,
+} from "@/graphql/wallet.gql";
+import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  BarChart,
+  Coins,
+  CreditCard,
+  DollarSign,
+  Download,
+  Gift,
+  Lock,
+  Plus,
+  Smartphone,
+  TrendingUp,
+} from "lucide-react";
+import { useState } from "react";
 
 export default function WalletPage() {
   const { user, role, loading: authLoading } = useMe();
@@ -72,19 +66,6 @@ export default function WalletPage() {
   });
 
   const {
-    data: tokenBalanceData,
-    loading: tokenBalanceLoading,
-    error: tokenBalanceError,
-    refetch: refetchTokenBalance,
-  } = useQuery(GET_TOKEN_BALANCE, {
-    variables: {
-      businessId: role === "business" ? user?.id : "",
-      clientId: role === "client" ? user?.id : "",
-    },
-    skip: !user?.id,
-  });
-
-  const {
     data: rechargesData,
     loading: rechargesLoading,
     error: rechargesError,
@@ -93,25 +74,11 @@ export default function WalletPage() {
     variables: {
       userId: user?.id,
       userType: role,
-      method: selectedMethod || undefined,
+      method: selectedMethod === "MOBILE_MONEY" ? "MTN_MONEY" : undefined,
       origin: selectedOrigin || undefined,
       search: searchQuery || undefined,
     },
     skip: !user?.id || !role,
-  });
-
-  const {
-    data: tokenTransactionsData,
-    loading: tokenTransactionsLoading,
-    error: tokenTransactionsError,
-    refetch: refetchTokenTransactions,
-  } = useQuery(GET_TOKEN_TRANSACTIONS, {
-    variables: {
-      businessId: role === "business" ? user?.id : "",
-      clientId: role === "client" ? user?.id : "",
-      search: searchQuery || undefined,
-    },
-    skip: !user?.id,
   });
 
   const [createRecharge] = useMutation(CREATE_ACCOUNT_RECHARGE);
@@ -121,19 +88,74 @@ export default function WalletPage() {
   const [releaseTokens] = useMutation(RELEASE_TOKENS);
 
   const balance = balanceData?.accountBalance;
-  const tokenBalance = tokenBalanceData?.tokenBalance;
-  const recharges = rechargesData?.accountRecharges?.items || [];
-  const tokenTransactions =
-    tokenTransactionsData?.tokenTransactions?.items || [];
+  const tokenBalance = balanceData?.accountBalance?.tokenBalance;
+  const recharges = balanceData?.accountBalance?.transactions || [];
+  //   const tokenTransactions = balanceData?.transactions?.items || [];
 
-  const handleRechargeCreated = (recharge: any) => {
+  const paymentMethods = [
+    {
+      id: "MTN_MONEY",
+      name: "MTN Mobile Money",
+      desc: "Fast and secure mobile payments",
+      icon: Smartphone,
+      iconColor: "text-yellow-600 dark:text-yellow-400",
+      bgColor: "bg-yellow-500/10",
+      status: "active",
+    },
+    {
+      id: "AIRTEL_MONEY",
+      name: "Airtel Money",
+      desc: "East Africa's leading payment provider",
+      icon: Smartphone,
+      iconColor: "text-red-600 dark:text-red-400",
+      bgColor: "bg-red-500/10",
+      tatus: "next",
+      badgeText: "Coming Soon",
+      badgeVariant: "next" as const,
+    },
+    {
+      id: "ORANGE_MONEY",
+      name: "Orange Money",
+      desc: "Coming soon to your region",
+      icon: Smartphone,
+      iconColor: "text-orange-600 dark:text-orange-400",
+      bgColor: "bg-orange-500/10",
+      status: "next",
+      badgeText: "Coming Soon",
+      badgeVariant: "next" as const,
+    },
+    {
+      id: "MPESA",
+      name: "M-Pesa",
+      desc: "Available for +Pro users only",
+      icon: Smartphone,
+      iconColor: "text-green-600 dark:text-green-400",
+      bgColor: "bg-green-500/10",
+      tatus: "next",
+      badgeText: "Coming Soon",
+      badgeVariant: "next" as const,
+    },
+    {
+      id: "BANK_TRANSFER",
+      name: "Bank Transfer",
+      desc: "Direct bank to platform transfer",
+      icon: CreditCard,
+      iconColor: "text-success",
+      bgColor: "bg-success/10",
+      tatus: "next",
+      badgeText: "Coming Soon",
+      badgeVariant: "next" as const,
+    },
+  ];
+
+  const handleRechargeCreated = (amount: number) => {
     refetchBalance();
     refetchRecharges();
     setShowRechargeModal(false);
     showToast(
       "success",
       "Recharge Successful",
-      `Successfully added $${recharge.amount} to your account`,
+      `Successfully added $${amount} to your account`,
     );
   };
 
@@ -179,7 +201,6 @@ export default function WalletPage() {
       });
 
       refetchBalance();
-      refetchTokenBalance();
       showToast(
         "success",
         "Conversion Successful",
@@ -195,71 +216,7 @@ export default function WalletPage() {
     }
   };
 
-  const handleRedeemTokens = async (tokenId: string, amount: number) => {
-    try {
-      const { data } = await redeemTokens({
-        variables: {
-          input: {
-            tokenId,
-            amount,
-            businessId: user?.id,
-          },
-        },
-      });
-
-      refetchTokenBalance();
-      refetchTokenTransactions();
-      showToast(
-        "success",
-        "Tokens Redeemed",
-        `Successfully redeemed ${amount} tokens`,
-      );
-      setShowTokenModal(false);
-    } catch (error: any) {
-      showToast(
-        "error",
-        "Redemption Failed",
-        error.message || "Failed to redeem tokens",
-      );
-    }
-  };
-
-  const handleReleaseTokens = async (tokenId: string, amount: number) => {
-    try {
-      const { data } = await releaseTokens({
-        variables: {
-          input: {
-            tokenId,
-            amount,
-            businessId: user?.id,
-          },
-        },
-      });
-
-      refetchTokenBalance();
-      refetchTokenTransactions();
-      showToast(
-        "success",
-        "Tokens Released",
-        `Successfully released ${amount} tokens`,
-      );
-      setShowTokenModal(false);
-    } catch (error: any) {
-      showToast(
-        "error",
-        "Release Failed",
-        error.message || "Failed to release tokens",
-      );
-    }
-  };
-
-  if (
-    authLoading ||
-    tokenTransactionsLoading ||
-    balanceLoading ||
-    tokenBalanceLoading
-  )
-    return <Loader loading={true} />;
+  if (authLoading || balanceLoading) return <Loader loading={true} />;
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -303,7 +260,7 @@ export default function WalletPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Balance</p>
                 <p className="text-2xl font-bold">
-                  ${balance?.totalAmount?.toFixed(2) || "0.00"}
+                  Frw {balance?.totalAmount?.toFixed(2) || "0.00"}
                 </p>
               </div>
             </div>
@@ -312,19 +269,19 @@ export default function WalletPage() {
               <div className="flex justify-between text-sm">
                 <span>Available</span>
                 <span className="font-medium">
-                  ${balance?.availableAmount?.toFixed(2) || "0.00"}
+                  Frw {balance?.availableAmount?.toFixed(2) || "0.00"}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Pending</span>
                 <span className="font-medium">
-                  ${balance?.pendingAmount?.toFixed(2) || "0.00"}
+                  Frw {balance?.pendingAmount?.toFixed(2) || "0.00"}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Reserved</span>
                 <span className="font-medium">
-                  ${balance?.reservedAmount?.toFixed(2) || "0.00"}
+                  Frw {balance?.reservedAmount?.toFixed(2) || "0.00"}
                 </span>
               </div>
             </div>
@@ -389,14 +346,14 @@ export default function WalletPage() {
                 <ArrowDown className="h-4 w-4 mr-2" />
                 Convert to Tokens
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 className="w-full"
                 onClick={() => setShowTokenModal(true)}
               >
                 <ArrowUp className="h-4 w-4 mr-2" />
                 Token Management
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -430,14 +387,14 @@ export default function WalletPage() {
             Convert to Tokens
           </Button>
 
-          <Button
+          {/* <Button
             variant="outline"
             className="flex items-center gap-2"
             onClick={() => setShowTokenModal(true)}
           >
             <Coins className="h-4 w-4" />
             Token Management
-          </Button>
+          </Button> */}
 
           <Button variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
@@ -447,7 +404,7 @@ export default function WalletPage() {
 
         {/* Navigation Tabs */}
         <div className="border-b border-border mb-6">
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-3">
             <Button
               variant={activeTab === "balance" ? "default" : "outline"}
               onClick={() => setActiveTab("balance")}
@@ -464,14 +421,14 @@ export default function WalletPage() {
               <ArrowUp className="h-4 w-4" />
               Recharge History
             </Button>
-            <Button
+            {/* <Button
               variant={activeTab === "tokens" ? "default" : "outline"}
               onClick={() => setActiveTab("tokens")}
               className="flex items-center gap-2"
             >
               <Coins className="h-4 w-4" />
               Token Transactions
-            </Button>
+            </Button> */}
             <Button
               variant={activeTab === "history" ? "default" : "outline"}
               onClick={() => setActiveTab("history")}
@@ -494,52 +451,61 @@ export default function WalletPage() {
                 </div>
 
                 <div className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {["MTN_MOMO", "AIRTEL_MONEY", "ORANGE_MONEY", "MPESA"].map(
-                      (method) => (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    {paymentMethods.map((method) => {
+                      const isDisabled = method.status !== "active";
+                      const IconComponent = method.icon;
+
+                      return (
                         <div
-                          key={method}
-                          className="border border-border rounded-lg p-4 hover:bg-muted/50 cursor-pointer transition-colors"
+                          key={method.id}
+                          className={`relative border rounded-lg p-4 transition-all duration-200 ${
+                            isDisabled
+                              ? "border-border/50 bg-muted/20 cursor-not-allowed opacity-70"
+                              : "border-border hover:bg-muted/50 hover:border-orange-500/40 cursor-pointer shadow-sm hover:shadow-md"
+                          }`}
                           onClick={() => {
-                            setSelectedMethod(method);
+                            if (isDisabled) {
+                              // Optional: Show a toast explaining why it's disabled
+                              // showToast("info", "Unavailable", `${method.name} is currently ${method.status === 'pro' ? 'restricted to Pro users' : 'in development'}.`);
+                              return;
+                            }
+                            setSelectedMethod(method.id);
                             setShowRechargeModal(true);
                           }}
                         >
+                          {/* Reusable Badge */}
+                          {method.badgeText && (
+                            <StatusBadge
+                              text={method.badgeText}
+                              variant={method.badgeVariant}
+                            />
+                          )}
+
                           <div className="flex flex-col items-center text-center">
-                            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                              <Smartphone className="h-6 w-6 text-primary" />
+                            <div
+                              className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform duration-200 ${
+                                isDisabled ? "" : "group-hover:scale-110"
+                              } ${method.bgColor}`}
+                            >
+                              <IconComponent
+                                className={`h-6 w-6 ${method.iconColor}`}
+                              />
+                              {method.status === "pro" && isDisabled && (
+                                <Lock className="h-3 w-3 absolute -bottom-1 -right-1 bg-background border border-border rounded-full p-0.5" />
+                              )}
                             </div>
-                            <h3 className="font-medium">
-                              {method === "MTN_MOMO" && "MTN Mobile Money"}
-                              {method === "AIRTEL_MONEY" && "Airtel Money"}
-                              {method === "ORANGE_MONEY" && "Orange Money"}
-                              {method === "MPESA" && "M-Pesa"}
+
+                            <h3 className="font-medium text-foreground">
+                              {method.name}
                             </h3>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              East Africa's leading payment provider
+                            <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                              {method.desc}
                             </p>
                           </div>
                         </div>
-                      ),
-                    )}
-
-                    <div
-                      className="border border-border rounded-lg p-4 hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => {
-                        setSelectedMethod("BANK_TRANSFER");
-                        setShowRechargeModal(true);
-                      }}
-                    >
-                      <div className="flex flex-col items-center text-center">
-                        <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center mb-3">
-                          <CreditCard className="h-6 w-6 text-success" />
-                        </div>
-                        <h3 className="font-medium">Bank Transfer</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Direct bank to platform transfer
-                        </p>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -547,14 +513,8 @@ export default function WalletPage() {
               {/* Token Management */}
               <TokenManagement
                 tokenBalance={tokenBalance}
-                onTokenRedeemed={() => {
-                  refetchTokenBalance();
-                  refetchTokenTransactions();
-                }}
-                onTokenReleased={() => {
-                  refetchTokenBalance();
-                  refetchTokenTransactions();
-                }}
+                onTokenRedeemed={() => {}}
+                onTokenReleased={() => {}}
               />
 
               {/* East Africa Payment Information */}
@@ -618,7 +578,7 @@ export default function WalletPage() {
             />
           )}
 
-          {activeTab === "tokens" && (
+          {/* {activeTab === "tokens" && (
             <div>
               <div className="bg-card border border-border rounded-lg overflow-hidden mb-6">
                 <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
@@ -739,7 +699,7 @@ export default function WalletPage() {
                 </Button>
               </div>
             </div>
-          )}
+          )} */}
 
           {activeTab === "history" && (
             <TransactionHistory
@@ -754,6 +714,7 @@ export default function WalletPage() {
 
       {/* Modals */}
       <RechargeModal
+        user={user}
         isOpen={showRechargeModal}
         onClose={() => setShowRechargeModal(false)}
         onRechargeCreated={handleRechargeCreated}
@@ -776,13 +737,13 @@ export default function WalletPage() {
         balance={balance?.availableAmount || 0}
       />
 
-      <TokenManagement
+      {/* <TokenManagement
         tokenBalance={tokenBalance}
         onTokenRedeemed={refetchTokenBalance}
         onTokenReleased={refetchTokenBalance}
         showTokenModal={showTokenModal}
         setShowTokenModal={setShowTokenModal}
-      />
+      /> */}
     </div>
   );
 }

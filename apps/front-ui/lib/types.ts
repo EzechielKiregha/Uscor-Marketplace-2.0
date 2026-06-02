@@ -152,6 +152,10 @@ export interface ClientEntity {
 	fullName?: string;
 	address?: string;
 	phone?: string;
+    loyaltyPoints?: number;
+    loyaltyTier?: number;
+    totalSpent?: number;
+    totalOrders?: number;
 	avatar?: string;
 	password: string;
 	isVerified: boolean;

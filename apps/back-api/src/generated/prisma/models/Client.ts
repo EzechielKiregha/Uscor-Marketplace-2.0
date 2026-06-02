@@ -264,6 +264,7 @@ export type ClientWhereInput = {
   sales?: Prisma.SaleListRelationFilter
   pointsTransactions?: Prisma.PointsTransactionListRelationFilter
   medias?: Prisma.MediaListRelationFilter
+  paymentTransactions?: Prisma.PaymentTransactionListRelationFilter
 }
 
 export type ClientOrderByWithRelationInput = {
@@ -295,6 +296,7 @@ export type ClientOrderByWithRelationInput = {
   sales?: Prisma.SaleOrderByRelationAggregateInput
   pointsTransactions?: Prisma.PointsTransactionOrderByRelationAggregateInput
   medias?: Prisma.MediaOrderByRelationAggregateInput
+  paymentTransactions?: Prisma.PaymentTransactionOrderByRelationAggregateInput
 }
 
 export type ClientWhereUniqueInput = Prisma.AtLeast<{
@@ -329,6 +331,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   sales?: Prisma.SaleListRelationFilter
   pointsTransactions?: Prisma.PointsTransactionListRelationFilter
   medias?: Prisma.MediaListRelationFilter
+  paymentTransactions?: Prisma.PaymentTransactionListRelationFilter
 }, "id" | "username" | "email" | "phone">
 
 export type ClientOrderByWithAggregationInput = {
@@ -400,6 +403,7 @@ export type ClientCreateInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateInput = {
@@ -431,6 +435,7 @@ export type ClientUncheckedCreateInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientUpdateInput = {
@@ -462,6 +467,7 @@ export type ClientUpdateInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateInput = {
@@ -493,6 +499,7 @@ export type ClientUncheckedUpdateInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateManyInput = {
@@ -697,6 +704,22 @@ export type ClientUpdateOneWithoutRechargesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutRechargesInput, Prisma.ClientUpdateWithoutRechargesInput>, Prisma.ClientUncheckedUpdateWithoutRechargesInput>
 }
 
+export type ClientCreateNestedOneWithoutPaymentTransactionsInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutPaymentTransactionsInput, Prisma.ClientUncheckedCreateWithoutPaymentTransactionsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutPaymentTransactionsInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneWithoutPaymentTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutPaymentTransactionsInput, Prisma.ClientUncheckedCreateWithoutPaymentTransactionsInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutPaymentTransactionsInput
+  upsert?: Prisma.ClientUpsertWithoutPaymentTransactionsInput
+  disconnect?: Prisma.ClientWhereInput | boolean
+  delete?: Prisma.ClientWhereInput | boolean
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutPaymentTransactionsInput, Prisma.ClientUpdateWithoutPaymentTransactionsInput>, Prisma.ClientUncheckedUpdateWithoutPaymentTransactionsInput>
+}
+
 export type ClientCreateNestedOneWithoutFreelanceOrdersInput = {
   create?: Prisma.XOR<Prisma.ClientCreateWithoutFreelanceOrdersInput, Prisma.ClientUncheckedCreateWithoutFreelanceOrdersInput>
   connectOrCreate?: Prisma.ClientCreateOrConnectWithoutFreelanceOrdersInput
@@ -843,6 +866,7 @@ export type ClientCreateWithoutMediasInput = {
   chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutClientInput
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutMediasInput = {
@@ -873,6 +897,7 @@ export type ClientUncheckedCreateWithoutMediasInput = {
   chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutClientInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutMediasInput = {
@@ -919,6 +944,7 @@ export type ClientUpdateWithoutMediasInput = {
   chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutClientNestedInput
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutMediasInput = {
@@ -949,6 +975,7 @@ export type ClientUncheckedUpdateWithoutMediasInput = {
   chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutClientNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutOrdersInput = {
@@ -979,6 +1006,7 @@ export type ClientCreateWithoutOrdersInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutOrdersInput = {
@@ -1009,6 +1037,7 @@ export type ClientUncheckedCreateWithoutOrdersInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutOrdersInput = {
@@ -1055,6 +1084,7 @@ export type ClientUpdateWithoutOrdersInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutOrdersInput = {
@@ -1085,6 +1115,7 @@ export type ClientUncheckedUpdateWithoutOrdersInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutReviewsInput = {
@@ -1115,6 +1146,7 @@ export type ClientCreateWithoutReviewsInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutReviewsInput = {
@@ -1145,6 +1177,7 @@ export type ClientUncheckedCreateWithoutReviewsInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutReviewsInput = {
@@ -1191,6 +1224,7 @@ export type ClientUpdateWithoutReviewsInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutReviewsInput = {
@@ -1221,6 +1255,7 @@ export type ClientUncheckedUpdateWithoutReviewsInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutChatParticipantsInput = {
@@ -1251,6 +1286,7 @@ export type ClientCreateWithoutChatParticipantsInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutChatParticipantsInput = {
@@ -1281,6 +1317,7 @@ export type ClientUncheckedCreateWithoutChatParticipantsInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutChatParticipantsInput = {
@@ -1327,6 +1364,7 @@ export type ClientUpdateWithoutChatParticipantsInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutChatParticipantsInput = {
@@ -1357,6 +1395,7 @@ export type ClientUncheckedUpdateWithoutChatParticipantsInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutKycInput = {
@@ -1387,6 +1426,7 @@ export type ClientCreateWithoutKycInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutKycInput = {
@@ -1417,6 +1457,7 @@ export type ClientUncheckedCreateWithoutKycInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutKycInput = {
@@ -1463,6 +1504,7 @@ export type ClientUpdateWithoutKycInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutKycInput = {
@@ -1493,6 +1535,7 @@ export type ClientUncheckedUpdateWithoutKycInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutRechargesInput = {
@@ -1523,6 +1566,7 @@ export type ClientCreateWithoutRechargesInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutRechargesInput = {
@@ -1553,6 +1597,7 @@ export type ClientUncheckedCreateWithoutRechargesInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutRechargesInput = {
@@ -1599,6 +1644,7 @@ export type ClientUpdateWithoutRechargesInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutRechargesInput = {
@@ -1619,6 +1665,147 @@ export type ClientUncheckedUpdateWithoutRechargesInput = {
   kyc?: Prisma.KYCUncheckedUpdateOneWithoutClientNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutClientNestedInput
+  freelanceOrders?: Prisma.FreelanceOrderUncheckedUpdateManyWithoutClientNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateClientNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredClientNestedInput
+  addresses?: Prisma.AddressUncheckedUpdateManyWithoutClientNestedInput
+  paymentMethods?: Prisma.ClientPaymentMethodUncheckedUpdateManyWithoutClientNestedInput
+  postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutClientNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
+  pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutPaymentTransactionsInput = {
+  id?: string
+  username: string
+  email: string
+  fullName?: string | null
+  avatar?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutClientInput
+  orders?: Prisma.OrderCreateNestedManyWithoutClientInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutClientInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutClientInput
+  freelanceOrders?: Prisma.FreelanceOrderCreateNestedManyWithoutClientInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateClientInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredClientInput
+  addresses?: Prisma.AddressCreateNestedManyWithoutClientInput
+  paymentMethods?: Prisma.ClientPaymentMethodCreateNestedManyWithoutClientInput
+  postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutClientInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleCreateNestedManyWithoutClientInput
+  pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
+  medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutPaymentTransactionsInput = {
+  id?: string
+  username: string
+  email: string
+  fullName?: string | null
+  avatar?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutClientInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutClientInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutClientInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutClientInput
+  freelanceOrders?: Prisma.FreelanceOrderUncheckedCreateNestedManyWithoutClientInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateClientInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredClientInput
+  addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutClientInput
+  paymentMethods?: Prisma.ClientPaymentMethodUncheckedCreateNestedManyWithoutClientInput
+  postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutClientInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutClientInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
+  pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutPaymentTransactionsInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutPaymentTransactionsInput, Prisma.ClientUncheckedCreateWithoutPaymentTransactionsInput>
+}
+
+export type ClientUpsertWithoutPaymentTransactionsInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutPaymentTransactionsInput, Prisma.ClientUncheckedUpdateWithoutPaymentTransactionsInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutPaymentTransactionsInput, Prisma.ClientUncheckedCreateWithoutPaymentTransactionsInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutPaymentTransactionsInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutPaymentTransactionsInput, Prisma.ClientUncheckedUpdateWithoutPaymentTransactionsInput>
+}
+
+export type ClientUpdateWithoutPaymentTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutClientNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutClientNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutClientNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutClientNestedInput
+  freelanceOrders?: Prisma.FreelanceOrderUpdateManyWithoutClientNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateClientNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredClientNestedInput
+  addresses?: Prisma.AddressUpdateManyWithoutClientNestedInput
+  paymentMethods?: Prisma.ClientPaymentMethodUpdateManyWithoutClientNestedInput
+  postTransactions?: Prisma.PostTransactionUpdateManyWithoutClientNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutClientNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
+  pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutPaymentTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutClientNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutClientNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutClientNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutClientNestedInput
   freelanceOrders?: Prisma.FreelanceOrderUncheckedUpdateManyWithoutClientNestedInput
   referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateClientNestedInput
   referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredClientNestedInput
@@ -1659,6 +1846,7 @@ export type ClientCreateWithoutFreelanceOrdersInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutFreelanceOrdersInput = {
@@ -1689,6 +1877,7 @@ export type ClientUncheckedCreateWithoutFreelanceOrdersInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutFreelanceOrdersInput = {
@@ -1735,6 +1924,7 @@ export type ClientUpdateWithoutFreelanceOrdersInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutFreelanceOrdersInput = {
@@ -1765,6 +1955,7 @@ export type ClientUncheckedUpdateWithoutFreelanceOrdersInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutReferralsMadeInput = {
@@ -1795,6 +1986,7 @@ export type ClientCreateWithoutReferralsMadeInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutReferralsMadeInput = {
@@ -1825,6 +2017,7 @@ export type ClientUncheckedCreateWithoutReferralsMadeInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutReferralsMadeInput = {
@@ -1860,6 +2053,7 @@ export type ClientCreateWithoutReferralsReceivedInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutReferralsReceivedInput = {
@@ -1890,6 +2084,7 @@ export type ClientUncheckedCreateWithoutReferralsReceivedInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutReferralsReceivedInput = {
@@ -1936,6 +2131,7 @@ export type ClientUpdateWithoutReferralsMadeInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutReferralsMadeInput = {
@@ -1966,6 +2162,7 @@ export type ClientUncheckedUpdateWithoutReferralsMadeInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUpsertWithoutReferralsReceivedInput = {
@@ -2007,6 +2204,7 @@ export type ClientUpdateWithoutReferralsReceivedInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutReferralsReceivedInput = {
@@ -2037,6 +2235,7 @@ export type ClientUncheckedUpdateWithoutReferralsReceivedInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutPostTransactionsInput = {
@@ -2067,6 +2266,7 @@ export type ClientCreateWithoutPostTransactionsInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutPostTransactionsInput = {
@@ -2097,6 +2297,7 @@ export type ClientUncheckedCreateWithoutPostTransactionsInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutPostTransactionsInput = {
@@ -2143,6 +2344,7 @@ export type ClientUpdateWithoutPostTransactionsInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutPostTransactionsInput = {
@@ -2173,6 +2375,7 @@ export type ClientUncheckedUpdateWithoutPostTransactionsInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutSalesInput = {
@@ -2203,6 +2406,7 @@ export type ClientCreateWithoutSalesInput = {
   chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutSalesInput = {
@@ -2233,6 +2437,7 @@ export type ClientUncheckedCreateWithoutSalesInput = {
   chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutSalesInput = {
@@ -2279,6 +2484,7 @@ export type ClientUpdateWithoutSalesInput = {
   chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutSalesInput = {
@@ -2309,6 +2515,7 @@ export type ClientUncheckedUpdateWithoutSalesInput = {
   chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutAddressesInput = {
@@ -2339,6 +2546,7 @@ export type ClientCreateWithoutAddressesInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutAddressesInput = {
@@ -2369,6 +2577,7 @@ export type ClientUncheckedCreateWithoutAddressesInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutAddressesInput = {
@@ -2415,6 +2624,7 @@ export type ClientUpdateWithoutAddressesInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutAddressesInput = {
@@ -2445,6 +2655,7 @@ export type ClientUncheckedUpdateWithoutAddressesInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutPaymentMethodsInput = {
@@ -2475,6 +2686,7 @@ export type ClientCreateWithoutPaymentMethodsInput = {
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutPaymentMethodsInput = {
@@ -2505,6 +2717,7 @@ export type ClientUncheckedCreateWithoutPaymentMethodsInput = {
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutPaymentMethodsInput = {
@@ -2551,6 +2764,7 @@ export type ClientUpdateWithoutPaymentMethodsInput = {
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutPaymentMethodsInput = {
@@ -2581,6 +2795,7 @@ export type ClientUncheckedUpdateWithoutPaymentMethodsInput = {
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   pointsTransactions?: Prisma.PointsTransactionUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutPointsTransactionsInput = {
@@ -2611,6 +2826,7 @@ export type ClientCreateWithoutPointsTransactionsInput = {
   chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutClientInput
   sales?: Prisma.SaleCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutPointsTransactionsInput = {
@@ -2641,6 +2857,7 @@ export type ClientUncheckedCreateWithoutPointsTransactionsInput = {
   chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutClientInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutClientInput
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutClientInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutPointsTransactionsInput = {
@@ -2687,6 +2904,7 @@ export type ClientUpdateWithoutPointsTransactionsInput = {
   chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutClientNestedInput
   sales?: Prisma.SaleUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutPointsTransactionsInput = {
@@ -2717,6 +2935,7 @@ export type ClientUncheckedUpdateWithoutPointsTransactionsInput = {
   chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutClientNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutClientNestedInput
   medias?: Prisma.MediaUncheckedUpdateManyWithoutClientNestedInput
+  paymentTransactions?: Prisma.PaymentTransactionUncheckedUpdateManyWithoutClientNestedInput
 }
 
 
@@ -2738,6 +2957,7 @@ export type ClientCountOutputType = {
   sales: number
   pointsTransactions: number
   medias: number
+  paymentTransactions: number
 }
 
 export type ClientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2754,6 +2974,7 @@ export type ClientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   sales?: boolean | ClientCountOutputTypeCountSalesArgs
   pointsTransactions?: boolean | ClientCountOutputTypeCountPointsTransactionsArgs
   medias?: boolean | ClientCountOutputTypeCountMediasArgs
+  paymentTransactions?: boolean | ClientCountOutputTypeCountPaymentTransactionsArgs
 }
 
 /**
@@ -2857,6 +3078,13 @@ export type ClientCountOutputTypeCountMediasArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.MediaWhereInput
 }
 
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountPaymentTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentTransactionWhereInput
+}
+
 
 export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2887,6 +3115,7 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   sales?: boolean | Prisma.Client$salesArgs<ExtArgs>
   pointsTransactions?: boolean | Prisma.Client$pointsTransactionsArgs<ExtArgs>
   medias?: boolean | Prisma.Client$mediasArgs<ExtArgs>
+  paymentTransactions?: boolean | Prisma.Client$paymentTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["client"]>
 
@@ -2957,6 +3186,7 @@ export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   sales?: boolean | Prisma.Client$salesArgs<ExtArgs>
   pointsTransactions?: boolean | Prisma.Client$pointsTransactionsArgs<ExtArgs>
   medias?: boolean | Prisma.Client$mediasArgs<ExtArgs>
+  paymentTransactions?: boolean | Prisma.Client$paymentTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2979,6 +3209,7 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     sales: Prisma.$SalePayload<ExtArgs>[]
     pointsTransactions: Prisma.$PointsTransactionPayload<ExtArgs>[]
     medias: Prisma.$MediaPayload<ExtArgs>[]
+    paymentTransactions: Prisma.$PaymentTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3403,6 +3634,7 @@ export interface Prisma__ClientClient<T, Null = never, ExtArgs extends runtime.T
   sales<T extends Prisma.Client$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pointsTransactions<T extends Prisma.Client$pointsTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$pointsTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointsTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   medias<T extends Prisma.Client$mediasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$mediasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentTransactions<T extends Prisma.Client$paymentTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$paymentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4162,6 +4394,30 @@ export type Client$mediasArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.MediaScalarFieldEnum | Prisma.MediaScalarFieldEnum[]
+}
+
+/**
+ * Client.paymentTransactions
+ */
+export type Client$paymentTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentTransaction
+   */
+  select?: Prisma.PaymentTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentTransaction
+   */
+  omit?: Prisma.PaymentTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentTransactionInclude<ExtArgs> | null
+  where?: Prisma.PaymentTransactionWhereInput
+  orderBy?: Prisma.PaymentTransactionOrderByWithRelationInput | Prisma.PaymentTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentTransactionScalarFieldEnum | Prisma.PaymentTransactionScalarFieldEnum[]
 }
 
 /**

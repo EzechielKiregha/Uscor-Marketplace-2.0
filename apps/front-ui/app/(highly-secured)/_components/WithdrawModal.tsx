@@ -1,19 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
-import { WITHDRAW_ACCOUNT_FUNDS } from "@/graphql/wallet.gql";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  ArrowDown,
-  DollarSign,
-  AlertTriangle,
-  X,
-  Loader2,
-  Info,
-} from "lucide-react";
-import { useToast } from "@/components/toast-provider";
+import { AlertTriangle, ArrowDown, DollarSign, Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface WithdrawModalProps {
   isOpen: boolean;
@@ -158,10 +149,18 @@ export default function WithdrawModal({
                 className="w-full p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <option value="MTN_MOMO">MTN Mobile Money</option>
-                <option value="AIRTEL_MONEY">Airtel Money</option>
-                <option value="ORANGE_MONEY">Orange Money</option>
-                <option value="MPESA">M-Pesa</option>
-                <option value="BANK_TRANSFER">Bank Transfer</option>
+                <option value="AIRTEL_MONEY" disabled>
+                  Airtel Money
+                </option>
+                <option value="ORANGE_MONEY" disabled>
+                  Orange Money
+                </option>
+                <option value="MPESA" disabled>
+                  M-Pesa
+                </option>
+                <option value="BANK_TRANSFER" disabled>
+                  Bank Transfer
+                </option>
               </select>
             </div>
 
@@ -193,15 +192,15 @@ export default function WithdrawModal({
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Gross Amount</span>
-                  <span>${amount.toFixed(2)}</span>
+                  <span>Frw {amount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Withdrawal Fee (2%)</span>
-                  <span>${(amount * WITHDRAWAL_FEE).toFixed(2)}</span>
+                  <span>Frw {(amount * WITHDRAWAL_FEE).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-bold pt-2 border-t border-border">
                   <span>Net Amount</span>
-                  <span>${calculateNetAmount().toFixed(2)}</span>
+                  <span>Frw {calculateNetAmount().toFixed(2)}</span>
                 </div>
               </div>
             </div>

@@ -51,6 +51,20 @@ export class AccountRechargeEntity {
 	createdAt: Date;
 }
 
+
+@ObjectType()
+export class TokensBalanceEntity {
+	@Field(() => Float)
+	totalTokens: number;
+
+	@Field(() => Float)
+	availableTokens: number;
+
+	@Field(() => Float)
+	pendingTokens: number;
+}
+
+
 @ObjectType()
 export class AccountBalanceEntity {
 	@Field(() => Float)
@@ -67,6 +81,9 @@ export class AccountBalanceEntity {
 
 	@Field(() => [AccountRechargeEntity])
 	transactions: AccountRechargeEntity[];
+
+    @Field(()=> TokensBalanceEntity, {nullable : true})
+    tokenBalance?: TokensBalanceEntity
 }
 
 @ObjectType()

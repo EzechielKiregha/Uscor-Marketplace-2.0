@@ -4,7 +4,10 @@
 import { useToast } from "@/components/toast-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CANCEL_ORDER, GET_ORDER_BY_ID } from "@/graphql/order.gql";
+import {
+  CANCEL_PAYMENT_TRANSACTION,
+  CHECK_PAYMENT_TRANSACTION_STATUS,
+} from "@/graphql/payment.gql";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   CheckCircle,
@@ -16,24 +19,24 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const COUNTDOWN_DURATION = 10 * 60; // 10 minutes
+const COUNTDOWN_DURATION = 25 * 60; // 25 minutes
 
 interface MobileMoneyPaymentCardProps {
-  orderId: string;
+  payment: string;
   user: any;
   total: number;
-  onPaymentConfirmed?: () => void;
-  onOrderCancelled?: () => void;
+  onPaymentConfirmed?: (amount: number) => void;
+  onPaymentCancelled?: (payment: string) => void;
 }
 
-export default function MobileMoneyPaymentCard({
-  orderId,
+export default function MobileMoneyPaymentUI({
+  payment,
   user,
   total,
   onPaymentConfirmed,
-  onOrderCancelled,
+  onPaymentCancelled,
 }: MobileMoneyPaymentCardProps) {
-  const storageKey = `payment_countdown_${orderId}`;
+  const storageKey = `payment_countdown_${payment}`;
 
   const getInitialTime = (): number => {
     try {
@@ -49,13 +52,15 @@ export default function MobileMoneyPaymentCard({
     return COUNTDOWN_DURATION;
   };
 
+  //   console.log({ payment });
+
   const [remainingTime, setRemainingTime] = useState<number>(getInitialTime);
   const [isPaid, setIsPaid] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
   const cancelledRef = useRef(false);
   const { showToast } = useToast();
 
-  const [cancelOrder] = useMutation(CANCEL_ORDER);
+  const [cancelPaymentTransaction] = useMutation(CANCEL_PAYMENT_TRANSACTION);
 
   // Persist expiry on first mount
   useEffect(() => {
@@ -81,48 +86,52 @@ export default function MobileMoneyPaymentCard({
     if (remainingTime !== 0 || isPaid || cancelledRef.current) return;
     cancelledRef.current = true;
     localStorage.removeItem(storageKey);
-    cancelOrder({ variables: { id: orderId } })
+    cancelPaymentTransaction({ variables: { id: payment } })
       .then(() => {
         showToast(
           "error",
           "Time expired",
-          "Time expired. Your order has been automatically cancelled.",
+          "Time expired. Your Account Recharge payment has been automatically cancelled.",
           true,
           5000,
         );
-        onOrderCancelled?.();
+        onPaymentCancelled?.(payment);
       })
       .catch(() =>
         showToast(
           "error",
           "Error",
-          "Could not cancel order. Please contact support",
+          "Could not cancel Account Recharge payment. Please contact support",
         ),
       );
   }, [
     remainingTime,
     isPaid,
-    orderId,
-    cancelOrder,
-    onOrderCancelled,
+    cancelPaymentTransaction,
+    onPaymentCancelled,
     storageKey,
   ]);
+
+  const { data, refetch } = useQuery(CHECK_PAYMENT_TRANSACTION_STATUS, {
+    variables: { id: payment },
+    fetchPolicy: "network-only",
+  });
+
+  const paymentData = data?.checkPaymentTransactionStatus;
 
   // Refetch order and check payment status
   const handleCheckPayment = async () => {
     setIsPolling(true);
+
     try {
-      const { data } = await useQuery(GET_ORDER_BY_ID, {
-        variables: { id: orderId },
-        fetchPolicy: "network-only",
-      });
-      const status = data?.order?.payment?.status;
-      if (status === "PAID" || status === "COMPLETED") {
+      await refetch();
+      const status = paymentData?.status;
+      if (status === "COMPLETED") {
         setIsPaid(true);
         localStorage.removeItem(storageKey);
         showToast("success", "Paid", "Payment confirmed!.", true, 5000);
-        onPaymentConfirmed?.();
-      } else if (status === "CANCELLED" || status === "FAILED") {
+        onPaymentConfirmed?.(paymentData?.amount);
+      } else if (status === "FAILED") {
         localStorage.removeItem(storageKey);
         showToast(
           "error",
@@ -131,7 +140,7 @@ export default function MobileMoneyPaymentCard({
           true,
           5000,
         );
-        onOrderCancelled?.();
+        onPaymentCancelled?.(payment);
       } else {
         showToast(
           "error",
@@ -141,7 +150,8 @@ export default function MobileMoneyPaymentCard({
           5000,
         );
       }
-    } catch {
+    } catch (error: any) {
+      console.log(error?.message);
       showToast(
         "error",
         "Failed",
@@ -196,11 +206,11 @@ export default function MobileMoneyPaymentCard({
           </p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-primary tracking-widest font-mono">
-              *384*333666#
+              *384*66639#
             </p>
             <button
               onClick={() => {
-                navigator.clipboard.writeText("*384*333666#");
+                navigator.clipboard.writeText("*384*66639#");
                 showToast(
                   "success",
                   "Success",

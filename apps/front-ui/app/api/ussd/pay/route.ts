@@ -138,8 +138,9 @@ Reference: ${transactionId}`,
           id: latestPayment.id,
           input: {
             status: 'COMPLETED',
-            qrCode: transactionId
-          }
+            qrCode: `USCOR:${transactionId}`
+          },
+          phone: phoneNumber
         }
       });
       

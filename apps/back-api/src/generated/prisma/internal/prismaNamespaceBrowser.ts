@@ -580,6 +580,7 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 
 export const PaymentTransactionScalarFieldEnum = {
   id: 'id',
+  clientId: 'clientId',
   orderId: 'orderId',
   status: 'status',
   method: 'method',

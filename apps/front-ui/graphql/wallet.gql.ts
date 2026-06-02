@@ -114,8 +114,8 @@ export const GET_ACCOUNT_RECHARGES = gql`
     $origin: String
     $startDate: DateTime
     $endDate: DateTime
-    $page: Float = 1
-    $limit: Float = 10
+    $page: Int = 1
+    $limit: Int = 10
   ) {
     accountRecharges(
       userId: $userId
@@ -147,8 +147,8 @@ export const GET_TOKEN_TRANSACTIONS = gql`
     $isReleased: Boolean
     $startDate: DateTime
     $endDate: DateTime
-    $page: Float = 1
-    $limit: Float = 10
+    $page: Int = 1
+    $limit: Int = 10
   ) {
     tokenTransactions(
       businessId: $businessId
@@ -202,6 +202,38 @@ export const CREATE_ACCOUNT_RECHARGE = gql`
   }
   ${ACCOUNT_RECHARGE_ENTITY}
 `;
+export const CREATE_ACCOUNT_RECHARGE_FROM_USSD = gql`
+      mutation CreateAccountRechargeFromUSSD($input: CreateAccountRechargeInput!) {
+        createAccountRechargeFromUSSD(input: $input) {
+          id
+          amount
+          method
+          origin
+          status
+          transactionDate
+          qrCode
+          createdAt
+          business {
+            id
+            name
+            avatar
+          }
+          client {
+            id
+            fullName
+            avatar
+          }
+          tokenTransaction {
+            id
+            amount
+            type
+            isRedeemed
+            isReleased
+            createdAt
+          }
+        }
+      }
+    `;
 
 export const UPDATE_ACCOUNT_RECHARGE = gql`
   mutation UpdateAccountRecharge($id: String!, $input: UpdateAccountRechargeInput!) {

@@ -1,21 +1,15 @@
 "use client";
 
-import {
-  DollarSign,
-  LogOutIcon,
-  Settings,
-  UserIcon,
-  Wallet,
-} from "lucide-react";
-import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { BusinessEntity, ClientEntity, WorkerEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { DollarSign, LogOutIcon, UserIcon, Wallet } from "lucide-react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./PopOver";
 
 export default function UserDropdown() {
-  const { user, role, loading, error, points } = useMe();
+  const { user, role, loading, error } = useMe();
 
   if (loading)
     return (
@@ -89,7 +83,7 @@ export default function UserDropdown() {
   return (
     <Popover>
       <PopoverTrigger>
-        <div className="flex items-center  hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded-lg transition-colors cursor-pointer">
+        <div className="flex items-center  hover:bg-gray-100 dark:hover:bg-background px-2 py-1 rounded-lg transition-colors cursor-pointer">
           <img
             src={avatar}
             alt="User avatar"
@@ -98,9 +92,9 @@ export default function UserDropdown() {
           <span className="text-sm sm:hidden lg:block font-medium text-gray-700 dark:text-gray-200 hidden">
             {displayName}
           </span>
-          {role !== "business" && (
+          {role === "client" && (
             <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
-              {points} pts
+              {(user as ClientEntity).loyaltyPoints} pts
             </span>
           )}
         </div>
@@ -111,9 +105,6 @@ export default function UserDropdown() {
             {displayName}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-            {role}
-          </p>
-          <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
             {role === "admin"
               ? "Administrator"
               : role === "business"
@@ -121,6 +112,9 @@ export default function UserDropdown() {
                 : role === "client"
                   ? "Client"
                   : "Worker"}
+          </p>
+          <p className="text-sm italic text-orange-600 dark:text-orange-400 mt-1">
+            {(user as ClientEntity).loyaltyTier}
           </p>
         </div>
         <div className="py-1">

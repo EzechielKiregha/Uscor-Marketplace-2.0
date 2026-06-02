@@ -184,7 +184,7 @@ const hardwareItems = [
 ];
 
 const countriesToSeed: Country[] = [
-	Country.DRC,
+	Country.RWANDA,
 	Country.KENYA,
 	Country.UGANDA,
 	Country.RWANDA,
