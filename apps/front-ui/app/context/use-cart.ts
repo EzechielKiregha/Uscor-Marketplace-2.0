@@ -5,7 +5,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface CartItem {
-  product: ProductEntity
+  product: any;
   quantity: number;
 }
 
