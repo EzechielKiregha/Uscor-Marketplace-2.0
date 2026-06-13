@@ -1,47 +1,43 @@
 // app/wallet/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import {
-  GET_ACCOUNT_BALANCE,
-  GET_TOKEN_BALANCE,
-  GET_ACCOUNT_RECHARGES,
-  GET_TOKEN_TRANSACTIONS,
-  CREATE_ACCOUNT_RECHARGE,
-  WITHDRAW_ACCOUNT_FUNDS,
-  CONVERT_TO_TOKENS,
-  REDEEM_TOKENS,
-  RELEASE_TOKENS,
-} from "@/graphql/wallet.gql";
-import { Button } from "@/components/ui/button";
-import {
-  DollarSign,
-  Coins,
-  CreditCard,
-  Smartphone,
-  ArrowUp,
-  ArrowDown,
-  TrendingUp,
-  TrendingDown,
-  Gift,
-  ShieldCheck,
-  AlertTriangle,
-  Loader2,
-  X,
-  Plus,
-  Download,
-  BarChart,
-  CheckCircle,
-} from "lucide-react";
-import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
-import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
 import ConvertModal from "@/app/(highly-secured)/_components/ConvertModal";
+import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
 import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
 import TransactionHistory from "@/app/(highly-secured)/_components/TransactionHistory";
-import { useMe } from "@/lib/useMe";
-import { useToast } from "@/components/toast-provider";
+import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
 import Loader from "@/components/seraui/Loader";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import {
+  CONVERT_TO_TOKENS,
+  CREATE_ACCOUNT_RECHARGE,
+  GET_ACCOUNT_BALANCE,
+  GET_ACCOUNT_RECHARGES,
+  GET_TOKEN_BALANCE,
+  GET_TOKEN_TRANSACTIONS,
+  REDEEM_TOKENS,
+  RELEASE_TOKENS,
+  WITHDRAW_ACCOUNT_FUNDS,
+} from "@/graphql/wallet.gql";
+import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  BarChart,
+  CheckCircle,
+  Coins,
+  CreditCard,
+  DollarSign,
+  Download,
+  Gift,
+  Plus,
+  Smartphone,
+  TrendingUp,
+} from "lucide-react";
+import { useState } from "react";
 
 export default function WalletPage() {
   const { user, role, loading: authLoading } = useMe();
@@ -754,6 +750,7 @@ export default function WalletPage() {
 
       {/* Modals */}
       <RechargeModal
+        user={user}
         isOpen={showRechargeModal}
         onClose={() => setShowRechargeModal(false)}
         onRechargeCreated={handleRechargeCreated}
