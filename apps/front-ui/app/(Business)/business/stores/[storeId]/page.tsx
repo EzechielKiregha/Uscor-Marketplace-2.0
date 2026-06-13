@@ -22,7 +22,7 @@ import {
   Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import AddWorkerModal from "./_components/AddWorkerModal";
 import StoreInventory from "./_components/StoreInventory";
 import StoreOverview from "./_components/StoreOverview";
@@ -32,12 +32,14 @@ import WorkerCard from "./_components/WorkerCard";
 import { useOpenAddWorkerModal } from "./_hooks/use-open-add-worker-modal";
 
 interface StorePageProps {
-  params: {
+  params: Promise<{
     storeId: string;
-  };
+  }>;
 }
 
 export default function StorePage({ params }: StorePageProps) {
+  const { storeId } = use(params);
+
   const { user, role, loading: authLoading } = useMe();
   const { isOpen, setIsOpen } = useOpenAddWorkerModal();
   const router = useRouter();
@@ -51,8 +53,8 @@ export default function StorePage({ params }: StorePageProps) {
     error: storeError,
     refetch,
   } = useQuery(GET_STORE_BY_ID, {
-    variables: { id: params.storeId },
-    skip: !params.storeId,
+    variables: { id: storeId },
+    skip: !storeId,
   });
 
   const {
@@ -61,8 +63,8 @@ export default function StorePage({ params }: StorePageProps) {
     error: workersError,
     refetch: refetchWorkers,
   } = useQuery(GET_WORKERS, {
-    variables: { storeId: params.storeId },
-    skip: !params.storeId,
+    variables: { storeId: storeId },
+    skip: !storeId,
   });
 
   const {
@@ -70,8 +72,8 @@ export default function StorePage({ params }: StorePageProps) {
     loading: statsLoading,
     error: statsError,
   } = useQuery(GET_STORE_DASHBOARD_STATS, {
-    variables: { storeId: params.storeId },
-    skip: !params.storeId,
+    variables: { storeId: storeId },
+    skip: !storeId,
   });
 
   const store = storeData?.store;
@@ -106,7 +108,7 @@ export default function StorePage({ params }: StorePageProps) {
           <Button
             variant="default"
             onClick={() =>
-              setIsOpen({ openAddWorkerModal: true, storeId: params.storeId })
+              setIsOpen({ openAddWorkerModal: true, storeId: storeId })
             }
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -276,7 +278,7 @@ export default function StorePage({ params }: StorePageProps) {
       <AddWorkerModal
         isOpen={isOpen}
         onClose={() => setIsOpen({ openAddWorkerModal: false, storeId: null })}
-        storeId={params.storeId}
+        storeId={storeId}
         businessId={user ? user.id! : ""}
       />
     </div>
