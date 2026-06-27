@@ -1,4 +1,3 @@
-// app/business/_components/modals/ProductForm.tsx
 "use client";
 
 import { useToast } from "@/components/toast-provider";
