@@ -13,6 +13,7 @@ import { UpdatePlatformSettingsInput } from "./dto/update-platform-settings.inpu
 import { KycSubmissionPagination } from "./entities/kyc-submission.entity";
 import { PlatformMetrics } from "./entities/platform-metrics.entity";
 import { PlatformSettings } from "./entities/platform-settings.entity";
+import { TokenReconciliation } from "./entities/token-reconciliation.entity";
 import { PlatformService } from "./platform.service";
 
 @Resolver()
@@ -53,6 +54,11 @@ export class PlatformResolver {
 			page,
 			limit,
 		);
+	}
+
+	@Query(() => TokenReconciliation)
+	async tokenReconciliation() {
+		return this.platformService.getTokenReconciliation();
 	}
 
 	@Mutation(() => PlatformSettings)

@@ -144,10 +144,18 @@ enum ChatStatus {
 enum SaleStatus {
   OPEN
   CLOSED
-  PENDING 
-	COMPLETED 
-	CANCELLED 
-	REFUNDED 
+  PENDING
+    COMPLETED
+    CANCELLED
+    REFUNDED
+}
+
+enum SyncStatus {
+  SYNCED
+  PENDING_SYNC
+  SYNCING
+  FAILED
+  CONFLICT
 }
 
 enum PurchaseOrderStatus {
@@ -172,6 +180,41 @@ enum AdjustmentType {
 	LOSS
 	CORRECTION
 	RETURN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+  TRIALING
+}
+
+enum SubscriptionTier {
+  STARTER
+  GROWTH
+  PRO
+  ENTERPRISE
+}
+
+enum B2BOrderStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum B2BPaymentTerms {
+  PREPAID
+  NET_15
+  NET_30
+  NET_60
+  ON_DELIVERY
 }
 
 enum WorkerRole {
@@ -251,6 +294,12 @@ model Business {
   promotions Promotion[] @relation("BusinessPromotions")
   disputes Dispute[]
   orderBusinessGroups OrderBusinessGroup[]
+  wholesalePrices WholesalePrice[]
+  b2bOrdersSent     B2BOrder[] @relation("B2BBuyer")
+  b2bOrdersReceived B2BOrder[] @relation("B2BSeller")
+  subscription      Subscription?
+  walletAuditLogs   WalletAuditLog[] @relation("BusinessAuditLogs")
+  ledgerEntries     LedgerEntry[]    @relation("BusinessLedger")
 }
 
 model PaymentConfig {
@@ -373,6 +422,8 @@ model Client {
   pointsTransactions PointsTransaction[]
   medias Media[]
   paymentTransactions PaymentTransaction[]
+  walletAuditLogs     WalletAuditLog[] @relation("ClientAuditLogs")
+  ledgerEntries       LedgerEntry[]    @relation("ClientLedger")
 
   // Common lookup
   @@index([createdAt])
@@ -432,6 +483,59 @@ model Admin {
   @@index([email])
 }
 
+// ─── Authentication & Security ─────────────────────────────────
+
+enum OtpPurpose {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  LOGIN_VERIFICATION
+}
+
+model Otp {
+  id         String     @id @default(uuid())
+  email      String
+  code       String     // argon2 hashed
+  purpose    OtpPurpose
+  attempts   Int        @default(0)
+  maxRetries Int        @default(5)
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime   @default(now())
+
+  @@index([email, purpose])
+}
+
+model SecurityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  userRole  String
+  action    String   // LOGIN, LOGOUT, PASSWORD_CHANGE, PASSWORD_RESET, OTP_SENT, OTP_VERIFIED, FAILED_LOGIN
+  ipAddress String?
+  userAgent String?
+  deviceId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+}
+
+model TrustedDevice {
+  id         String   @id @default(uuid())
+  userId     String
+  userRole   String
+  deviceId   String
+  deviceName String?
+  userAgent  String?
+  lastUsedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, deviceId])
+  @@index([userId])
+}
+
+// ─── Content Models ────────────────────────────────────────────
+
 model Category {
   id          String    @id @default(uuid())
   name        String    @unique
@@ -459,6 +563,14 @@ model Product {
   variants             Json?                 // For size, color, etc.
   featured             Boolean               @default(false)
   approvedForSale      Boolean               @default(false)
+
+  // Business-type-specific fields
+  sku                  String?               // Standard product identifier
+  barcode              String?               // Scanner integration
+  serialNumber         String?               // Electronics tracking
+  imei                 String?               // Electronics IMEI
+  warrantyMonths       Int?                  // Warranty period in months
+  brand                String?               // Product brand
   medias               Media[]
   reviews              Review[]
   orders               OrderProduct[]
@@ -476,6 +588,8 @@ model Product {
   purchaseOrderProducts        PurchaseOrderProduct[]
   inventoryAdjustments InventoryAdjustment[]
   orderItems OrderItem[]
+  wholesalePrices WholesalePrice[]
+  b2bOrderItems  B2BOrderItem[]
 
   // Foreign keys
   @@index([businessId])
@@ -488,6 +602,10 @@ model Product {
 
   // If you frequently search by title
   @@index([title])
+
+  // Product identification
+  @@index([sku])
+  @@index([barcode])
 }
 
 model Media {
@@ -712,6 +830,8 @@ model TokenTransaction {
   type                 TokenTransactionType
   isRedeemed           Boolean               @default(false)
   isReleased           Boolean               @default(false)
+  version              Int                   @default(0)
+  idempotencyKey       String?               @unique
   createdAt            DateTime              @default(now())
 
   AccountRecharge AccountRecharge[]
@@ -957,13 +1077,22 @@ model Sale {
   saleProducts SaleProduct[]
   returns      Return[]
 
-  // Add this field to directly link the receipt URL to the sale
+  // Receipt
   receiptUrl           String?
+
+  // Offline support fields
+  isOffline        Boolean        @default(false)
+  syncStatus       SyncStatus     @default(SYNCED)
+  localId          String?        @unique  // Client-side UUID for dedup
+  localTimestamp    DateTime?      // Client-side creation time
+  deviceId         String?        // Terminal/device identifier
+  version          Int            @default(1)  // Optimistic locking
 
   // Queries like “sales by store” & “recent sales”
   @@index([storeId])
   @@index([workerId])
   @@index([createdAt])
+  @@index([localId])
 }
 
 model SaleProduct {
@@ -1270,5 +1399,164 @@ model DisputeMessage {
   senderType String?
   content    String
   createdAt  DateTime @default(now())
+}
+
+// ─── B2B Models ──────────────────────────────────────────
+
+model WholesalePrice {
+  id                     String    @id @default(uuid())
+  product                Product   @relation(fields: [productId], references: [id])
+  productId              String
+  business               Business  @relation(fields: [businessId], references: [id])
+  businessId             String
+  minQuantity            Int       // Minimum order quantity for this tier
+  price                  Float     // Price per unit at this tier
+  maxQuantity            Int?      // Optional upper bound for this tier
+  businessTypeRestriction String?  // Optional: restrict to specific buyer business types
+  isActive               Boolean   @default(true)
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@unique([productId, minQuantity])
+  @@index([productId])
+  @@index([businessId])
+}
+
+model B2BOrder {
+  id              String          @id @default(uuid())
+  orderNumber     String          @unique @default(uuid())
+  buyer           Business        @relation("B2BBuyer", fields: [buyerId], references: [id])
+  buyerId         String
+  seller          Business        @relation("B2BSeller", fields: [sellerId], references: [id])
+  sellerId        String
+  status          B2BOrderStatus  @default(DRAFT)
+  paymentTerms    B2BPaymentTerms @default(PREPAID)
+  notes           String?
+  rejectionReason String?
+  subtotal        Float           @default(0)
+  tax             Float           @default(0)
+  total           Float           @default(0)
+  shippingAddress String?
+  items           B2BOrderItem[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+  cancelledAt     DateTime?
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model B2BOrderItem {
+  id          String   @id @default(uuid())
+  order       B2BOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String
+  quantity    Int
+  unitPrice   Float    // Price at time of order (from wholesale tier or negotiated)
+  totalPrice  Float
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ─── Subscription Models ─────────────────────────────────
+
+model Subscription {
+  id          String             @id @default(uuid())
+  business    Business           @relation(fields: [businessId], references: [id])
+  businessId  String             @unique
+  tier        SubscriptionTier   @default(STARTER)
+  status      SubscriptionStatus @default(ACTIVE)
+  startsAt    DateTime           @default(now())
+  endsAt      DateTime?
+  autoRenew   Boolean            @default(true)
+  cancelledAt DateTime?
+  features    SubscriptionFeature[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([businessId])
+  @@index([status])
+  @@index([tier])
+}
+
+model SubscriptionFeature {
+  id             String       @id @default(uuid())
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscriptionId String
+  featureKey     String       // Maps to FeatureKey in config/subscription-plans.ts
+  enabled        Boolean      @default(true)
+  metadata       Json?        // Extra config per feature (e.g. custom limits)
+  createdAt      DateTime     @default(now())
+
+  @@unique([subscriptionId, featureKey])
+  @@index([subscriptionId])
+}
+
+// ─── Wallet Security (Phase 18) ────────────────────────────────────────
+
+enum WalletAuditAction {
+  REDEEM
+  RELEASE
+  RECHARGE
+  WITHDRAW
+  CONVERT
+  TRANSFER
+  ADJUSTMENT
+}
+
+enum LedgerEntryType {
+  CREDIT
+  DEBIT
+}
+
+model WalletAuditLog {
+  id             String            @id @default(uuid())
+  business       Business?         @relation("BusinessAuditLogs", fields: [businessId], references: [id])
+  businessId     String?
+  client         Client?           @relation("ClientAuditLogs", fields: [clientId], references: [id])
+  clientId       String?
+  action         WalletAuditAction
+  amount         Float
+  balanceBefore  Float
+  balanceAfter   Float
+  metadata       Json?
+  idempotencyKey String?           @unique
+  createdAt      DateTime          @default(now())
+
+  @@index([businessId])
+  @@index([clientId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model LedgerEntry {
+  id                 String          @id @default(uuid())
+  business           Business?       @relation("BusinessLedger", fields: [businessId], references: [id])
+  businessId         String?
+  client             Client?         @relation("ClientLedger", fields: [clientId], references: [id])
+  clientId           String?
+  type               LedgerEntryType
+  amount             Float
+  balanceAfter       Float
+  reference          String?
+  referenceType      String?
+  referenceId        String?
+  description        String
+  createdAt          DateTime        @default(now())
+
+  @@index([businessId])
+  @@index([clientId])
+  @@index([referenceId])
+  @@index([createdAt])
 }
 

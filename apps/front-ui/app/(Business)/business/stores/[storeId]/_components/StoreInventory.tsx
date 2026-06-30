@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { GET_STORE_INVENTORY } from "@/graphql/store.gql";
 import { useQuery } from "@apollo/client";
 import { AlertTriangle, ArrowDown, CheckCircle, Package } from "lucide-react";
@@ -15,7 +15,7 @@ export default function StoreInventory({ storeId }: StoreInventoryProps) {
     skip: !storeId,
   });
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return <TableSkeleton />;
   if (!data?.storeInventory) return null;
 
   const { items, totalItems, lowStockCount, outOfStockCount } =
@@ -24,7 +24,7 @@ export default function StoreInventory({ storeId }: StoreInventoryProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <Package className="h-5 w-5" />
@@ -35,7 +35,7 @@ export default function StoreInventory({ storeId }: StoreInventoryProps) {
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <ArrowDown className="h-5 w-5" />
@@ -46,7 +46,7 @@ export default function StoreInventory({ storeId }: StoreInventoryProps) {
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
               <AlertTriangle className="h-5 w-5" />

@@ -26,7 +26,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -119,15 +120,15 @@ export default function ReportsPage({
     { name: "Accessories", value: 25 },
   ];
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+  const COLORS = CHART_COLORS.palette;
 
   if (reportsLoading || performanceLoading || salesHistoryLoading)
-    return <Loader loading={true} />;
+    return <DashboardSkeleton />;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Performance Reports</h1>
+        <h1 className="text-page-title">Performance Reports</h1>
         <p className="text-muted-foreground">
           View your performance metrics and business analytics
         </p>
@@ -170,42 +171,42 @@ export default function ReportsPage({
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <DollarSign className="h-5 w-5" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Sales</p>
-              <p className="text-xl font-bold">
+              <p className="text-stat">
                 ${reportData?.totalSales?.toFixed(2) || "12,450.00"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
               <ShoppingCart className="h-5 w-5" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Orders</p>
-              <p className="text-xl font-bold">
+              <p className="text-stat">
                 {reportData?.totalOrders || 124}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <Package className="h-5 w-5" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Average Order</p>
-              <p className="text-xl font-bold">
+              <p className="text-stat">
                 $
                 {(
                   reportData?.totalSales / reportData?.totalOrders || 100.4
@@ -215,14 +216,14 @@ export default function ReportsPage({
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
               <Users className="h-5 w-5" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Active Customers</p>
-              <p className="text-xl font-bold">
+              <p className="text-stat">
                 {reportData?.activeCustomers || 89}
               </p>
             </div>
@@ -233,7 +234,7 @@ export default function ReportsPage({
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Sales Chart */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border">
             <h2 className="font-semibold flex items-center gap-2">
               <BarChart className="h-5 w-5" />
@@ -251,12 +252,12 @@ export default function ReportsPage({
                 <Legend />
                 <Bar
                   dataKey="sales"
-                  fill="hsl(var(--primary))"
+                  fill={CHART_COLORS.primary}
                   name="Sales ($)"
                 />
                 <Bar
                   dataKey="orders"
-                  fill="hsl(var(--success))"
+                  fill={CHART_COLORS.success}
                   name="Orders"
                 />
               </BarChartRecharts>
@@ -265,7 +266,7 @@ export default function ReportsPage({
         </div>
 
         {/* Inventory Distribution */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border">
             <h2 className="font-semibold flex items-center gap-2">
               <PieChart className="h-5 w-5" />
@@ -282,7 +283,7 @@ export default function ReportsPage({
                   cy="50%"
                   labelLine={false}
                   outerRadius={80}
-                  fill="#8884d8"
+                  fill={CHART_COLORS.accent}
                   dataKey="value"
                   label={({ name, percent }) =>
                     `${name} ${(percent || 0 * 100).toFixed(0)}%`
@@ -304,7 +305,7 @@ export default function ReportsPage({
       </div>
 
       {/* Detailed Reports */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <h2 className="font-semibold flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
@@ -368,7 +369,7 @@ export default function ReportsPage({
       </div>
 
       {/* Worker Performance */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <h2 className="font-semibold flex items-center gap-2">
             <Clock className="h-5 w-5" />
@@ -380,7 +381,7 @@ export default function ReportsPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="border border-border rounded-lg p-4">
               <h3 className="font-medium mb-2">Shift Performance</h3>
-              <p className="text-2xl font-bold">
+              <p className="text-stat">
                 {performanceData?.shiftsCompleted || 24}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -390,7 +391,7 @@ export default function ReportsPage({
 
             <div className="border border-border rounded-lg p-4">
               <h3 className="font-medium mb-2">Sales Contribution</h3>
-              <p className="text-2xl font-bold">
+              <p className="text-stat">
                 ${performanceData?.personalSales?.toFixed(2) || "3,240.00"}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -400,7 +401,7 @@ export default function ReportsPage({
 
             <div className="border border-border rounded-lg p-4">
               <h3 className="font-medium mb-2">Customer Satisfaction</h3>
-              <p className="text-2xl font-bold">
+              <p className="text-stat">
                 {performanceData?.customerSatisfaction?.toFixed(1) || "4.7"}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -418,7 +419,7 @@ export default function ReportsPage({
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="sales" fill="hsl(var(--primary))" />
+                  <Bar dataKey="sales" fill={CHART_COLORS.primary} />
                 </BarChartRecharts>
               </ResponsiveContainer>
             </div>

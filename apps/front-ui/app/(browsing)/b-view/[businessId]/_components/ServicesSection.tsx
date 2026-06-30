@@ -23,6 +23,7 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FreelanceServiceEntity } from "@/lib/types";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 // Map service categories to icons (Lucide icons)
 const SERVICE_CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -86,29 +87,21 @@ export default function ServicesSection({
   if (filteredServices.length === 0) {
     return (
       <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <BriefcaseBusiness className="h-8 w-8 text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-medium mb-1">No services found</h3>
-          <p className="text-muted-foreground mb-6">
-            {searchQuery || selectedCategory
-              ? "Try adjusting your search or filter criteria"
-              : "This business has not added any services yet"}
-          </p>
-
-          {(searchQuery || selectedCategory) && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory(null);
-              }}
-            >
-              Clear Filters
-            </Button>
-          )}
-        </div>
+        <EmptyState
+          icon={emptyStateIcons.search}
+          title="No services found"
+          description={searchQuery || selectedCategory
+            ? "Try adjusting your search or filter criteria"
+            : "This business has not added any services yet"}
+          action={(searchQuery || selectedCategory) ? {
+            label: "Clear Filters",
+            onClick: () => {
+              setSearchQuery("");
+              setSelectedCategory(null);
+            },
+            variant: "outline",
+          } : undefined}
+        />
       </div>
     );
   }

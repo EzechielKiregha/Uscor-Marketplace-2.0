@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { ProductEntity } from "@/lib/types";
 import { p } from "framer-motion/client";
 import { useCart } from "@/app/context/use-cart";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 interface ProductsSectionProps {
   products: ProductEntity[];
@@ -84,29 +85,21 @@ export default function ProductsSection({
   if (filteredProducts.length === 0) {
     return (
       <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <ShoppingCart className="h-8 w-8 text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-medium mb-1">No products found</h3>
-          <p className="text-muted-foreground mb-6">
-            {searchQuery || selectedCategory
-              ? "Try adjusting your search or filter criteria"
-              : "This business has not added any products yet"}
-          </p>
-
-          {(searchQuery || selectedCategory) && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory(null);
-              }}
-            >
-              Clear Filters
-            </Button>
-          )}
-        </div>
+        <EmptyState
+          icon={emptyStateIcons.products}
+          title="No products found"
+          description={searchQuery || selectedCategory
+            ? "Try adjusting your search or filter criteria"
+            : "This business has not added any products yet"}
+          action={(searchQuery || selectedCategory) ? {
+            label: "Clear Filters",
+            onClick: () => {
+              setSearchQuery("");
+              setSelectedCategory(null);
+            },
+            variant: "outline",
+          } : undefined}
+        />
       </div>
     );
   }

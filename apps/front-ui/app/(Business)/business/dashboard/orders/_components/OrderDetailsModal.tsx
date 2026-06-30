@@ -3,6 +3,7 @@
 
 import { useMutation, useQuery } from "@apollo/client";
 import { CheckCircle, CreditCard, Package, Truck, XCircle } from "lucide-react";
+import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
 import ResponsiveModal from "@/app/(Business)/business/_components/responsive-modal";
 import { Button } from "@/components/ui/button";
 import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
@@ -190,6 +191,14 @@ export default function OrderDetailsModal() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Order Activity Timeline */}
+          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
+            <h3 className="font-semibold mb-3">Order Activity</h3>
+            <ActivityTimeline
+              items={buildOrderTimelineItems(orderData.status, orderData.createdAt)}
+            />
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-border">

@@ -4,12 +4,13 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { CheckCircle, Megaphone, Users } from "lucide-react";
 import { useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CREATE_ANNOUNCEMENT, GET_ANNOUNCEMENTS } from "@/graphql/admin.gql";
 import AnnouncementDetailModal from "./AnnouncementDetailModal";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 type AnnouncementManagementProps = {};
 
@@ -60,7 +61,7 @@ export default function AnnouncementManagement({}: AnnouncementManagementProps) 
 		}
 	};
 
-	if (announcementsLoading) return <Loader loading={true} />;
+	if (announcementsLoading) return <TableSkeleton />;
 	if (announcementsError)
 		return <div>Error loading announcements: {announcementsError.message}</div>;
 
@@ -126,11 +127,13 @@ export default function AnnouncementManagement({}: AnnouncementManagementProps) 
 					<tbody>
 						{announcements.length === 0 ? (
 							<tr>
-								<td
-									colSpan={6}
-									className="p-8 text-center text-muted-foreground"
-								>
-									No announcements found matching your criteria
+								<td colSpan={6}>
+									<EmptyState
+										icon={emptyStateIcons.chat}
+										title="No announcements found"
+										description="Try adjusting your search or filter criteria"
+										compact
+									/>
 								</td>
 							</tr>
 						) : (

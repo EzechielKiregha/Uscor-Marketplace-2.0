@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import {
   GET_STORE_BY_ID,
@@ -81,7 +81,7 @@ export default function StorePage({ params }: StorePageProps) {
   const stats = statsData?.storeDashboardStats;
 
   if (authLoading || storeLoading || workersLoading || statsLoading)
-    return <Loader loading={true} />;
+    return <DashboardSkeleton />;
   if (storeError || !store)
     return (
       <div>Error loading store: {storeError?.message || "Store not found"}</div>
@@ -91,11 +91,11 @@ export default function StorePage({ params }: StorePageProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <h1 className="text-page-title flex items-center gap-2">
             <Building2 className="h-6 w-6 text-primary" />
             {store.name}
           </h1>
-          <p className="text-muted-foreground">{store.address}</p>
+          <p className="text-page-subtitle">{store.address}</p>
         </div>
 
         <div className="flex gap-2">
@@ -126,52 +126,52 @@ export default function StorePage({ params }: StorePageProps) {
 
       {/* Store Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <Users className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Active Workers</p>
-              <p className="text-xl font-bold">{stats?.activeWorkers || 0}</p>
+              <p className="text-stat-label">Active Workers</p>
+              <p className="text-stat">{stats?.activeWorkers || 0}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
               <ShoppingCart className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Today's Sales</p>
-              <p className="text-xl font-bold">
+              <p className="text-stat-label">Today's Sales</p>
+              <p className="text-stat">
                 ${stats?.todaySales?.toFixed(2) || "0.00"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <Package className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Low Stock Items</p>
-              <p className="text-xl font-bold">{stats?.lowStockItems || 0}</p>
+              <p className="text-stat-label">Low Stock Items</p>
+              <p className="text-stat">{stats?.lowStockItems || 0}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Active Shifts</p>
-              <p className="text-xl font-bold">{stats?.activeShifts || 0}</p>
+              <p className="text-stat-label">Active Shifts</p>
+              <p className="text-stat">{stats?.activeShifts || 0}</p>
             </div>
           </div>
         </div>

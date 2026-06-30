@@ -1,7 +1,21 @@
 // app/business/settings/_components/KycVerification.tsx
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import {
+  GET_KYC_DOCUMENTS,
+  ON_KYC_UPDATED,
+  SUBMIT_KYC,
+  UPLOAD_KYC_DOCUMENT,
+} from "@/graphql/kyc.gql";
+import { downloadKycCertificatePDF } from "@/lib/pdf/kyc-certificate-pdf";
+import { Document } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { put } from "@vercel/blob";
 import {
   AlertTriangle,
   CheckCircle,
@@ -14,18 +28,6 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import {
-  GET_KYC_DOCUMENTS,
-  ON_KYC_UPDATED,
-  SUBMIT_KYC,
-  UPLOAD_KYC_DOCUMENT,
-} from "@/graphql/settings.gql";
-import { Document } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 
 // Document types for KYC
 export const DOCUMENT_TYPES = [
@@ -42,14 +44,14 @@ export const DOCUMENT_TYPES = [
     name: "Tax Identification Document",
     description: "Document showing your business tax ID or VAT number",
     required: true,
-    sampleUrl: "/samples/tax-id.pdf",
+    sampleUrl: "/samples/tax-id.png",
   },
   {
     id: "PROOF_OF_ADDRESS",
     name: "Proof of Business Address",
     description: "Utility bill or bank statement showing your business address",
     required: true,
-    sampleUrl: "/samples/proof-of-address.pdf",
+    sampleUrl: "/samples/business-registration.pdf",
   },
   {
     id: "OWNER_ID",
@@ -63,13 +65,13 @@ export const DOCUMENT_TYPES = [
     name: "Business Bank Statement",
     description: "Recent bank statement showing your business account",
     required: false,
-    sampleUrl: "/samples/bank-statement.pdf",
+    sampleUrl: "/samples/bank-statement.png",
   },
 ];
 
-type KycVerificationProps = {};
+// type KycVerificationProps = {};
 
-export default function KycVerification({}: KycVerificationProps) {
+export default function KycVerification() {
   const { user, loading: authLoading } = useMe();
   const [selectedDocumentType, setSelectedDocumentType] = useState<
     string | null
@@ -77,10 +79,11 @@ export default function KycVerification({}: KycVerificationProps) {
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [isReadyToSubmit, setIsReadyToSubmit] = useState(false);
   const { showToast } = useToast();
 
-  const { data: businessData } = useQuery(GET_BUSINESS_BY_ID, {
-    variables: { userId: user?.id },
+  const { data, refetch: refetchBusiness } = useQuery(GET_BUSINESS_BY_ID, {
+    variables: { id: user?.id },
     skip: !user?.id,
   });
 
@@ -153,37 +156,43 @@ export default function KycVerification({}: KycVerificationProps) {
     if (!selectedDocumentType || !documentFile || !user?.id) return;
 
     setUploading(true);
+
+    // Vercel Blob handles File objects perfectly
+    const blobToken = process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN;
+
+    if (!blobToken && documentFile instanceof File) {
+      throw new Error(
+        "Vercel Blob token is missing. Please configure NEST_PUBLIC_BLOB_READ_WRITE_TOKEN.",
+      );
+    }
+
+    const blob = await put(
+      `business/uscor-kyc/${Date.now()}-${documentFile.name!}`,
+      documentFile,
+      {
+        access: "public",
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        token: blobToken,
+      },
+    );
+
     try {
-      const { data } = await uploadDocument({
-        variables: {
-          input: {
-            businessId: user.id,
-            documentType: selectedDocumentType,
-            document: documentFile,
-          },
+      const payload = {
+        input: {
+          businessId: user?.id,
+          documentType: selectedDocumentType,
+          documentUrl: blob.url,
         },
-      });
+      };
+
+      // Run mutation after logging
+      await uploadDocument({ variables: payload });
 
       showToast("success", "Success", "Document uploaded successfully");
       setDocumentFile(null);
       setSelectedDocumentType(null);
       refetchKyc();
-
-      // Check if all required documents are uploaded
-      const requiredDocuments = DOCUMENT_TYPES.filter((d) => d.required);
-      const uploadedRequiredDocuments = requiredDocuments.filter(
-        (d) =>
-          getDocumentStatus(d.id) === "PENDING" ||
-          getDocumentStatus(d.id) === "VERIFIED",
-      );
-
-      if (uploadedRequiredDocuments.length === requiredDocuments.length) {
-        showToast(
-          "info",
-          "Ready for Verification",
-          "You have uploaded all required documents. You can now submit for verification.",
-        );
-      }
     } catch (error: any) {
       showToast(
         "error",
@@ -194,6 +203,28 @@ export default function KycVerification({}: KycVerificationProps) {
       setUploading(false);
     }
   };
+  const requiredDocuments = DOCUMENT_TYPES.filter((d) => d.required);
+
+  useEffect(() => {
+    // Check if all required documents are uploaded
+    const uploadedRequiredDocuments = requiredDocuments.filter(
+      (d) =>
+        getDocumentStatus(d.id) === "PENDING" ||
+        getDocumentStatus(d.id) === "VERIFIED",
+    );
+
+    if (uploadedRequiredDocuments.length === requiredDocuments.length) {
+      setIsReadyToSubmit(true);
+      showToast(
+        "info",
+        "Ready for Verification",
+        "You have uploaded all required documents. You can now submit for verification.",
+      );
+    } else {
+      setIsReadyToSubmit(false);
+      return;
+    }
+  }, [kycDocuments]);
 
   const handleSubmitForVerification = async () => {
     if (!user?.id) return;
@@ -222,6 +253,7 @@ export default function KycVerification({}: KycVerificationProps) {
       });
 
       showToast("success", "Success", "KYC submitted for verification");
+      refetchBusiness();
       refetchKyc();
     } catch (error: any) {
       showToast(
@@ -230,6 +262,7 @@ export default function KycVerification({}: KycVerificationProps) {
         error.message || "Failed to submit KYC for verification",
       );
     } finally {
+      setIsReadyToSubmit(false);
       setSubmitting(false);
     }
   };
@@ -267,6 +300,8 @@ export default function KycVerification({}: KycVerificationProps) {
       refetchKyc();
     }
   }, [kycUpdateData, refetchKyc]);
+
+  const businessData = data?.business;
 
   if (authLoading || kycLoading)
     return (
@@ -310,13 +345,13 @@ export default function KycVerification({}: KycVerificationProps) {
         <div className="mb-6 p-4 rounded-lg bg-muted">
           <div className="flex items-start gap-3">
             {businessData?.kycStatus === "VERIFIED" ? (
-              <CheckCircle className="h-5 w-5 text-success mt-1 flex-shrink-0" />
+              <CheckCircle className="h-5 w-5 text-success mt-1 shrink-0" />
             ) : businessData?.kycStatus === "PENDING" ? (
-              <AlertTriangle className="h-5 w-5 text-warning mt-1 flex-shrink-0" />
+              <AlertTriangle className="h-5 w-5 text-warning mt-1 shrink-0" />
             ) : businessData?.kycStatus === "REJECTED" ? (
-              <AlertTriangle className="h-5 w-5 text-destructive mt-1 flex-shrink-0" />
+              <AlertTriangle className="h-5 w-5 text-destructive mt-1 shrink-0" />
             ) : (
-              <ShieldCheck className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+              <ShieldCheck className="h-5 w-5 text-primary mt-1 shrink-0" />
             )}
 
             <div className="flex-1">
@@ -336,41 +371,165 @@ export default function KycVerification({}: KycVerificationProps) {
                   : businessData?.kycStatus === "PENDING"
                     ? "Your KYC documents have been submitted and are being reviewed. This typically takes 1-3 business days."
                     : businessData?.kycStatus === "REJECTED"
-                      ? "Your KYC submission was rejected. Please review the rejection reasons and resubmit your documents."
+                      ? "Your KYC submission was rejected. Please review the rejection reasons below and resubmit your documents."
                       : "Complete your KYC verification to access the full marketplace features, including purchasing from other businesses."}
               </p>
-
-              {businessData?.kycStatus === "REJECTED" && (
-                <div className="mt-2 p-2 bg-destructive/10 rounded-lg text-sm text-destructive">
-                  <p className="font-medium">Rejection Reason:</p>
-                  <p>
-                    {kycDocuments.find((doc: Document) => doc.rejectionReason)
-                      ?.rejectionReason ||
-                      "Your documents require additional information or clarification"}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
 
-          {businessData?.kycStatus === "NOT_VERIFIED" && (
-            <div className="mt-4 flex justify-end">
-              <Button
-                variant="default"
-                onClick={handleSubmitForVerification}
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit for Verification"
-                )}
-              </Button>
+          {/* Verified — certificate download */}
+          {businessData?.kycStatus === "VERIFIED" && (
+            <div className="mt-4 p-3 bg-success/10 border border-success/20 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-success">
+                    Your business has been verified by USCOR
+                  </p>
+                  {businessData?.kyc?.verifiedAt && (
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Verified on{" "}
+                      {new Date(
+                        businessData.kyc.verifiedAt,
+                      ).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    downloadKycCertificatePDF({
+                      businessName: businessData?.name || "",
+                      businessType: businessData?.businessType || "",
+                      businessEmail: businessData?.email || "",
+                      businessAddress: businessData?.address || "",
+                      taxId: businessData?.taxId || "",
+                      registrationNumber:
+                        businessData?.registrationNumber || "",
+                      status: "VERIFIED",
+                      verifiedAt:
+                        businessData?.kyc?.verifiedAt ||
+                        new Date().toISOString(),
+                      documents: kycDocuments.map((doc: Document) => ({
+                        documentType: doc.documentType,
+                        status: doc.status,
+                        submittedAt: doc.submittedAt,
+                        verifiedAt: doc.verifiedAt,
+                      })),
+                      certificateId:
+                        businessData?.kyc?.id || businessData?.id || "",
+                    })
+                  }
+                >
+                  <Download className="h-4 w-4 mr-1" />
+                  Download Certificate
+                </Button>
+              </div>
             </div>
           )}
+
+          {/* Rejected — detailed per-document feedback */}
+          {businessData?.kycStatus === "REJECTED" && (
+            <div className="mt-4 space-y-3">
+              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <p className="text-sm font-medium text-destructive mb-2">
+                  Rejection Details
+                </p>
+                {kycDocuments.filter((doc: Document) => doc.rejectionReason)
+                  .length > 0 ? (
+                  <ul className="space-y-2">
+                    {kycDocuments
+                      .filter((doc: Document) => doc.rejectionReason)
+                      .map((doc: Document) => (
+                        <li
+                          key={doc.id}
+                          className="flex items-start gap-2 text-sm"
+                        >
+                          <X className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
+                          <div>
+                            <span className="font-medium">
+                              {doc.documentType?.replace(/_/g, " ")}:
+                            </span>{" "}
+                            <span className="text-destructive">
+                              {doc.rejectionReason}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-destructive">
+                    Your documents require additional information or
+                    clarification. Please re-upload them below.
+                  </p>
+                )}
+              </div>
+
+              {/* Document status summary */}
+              <div className="flex gap-3 text-sm">
+                {kycDocuments.filter(
+                  (doc: Document) => doc.status === "VERIFIED",
+                ).length > 0 && (
+                  <span className="flex items-center gap-1 text-success">
+                    <CheckCircle className="h-3.5 w-3.5" />
+                    {
+                      kycDocuments.filter(
+                        (doc: Document) => doc.status === "VERIFIED",
+                      ).length
+                    }{" "}
+                    approved
+                  </span>
+                )}
+                {kycDocuments.filter(
+                  (doc: Document) => doc.status === "REJECTED",
+                ).length > 0 && (
+                  <span className="flex items-center gap-1 text-destructive">
+                    <X className="h-3.5 w-3.5" />
+                    {
+                      kycDocuments.filter(
+                        (doc: Document) => doc.status === "REJECTED",
+                      ).length
+                    }{" "}
+                    rejected
+                  </span>
+                )}
+                {kycDocuments.filter(
+                  (doc: Document) => doc.status === "PENDING",
+                ).length > 0 && (
+                  <span className="flex items-center gap-1 text-warning">
+                    <AlertTriangle className="h-3.5 w-3.5" />
+                    {
+                      kycDocuments.filter(
+                        (doc: Document) => doc.status === "PENDING",
+                      ).length
+                    }{" "}
+                    pending
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {isReadyToSubmit &&
+            businessData?.kycStatus !== "PENDING" &&
+            businessData?.kycStatus !== "VERIFIED" && (
+              <div className="mt-4 flex justify-end">
+                <Button
+                  variant="default"
+                  onClick={handleSubmitForVerification}
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit for Verification"
+                  )}
+                </Button>
+              </div>
+            )}
         </div>
 
         {/* Document Upload Section */}
@@ -443,7 +602,7 @@ export default function KycVerification({}: KycVerificationProps) {
                         )}
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-2 min-w-[180px]">
+                      <div className="flex flex-col sm:flex-row gap-2 min-w-45">
                         {status === "NOT_UPLOADED" && (
                           <Button
                             variant="default"
@@ -663,28 +822,28 @@ export default function KycVerification({}: KycVerificationProps) {
 
             <ul className="space-y-2">
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
                 <span>
                   Verified businesses can purchase products from other
                   businesses in the marketplace
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
                 <span>
                   Access to freelance services like transportation from other
                   verified businesses
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
                 <span>
                   Build trust with customers and other businesses through
                   verified identity
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-success mt-1 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-1 shrink-0" />
                 <span>
                   Essential for local artisans and craftsmen to participate
                   fully in the marketplace

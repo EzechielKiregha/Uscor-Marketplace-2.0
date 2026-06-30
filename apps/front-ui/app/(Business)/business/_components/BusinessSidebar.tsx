@@ -3,13 +3,17 @@
 import { useQuery } from "@apollo/client";
 import {
   BarChart,
+  BarChart3,
   BriefcaseBusiness,
   Building,
+  Crown,
+  Handshake,
   MessageSquare,
   Package,
   Settings,
   ShoppingCart,
   Star,
+  Users,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
@@ -41,9 +45,13 @@ export const sidebarItems = [
     label: "Messages",
     badge: true,
   },
+  { href: "/business/b2b", icon: Handshake, label: "B2B Hub" },
+  { href: "/business/reports", icon: BarChart3, label: "Reports" },
+  { href: "/business/customers", icon: Users, label: "Customers" },
   { href: "/business/reposts", icon: Star, label: "Reposts & Reowns" },
   { href: "/business/loyalty", icon: Star, label: "Loyalty Program" },
   { href: "/business/wallet", icon: Wallet, label: "Business Wallet" },
+  { href: "/business/subscription", icon: Crown, label: "Subscription" },
   { href: "/business/settings", icon: Settings, label: "Settings" },
 ];
 

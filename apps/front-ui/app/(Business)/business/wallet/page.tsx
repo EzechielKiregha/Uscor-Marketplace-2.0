@@ -6,7 +6,7 @@ import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
 import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
 import TransactionHistory from "@/app/(highly-secured)/_components/TransactionHistory";
 import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,17 +34,20 @@ import {
   Download,
   Gift,
   Plus,
+  Shield,
   Smartphone,
   TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
+import TransactionConfirmDialog from "./_components/TransactionConfirmDialog";
+import WalletActivityTimeline from "./_components/WalletActivityTimeline";
 
 export default function WalletPage() {
   const { user, role, loading: authLoading } = useMe();
   const { showToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<
-    "balance" | "recharges" | "tokens" | "history"
+    "balance" | "recharges" | "tokens" | "history" | "security"
   >("balance");
   const [showRechargeModal, setShowRechargeModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -53,6 +56,15 @@ export default function WalletPage() {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [selectedOrigin, setSelectedOrigin] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Confirmation dialog state
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    type: "withdraw" | "convert" | "recharge" | "redeem" | "release";
+    amount: number;
+    onConfirm: () => void;
+  }>({ isOpen: false, type: "withdraw", amount: 0, onConfirm: () => {} });
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const {
     data: balanceData,
@@ -134,61 +146,64 @@ export default function WalletPage() {
   };
 
   const handleWithdrawFunds = async (amount: number, method: string) => {
-    try {
-      const { data } = await withdrawFunds({
-        variables: {
-          input: {
-            userId: user?.id,
-            userType: role,
-            amount,
-            method,
-          },
-        },
-      });
-
-      refetchBalance();
-      showToast(
-        "success",
-        "Withdrawal Successful",
-        `Withdrawal of $${data.withdrawFunds.netAmount} processed`,
-      );
-      setShowWithdrawModal(false);
-    } catch (error: any) {
-      showToast(
-        "error",
-        "Withdrawal Failed",
-        error.message || "Failed to withdraw funds",
-      );
-    }
+    setShowWithdrawModal(false);
+    setConfirmDialog({
+      isOpen: true,
+      type: "withdraw",
+      amount,
+      onConfirm: async () => {
+        setConfirmLoading(true);
+        try {
+          const { data } = await withdrawFunds({
+            variables: {
+              input: { userId: user?.id, userType: role, amount, method },
+            },
+          });
+          refetchBalance();
+          showToast(
+            "success",
+            "Withdrawal Successful",
+            `Withdrawal of $${data.withdrawFunds.netAmount} processed`,
+          );
+        } catch (error: any) {
+          showToast("error", "Withdrawal Failed", error.message || "Failed to withdraw funds");
+        } finally {
+          setConfirmLoading(false);
+          setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+    });
   };
 
   const handleConvertToTokens = async (amount: number) => {
-    try {
-      const { data } = await convertToTokens({
-        variables: {
-          input: {
-            userId: user?.id,
-            userType: role,
-            amount,
-          },
-        },
-      });
-
-      refetchBalance();
-      refetchTokenBalance();
-      showToast(
-        "success",
-        "Conversion Successful",
-        `${data.convertToTokens.tokenAmount} tokens added to your account`,
-      );
-      setShowConvertModal(false);
-    } catch (error: any) {
-      showToast(
-        "error",
-        "Conversion Failed",
-        error.message || "Failed to convert to tokens",
-      );
-    }
+    setShowConvertModal(false);
+    setConfirmDialog({
+      isOpen: true,
+      type: "convert",
+      amount,
+      onConfirm: async () => {
+        setConfirmLoading(true);
+        try {
+          const { data } = await convertToTokens({
+            variables: {
+              input: { userId: user?.id, userType: role, amount },
+            },
+          });
+          refetchBalance();
+          refetchTokenBalance();
+          showToast(
+            "success",
+            "Conversion Successful",
+            `${data.convertToTokens.tokenAmount} tokens added to your account`,
+          );
+        } catch (error: any) {
+          showToast("error", "Conversion Failed", error.message || "Failed to convert to tokens");
+        } finally {
+          setConfirmLoading(false);
+          setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+    });
   };
 
   const handleRedeemTokens = async (tokenId: string, amount: number) => {
@@ -255,7 +270,7 @@ export default function WalletPage() {
     balanceLoading ||
     tokenBalanceLoading
   )
-    return <Loader loading={true} />;
+    return <DashboardSkeleton showChart={false} />;
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -283,22 +298,22 @@ export default function WalletPage() {
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div>
-          <h1 className="text-2xl font-bold">Wallet & Token Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-page-title">Wallet & Token Management</h1>
+          <p className="text-page-subtitle">
             Manage your account balance and USCOR tokens
           </p>
         </div>
 
         {/* Balance Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border border-border rounded-lg p-6 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                 <DollarSign className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Balance</p>
-                <p className="text-2xl font-bold">
+                <p className="text-stat-label">Total Balance</p>
+                <p className="text-stat">
                   ${balance?.totalAmount?.toFixed(2) || "0.00"}
                 </p>
               </div>
@@ -326,16 +341,16 @@ export default function WalletPage() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border border-border rounded-lg p-6 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
                 <Coins className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-stat-label">
                   USCOR Tokens (uTn)
                 </p>
-                <p className="text-2xl font-bold">
+                <p className="text-stat">
                   {tokenBalance?.totalTokens || 0}
                 </p>
               </div>
@@ -363,16 +378,16 @@ export default function WalletPage() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border border-border rounded-lg p-6 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
                 <Gift className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-stat-label">
                   Token Conversion
                 </p>
-                <p className="text-2xl font-bold">1 uTn = $10</p>
+                <p className="text-stat">1 uTn = $10</p>
               </div>
             </div>
 
@@ -475,6 +490,14 @@ export default function WalletPage() {
             >
               <BarChart className="h-4 w-4" />
               Transaction History
+            </Button>
+            <Button
+              variant={activeTab === "security" ? "default" : "outline"}
+              onClick={() => setActiveTab("security")}
+              className="flex items-center gap-2"
+            >
+              <Shield className="h-4 w-4" />
+              Security & Audit
             </Button>
           </div>
         </div>
@@ -745,6 +768,8 @@ export default function WalletPage() {
               userId={user.id}
             />
           )}
+
+          {activeTab === "security" && <WalletActivityTimeline />}
         </div>
       </div>
 
@@ -779,6 +804,21 @@ export default function WalletPage() {
         onTokenReleased={refetchTokenBalance}
         showTokenModal={showTokenModal}
         setShowTokenModal={setShowTokenModal}
+      />
+
+      {/* Transaction Confirmation Dialog */}
+      <TransactionConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmDialog.onConfirm}
+        type={confirmDialog.type}
+        amount={confirmDialog.amount}
+        currentBalance={
+          confirmDialog.type === "redeem" || confirmDialog.type === "release"
+            ? tokenBalance?.totalTokens || 0
+            : balance?.availableAmount || 0
+        }
+        loading={confirmLoading}
       />
     </div>
   );

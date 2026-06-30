@@ -50,23 +50,6 @@ export const GET_BUSINESS_SETTINGS = gql`
   }
 `;
 
-export const GET_KYC_DOCUMENTS = gql`
-  query GetKycDocuments($businessId: String!) {
-    kycDocuments(businessId: $businessId) {
-      id
-      businessId
-      documentType
-      documentUrl
-      status
-      submittedAt
-      verifiedAt
-      rejectionReason
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
 export const GET_PRICING_PLANS = gql`
   query GetPricingPlans {
     pricingPlans {
@@ -162,7 +145,10 @@ export const UPDATE_BUSINESS_PROFILE = gql`
 `;
 
 export const UPDATE_PAYMENT_CONFIG = gql`
-  mutation UpdatePaymentConfig($businessId: String!, $input: PaymentConfigInput!) {
+  mutation UpdatePaymentConfig(
+    $businessId: String!
+    $input: PaymentConfigInput!
+  ) {
     updatePaymentConfig(businessId: $businessId, input: $input) {
       id
       name
@@ -207,7 +193,10 @@ export const UPDATE_PAYMENT_CONFIG = gql`
 `;
 
 export const UPDATE_HARDWARE_CONFIG = gql`
-  mutation UpdateHardwareConfig($businessId: String!, $input: HardwareConfigInput!) {
+  mutation UpdateHardwareConfig(
+    $businessId: String!
+    $input: HardwareConfigInput!
+  ) {
     updateHardwareConfig(businessId: $businessId, input: $input) {
       id
       name
@@ -247,38 +236,6 @@ export const UPDATE_HARDWARE_CONFIG = gql`
       }
       createdAt
       updatedAt
-    }
-  }
-`;
-
-export const UPLOAD_KYC_DOCUMENT = gql`
-  mutation UploadKycDocument($input: UploadKycDocumentInput!) {
-    uploadKycDocument(input: $input) {
-      id
-      businessId
-      documentType
-      documentUrl
-      status
-      submittedAt
-      verifiedAt
-      rejectionReason
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
-export const SUBMIT_KYC = gql`
-  mutation SubmitKyc($businessId: String!) {
-    submitKyc(businessId: $businessId) {
-      id
-      kycStatus
-      kyc {
-        id
-        status
-        submittedAt
-        verifiedAt
-      }
     }
   }
 `;
@@ -357,22 +314,6 @@ export const ON_SETTINGS_UPDATED = gql`
       }
       createdAt
       updatedAt
-    }
-  }
-`;
-
-export const ON_KYC_UPDATED = gql`
-  subscription OnKycUpdated($businessId: String!) {
-    kycUpdated(businessId: $businessId) {
-      id
-      kycStatus
-      kyc {
-        id
-        status
-        documentUrl
-        submittedAt
-        verifiedAt
-      }
     }
   }
 `;

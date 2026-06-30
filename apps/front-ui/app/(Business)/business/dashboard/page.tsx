@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useQuery } from "@apollo/client";
 import {
   DollarSign,
@@ -10,24 +11,30 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GET_BUSINESS_DASHBOARD } from "@/graphql/business.gql";
 import { GET_BUSINESS_ORDERS } from "@/graphql/order.gql";
+import { GET_PRODUCTS_BY_BUSINESS_ID } from "@/graphql/product.gql";
 import { GET_STORES } from "@/graphql/store.gql";
 import {
+  BusinessEntity,
   OrderEntity,
   ProductEntity,
   SaleEntity,
   StoreEntity,
 } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import TypeDashboardWidgets from "@/components/dashboard/TypeDashboardWidgets";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import { useOpenOrderDetailsModal } from "../_hooks/use-open-order-details-modal";
 import SalesDashboard from "../sales/_components/SalesDashboard";
 import OrderDetailsModal from "./orders/_components/OrderDetailsModal";
+import MotionPage from "@/components/MotionPage";
+import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 
 export default function BusinessDashboardPage() {
   const { isOpen: isOpenOrder, setIsOpen: setIsOpenOrder } =
@@ -70,6 +77,9 @@ export default function BusinessDashboardPage() {
     loading: businessDataLoading,
     error: businessDataErro,
   } = useQuery(GET_BUSINESS_DASHBOARD);
+
+  // Fetch all business products with type-specific fields for dashboard widgets
+  const { data: businessProductsData } = useQuery(GET_PRODUCTS_BY_BUSINESS_ID);
 
   // Auto-select first store if none selected
   useEffect(() => {
@@ -178,7 +188,7 @@ export default function BusinessDashboardPage() {
   };
 
   if (loading || businessDataLoading || storesLoading)
-    return <Loader loading={true} />;
+    return <DashboardSkeleton statCount={4} showChart showTable />;
   if (error || businessDataErro || storesError)
     return <div>Error loading dashboard</div>;
 
@@ -187,68 +197,84 @@ export default function BusinessDashboardPage() {
   localStorage.setItem("unreadMessages", stats.unreadMessages);
 
   return (
-    <div className="space-y-6">
+    <MotionPage className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-page-title">Dashboard</h1>
+        <p className="text-page-subtitle">
           Overview of your business performance
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">
-              +{((totalRevenue / totalSales) * 100).toFixed(2)}% from last month
-            </p>
-          </CardContent>
-        </Card>
+      <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MotionStaggerItem>
+          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-stat-label">Total Revenue</CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-stat">${totalRevenue.toFixed(2)}</div>
+              <p className="text-xs text-muted-foreground">
+                +{((totalRevenue / totalSales) * 100).toFixed(2)}% from last month
+              </p>
+            </CardContent>
+          </Card>
+        </MotionStaggerItem>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{ordersCount}</div>
-            <p className="text-xs text-muted-foreground">
-              {pendingOrdersCount} pending, {completedOrdersCount} completed
-            </p>
-          </CardContent>
-        </Card>
+        <MotionStaggerItem>
+          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-stat-label">Total Orders</CardTitle>
+              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-stat">{ordersCount}</div>
+              <p className="text-xs text-muted-foreground">
+                {pendingOrdersCount} pending, {completedOrdersCount} completed
+              </p>
+            </CardContent>
+          </Card>
+        </MotionStaggerItem>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Products</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalProducts}</div>
-            <p className="text-xs text-muted-foreground">
-              {lowStockProducts} low stock items
-            </p>
-          </CardContent>
-        </Card>
+        <MotionStaggerItem>
+          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-stat-label">Products</CardTitle>
+              <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-stat">{totalProducts}</div>
+              <p className="text-xs text-muted-foreground">
+                {lowStockProducts} low stock items
+              </p>
+            </CardContent>
+          </Card>
+        </MotionStaggerItem>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Messages</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.unreadMessages}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.totalMessages} total messages
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+        <MotionStaggerItem>
+          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-stat-label">Messages</CardTitle>
+              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-stat">{stats.unreadMessages}</div>
+              <p className="text-xs text-muted-foreground">
+                {stats.totalMessages} total messages
+              </p>
+            </CardContent>
+          </Card>
+        </MotionStaggerItem>
+      </MotionStagger>
+
+      {/* Type-Specific Business Insights */}
+      {(user as BusinessEntity)?.businessType && businessProductsData?.fetchedBusinessProducts && (
+        <TypeDashboardWidgets
+          businessType={(user as BusinessEntity).businessType!}
+          products={businessProductsData.fetchedBusinessProducts}
+        />
+      )}
 
       <div className="flex flex-col justify-between sm:flex-row gap-3 w-full sm:w-auto">
         <select
@@ -286,32 +312,24 @@ export default function BusinessDashboardPage() {
 
       {/* Sales Chart */}
       {!storesData?.stores || storesData.stores.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] p-6">
-          <div className="text-center max-w-md">
-            <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-              <ShoppingCart className="h-10 w-10 text-primary" />
-            </div>
-            <h2 className="text-2xl font-bold mb-2">No Stores Found</h2>
-            <p className="text-muted-foreground mb-6">
-              You need to create at least one store before you can process sales
-            </p>
-            <Button
-              onClick={() => {
-                showToast(
-                  "success",
-                  "Redirecting to store page",
-                  "You are now redirecting to the store page",
-                  false,
-                  9000,
-                );
-                router.push("/business/stores?create=true");
-              }}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Create Your First Store
-            </Button>
-          </div>
-        </div>
+        <EmptyState
+          icon={emptyStateIcons.stores}
+          title="No Stores Found"
+          description="You need to create at least one store before you can process sales"
+          action={{
+            label: "Create Your First Store",
+            onClick: () => {
+              showToast(
+                "success",
+                "Redirecting to store page",
+                "You are now redirecting to the store page",
+                false,
+                9000,
+              );
+              router.push("/business/stores?create=true");
+            },
+          }}
+        />
       ) : (
         <>
           {/* <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
@@ -325,7 +343,7 @@ export default function BusinessDashboardPage() {
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="sales" fill="hsl(var(--primary))" />
+                  <Bar dataKey="sales" fill={CHART_COLORS.primary} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -386,6 +404,6 @@ export default function BusinessDashboardPage() {
       </div>
       {/* Order Details Modal */}
       <OrderDetailsModal />
-    </div>
+    </MotionPage>
   );
 }

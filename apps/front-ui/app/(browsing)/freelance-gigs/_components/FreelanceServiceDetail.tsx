@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { GlowButton } from "@/components/seraui/GlowButton";
-import Loader from "@/components/seraui/Loader";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { useToast } from "@/components/toast-provider";
 import {
 	Card,
@@ -57,7 +57,7 @@ export default function FreelanceServiceDetail({
 		});
 	};
 
-	if (loading) return <Loader loading={true} />;
+	if (loading) return <PageSkeleton variant="centered" />;
 	if (error)
 		return <p className="text-center text-red-500">Error: {error.message}</p>;
 

@@ -1,5 +1,5 @@
 "use client";
-import Loader from "@/components/seraui/Loader";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_REPORT_HISTORY } from "@/graphql/store.gql";
 import { useQuery } from "@apollo/client";
@@ -73,7 +73,7 @@ export default function ReportsPage({ params }: ReportsPageProps) {
     variables: { storeId: storeId },
   });
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return <CardGridSkeleton variant="simple" columns={3} count={6} />;
 
   return (
     <div className=" space-y-6">

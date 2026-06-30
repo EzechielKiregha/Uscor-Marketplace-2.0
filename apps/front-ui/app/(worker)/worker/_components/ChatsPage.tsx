@@ -10,7 +10,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,7 @@ import type {
   ClientEntity,
 } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 type ChatMessageWithContentEntity = ChatMessageEntity & {
   content: string;
@@ -256,14 +257,14 @@ export default function ChatsPage({
     return matchesSearch && matchesStatus && matchesType;
   });
 
-  if (chatsLoading || messagesLoading) return <Loader loading={true} />;
+  if (chatsLoading || messagesLoading) return <SidebarPageSkeleton navItems={5} contentVariant="cards" />;
   if (chatsError) return <div>Error loading chats: {chatsError.message}</div>;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Customer Conversations</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-page-title">Customer Conversations</h1>
+        <p className="text-page-subtitle">
           Manage conversations with customers and businesses
         </p>
       </div>
@@ -418,11 +419,13 @@ export default function ChatsPage({
               })}
 
               {filteredChats.length === 0 && (
-                <div className="p-8 text-center text-muted-foreground">
-                  {searchQuery || filterStatus || filterType
+                <EmptyState
+                  icon={emptyStateIcons.chat}
+                  title={searchQuery || filterStatus || filterType
                     ? "No matching conversations found"
                     : "No conversations yet"}
-                </div>
+                  compact
+                />
               )}
             </div>
           </div>

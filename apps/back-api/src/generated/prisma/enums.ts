@@ -42,6 +42,7 @@ export type Country = (typeof Country)[keyof typeof Country]
 
 
 export const KycStatus = {
+  NONE: 'NONE',
   PENDING: 'PENDING',
   VERIFIED: 'VERIFIED',
   REJECTED: 'REJECTED'
@@ -193,6 +194,17 @@ export const SaleStatus = {
 export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
 
 
+export const SyncStatus = {
+  SYNCED: 'SYNCED',
+  PENDING_SYNC: 'PENDING_SYNC',
+  SYNCING: 'SYNCING',
+  FAILED: 'FAILED',
+  CONFLICT: 'CONFLICT'
+} as const
+
+export type SyncStatus = (typeof SyncStatus)[keyof typeof SyncStatus]
+
+
 export const PurchaseOrderStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -226,6 +238,53 @@ export const AdjustmentType = {
 export type AdjustmentType = (typeof AdjustmentType)[keyof typeof AdjustmentType]
 
 
+export const SubscriptionStatus = {
+  ACTIVE: 'ACTIVE',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+  PAST_DUE: 'PAST_DUE',
+  TRIALING: 'TRIALING'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const SubscriptionTier = {
+  STARTER: 'STARTER',
+  GROWTH: 'GROWTH',
+  PRO: 'PRO',
+  ENTERPRISE: 'ENTERPRISE'
+} as const
+
+export type SubscriptionTier = (typeof SubscriptionTier)[keyof typeof SubscriptionTier]
+
+
+export const B2BOrderStatus = {
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  PROCESSING: 'PROCESSING',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type B2BOrderStatus = (typeof B2BOrderStatus)[keyof typeof B2BOrderStatus]
+
+
+export const B2BPaymentTerms = {
+  PREPAID: 'PREPAID',
+  NET_15: 'NET_15',
+  NET_30: 'NET_30',
+  NET_60: 'NET_60',
+  ON_DELIVERY: 'ON_DELIVERY'
+} as const
+
+export type B2BPaymentTerms = (typeof B2BPaymentTerms)[keyof typeof B2BPaymentTerms]
+
+
 export const WorkerRole = {
   ADMIN: 'ADMIN',
   STAFF: 'STAFF',
@@ -246,6 +305,15 @@ export const AdminRole = {
 } as const
 
 export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole]
+
+
+export const OtpPurpose = {
+  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
+  PASSWORD_RESET: 'PASSWORD_RESET',
+  LOGIN_VERIFICATION: 'LOGIN_VERIFICATION'
+} as const
+
+export type OtpPurpose = (typeof OtpPurpose)[keyof typeof OtpPurpose]
 
 
 export const AnnouncementStatus = {
@@ -274,3 +342,24 @@ export const DisputeStatus = {
 } as const
 
 export type DisputeStatus = (typeof DisputeStatus)[keyof typeof DisputeStatus]
+
+
+export const WalletAuditAction = {
+  REDEEM: 'REDEEM',
+  RELEASE: 'RELEASE',
+  RECHARGE: 'RECHARGE',
+  WITHDRAW: 'WITHDRAW',
+  CONVERT: 'CONVERT',
+  TRANSFER: 'TRANSFER',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type WalletAuditAction = (typeof WalletAuditAction)[keyof typeof WalletAuditAction]
+
+
+export const LedgerEntryType = {
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT'
+} as const
+
+export type LedgerEntryType = (typeof LedgerEntryType)[keyof typeof LedgerEntryType]

@@ -28,10 +28,12 @@ export type AggregateTokenTransaction = {
 
 export type TokenTransactionAvgAggregateOutputType = {
   amount: number | null
+  version: number | null
 }
 
 export type TokenTransactionSumAggregateOutputType = {
   amount: number | null
+  version: number | null
 }
 
 export type TokenTransactionMinAggregateOutputType = {
@@ -43,6 +45,8 @@ export type TokenTransactionMinAggregateOutputType = {
   type: $Enums.TokenTransactionType | null
   isRedeemed: boolean | null
   isReleased: boolean | null
+  version: number | null
+  idempotencyKey: string | null
   createdAt: Date | null
 }
 
@@ -55,6 +59,8 @@ export type TokenTransactionMaxAggregateOutputType = {
   type: $Enums.TokenTransactionType | null
   isRedeemed: boolean | null
   isReleased: boolean | null
+  version: number | null
+  idempotencyKey: string | null
   createdAt: Date | null
 }
 
@@ -67,6 +73,8 @@ export type TokenTransactionCountAggregateOutputType = {
   type: number
   isRedeemed: number
   isReleased: number
+  version: number
+  idempotencyKey: number
   createdAt: number
   _all: number
 }
@@ -74,10 +82,12 @@ export type TokenTransactionCountAggregateOutputType = {
 
 export type TokenTransactionAvgAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type TokenTransactionSumAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type TokenTransactionMinAggregateInputType = {
@@ -89,6 +99,8 @@ export type TokenTransactionMinAggregateInputType = {
   type?: true
   isRedeemed?: true
   isReleased?: true
+  version?: true
+  idempotencyKey?: true
   createdAt?: true
 }
 
@@ -101,6 +113,8 @@ export type TokenTransactionMaxAggregateInputType = {
   type?: true
   isRedeemed?: true
   isReleased?: true
+  version?: true
+  idempotencyKey?: true
   createdAt?: true
 }
 
@@ -113,6 +127,8 @@ export type TokenTransactionCountAggregateInputType = {
   type?: true
   isRedeemed?: true
   isReleased?: true
+  version?: true
+  idempotencyKey?: true
   createdAt?: true
   _all?: true
 }
@@ -212,6 +228,8 @@ export type TokenTransactionGroupByOutputType = {
   type: $Enums.TokenTransactionType
   isRedeemed: boolean
   isReleased: boolean
+  version: number
+  idempotencyKey: string | null
   createdAt: Date
   _count: TokenTransactionCountAggregateOutputType | null
   _avg: TokenTransactionAvgAggregateOutputType | null
@@ -247,6 +265,8 @@ export type TokenTransactionWhereInput = {
   type?: Prisma.EnumTokenTransactionTypeFilter<"TokenTransaction"> | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFilter<"TokenTransaction"> | boolean
   isReleased?: Prisma.BoolFilter<"TokenTransaction"> | boolean
+  version?: Prisma.IntFilter<"TokenTransaction"> | number
+  idempotencyKey?: Prisma.StringNullableFilter<"TokenTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TokenTransaction"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   reOwnedProduct?: Prisma.XOR<Prisma.ReOwnedProductNullableScalarRelationFilter, Prisma.ReOwnedProductWhereInput> | null
@@ -263,6 +283,8 @@ export type TokenTransactionOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   isRedeemed?: Prisma.SortOrder
   isReleased?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   reOwnedProduct?: Prisma.ReOwnedProductOrderByWithRelationInput
@@ -272,6 +294,7 @@ export type TokenTransactionOrderByWithRelationInput = {
 
 export type TokenTransactionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  idempotencyKey?: string
   AND?: Prisma.TokenTransactionWhereInput | Prisma.TokenTransactionWhereInput[]
   OR?: Prisma.TokenTransactionWhereInput[]
   NOT?: Prisma.TokenTransactionWhereInput | Prisma.TokenTransactionWhereInput[]
@@ -282,12 +305,13 @@ export type TokenTransactionWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumTokenTransactionTypeFilter<"TokenTransaction"> | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFilter<"TokenTransaction"> | boolean
   isReleased?: Prisma.BoolFilter<"TokenTransaction"> | boolean
+  version?: Prisma.IntFilter<"TokenTransaction"> | number
   createdAt?: Prisma.DateTimeFilter<"TokenTransaction"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   reOwnedProduct?: Prisma.XOR<Prisma.ReOwnedProductNullableScalarRelationFilter, Prisma.ReOwnedProductWhereInput> | null
   repostedProduct?: Prisma.XOR<Prisma.RepostedProductNullableScalarRelationFilter, Prisma.RepostedProductWhereInput> | null
   AccountRecharge?: Prisma.AccountRechargeListRelationFilter
-}, "id">
+}, "id" | "idempotencyKey">
 
 export type TokenTransactionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -298,6 +322,8 @@ export type TokenTransactionOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   isRedeemed?: Prisma.SortOrder
   isReleased?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TokenTransactionCountOrderByAggregateInput
   _avg?: Prisma.TokenTransactionAvgOrderByAggregateInput
@@ -318,6 +344,8 @@ export type TokenTransactionScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumTokenTransactionTypeWithAggregatesFilter<"TokenTransaction"> | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolWithAggregatesFilter<"TokenTransaction"> | boolean
   isReleased?: Prisma.BoolWithAggregatesFilter<"TokenTransaction"> | boolean
+  version?: Prisma.IntWithAggregatesFilter<"TokenTransaction"> | number
+  idempotencyKey?: Prisma.StringNullableWithAggregatesFilter<"TokenTransaction"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TokenTransaction"> | Date | string
 }
 
@@ -327,6 +355,8 @@ export type TokenTransactionCreateInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutTokenTransactionsInput
   reOwnedProduct?: Prisma.ReOwnedProductCreateNestedOneWithoutTokenTransactionsInput
@@ -343,6 +373,8 @@ export type TokenTransactionUncheckedCreateInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutTokenTransactionInput
 }
@@ -353,6 +385,8 @@ export type TokenTransactionUpdateInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutTokenTransactionsNestedInput
   reOwnedProduct?: Prisma.ReOwnedProductUpdateOneWithoutTokenTransactionsNestedInput
@@ -369,6 +403,8 @@ export type TokenTransactionUncheckedUpdateInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedUpdateManyWithoutTokenTransactionNestedInput
 }
@@ -382,6 +418,8 @@ export type TokenTransactionCreateManyInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
 }
 
@@ -391,6 +429,8 @@ export type TokenTransactionUpdateManyMutationInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -403,6 +443,8 @@ export type TokenTransactionUncheckedUpdateManyInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -425,11 +467,14 @@ export type TokenTransactionCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   isRedeemed?: Prisma.SortOrder
   isReleased?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TokenTransactionAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type TokenTransactionMaxOrderByAggregateInput = {
@@ -441,6 +486,8 @@ export type TokenTransactionMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   isRedeemed?: Prisma.SortOrder
   isReleased?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -453,11 +500,14 @@ export type TokenTransactionMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   isRedeemed?: Prisma.SortOrder
   isReleased?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TokenTransactionSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type TokenTransactionNullableScalarRelationFilter = {
@@ -617,6 +667,8 @@ export type TokenTransactionCreateWithoutBusinessInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   reOwnedProduct?: Prisma.ReOwnedProductCreateNestedOneWithoutTokenTransactionsInput
   repostedProduct?: Prisma.RepostedProductCreateNestedOneWithoutTokenTransactionsInput
@@ -631,6 +683,8 @@ export type TokenTransactionUncheckedCreateWithoutBusinessInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutTokenTransactionInput
 }
@@ -673,6 +727,8 @@ export type TokenTransactionScalarWhereInput = {
   type?: Prisma.EnumTokenTransactionTypeFilter<"TokenTransaction"> | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFilter<"TokenTransaction"> | boolean
   isReleased?: Prisma.BoolFilter<"TokenTransaction"> | boolean
+  version?: Prisma.IntFilter<"TokenTransaction"> | number
+  idempotencyKey?: Prisma.StringNullableFilter<"TokenTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"TokenTransaction"> | Date | string
 }
 
@@ -682,6 +738,8 @@ export type TokenTransactionCreateWithoutRepostedProductInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutTokenTransactionsInput
   reOwnedProduct?: Prisma.ReOwnedProductCreateNestedOneWithoutTokenTransactionsInput
@@ -696,6 +754,8 @@ export type TokenTransactionUncheckedCreateWithoutRepostedProductInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutTokenTransactionInput
 }
@@ -732,6 +792,8 @@ export type TokenTransactionCreateWithoutReOwnedProductInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutTokenTransactionsInput
   repostedProduct?: Prisma.RepostedProductCreateNestedOneWithoutTokenTransactionsInput
@@ -746,6 +808,8 @@ export type TokenTransactionUncheckedCreateWithoutReOwnedProductInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutTokenTransactionInput
 }
@@ -782,6 +846,8 @@ export type TokenTransactionCreateWithoutAccountRechargeInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutTokenTransactionsInput
   reOwnedProduct?: Prisma.ReOwnedProductCreateNestedOneWithoutTokenTransactionsInput
@@ -797,6 +863,8 @@ export type TokenTransactionUncheckedCreateWithoutAccountRechargeInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
 }
 
@@ -822,6 +890,8 @@ export type TokenTransactionUpdateWithoutAccountRechargeInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutTokenTransactionsNestedInput
   reOwnedProduct?: Prisma.ReOwnedProductUpdateOneWithoutTokenTransactionsNestedInput
@@ -837,6 +907,8 @@ export type TokenTransactionUncheckedUpdateWithoutAccountRechargeInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -848,6 +920,8 @@ export type TokenTransactionCreateManyBusinessInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
 }
 
@@ -857,6 +931,8 @@ export type TokenTransactionUpdateWithoutBusinessInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reOwnedProduct?: Prisma.ReOwnedProductUpdateOneWithoutTokenTransactionsNestedInput
   repostedProduct?: Prisma.RepostedProductUpdateOneWithoutTokenTransactionsNestedInput
@@ -871,6 +947,8 @@ export type TokenTransactionUncheckedUpdateWithoutBusinessInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedUpdateManyWithoutTokenTransactionNestedInput
 }
@@ -883,6 +961,8 @@ export type TokenTransactionUncheckedUpdateManyWithoutBusinessInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -894,6 +974,8 @@ export type TokenTransactionCreateManyRepostedProductInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
 }
 
@@ -903,6 +985,8 @@ export type TokenTransactionUpdateWithoutRepostedProductInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutTokenTransactionsNestedInput
   reOwnedProduct?: Prisma.ReOwnedProductUpdateOneWithoutTokenTransactionsNestedInput
@@ -917,6 +1001,8 @@ export type TokenTransactionUncheckedUpdateWithoutRepostedProductInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedUpdateManyWithoutTokenTransactionNestedInput
 }
@@ -929,6 +1015,8 @@ export type TokenTransactionUncheckedUpdateManyWithoutRepostedProductInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -940,6 +1028,8 @@ export type TokenTransactionCreateManyReOwnedProductInput = {
   type: $Enums.TokenTransactionType
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: number
+  idempotencyKey?: string | null
   createdAt?: Date | string
 }
 
@@ -949,6 +1039,8 @@ export type TokenTransactionUpdateWithoutReOwnedProductInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutTokenTransactionsNestedInput
   repostedProduct?: Prisma.RepostedProductUpdateOneWithoutTokenTransactionsNestedInput
@@ -963,6 +1055,8 @@ export type TokenTransactionUncheckedUpdateWithoutReOwnedProductInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   AccountRecharge?: Prisma.AccountRechargeUncheckedUpdateManyWithoutTokenTransactionNestedInput
 }
@@ -975,6 +1069,8 @@ export type TokenTransactionUncheckedUpdateManyWithoutReOwnedProductInput = {
   type?: Prisma.EnumTokenTransactionTypeFieldUpdateOperationsInput | $Enums.TokenTransactionType
   isRedeemed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isReleased?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  idempotencyKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1018,6 +1114,8 @@ export type TokenTransactionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   type?: boolean
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: boolean
+  idempotencyKey?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   reOwnedProduct?: boolean | Prisma.TokenTransaction$reOwnedProductArgs<ExtArgs>
@@ -1035,6 +1133,8 @@ export type TokenTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   type?: boolean
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: boolean
+  idempotencyKey?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   reOwnedProduct?: boolean | Prisma.TokenTransaction$reOwnedProductArgs<ExtArgs>
@@ -1050,6 +1150,8 @@ export type TokenTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   type?: boolean
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: boolean
+  idempotencyKey?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   reOwnedProduct?: boolean | Prisma.TokenTransaction$reOwnedProductArgs<ExtArgs>
@@ -1065,10 +1167,12 @@ export type TokenTransactionSelectScalar = {
   type?: boolean
   isRedeemed?: boolean
   isReleased?: boolean
+  version?: boolean
+  idempotencyKey?: boolean
   createdAt?: boolean
 }
 
-export type TokenTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "reOwnedProductId" | "repostedProductId" | "amount" | "type" | "isRedeemed" | "isReleased" | "createdAt", ExtArgs["result"]["tokenTransaction"]>
+export type TokenTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "reOwnedProductId" | "repostedProductId" | "amount" | "type" | "isRedeemed" | "isReleased" | "version" | "idempotencyKey" | "createdAt", ExtArgs["result"]["tokenTransaction"]>
 export type TokenTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   reOwnedProduct?: boolean | Prisma.TokenTransaction$reOwnedProductArgs<ExtArgs>
@@ -1104,6 +1208,8 @@ export type $TokenTransactionPayload<ExtArgs extends runtime.Types.Extensions.In
     type: $Enums.TokenTransactionType
     isRedeemed: boolean
     isReleased: boolean
+    version: number
+    idempotencyKey: string | null
     createdAt: Date
   }, ExtArgs["result"]["tokenTransaction"]>
   composites: {}
@@ -1540,6 +1646,8 @@ export interface TokenTransactionFieldRefs {
   readonly type: Prisma.FieldRef<"TokenTransaction", 'TokenTransactionType'>
   readonly isRedeemed: Prisma.FieldRef<"TokenTransaction", 'Boolean'>
   readonly isReleased: Prisma.FieldRef<"TokenTransaction", 'Boolean'>
+  readonly version: Prisma.FieldRef<"TokenTransaction", 'Int'>
+  readonly idempotencyKey: Prisma.FieldRef<"TokenTransaction", 'String'>
   readonly createdAt: Prisma.FieldRef<"TokenTransaction", 'DateTime'>
 }
     

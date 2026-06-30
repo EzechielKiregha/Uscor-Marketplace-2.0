@@ -4,6 +4,8 @@ import { useCart } from "@/app/context/use-cart";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getBusinessTypeConfig, getBusinessTypeEmoji } from "@/config/business-types";
+import TypeSpecificFields from "./TypeSpecificFields";
 import {
   AlertTriangle,
   BaggageClaim,
@@ -58,33 +60,8 @@ export default function ProductDetailsModal({
     return product.price * (1 - promotion.discountPercentage / 100);
   };
 
-  // Get business type icon
-  const getBusinessTypeIcon = () => {
-    switch (product.business.businessType) {
-      case "ARTISAN":
-        return "🎨";
-      case "BOOKSTORE":
-        return "📚";
-      case "ELECTRONICS":
-        return "🔌";
-      case "HARDWARE":
-        return "🔨";
-      case "GROCERY":
-        return "🛒";
-      case "CAFE":
-        return "☕";
-      case "RESTAURANT":
-        return "🍽️";
-      case "RETAIL":
-        return "🏬";
-      case "BAR":
-        return "🍷";
-      case "CLOTHING":
-        return "👕";
-      default:
-        return "🏢";
-    }
-  };
+  const getBusinessTypeIcon = () =>
+    getBusinessTypeEmoji(product.business.businessType);
 
   const handleIncrement = () => {
     setQuantity((q) => q + 1);
@@ -283,26 +260,12 @@ export default function ProductDetailsModal({
                 </div>
               )}
 
-              {/* Variants Selection */}
-              {product.variants && (
-                <div>
-                  <h3 className="font-semibold mb-2">Options</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.keys(product.variants).map((variant) => (
-                      <Button
-                        key={variant}
-                        variant={
-                          selectedVariant === variant ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => handleSelectVariant(variant)}
-                      >
-                        {variant}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Type-Specific Product Details */}
+              <TypeSpecificFields
+                product={product}
+                context="detail"
+                className="p-4 rounded-lg bg-muted/50 border border-border"
+              />
 
               {/* Quantity Selector */}
               <div className="flex items-center gap-3">
@@ -359,49 +322,27 @@ export default function ProductDetailsModal({
                 </Button>
               </div>
 
-              {/* Business Type Specific Information */}
-              <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
-                <div className="flex items-start gap-3">
-                  <ShoppingCart className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-semibold">Product Information</h3>
-
-                    {product.business.businessType === "ARTISAN" && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        As a handcrafted product, this item may have slight
-                        variations that make it unique. Artisans typically take
-                        2-4 weeks to complete custom orders. Contact the
-                        business directly for customization options.
-                      </p>
-                    )}
-
-                    {product.business.businessType === "GROCERY" && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        This grocery item is typically available for same-day
-                        delivery. Check with the business for current stock
-                        availability and delivery options in your area.
-                      </p>
-                    )}
-
-                    {product.business.businessType === "BOOKSTORE" && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Bookstore items may include special editions or signed
-                        copies. Ask about availability of specific editions or
-                        related products that might interest you.
-                      </p>
-                    )}
-
-                    {product.business.businessType !== "ARTISAN" &&
-                      product.business.businessType !== "GROCERY" &&
-                      product.business.businessType !== "BOOKSTORE" && (
+              {/* Business Type Information */}
+              {(() => {
+                const config = getBusinessTypeConfig(product.business?.businessType);
+                return (
+                  <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+                    <div className="flex items-start gap-3">
+                      <div className={`p-1.5 rounded-md ${config.color.badge} shrink-0`}>
+                        <config.icon className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">{config.label}</h3>
                         <p className="text-sm text-muted-foreground mt-1">
-                          Contact the business directly for any questions about
-                          this product, availability, or customization options.
+                          {config.description}. Contact the business directly for
+                          any questions about this product, availability, or
+                          customization options.
                         </p>
-                      )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                );
+              })()}
             </div>
           </div>
         </div>

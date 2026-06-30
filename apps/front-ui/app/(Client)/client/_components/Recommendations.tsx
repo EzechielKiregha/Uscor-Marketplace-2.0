@@ -110,7 +110,7 @@ export default function Recommendations({ client }: RecommendationsProps) {
 			<div className="p-4 bg-muted border-b border-border">
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 					<div>
-						<h1 className="text-2xl font-bold">Personalized Recommendations</h1>
+						<h1 className="text-page-title">Personalized Recommendations</h1>
 						<p className="text-muted-foreground mt-1">
 							Based on your purchase history and preferences
 						</p>

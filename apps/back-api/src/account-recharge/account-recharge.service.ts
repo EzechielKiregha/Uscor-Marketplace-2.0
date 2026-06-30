@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { sumPrecise } from "../common/token-math";
 import { PaymentStatus, RechargeMethod } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateAccountRechargeInput } from "./dto/create-account-recharge.input";
@@ -228,23 +229,27 @@ export class AccountRechargeService {
 			},
 		});
 
-		const totalAmount = recharges.filter((r)=> r.status === PaymentStatus.COMPLETED && r.method !== RechargeMethod.TOKEN).reduce((sum, recharge) => sum + recharge.amount, 0);
-		const availableAmount = recharges
-			.filter((recharge) => recharge.status === PaymentStatus.COMPLETED && recharge.method !== RechargeMethod.TOKEN)
-			.reduce((sum, recharge) => sum + recharge.amount, 0);
-		const pendingAmount = recharges
-			.filter((recharge) => recharge.status === PaymentStatus.PENDING && recharge.method !== RechargeMethod.TOKEN)
-			.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const totalAmount = sumPrecise(
+			recharges.filter((r) => r.status === PaymentStatus.COMPLETED && r.method !== RechargeMethod.TOKEN).map((r) => r.amount),
+		);
+		const availableAmount = sumPrecise(
+			recharges.filter((r) => r.status === PaymentStatus.COMPLETED && r.method !== RechargeMethod.TOKEN).map((r) => r.amount),
+		);
+		const pendingAmount = sumPrecise(
+			recharges.filter((r) => r.status === PaymentStatus.PENDING && r.method !== RechargeMethod.TOKEN).map((r) => r.amount),
+		);
 		const reservedAmount = pendingAmount;
-        
+
         // token balance
-		const totalTokens = recharges.filter((r)=> r.method === RechargeMethod.TOKEN).reduce((sum, recharge) => sum + recharge.amount, 0);
-		const availableTokens = recharges
-			.filter((recharge) => recharge.status === PaymentStatus.COMPLETED && recharge.method === RechargeMethod.TOKEN)
-			.reduce((sum, recharge) => sum + recharge.amount, 0);
-		const pendingTokens = recharges
-			.filter((recharge) => recharge.status === PaymentStatus.PENDING && recharge.method === RechargeMethod.TOKEN)
-			.reduce((sum, recharge) => sum + recharge.amount, 0);
+		const totalTokens = sumPrecise(
+			recharges.filter((r) => r.method === RechargeMethod.TOKEN).map((r) => r.amount),
+		);
+		const availableTokens = sumPrecise(
+			recharges.filter((r) => r.status === PaymentStatus.COMPLETED && r.method === RechargeMethod.TOKEN).map((r) => r.amount),
+		);
+		const pendingTokens = sumPrecise(
+			recharges.filter((r) => r.status === PaymentStatus.PENDING && r.method === RechargeMethod.TOKEN).map((r) => r.amount),
+		);
 
         const tokenBalance = {
             totalTokens,

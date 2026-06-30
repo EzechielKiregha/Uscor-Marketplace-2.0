@@ -29,11 +29,13 @@ export type AggregateSale = {
 export type SaleAvgAggregateOutputType = {
   totalAmount: number | null
   discount: number | null
+  version: number | null
 }
 
 export type SaleSumAggregateOutputType = {
   totalAmount: number | null
   discount: number | null
+  version: number | null
 }
 
 export type SaleMinAggregateOutputType = {
@@ -48,6 +50,12 @@ export type SaleMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   receiptUrl: string | null
+  isOffline: boolean | null
+  syncStatus: $Enums.SyncStatus | null
+  localId: string | null
+  localTimestamp: Date | null
+  deviceId: string | null
+  version: number | null
 }
 
 export type SaleMaxAggregateOutputType = {
@@ -62,6 +70,12 @@ export type SaleMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   receiptUrl: string | null
+  isOffline: boolean | null
+  syncStatus: $Enums.SyncStatus | null
+  localId: string | null
+  localTimestamp: Date | null
+  deviceId: string | null
+  version: number | null
 }
 
 export type SaleCountAggregateOutputType = {
@@ -76,6 +90,12 @@ export type SaleCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   receiptUrl: number
+  isOffline: number
+  syncStatus: number
+  localId: number
+  localTimestamp: number
+  deviceId: number
+  version: number
   _all: number
 }
 
@@ -83,11 +103,13 @@ export type SaleCountAggregateOutputType = {
 export type SaleAvgAggregateInputType = {
   totalAmount?: true
   discount?: true
+  version?: true
 }
 
 export type SaleSumAggregateInputType = {
   totalAmount?: true
   discount?: true
+  version?: true
 }
 
 export type SaleMinAggregateInputType = {
@@ -102,6 +124,12 @@ export type SaleMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   receiptUrl?: true
+  isOffline?: true
+  syncStatus?: true
+  localId?: true
+  localTimestamp?: true
+  deviceId?: true
+  version?: true
 }
 
 export type SaleMaxAggregateInputType = {
@@ -116,6 +144,12 @@ export type SaleMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   receiptUrl?: true
+  isOffline?: true
+  syncStatus?: true
+  localId?: true
+  localTimestamp?: true
+  deviceId?: true
+  version?: true
 }
 
 export type SaleCountAggregateInputType = {
@@ -130,6 +164,12 @@ export type SaleCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   receiptUrl?: true
+  isOffline?: true
+  syncStatus?: true
+  localId?: true
+  localTimestamp?: true
+  deviceId?: true
+  version?: true
   _all?: true
 }
 
@@ -231,6 +271,12 @@ export type SaleGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   receiptUrl: string | null
+  isOffline: boolean
+  syncStatus: $Enums.SyncStatus
+  localId: string | null
+  localTimestamp: Date | null
+  deviceId: string | null
+  version: number
   _count: SaleCountAggregateOutputType | null
   _avg: SaleAvgAggregateOutputType | null
   _sum: SaleSumAggregateOutputType | null
@@ -268,6 +314,12 @@ export type SaleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   receiptUrl?: Prisma.StringNullableFilter<"Sale"> | string | null
+  isOffline?: Prisma.BoolFilter<"Sale"> | boolean
+  syncStatus?: Prisma.EnumSyncStatusFilter<"Sale"> | $Enums.SyncStatus
+  localId?: Prisma.StringNullableFilter<"Sale"> | string | null
+  localTimestamp?: Prisma.DateTimeNullableFilter<"Sale"> | Date | string | null
+  deviceId?: Prisma.StringNullableFilter<"Sale"> | string | null
+  version?: Prisma.IntFilter<"Sale"> | number
   store?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
   worker?: Prisma.XOR<Prisma.WorkerScalarRelationFilter, Prisma.WorkerWhereInput>
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
@@ -287,6 +339,12 @@ export type SaleOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   receiptUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOffline?: Prisma.SortOrder
+  syncStatus?: Prisma.SortOrder
+  localId?: Prisma.SortOrderInput | Prisma.SortOrder
+  localTimestamp?: Prisma.SortOrderInput | Prisma.SortOrder
+  deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   store?: Prisma.StoreOrderByWithRelationInput
   worker?: Prisma.WorkerOrderByWithRelationInput
   client?: Prisma.ClientOrderByWithRelationInput
@@ -296,6 +354,7 @@ export type SaleOrderByWithRelationInput = {
 
 export type SaleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  localId?: string
   AND?: Prisma.SaleWhereInput | Prisma.SaleWhereInput[]
   OR?: Prisma.SaleWhereInput[]
   NOT?: Prisma.SaleWhereInput | Prisma.SaleWhereInput[]
@@ -309,12 +368,17 @@ export type SaleWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   receiptUrl?: Prisma.StringNullableFilter<"Sale"> | string | null
+  isOffline?: Prisma.BoolFilter<"Sale"> | boolean
+  syncStatus?: Prisma.EnumSyncStatusFilter<"Sale"> | $Enums.SyncStatus
+  localTimestamp?: Prisma.DateTimeNullableFilter<"Sale"> | Date | string | null
+  deviceId?: Prisma.StringNullableFilter<"Sale"> | string | null
+  version?: Prisma.IntFilter<"Sale"> | number
   store?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
   worker?: Prisma.XOR<Prisma.WorkerScalarRelationFilter, Prisma.WorkerWhereInput>
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
   saleProducts?: Prisma.SaleProductListRelationFilter
   returns?: Prisma.ReturnListRelationFilter
-}, "id">
+}, "id" | "localId">
 
 export type SaleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -328,6 +392,12 @@ export type SaleOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   receiptUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOffline?: Prisma.SortOrder
+  syncStatus?: Prisma.SortOrder
+  localId?: Prisma.SortOrderInput | Prisma.SortOrder
+  localTimestamp?: Prisma.SortOrderInput | Prisma.SortOrder
+  deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.SaleCountOrderByAggregateInput
   _avg?: Prisma.SaleAvgOrderByAggregateInput
   _max?: Prisma.SaleMaxOrderByAggregateInput
@@ -350,6 +420,12 @@ export type SaleScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Sale"> | Date | string
   receiptUrl?: Prisma.StringNullableWithAggregatesFilter<"Sale"> | string | null
+  isOffline?: Prisma.BoolWithAggregatesFilter<"Sale"> | boolean
+  syncStatus?: Prisma.EnumSyncStatusWithAggregatesFilter<"Sale"> | $Enums.SyncStatus
+  localId?: Prisma.StringNullableWithAggregatesFilter<"Sale"> | string | null
+  localTimestamp?: Prisma.DateTimeNullableWithAggregatesFilter<"Sale"> | Date | string | null
+  deviceId?: Prisma.StringNullableWithAggregatesFilter<"Sale"> | string | null
+  version?: Prisma.IntWithAggregatesFilter<"Sale"> | number
 }
 
 export type SaleCreateInput = {
@@ -361,6 +437,12 @@ export type SaleCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   store: Prisma.StoreCreateNestedOneWithoutSalesInput
   worker: Prisma.WorkerCreateNestedOneWithoutSalesInput
   client?: Prisma.ClientCreateNestedOneWithoutSalesInput
@@ -380,6 +462,12 @@ export type SaleUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutSaleInput
   returns?: Prisma.ReturnUncheckedCreateNestedManyWithoutSaleInput
 }
@@ -393,6 +481,12 @@ export type SaleUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   store?: Prisma.StoreUpdateOneRequiredWithoutSalesNestedInput
   worker?: Prisma.WorkerUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneWithoutSalesNestedInput
@@ -412,6 +506,12 @@ export type SaleUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutSaleNestedInput
   returns?: Prisma.ReturnUncheckedUpdateManyWithoutSaleNestedInput
 }
@@ -428,6 +528,12 @@ export type SaleCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
 }
 
 export type SaleUpdateManyMutationInput = {
@@ -439,6 +545,12 @@ export type SaleUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SaleUncheckedUpdateManyInput = {
@@ -453,6 +565,12 @@ export type SaleUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SaleListRelationFilter = {
@@ -477,11 +595,18 @@ export type SaleCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   receiptUrl?: Prisma.SortOrder
+  isOffline?: Prisma.SortOrder
+  syncStatus?: Prisma.SortOrder
+  localId?: Prisma.SortOrder
+  localTimestamp?: Prisma.SortOrder
+  deviceId?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type SaleAvgOrderByAggregateInput = {
   totalAmount?: Prisma.SortOrder
   discount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type SaleMaxOrderByAggregateInput = {
@@ -496,6 +621,12 @@ export type SaleMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   receiptUrl?: Prisma.SortOrder
+  isOffline?: Prisma.SortOrder
+  syncStatus?: Prisma.SortOrder
+  localId?: Prisma.SortOrder
+  localTimestamp?: Prisma.SortOrder
+  deviceId?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type SaleMinOrderByAggregateInput = {
@@ -510,11 +641,18 @@ export type SaleMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   receiptUrl?: Prisma.SortOrder
+  isOffline?: Prisma.SortOrder
+  syncStatus?: Prisma.SortOrder
+  localId?: Prisma.SortOrder
+  localTimestamp?: Prisma.SortOrder
+  deviceId?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type SaleSumOrderByAggregateInput = {
   totalAmount?: Prisma.SortOrder
   discount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type SaleScalarRelationFilter = {
@@ -652,6 +790,10 @@ export type EnumSaleStatusFieldUpdateOperationsInput = {
   set?: $Enums.SaleStatus
 }
 
+export type EnumSyncStatusFieldUpdateOperationsInput = {
+  set?: $Enums.SyncStatus
+}
+
 export type SaleCreateNestedOneWithoutSaleProductsInput = {
   create?: Prisma.XOR<Prisma.SaleCreateWithoutSaleProductsInput, Prisma.SaleUncheckedCreateWithoutSaleProductsInput>
   connectOrCreate?: Prisma.SaleCreateOrConnectWithoutSaleProductsInput
@@ -689,6 +831,12 @@ export type SaleCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   store: Prisma.StoreCreateNestedOneWithoutSalesInput
   worker: Prisma.WorkerCreateNestedOneWithoutSalesInput
   saleProducts?: Prisma.SaleProductCreateNestedManyWithoutSaleInput
@@ -706,6 +854,12 @@ export type SaleUncheckedCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutSaleInput
   returns?: Prisma.ReturnUncheckedCreateNestedManyWithoutSaleInput
 }
@@ -751,6 +905,12 @@ export type SaleScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   receiptUrl?: Prisma.StringNullableFilter<"Sale"> | string | null
+  isOffline?: Prisma.BoolFilter<"Sale"> | boolean
+  syncStatus?: Prisma.EnumSyncStatusFilter<"Sale"> | $Enums.SyncStatus
+  localId?: Prisma.StringNullableFilter<"Sale"> | string | null
+  localTimestamp?: Prisma.DateTimeNullableFilter<"Sale"> | Date | string | null
+  deviceId?: Prisma.StringNullableFilter<"Sale"> | string | null
+  version?: Prisma.IntFilter<"Sale"> | number
 }
 
 export type SaleCreateWithoutWorkerInput = {
@@ -762,6 +922,12 @@ export type SaleCreateWithoutWorkerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   store: Prisma.StoreCreateNestedOneWithoutSalesInput
   client?: Prisma.ClientCreateNestedOneWithoutSalesInput
   saleProducts?: Prisma.SaleProductCreateNestedManyWithoutSaleInput
@@ -779,6 +945,12 @@ export type SaleUncheckedCreateWithoutWorkerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutSaleInput
   returns?: Prisma.ReturnUncheckedCreateNestedManyWithoutSaleInput
 }
@@ -818,6 +990,12 @@ export type SaleCreateWithoutStoreInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   worker: Prisma.WorkerCreateNestedOneWithoutSalesInput
   client?: Prisma.ClientCreateNestedOneWithoutSalesInput
   saleProducts?: Prisma.SaleProductCreateNestedManyWithoutSaleInput
@@ -835,6 +1013,12 @@ export type SaleUncheckedCreateWithoutStoreInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutSaleInput
   returns?: Prisma.ReturnUncheckedCreateNestedManyWithoutSaleInput
 }
@@ -874,6 +1058,12 @@ export type SaleCreateWithoutSaleProductsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   store: Prisma.StoreCreateNestedOneWithoutSalesInput
   worker: Prisma.WorkerCreateNestedOneWithoutSalesInput
   client?: Prisma.ClientCreateNestedOneWithoutSalesInput
@@ -892,6 +1082,12 @@ export type SaleUncheckedCreateWithoutSaleProductsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   returns?: Prisma.ReturnUncheckedCreateNestedManyWithoutSaleInput
 }
 
@@ -920,6 +1116,12 @@ export type SaleUpdateWithoutSaleProductsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   store?: Prisma.StoreUpdateOneRequiredWithoutSalesNestedInput
   worker?: Prisma.WorkerUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneWithoutSalesNestedInput
@@ -938,6 +1140,12 @@ export type SaleUncheckedUpdateWithoutSaleProductsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   returns?: Prisma.ReturnUncheckedUpdateManyWithoutSaleNestedInput
 }
 
@@ -950,6 +1158,12 @@ export type SaleCreateWithoutReturnsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   store: Prisma.StoreCreateNestedOneWithoutSalesInput
   worker: Prisma.WorkerCreateNestedOneWithoutSalesInput
   client?: Prisma.ClientCreateNestedOneWithoutSalesInput
@@ -968,6 +1182,12 @@ export type SaleUncheckedCreateWithoutReturnsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
   saleProducts?: Prisma.SaleProductUncheckedCreateNestedManyWithoutSaleInput
 }
 
@@ -996,6 +1216,12 @@ export type SaleUpdateWithoutReturnsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   store?: Prisma.StoreUpdateOneRequiredWithoutSalesNestedInput
   worker?: Prisma.WorkerUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneWithoutSalesNestedInput
@@ -1014,6 +1240,12 @@ export type SaleUncheckedUpdateWithoutReturnsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutSaleNestedInput
 }
 
@@ -1028,6 +1260,12 @@ export type SaleCreateManyClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
 }
 
 export type SaleUpdateWithoutClientInput = {
@@ -1039,6 +1277,12 @@ export type SaleUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   store?: Prisma.StoreUpdateOneRequiredWithoutSalesNestedInput
   worker?: Prisma.WorkerUpdateOneRequiredWithoutSalesNestedInput
   saleProducts?: Prisma.SaleProductUpdateManyWithoutSaleNestedInput
@@ -1056,6 +1300,12 @@ export type SaleUncheckedUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutSaleNestedInput
   returns?: Prisma.ReturnUncheckedUpdateManyWithoutSaleNestedInput
 }
@@ -1071,6 +1321,12 @@ export type SaleUncheckedUpdateManyWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SaleCreateManyWorkerInput = {
@@ -1084,6 +1340,12 @@ export type SaleCreateManyWorkerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
 }
 
 export type SaleUpdateWithoutWorkerInput = {
@@ -1095,6 +1357,12 @@ export type SaleUpdateWithoutWorkerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   store?: Prisma.StoreUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneWithoutSalesNestedInput
   saleProducts?: Prisma.SaleProductUpdateManyWithoutSaleNestedInput
@@ -1112,6 +1380,12 @@ export type SaleUncheckedUpdateWithoutWorkerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutSaleNestedInput
   returns?: Prisma.ReturnUncheckedUpdateManyWithoutSaleNestedInput
 }
@@ -1127,6 +1401,12 @@ export type SaleUncheckedUpdateManyWithoutWorkerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SaleCreateManyStoreInput = {
@@ -1140,6 +1420,12 @@ export type SaleCreateManyStoreInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   receiptUrl?: string | null
+  isOffline?: boolean
+  syncStatus?: $Enums.SyncStatus
+  localId?: string | null
+  localTimestamp?: Date | string | null
+  deviceId?: string | null
+  version?: number
 }
 
 export type SaleUpdateWithoutStoreInput = {
@@ -1151,6 +1437,12 @@ export type SaleUpdateWithoutStoreInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   worker?: Prisma.WorkerUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneWithoutSalesNestedInput
   saleProducts?: Prisma.SaleProductUpdateManyWithoutSaleNestedInput
@@ -1168,6 +1460,12 @@ export type SaleUncheckedUpdateWithoutStoreInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   saleProducts?: Prisma.SaleProductUncheckedUpdateManyWithoutSaleNestedInput
   returns?: Prisma.ReturnUncheckedUpdateManyWithoutSaleNestedInput
 }
@@ -1183,6 +1481,12 @@ export type SaleUncheckedUpdateManyWithoutStoreInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receiptUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOffline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  syncStatus?: Prisma.EnumSyncStatusFieldUpdateOperationsInput | $Enums.SyncStatus
+  localId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localTimestamp?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -1237,6 +1541,12 @@ export type SaleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   receiptUrl?: boolean
+  isOffline?: boolean
+  syncStatus?: boolean
+  localId?: boolean
+  localTimestamp?: boolean
+  deviceId?: boolean
+  version?: boolean
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
   client?: boolean | Prisma.Sale$clientArgs<ExtArgs>
@@ -1257,6 +1567,12 @@ export type SaleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   receiptUrl?: boolean
+  isOffline?: boolean
+  syncStatus?: boolean
+  localId?: boolean
+  localTimestamp?: boolean
+  deviceId?: boolean
+  version?: boolean
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
   client?: boolean | Prisma.Sale$clientArgs<ExtArgs>
@@ -1274,6 +1590,12 @@ export type SaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   receiptUrl?: boolean
+  isOffline?: boolean
+  syncStatus?: boolean
+  localId?: boolean
+  localTimestamp?: boolean
+  deviceId?: boolean
+  version?: boolean
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
   client?: boolean | Prisma.Sale$clientArgs<ExtArgs>
@@ -1291,9 +1613,15 @@ export type SaleSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   receiptUrl?: boolean
+  isOffline?: boolean
+  syncStatus?: boolean
+  localId?: boolean
+  localTimestamp?: boolean
+  deviceId?: boolean
+  version?: boolean
 }
 
-export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storeId" | "workerId" | "clientId" | "totalAmount" | "discount" | "paymentMethod" | "status" | "createdAt" | "updatedAt" | "receiptUrl", ExtArgs["result"]["sale"]>
+export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storeId" | "workerId" | "clientId" | "totalAmount" | "discount" | "paymentMethod" | "status" | "createdAt" | "updatedAt" | "receiptUrl" | "isOffline" | "syncStatus" | "localId" | "localTimestamp" | "deviceId" | "version", ExtArgs["result"]["sale"]>
 export type SaleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   worker?: boolean | Prisma.WorkerDefaultArgs<ExtArgs>
@@ -1334,6 +1662,12 @@ export type $SalePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdAt: Date
     updatedAt: Date
     receiptUrl: string | null
+    isOffline: boolean
+    syncStatus: $Enums.SyncStatus
+    localId: string | null
+    localTimestamp: Date | null
+    deviceId: string | null
+    version: number
   }, ExtArgs["result"]["sale"]>
   composites: {}
 }
@@ -1773,6 +2107,12 @@ export interface SaleFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Sale", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Sale", 'DateTime'>
   readonly receiptUrl: Prisma.FieldRef<"Sale", 'String'>
+  readonly isOffline: Prisma.FieldRef<"Sale", 'Boolean'>
+  readonly syncStatus: Prisma.FieldRef<"Sale", 'SyncStatus'>
+  readonly localId: Prisma.FieldRef<"Sale", 'String'>
+  readonly localTimestamp: Prisma.FieldRef<"Sale", 'DateTime'>
+  readonly deviceId: Prisma.FieldRef<"Sale", 'String'>
+  readonly version: Prisma.FieldRef<"Sale", 'Int'>
 }
     
 

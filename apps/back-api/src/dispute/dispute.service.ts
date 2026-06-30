@@ -1,9 +1,11 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class DisputeService {
+	private readonly logger = new Logger(DisputeService.name);
+
 	constructor(
 		private prisma: PrismaService,
 		@Inject("PUB_SUB") private pubSub: PubSub,
@@ -67,6 +69,17 @@ export class DisputeService {
 				resolvedAt: new Date(),
 			},
 		});
+		if (refundAmount && refundAmount > 0) {
+			this.logger.warn(
+				`Dispute ${disputeId} resolved with refund $${refundAmount} — manual refund processing required`,
+			);
+		}
+		if (compensation && compensation > 0) {
+			this.logger.warn(
+				`Dispute ${disputeId} resolved with compensation $${compensation} — manual compensation processing required`,
+			);
+		}
+
 		await this.pubSub.publish("DISPUTE_RESOLVED", { disputeResolved: dispute });
 		return dispute;
 	}

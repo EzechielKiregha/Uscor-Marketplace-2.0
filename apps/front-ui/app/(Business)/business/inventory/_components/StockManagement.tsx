@@ -1,9 +1,12 @@
 // app/business/inventory/_components/StockManagement.tsx
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   AlertTriangle,
+  Download,
+  FileText,
   Minus,
   Package,
   Pencil,
@@ -19,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import { CREATE_INVENTORY_ADJUSTMENT } from "@/graphql/inventory.gql";
 import { GET_PRODUCTS } from "@/graphql/product.gql";
 import { ProductEntity } from "@/lib/types";
+import { exportInventoryCSV } from "@/lib/export-utils";
+import { downloadInventoryReportPDF } from "@/lib/pdf/inventory-report-pdf";
 
 interface StockManagementProps {
   storeId: string;
@@ -143,6 +148,29 @@ export default function StockManagement({
             </div>
 
             <Button
+              variant="outline"
+              size="sm"
+              onClick={() => exportInventoryCSV(filteredInventory)}
+              disabled={filteredInventory.length === 0}
+            >
+              <Download className="h-3.5 w-3.5 mr-1" />
+              CSV
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                downloadInventoryReportPDF({
+                  storeName: "Store",
+                  items: filteredInventory,
+                })
+              }
+              disabled={filteredInventory.length === 0}
+            >
+              <FileText className="h-3.5 w-3.5 mr-1" />
+              PDF
+            </Button>
+            <Button
               variant="default"
               onClick={() => {
                 setSelectedItem(null);
@@ -158,11 +186,12 @@ export default function StockManagement({
 
       <CardContent>
         {filteredInventory.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            {searchQuery
-              ? "No matching products found"
-              : "No inventory items available"}
-          </div>
+          <EmptyState
+            icon={emptyStateIcons.inventory}
+            title={searchQuery ? "No matching products found" : "No inventory items available"}
+            description="Inventory items will appear here"
+            compact
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">

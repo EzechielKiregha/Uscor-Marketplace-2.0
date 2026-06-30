@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import {
     Country,
@@ -6,6 +6,7 @@ import {
 } from "../account-recharge/dto/create-account-recharge.input";
 import { BusinessService } from "../business/business.service";
 import { ClientService } from "../client/client.service";
+import { divPrecise } from "../common/token-math";
 import {
     OrderStatus,
     PaymentMethod,
@@ -19,6 +20,8 @@ import { PaymentTransactionEntity } from "./entities/payment-transaction.entity"
 // Service
 @Injectable()
 export class PaymentTransactionService {
+    private readonly logger = new Logger(PaymentTransactionService.name);
+
     constructor(
         private prisma: PrismaService,
         private accountRechargeService: AccountRechargeService,
@@ -58,7 +61,7 @@ export class PaymentTransactionService {
             "client",
             mtd,
         );
-        return balance.totalAmount / 10 >= amount;
+        return divPrecise(balance.totalAmount, 10) >= amount;
     }
 
     async create(
@@ -205,11 +208,16 @@ export class PaymentTransactionService {
         if (!order.payment)
             throw new Error("This order's payment was not initialized");
 
-        // If status is changing to COMPLETED, validate and deduct balance
+        // If status is changing to COMPLETED, validate and deduct balance atomically
         if (
             status === "COMPLETED" &&
             transaction.status !== PaymentStatus.COMPLETED
         ) {
+            // Collect business IDs for settlement (credit to seller)
+            const businessIds = [
+                ...new Set(order.products.map((p) => p.product.businessId)),
+            ];
+
             if (!phone) {
                 if (transaction.method === PaymentMethod.TOKEN) {
                     const hasEnoughTokens = await this.validateBalance(
@@ -220,7 +228,7 @@ export class PaymentTransactionService {
                     if (!hasEnoughTokens) {
                         throw new Error("Insufficient token balance");
                     }
-                    // Deduct balance by creating a negative AccountRecharge
+                    // Deduct balance from client
                     await this.accountRechargeService.create(
                         {
                             amount: -transaction.amount,
@@ -232,6 +240,20 @@ export class PaymentTransactionService {
                         order.clientId,
                         "client",
                     );
+                    // Settle to each business
+                    for (const bizId of businessIds) {
+                        await this.accountRechargeService.create(
+                            {
+                                amount: transaction.amount / businessIds.length,
+                                method: RechargeMethod.TOKEN,
+                                origin: Country.RWANDA,
+                                clientId: undefined,
+                                businessId: bizId,
+                            },
+                            bizId,
+                            "business",
+                        );
+                    }
                 } else if (transaction.method === PaymentMethod.MOBILE_MONEY) {
                     let mtd = RechargeMethod.AIRTEL_MONEY;
                     let hasEnoughBalance = await this.validateBalance(
@@ -267,7 +289,7 @@ export class PaymentTransactionService {
                     if (!hasEnoughBalance) {
                         throw new Error("Insufficient mobile money balance");
                     }
-                    // Deduct balance by creating a negative AccountRecharge
+                    // Deduct balance from client
                     await this.accountRechargeService.create(
                         {
                             amount: -transaction.amount,
@@ -279,8 +301,26 @@ export class PaymentTransactionService {
                         order.clientId,
                         "client",
                     );
+                    // Settle to each business
+                    for (const bizId of businessIds) {
+                        await this.accountRechargeService.create(
+                            {
+                                amount: transaction.amount / businessIds.length,
+                                method: mtd,
+                                origin: Country.RWANDA,
+                                clientId: undefined,
+                                businessId: bizId,
+                            },
+                            bizId,
+                            "business",
+                        );
+                    }
                 }
             }
+
+            this.logger.log(
+                `Payment ${id} completed: ${transaction.method} $${transaction.amount} for order ${order.id}`,
+            );
         }
 
         await this.prisma.order.updateMany({
@@ -293,30 +333,37 @@ export class PaymentTransactionService {
             },
         })
 
-        return this.prisma.paymentTransaction.update({
-            where: { id },
+        return this.prisma.paymentTransaction.update(
+          {
+            where: { orderId: order.id },
             data: {
-                ...(status && { status: status as any }),
-                ...(qrCode && { qrCode }),
-                order: {
-                    update: {
-                        status: OrderStatus.PROCESSING,
-                    },
+              ...(status && {
+                status: status as any,
+              }),
+              ...(qrCode && { qrCode }),
+              order: {
+                update: {
+                  status: OrderStatus.PROCESSING,
                 },
+              },
             },
             select: {
-                id: true,
-                amount: true,
-                method: true,
-                status: true,
-                transactionDate: true,
-                qrCode: true,
-                createdAt: true,
-                order: {
-                    select: { id: true, deliveryFee: true },
+              id: true,
+              amount: true,
+              method: true,
+              status: true,
+              transactionDate: true,
+              qrCode: true,
+              createdAt: true,
+              order: {
+                select: {
+                  id: true,
+                  deliveryFee: true,
                 },
+              },
             },
-        });
+          },
+        )
     }
 
     async createRechargePayment(
@@ -415,8 +462,6 @@ export class PaymentTransactionService {
             throw new Error("Payment transaction not found");
         }
 
-        console.log("Recharge Completion is progress...")
-
         const transaction = await this.prisma.paymentTransaction.update({
             where: { id: effectiveId },
             data: {
@@ -509,7 +554,7 @@ export class PaymentTransactionService {
         }));
     }
 
-    async findLatest(phone: string): Promise<PaymentTransactionEntity | null> {
+    async findLatest(phone: string, status?: string): Promise<PaymentTransactionEntity | null> {
         // Resolve phone → userId (client or business)
         const client = await this.prisma.client.findUnique({
             where: { phone },
@@ -527,22 +572,42 @@ export class PaymentTransactionService {
 
         if (!clientId && !businessId) return null;
 
-        const where: any = { status: PaymentStatus.PENDING };
+        // 1. Calculate the 15-minute cutoff window
+        const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+
+        // 2. Setup base where filters
+        const where: any = { 
+            status: {
+                in: [PaymentStatus.PENDING, PaymentStatus.COMPLETED]
+            },
+            // createdAt: {
+            //     gte: fifteenMinutesAgo 
+            // },
+            // Enforces that a linked Order MUST exist AND its clientOrderId MUST be null
+            order: {
+                clientOrderId: null
+            }
+        };
+
+        // 3. Keep conditional OR logic for client / business filters
         const or: any[] = [];
         if (clientId) or.push({ clientId });
-        if (businessId)
+        if (businessId) {
             or.push({ order: { products: { some: { product: { businessId } } } } });
+        }
         if (or.length) where.OR = or;
 
+        // 4. Query the single latest transaction matching all parameters
         const t = await this.prisma.paymentTransaction.findFirst({
-            where,
-            orderBy: { createdAt: "desc" },
+            where: { ...where },
+            orderBy: { createdAt: "desc" }, // Ensures you get the latest record
             include: {
                 order: {
                     select: {
                         id: true,
                         deliveryFee: true,
                         deliveryAddress: true,
+                        clientOrderId: true,
                         createdAt: true,
                         updatedAt: true,
                         client: true,
@@ -561,7 +626,9 @@ export class PaymentTransactionService {
             },
         });
 
-        console.log({Trans: t})
+
+
+        console.log({t})
 
         if (!t) return null;
 
@@ -571,20 +638,6 @@ export class PaymentTransactionService {
                 where: { id: t.order.deliveryAddress },
             });
         }
-
-        console.log({
-            ...(t as any),
-            order: {
-                ...(t.order as any),
-                deliveryAddress: address
-                    ? {
-                          ...address,
-                          country: address.country ?? undefined,
-                          postalCode: address.postalCode ?? undefined,
-                      }
-                    : null,
-            },
-        })
 
         return ({
             ...(t as any),

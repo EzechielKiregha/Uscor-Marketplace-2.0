@@ -22,15 +22,12 @@ export const GET_KYC_SUBMISSIONS = gql`
       items {
         id
         businessId
-        documentType
         documentUrl
         status
         submittedAt
         verifiedAt
         rejectionReason
-        notes
-        createdAt
-        updatedAt
+        submittedAt
         business {
           id
           name
@@ -39,6 +36,17 @@ export const GET_KYC_SUBMISSIONS = gql`
           address
           phone
           avatar
+          taxId
+          registrationNumber
+          kycDocuments {
+            id
+            documentType
+            documentUrl
+            status
+            submittedAt
+            verifiedAt
+            rejectionReason
+          }
         }
       }
       total
@@ -51,15 +59,12 @@ export const GET_KYC_SUBMISSIONS = gql`
 export const GET_USERS = gql`
   query GetUsers(
     $input: GetUsersInput!
-
     $includeBusinesses: Boolean!
     $includeClients: Boolean!
     $includeWorkers: Boolean!
     $includeAdmins: Boolean!
   ) {
-    all_businesses(
-      input: $input
-    ) @include(if: $includeBusinesses) {
+    all_businesses(input: $input) @include(if: $includeBusinesses) {
       items {
         id
         name
@@ -101,10 +106,8 @@ export const GET_USERS = gql`
       page
       limit
     }
-    
-    all_clients(
-      input: $input
-    ) @include(if: $includeClients) {
+
+    all_clients(input: $input) @include(if: $includeClients) {
       items {
         id
         fullName
@@ -136,10 +139,8 @@ export const GET_USERS = gql`
       page
       limit
     }
-    
-    all_workers(
-      input: $input
-    ) @include(if: $includeWorkers) {
+
+    all_workers(input: $input) @include(if: $includeWorkers) {
       items {
         id
         email
@@ -168,9 +169,7 @@ export const GET_USERS = gql`
       limit
     }
 
-    all_admins(
-      input: $input
-    ) @include(if: $includeAdmins) {
+    all_admins(input: $input) @include(if: $includeAdmins) {
       items {
         id
         email
@@ -192,9 +191,8 @@ export const GET_USERS = gql`
 
 export const GET_USER_DETAILS = gql`
   query GetUserDetails(
-    $id: String!  
+    $id: String!
     $userType: String!
-
     $includeBusinesse: Boolean!
     $includeClient: Boolean!
     $includeWorker: Boolean!
@@ -237,7 +235,7 @@ export const GET_USER_DETAILS = gql`
         verifiedAt
       }
     }
-    
+
     one_client(id: $id) @include(if: $includeClient) {
       id
       fullName
@@ -265,7 +263,7 @@ export const GET_USER_DETAILS = gql`
         isDefault
       }
     }
-    
+
     one_worker(id: $id) @include(if: $includeWorker) {
       id
       email
@@ -290,7 +288,7 @@ export const GET_USER_DETAILS = gql`
         verifiedAt
       }
     }
-    
+
     one_admin(id: $id) @include(if: $includeAdmin) {
       id
       email
@@ -310,45 +308,20 @@ export const GET_USER_DETAILS = gql`
 // USER MANAGEMENT MUTATIONS
 // ======================
 
-export const VERIFY_KYC = gql`
-  mutation VerifyKyc($businessId: String!, $notes: String) {
-    verifyKyc(businessId: $businessId, notes: $notes) {
-      id
-      kycStatus
-      kyc {
-        id
-        status
-        verifiedAt
-        verifiedBy {
-          id
-          fullName
-        }
-      }
-    }
-  }
-`;
-
-export const REJECT_KYC = gql`
-  mutation RejectKyc($businessId: String!, $rejectionReason: String!) {
-    rejectKyc(businessId: $businessId, rejectionReason: $rejectionReason) {
-      id
-      kycStatus
-      kyc {
-        id
-        status
-        rejectionReason
-        verifiedAt
-      }
-    }
-  }
-`;
-
 export const UPDATE_USER_STATUS = gql`
-  mutation UpdateUserStatus($id: String!, $userType: String!, $status: String!) {
-    updateBusinessStatus(id: $id, status: $status) @include(if: $userType, match: $userType, value: "BUSINESS")
-    updateClientStatus(id: $id, status: $status) @include(if: $userType, match: $userType, value: "CLIENT")
-    updateWorkerStatus(id: $id, status: $status) @include(if: $userType, match: $userType, value: "WORKER")
-    updateAdminStatus(id: $id, status: $status) @include(if: $userType, match: $userType, value: "ADMIN")
+  mutation UpdateUserStatus(
+    $id: String!
+    $userType: String!
+    $status: String!
+  ) {
+    updateBusinessStatus(id: $id, status: $status)
+      @include(if: $userType, match: $userType, value: "BUSINESS")
+    updateClientStatus(id: $id, status: $status)
+      @include(if: $userType, match: $userType, value: "CLIENT")
+    updateWorkerStatus(id: $id, status: $status)
+      @include(if: $userType, match: $userType, value: "WORKER")
+    updateAdminStatus(id: $id, status: $status)
+      @include(if: $userType, match: $userType, value: "ADMIN")
   }
 `;
 
@@ -360,40 +333,40 @@ export const ON_NEW_BUSINESS = gql`
   subscription OnNewBusiness {
     newBusiness {
       id
-    name
-    email
-    phone
-    avatar
-    businessType
-    kycStatus
-    isB2BEnabled
-    address
-    description
-    totalProductsSold
-    totalWorkers
-    totalClients
-    totalSales
-    totalRevenueGenerated
-    createdAt
-    updatedAt
-    stores {
-      id
       name
-      address
-    }
-    workers {
-      id
-      fullName
+      email
+      phone
       avatar
-      role
-    }
-    kyc {
-      id
-      status
-      documentUrl
-      submittedAt
-      verifiedAt
-    }
+      businessType
+      kycStatus
+      isB2BEnabled
+      address
+      description
+      totalProductsSold
+      totalWorkers
+      totalClients
+      totalSales
+      totalRevenueGenerated
+      createdAt
+      updatedAt
+      stores {
+        id
+        name
+        address
+      }
+      workers {
+        id
+        fullName
+        avatar
+        role
+      }
+      kyc {
+        id
+        status
+        documentUrl
+        submittedAt
+        verifiedAt
+      }
     }
   }
 `;
@@ -402,30 +375,30 @@ export const ON_NEW_CLIENT = gql`
   subscription OnNewClient {
     newClient {
       id
-        fullName
-        email
-        phone
-        avatar
-        address
-        createdAt
-        updatedAt
-        loyaltyPoints
-        totalSpent
-        totalOrders
-        addresses {
-          id
-          street
-          city
-          country
-          postalCode
-          isDefault
-        }
-        paymentMethods {
-          id
-          type
-          last4
-          isDefault
-        }
+      fullName
+      email
+      phone
+      avatar
+      address
+      createdAt
+      updatedAt
+      loyaltyPoints
+      totalSpent
+      totalOrders
+      addresses {
+        id
+        street
+        city
+        country
+        postalCode
+        isDefault
+      }
+      paymentMethods {
+        id
+        type
+        last4
+        isDefault
+      }
     }
   }
 `;
@@ -434,27 +407,27 @@ export const ON_NEW_WORKER = gql`
   subscription OnNewWorker {
     newWorker {
       id
-        email
-        fullName
-        phone
-        avatar
-        role
-        isVerified
-        createdAt
-        updatedAt
-        business {
-          id
-          name
-          businessType
-          kycStatus
-        }
-        kyc {
-          id
-          status
-          documentUrl
-          submittedAt
-          verifiedAt
-        }
+      email
+      fullName
+      phone
+      avatar
+      role
+      isVerified
+      createdAt
+      updatedAt
+      business {
+        id
+        name
+        businessType
+        kycStatus
+      }
+      kyc {
+        id
+        status
+        documentUrl
+        submittedAt
+        verifiedAt
+      }
     }
   }
 `;
@@ -506,6 +479,30 @@ export const GET_PLATFORM_DASHBOARD = gql`
       }
       last30Days {
         date
+        count
+      }
+      totalWorkers
+      totalStores
+      totalOrders
+      totalTokenVolume
+      totalRechargeVolume
+      totalSales
+      totalSalesRevenue
+      activeWorkersToday
+      userSignups30d {
+        date
+        count
+      }
+      businessSignups30d {
+        date
+        count
+      }
+      gmv30d {
+        date
+        amount
+      }
+      businessTypeDistribution {
+        type
         count
       }
     }
@@ -898,6 +895,42 @@ export const ON_PLATFORM_SETTINGS_UPDATED = gql`
       marketplaceEnabled
       createdAt
       updatedAt
+    }
+  }
+`;
+
+// ======================
+// TOKEN RECONCILIATION
+// ======================
+
+export const GET_TOKEN_RECONCILIATION = gql`
+  query GetTokenReconciliation {
+    tokenReconciliation {
+      totalTokensIssued
+      totalTokensRedeemed
+      totalTokensReleased
+      totalTokensPending
+      totalTokensReserved
+      totalWalletTokenBalance
+      totalBusinessTokenBalance
+      totalClientTokenBalance
+      totalLedgerCredits
+      totalLedgerDebits
+      ledgerNetBalance
+      discrepancy
+      isBalanced
+      reconciliationDate
+      topHolders {
+        id
+        name
+        type
+        tokenBalance
+        rechargeBalance
+        transactionCount
+      }
+      totalTokenTransactions
+      totalRechargeTransactions
+      totalLedgerEntries
     }
   }
 `;

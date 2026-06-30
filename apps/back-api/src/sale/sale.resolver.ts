@@ -30,6 +30,8 @@ import { ReturnEntity } from "./entities/return.entity";
 import { SaleEntity } from "./entities/sale.entity";
 import { SaleProductEntity } from "./entities/sale-product.entity";
 import { SalesDashboard } from "./entities/sales-dashboard.entity";
+import { SyncResult } from "./entities/sync-result.entity";
+import { SyncOfflineSalesInput } from "./dto/sync-offline-sales.input";
 import { SaleService } from "./sale.service";
 
 // Resolver
@@ -281,5 +283,22 @@ export class SaleResolver {
 		await this.storeService.verifyStoreAccess(storeId, user);
 
 		return this.pubSub.asyncIterableIterator(`sale_updated_${storeId}`);
+	}
+
+	// ============ OFFLINE SYNC ============
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("business", "worker")
+	@Mutation(() => SyncResult, {
+		name: "syncOfflineSales",
+		description:
+			"Sync batch of offline sales. Deduplicates by localId, checks inventory, resolves conflicts.",
+	})
+	async syncOfflineSales(
+		@Args("input") input: SyncOfflineSalesInput,
+		@Context() context: any,
+	) {
+		const user = context.req.user;
+		return this.saleService.syncOfflineSales(input.sales, user);
 	}
 }

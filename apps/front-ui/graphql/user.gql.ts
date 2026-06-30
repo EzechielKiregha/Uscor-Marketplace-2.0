@@ -256,16 +256,6 @@ export const UPDATE_BUSINESS = gql`
   ${BUSINESS_ENTITY}
 `;
 
-export const VERIFY_KYC = gql`
-  mutation VerifyKyc($input: VerifyKycInput!) {
-    verifyKyc(input: $input) {
-      id
-      status
-      verifiedAt
-    }
-  }
-`;
-
 // ======================
 // SUBSCRIPTIONS
 // ======================

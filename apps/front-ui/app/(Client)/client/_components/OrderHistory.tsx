@@ -23,6 +23,7 @@ import {
   Truck,
   X,
 } from "lucide-react";
+import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
 import { useState } from "react";
 
 interface OrderHistoryProps {
@@ -271,7 +272,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Order History</h1>
+          <h1 className="text-page-title">Order History</h1>
           <p className="text-muted-foreground mt-1">
             View your past orders and reorder your favorites
           </p>
@@ -691,133 +692,16 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                     </div>
                   </div>
 
-                  {/* Delivery Timeline */}
+                  {/* Order Activity Timeline */}
                   <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
                     <div className="p-4 bg-muted border-b border-border">
-                      <h3 className="font-semibold">Order Status</h3>
+                      <h3 className="font-semibold">Order Timeline</h3>
                     </div>
-
                     <div className="p-4">
-                      {getStatusBadge(activeOrder.status)}
-
-                      <div className="mt-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">
-                            Delivery Timeline
-                          </span>
-                          <span className="text-sm font-medium">
-                            {getDeliveryStatus(activeOrder.status).label}
-                          </span>
-                        </div>
-
-                        <div className="relative">
-                          {/* Timeline line */}
-                          <div className="absolute top-4 left-0 right-0 h-0.5 bg-border"></div>
-
-                          {/* Timeline steps */}
-                          <div className="relative flex justify-between">
-                            <div
-                              className={`flex flex-col items-center ${getDeliveryStatus(activeOrder.status).step >= 0 ? "text-primary" : "text-muted-foreground"}`}
-                            >
-                              <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
-                                  getDeliveryStatus(activeOrder.status).step >=
-                                  0
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-border"
-                                }`}
-                              >
-                                <Calendar className="h-4 w-4" />
-                              </div>
-                              <span className="text-xs text-center">
-                                Order
-                                <br />
-                                Placed
-                              </span>
-                              <span className="text-xs text-muted-foreground mt-1">
-                                {new Date(
-                                  activeOrder.createdAt,
-                                ).toLocaleDateString()}
-                              </span>
-                            </div>
-
-                            <div
-                              className={`flex flex-col items-center ${getDeliveryStatus(activeOrder.status).step >= 1 ? "text-primary" : "text-muted-foreground"}`}
-                            >
-                              <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
-                                  getDeliveryStatus(activeOrder.status).step >=
-                                  1
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-border"
-                                }`}
-                              >
-                                <Truck className="h-4 w-4" />
-                              </div>
-                              <span className="text-xs text-center">
-                                Processing
-                              </span>
-                              {activeOrder.status !== "PENDING" && (
-                                <span className="text-xs text-muted-foreground mt-1">
-                                  {new Date(
-                                    activeOrder.createdAt,
-                                  ).toLocaleDateString()}
-                                </span>
-                              )}
-                            </div>
-
-                            <div
-                              className={`flex flex-col items-center ${getDeliveryStatus(activeOrder.status).step >= 2 ? "text-primary" : "text-muted-foreground"}`}
-                            >
-                              <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
-                                  getDeliveryStatus(activeOrder.status).step >=
-                                  2
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-border"
-                                }`}
-                              >
-                                <Truck className="h-4 w-4" />
-                              </div>
-                              <span className="text-xs text-center">
-                                Shipped
-                              </span>
-                              {activeOrder.status === "SHIPPED" && (
-                                <span className="text-xs text-muted-foreground mt-1">
-                                  {new Date(
-                                    activeOrder.createdAt,
-                                  ).toLocaleDateString()}
-                                </span>
-                              )}
-                            </div>
-
-                            <div
-                              className={`flex flex-col items-center ${getDeliveryStatus(activeOrder.status).step >= 3 ? "text-primary" : "text-muted-foreground"}`}
-                            >
-                              <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center mb-2 ${
-                                  getDeliveryStatus(activeOrder.status).step >=
-                                  3
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-border"
-                                }`}
-                              >
-                                <CheckCircle className="h-4 w-4" />
-                              </div>
-                              <span className="text-xs text-center">
-                                Delivered
-                              </span>
-                              {activeOrder.status === "DELIVERED" && (
-                                <span className="text-xs text-muted-foreground mt-1">
-                                  {new Date(
-                                    activeOrder.createdAt,
-                                  ).toLocaleDateString()}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <ActivityTimeline
+                        items={buildOrderTimelineItems(activeOrder.status, activeOrder.createdAt)}
+                        compact
+                      />
                     </div>
                   </div>
                 </div>

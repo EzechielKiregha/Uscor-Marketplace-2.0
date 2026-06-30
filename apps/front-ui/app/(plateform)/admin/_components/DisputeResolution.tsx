@@ -4,12 +4,13 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { CheckCircle, MessageSquare, Search } from "lucide-react";
 import { useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_DISPUTES, RESOLVE_DISPUTE } from "@/graphql/admin.gql";
 import DisputeDetailModal from "./DisputeDetailModal";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 type DisputeResolutionProps = {};
 
@@ -84,7 +85,7 @@ export default function DisputeResolution({}: DisputeResolutionProps) {
 		}
 	};
 
-	if (disputesLoading) return <Loader loading={true} />;
+	if (disputesLoading) return <TableSkeleton />;
 	if (disputesError)
 		return <div>Error loading disputes: {disputesError.message}</div>;
 
@@ -146,11 +147,13 @@ export default function DisputeResolution({}: DisputeResolutionProps) {
 					<tbody>
 						{disputes.length === 0 ? (
 							<tr>
-								<td
-									colSpan={6}
-									className="p-8 text-center text-muted-foreground"
-								>
-									No disputes found matching your criteria
+								<td colSpan={6}>
+									<EmptyState
+										icon={emptyStateIcons.warnings}
+										title="No disputes found"
+										description="Try adjusting your search or filter criteria"
+										compact
+									/>
 								</td>
 							</tr>
 						) : (

@@ -1,7 +1,8 @@
 // app/business/sales/page.tsx
 "use client";
 
-import Loader from "@/components/seraui/Loader";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { StoreEntity } from "@/lib/types";
@@ -16,6 +17,7 @@ import CurrentSalePanel from "./_components/CurrentSalePanel";
 import NewSaleModal from "./_components/NewSaleModal";
 import SalesDashboard from "./_components/SalesDashboard";
 import SalesHistoryPanel from "./_components/SalesHistoryPanel";
+import MotionPage from "@/components/MotionPage";
 
 export default function SalesManagementPage() {
   const { user, role, loading: authLoading } = useMe();
@@ -48,43 +50,34 @@ export default function SalesManagementPage() {
     salesHistoryLoading,
   } = useSales(selectedStoreId!, user?.id || "", role!);
 
-  if (authLoading || storesLoading) return <Loader loading={true} />;
+  if (authLoading || storesLoading) return <PageSkeleton variant="split" />;
   if (storesError)
     return <div>Error loading stores: {storesError.message}</div>;
   if (!storesData?.stores || storesData.stores.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] p-6">
-        <div className="text-center max-w-md">
-          <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-            <ShoppingCart className="h-10 w-10 text-primary" />
-          </div>
-          <h2 className="text-2xl font-bold mb-2">No Stores Found</h2>
-          <p className="text-muted-foreground mb-6">
-            You need to create at least one store before you can process sales
-          </p>
-          <Button
-            onClick={() =>
-              setIsOpen({
-                openCreateStoreModal: true,
-                initialStoreData: null,
-              })
-            }
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Create Your First Store
-          </Button>
-        </div>
-      </div>
+      <EmptyState
+        icon={emptyStateIcons.stores}
+        title="No Stores Found"
+        description="You need to create at least one store before you can process sales"
+        action={{
+          label: "Create Your First Store",
+          onClick: () =>
+            setIsOpen({
+              openCreateStoreModal: true,
+              initialStoreData: null,
+            }),
+        }}
+      />
     );
   }
 
   return (
-    <div className="space-y-6">
+    <MotionPage className="space-y-6">
       {/* Store Selector */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Point of Sale</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-page-title">Point of Sale</h1>
+          <p className="text-page-subtitle">
             Process sales and manage transactions
           </p>
         </div>
@@ -159,6 +152,6 @@ export default function SalesManagementPage() {
 
       {/* Create Store Modal */}
       <CreateStoreModal />
-    </div>
+    </MotionPage>
   );
 }

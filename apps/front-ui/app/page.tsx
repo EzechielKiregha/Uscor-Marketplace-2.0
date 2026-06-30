@@ -93,7 +93,9 @@ export default function HomePage() {
         </div>
       </div>
       {/* Pricing */}
-      <PricingSection />
+      <div id="pricing">
+        <PricingSection />
+      </div>
 
       {/* Team */}
       <TeamSection />

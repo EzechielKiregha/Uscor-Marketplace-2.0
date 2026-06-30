@@ -52,8 +52,8 @@ export const GET_PAYMENT_TRANSACTIONS = gql`
   }
 `;
 export const GET_PAYMENT_LATEST_TRANSACTION = gql`
-  query GetLatestPaymentTransaction($phone: String!) {
-    latestPaymentTransaction(phone: $phone) {
+  query GetLatestPaymentTransaction($phone: String!, $status: String) {
+    latestPaymentTransaction(phone: $phone, status: $status) {
       id
       amount
       method
@@ -66,7 +66,7 @@ export const GET_PAYMENT_LATEST_TRANSACTION = gql`
         amount
         status
         createdAt
-        }
+      }
     }
   }
 `;

@@ -67,21 +67,23 @@ export async function POST(req: NextRequest) {
         }
         
         response = `CON 🏪 Business Payment for ${business.name}
-Order ID: ${latestPayment?.order?.id?.substring(0, 8)}
+Order TX-ID: ${latestPayment?.id?.substring(0, 8)}
 Amount: $${latestPayment?.amount?.toFixed(2)}
 1. Confirm Payment
 2. Cancel`;
       } else {
         // Client user
         // Get latest pending payment transaction
-        const paymentResult = await executeQuery.query({
+        const {data} = await executeQuery.query({
           query: GET_PAYMENT_LATEST_TRANSACTION,
           variables: {
             phone: phoneNumber
           },
           fetchPolicy: 'network-only'
         });
-        const latestPayment = paymentResult?.data?.latestPaymentTransaction;
+        const latestPayment = data?.latestPaymentTransaction;
+
+        // console.log({latestPayment})
         
         if (!latestPayment || latestPayment.status !== 'PENDING') {
           response = `END ❌ No pending payment found for your account.`;
@@ -89,7 +91,7 @@ Amount: $${latestPayment?.amount?.toFixed(2)}
         }
         
         response = `CON 🛒 Order Payment for ${client.fullName}
-Order ID: ${latestPayment?.order?.id?.substring(0, 8)}
+Order TX-ID: ${latestPayment?.id?.substring(0, 8)}
 Amount: $${latestPayment?.amount?.toFixed(2)}
 1. Confirm Payment
 2. Cancel`;
@@ -125,7 +127,7 @@ Amount: $${latestPayment?.amount?.toFixed(2)}
         to: [phoneNumber],
         message: `USCOR Payment Confirmation
 User: ${userResult?.data?.clientByPhone?.fullName || 'Unknown'}
-Order ID: ${latestPayment?.order?.id?.substring(0, 8)}
+Order TX-ID: ${latestPayment?.id?.substring(0, 8)}
 Amount: $${latestPayment?.amount?.toFixed(2)}
 Reference: ${transactionId}`,
         from: "USCOR_FINANCE",
@@ -145,7 +147,7 @@ Reference: ${transactionId}`,
       });
       
       response = `END ✅ Payment Confirmed!
-Order ID: ${latestPayment?.order?.id?.substring(0, 8)}
+Order TX-ID: ${latestPayment?.id?.substring(0, 8)}
 Amount: $${latestPayment?.amount?.toFixed(2)}
 Reference: ${transactionId}
 Thank you for using USCOR!`;

@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 
 export default function TermsOfService() {
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen bg-background text-foreground">
 			{/* Navigation */}
-			<header className="fixed w-full border-b-3 border-primary  bg-gray-50 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 z-50">
-				<div className="container mx-auto flex h-16 items-center justify-between">
+			<header className="fixed w-full border-b border-border bg-background/80 backdrop-blur-lg z-50">
+				<div className="container mx-auto flex h-16 items-center justify-between px-4">
 					<Link
 						href="/"
-						className="text-xl items-center font-bold flex flex-row gap-1.5 ml-2 text-primary"
+						className="text-xl items-center font-bold flex flex-row gap-1.5 text-primary"
 					>
 						<Image
 							width={50}

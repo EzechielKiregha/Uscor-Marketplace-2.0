@@ -11,6 +11,7 @@ import {
 } from "./types";
 import { useQuery } from "@apollo/client";
 import { GET_POINTS_TRANSACTIONS, GET_POINTS_TRANSACTIONS_BY_CLIENT } from "@/graphql/loyalty.gql";
+import { getActiveOfflineSession, isOfflineMode } from "./auth";
 
 type MeResult =
 	| { role: "client"; id: string; user: ClientEntity }
@@ -29,6 +30,7 @@ export function useMe() {
 	>(null);
 	const [id, setId] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [isOfflineSession, setIsOfflineSession] = useState(false);
 	const router = useRouter();
 	const path = usePathname();
 
@@ -59,6 +61,31 @@ export function useMe() {
 		(async () => {
 			setLoading(true);
 			try {
+				// Check for offline worker session first
+				if (isOfflineMode()) {
+					const offlineSession = getActiveOfflineSession();
+					if (offlineSession) {
+						if (!mounted) return;
+						const profile = offlineSession.workerProfile;
+						setUser({
+							id: profile.id,
+							email: profile.email,
+							fullName: profile.fullName || "",
+							avatar: profile.avatar || null,
+							role: profile.role as any,
+							phone: "",
+							bio: null,
+							businessId: offlineSession.businessInfo.id,
+							isVerified: true,
+						} as WorkerEntity);
+						setRole("worker");
+						setId(profile.id);
+						setIsOfflineSession(true);
+						setLoading(false);
+						return;
+					}
+				}
+
 				const res = await fetchMe();
 				if (!mounted) return;
 				if (!res) {
@@ -66,11 +93,12 @@ export function useMe() {
 					setUser(null);
 					setRole(null);
 					setId(null);
-					// if (path !== '/' && path !== "/marketplace/products" && path !== '/freelance-gigs' ) router.push('/');
+					setIsOfflineSession(false);
 				} else {
 					setUser(res.user);
 					setRole(res.role);
 					setId(res.id);
+					setIsOfflineSession(false);
 				}
 			} catch (_err) {
 				if (!mounted) return;
@@ -78,6 +106,7 @@ export function useMe() {
 				setUser(null);
 				setRole(null);
 				setId(null);
+				setIsOfflineSession(false);
 				if (
 					path !== "/" &&
 					path !== "/marketplace/products" &&
@@ -110,5 +139,5 @@ export function useMe() {
 
 	// }, [error]);
 
-	return { loading, user, role, id, error, points };
+	return { loading, user, role, id, error, points, isOfflineSession };
 }

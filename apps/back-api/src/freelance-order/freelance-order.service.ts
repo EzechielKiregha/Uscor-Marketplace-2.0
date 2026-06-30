@@ -4,6 +4,7 @@ import {
     Country,
     RechargeMethod,
 } from "../account-recharge/dto/create-account-recharge.input";
+import { afterCommission, divPrecise, mulPrecise } from "../common/token-math";
 import {
     PaymentMethod,
     PaymentStatus,
@@ -43,7 +44,7 @@ export class FreelanceOrderService {
 			"client",
 			RechargeMethod.TOKEN,
 		);
-		return (balance.totalAmount / 10) >= amount;
+		return divPrecise(balance.totalAmount, 10) >= amount;
 	}
 
 	async create(
@@ -75,7 +76,7 @@ export class FreelanceOrderService {
 		}
 
 		const totalAmount = service.isHourly
-			? service.rate * quantity
+			? mulPrecise(service.rate, quantity)
 			: service.rate;
 		const commissionPercent = 0.1; // Platform fee, configurable
 		const escrowAmount = totalAmount;
@@ -368,11 +369,57 @@ export class FreelanceOrderService {
 			throw new Error("Order must be completed before releasing escrow");
 		}
 
+		if (order.escrowReleasedAt) {
+			throw new Error("Escrow has already been released for this order");
+		}
+
 		return this.prisma.$transaction(async (_prisma) => {
+			// Process actual escrow settlement: deduct from client, credit business
+			const businessAmount = afterCommission(
+				order.escrowAmount,
+				order.commissionPercent,
+			);
+
+			// Deduct from client
+			await this.accountRechargeService.create(
+				{
+					amount: -order.escrowAmount,
+					method: RechargeMethod.TOKEN,
+					origin: Country.RWANDA,
+					clientId: order.clientId,
+					businessId: undefined,
+				},
+				order.clientId,
+				"client",
+			);
+
+			// Credit to business (after platform commission)
+			await this.accountRechargeService.create(
+				{
+					amount: businessAmount,
+					method: RechargeMethod.TOKEN,
+					origin: Country.RWANDA,
+					clientId: undefined,
+					businessId: order.service.businessId,
+				},
+				order.service.businessId,
+				"business",
+			);
+
+			// Update payment transaction to COMPLETED
+			if (order.payment) {
+				await this.paymentTransactionService.update(
+					{ status: PaymentStatus.COMPLETED },
+					order.payment.id,
+					order.clientId,
+				);
+			}
+
 			// Update order to mark escrow as released
 			const updatedOrder = await this.prisma.freelanceOrder.update({
 				where: { id: orderId },
 				data: {
+					escrowStatus: EscrowStatus.RELEASED,
 					escrowReleasedAt: new Date(),
 					updatedAt: new Date(),
 				},
@@ -404,8 +451,6 @@ export class FreelanceOrderService {
 				},
 			});
 
-			// Handle actual payment processing here if needed
-			// For now, just return the updated order
 			return updatedOrder;
 		});
 	}
@@ -466,9 +511,10 @@ export class FreelanceOrderService {
 				);
 
 				// Deduct client balance and pay business
-				const businessAmount =
-					order.totalAmount *
-					(1 - (commissionPercent || order.commissionPercent));
+				const businessAmount = afterCommission(
+					order.totalAmount,
+					commissionPercent || order.commissionPercent,
+				);
 				await this.accountRechargeService.create(
 					{
 						amount: -order.escrowAmount,

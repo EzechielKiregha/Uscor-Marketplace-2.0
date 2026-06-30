@@ -129,6 +129,79 @@ export const GET_MARKETPLACE_DATA = gql`
   }
 `;
 
+export const GET_FEATURED_STORES = gql`
+  query GetFeaturedStores($limit: Int = 8) {
+    featuredStores(limit: $limit) {
+      items {
+        id
+        name
+        avatar
+        businessType
+        kycStatus
+        isVerified
+        totalSales
+        totalProductsSold
+        productCount
+      }
+    }
+  }
+`;
+
+export const GET_PRODUCTS_BY_BUSINESS_TYPE = gql`
+  query GetProductsByBusinessType($businessType: String!, $limit: Int = 8) {
+    productsByBusinessType(businessType: $businessType, limit: $limit) {
+      items {
+        id
+        title
+        description
+        price
+        quantity
+        isPhysical
+        featured
+        approvedForSale
+        brand
+        serialNumber
+        imei
+        warrantyMonths
+        sku
+        barcode
+        variants
+        business {
+          id
+          name
+          avatar
+          businessType
+          kycStatus
+          isVerified
+          isB2BEnabled
+        }
+        store {
+          id
+          name
+        }
+        medias {
+          url
+          type
+        }
+        category {
+          id
+          name
+        }
+        promotions {
+          id
+          title
+          discountPercentage
+          code
+          value
+          startDate
+          endDate
+        }
+      }
+      total
+    }
+  }
+`;
+
 // ======================
 // MUTATIONS
 // ======================

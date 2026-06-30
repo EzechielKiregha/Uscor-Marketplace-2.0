@@ -73,6 +73,21 @@ export type Worker = Prisma.WorkerModel
  */
 export type Admin = Prisma.AdminModel
 /**
+ * Model Otp
+ * 
+ */
+export type Otp = Prisma.OtpModel
+/**
+ * Model SecurityLog
+ * 
+ */
+export type SecurityLog = Prisma.SecurityLogModel
+/**
+ * Model TrustedDevice
+ * 
+ */
+export type TrustedDevice = Prisma.TrustedDeviceModel
+/**
  * Model Category
  * 
  */
@@ -322,3 +337,38 @@ export type Dispute = Prisma.DisputeModel
  * 
  */
 export type DisputeMessage = Prisma.DisputeMessageModel
+/**
+ * Model WholesalePrice
+ * 
+ */
+export type WholesalePrice = Prisma.WholesalePriceModel
+/**
+ * Model B2BOrder
+ * 
+ */
+export type B2BOrder = Prisma.B2BOrderModel
+/**
+ * Model B2BOrderItem
+ * 
+ */
+export type B2BOrderItem = Prisma.B2BOrderItemModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model SubscriptionFeature
+ * 
+ */
+export type SubscriptionFeature = Prisma.SubscriptionFeatureModel
+/**
+ * Model WalletAuditLog
+ * 
+ */
+export type WalletAuditLog = Prisma.WalletAuditLogModel
+/**
+ * Model LedgerEntry
+ * 
+ */
+export type LedgerEntry = Prisma.LedgerEntryModel

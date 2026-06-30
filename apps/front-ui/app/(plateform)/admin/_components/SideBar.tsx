@@ -4,13 +4,16 @@ import {
   Activity,
   AlertTriangle,
   BarChart,
+  Building2,
+  Coins,
   Home,
   Megaphone,
   Settings,
   ShieldCheck,
   Users,
+  Wrench,
 } from "lucide-react";
-import Loader from "@/components/seraui/Loader";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/lib/useMe";
 import { useActiveSection } from "./useActiveSection";
@@ -18,7 +21,10 @@ import { useActiveSection } from "./useActiveSection";
 export const sidebarItems = [
   { section: "dashboard", icon: Home, label: "Dashboard" },
   { section: "users", icon: Users, label: "Users" },
+  { section: "businesses", icon: Building2, label: "Businesses" },
+  { section: "workers", icon: Wrench, label: "Workers" },
   { section: "kyc", icon: ShieldCheck, label: "KYC Verification" },
+  { section: "tokens", icon: Coins, label: "Tokens & Wallets" },
   { section: "announcements", icon: Megaphone, label: "Announcements" },
   { section: "disputes", icon: AlertTriangle, label: "Dispute Resolution" },
   { section: "audits", icon: Activity, label: "Audit Logs" },
@@ -38,7 +44,7 @@ export default function SideBar({
 
   const { activeSection, handleActiveSectionChange } = useActiveSection();
 
-  if (userLoading) return <Loader loading={true} />;
+  if (userLoading) return <SidebarPageSkeleton navItems={7} contentVariant="cards" />;
   if (!user) return <div>Unauthorized</div>;
 
   const containerClass = isOpen
@@ -59,15 +65,6 @@ export default function SideBar({
           <nav className="space-y-1">
             {sidebarItems.map((item) => {
               const isActive =
-                [
-                  "dashboard",
-                  "users",
-                  "kyc",
-                  "disputes",
-                  "settings",
-                  "announcements",
-                  "audit",
-                ].includes(activeSection) &&
                 activeSection === item.section.toLowerCase();
               return (
                 <Button

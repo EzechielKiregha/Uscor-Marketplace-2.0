@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { format } from "date-fns";
 import { Calendar, Download, Eye, Filter, Package, Search } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -128,11 +129,12 @@ export default function SalesHistoryPanel({
           </div>
 
           {filteredSales.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              {searchQuery || dateRange.start || dateRange.end
-                ? "No matching sales found"
-                : "No sales history available"}
-            </div>
+            <EmptyState
+              icon={emptyStateIcons.sales}
+              title={searchQuery || dateRange.start || dateRange.end ? "No matching sales found" : "No sales history available"}
+              description="Sales will appear here as they are completed"
+              compact
+            />
           ) : (
             <div className="space-y-3 max-h-75 overflow-y-auto">
               {filteredSales.slice(0, 5).map((sale) => (

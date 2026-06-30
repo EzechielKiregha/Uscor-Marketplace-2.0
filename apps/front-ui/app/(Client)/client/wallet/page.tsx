@@ -5,7 +5,7 @@ import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
 import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
 import TransactionHistory from "@/app/(highly-secured)/_components/TransactionHistory";
 import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -216,7 +216,7 @@ export default function WalletPage() {
     }
   };
 
-  if (authLoading || balanceLoading) return <Loader loading={true} />;
+  if (authLoading || balanceLoading) return <DashboardSkeleton showChart={false} />;
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -244,22 +244,22 @@ export default function WalletPage() {
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div>
-          <h1 className="text-2xl font-bold">Wallet & Token Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-page-title">Wallet & Token Management</h1>
+          <p className="text-page-subtitle">
             Manage your account balance and USCOR tokens
           </p>
         </div>
 
         {/* Balance Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border border-border rounded-lg p-6 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                 <DollarSign className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Balance</p>
-                <p className="text-2xl font-bold">
+                <p className="text-stat-label">Total Balance</p>
+                <p className="text-stat">
                   Frw {balance?.totalAmount?.toFixed(2) || "0.00"}
                 </p>
               </div>
@@ -287,16 +287,16 @@ export default function WalletPage() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border border-border rounded-lg p-6 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
                 <Coins className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-stat-label">
                   USCOR Tokens (uTn)
                 </p>
-                <p className="text-2xl font-bold">
+                <p className="text-stat">
                   {tokenBalance?.totalTokens || 0}
                 </p>
               </div>
@@ -324,16 +324,16 @@ export default function WalletPage() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-6">
+          <div className="bg-card border border-border rounded-lg p-6 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
                 <Gift className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-stat-label">
                   Token Conversion
                 </p>
-                <p className="text-2xl font-bold">1 uTn = $10</p>
+                <p className="text-stat">1 uTn = $10</p>
               </div>
             </div>
 

@@ -25,6 +25,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { CHART_COLORS } from "@/lib/chart-theme";
 
 interface WorkerOverviewProps {
   worker: any;
@@ -212,7 +213,7 @@ export default function WorkerOverview({
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`$${value}`, "Sales"]} />
-                  <Bar dataKey="sales" fill="hsl(var(--primary))" />
+                  <Bar dataKey="sales" fill={CHART_COLORS.primary} />
                 </BarChartRecharts>
               </ResponsiveContainer>
             </div>

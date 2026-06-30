@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,7 @@ import {
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
 import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 interface InventoryPageProps {
   selectedStoreId: string | null;
@@ -182,13 +183,13 @@ export default function InventoryPage({
     }
   }, [isOnline, handleSync]);
 
-  if (inventoryLoading) return <Loader loading={true} />;
+  if (inventoryLoading) return <TableSkeleton />;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Inventory Management</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-page-title">Inventory Management</h1>
+        <p className="text-page-subtitle">
           Manage stock levels and track inventory across your store
         </p>
       </div>
@@ -350,33 +351,24 @@ export default function InventoryPage({
 
       {/* Empty State */}
       {filteredInventory.length === 0 && (
-        <div className="text-center py-12 bg-card border border-border rounded-lg">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <Package className="h-8 w-8 text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-medium mb-1">
-            {searchQuery || lowStockOnly
-              ? "No matching items found"
-              : "No inventory items"}
-          </h3>
-          <p className="text-muted-foreground mb-6">
-            {searchQuery || lowStockOnly
-              ? "Try adjusting your search or filter criteria"
-              : "Your store inventory will appear here once you start adding products"}
-          </p>
-
-          {(searchQuery || lowStockOnly) && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchQuery("");
-                setLowStockOnly(false);
-              }}
-            >
-              Clear Filters
-            </Button>
-          )}
-        </div>
+        <EmptyState
+          icon={emptyStateIcons.inventory}
+          title={searchQuery || lowStockOnly
+            ? "No matching items found"
+            : "No inventory items"}
+          description={searchQuery || lowStockOnly
+            ? "Try adjusting your search or filter criteria"
+            : "Your store inventory will appear here once you start adding products"}
+          action={(searchQuery || lowStockOnly) ? {
+            label: "Clear Filters",
+            onClick: () => {
+              setSearchQuery("");
+              setLowStockOnly(false);
+            },
+            variant: "outline",
+          } : undefined}
+          compact
+        />
       )}
 
       {/* Inventory Adjustment Modal */}

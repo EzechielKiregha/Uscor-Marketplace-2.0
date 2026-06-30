@@ -1,69 +1,71 @@
 import { type ClassValue, clsx } from "clsx";
-import { Metadata  } from "next";
+import { Metadata } from "next";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs));
+    return twMerge(clsx(inputs));
 }
 
 export function formatPrice(
-	price: number | string,
-	options: {
-		currency?: "USD" | "EUR" | "GBP" | "BDT";
-		notation?: Intl.NumberFormatOptions["notation"];
-	} = {},
+    price: number | string,
+    options: {
+        currency?: "USD" | "EUR" | "GBP" | "BDT";
+        notation?: Intl.NumberFormatOptions["notation"];
+    } = {},
 ) {
-	const { currency = "USD", notation = "compact" } = options;
+    const { currency = "USD", notation = "compact" } = options;
 
-	const numericPrice = typeof price === "string" ? parseFloat(price) : price;
+    const numericPrice = typeof price === "string" ? parseFloat(price) : price;
 
-	return new Intl.NumberFormat("en-US", {
-		style: "currency",
-		currency,
-		notation,
-		maximumFractionDigits: 2,
-	}).format(numericPrice);
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency,
+        notation,
+        maximumFractionDigits: 2,
+    }).format(numericPrice);
 }
 
 export function constructMetadata({
-	title = "Uscor-Market - Le marche pour fourniture de bureau, meubles et consors",
-	description = "Uscor-Market is an open-source marketplace for high-quality goods.",
-	image = "/thumbnail.png",
-	icons = "/favicon.ico",
-	noIndex = false,
+    title = "Uscor-Marketplace",
+    description = "A marketplace for local businesses to sell their products online.",
+    image = "/thumbnail.png",
+    icons = "/favicon.ico",
+    noIndex = false,
 }: {
-	title?: string;
-	description?: string;
-	image?: string;
-	icons?: string;
-	noIndex?: boolean;
+    title?: string;
+    description?: string;
+    image?: string;
+    icons?: string;
+    noIndex?: boolean;
 } = {}): Metadata {
-	return {
-		title,
-		description,
-		openGraph: {
-			title,
-			description,
-			images: [
-				{
-					url: image,
-				},
-			],
-		},
-		twitter: {
-			card: "summary_large_image",
-			title,
-			description,
-			images: [image],
-			creator: "@EzechielKiregha",
-		},
-		icons,
-		metadataBase: new URL("https://uscor-market.giize.com"),
-		...(noIndex && {
-			robots: {
-				index: false,
-				follow: false,
-			},
-		}),
-	};
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            images: [
+                {
+                    url: image,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [image],
+            creator: "@EzechielKiregha",
+        },
+        icons,
+        metadataBase: new URL(
+            "https://uscor-marketplace-2-0-front-ui.vercel.app/",
+        ),
+        ...(noIndex && {
+            robots: {
+                index: false,
+                follow: false,
+            },
+        }),
+    };
 }

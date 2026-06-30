@@ -1,6 +1,7 @@
 // app/business/inventory/_components/TransferOrders.tsx
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useMutation, useQuery } from "@apollo/client";
 import {
 	ArrowRightLeft,
@@ -198,11 +199,12 @@ export default function TransferOrders({
 						<p className="text-muted-foreground">Loading data...</p>
 					</div>
 				) : filteredOrders.length === 0 ? (
-					<div className="text-center py-8 text-muted-foreground">
-						{searchQuery
-							? "No matching transfers found"
-							: "No transfer orders yet"}
-					</div>
+					<EmptyState
+						icon={emptyStateIcons.transfers}
+						title={searchQuery ? "No matching transfers found" : "No transfer orders yet"}
+						description="Transfer orders will appear here"
+						compact
+					/>
 				) : (
 					<div className="overflow-x-auto">
 						<table className="w-full">

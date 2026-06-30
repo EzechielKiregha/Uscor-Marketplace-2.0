@@ -1,8 +1,9 @@
 "use client";
 
-import { Gift, MapPin, ShieldCheck, ShoppingCart } from "lucide-react";
+import { Gift, Handshake, MapPin, ShieldCheck, ShoppingCart, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/app/context/use-cart";
 import ProductDetailsModal from "./ProductDetailsModal";
@@ -14,9 +15,11 @@ import BusinessTypeIcon from "./BusinessTypeIcons";
 interface ProductCardProps {
   product: any;
   viewMode: "grid" | "list";
+  /** When true, suppress the card's own border (used inside TypedProductCard wrapper) */
+  noBorder?: boolean;
 }
 
-export default function ProductCard({ product, viewMode }: ProductCardProps) {
+export default function ProductCard({ product, viewMode, noBorder }: ProductCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const { showToast } = useToast();
   const [openChat, setOpenChat] = useState(false);
@@ -58,7 +61,10 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
   if (viewMode === "grid") {
     return (
       <>
-        <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
+        <div className={cn(
+          "rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card",
+          !noBorder && "border border-orange-400/60 dark:border-orange-500/70",
+        )}>
           {/* Product Image */}
           <div className="h-72 bg-muted relative">
             {product.medias && product.medias.length > 0 ? (
@@ -109,7 +115,13 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
                   </div>
                 )}
 
-                {product.business.isB2BEnabled && (
+                {product.business.isB2BEnabled && product.business.kycStatus === "VERIFIED" && (
+                  <div className="flex items-center gap-1 bg-success/10 text-success px-2 py-0.5 rounded-full text-[10px] font-medium">
+                    <Handshake className="h-3 w-3" />
+                    Wholesale
+                  </div>
+                )}
+                {product.business.isB2BEnabled && !(product.business.kycStatus === "VERIFIED") && (
                   <div className="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-medium">
                     B2B
                   </div>
@@ -203,7 +215,10 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
 
   return (
     <>
-      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row">
+      <div className={cn(
+        "rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row",
+        !noBorder && "border border-orange-400/60 dark:border-orange-500/70",
+      )}>
         {/* Product Image */}
         <div className="md:w-48 h-32 md:h-auto bg-muted relative">
           {product.medias && product.medias.length > 0 ? (
@@ -248,7 +263,13 @@ export default function ProductCard({ product, viewMode }: ProductCardProps) {
                     </div>
                   )}
 
-                  {product.business.isB2BEnabled && (
+                  {product.business.isB2BEnabled && product.business.kycStatus === "VERIFIED" && (
+                    <div className="flex items-center gap-1 bg-success/10 text-success px-2 py-0.5 rounded-full text-[10px] font-medium">
+                      <Handshake className="h-3 w-3" />
+                      Wholesale
+                    </div>
+                  )}
+                  {product.business.isB2BEnabled && !(product.business.kycStatus === "VERIFIED") && (
                     <div className="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-medium">
                       B2B
                     </div>

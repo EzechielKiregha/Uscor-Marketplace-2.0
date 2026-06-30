@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "@/components/seraui/Loader";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
 import { Button } from "@/components/ui/button";
 import {
   GET_REPORT_HISTORY,
@@ -28,6 +28,7 @@ import AddWorkerModal from "./[storeId]/_components/AddWorkerModal";
 import { useOpenAddWorkerModal } from "./[storeId]/_hooks/use-open-add-worker-modal";
 import { ReportHistory } from "./[storeId]/report/_components/ReportHistory";
 import StoreCard from "./_components/StoreCard";
+import MotionPage from "@/components/MotionPage";
 
 export default function StoresPage() {
   const { user, role, loading: authLoading } = useMe();
@@ -78,7 +79,7 @@ export default function StoresPage() {
     },
   });
 
-  if (authLoading || storesLoading) return <Loader loading={true} />;
+  if (authLoading || storesLoading) return <CardGridSkeleton variant="store" columns={3} count={6} />;
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -100,10 +101,10 @@ export default function StoresPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <MotionPage className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Store & Worker Management</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-page-title">Store & Worker Management</h1>
+        <p className="text-page-subtitle">
           Manage your stores, workers, and operational performance
         </p>
       </div>
@@ -179,7 +180,7 @@ export default function StoresPage() {
 
       {/* Empty State */}
       {stores.length === 0 && (
-        <div className="bg-card border border-border rounded-lg p-12 text-center">
+        <div className="bg-card border border-border rounded-lg p-12 text-center card-hover">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <Building2 className="h-8 w-8 text-muted-foreground" />
           </div>
@@ -206,7 +207,7 @@ export default function StoresPage() {
 
       {/* Selected Store Details */}
       {selectedStoreId && selectedStore && (
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
             <h2 className="font-semibold">Store: {selectedStore.name}</h2>
             <Button
@@ -229,8 +230,8 @@ export default function StoresPage() {
                     <Users className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Workers</p>
-                    <p className="text-xl font-bold">
+                    <p className="text-stat-label">Workers</p>
+                    <p className="text-stat">
                       {selectedStore?.workers?.length}
                     </p>
                   </div>
@@ -243,10 +244,10 @@ export default function StoresPage() {
                     <ShoppingCart className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-stat-label">
                       Today's Sales
                     </p>
-                    <p className="text-xl font-bold">
+                    <p className="text-stat">
                       $
                       {selectedStore.dailyStats?.todaySales?.toFixed(2) ||
                         "0.00"}
@@ -261,10 +262,10 @@ export default function StoresPage() {
                     <Package className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-stat-label">
                       Low Stock Items
                     </p>
-                    <p className="text-xl font-bold">
+                    <p className="text-stat">
                       {selectedStore.inventoryStats?.lowStockItems || 0}
                     </p>
                   </div>
@@ -277,10 +278,10 @@ export default function StoresPage() {
                     <Clock className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-stat-label">
                       Active Shifts
                     </p>
-                    <p className="text-xl font-bold">
+                    <p className="text-stat">
                       {selectedStore.shiftsStats?.activeShifts || 0}
                     </p>
                   </div>
@@ -376,7 +377,7 @@ export default function StoresPage() {
           </div>
         </div>
       )}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
           <h2 className="font-semibold">
             View All Repports: {selectedStore?.name}
@@ -416,6 +417,6 @@ export default function StoresPage() {
         storeId={selectedStoreId!}
         businessId={user ? user.id : ""}
       />
-    </div>
+    </MotionPage>
   );
 }

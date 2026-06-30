@@ -1,4 +1,5 @@
 import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
+import GraphQLJSON from "graphql-type-json";
 import { AdEntity } from "../../ad/entities/ad.entity";
 import { BusinessEntity } from "../../business/entities/business.entity";
 import { CategoryEntity } from "../../category/entities/category.entity";
@@ -62,6 +63,28 @@ export class ProductEntity {
 
 	@Field(() => Boolean)
 	approvedForSale: boolean;
+
+	// Business-type-specific fields
+	@Field(() => String, { nullable: true })
+	brand?: string | null;
+
+	@Field(() => String, { nullable: true })
+	serialNumber?: string | null;
+
+	@Field(() => String, { nullable: true })
+	imei?: string | null;
+
+	@Field(() => Int, { nullable: true })
+	warrantyMonths?: number | null;
+
+	@Field(() => String, { nullable: true })
+	sku?: string | null;
+
+	@Field(() => String, { nullable: true })
+	barcode?: string | null;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	variants?: any;
 
 	// Relations
 	@Field(() => [MediaEntity], { nullable: true }) // Media associated with the product

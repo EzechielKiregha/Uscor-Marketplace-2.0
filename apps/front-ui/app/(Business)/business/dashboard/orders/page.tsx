@@ -2,9 +2,10 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { Package, Search } from "lucide-react";
 import { useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_BUSINESS_ORDERS } from "@/graphql/order.gql";
 import { OrderEntity } from "@/lib/types";
@@ -63,15 +64,15 @@ export default function BusinessOrdersPage() {
     }
   };
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return <TableSkeleton />;
   if (error) return <div>Error loading orders</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Orders</h1>
-          <p className="text-muted-foreground">Manage customer orders</p>
+          <h1 className="text-page-title">Orders</h1>
+          <p className="text-page-subtitle">Manage customer orders</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -168,13 +169,11 @@ export default function BusinessOrdersPage() {
 
       {/* Empty State */}
       {data.businessOrders.items.length === 0 && (
-        <div className="text-center py-12 bg-card rounded-lg border border-orange-400/60 dark:border-orange-500/70">
-          <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium mb-2">No orders yet</h3>
-          <p className="text-muted-foreground">
-            You don't have any orders to display
-          </p>
-        </div>
+        <EmptyState
+          icon={emptyStateIcons.orders}
+          title="No orders yet"
+          description="Orders from your marketplace will appear here"
+        />
       )}
 
       {/* Order Details Modal */}

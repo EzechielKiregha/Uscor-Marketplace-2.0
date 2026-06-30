@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import {
 	GET_BUSINESS_BY_ID,
@@ -102,7 +102,7 @@ export default function BusinessPage() {
 	const services = servicesData?.businessServices || [];
 	const reviews = reviewsData?.businessReviews?.items || [];
 
-	if (businessLoading) return <Loader loading={true} />;
+	if (businessLoading) return <DashboardSkeleton />;
 
 	if (!business)
 		return (

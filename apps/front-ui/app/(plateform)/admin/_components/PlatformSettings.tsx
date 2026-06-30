@@ -10,7 +10,7 @@ import {
 	TrendingUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -112,7 +112,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 		}
 	};
 
-	if (settingsLoading) return <Loader loading={true} />;
+	if (settingsLoading) return <FormSkeleton fields={8} columns={2} />;
 	if (settingsError)
 		return <div>Error loading settings: {settingsError.message}</div>;
 
@@ -121,7 +121,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 			<div className="p-4 bg-muted border-b border-border">
 				<div className="flex justify-between items-start">
 					<div>
-						<h1 className="text-2xl font-bold">Platform Settings</h1>
+						<h1 className="text-page-title">Platform Settings</h1>
 						<p className="text-muted-foreground mt-1">
 							Configure platform rules, fees, and features
 						</p>
@@ -135,7 +135,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 					<div>
 						<div className="flex justify-between items-start mb-4">
 							<div>
-								<h2 className="text-xl font-bold flex items-center gap-2">
+								<h2 className="text-section-title flex items-center gap-2">
 									<DollarSign className="h-5 w-5" />
 									Transaction Fees
 								</h2>
@@ -260,7 +260,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 					<div>
 						<div className="flex justify-between items-start mb-4">
 							<div>
-								<h2 className="text-xl font-bold flex items-center gap-2">
+								<h2 className="text-section-title flex items-center gap-2">
 									<TrendingUp className="h-5 w-5" />
 									USCOR Token Configuration
 								</h2>
@@ -339,7 +339,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 					<div>
 						<div className="flex justify-between items-start mb-4">
 							<div>
-								<h2 className="text-xl font-bold flex items-center gap-2">
+								<h2 className="text-section-title flex items-center gap-2">
 									<ShieldCheck className="h-5 w-5" />
 									Platform Rules
 								</h2>
@@ -406,7 +406,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 					<div>
 						<div className="flex justify-between items-start mb-4">
 							<div>
-								<h2 className="text-xl font-bold flex items-center gap-2">
+								<h2 className="text-section-title flex items-center gap-2">
 									<BarChart className="h-5 w-5" />
 									East Africa Specific Settings
 								</h2>

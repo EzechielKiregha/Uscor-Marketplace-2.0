@@ -4,15 +4,16 @@
 import { useToast } from "@/components/toast-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CANCEL_ORDER, GET_ORDER_BY_ID } from "@/graphql/order.gql";
+import { CANCEL_ORDER } from "@/graphql/order.gql";
+import { GET_PAYMENT_LATEST_TRANSACTION } from "@/graphql/payment.gql";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  CheckCircle,
-  Copy,
-  Phone,
-  RefreshCw,
-  Wallet,
-  XCircle,
+    CheckCircle,
+    Copy,
+    Phone,
+    RefreshCw,
+    Wallet,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -56,6 +57,21 @@ export default function MobileMoneyPaymentCard({
   const { showToast } = useToast();
 
   const [cancelOrder] = useMutation(CANCEL_ORDER);
+
+//   const { data } = useQuery(GET_ORDER_BY_ID, {
+//     variables: { id: orderId },
+//     fetchPolicy: "network-only",
+//   });
+
+  const { data: tx_data, refetch: fetchLastTx } = useQuery(
+    GET_PAYMENT_LATEST_TRANSACTION,
+    {
+      variables: {
+        phone: user?.phone,
+        status: "COMPLETED"
+      },
+    },
+  );
 
   // Persist expiry on first mount
   useEffect(() => {
@@ -112,17 +128,14 @@ export default function MobileMoneyPaymentCard({
   const handleCheckPayment = async () => {
     setIsPolling(true);
     try {
-      const { data } = await useQuery(GET_ORDER_BY_ID, {
-        variables: { id: orderId },
-        fetchPolicy: "network-only",
-      });
-      const status = data?.order?.payment?.status;
-      if (status === "PAID" || status === "COMPLETED") {
+        await fetchLastTx();
+      const status = tx_data?.latestPaymentTransaction?.status;
+      if (status === "COMPLETED") {
         setIsPaid(true);
         localStorage.removeItem(storageKey);
         showToast("success", "Paid", "Payment confirmed!.", true, 5000);
         onPaymentConfirmed?.();
-      } else if (status === "CANCELLED" || status === "FAILED") {
+      } else if (status === "FAILED") {
         localStorage.removeItem(storageKey);
         showToast(
           "error",
@@ -196,11 +209,12 @@ export default function MobileMoneyPaymentCard({
           </p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-primary tracking-widest font-mono">
-              *384*333666#
+              *384*33369#
             </p>
             <button
+            type="button"
               onClick={() => {
-                navigator.clipboard.writeText("*384*333666#");
+                navigator.clipboard.writeText("*384*33369#");
                 showToast(
                   "success",
                   "Success",

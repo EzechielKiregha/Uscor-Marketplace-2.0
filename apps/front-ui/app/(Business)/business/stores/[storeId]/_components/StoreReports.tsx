@@ -11,7 +11,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { DollarSign, ShoppingCart, Users, TrendingUp } from "lucide-react";
 
 interface StoreReportsProps {
@@ -24,7 +25,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
     skip: !storeId,
   });
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return <DashboardSkeleton />;
   if (!data?.storeReports) return null;
 
   const {
@@ -38,7 +39,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <DollarSign className="h-5 w-5" />
@@ -51,7 +52,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
               <ShoppingCart className="h-5 w-5" />
@@ -62,7 +63,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <TrendingUp className="h-5 w-5" />
@@ -75,7 +76,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
             </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
               <Users className="h-5 w-5" />
@@ -91,7 +92,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <h3 className="font-semibold mb-4">Daily Sales Trend</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -102,7 +103,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
                 <Tooltip />
                 <Bar
                   dataKey="sales"
-                  fill="hsl(var(--primary))"
+                  fill={CHART_COLORS.primary}
                   name="Sales ($)"
                 />
               </BarChart>
@@ -110,7 +111,7 @@ export default function StoreReports({ storeId }: StoreReportsProps) {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <h3 className="font-semibold mb-4">Worker Performance</h3>
           <div className="space-y-3">
             {workerPerformance?.map((wp: any) => (

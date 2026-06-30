@@ -2,6 +2,7 @@
 
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
+import { BUSINESS_TYPES, isDedicatedField, type ProductFieldConfig } from "@/config/business-types";
 import {
   Dialog,
   DialogClose,
@@ -30,6 +31,7 @@ import {
   Baby,
   BookOpen,
   Boxes,
+  ChevronDown,
   Coffee,
   Dumbbell,
   Flower2,
@@ -812,6 +814,22 @@ export default function ProductForm({
     storeId: initialData?.storeId ?? "",
   });
 
+  // Type-specific fields (initialized from dedicated columns + variants JSON)
+  const [typeFields, setTypeFields] = useState<Record<string, any>>(() => {
+    if (!initialData) return {};
+    const fields: Record<string, any> = {};
+    // Pull dedicated columns
+    for (const key of ["brand", "serialNumber", "imei", "warrantyMonths", "sku", "barcode"]) {
+      if (initialData[key] != null) fields[key] = initialData[key];
+    }
+    // Pull variants JSON
+    if (initialData.variants && typeof initialData.variants === "object") {
+      Object.assign(fields, initialData.variants);
+    }
+    return fields;
+  });
+  const [typeFieldsOpen, setTypeFieldsOpen] = useState(true);
+
   const { data: storesData, loading: storesLoading } = useQuery(GET_STORES);
   const { data: catData, loading: catLoading } = useQuery(GET_CATEGORIES);
 
@@ -907,6 +925,18 @@ export default function ProductForm({
       );
       setIsUploading(false);
 
+      // Split type-specific fields into dedicated columns vs. variants JSON
+      const dedicatedFields: Record<string, any> = {};
+      const variantsJson: Record<string, any> = {};
+      for (const [key, value] of Object.entries(typeFields)) {
+        if (value === "" || value == null) continue;
+        if (isDedicatedField(key)) {
+          dedicatedFields[key] = value;
+        } else {
+          variantsJson[key] = value;
+        }
+      }
+
       const productData = {
         ...formData,
         businessId: user?.id,
@@ -914,6 +944,8 @@ export default function ProductForm({
         categoryId: selectedCatId,
         price: parseFloat(formData.price),
         quantity: parseInt(formData.quantity, 10),
+        ...dedicatedFields,
+        variants: Object.keys(variantsJson).length > 0 ? variantsJson : undefined,
       };
 
       if (initialData) {
@@ -1012,6 +1044,146 @@ export default function ProductForm({
               />
             </div>
           </div>
+
+          {/* ── Type-Specific Fields ── */}
+          {(() => {
+            const config = BUSINESS_TYPES[businessType?.toUpperCase?.()];
+            const formFields = config?.productFields?.filter((f: ProductFieldConfig) =>
+              f.visibleIn.includes("form"),
+            );
+            if (!formFields || formFields.length === 0) return null;
+
+            return (
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => setTypeFieldsOpen(!typeFieldsOpen)}
+                  className="flex items-center gap-2 text-sm font-medium w-full"
+                >
+                  <div
+                    className={cn(
+                      "p-1 rounded-md",
+                      config.color.badge,
+                    )}
+                  >
+                    <config.icon className="size-3.5" />
+                  </div>
+                  <span>{config.label} Details</span>
+                  <ChevronDown
+                    className={cn(
+                      "size-4 ml-auto transition-transform",
+                      typeFieldsOpen && "rotate-180",
+                    )}
+                  />
+                </button>
+
+                {typeFieldsOpen && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-1">
+                    {formFields.map((field: ProductFieldConfig) => (
+                      <div key={field.key}>
+                        <label
+                          htmlFor={`tf-${field.key}`}
+                          className="block text-sm font-medium mb-1"
+                        >
+                          {field.label}
+                          {field.required && (
+                            <span className="text-destructive ml-1">*</span>
+                          )}
+                        </label>
+
+                        {field.type === "text" && (
+                          <input
+                            type="text"
+                            id={`tf-${field.key}`}
+                            value={typeFields[field.key] ?? ""}
+                            onChange={(e) =>
+                              setTypeFields((prev) => ({
+                                ...prev,
+                                [field.key]: e.target.value,
+                              }))
+                            }
+                            placeholder={field.placeholder}
+                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md text-sm"
+                          />
+                        )}
+
+                        {field.type === "number" && (
+                          <input
+                            type="number"
+                            id={`tf-${field.key}`}
+                            value={typeFields[field.key] ?? ""}
+                            onChange={(e) =>
+                              setTypeFields((prev) => ({
+                                ...prev,
+                                [field.key]: e.target.value ? Number(e.target.value) : "",
+                              }))
+                            }
+                            placeholder={field.placeholder}
+                            min="0"
+                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md text-sm"
+                          />
+                        )}
+
+                        {field.type === "select" && (
+                          <select
+                            id={`tf-${field.key}`}
+                            value={typeFields[field.key] ?? ""}
+                            onChange={(e) =>
+                              setTypeFields((prev) => ({
+                                ...prev,
+                                [field.key]: e.target.value,
+                              }))
+                            }
+                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted text-sm"
+                          >
+                            <option value="">Select {field.label}</option>
+                            {field.options?.map((opt) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+
+                        {field.type === "boolean" && (
+                          <label className="flex items-center gap-2 text-sm cursor-pointer mt-1">
+                            <input
+                              type="checkbox"
+                              id={`tf-${field.key}`}
+                              checked={!!typeFields[field.key]}
+                              onChange={(e) =>
+                                setTypeFields((prev) => ({
+                                  ...prev,
+                                  [field.key]: e.target.checked,
+                                }))
+                              }
+                              className="h-4 w-4 text-primary border-border rounded"
+                            />
+                            {field.label}
+                          </label>
+                        )}
+
+                        {field.type === "date" && (
+                          <input
+                            type="date"
+                            id={`tf-${field.key}`}
+                            value={typeFields[field.key] ?? ""}
+                            onChange={(e) =>
+                              setTypeFields((prev) => ({
+                                ...prev,
+                                [field.key]: e.target.value,
+                              }))
+                            }
+                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md text-sm"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ── Category Grid ── */}
           <div className="space-y-2">

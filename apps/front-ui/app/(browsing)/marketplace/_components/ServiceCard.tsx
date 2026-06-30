@@ -81,7 +81,7 @@ export default function ServiceCard({ service, viewMode }: ServiceCardProps) {
   if (viewMode === "grid") {
     return (
       <>
-        <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card">
+        <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card">
           {/* Service Image */}
           <div className="h-48 bg-muted relative">
             {service.medias && service.medias.length > 0 ? (
@@ -230,7 +230,7 @@ export default function ServiceCard({ service, viewMode }: ServiceCardProps) {
 
   return (
     <>
-      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row">
+      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card flex flex-col md:flex-row">
         {/* Service Image */}
         <div className="md:w-48 h-32 md:h-auto bg-muted relative">
           {service.medias && service.medias.length > 0 ? (

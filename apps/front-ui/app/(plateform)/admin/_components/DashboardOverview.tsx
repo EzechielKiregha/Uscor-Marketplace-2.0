@@ -86,7 +86,7 @@ export default function DashboardOverview({
 						</div>
 						<div>
 							<p className="text-sm text-muted-foreground">Total Users</p>
-							<p className="text-2xl font-bold">
+							<p className="text-stat">
 								{metrics?.totalUsers.toLocaleString()}
 							</p>
 						</div>
@@ -100,7 +100,7 @@ export default function DashboardOverview({
 						</div>
 						<div>
 							<p className="text-sm text-muted-foreground">Businesses</p>
-							<p className="text-2xl font-bold">
+							<p className="text-stat">
 								{metrics?.totalBusinesses.toLocaleString()}
 							</p>
 						</div>
@@ -114,7 +114,7 @@ export default function DashboardOverview({
 						</div>
 						<div>
 							<p className="text-sm text-muted-foreground">Products</p>
-							<p className="text-2xl font-bold">
+							<p className="text-stat">
 								{metrics?.totalProducts.toLocaleString()}
 							</p>
 						</div>
@@ -128,7 +128,7 @@ export default function DashboardOverview({
 						</div>
 						<div>
 							<p className="text-sm text-muted-foreground">Services</p>
-							<p className="text-2xl font-bold">
+							<p className="text-stat">
 								{metrics?.totalServices.toLocaleString()}
 							</p>
 						</div>

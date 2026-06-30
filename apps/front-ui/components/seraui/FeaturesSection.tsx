@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -106,20 +107,7 @@ export default function FeaturesSection() {
 												className="inline-flex items-center text-primary hover:text-accent transition-colors text-sm font-medium"
 											>
 												Learn more
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 16 16"
-													className="ml-2 h-4 w-4"
-													fill="currentColor"
-													aria-hidden="true"
-													focusable="false"
-												>
-													<path
-														fillRule="evenodd"
-														d="M8.22 2.72a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 8.5H3.75a.75.75 0 0 1 0-1.5h8.19L8.22 3.78a.75.75 0 0 1 0-1.06Z"
-														clipRule="evenodd"
-													/>
-												</svg>
+												<ArrowRight className="ml-2 h-4 w-4" />
 											</Link>
 										</div>
 									)}
@@ -131,7 +119,7 @@ export default function FeaturesSection() {
 										imageOnRight ? "order-1 md:order-2" : "order-1 md:order-1"
 									}
 								>
-									<div className="relative w-full overflow-hidden rounded-2xl border border-orange-400/60 dark:border-orange-500/70/60 bg-card shadow-sm">
+									<div className="relative w-full overflow-hidden rounded-2xl border border-orange-400/60 dark:border-orange-500/70 bg-card shadow-sm">
 										<Image
 											src={feature.imageSrc}
 											alt={feature.imageAlt}

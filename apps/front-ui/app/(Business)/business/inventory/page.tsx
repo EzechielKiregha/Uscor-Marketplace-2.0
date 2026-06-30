@@ -1,9 +1,10 @@
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useQuery } from "@apollo/client";
 import { Package, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { useMe } from "@/lib/useMe";
@@ -13,6 +14,7 @@ import InventorySummary from "./_components/InventorySummary";
 import PurchaseOrders from "./_components/PurchaseOrders";
 import StockManagement from "./_components/StockManagement";
 import TransferOrders from "./_components/TransferOrders";
+import MotionPage from "@/components/MotionPage";
 
 export default function InventoryManagementPage() {
 	const { user, role, loading: authLoading } = useMe();
@@ -48,43 +50,33 @@ export default function InventoryManagementPage() {
 		}
 	}, [storesData, selectedStoreId]);
 
-	if (authLoading || storesLoading) return <Loader loading={true} />;
+	if (authLoading || storesLoading) return <TableSkeleton />;
 	if (storesError)
 		return <div>Error loading stores: {storesError.message}</div>;
 	if (!storesData?.stores || storesData.stores.length === 0) {
 		return (
-			<div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] p-6">
-				<div className="text-center max-w-md">
-					<div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-						<Package className="h-10 w-10 text-primary" />
-					</div>
-					<h2 className="text-2xl font-bold mb-2">No Stores Found</h2>
-					<p className="text-muted-foreground mb-6">
-						You need to create at least one store before you can manage
-						inventory
-					</p>
-					<Button
-						onClick={() =>
-							setIsOpen({
-								openCreateStoreModal: true,
-								initialStoreData: null,
-							})
-						}
-					>
-						<Plus className="h-4 w-4 mr-2" />
-						Create Your First Store
-					</Button>
-				</div>
-			</div>
+			<EmptyState
+				icon={emptyStateIcons.stores}
+				title="No Stores Found"
+				description="You need to create at least one store before you can manage inventory"
+				action={{
+					label: "Create Your First Store",
+					onClick: () =>
+						setIsOpen({
+							openCreateStoreModal: true,
+							initialStoreData: null,
+						}),
+				}}
+			/>
 		);
 	}
 
 	return (
-		<div className="space-y-6">
+		<MotionPage className="space-y-6">
 			{/* Store Selector */}
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 				<div>
-					<h1 className="text-2xl font-bold">Inventory Management</h1>
+					<h1 className="text-page-title">Inventory Management</h1>
 					<p className="text-muted-foreground">
 						Manage stock levels, purchase orders, and transfers
 					</p>
@@ -166,6 +158,6 @@ export default function InventoryManagementPage() {
 					/>
 				)}
 			</div>
-		</div>
+		</MotionPage>
 	);
 }

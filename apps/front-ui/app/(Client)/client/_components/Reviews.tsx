@@ -168,7 +168,7 @@ export default function Reviews({ client }: ReviewsProps) {
 			{/* Header */}
 			<div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 				<div>
-					<h1 className="text-2xl font-bold">My Reviews</h1>
+					<h1 className="text-page-title">My Reviews</h1>
 					<p className="text-muted-foreground mt-1">
 						Manage your reviews and see business responses
 					</p>

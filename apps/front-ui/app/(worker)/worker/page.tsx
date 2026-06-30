@@ -2,7 +2,7 @@
 
 import { useQuery } from "@apollo/client";
 import { DollarSign, Package, Plus, ShoppingCart, Users } from "lucide-react";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_WORKER_DASHBOARD } from "@/graphql/worker.gql";
 import { useMe } from "@/lib/useMe";
@@ -19,12 +19,31 @@ import NewSaleModal from "@/app/(Business)/business/sales/_components/NewSaleMod
 import { StoreEntity } from "@/lib/types";
 import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
 import ChatPage from "@/components/chat/ChatComponent";
+import LowStockAlerts from "./_components/LowStockAlerts";
+import { OfflineWorkerBanner } from "@/components/OfflineWorkerBanner";
+import { SyncStatusBar } from "@/components/SyncStatusBar";
+import { useOfflinePOS } from "@/hooks/use-offline-pos";
+import { getActiveOfflineSession, isOfflineMode, setActiveOfflineSession } from "@/lib/auth";
+import MotionPage from "@/components/MotionPage";
+import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 
 export default function WorkerPage() {
-  const { user, loading: authLoading, role } = useMe();
+  const { user, loading: authLoading, role, isOfflineSession } = useMe();
   const { activeSection, selectedStoreId, setSelectedStoreId } =
     useWorkerLayout();
   const [showNewSaleModal, setShowNewSaleModal] = useState(false);
+  const offlineSession = isOfflineMode() ? getActiveOfflineSession() : null;
+
+  const handleOfflineLogout = () => {
+    setActiveOfflineSession(null);
+    window.location.href = "/login";
+  };
+
+  const handleReconnect = () => {
+    // Clear offline session and redirect to login for online auth
+    setActiveOfflineSession(null);
+    window.location.href = "/login";
+  };
 
   const {
     data: storesData,
@@ -45,6 +64,19 @@ export default function WorkerPage() {
   );
 
   const {
+    isOnline,
+    pendingCount,
+    syncStatus,
+    lastSyncTime,
+    conflicts,
+    syncPendingOperations,
+  } = useOfflinePOS(
+    selectedStoreId || "",
+    user?.id || "",
+    role || "",
+  );
+
+  const {
     data: dashboardData,
     loading: dashboardLoading,
     error: dashboardError,
@@ -57,7 +89,7 @@ export default function WorkerPage() {
   });
 
   if (authLoading || dashboardLoading || !selectedStoreId || storesLoading)
-    return <Loader loading={true} />;
+    return <DashboardSkeleton statCount={4} showChart={false} showTable={false} />;
   if (dashboardError || storesError)
     return (
       <div>
@@ -85,12 +117,12 @@ export default function WorkerPage() {
     );
 
   return (
-    <div className="space-y-6">
+    <MotionPage className="space-y-6">
       {/* Dashboard Overview */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="mt-2">
-          <h1 className="text-2xl font-bold">Worker Dashboard</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-page-title">Worker Dashboard</h1>
+          <p className="text-page-subtitle">
             Welcome back, {user.fullName}. Manage your daily operations and
             performance.
           </p>
@@ -131,66 +163,99 @@ export default function WorkerPage() {
         userId={user?.id || ""}
       />
 
+      {/* Offline Worker Banner — shown when in offline session */}
+      {offlineSession && (
+        <OfflineWorkerBanner
+          session={offlineSession}
+          isOnline={isOnline}
+          pendingCount={pendingCount}
+          lastSyncTime={lastSyncTime}
+          onReconnect={handleReconnect}
+          onLogout={handleOfflineLogout}
+        />
+      )}
+
+      {/* Sync Status Bar */}
+      <SyncStatusBar
+        isOnline={isOnline}
+        pendingCount={pendingCount}
+        syncStatus={syncStatus}
+        lastSyncTime={lastSyncTime}
+        conflictCount={conflicts.length}
+        onSyncNow={syncPendingOperations}
+      />
+
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <DollarSign className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Today's Sales</p>
-              <p className="text-xl font-bold">
-                $
-                {dashboardData?.workerDashboard?.todaySales?.toFixed(2) ||
-                  "0.00"}
-              </p>
+      <MotionStagger className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <MotionStaggerItem>
+          <div className="bg-card border border-border rounded-lg p-4 card-hover">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                <DollarSign className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-stat-label">Today's Sales</p>
+                <p className="text-stat">
+                  $
+                  {dashboardData?.workerDashboard?.todaySales?.toFixed(2) ||
+                    "0.00"}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </MotionStaggerItem>
 
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
-              <ShoppingCart className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Today's Orders</p>
-              <p className="text-xl font-bold">
-                {dashboardData?.workerDashboard?.todayOrders || 0}
-              </p>
+        <MotionStaggerItem>
+          <div className="bg-card border border-border rounded-lg p-4 card-hover">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
+                <ShoppingCart className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-stat-label">Today's Orders</p>
+                <p className="text-stat">
+                  {dashboardData?.workerDashboard?.todayOrders || 0}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </MotionStaggerItem>
 
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
-              <Package className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Low Stock Items</p>
-              <p className="text-xl font-bold">
-                {dashboardData?.workerDashboard?.lowStockItems || 0}
-              </p>
+        <MotionStaggerItem>
+          <div className="bg-card border border-border rounded-lg p-4 card-hover">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
+                <Package className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-stat-label">Low Stock Items</p>
+                <p className="text-stat">
+                  {dashboardData?.workerDashboard?.lowStockItems || 0}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </MotionStaggerItem>
 
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Active Chats</p>
-              <p className="text-xl font-bold">
-                {dashboardData?.workerDashboard?.activeChats || 0}
-              </p>
+        <MotionStaggerItem>
+          <div className="bg-card border border-border rounded-lg p-4 card-hover">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
+                <Users className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-stat-label">Active Chats</p>
+                <p className="text-stat">
+                  {dashboardData?.workerDashboard?.activeChats || 0}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </MotionStaggerItem>
+      </MotionStagger>
+
+      {/* Low Stock Alerts */}
+      <LowStockAlerts storeId={selectedStoreId || ""} />
 
       {/* Main Content */}
       <div>
@@ -210,6 +275,6 @@ export default function WorkerPage() {
         )}
         {activeSection === "profile" && <ProfilePage />}
       </div>
-    </div>
+    </MotionPage>
   );
 }

@@ -4,7 +4,7 @@
 import { useQuery } from "@apollo/client";
 import { BriefcaseBusiness, Download, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_STORES } from "@/graphql/store.gql";
@@ -63,7 +63,7 @@ export default function FreelanceServicesPage() {
     }
   }, [services, selectedService, setSelectedServiceId]);
 
-  if (authLoading || storesLoading) return <Loader loading={true} />;
+  if (authLoading || storesLoading) return <PageSkeleton />;
 
   return (
     <div className="space-y-6">

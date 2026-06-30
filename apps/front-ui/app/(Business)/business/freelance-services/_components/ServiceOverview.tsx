@@ -19,6 +19,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -301,7 +302,7 @@ export default function ServiceOverview({
 									<Tooltip />
 									<Bar
 										dataKey="orders"
-										fill="hsl(var(--primary))"
+										fill={CHART_COLORS.primary}
 										name="Orders"
 									/>
 								</BarChart>
@@ -337,7 +338,7 @@ export default function ServiceOverview({
 											serviceOrders.filter((o) => o.serviceId === service.id)
 												.length
 										}
-										fill="hsl(var(--primary))"
+										fill={CHART_COLORS.primary}
 										name="Orders"
 									/>
 								</BarChart>

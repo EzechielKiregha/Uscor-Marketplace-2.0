@@ -13,6 +13,13 @@ export const GET_PRODUCTS = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -49,6 +56,13 @@ export const GET_PRODUCTS_BY_BUSINESS_ID = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -85,6 +99,13 @@ export const GET_PRODUCTS_BY_NAME = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -121,6 +142,13 @@ export const SEARCHED_PRODUCTS = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -154,6 +182,13 @@ export const GET_PRODUCT_BY_ID = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -191,6 +226,13 @@ export const GET_FEATURED_PRODUCTS = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -223,6 +265,13 @@ export const GET_RELATED_PRODUCTS = gql`
       price
       quantity
       featured
+      brand
+      serialNumber
+      imei
+      warrantyMonths
+      sku
+      barcode
+      variants
       createdAt
       updatedAt
       category {
@@ -260,6 +309,13 @@ const PRODUCT_FIELDS = gql`
     featured
     isPhysical
     approvedForSale
+    brand
+    serialNumber
+    imei
+    warrantyMonths
+    sku
+    barcode
+    variants
     createdAt
     updatedAt
     category {

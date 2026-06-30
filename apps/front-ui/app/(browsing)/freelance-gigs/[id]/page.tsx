@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import Loader from "@/components/seraui/Loader";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import FreelanceServiceDetail from "../_components/FreelanceServiceDetail";
 
 export default function FreelanceServiceDetailPage() {
@@ -10,7 +10,7 @@ export default function FreelanceServiceDetailPage() {
 	if (!id) {
 		return (
 			<>
-				<Loader loading={true} />
+				<PageSkeleton variant="centered" />
 				<p className="text-center text-red-500">Chat ID is required</p>
 			</>
 		);

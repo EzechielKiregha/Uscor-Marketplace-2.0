@@ -11,6 +11,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 interface TransactionHistoryProps {
   transactions: any[];
@@ -198,15 +199,13 @@ export default function TransactionHistory({
 
         {/* Transactions Table */}
         {filteredTransactions.length === 0 ? (
-          <div className="text-center py-12">
-            <DollarSign className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No transactions found</h3>
-            <p className="text-muted-foreground">
-              {searchQuery || filterMethod || filterStatus
-                ? "Try adjusting your filters"
-                : "Your transaction history will appear here"}
-            </p>
-          </div>
+          <EmptyState
+            icon={emptyStateIcons.revenue}
+            title="No transactions found"
+            description={searchQuery || filterMethod || filterStatus
+              ? "Try adjusting your filters"
+              : "Your transaction history will appear here"}
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">

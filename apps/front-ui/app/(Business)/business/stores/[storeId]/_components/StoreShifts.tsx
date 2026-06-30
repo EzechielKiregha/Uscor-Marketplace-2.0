@@ -4,7 +4,7 @@
 import { useQuery } from "@apollo/client";
 import { GET_STORE_SHIFTS } from "@/graphql/store.gql";
 import { Clock, User, CheckCircle, AlertTriangle } from "lucide-react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 
 interface StoreShiftsProps {
   storeId: string;
@@ -16,7 +16,7 @@ export default function StoreShifts({ storeId }: StoreShiftsProps) {
     skip: !storeId,
   });
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return <TableSkeleton />;
   if (!data?.storeShifts) return null;
 
   return (

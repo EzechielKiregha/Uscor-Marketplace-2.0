@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import ResponsiveModal from "@/app/(Business)/business/_components/responsive-modal";
-import Loader from "@/components/seraui/Loader";
+import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -474,7 +474,7 @@ export default function CheckoutPage() {
   };
 
   if (userLoading) {
-    return <Loader loading={true} />;
+    return <FormSkeleton fields={4} />;
   }
 
   if (!userLoading && (!user || role !== "client")) {

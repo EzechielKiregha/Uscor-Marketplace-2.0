@@ -6,6 +6,7 @@ import {
 	IsString,
 	Min,
 } from "class-validator";
+import GraphQLJSON from "graphql-type-json";
 
 @InputType()
 export class UpdateProductInput {
@@ -51,4 +52,39 @@ export class UpdateProductInput {
 	@Field(() => Boolean, { defaultValue: true })
 	@IsOptional()
 	approvedForSale?: boolean;
+
+	// Business-type-specific fields
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	brand?: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	serialNumber?: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	imei?: string;
+
+	@Field(() => Int, { nullable: true })
+	@IsOptional()
+	@IsNumber()
+	warrantyMonths?: number;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	sku?: string;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	barcode?: string;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	@IsOptional()
+	variants?: any;
 }

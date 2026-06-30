@@ -8,10 +8,8 @@ import { WorkerEntity } from "../worker/entities/worker.entity";
 import { AdminService } from "./admin.service";
 import { CreateAdminInput } from "./dto/create-admin.input";
 import { GetUsersInput } from "./dto/get-users.input";
-import { RejectKycInput } from "./dto/reject-kyc.input";
 import { UpdateAdminInput } from "./dto/update-admin.input";
 import { UpdateUserStatusInput } from "./dto/update-user-status.input";
-import { VerifyKycInput } from "./dto/verify-kyc.input";
 import { Admin } from "./entities/admin.entity";
 import {
 	PaginatedAdminsResponse,
@@ -135,36 +133,11 @@ export class AdminResolver {
 	newAdmin() {
 		return this.pubSub.asyncIterableIterator("NEW_ADMIN");
 	}
-	@UseGuards(JwtAuthGuard)
-	@Mutation(() => BusinessEntity)
-	async verifyKyc(@Args("input") input: VerifyKycInput) {
-		return this.userService.verifyKyc(input);
-	}
-
-	@UseGuards(JwtAuthGuard)
-	@Mutation(() => BusinessEntity)
-	async rejectKyc(@Args("input") input: RejectKycInput) {
-		return this.userService.rejectKyc(input);
-	}
 
 	@UseGuards(JwtAuthGuard)
 	@Mutation(() => Boolean)
 	async updateUserStatus(@Args("input") input: UpdateUserStatusInput) {
 		await this.userService.updateUserStatus(input);
 		return true;
-	}
-
-	@Subscription(() => BusinessEntity, {
-		resolve: (payload) => payload.kycVerified,
-	})
-	kycVerified() {
-		return this.pubSub.asyncIterableIterator("KYC_VERIFIED");
-	}
-
-	@Subscription(() => BusinessEntity, {
-		resolve: (payload) => payload.kycRejected,
-	})
-	kycRejected() {
-		return this.pubSub.asyncIterableIterator("KYC_REJECTED");
 	}
 }

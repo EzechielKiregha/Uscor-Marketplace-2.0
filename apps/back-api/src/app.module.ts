@@ -13,6 +13,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuditModule } from "./audit/audit.module";
 import { AuthModule } from "./auth/auth.module";
+import { B2BModule } from "./b2b/b2b.module";
 import { BusinessModule } from "./business/business.module";
 import { CategoryModule } from "./category/category.module";
 import { ChatModule } from "./chat/chat.module";
@@ -25,10 +26,12 @@ import { FreelanceServiceModule } from "./freelance-service/freelance-service.mo
 import { InventoryModule } from "./inventory/inventory.module";
 import { KnowYourCustomerModule } from "./know-your-customer/know-your-customer.module";
 import { LoyaltyProgramModule } from "./loyalty-program/loyalty-program.module";
+import { MailModule } from "./mail/mail.module";
 import { MarketplaceModule } from "./marketplace/marketplace.module";
 import { MediaModule } from "./media/media.module";
 import { OrderModule } from "./order/order.module";
 import { OrderProductModule } from "./order-product/order-product.module";
+import { OtpModule } from "./otp/otp.module";
 import { PaymentTransactionModule } from "./payment-transaction/payment-transaction.module";
 import { PlatformModule } from "./platform/platform.module";
 import { PostOfSaleModule } from "./post-of-sale/post-of-sale.module";
@@ -44,6 +47,7 @@ import { ShiftModule } from "./shift/shift.module";
 import { StoreModule } from "./store/store.module";
 import { TokenModule } from "./token/token.module";
 import { TokenTransactionModule } from "./token-transaction/token-transaction.module";
+import { WalletSecurityModule } from "./wallet-security/wallet-security.module";
 import { WorkerModule } from "./worker/worker.module";
 
 @Module({
@@ -87,6 +91,7 @@ import { WorkerModule } from "./worker/worker.module";
 		FreelanceOrderModule,
 		ReferralModule,
 		AuthModule,
+		B2BModule,
 		PostOfSaleModule,
 		CategoryModule,
 		TokenTransactionModule,
@@ -102,6 +107,9 @@ import { WorkerModule } from "./worker/worker.module";
 		DisputeModule,
 		AuditModule,
 		PlatformModule,
+		MailModule,
+		OtpModule,
+		WalletSecurityModule,
 	],
 	controllers: [AppController],
 	providers: [

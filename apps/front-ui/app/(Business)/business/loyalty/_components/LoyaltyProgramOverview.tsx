@@ -43,9 +43,10 @@ import {
   Cell,
   PieChart,
 } from "recharts";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { useToast } from "@/components/toast-provider";
 import { useMe } from "@/lib/useMe";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Input } from "@/components/ui/input";
 import { BusinessEntity } from "@/lib/types";
 
@@ -141,10 +142,10 @@ export default function LoyaltyProgramOverview({
     { name: "Platinum", value: analytics?.platinumMembers || 5 },
   ];
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = CHART_COLORS.palette;
 
   if (programLoading || analyticsLoading || tiersLoading)
-    return <Loader loading={true} />;
+    return <DashboardSkeleton />;
   if (programError || analyticsError || tiersError) {
     return (
       <div className="text-center py-12">
@@ -361,12 +362,12 @@ export default function LoyaltyProgramOverview({
                     <Bar
                       dataKey="earned"
                       name="Points Earned"
-                      fill="hsl(var(--primary))"
+                      fill={CHART_COLORS.primary}
                     />
                     <Bar
                       dataKey="redeemed"
                       name="Points Redeemed"
-                      fill="hsl(var(--success))"
+                      fill={CHART_COLORS.success}
                     />
                   </BarChartRecharts>
                 </ResponsiveContainer>
@@ -388,7 +389,7 @@ export default function LoyaltyProgramOverview({
                       cy="50%"
                       labelLine={false}
                       outerRadius={80}
-                      fill="#8884d8"
+                      fill={CHART_COLORS.accent}
                       dataKey="value"
                       label={({ name, percent }) =>
                         `${name} ${percent ? (percent * 100).toFixed(0) : 0}%`

@@ -5,6 +5,7 @@ import { Filter, MessageSquare, Search, Star, Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 interface WorkersSectionProps {
 	workers: any[];
@@ -51,29 +52,22 @@ export default function WorkersSection({
 	if (filteredWorkers.length === 0) {
 		return (
 			<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
-				<div className="text-center py-12">
-					<div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-						<Users className="h-8 w-8 text-muted-foreground" />
-					</div>
-					<h3 className="text-lg font-medium mb-1">No workers found</h3>
-					<p className="text-muted-foreground mb-6">
-						{searchQuery || selectedRole
-							? "Try adjusting your search or filter criteria"
-							: "This business has not added any workers yet"}
-					</p>
-
-					{(searchQuery || selectedRole) && (
-						<Button
-							variant="outline"
-							onClick={() => {
-								setSearchQuery("");
-								setSelectedRole(null);
-							}}
-						>
-							Clear Filters
-						</Button>
-					)}
-				</div>
+				<EmptyState
+					icon={emptyStateIcons.customers}
+					title="No workers found"
+					description={searchQuery || selectedRole
+						? "Try adjusting your search or filter criteria"
+						: "This business hasn't added workers yet"}
+					action={(searchQuery || selectedRole) ? {
+						label: "Clear Filters",
+						onClick: () => {
+							setSearchQuery("");
+							setSelectedRole(null);
+						},
+						variant: "outline",
+					} : undefined}
+					compact
+				/>
 			</div>
 		);
 	}

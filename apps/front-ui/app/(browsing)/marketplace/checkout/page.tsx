@@ -1,7 +1,7 @@
 "use client";
 
 import { useCart } from "@/app/context/use-cart";
-import Loader from "@/components/seraui/Loader";
+import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -176,7 +176,7 @@ export default function CheckoutPage() {
   //   console.log("Grouped Orders:", groupedOrders);
 
   if (userLoading) {
-    return <Loader loading={true} />;
+    return <FormSkeleton fields={4} />;
   }
 
   const handleApplyPromotion = async () => {
@@ -413,7 +413,7 @@ export default function CheckoutPage() {
           {/* Left Column - Address & Payment */}
           <div className="lg:col-span-2 space-y-6">
             {/* Address Section */}
-            <div className="bg-card border border-border rounded-lg overflow-hidden">
+            <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
               <div className="p-4 bg-muted border-b border-border">
                 <h2 className="font-semibold flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
@@ -433,7 +433,7 @@ export default function CheckoutPage() {
 
             {/* Business Tabs */}
             {groupedOrders.length > 1 && !useUnifiedPayment && (
-              <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
                 <div className="p-4 bg-muted border-b border-border">
                   <h2 className="font-semibold">Business Selection</h2>
                 </div>
@@ -461,7 +461,7 @@ export default function CheckoutPage() {
             )}
 
             {/* Payment Section */}
-            <div className="bg-card border border-border rounded-lg overflow-hidden">
+            <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
               <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
                 <h2 className="font-semibold flex items-center gap-2 text-foreground">
                   <CreditCard className="h-5 w-5 text-muted-foreground" />
@@ -538,7 +538,7 @@ export default function CheckoutPage() {
                         </span>
                       </div>
                       {/* Unified Payment Info */}
-                      {groupedOrders.length > 1 && useUnifiedPayment && (
+                      {groupedOrders.length >= 1 && useUnifiedPayment && (
                         <div className="mt-4 p-4 bg-primary/5 border border-primary/20 rounded-lg space-y-2">
                           <div className="flex items-start gap-2">
                             <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
@@ -596,7 +596,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Promotion Section */}
-            <div className="bg-card border border-border rounded-lg overflow-hidden">
+            <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
               <div className="p-4 bg-muted border-b border-border">
                 <h2 className="font-semibold">Promotions</h2>
               </div>
@@ -658,7 +658,7 @@ export default function CheckoutPage() {
             />
 
             {/* Business Details */}
-            <div className="mt-6 bg-card border border-border rounded-lg p-4 sm:p-5 shadow-sm">
+            <div className="mt-6 bg-card border border-border rounded-lg p-4 sm:p-5 shadow-sm card-hover">
               {/* Header Section: Fully Responsive Wrap */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-4 border-b border-border/60">
                 <div className="flex items-center gap-3">

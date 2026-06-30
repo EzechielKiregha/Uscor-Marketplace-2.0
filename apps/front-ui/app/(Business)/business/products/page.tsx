@@ -1,6 +1,6 @@
 "use client";
 
-import Loader from "@/components/seraui/Loader";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,10 +11,12 @@ import {
 import { ProductEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { Edit, Package, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateProductModal from "../_components/modals/CreateProductModal";
 import { useOpenCreateProductModal } from "../_hooks/use-open-create-product-modal";
+import MotionPage from "@/components/MotionPage";
 
 export default function BusinessProductsPage() {
   const { isOpen, setIsOpen } = useOpenCreateProductModal();
@@ -70,15 +72,15 @@ export default function BusinessProductsPage() {
     ) || [];
 
   if ((loading && searchTerm.trim() === "") || productsLoading)
-    return <Loader loading={true} />;
+    return <CardGridSkeleton variant="product" columns={4} />;
   if (error) return <div>Error loading products</div>;
 
   return (
-    <div className="space-y-6">
+    <MotionPage className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Products</h1>
-          <p className="text-muted-foreground">Manage your product catalog</p>
+          <h1 className="text-page-title">Products</h1>
+          <p className="text-page-subtitle">Manage your product catalog</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -207,28 +209,23 @@ export default function BusinessProductsPage() {
 
       {/* Empty State */}
       {filteredProducts.length === 0 && (
-        <div className="text-center py-12 bg-card rounded-lg border border-orange-400/60 dark:border-orange-500/70">
-          <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium mb-2">No products yet</h3>
-          <p className="text-muted-foreground mb-6">
-            Get started by creating your first product
-          </p>
-          <Button
-            onClick={() =>
+        <EmptyState
+          icon={emptyStateIcons.products}
+          title="No products yet"
+          description="Get started by creating your first product"
+          action={{
+            label: "Add Product",
+            onClick: () =>
               setIsOpen({
                 openCreateProductModal: true,
                 initialProductData: null,
-              })
-            }
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Create Product
-          </Button>
-        </div>
+              }),
+          }}
+        />
       )}
 
       {/* Create Product Modal */}
       <CreateProductModal />
-    </div>
+    </MotionPage>
   );
 }

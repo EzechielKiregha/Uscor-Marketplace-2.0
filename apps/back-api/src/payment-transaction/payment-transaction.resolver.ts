@@ -81,8 +81,11 @@ export class PaymentTransactionResolver {
 		name: "latestPaymentTransaction",
 		nullable: true,
 	})
-	async getLatestPaymentTransaction(@Args("phone",{type: () => String}) phone: string) {
-		return this.paymentTransactionService.findLatest(phone);
+	async getLatestPaymentTransaction(
+        @Args("phone",{type: () => String}) phone: string,
+        @Args("status",{type: () => String, nullable: true}) status?: string
+    ) {
+		return this.paymentTransactionService.findLatest(phone, status);
 	}
 
 	// @UseGuards(JwtAuthGuard, RolesGuard)

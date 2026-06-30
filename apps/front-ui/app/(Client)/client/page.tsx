@@ -1,19 +1,24 @@
 // app/client/page.tsx
 "use client";
 
-import Loader from "@/components/seraui/Loader";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
+  BarChart3,
+  Heart,
   Home,
   Menu,
   MessageSquare,
+  RefreshCcw,
   Settings,
+  Shield,
   ShieldCheck,
   ShoppingBag,
+  ShoppingCart,
   Star,
   User,
   Wallet,
@@ -28,11 +33,22 @@ import Recommendations from "./_components/Recommendations";
 import ReviewsPage from "./_components/Reviews";
 import SettingsPanel from "./_components/SettingsPanel";
 import WalletPage from "./wallet/page";
+import PurchaseHistory from "./_components/PurchaseHistory";
+import WarrantyTracker from "./_components/WarrantyTracker";
+import CustomerStats from "./_components/CustomerStats";
+import FavoriteStores from "./_components/FavoriteStores";
+import ReturnRequestForm from "./_components/ReturnRequestForm";
+import MotionPage from "@/components/MotionPage";
 
 type ClientSection =
   | "profile"
   | "chat"
   | "orders"
+  | "purchases"
+  | "warranty"
+  | "analytics"
+  | "favorites"
+  | "returns"
   | "loyalty"
   | "recommendations"
   | "reviews"
@@ -56,17 +72,13 @@ export default function ClientPanel() {
         ? window.localStorage.getItem("clientActiveSection")
         : null;
 
-    if (
-      storedSection === "profile" ||
-      storedSection === "chat" ||
-      storedSection === "orders" ||
-      storedSection === "loyalty" ||
-      storedSection === "recommendations" ||
-      storedSection === "reviews" ||
-      storedSection === "wallet" ||
-      storedSection === "settings"
-    ) {
-      setActiveSection(storedSection);
+    const validSections: ClientSection[] = [
+      "profile", "chat", "orders", "purchases", "warranty",
+      "analytics", "favorites", "returns", "loyalty",
+      "recommendations", "reviews", "wallet", "settings",
+    ];
+    if (storedSection && validSections.includes(storedSection as ClientSection)) {
+      setActiveSection(storedSection as ClientSection);
     }
   }, []);
 
@@ -79,6 +91,11 @@ export default function ClientPanel() {
   const clientSideLinks: ClientSideLink[] = [
     { section: "profile", icon: User, label: "Profile" },
     { section: "orders", icon: ShoppingBag, label: "Order History" },
+    { section: "purchases", icon: ShoppingCart, label: "Purchase History" },
+    { section: "warranty", icon: Shield, label: "Warranty Tracker" },
+    { section: "analytics", icon: BarChart3, label: "My Analytics" },
+    { section: "favorites", icon: Heart, label: "Favorite Stores" },
+    { section: "returns", icon: RefreshCcw, label: "Returns" },
     { section: "chat", icon: MessageSquare, label: "My Chats" },
     { section: "loyalty", icon: Star, label: "Loyalty Program" },
     { section: "recommendations", icon: Home, label: "Recommendations" },
@@ -96,14 +113,14 @@ export default function ClientPanel() {
     skip: !user?.id,
   });
 
-  if (authLoading || clientLoading) return <Loader loading={true} />;
+  if (authLoading || clientLoading) return <SidebarPageSkeleton navItems={13} contentVariant="profile" />;
   if (clientError)
     return <div>Error loading client data: {clientError.message}</div>;
   if (!user || !user)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Client Access Required</h1>
+          <h1 className="text-page-title">Client Access Required</h1>
           <p className="text-muted-foreground mt-2">
             You need to be logged in as a customer to access this panel.
           </p>
@@ -217,7 +234,7 @@ export default function ClientPanel() {
       {/* Main Content */}
       <div className="flex-1">
         <div className="container mx-auto px-4 py-8">
-          <div className="space-y-6">
+          <MotionPage className="space-y-6">
             {activeSection === "profile" && (
               <ProfileOverview client={clientData.client} />
             )}
@@ -225,6 +242,21 @@ export default function ClientPanel() {
             {/* {activeSection === "chat" && <ChatsPage />} */}
             {activeSection === "orders" && (
               <OrderHistory client={clientData.client} />
+            )}
+            {activeSection === "purchases" && (
+              <PurchaseHistory client={clientData.client} />
+            )}
+            {activeSection === "warranty" && (
+              <WarrantyTracker client={clientData.client} />
+            )}
+            {activeSection === "analytics" && (
+              <CustomerStats client={clientData.client} />
+            )}
+            {activeSection === "favorites" && (
+              <FavoriteStores client={clientData.client} />
+            )}
+            {activeSection === "returns" && (
+              <ReturnRequestForm client={clientData.client} />
             )}
             {activeSection === "loyalty" && (
               <LoyaltyDashboard client={clientData.client} />
@@ -239,7 +271,7 @@ export default function ClientPanel() {
             {activeSection === "settings" && (
               <SettingsPanel client={clientData.client} />
             )}
-          </div>
+          </MotionPage>
         </div>
       </div>
     </div>

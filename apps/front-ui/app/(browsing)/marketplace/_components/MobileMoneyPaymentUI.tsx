@@ -5,17 +5,17 @@ import { useToast } from "@/components/toast-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  CANCEL_PAYMENT_TRANSACTION,
-  CHECK_PAYMENT_TRANSACTION_STATUS,
+    CANCEL_PAYMENT_TRANSACTION,
+    CHECK_PAYMENT_TRANSACTION_STATUS,
 } from "@/graphql/payment.gql";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  CheckCircle,
-  Copy,
-  Phone,
-  RefreshCw,
-  Wallet,
-  XCircle,
+    CheckCircle,
+    Copy,
+    Phone,
+    RefreshCw,
+    Wallet,
+    XCircle,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -209,6 +209,7 @@ export default function MobileMoneyPaymentUI({
               *384*66639#
             </p>
             <button
+            type="button"
               onClick={() => {
                 navigator.clipboard.writeText("*384*66639#");
                 showToast(

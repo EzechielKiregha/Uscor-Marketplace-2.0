@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { useMe } from "@/lib/useMe";
 import BusinessHeader from "./business/_components/BusinessHeader";
 import BusinessSidebar from "./business/_components/BusinessSidebar";
@@ -14,7 +14,7 @@ export default function ClientSideLayout({
 
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
-  if (loading) return <Loader loading={true} />;
+  if (loading) return <SidebarPageSkeleton navItems={8} contentVariant="cards" />;
   if (error || role !== "business") return <div>Unauthorized</div>;
 
   return (

@@ -328,3 +328,69 @@ export const ON_ACCOUNT_BALANCE_UPDATED = gql`
     }
   }
 `;
+
+// ======================
+// WALLET SECURITY QUERIES
+// ======================
+
+export const GET_WALLET_AUDIT_LOGS = gql`
+  query GetWalletAuditLogs($action: String, $page: Int, $limit: Int) {
+    walletAuditLogs(action: $action, page: $page, limit: $limit) {
+      items {
+        id
+        businessId
+        clientId
+        action
+        amount
+        balanceBefore
+        balanceAfter
+        metadata
+        idempotencyKey
+        createdAt
+      }
+      total
+      page
+      limit
+    }
+  }
+`;
+
+export const GET_LEDGER_ENTRIES = gql`
+  query GetLedgerEntries($type: String, $page: Int, $limit: Int) {
+    ledgerEntries(type: $type, page: $page, limit: $limit) {
+      items {
+        id
+        businessId
+        clientId
+        type
+        amount
+        balanceAfter
+        reference
+        referenceType
+        referenceId
+        description
+        createdAt
+      }
+      total
+      page
+      limit
+    }
+  }
+`;
+
+export const GET_WALLET_SECURITY_SUMMARY = gql`
+  query GetWalletSecuritySummary {
+    walletSecuritySummary {
+      totalAuditLogs
+      totalLedgerEntries
+      recentActivity {
+        id
+        action
+        amount
+        balanceBefore
+        balanceAfter
+        createdAt
+      }
+    }
+  }
+`;

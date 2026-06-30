@@ -23,7 +23,7 @@ interface WorkerCacheItem {
 let dbPromise: Promise<IDBPDatabase> | null = null;
 
 const DB_NAME = "uscor-worker-db";
-const DB_VERSION = 1;
+const DB_VERSION = 3;
 
 const STORES = {
 	OFFLINE_OPERATIONS: "offlineOperations",
@@ -31,6 +31,9 @@ const STORES = {
 	LOCAL_SALES: "localSales",
 	LOCAL_INVENTORY: "localInventory",
 	LOCAL_CHAT: "localChat",
+	SYNC_METADATA: "syncMetadata",
+	CONFLICT_LOG: "conflictLog",
+	OFFLINE_SESSION: "offlineSession",
 };
 
 export async function initDB() {
@@ -85,6 +88,30 @@ export async function initDB() {
 				});
 				chatStore.createIndex("chatId", "chatId", { unique: false });
 				chatStore.createIndex("createdAt", "createdAt", { unique: false });
+			}
+
+			// Sync metadata store (v2)
+			if (!db.objectStoreNames.contains(STORES.SYNC_METADATA)) {
+				db.createObjectStore(STORES.SYNC_METADATA, {
+					keyPath: "key",
+				});
+			}
+
+			// Conflict log store (v2)
+			if (!db.objectStoreNames.contains(STORES.CONFLICT_LOG)) {
+				const conflictStore = db.createObjectStore(STORES.CONFLICT_LOG, {
+					keyPath: "id",
+				});
+				conflictStore.createIndex("localId", "localId", { unique: false });
+				conflictStore.createIndex("createdAt", "createdAt", { unique: false });
+				conflictStore.createIndex("resolved", "resolved", { unique: false });
+			}
+
+			// Offline session store (v3) — encrypted worker credentials for offline login
+			if (!db.objectStoreNames.contains(STORES.OFFLINE_SESSION)) {
+				db.createObjectStore(STORES.OFFLINE_SESSION, {
+					keyPath: "workerId",
+				});
 			}
 		},
 	});

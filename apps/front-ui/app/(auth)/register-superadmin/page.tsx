@@ -1,6 +1,7 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -52,7 +53,6 @@ export default function RegisterSuperAdminPage() {
 					8000,
 					"bottom-right",
 				);
-				// redirect to admin dashboard or to login
 				router.push("/login");
 			} else {
 				showToast(
@@ -78,13 +78,16 @@ export default function RegisterSuperAdminPage() {
 	};
 
 	return (
-		<div className="relative w-full flex items-center justify-center min-h-screen bg-white ">
-			<div className="w-full max-w-md p-6 space-y-6 bg-background rounded-lg border border-secondary-light dark:border-secondary-dark shadow-lg">
+		<div className="relative w-full flex items-center justify-center min-h-screen bg-background">
+			<div className="w-full max-w-md p-6 space-y-6 bg-card rounded-xl border border-border shadow-lg">
 				<div className="text-center space-y-3">
-					<h1 className="text-2xl font-semibold tracking-tight text-darkGray dark:text-lightGray">
+					<div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mx-auto">
+						<ShieldCheck className="h-6 w-6 text-primary" />
+					</div>
+					<h1 className="text-2xl font-semibold tracking-tight text-foreground">
 						Bootstrap Super Admin
 					</h1>
-					<p className="text-sm text-secondary-light dark:text-secondary-dark mt-1">
+					<p className="text-sm text-muted-foreground mt-1">
 						Create the first Super Admin account for the platform.
 					</p>
 				</div>
@@ -96,13 +99,13 @@ export default function RegisterSuperAdminPage() {
 							name="fullName"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Full name</FormLabel>
+									<FormLabel className="text-foreground">Full name</FormLabel>
 									<FormControl>
 										<input
 											type="text"
 											placeholder="Jane Doe"
 											{...field}
-											className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+											className="w-full text-foreground bg-muted/50 dark:bg-white/5 border border-border rounded-lg px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -115,13 +118,13 @@ export default function RegisterSuperAdminPage() {
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Email</FormLabel>
+									<FormLabel className="text-foreground">Email</FormLabel>
 									<FormControl>
 										<input
 											type="email"
 											placeholder="admin@example.com"
 											{...field}
-											className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+											className="w-full text-foreground bg-muted/50 dark:bg-white/5 border border-border rounded-lg px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -134,13 +137,13 @@ export default function RegisterSuperAdminPage() {
 							name="phone"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Phone (optional)</FormLabel>
+									<FormLabel className="text-foreground">Phone (optional)</FormLabel>
 									<FormControl>
 										<input
 											type="tel"
 											placeholder="+1234567890"
 											{...field}
-											className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+											className="w-full text-foreground bg-muted/50 dark:bg-white/5 border border-border rounded-lg px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -153,13 +156,13 @@ export default function RegisterSuperAdminPage() {
 							name="password"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Password</FormLabel>
+									<FormLabel className="text-foreground">Password</FormLabel>
 									<FormControl>
 										<input
 											type="password"
 											placeholder="Choose a strong password"
 											{...field}
-											className="w-full text-darkGray dark:text-lightGray bg-transparent border rounded-md px-3 py-2 border-secondary-light dark:border-secondary-dark"
+											className="w-full text-foreground bg-muted/50 dark:bg-white/5 border border-border rounded-lg px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all"
 										/>
 									</FormControl>
 									<FormMessage />
@@ -170,14 +173,14 @@ export default function RegisterSuperAdminPage() {
 						<GlowButton
 							type="submit"
 							disabled={loading}
-							className="w-full bg-primary rounded-md cursor-pointer py-1"
+							className="w-full rounded-lg py-2.5"
 						>
 							{loading ? "Creating..." : "Create Super Admin"}
 						</GlowButton>
 					</form>
 				</Form>
 
-				<div className="text-center text-sm text-secondary-light dark:text-secondary-dark">
+				<div className="text-center text-sm text-muted-foreground">
 					<p>
 						Only the first Super Admin can be created here. If a Super Admin
 						already exists, please sign in.

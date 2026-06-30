@@ -448,6 +448,12 @@ export type BusinessWhereInput = {
   promotions?: Prisma.PromotionListRelationFilter
   disputes?: Prisma.DisputeListRelationFilter
   orderBusinessGroups?: Prisma.OrderBusinessGroupListRelationFilter
+  wholesalePrices?: Prisma.WholesalePriceListRelationFilter
+  b2bOrdersSent?: Prisma.B2BOrderListRelationFilter
+  b2bOrdersReceived?: Prisma.B2BOrderListRelationFilter
+  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
+  walletAuditLogs?: Prisma.WalletAuditLogListRelationFilter
+  ledgerEntries?: Prisma.LedgerEntryListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -505,6 +511,12 @@ export type BusinessOrderByWithRelationInput = {
   promotions?: Prisma.PromotionOrderByRelationAggregateInput
   disputes?: Prisma.DisputeOrderByRelationAggregateInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupOrderByRelationAggregateInput
+  wholesalePrices?: Prisma.WholesalePriceOrderByRelationAggregateInput
+  b2bOrdersSent?: Prisma.B2BOrderOrderByRelationAggregateInput
+  b2bOrdersReceived?: Prisma.B2BOrderOrderByRelationAggregateInput
+  subscription?: Prisma.SubscriptionOrderByWithRelationInput
+  walletAuditLogs?: Prisma.WalletAuditLogOrderByRelationAggregateInput
+  ledgerEntries?: Prisma.LedgerEntryOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -565,6 +577,12 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   promotions?: Prisma.PromotionListRelationFilter
   disputes?: Prisma.DisputeListRelationFilter
   orderBusinessGroups?: Prisma.OrderBusinessGroupListRelationFilter
+  wholesalePrices?: Prisma.WholesalePriceListRelationFilter
+  b2bOrdersSent?: Prisma.B2BOrderListRelationFilter
+  b2bOrdersReceived?: Prisma.B2BOrderListRelationFilter
+  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
+  walletAuditLogs?: Prisma.WalletAuditLogListRelationFilter
+  ledgerEntries?: Prisma.LedgerEntryListRelationFilter
 }, "id" | "email" | "phone">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -696,6 +714,12 @@ export type BusinessCreateInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -753,6 +777,12 @@ export type BusinessUncheckedCreateInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -810,6 +840,12 @@ export type BusinessUpdateInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -867,6 +903,12 @@ export type BusinessUncheckedUpdateInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -1545,6 +1587,94 @@ export type BusinessUpdateOneWithoutDisputesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutDisputesInput, Prisma.BusinessUpdateWithoutDisputesInput>, Prisma.BusinessUncheckedUpdateWithoutDisputesInput>
 }
 
+export type BusinessCreateNestedOneWithoutWholesalePricesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutWholesalePricesInput, Prisma.BusinessUncheckedCreateWithoutWholesalePricesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutWholesalePricesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutWholesalePricesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutWholesalePricesInput, Prisma.BusinessUncheckedCreateWithoutWholesalePricesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutWholesalePricesInput
+  upsert?: Prisma.BusinessUpsertWithoutWholesalePricesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutWholesalePricesInput, Prisma.BusinessUpdateWithoutWholesalePricesInput>, Prisma.BusinessUncheckedUpdateWithoutWholesalePricesInput>
+}
+
+export type BusinessCreateNestedOneWithoutB2bOrdersSentInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersSentInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersSentInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutB2bOrdersSentInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessCreateNestedOneWithoutB2bOrdersReceivedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersReceivedInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersReceivedInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutB2bOrdersReceivedInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutB2bOrdersSentNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersSentInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersSentInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutB2bOrdersSentInput
+  upsert?: Prisma.BusinessUpsertWithoutB2bOrdersSentInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutB2bOrdersSentInput, Prisma.BusinessUpdateWithoutB2bOrdersSentInput>, Prisma.BusinessUncheckedUpdateWithoutB2bOrdersSentInput>
+}
+
+export type BusinessUpdateOneRequiredWithoutB2bOrdersReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersReceivedInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersReceivedInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutB2bOrdersReceivedInput
+  upsert?: Prisma.BusinessUpsertWithoutB2bOrdersReceivedInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutB2bOrdersReceivedInput, Prisma.BusinessUpdateWithoutB2bOrdersReceivedInput>, Prisma.BusinessUncheckedUpdateWithoutB2bOrdersReceivedInput>
+}
+
+export type BusinessCreateNestedOneWithoutSubscriptionInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSubscriptionInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSubscriptionNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSubscriptionInput
+  upsert?: Prisma.BusinessUpsertWithoutSubscriptionInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSubscriptionInput, Prisma.BusinessUpdateWithoutSubscriptionInput>, Prisma.BusinessUncheckedUpdateWithoutSubscriptionInput>
+}
+
+export type BusinessCreateNestedOneWithoutWalletAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutWalletAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutWalletAuditLogsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutWalletAuditLogsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutWalletAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutWalletAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutWalletAuditLogsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutWalletAuditLogsInput
+  upsert?: Prisma.BusinessUpsertWithoutWalletAuditLogsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutWalletAuditLogsInput, Prisma.BusinessUpdateWithoutWalletAuditLogsInput>, Prisma.BusinessUncheckedUpdateWithoutWalletAuditLogsInput>
+}
+
+export type BusinessCreateNestedOneWithoutLedgerEntriesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntriesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutLedgerEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntriesInput
+  upsert?: Prisma.BusinessUpsertWithoutLedgerEntriesInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutLedgerEntriesInput, Prisma.BusinessUpdateWithoutLedgerEntriesInput>, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
+}
+
 export type BusinessCreateWithoutPaymentConfigInput = {
   id?: string
   name: string
@@ -1599,6 +1729,12 @@ export type BusinessCreateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPaymentConfigInput = {
@@ -1655,6 +1791,12 @@ export type BusinessUncheckedCreateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPaymentConfigInput = {
@@ -1727,6 +1869,12 @@ export type BusinessUpdateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPaymentConfigInput = {
@@ -1783,6 +1931,12 @@ export type BusinessUncheckedUpdateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutHardwareConfigInput = {
@@ -1839,6 +1993,12 @@ export type BusinessCreateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutHardwareConfigInput = {
@@ -1895,6 +2055,12 @@ export type BusinessUncheckedCreateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutHardwareConfigInput = {
@@ -1967,6 +2133,12 @@ export type BusinessUpdateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutHardwareConfigInput = {
@@ -2023,6 +2195,12 @@ export type BusinessUncheckedUpdateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutKycDocumentsInput = {
@@ -2079,6 +2257,12 @@ export type BusinessCreateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutKycDocumentsInput = {
@@ -2135,6 +2319,12 @@ export type BusinessUncheckedCreateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutKycDocumentsInput = {
@@ -2207,6 +2397,12 @@ export type BusinessUpdateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutKycDocumentsInput = {
@@ -2263,6 +2459,12 @@ export type BusinessUncheckedUpdateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutWorkersInput = {
@@ -2319,6 +2521,12 @@ export type BusinessCreateWithoutWorkersInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutWorkersInput = {
@@ -2375,6 +2583,12 @@ export type BusinessUncheckedCreateWithoutWorkersInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutWorkersInput = {
@@ -2447,6 +2661,12 @@ export type BusinessUpdateWithoutWorkersInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutWorkersInput = {
@@ -2503,6 +2723,12 @@ export type BusinessUncheckedUpdateWithoutWorkersInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProductsInput = {
@@ -2559,6 +2785,12 @@ export type BusinessCreateWithoutProductsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProductsInput = {
@@ -2615,6 +2847,12 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProductsInput = {
@@ -2687,6 +2925,12 @@ export type BusinessUpdateWithoutProductsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProductsInput = {
@@ -2743,6 +2987,12 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutMediasInput = {
@@ -2799,6 +3049,12 @@ export type BusinessCreateWithoutMediasInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutMediasInput = {
@@ -2855,6 +3111,12 @@ export type BusinessUncheckedCreateWithoutMediasInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutMediasInput = {
@@ -2927,6 +3189,12 @@ export type BusinessUpdateWithoutMediasInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutMediasInput = {
@@ -2983,6 +3251,12 @@ export type BusinessUncheckedUpdateWithoutMediasInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutOrderBusinessGroupsInput = {
@@ -3039,6 +3313,12 @@ export type BusinessCreateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutOrderBusinessGroupsInput = {
@@ -3095,6 +3375,12 @@ export type BusinessUncheckedCreateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutOrderBusinessGroupsInput = {
@@ -3167,6 +3453,12 @@ export type BusinessUpdateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutOrderBusinessGroupsInput = {
@@ -3223,6 +3515,12 @@ export type BusinessUncheckedUpdateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutChatParticipantsInput = {
@@ -3279,6 +3577,12 @@ export type BusinessCreateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutChatParticipantsInput = {
@@ -3335,6 +3639,12 @@ export type BusinessUncheckedCreateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutChatParticipantsInput = {
@@ -3407,6 +3717,12 @@ export type BusinessUpdateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutChatParticipantsInput = {
@@ -3463,6 +3779,12 @@ export type BusinessUncheckedUpdateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutRepostedItemsInput = {
@@ -3519,6 +3841,12 @@ export type BusinessCreateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutRepostedItemsInput = {
@@ -3575,6 +3903,12 @@ export type BusinessUncheckedCreateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutRepostedItemsInput = {
@@ -3647,6 +3981,12 @@ export type BusinessUpdateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutRepostedItemsInput = {
@@ -3703,6 +4043,12 @@ export type BusinessUncheckedUpdateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutReownedItemsInput = {
@@ -3759,6 +4105,12 @@ export type BusinessCreateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutReownedItemsInput = {
@@ -3815,6 +4167,12 @@ export type BusinessUncheckedCreateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutReownedItemsInput = {
@@ -3928,6 +4286,12 @@ export type BusinessCreateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutTokenTransactionsInput = {
@@ -3984,6 +4348,12 @@ export type BusinessUncheckedCreateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutTokenTransactionsInput = {
@@ -4056,6 +4426,12 @@ export type BusinessUpdateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutTokenTransactionsInput = {
@@ -4112,6 +4488,12 @@ export type BusinessUncheckedUpdateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutKycInput = {
@@ -4168,6 +4550,12 @@ export type BusinessCreateWithoutKycInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutKycInput = {
@@ -4224,6 +4612,12 @@ export type BusinessUncheckedCreateWithoutKycInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutKycInput = {
@@ -4296,6 +4690,12 @@ export type BusinessUpdateWithoutKycInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutKycInput = {
@@ -4352,6 +4752,12 @@ export type BusinessUncheckedUpdateWithoutKycInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutRechargesInput = {
@@ -4408,6 +4814,12 @@ export type BusinessCreateWithoutRechargesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutRechargesInput = {
@@ -4464,6 +4876,12 @@ export type BusinessUncheckedCreateWithoutRechargesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutRechargesInput = {
@@ -4536,6 +4954,12 @@ export type BusinessUpdateWithoutRechargesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutRechargesInput = {
@@ -4592,6 +5016,12 @@ export type BusinessUncheckedUpdateWithoutRechargesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutAdsInput = {
@@ -4648,6 +5078,12 @@ export type BusinessCreateWithoutAdsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutAdsInput = {
@@ -4704,6 +5140,12 @@ export type BusinessUncheckedCreateWithoutAdsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutAdsInput = {
@@ -4776,6 +5218,12 @@ export type BusinessUpdateWithoutAdsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutAdsInput = {
@@ -4832,6 +5280,12 @@ export type BusinessUncheckedUpdateWithoutAdsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutFreelanceServicesInput = {
@@ -4888,6 +5342,12 @@ export type BusinessCreateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutFreelanceServicesInput = {
@@ -4944,6 +5404,12 @@ export type BusinessUncheckedCreateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutFreelanceServicesInput = {
@@ -5016,6 +5482,12 @@ export type BusinessUpdateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutFreelanceServicesInput = {
@@ -5072,6 +5544,12 @@ export type BusinessUncheckedUpdateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutFreelanceOrderBusinessInput = {
@@ -5128,6 +5606,12 @@ export type BusinessCreateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutFreelanceOrderBusinessInput = {
@@ -5184,6 +5668,12 @@ export type BusinessUncheckedCreateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutFreelanceOrderBusinessInput = {
@@ -5256,6 +5746,12 @@ export type BusinessUpdateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutFreelanceOrderBusinessInput = {
@@ -5312,6 +5808,12 @@ export type BusinessUncheckedUpdateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutReferralsMadeInput = {
@@ -5368,6 +5870,12 @@ export type BusinessCreateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutReferralsMadeInput = {
@@ -5424,6 +5932,12 @@ export type BusinessUncheckedCreateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutReferralsMadeInput = {
@@ -5485,6 +5999,12 @@ export type BusinessCreateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutReferralsReceivedInput = {
@@ -5541,6 +6061,12 @@ export type BusinessUncheckedCreateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutReferralsReceivedInput = {
@@ -5613,6 +6139,12 @@ export type BusinessUpdateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutReferralsMadeInput = {
@@ -5669,6 +6201,12 @@ export type BusinessUncheckedUpdateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUpsertWithoutReferralsReceivedInput = {
@@ -5736,6 +6274,12 @@ export type BusinessUpdateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutReferralsReceivedInput = {
@@ -5792,6 +6336,12 @@ export type BusinessUncheckedUpdateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutPostOfSalesInput = {
@@ -5848,6 +6398,12 @@ export type BusinessCreateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPostOfSalesInput = {
@@ -5904,6 +6460,12 @@ export type BusinessUncheckedCreateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPostOfSalesInput = {
@@ -5976,6 +6538,12 @@ export type BusinessUpdateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPostOfSalesInput = {
@@ -6032,6 +6600,12 @@ export type BusinessUncheckedUpdateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutStoresInput = {
@@ -6088,6 +6662,12 @@ export type BusinessCreateWithoutStoresInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutStoresInput = {
@@ -6144,6 +6724,12 @@ export type BusinessUncheckedCreateWithoutStoresInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutStoresInput = {
@@ -6216,6 +6802,12 @@ export type BusinessUpdateWithoutStoresInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutStoresInput = {
@@ -6272,6 +6864,12 @@ export type BusinessUncheckedUpdateWithoutStoresInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutPurchaseOrdersInput = {
@@ -6328,6 +6926,12 @@ export type BusinessCreateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -6384,6 +6988,12 @@ export type BusinessUncheckedCreateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -6456,6 +7066,12 @@ export type BusinessUpdateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -6512,6 +7128,12 @@ export type BusinessUncheckedUpdateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutLoyaltyProgramsInput = {
@@ -6568,6 +7190,12 @@ export type BusinessCreateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutLoyaltyProgramsInput = {
@@ -6624,6 +7252,12 @@ export type BusinessUncheckedCreateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutLoyaltyProgramsInput = {
@@ -6696,6 +7330,12 @@ export type BusinessUpdateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutLoyaltyProgramsInput = {
@@ -6752,6 +7392,12 @@ export type BusinessUncheckedUpdateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutPromotionsInput = {
@@ -6808,6 +7454,12 @@ export type BusinessCreateWithoutPromotionsInput = {
   medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPromotionsInput = {
@@ -6864,6 +7516,12 @@ export type BusinessUncheckedCreateWithoutPromotionsInput = {
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPromotionsInput = {
@@ -6941,6 +7599,12 @@ export type BusinessCreateWithoutDisputesInput = {
   medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutDisputesInput = {
@@ -6997,6 +7661,12 @@ export type BusinessUncheckedCreateWithoutDisputesInput = {
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutDisputesInput = {
@@ -7069,6 +7739,12 @@ export type BusinessUpdateWithoutDisputesInput = {
   medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutDisputesInput = {
@@ -7125,6 +7801,1596 @@ export type BusinessUncheckedUpdateWithoutDisputesInput = {
   medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutWholesalePricesInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutWholesalePricesInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutWholesalePricesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutWholesalePricesInput, Prisma.BusinessUncheckedCreateWithoutWholesalePricesInput>
+}
+
+export type BusinessUpsertWithoutWholesalePricesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutWholesalePricesInput, Prisma.BusinessUncheckedUpdateWithoutWholesalePricesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutWholesalePricesInput, Prisma.BusinessUncheckedCreateWithoutWholesalePricesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutWholesalePricesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutWholesalePricesInput, Prisma.BusinessUncheckedUpdateWithoutWholesalePricesInput>
+}
+
+export type BusinessUpdateWithoutWholesalePricesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutWholesalePricesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutB2bOrdersSentInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutB2bOrdersSentInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutB2bOrdersSentInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersSentInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersSentInput>
+}
+
+export type BusinessCreateWithoutB2bOrdersReceivedInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutB2bOrdersReceivedInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutB2bOrdersReceivedInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersReceivedInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersReceivedInput>
+}
+
+export type BusinessUpsertWithoutB2bOrdersSentInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutB2bOrdersSentInput, Prisma.BusinessUncheckedUpdateWithoutB2bOrdersSentInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersSentInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersSentInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutB2bOrdersSentInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutB2bOrdersSentInput, Prisma.BusinessUncheckedUpdateWithoutB2bOrdersSentInput>
+}
+
+export type BusinessUpdateWithoutB2bOrdersSentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutB2bOrdersSentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUpsertWithoutB2bOrdersReceivedInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutB2bOrdersReceivedInput, Prisma.BusinessUncheckedUpdateWithoutB2bOrdersReceivedInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutB2bOrdersReceivedInput, Prisma.BusinessUncheckedCreateWithoutB2bOrdersReceivedInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutB2bOrdersReceivedInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutB2bOrdersReceivedInput, Prisma.BusinessUncheckedUpdateWithoutB2bOrdersReceivedInput>
+}
+
+export type BusinessUpdateWithoutB2bOrdersReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutB2bOrdersReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSubscriptionInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSubscriptionInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSubscriptionInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionInput>
+}
+
+export type BusinessUpsertWithoutSubscriptionInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSubscriptionInput, Prisma.BusinessUncheckedUpdateWithoutSubscriptionInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSubscriptionInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSubscriptionInput, Prisma.BusinessUncheckedUpdateWithoutSubscriptionInput>
+}
+
+export type BusinessUpdateWithoutSubscriptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSubscriptionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutWalletAuditLogsInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutWalletAuditLogsInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutWalletAuditLogsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutWalletAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutWalletAuditLogsInput>
+}
+
+export type BusinessUpsertWithoutWalletAuditLogsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutWalletAuditLogsInput, Prisma.BusinessUncheckedUpdateWithoutWalletAuditLogsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutWalletAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutWalletAuditLogsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutWalletAuditLogsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutWalletAuditLogsInput, Prisma.BusinessUncheckedUpdateWithoutWalletAuditLogsInput>
+}
+
+export type BusinessUpdateWithoutWalletAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutWalletAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutLedgerEntriesInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutLedgerEntriesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+}
+
+export type BusinessUpsertWithoutLedgerEntriesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutLedgerEntriesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
+}
+
+export type BusinessUpdateWithoutLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUpdateWithoutReownedItemsInput = {
@@ -7181,6 +9447,12 @@ export type BusinessUpdateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutReownedItemsInput = {
@@ -7237,6 +9509,12 @@ export type BusinessUncheckedUpdateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateManyWithoutReownedItemsInput = {
@@ -7326,6 +9604,12 @@ export type BusinessUpdateWithoutPromotionsInput = {
   medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPromotionsInput = {
@@ -7382,6 +9666,12 @@ export type BusinessUncheckedUpdateWithoutPromotionsInput = {
   medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateManyWithoutPromotionsInput = {
@@ -7444,6 +9734,11 @@ export type BusinessCountOutputType = {
   promotions: number
   disputes: number
   orderBusinessGroups: number
+  wholesalePrices: number
+  b2bOrdersSent: number
+  b2bOrdersReceived: number
+  walletAuditLogs: number
+  ledgerEntries: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -7468,6 +9763,11 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   promotions?: boolean | BusinessCountOutputTypeCountPromotionsArgs
   disputes?: boolean | BusinessCountOutputTypeCountDisputesArgs
   orderBusinessGroups?: boolean | BusinessCountOutputTypeCountOrderBusinessGroupsArgs
+  wholesalePrices?: boolean | BusinessCountOutputTypeCountWholesalePricesArgs
+  b2bOrdersSent?: boolean | BusinessCountOutputTypeCountB2bOrdersSentArgs
+  b2bOrdersReceived?: boolean | BusinessCountOutputTypeCountB2bOrdersReceivedArgs
+  walletAuditLogs?: boolean | BusinessCountOutputTypeCountWalletAuditLogsArgs
+  ledgerEntries?: boolean | BusinessCountOutputTypeCountLedgerEntriesArgs
 }
 
 /**
@@ -7627,6 +9927,41 @@ export type BusinessCountOutputTypeCountOrderBusinessGroupsArgs<ExtArgs extends 
   where?: Prisma.OrderBusinessGroupWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountWholesalePricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WholesalePriceWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountB2bOrdersSentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.B2BOrderWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountB2bOrdersReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.B2BOrderWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountWalletAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WalletAuditLogWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LedgerEntryWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -7683,6 +10018,12 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   promotions?: boolean | Prisma.Business$promotionsArgs<ExtArgs>
   disputes?: boolean | Prisma.Business$disputesArgs<ExtArgs>
   orderBusinessGroups?: boolean | Prisma.Business$orderBusinessGroupsArgs<ExtArgs>
+  wholesalePrices?: boolean | Prisma.Business$wholesalePricesArgs<ExtArgs>
+  b2bOrdersSent?: boolean | Prisma.Business$b2bOrdersSentArgs<ExtArgs>
+  b2bOrdersReceived?: boolean | Prisma.Business$b2bOrdersReceivedArgs<ExtArgs>
+  subscription?: boolean | Prisma.Business$subscriptionArgs<ExtArgs>
+  walletAuditLogs?: boolean | Prisma.Business$walletAuditLogsArgs<ExtArgs>
+  ledgerEntries?: boolean | Prisma.Business$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -7811,6 +10152,12 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   promotions?: boolean | Prisma.Business$promotionsArgs<ExtArgs>
   disputes?: boolean | Prisma.Business$disputesArgs<ExtArgs>
   orderBusinessGroups?: boolean | Prisma.Business$orderBusinessGroupsArgs<ExtArgs>
+  wholesalePrices?: boolean | Prisma.Business$wholesalePricesArgs<ExtArgs>
+  b2bOrdersSent?: boolean | Prisma.Business$b2bOrdersSentArgs<ExtArgs>
+  b2bOrdersReceived?: boolean | Prisma.Business$b2bOrdersReceivedArgs<ExtArgs>
+  subscription?: boolean | Prisma.Business$subscriptionArgs<ExtArgs>
+  walletAuditLogs?: boolean | Prisma.Business$walletAuditLogsArgs<ExtArgs>
+  ledgerEntries?: boolean | Prisma.Business$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -7843,6 +10190,12 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     promotions: Prisma.$PromotionPayload<ExtArgs>[]
     disputes: Prisma.$DisputePayload<ExtArgs>[]
     orderBusinessGroups: Prisma.$OrderBusinessGroupPayload<ExtArgs>[]
+    wholesalePrices: Prisma.$WholesalePricePayload<ExtArgs>[]
+    b2bOrdersSent: Prisma.$B2BOrderPayload<ExtArgs>[]
+    b2bOrdersReceived: Prisma.$B2BOrderPayload<ExtArgs>[]
+    subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
+    walletAuditLogs: Prisma.$WalletAuditLogPayload<ExtArgs>[]
+    ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -8293,6 +10646,12 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   promotions<T extends Prisma.Business$promotionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$promotionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disputes<T extends Prisma.Business$disputesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderBusinessGroups<T extends Prisma.Business$orderBusinessGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$orderBusinessGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderBusinessGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  wholesalePrices<T extends Prisma.Business$wholesalePricesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$wholesalePricesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WholesalePricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  b2bOrdersSent<T extends Prisma.Business$b2bOrdersSentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$b2bOrdersSentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$B2BOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  b2bOrdersReceived<T extends Prisma.Business$b2bOrdersReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$b2bOrdersReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$B2BOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscription<T extends Prisma.Business$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  walletAuditLogs<T extends Prisma.Business$walletAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$walletAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WalletAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ledgerEntries<T extends Prisma.Business$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9298,6 +11657,145 @@ export type Business$orderBusinessGroupsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.OrderBusinessGroupScalarFieldEnum | Prisma.OrderBusinessGroupScalarFieldEnum[]
+}
+
+/**
+ * Business.wholesalePrices
+ */
+export type Business$wholesalePricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WholesalePrice
+   */
+  select?: Prisma.WholesalePriceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WholesalePrice
+   */
+  omit?: Prisma.WholesalePriceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WholesalePriceInclude<ExtArgs> | null
+  where?: Prisma.WholesalePriceWhereInput
+  orderBy?: Prisma.WholesalePriceOrderByWithRelationInput | Prisma.WholesalePriceOrderByWithRelationInput[]
+  cursor?: Prisma.WholesalePriceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WholesalePriceScalarFieldEnum | Prisma.WholesalePriceScalarFieldEnum[]
+}
+
+/**
+ * Business.b2bOrdersSent
+ */
+export type Business$b2bOrdersSentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the B2BOrder
+   */
+  select?: Prisma.B2BOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the B2BOrder
+   */
+  omit?: Prisma.B2BOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.B2BOrderInclude<ExtArgs> | null
+  where?: Prisma.B2BOrderWhereInput
+  orderBy?: Prisma.B2BOrderOrderByWithRelationInput | Prisma.B2BOrderOrderByWithRelationInput[]
+  cursor?: Prisma.B2BOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.B2BOrderScalarFieldEnum | Prisma.B2BOrderScalarFieldEnum[]
+}
+
+/**
+ * Business.b2bOrdersReceived
+ */
+export type Business$b2bOrdersReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the B2BOrder
+   */
+  select?: Prisma.B2BOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the B2BOrder
+   */
+  omit?: Prisma.B2BOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.B2BOrderInclude<ExtArgs> | null
+  where?: Prisma.B2BOrderWhereInput
+  orderBy?: Prisma.B2BOrderOrderByWithRelationInput | Prisma.B2BOrderOrderByWithRelationInput[]
+  cursor?: Prisma.B2BOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.B2BOrderScalarFieldEnum | Prisma.B2BOrderScalarFieldEnum[]
+}
+
+/**
+ * Business.subscription
+ */
+export type Business$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subscription
+   */
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subscription
+   */
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
+}
+
+/**
+ * Business.walletAuditLogs
+ */
+export type Business$walletAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WalletAuditLog
+   */
+  select?: Prisma.WalletAuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WalletAuditLog
+   */
+  omit?: Prisma.WalletAuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WalletAuditLogInclude<ExtArgs> | null
+  where?: Prisma.WalletAuditLogWhereInput
+  orderBy?: Prisma.WalletAuditLogOrderByWithRelationInput | Prisma.WalletAuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.WalletAuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WalletAuditLogScalarFieldEnum | Prisma.WalletAuditLogScalarFieldEnum[]
+}
+
+/**
+ * Business.ledgerEntries
+ */
+export type Business$ledgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LedgerEntry
+   */
+  select?: Prisma.LedgerEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LedgerEntry
+   */
+  omit?: Prisma.LedgerEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LedgerEntryInclude<ExtArgs> | null
+  where?: Prisma.LedgerEntryWhereInput
+  orderBy?: Prisma.LedgerEntryOrderByWithRelationInput | Prisma.LedgerEntryOrderByWithRelationInput[]
+  cursor?: Prisma.LedgerEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LedgerEntryScalarFieldEnum | Prisma.LedgerEntryScalarFieldEnum[]
 }
 
 /**

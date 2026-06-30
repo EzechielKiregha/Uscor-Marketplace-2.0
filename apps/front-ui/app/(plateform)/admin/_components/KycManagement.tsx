@@ -1,29 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import {
-  VERIFY_KYC,
-  REJECT_KYC,
-  GET_KYC_SUBMISSIONS,
-} from "@/graphql/admin.gql";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Search,
-  ShieldCheck,
-  AlertTriangle,
-  Clock,
-  CheckCircle,
-  X,
-  Eye,
-  Download,
-  Filter,
-  MapPin,
-  User,
-} from "lucide-react";
-import { useToast } from "@/components/toast-provider";
-import Loader from "@/components/seraui/Loader";
+import { GET_KYC_SUBMISSIONS } from "@/graphql/admin.gql";
+import { useQuery } from "@apollo/client";
+import { CheckCircle, Clock, Eye, Search, ShieldCheck, X } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 
 interface KycManagementProps {
   onKycSelected: (kyc: any) => void;
@@ -33,7 +18,6 @@ export default function KycManagement({ onKycSelected }: KycManagementProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [businessTypeFilter, setBusinessTypeFilter] = useState("");
-  const { showToast } = useToast();
 
   const {
     data: kycData,
@@ -48,69 +32,33 @@ export default function KycManagement({ onKycSelected }: KycManagementProps) {
     },
   });
 
-  const [verifyKyc] = useMutation(VERIFY_KYC);
-  const [rejectKyc] = useMutation(REJECT_KYC);
-
   const kycSubmissions = kycData?.kycSubmissions?.items || [];
   const totalSubmissions = kycData?.kycSubmissions?.total || 0;
 
   const filteredSubmissions = kycSubmissions.filter((submission: any) => {
     const matchesSearch =
       !searchQuery ||
-      submission.business.name
+      submission.business?.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      submission.business.email
+      submission.business?.email
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      submission.business.taxId
+      (submission.business?.taxId || "")
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
 
     const matchesStatus = !statusFilter || submission.status === statusFilter;
     const matchesType =
       !businessTypeFilter ||
-      submission.business.businessType === businessTypeFilter;
+      submission.business?.businessType === businessTypeFilter;
 
     return matchesSearch && matchesStatus && matchesType;
   });
 
-  const handleVerify = async (businessId: string) => {
-    try {
-      await verifyKyc({
-        variables: { businessId },
-      });
-      showToast("success", "Success", "KYC verified successfully");
-      refetch();
-    } catch (error: any) {
-      showToast(
-        "error",
-        "Verification Failed",
-        error.message || "Failed to verify KYC",
-      );
-    }
-  };
+  console.log({ filteredSubmissions });
 
-  const handleReject = async (businessId: string) => {
-    const reason = prompt("Enter rejection reason:");
-    if (reason) {
-      try {
-        await rejectKyc({
-          variables: { businessId, rejectionReason: reason },
-        });
-        showToast("success", "Success", "KYC rejected successfully");
-        refetch();
-      } catch (error: any) {
-        showToast(
-          "error",
-          "Rejection Failed",
-          error.message || "Failed to reject KYC",
-        );
-      }
-    }
-  };
-
-  if (kycLoading) return <Loader loading={true} />;
+  if (kycLoading) return <TableSkeleton />;
 
   return (
     <div className="bg-card border border-border rounded-lg overflow-hidden">
@@ -172,15 +120,16 @@ export default function KycManagement({ onKycSelected }: KycManagementProps) {
 
       <div className="p-4">
         {filteredSubmissions.length === 0 ? (
-          <div className="text-center py-12">
-            <ShieldCheck className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No KYC submissions</h3>
-            <p className="text-muted-foreground">
-              {searchQuery || statusFilter || businessTypeFilter
-                ? "No matching KYC submissions found"
-                : "Businesses will appear here once they submit KYC documents"}
-            </p>
-          </div>
+          <EmptyState
+            icon={emptyStateIcons.reports}
+            title="No matching KYC submissions"
+            description={
+              searchQuery || statusFilter || businessTypeFilter
+                ? "Try adjusting your search or filter criteria"
+                : "Businesses will appear here once they submit KYC documents"
+            }
+            compact
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -202,30 +151,32 @@ export default function KycManagement({ onKycSelected }: KycManagementProps) {
                   >
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        {submission.business.avatar ? (
-                          <img
-                            src={submission.business.avatar}
-                            alt={submission.business.name}
+                        {submission.business?.avatar ? (
+                          <Image
+                            src={submission.business?.avatar}
+                            alt={submission.business?.name}
                             className="w-10 h-10 rounded-full object-cover"
+                            width={100}
+                            height={100}
                           />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-sm">
-                            {submission.business.name.charAt(0)}
+                            {submission.business?.name.charAt(0)}
                           </div>
                         )}
                         <div>
                           <h4 className="font-medium">
-                            {submission.business.name}
+                            {submission.business?.name}
                           </h4>
                           <p className="text-sm text-muted-foreground">
-                            {submission.business.email}
+                            {submission.business?.email}
                           </p>
                         </div>
                       </div>
                     </td>
                     <td className="py-3 px-4">
                       <span className="text-sm capitalize">
-                        {submission.business.businessType.toLowerCase()}
+                        {submission.business?.businessType.toLowerCase()}
                       </span>
                     </td>
                     <td className="py-3 px-4">
@@ -263,42 +214,14 @@ export default function KycManagement({ onKycSelected }: KycManagementProps) {
                       {new Date(submission.submittedAt).toLocaleDateString()}
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onKycSelected(submission)}
-                        >
-                          <Eye className="h-4 w-4 mr-1" />
-                          Review
-                        </Button>
-                        {submission.status === "PENDING" && (
-                          <>
-                            <Button
-                              variant="default"
-                              size="sm"
-                              onClick={() =>
-                                handleVerify(submission.businessId)
-                              }
-                              className="bg-success hover:bg-success/90 text-success-foreground"
-                            >
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                              Approve
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                handleReject(submission.businessId)
-                              }
-                              className="text-destructive hover:bg-destructive/10"
-                            >
-                              <X className="h-4 w-4 mr-1" />
-                              Reject
-                            </Button>
-                          </>
-                        )}
-                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onKycSelected(submission)}
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        Review
+                      </Button>
                     </td>
                   </tr>
                 ))}

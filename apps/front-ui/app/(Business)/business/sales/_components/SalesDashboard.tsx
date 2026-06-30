@@ -12,6 +12,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
@@ -136,7 +137,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
             <div className="flex items-center gap-2">
               <div
                 className="w-3 h-3 rounded"
-                style={{ backgroundColor: "hsl(var(--primary))" }}
+                style={{ backgroundColor: CHART_COLORS.primary }}
               ></div>
               <span>Sales ($)</span>
             </div>
@@ -163,12 +164,12 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
                 <Bar
                   yAxisId="left"
                   dataKey="sales"
-                  fill="hsl(var(--primary))"
+                  fill={CHART_COLORS.primary}
                 />
                 <Bar
                   yAxisId="right"
                   dataKey="transactions"
-                  fill="hsl(var(--muted-foreground))"
+                  fill={CHART_COLORS.muted}
                   opacity={0.6}
                 />
               </ComposedChart>

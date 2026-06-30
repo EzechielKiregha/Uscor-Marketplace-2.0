@@ -1,6 +1,7 @@
 // app/business/inventory/_components/PurchaseOrders.tsx
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useMutation, useQuery } from "@apollo/client";
 import {
 	Download,
@@ -193,11 +194,12 @@ export default function PurchaseOrders({
 						<p className="text-muted-foreground">Loading data...</p>
 					</div>
 				) : filteredOrders.length === 0 ? (
-					<div className="text-center py-8 text-muted-foreground">
-						{searchQuery
-							? "No matching orders found"
-							: "No purchase orders yet"}
-					</div>
+					<EmptyState
+						icon={emptyStateIcons.orders}
+						title={searchQuery ? "No matching orders found" : "No purchase orders yet"}
+						description="Purchase orders will appear here"
+						compact
+					/>
 				) : (
 					<div className="overflow-x-auto">
 						<table className="w-full">

@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GET_FEATURED_PRODUCTS } from "@/graphql/product.gql";
-import Loader from "./Loader";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
 import MasonryGrid, { ProductGridItem } from "./MasonryGrid";
 
 interface ProductReelProps {
@@ -41,7 +41,7 @@ export default function FeaturedProducts({
 		}
 	}, [data]);
 
-	if (loading) return <Loader loading={true} />;
+	if (loading) return <CardGridSkeleton variant="product" columns={4} count={4} />;
 	if (error)
 		return (
 			<div className="flex items-center justify-center min-h-[60vh]">

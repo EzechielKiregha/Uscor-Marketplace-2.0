@@ -19,7 +19,8 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import FormFieldWrapper from "@/components/FormFieldWrapper";
+import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +29,9 @@ import {
   GET_WORKER_SHIFTS,
   UPDATE_WORKER_PROFILE,
 } from "@/graphql/worker.gql";
+import { useFormValidation } from "@/hooks/use-form-validation";
 import { useMe } from "@/lib/useMe";
+import { workerProfileSchema } from "@/lib/validators/form-schemas";
 
 type ProfilePageProps = {
   viewMode?: "worker" | "business"; // New prop
@@ -40,13 +43,25 @@ export default function ProfilePage({
   workerId,
 }: ProfilePageProps) {
   const { user } = useMe();
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    role: "",
-    bio: "",
+  const {
+    values: formData,
+    setValues: setFormData,
+    handleChange: handleInputChange,
+    handleBlur,
+    validateAll,
+    getFieldProps,
+    getFieldError,
+    resetForm,
+  } = useFormValidation({
+    schema: workerProfileSchema,
+    initialValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+    },
+    onSubmit: () => {},
   });
+  const [extraFields, setExtraFields] = useState({ role: "", bio: "" });
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -83,10 +98,12 @@ export default function ProfilePage({
 
   useEffect(() => {
     if (worker) {
-      setFormData({
+      resetForm({
         fullName: worker.fullName || "",
         email: worker.email || "",
         phone: worker.phone || "",
+      });
+      setExtraFields({
         role: worker.role || "",
         bio: worker.bio || "",
       });
@@ -94,13 +111,13 @@ export default function ProfilePage({
     }
   }, [worker]);
 
-  const handleInputChange = (
+  const handleExtraFieldChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setExtraFields((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,6 +158,7 @@ export default function ProfilePage({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateAll()) return;
     setIsSubmitting(true);
 
     try {
@@ -175,8 +193,8 @@ export default function ProfilePage({
             fullName: formData.fullName,
             email: formData.email,
             phone: formData.phone,
-            role: formData.role,
-            bio: formData.bio,
+            role: extraFields.role,
+            bio: extraFields.bio,
             avatar: avatarUrl,
           },
         },
@@ -192,7 +210,7 @@ export default function ProfilePage({
     }
   };
 
-  if (workerLoading || shiftsLoading) return <Loader loading={true} />;
+  if (workerLoading || shiftsLoading) return <FormSkeleton fields={5} />;
   if (workerError)
     return <div>Error loading profile: {workerError.message}</div>;
 
@@ -369,31 +387,27 @@ export default function ProfilePage({
               <form onSubmit={handleSubmit} className="p-6">
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        htmlFor="fullName"
-                        className="text-sm font-medium mb-1 flex items-center gap-2"
-                      >
-                        <User className="h-4 w-4 text-muted-foreground" />
-                        Full Name
-                      </label>
+                    <FormFieldWrapper
+                      label="Full Name"
+                      htmlFor="fullName"
+                      icon={User}
+                      error={getFieldError("fullName")}
+                      required
+                    >
                       <Input
                         id="fullName"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
+                        {...getFieldProps("fullName")}
                         placeholder="Your full name"
                       />
-                    </div>
+                    </FormFieldWrapper>
 
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="text-sm font-medium mb-1 flex items-center gap-2"
-                      >
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        Email Address
-                      </label>
+                    <FormFieldWrapper
+                      label="Email Address"
+                      htmlFor="email"
+                      icon={Mail}
+                      error={getFieldError("email")}
+                      helperText="Email cannot be changed. Contact admin to update."
+                    >
                       <Input
                         id="email"
                         name="email"
@@ -402,28 +416,21 @@ export default function ProfilePage({
                         disabled
                         className="bg-muted"
                       />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Email cannot be changed. Contact admin to update.
-                      </p>
-                    </div>
+                    </FormFieldWrapper>
                   </div>
 
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="text-sm font-medium mb-1 flex items-center gap-2"
-                    >
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      Phone Number
-                    </label>
+                  <FormFieldWrapper
+                    label="Phone Number"
+                    htmlFor="phone"
+                    icon={Phone}
+                    error={getFieldError("phone")}
+                  >
                     <Input
                       id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
+                      {...getFieldProps("phone")}
                       placeholder="+250 788 123 456"
                     />
-                  </div>
+                  </FormFieldWrapper>
 
                   <div>
                     <label
@@ -435,8 +442,8 @@ export default function ProfilePage({
                     <select
                       id="role"
                       name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
+                      value={extraFields.role}
+                      onChange={handleExtraFieldChange}
                       className="w-full p-2 border border-border rounded-md"
                     >
                       <option value="STAFF">Staff</option>
@@ -456,8 +463,8 @@ export default function ProfilePage({
                     <textarea
                       id="bio"
                       name="bio"
-                      value={formData.bio}
-                      onChange={handleInputChange}
+                      value={extraFields.bio}
+                      onChange={handleExtraFieldChange}
                       placeholder="Tell customers about yourself..."
                       rows={4}
                       className="w-full p-2 border border-border rounded-md"
@@ -474,10 +481,12 @@ export default function ProfilePage({
                     variant="outline"
                     onClick={() => {
                       setIsEditing(false);
-                      setFormData({
+                      resetForm({
                         fullName: worker?.fullName || "",
                         email: worker?.email || "",
                         phone: worker?.phone || "",
+                      });
+                      setExtraFields({
                         role: worker?.role || "",
                         bio: worker?.bio || "",
                       });

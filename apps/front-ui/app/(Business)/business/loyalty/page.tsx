@@ -19,7 +19,7 @@ import RedemptionProcess from "./_components/RedemptionProcess";
 import CreateLoyaltyProgramModal from "./_components/CreateLoyaltyProgramModal";
 import { useLoyalty } from "./_hooks/use-loyalty";
 import { useMe } from "@/lib/useMe";
-import Loader from "@/components/seraui/Loader";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 
 export default function LoyaltyProgramPage() {
   const { user, role, loading: authLoading } = useMe();
@@ -44,7 +44,7 @@ export default function LoyaltyProgramPage() {
     }
   }, [programs, selectedProgramId]);
 
-  if (authLoading || programsLoading) return <Loader loading={true} />;
+  if (authLoading || programsLoading) return <PageSkeleton />;
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">

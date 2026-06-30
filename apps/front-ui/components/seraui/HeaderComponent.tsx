@@ -1,28 +1,19 @@
 "use client";
 import {
   ArrowUpRight,
-  BookOpen,
   ChevronDown,
-  Coffee,
-  Hammer,
   MenuIcon,
   MoonIcon,
-  Palette,
-  Plug,
   Search,
-  Shirt,
   ShoppingCart,
-  Store,
   SunIcon,
-  UtensilsCrossed,
-  Wine,
 } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import type React from "react";
 import { type ReactNode, useCallback, useState } from "react";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
 import SearchModal from "@/app/(browsing)/marketplace/_components/SearchModal";
-import Cart from "../Cart";
 import { Logo } from "../icons/Logos";
 import { Button } from "../ui/button";
 import NotificationsPopover from "./Notifications";
@@ -30,7 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./PopOver";
 import UserDropdown from "./UserDrodown";
 import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
 import { useCart } from "@/app/context/use-cart";
-import { get } from "http";
+import MobileNavDrawer from "../MobileNavDrawer";
 
 // Type definitions
 
@@ -94,55 +85,12 @@ const NavigationMenuLink: React.FC<NavigationMenuLinkProps> = ({
   </a>
 );
 
-// ✅ Main business types for navigation
-export const businessTypes = [
-  {
-    href: "/signup?businessType=artisan",
-    label: "Artisan & Handcrafted Goods",
-    icon: Palette,
-  },
-  {
-    href: "/signup?businessType=bookstore",
-    label: "Bookstore & Stationery",
-    icon: BookOpen,
-  },
-  {
-    href: "/signup?businessType=electronics",
-    label: "Electronics & Gadgets",
-    icon: Plug,
-  },
-  {
-    href: "/signup?businessType=hardware",
-    label: "Hardware & Tools",
-    icon: Hammer,
-  },
-  {
-    href: "/signup?businessType=grocery",
-    label: "Grocery & Convenience",
-    icon: ShoppingCart,
-  },
-  {
-    href: "/signup?businessType=cafe",
-    label: "Café & Coffee Shops",
-    icon: Coffee,
-  },
-  {
-    href: "/signup?businessType=restaurant",
-    label: "Restaurant & Dining",
-    icon: UtensilsCrossed,
-  },
-  {
-    href: "/signup?businessType=retail",
-    label: "Retail & General Stores",
-    icon: Store,
-  },
-  { href: "/signup?businessType=bar", label: "Bar & Pub", icon: Wine },
-  {
-    href: "/signup?businessType=clothing",
-    label: "Clothing & Accessories",
-    icon: Shirt,
-  },
-];
+// Build business type nav items from centralized config
+const businessTypeNavItems = BUSINESS_TYPE_LIST.map((bt) => ({
+  href: `/marketplace?businessType=${bt.key}`,
+  label: bt.label,
+  icon: bt.icon,
+}));
 
 // Constants for search input configuration
 const SEARCH_INPUT_CONFIG = {
@@ -151,7 +99,7 @@ const SEARCH_INPUT_CONFIG = {
     "pl-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
 } as const;
 
-// Reusable search input component to reduce duplication
+// Reusable search input component
 interface SearchInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -201,6 +149,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 function HeaderComponent() {
   const { theme, setTheme } = useTheme();
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [filters, setFilters] = useState({
     search: "",
   });
@@ -225,150 +174,50 @@ function HeaderComponent() {
     setShowSearchModal(true);
   }, []);
 
-  // Define navigation links based on pathname
+  // Navigation links (English, valid routes, USCOR orange hover)
   const navLinks = [
     { href: "/uscor-features", label: "Features", target: "" },
     { href: "/hardware", label: "Hardware", target: "" },
     {
       href: "#",
-      label: "Join as Business",
+      label: "Browse",
       isPopover: true,
-      popoverItems: businessTypes,
+      popoverItems: businessTypeNavItems,
     },
     { href: "/marketplace", label: "Marketplace", target: "" },
-    // { href: '/freelance-gigs', label: 'Freelance', target: '', rel: '' },
+    { href: "/#pricing", label: "Pricing", target: "" },
     { href: "/faq", label: "FAQ", target: "" },
   ];
 
   return (
     <header className="border-b border-orange-400/60 dark:border-orange-500/70 bg-white dark:bg-card w-full sticky top-0 z-50">
-      {/* Default Header View */}
-      <div
-        className={`flex h-14 sm:h-16 items-center justify-between gap-4 px-4 lg:px-6 `}
-      >
+      <div className="flex h-14 sm:h-16 items-center justify-between gap-4 px-4 lg:px-6">
         {/* Left side: Mobile Menu, Logo, Desktop Nav */}
-        <div className="flex items-center  sm:gap-4">
+        <div className="flex items-center sm:gap-4">
+          {/* Mobile hamburger → opens Sheet drawer */}
           <div className="lg:hidden">
-            <Popover>
-              <PopoverTrigger>
-                <Button
-                  className="group h-8 w-8 hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border hover:border-orange-400/40 dark:hover:border-orange-500/40 transition-all duration-300 ease-out"
-                  variant="ghost"
-                  size="icon"
-                >
-                  <MenuIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="start" className="w-48 p-1">
-                <NavigationMenu className="max-w-none *:w-full">
-                  <NavigationMenuList className="flex-col items-start gap-0">
-                    {navLinks.map((link, index) => (
-                      <NavigationMenuItem key={index} className="w-full">
-                        {link.isPopover ? (
-                          <Popover>
-                            <PopoverTrigger>
-                              <Button
-                                variant="ghost"
-                                className="cursor-pointer py-2 px-3 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
-                              >
-                                <span>{link.label}</span>
-                                <ChevronDown size={16} />
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent align="start" className="w-48 p-1">
-                              <NavigationMenuList className="flex-col items-start gap-0">
-                                {link.popoverItems?.map((item, i) => (
-                                  <NavigationMenuItem
-                                    key={i}
-                                    className="w-full"
-                                  >
-                                    <NavigationMenuLink
-                                      href={item.href}
-                                      className="flex py-2 px-3 gap-1 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
-                                    >
-                                      <item.icon
-                                        size={18}
-                                        className="text-primary"
-                                      />
-                                      {item.label}
-                                    </NavigationMenuLink>
-                                  </NavigationMenuItem>
-                                ))}
-                              </NavigationMenuList>
-                            </PopoverContent>
-                          </Popover>
-                        ) : (
-                          <NavigationMenuLink
-                            href={link.href}
-                            target={link.target}
-                            // rel={link.rel}
-                            className=""
-                          >
-                            <Button
-                              variant="link"
-                              className="flex cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors"
-                            >
-                              {link.label}
-                              {link.target === "_blank" && (
-                                <ArrowUpRight
-                                  size={16}
-                                  className="opacity-70"
-                                />
-                              )}
-                            </Button>
-                          </NavigationMenuLink>
-                        )}
-                      </NavigationMenuItem>
-                    ))}
-                    <NavigationMenuItem
-                      className="w-full"
-                      role="presentation"
-                      aria-hidden={true}
-                    >
-                      <div
-                        role="separator"
-                        aria-orientation="horizontal"
-                        className="bg-background /20  -mx-1 my-1 h-px"
-                      ></div>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem className="w-full">
-                      {/* Notifications Popover */}
-                      <Button
-                        onClick={toggleTheme}
-                        variant="ghost"
-                        size="sm"
-                        className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-700 transition-colors"
-                        aria-label="Toggle theme"
-                      >
-                        {theme === "dark" ? (
-                          <SunIcon className="h-5 w-5 group-hover:text-gray-700" />
-                        ) : (
-                          <MoonIcon className="h-5 w-5 group-hover:text-gray-700" />
-                        )}
-                      </Button>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem className="w-full">
-                      <NavigationMenuItem className="w-full">
-                        <div className="py-2 px-3">
-                          <UserDropdown />
-                        </div>
-                      </NavigationMenuItem>
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
-                </NavigationMenu>
-              </PopoverContent>
-            </Popover>
+            <Button
+              className="group h-8 w-8 hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border hover:border-orange-400/40 dark:hover:border-orange-500/40 transition-all duration-300 ease-out"
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileNavOpen(true)}
+            >
+              <MenuIcon />
+            </Button>
           </div>
+
           <Link
             href="/"
             className="text-black dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
           >
             <Logo />
           </Link>
+
+          {/* Desktop navigation */}
           <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList className="">
+            <NavigationMenuList>
               {navLinks.map((link, index) => (
-                <NavigationMenuItem key={index} className="">
+                <NavigationMenuItem key={index}>
                   {link.isPopover ? (
                     <Popover>
                       <PopoverTrigger>
@@ -380,16 +229,16 @@ function HeaderComponent() {
                           <ChevronDown size={16} />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent align="start" className="w-48 p-1">
+                      <PopoverContent align="start" className="w-56 p-1">
                         <NavigationMenuList className="flex-col items-start gap-0">
                           {link.popoverItems?.map((item, i) => (
                             <NavigationMenuItem key={i} className="w-full">
                               <NavigationMenuLink
                                 href={item.href}
-                                className="flex py-2 gap-1 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
+                                className="flex py-2 px-3 gap-2 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
                               >
-                                <item.icon size={18} className="text-primary" />
-                                {item.label}
+                                <item.icon size={18} className="text-primary shrink-0" />
+                                <span className="text-sm">{item.label}</span>
                               </NavigationMenuLink>
                             </NavigationMenuItem>
                           ))}
@@ -397,12 +246,7 @@ function HeaderComponent() {
                       </PopoverContent>
                     </Popover>
                   ) : (
-                    <NavigationMenuLink
-                      href={link.href}
-                      target={link.target}
-                      // rel={link.rel}
-                      className=""
-                    >
+                    <NavigationMenuLink href={link.href} target={link.target}>
                       <Button
                         variant="link"
                         className="flex cursor-pointer text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 py-1 font-medium transition-colors"
@@ -420,9 +264,9 @@ function HeaderComponent() {
           </NavigationMenu>
         </div>
 
-        {/* Right side: Search, Theme Toggle, and Sign In */}
+        {/* Right side: Search, Theme Toggle, Cart, User */}
         <div className="flex items-center gap-2">
-          {/* Search for small screens (hidden on lg) */}
+          {/* Search for medium screens */}
           <div className="hidden md:block lg:hidden">
             <SearchInput
               value={filters.search}
@@ -431,7 +275,7 @@ function HeaderComponent() {
             />
           </div>
 
-          {/* Search for medium screens (md:hidden lg:flex) */}
+          {/* Search for large screens */}
           <div className="hidden lg:flex items-center gap-2">
             <SearchInput
               value={filters.search}
@@ -440,7 +284,7 @@ function HeaderComponent() {
             />
           </div>
 
-          {/* Mobile layout (lg:hidden) */}
+          {/* Mobile: search icon + cart + user */}
           <div className="flex lg:hidden items-center gap-2">
             <SearchInput
               value={filters.search}
@@ -452,49 +296,51 @@ function HeaderComponent() {
               onClick={() => setOpenCart(!openCart)}
               variant="ghost"
               size="sm"
-              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-700 transition-colors"
-              aria-label="Toggle theme"
+              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors relative"
+              aria-label="Open cart"
             >
               <ShoppingCart
                 aria-hidden="true"
-                className="h-6 w-6 shrink-0 group-hover:text-gray-700"
+                className="h-6 w-6 shrink-0"
               />
               {getItemCount() > 0 && (
-                <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
                   {getItemCount()}
                 </span>
               )}
             </Button>
             <UserDropdown />
           </div>
-          <div className="hidden lg:flex gap-2">
+
+          {/* Desktop: notifications, theme, cart, user */}
+          <div className="hidden lg:flex gap-2 items-center">
             <NotificationsPopover />
             <Button
               onClick={toggleTheme}
               variant="ghost"
               size="sm"
-              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-700 transition-colors"
+              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
               aria-label="Toggle theme"
             >
               {theme === "dark" ? (
-                <SunIcon className="h-5 w-5 group-hover:text-gray-700" />
+                <SunIcon className="h-5 w-5" />
               ) : (
-                <MoonIcon className="h-5 w-5 group-hover:text-gray-700" />
+                <MoonIcon className="h-5 w-5" />
               )}
             </Button>
             <Button
               onClick={() => setOpenCart(!openCart)}
               variant="ghost"
               size="sm"
-              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-700 transition-colors"
-              aria-label="Toggle theme"
+              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors relative"
+              aria-label="Open cart"
             >
               <ShoppingCart
                 aria-hidden="true"
-                className="h-6 w-6 shrink-0 group-hover:text-gray-700"
+                className="h-6 w-6 shrink-0"
               />
               {getItemCount() > 0 && (
-                <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
                   {getItemCount()}
                 </span>
               )}
@@ -503,6 +349,13 @@ function HeaderComponent() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation Drawer (Sheet) */}
+      <MobileNavDrawer
+        open={mobileNavOpen}
+        onOpenChange={setMobileNavOpen}
+      />
+
       {/* Search Modal */}
       {showSearchModal && (
         <SearchModal

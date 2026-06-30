@@ -60,6 +60,9 @@ export const ModelName = {
   Client: 'Client',
   Worker: 'Worker',
   Admin: 'Admin',
+  Otp: 'Otp',
+  SecurityLog: 'SecurityLog',
+  TrustedDevice: 'TrustedDevice',
   Category: 'Category',
   Product: 'Product',
   Media: 'Media',
@@ -109,7 +112,14 @@ export const ModelName = {
   Announcement: 'Announcement',
   AuditLog: 'AuditLog',
   Dispute: 'Dispute',
-  DisputeMessage: 'DisputeMessage'
+  DisputeMessage: 'DisputeMessage',
+  WholesalePrice: 'WholesalePrice',
+  B2BOrder: 'B2BOrder',
+  B2BOrderItem: 'B2BOrderItem',
+  Subscription: 'Subscription',
+  SubscriptionFeature: 'SubscriptionFeature',
+  WalletAuditLog: 'WalletAuditLog',
+  LedgerEntry: 'LedgerEntry'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -317,6 +327,50 @@ export const AdminScalarFieldEnum = {
 export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
+export const OtpScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  code: 'code',
+  purpose: 'purpose',
+  attempts: 'attempts',
+  maxRetries: 'maxRetries',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type OtpScalarFieldEnum = (typeof OtpScalarFieldEnum)[keyof typeof OtpScalarFieldEnum]
+
+
+export const SecurityLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  userRole: 'userRole',
+  action: 'action',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  deviceId: 'deviceId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SecurityLogScalarFieldEnum = (typeof SecurityLogScalarFieldEnum)[keyof typeof SecurityLogScalarFieldEnum]
+
+
+export const TrustedDeviceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  userRole: 'userRole',
+  deviceId: 'deviceId',
+  deviceName: 'deviceName',
+  userAgent: 'userAgent',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TrustedDeviceScalarFieldEnum = (typeof TrustedDeviceScalarFieldEnum)[keyof typeof TrustedDeviceScalarFieldEnum]
+
+
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -343,6 +397,12 @@ export const ProductScalarFieldEnum = {
   variants: 'variants',
   featured: 'featured',
   approvedForSale: 'approvedForSale',
+  sku: 'sku',
+  barcode: 'barcode',
+  serialNumber: 'serialNumber',
+  imei: 'imei',
+  warrantyMonths: 'warrantyMonths',
+  brand: 'brand',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -529,6 +589,8 @@ export const TokenTransactionScalarFieldEnum = {
   type: 'type',
   isRedeemed: 'isRedeemed',
   isReleased: 'isReleased',
+  version: 'version',
+  idempotencyKey: 'idempotencyKey',
   createdAt: 'createdAt'
 } as const
 
@@ -725,7 +787,13 @@ export const SaleScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  receiptUrl: 'receiptUrl'
+  receiptUrl: 'receiptUrl',
+  isOffline: 'isOffline',
+  syncStatus: 'syncStatus',
+  localId: 'localId',
+  localTimestamp: 'localTimestamp',
+  deviceId: 'deviceId',
+  version: 'version'
 } as const
 
 export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
@@ -1021,6 +1089,122 @@ export const DisputeMessageScalarFieldEnum = {
 } as const
 
 export type DisputeMessageScalarFieldEnum = (typeof DisputeMessageScalarFieldEnum)[keyof typeof DisputeMessageScalarFieldEnum]
+
+
+export const WholesalePriceScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  businessId: 'businessId',
+  minQuantity: 'minQuantity',
+  price: 'price',
+  maxQuantity: 'maxQuantity',
+  businessTypeRestriction: 'businessTypeRestriction',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WholesalePriceScalarFieldEnum = (typeof WholesalePriceScalarFieldEnum)[keyof typeof WholesalePriceScalarFieldEnum]
+
+
+export const B2BOrderScalarFieldEnum = {
+  id: 'id',
+  orderNumber: 'orderNumber',
+  buyerId: 'buyerId',
+  sellerId: 'sellerId',
+  status: 'status',
+  paymentTerms: 'paymentTerms',
+  notes: 'notes',
+  rejectionReason: 'rejectionReason',
+  subtotal: 'subtotal',
+  tax: 'tax',
+  total: 'total',
+  shippingAddress: 'shippingAddress',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  submittedAt: 'submittedAt',
+  approvedAt: 'approvedAt',
+  shippedAt: 'shippedAt',
+  deliveredAt: 'deliveredAt',
+  cancelledAt: 'cancelledAt'
+} as const
+
+export type B2BOrderScalarFieldEnum = (typeof B2BOrderScalarFieldEnum)[keyof typeof B2BOrderScalarFieldEnum]
+
+
+export const B2BOrderItemScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  productId: 'productId',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  totalPrice: 'totalPrice',
+  notes: 'notes',
+  createdAt: 'createdAt'
+} as const
+
+export type B2BOrderItemScalarFieldEnum = (typeof B2BOrderItemScalarFieldEnum)[keyof typeof B2BOrderItemScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  tier: 'tier',
+  status: 'status',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  autoRenew: 'autoRenew',
+  cancelledAt: 'cancelledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const SubscriptionFeatureScalarFieldEnum = {
+  id: 'id',
+  subscriptionId: 'subscriptionId',
+  featureKey: 'featureKey',
+  enabled: 'enabled',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriptionFeatureScalarFieldEnum = (typeof SubscriptionFeatureScalarFieldEnum)[keyof typeof SubscriptionFeatureScalarFieldEnum]
+
+
+export const WalletAuditLogScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  clientId: 'clientId',
+  action: 'action',
+  amount: 'amount',
+  balanceBefore: 'balanceBefore',
+  balanceAfter: 'balanceAfter',
+  metadata: 'metadata',
+  idempotencyKey: 'idempotencyKey',
+  createdAt: 'createdAt'
+} as const
+
+export type WalletAuditLogScalarFieldEnum = (typeof WalletAuditLogScalarFieldEnum)[keyof typeof WalletAuditLogScalarFieldEnum]
+
+
+export const LedgerEntryScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  clientId: 'clientId',
+  type: 'type',
+  amount: 'amount',
+  balanceAfter: 'balanceAfter',
+  reference: 'reference',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
 
 
 export const SortOrder = {

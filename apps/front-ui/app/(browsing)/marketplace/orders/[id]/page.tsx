@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import Loader from "@/components/seraui/Loader";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -31,7 +31,7 @@ export default function OrderDetailsPage() {
   });
 
   if (loading) {
-    return <Loader loading={true} />;
+    return <PageSkeleton />;
   }
 
   clearCart();

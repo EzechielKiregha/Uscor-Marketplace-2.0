@@ -895,7 +895,8 @@ export class StoreService {
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
         });
         const page = await browser.newPage();
-        await page.setContent(html, { waitUntil: "networkidle0" });
+        await page.setContent(html, { waitUntil: "domcontentloaded" });
+        await page.waitForNetworkIdle();
 
         const pdfBuffer = await page.pdf({
             format: "A4",
@@ -1136,7 +1137,7 @@ export class StoreService {
                                 id: true,
                                 totalAmount: true,
                                 createdAt: true,
-                                worker: { select: { fullName: true}}
+                                worker: { select: { fullName: true } },
                             },
                         },
                     },

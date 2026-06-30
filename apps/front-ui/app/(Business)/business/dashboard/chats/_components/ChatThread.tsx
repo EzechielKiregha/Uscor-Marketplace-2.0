@@ -4,7 +4,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { ArrowLeft, MoreVertical, Paperclip, Send, Smile } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_CHAT_BY_ID, SEND_MESSAGE } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
@@ -60,7 +60,7 @@ export default function ChatThread({ chatId, onBack }: ChatThreadProps) {
 		}
 	};
 
-	if (loading) return <Loader loading={true} />;
+	if (loading) return <PageSkeleton />;
 	if (error) return <div>Error loading chat</div>;
 	if (!data?.chat) return <div>Chat not found</div>;
 

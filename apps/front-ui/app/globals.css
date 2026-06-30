@@ -68,11 +68,11 @@ html {
 	--border: oklch(0.922 0 0);
 	--input: oklch(0.922 0 0);
 	--ring: oklch(0.708 0 0);
-	--chart-1: oklch(0.646 0.222 41.116);
-	--chart-2: oklch(0.6 0.118 184.704);
-	--chart-3: oklch(0.398 0.07 227.392);
-	--chart-4: oklch(0.828 0.189 84.429);
-	--chart-5: oklch(0.769 0.188 70.08);
+	--chart-1: #f97316; /* USCOR orange */
+	--chart-2: #fb923c; /* orange-400 */
+	--chart-3: #ea580c; /* orange-600 */
+	--chart-4: #fdba74; /* orange-300 */
+	--chart-5: #c2410c; /* orange-700 */
 	--sidebar: oklch(0.985 0 0);
 	--sidebar-foreground: oklch(0.145 0 0);
 	--sidebar-primary: oklch(0.205 0 0);
@@ -111,11 +111,11 @@ html {
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
 	--ring: oklch(0.556 0 0);
-	--chart-1: oklch(0.488 0.243 264.376);
-	--chart-2: oklch(0.696 0.17 162.48);
-	--chart-3: oklch(0.769 0.188 70.08);
-	--chart-4: oklch(0.627 0.265 303.9);
-	--chart-5: oklch(0.645 0.246 16.439);
+	--chart-1: #fb923c; /* orange-400 */
+	--chart-2: #fdba74; /* orange-300 */
+	--chart-3: #f97316; /* orange-500 */
+	--chart-4: #fed7aa; /* orange-200 */
+	--chart-5: #ea580c; /* orange-600 */
 	--sidebar: oklch(0.205 0 0);
 	--sidebar-foreground: oklch(0.985 0 0);
 	--sidebar-primary: oklch(0.488 0.243 264.376);
@@ -140,7 +140,110 @@ html {
 	}
 	body {
 		@apply bg-background dark:bg-gray-950 text-foreground;
+		font-feature-settings: "rlig" 1, "calt" 1;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 	}
+}
+
+/* ──────────────────────────────────────────────
+   Typography Scale — USCOR Design System
+   Consistent hierarchy: display → page → section → body → caption
+   Use these classes for semantic text sizing.
+   ────────────────────────────────────────────── */
+
+/* Display — hero titles, landing page headings */
+.text-display {
+  font-size: 2.25rem; /* 36px */
+  line-height: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+/* Page title — top-level page headings (Dashboard, Settings, etc.) */
+.text-page-title {
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Page subtitle — description below page title */
+.text-page-subtitle {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem;
+  color: var(--muted-foreground);
+}
+
+/* Section title — card headers, panel titles */
+.text-section-title {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem;
+  font-weight: 600;
+}
+
+/* Section subtitle — secondary info under section titles */
+.text-section-subtitle {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.25rem;
+  color: var(--muted-foreground);
+}
+
+/* Stat value — large numbers in dashboard cards */
+.text-stat {
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Stat label — label above/below stat values */
+.text-stat-label {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+/* Body — default paragraph text */
+.text-body {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.375rem;
+}
+
+/* Body small — secondary body text, table cells */
+.text-body-sm {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.25rem;
+}
+
+/* Caption — timestamps, metadata, helper text */
+.text-caption {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1rem;
+  color: var(--muted-foreground);
+}
+
+/* Overline — category labels, badges, section markers */
+.text-overline {
+  font-size: 0.6875rem; /* 11px */
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* Tabular numbers — prices, quantities, IDs */
+.text-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .text-display {
+    font-size: 3rem; /* 48px */
+    line-height: 3.25rem;
+  }
 }
 
 .signin-input:focus {
@@ -262,4 +365,20 @@ html {
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card hover effects — apply to non-shadcn card divs */
+.card-hover {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(249, 115, 22, 0.5);
+  transform: translateY(-1px);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(249, 115, 22, 0.6);
 }

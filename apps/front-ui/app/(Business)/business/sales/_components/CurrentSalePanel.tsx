@@ -1,6 +1,19 @@
 // app/business/sales/_components/CurrentSalePanel.tsx
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GET_PRODUCTS_BY_NAME } from "@/graphql/product.gql";
+import {
+  ADD_SALE_PRODUCT,
+  COMPLETE_SALE,
+  GET_SALE_BY_ID,
+  REMOVE_SALE_PRODUCT,
+  UPDATE_SALE_PRODUCT,
+} from "@/graphql/sales.gql";
+import { useIndexedDB } from "@/hooks/use-indexed-db";
+import { ProductEntity } from "@/lib/types";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   ArrowRightLeft,
@@ -14,23 +27,11 @@ import {
   User,
   X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GET_PRODUCTS_BY_NAME } from "@/graphql/product.gql";
-import {
-  ADD_SALE_PRODUCT,
-  COMPLETE_SALE,
-  GET_SALE_BY_ID,
-  REMOVE_SALE_PRODUCT,
-  UPDATE_SALE_PRODUCT,
-} from "@/graphql/sales.gql";
-import { ProductEntity } from "@/lib/types";
+import { useSales } from "../../_hooks/use-sales";
 import ClientSelectionModal from "./ClientSelectionModal";
 import NewSaleModal from "./NewSaleModal";
-import { useSales } from "../../_hooks/use-sales";
-import { useIndexedDB } from "@/hooks/use-indexed-db";
 
 interface CurrentSalePanelProps {
   storeId: string;
@@ -62,6 +63,7 @@ export default function CurrentSalePanel({
   const [currentSale, setCurrentSale] = useState<any>(sale);
 
   const { showToast } = useToast();
+  const router = useRouter();
 
   // Get products for the store
   const {
@@ -103,7 +105,7 @@ export default function CurrentSalePanel({
   } = useQuery(GET_SALE_BY_ID, {
     variables: { id: currentSale?.id },
     skip: !currentSale?.id,
-    fetchPolicy: "cache-and-network",
+    // fetchPolicy: "cache-and-network",
   });
   const currentSaleDetails = saleData?.sale || currentSale;
 
@@ -161,6 +163,8 @@ export default function CurrentSalePanel({
         },
       });
     }
+
+    router.refresh();
   };
 
   useEffect(() => {

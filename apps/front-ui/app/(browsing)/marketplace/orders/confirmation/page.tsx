@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/app/context/use-cart";
+import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
@@ -9,18 +10,18 @@ import { GET_ACCOUNT_BALANCE } from "@/graphql/wallet.gql";
 import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  ArrowLeft,
-  CheckCircle2,
-  CreditCard,
-  Download,
-  Loader2,
-  MapPin,
-  Package,
-  RefreshCw,
-  Smartphone,
-  Star,
-  Truck,
-  X,
+    ArrowLeft,
+    CheckCircle2,
+    CreditCard,
+    Download,
+    Loader2,
+    MapPin,
+    Package,
+    RefreshCw,
+    Smartphone,
+    Star,
+    Truck,
+    X,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -430,9 +431,21 @@ export default function OrderConfirmationPage() {
               </div>
             </div>
 
+            {/* Order Timeline */}
+            <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
+              <div className="p-4 bg-muted border-b border-border">
+                <h2 className="font-semibold">Order Timeline</h2>
+              </div>
+              <div className="p-4">
+                <ActivityTimeline
+                  items={buildOrderTimelineItems(order.status, order.createdAt)}
+                />
+              </div>
+            </div>
+
             {/* Mobile Money Payment Card — shown while payment is pending */}
             {order.payment?.method === "MOBILE_MONEY" &&
-              order.payment?.status !== "PAID" &&
+              order.payment?.status !== "COMPLETED" &&
               !paymentCancelled && (
                 <MobileMoneyPaymentCard
                   orderId={order.id}
@@ -478,7 +491,7 @@ export default function OrderConfirmationPage() {
             {businessGroups.map((group: any) => (
               <div
                 key={group.id}
-                className="bg-card border border-border rounded-lg overflow-hidden"
+                className="bg-card border border-border rounded-lg overflow-hidden card-hover"
               >
                 <div className="p-4 bg-muted border-b border-border flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -543,7 +556,7 @@ export default function OrderConfirmationPage() {
             {/* {Object.values(businessGroups).map((group: any, index: number) => (
               <div
                 key={index}
-                className="bg-card border border-border rounded-lg overflow-hidden"
+                className="bg-card border border-border rounded-lg overflow-hidden card-hover"
               >
                 <div className="p-4 bg-muted border-b border-border flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -652,7 +665,7 @@ export default function OrderConfirmationPage() {
             ))} */}
 
             {/* Delivery Information */}
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border rounded-lg p-4 card-hover">
               <div className="flex items-start gap-3 mb-3">
                 <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                 <div>
@@ -690,7 +703,7 @@ export default function OrderConfirmationPage() {
 
           {/* Right Column - Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-lg overflow-hidden sticky top-8">
+            <div className="bg-card border border-border rounded-lg overflow-hidden sticky top-8 card-hover">
               <div className="p-4 bg-muted border-b border-border">
                 <h2 className="font-semibold">Order Summary</h2>
               </div>
@@ -812,7 +825,7 @@ export default function OrderConfirmationPage() {
             </div>
 
             {/* Recommendations */}
-            <div className="mt-6 bg-card border border-border rounded-lg p-4">
+            <div className="mt-6 bg-card border border-border rounded-lg p-4 card-hover">
               <div className="flex items-start gap-3 mb-3">
                 <Star className="h-5 w-5 text-warning mt-0.5 shrink-0" />
                 <div>

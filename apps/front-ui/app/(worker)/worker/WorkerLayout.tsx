@@ -19,7 +19,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
@@ -131,7 +131,7 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
 
   // Handle loading and error states after all hooks are called
   if (authLoading || workerLoading || storesLoading)
-    return <Loader loading={true} />;
+    return <SidebarPageSkeleton navItems={6} contentVariant="cards" />;
   if (!user)
     return (
       <div className="min-h-screen flex items-center justify-center">

@@ -1,161 +1,172 @@
-import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
-import GraphQLJSON from "graphql-type-json";
-import { AccountRechargeEntity } from "../../account-recharge/entities/account-recharge.entity";
-import { AdEntity } from "../../ad/entities/ad.entity";
-import { ChatEntity } from "../../chat/entities/chat.entity";
-import { FreelanceOrderEntity } from "../../freelance-order/entities/freelance-order.entity";
-import { FreelanceServiceEntity } from "../../freelance-service/entities/freelance-service.entity";
-import { PostOfSaleEntity } from "../../post-of-sale/entities/post-of-sale.entity";
-import { ProductEntity } from "../../product/entities/product.entity";
-import { ReOwnedProductEntity } from "../../re-owned-product/entities/re-owned-product.entity";
-import { ReferralEntity } from "../../referral/entities/referral.entity";
-import { RepostedProductEntity } from "../../reposted-product/entities/reposted-product.entity";
-import { StoreEntity } from "../../store/entities/store.entity";
-import { WorkerEntity } from "../../worker/entities/worker.entity";
-import { HardwareConfigEntity } from "./hardware-config.entity";
-import { KycDocumentEntity } from "./kyc-document.entity";
-import { PaymentConfigEntity } from "./payment-config.entity";
+import {
+  Field,
+  Float,
+  Int,
+  ObjectType,
+} from '@nestjs/graphql'
+import GraphQLJSON from 'graphql-type-json'
+import { KnowYourCustomerEntity } from '../../know-your-customer/entities/know-your-customer.entity'
+import { AccountRechargeEntity } from '../../account-recharge/entities/account-recharge.entity'
+import { AdEntity } from '../../ad/entities/ad.entity'
+import { ChatEntity } from '../../chat/entities/chat.entity'
+import { FreelanceOrderEntity } from '../../freelance-order/entities/freelance-order.entity'
+import { FreelanceServiceEntity } from '../../freelance-service/entities/freelance-service.entity'
+import { KycDocumentEntity } from '../../know-your-customer/entities/kyc-document.entity'
+import { PostOfSaleEntity } from '../../post-of-sale/entities/post-of-sale.entity'
+import { ProductEntity } from '../../product/entities/product.entity'
+import { ReOwnedProductEntity } from '../../re-owned-product/entities/re-owned-product.entity'
+import { ReferralEntity } from '../../referral/entities/referral.entity'
+import { RepostedProductEntity } from '../../reposted-product/entities/reposted-product.entity'
+import { StoreEntity } from '../../store/entities/store.entity'
+import { WorkerEntity } from '../../worker/entities/worker.entity'
+import { HardwareConfigEntity } from './hardware-config.entity'
+import { PaymentConfigEntity } from './payment-config.entity'
 
 @ObjectType()
 export class BusinessSettingsEntity {
-	@Field()
-	id: string;
+  @Field()
+  id: string
 
-	@Field()
-	name: string;
+  @Field()
+  name: string
 
-	@Field()
-	email: string;
+  @Field()
+  email: string
 
-	@Field({ nullable: true })
-	description?: string;
+  @Field({ nullable: true })
+  description?: string
 
-	@Field({ nullable: true })
-	avatar?: string;
+  @Field({ nullable: true })
+  avatar?: string
 
-	@Field({ nullable: true })
-	coverImage?: string;
+  @Field({ nullable: true })
+  coverImage?: string
 
-	@Field({ nullable: true })
-	address?: string;
+  @Field({ nullable: true })
+  address?: string
 
-	@Field({ nullable: true })
-	phone?: string;
+  @Field({ nullable: true })
+  phone?: string
 
-	@Field({ nullable: true })
-	country?: string;
+  @Field({ nullable: true })
+  country?: string
 
-	@Field({ nullable: true })
-	businessType?: string;
+  @Field({ nullable: true })
+  businessType?: string
 
-	@Field()
-	kycStatus: string;
+  @Field()
+  kycStatus: string
 
-	@Field()
-	isB2BEnabled: boolean;
+  @Field()
+  isB2BEnabled: boolean
 
-	@Field()
-	isVerified: boolean;
+  @Field()
+  isVerified: boolean
 
-	@Field()
-	totalProductsSold: number;
+  @Field()
+  totalProductsSold: number
 
-	@Field()
-	hasAgreedToTerms: boolean;
+  @Field()
+  hasAgreedToTerms: boolean
 
-	@Field({ nullable: true })
-	termsAgreedAt?: Date;
+  @Field({ nullable: true })
+  termsAgreedAt?: Date
 
-	@Field(() => PaymentConfigEntity, {
-		nullable: true,
-	})
-	paymentConfig?: PaymentConfigEntity;
+  @Field(() => PaymentConfigEntity, {
+    nullable: true,
+  })
+  paymentConfig?: PaymentConfigEntity
 
-	@Field(() => HardwareConfigEntity, {
-		nullable: true,
-	})
-	hardwareConfig?: HardwareConfigEntity;
+  @Field(() => HardwareConfigEntity, {
+    nullable: true,
+  })
+  hardwareConfig?: HardwareConfigEntity
 
-	@Field(() => [KycDocumentEntity], {
-		nullable: true,
-	})
-	kyc?: KycDocumentEntity[];
+  @Field(() => [KycDocumentEntity], {
+    nullable: true,
+  })
+  kycDocuments?: KycDocumentEntity[]
 
-	@Field()
-	createdAt: Date;
+  @Field(() => KnowYourCustomerEntity, {
+    nullable: true,
+  })
+  kyc?: KnowYourCustomerEntity
 
-	@Field()
-	updatedAt: Date;
+  @Field()
+  createdAt: Date
 
-	@Field({ nullable: true })
-	taxId?: string;
+  @Field()
+  updatedAt: Date
 
-	@Field({ nullable: true })
-	registrationNumber?: string;
+  @Field({ nullable: true })
+  taxId?: string
 
-	@Field({ nullable: true })
-	website?: string;
+  @Field({ nullable: true })
+  registrationNumber?: string
 
-	@Field(() => GraphQLJSON, { nullable: true })
-	socialLinks?: any;
+  @Field({ nullable: true })
+  website?: string
 
-	@Field({ nullable: true })
-	notes?: string;
+  @Field(() => GraphQLJSON, { nullable: true })
+  socialLinks?: any
 
-	@Field(() => GraphQLJSON, { nullable: true })
-	preferences?: any;
+  @Field({ nullable: true })
+  notes?: string
 
-	@Field(() => Int)
-	totalClients: number;
+  @Field(() => GraphQLJSON, { nullable: true })
+  preferences?: any
 
-	@Field(() => Int)
-	totalWorkers: number;
+  @Field(() => Int)
+  totalClients: number
 
-	@Field(() => Int)
-	totalSales: number;
+  @Field(() => Int)
+  totalWorkers: number
 
-	@Field(() => Float)
-	totalRevenueGenerated: number;
+  @Field(() => Int)
+  totalSales: number
 
-	// Relations
-	@Field(() => [ProductEntity]) // Products associated with the business
-	products: ProductEntity[];
+  @Field(() => Float)
+  totalRevenueGenerated: number
 
-	@Field(() => [WorkerEntity]) // Workers associated with the business
-	workers: WorkerEntity[];
+  // Relations
+  @Field(() => [ProductEntity]) // Products associated with the business
+  products: ProductEntity[]
 
-	@Field(() => [RepostedProductEntity]) // Reposted products
-	repostedItems: RepostedProductEntity[];
+  @Field(() => [WorkerEntity]) // Workers associated with the business
+  workers: WorkerEntity[]
 
-	@Field(() => [ReOwnedProductEntity]) // Reowned products
-	reownedItems: ReOwnedProductEntity[];
+  @Field(() => [RepostedProductEntity]) // Reposted products
+  repostedItems: RepostedProductEntity[]
 
-	@Field(() => [AccountRechargeEntity]) // Recharges made by the business
-	recharges: AccountRechargeEntity[];
+  @Field(() => [ReOwnedProductEntity]) // Reowned products
+  reownedItems: ReOwnedProductEntity[]
 
-	@Field(() => [AdEntity]) // Ads created by the business
-	ads: AdEntity[];
+  @Field(() => [AccountRechargeEntity]) // Recharges made by the business
+  recharges: AccountRechargeEntity[]
 
-	@Field(() => [StoreEntity], { nullable: true })
-	stores?: StoreEntity[];
+  @Field(() => [AdEntity]) // Ads created by the business
+  ads: AdEntity[]
 
-	@Field(() => [FreelanceServiceEntity]) // Freelance services offered by the business
-	freelanceServices: FreelanceServiceEntity[];
+  @Field(() => [StoreEntity], { nullable: true })
+  stores?: StoreEntity[]
 
-	@Field(() => [FreelanceOrderEntity]) // Freelance orders associated with the business
-	freelanceOrders: FreelanceOrderEntity[];
+  @Field(() => [FreelanceServiceEntity]) // Freelance services offered by the business
+  freelanceServices: FreelanceServiceEntity[]
 
-	@Field(() => [ReferralEntity]) // Referrals made by the business
-	referralsMade: ReferralEntity[];
+  @Field(() => [FreelanceOrderEntity]) // Freelance orders associated with the business
+  freelanceOrders: FreelanceOrderEntity[]
 
-	@Field(() => [ReferralEntity]) // Referrals received by the business
-	referralsReceived: ReferralEntity[];
+  @Field(() => [ReferralEntity]) // Referrals made by the business
+  referralsMade: ReferralEntity[]
 
-	@Field(() => [ChatEntity]) // Chats associated with the business
-	chats: ChatEntity[];
+  @Field(() => [ReferralEntity]) // Referrals received by the business
+  referralsReceived: ReferralEntity[]
 
-	@Field(() => [PostOfSaleEntity], {
-		nullable: true,
-	})
-	postOfSales?: PostOfSaleEntity[];
+  @Field(() => [ChatEntity]) // Chats associated with the business
+  chats: ChatEntity[]
+
+  @Field(() => [PostOfSaleEntity], {
+    nullable: true,
+  })
+  postOfSales?: PostOfSaleEntity[]
 }

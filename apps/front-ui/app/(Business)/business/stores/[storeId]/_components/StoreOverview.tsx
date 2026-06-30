@@ -24,6 +24,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { CHART_COLORS } from "@/lib/chart-theme";
 
 interface StoreOverviewProps {
   store: any;
@@ -61,7 +62,7 @@ export default function StoreOverview({
     <div className="space-y-6">
       {/* Quick Stats Grid */}
       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <Users className="h-5 w-5" />
@@ -76,7 +77,7 @@ export default function StoreOverview({
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
               <ShoppingCart className="h-5 w-5" />
@@ -90,7 +91,7 @@ export default function StoreOverview({
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <Package className="h-5 w-5" />
@@ -102,7 +103,7 @@ export default function StoreOverview({
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
               <Clock className="h-5 w-5" />
@@ -118,7 +119,7 @@ export default function StoreOverview({
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Sales Chart */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
             <h3 className="font-semibold flex items-center gap-2">
               <BarChart className="h-5 w-5" />
@@ -158,7 +159,7 @@ export default function StoreOverview({
                 <Tooltip formatter={(value) => [`$${value}`, "Sales"]} />
                 <Bar
                   dataKey="sales"
-                  fill="hsl(var(--primary))"
+                  fill={CHART_COLORS.primary}
                   name="Sales ($)"
                 />
               </BarChartRecharts>
@@ -167,7 +168,7 @@ export default function StoreOverview({
         </div>
 
         {/* Inventory Status */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border">
             <h3 className="font-semibold flex items-center gap-2">
               <Package className="h-5 w-5" />
@@ -207,7 +208,7 @@ export default function StoreOverview({
                   <Line
                     type="monotone"
                     dataKey="sales"
-                    stroke="hsl(var(--primary))"
+                    stroke={CHART_COLORS.primary}
                     strokeWidth={2}
                     dot={false}
                   />
@@ -221,7 +222,7 @@ export default function StoreOverview({
       {/* Top Products & Recent Sales */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Selling Products */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
             <h3 className="font-semibold flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
@@ -263,7 +264,7 @@ export default function StoreOverview({
         </div>
 
         {/* Recent Sales */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border flex justify-between items-center">
             <h3 className="font-semibold flex items-center gap-2">
               <DollarSign className="h-5 w-5" />
@@ -329,7 +330,7 @@ export default function StoreOverview({
       </div>
 
       {/* Worker Performance Summary */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <h3 className="font-semibold flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -416,7 +417,7 @@ export default function StoreOverview({
       </div>
 
       {/* Business Type Specific Tips */}
-      <div className="bg-card border border-border rounded-lg p-4">
+      <div className="bg-card border border-border rounded-lg p-4 card-hover">
         <div className="flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
           <div>

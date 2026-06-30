@@ -6,7 +6,7 @@ import React from "react";
 import ChatList from "@/components/chat/ChatList";
 import ChatThread from "@/components/chat/ChatThread";
 import HeaderComponent from "@/components/seraui/HeaderComponent";
-import Loader from "@/components/seraui/Loader";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import {
   GET_CHAT_BY_ID,
   GET_CHATS_BY_PARTICIPANT,
@@ -44,7 +44,7 @@ export default function ChatThreadListPage() {
   }, [data, currentId, chatData, notifId]);
 
   if (loading) {
-    return <Loader loading={true} />;
+    return <SidebarPageSkeleton navItems={5} contentVariant="cards" />;
   }
   if (error) {
     console.error(error);

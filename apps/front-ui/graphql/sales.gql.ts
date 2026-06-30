@@ -405,6 +405,24 @@ export const CREATE_RETURN = gql`
   }
 `;
 
+export const SYNC_OFFLINE_SALES = gql`
+  mutation SyncOfflineSales($input: SyncOfflineSalesInput!) {
+    syncOfflineSales(input: $input) {
+      synced
+      failed
+      conflicts
+      duplicates
+      results {
+        localId
+        serverId
+        status
+        error
+        conflictDetails
+      }
+    }
+  }
+`;
+
 export const GENERATE_RECEIPT = gql`
   mutation GenerateReceipt($generateReceiptInput: GenerateReceiptInput!) {
     generateReceipt(generateReceiptInput: $generateReceiptInput) {

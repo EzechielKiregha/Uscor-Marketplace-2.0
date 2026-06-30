@@ -38,7 +38,7 @@ export default function PaymentMethodSelector({
   isBusinessPayment,
 }: PaymentMethodSelectorProps) {
   const { showToast } = useToast();
-  const [showAcountBalancePaymentModal, setShowAcountBalancePaymentModal] =
+  const [showAccountBalancePaymentModal, setShowAccountBalancePaymentModal] =
     useState(false);
   const [paymentDetails, setPaymentDetails] = useState({
     mobileMoneyProvider: "",
@@ -88,7 +88,7 @@ export default function PaymentMethodSelector({
 
     // Show payment modal for certain methods
     if (["MOBILE_MONEY", "CARD"].includes(methodId)) {
-      setShowAcountBalancePaymentModal(true);
+      setShowAccountBalancePaymentModal(true);
     }
   };
 
@@ -117,7 +117,7 @@ export default function PaymentMethodSelector({
       "Payment Method Set",
       `Payment will be processed via ${selectedMethod}`,
     );
-    setShowAcountBalancePaymentModal(false);
+    setShowAccountBalancePaymentModal(false);
   };
 
   const handleMobileMoneyPayment = () => {
@@ -245,12 +245,12 @@ export default function PaymentMethodSelector({
         </div>
       )}
 
-      {showAcountBalancePaymentModal && selectedMethod && (
+      {showAccountBalancePaymentModal && selectedMethod && (
         <PaymentCode
           amount={amount}
           paymentMethod={selectedMethod}
           businessName={businessName}
-          onClose={() => setShowAcountBalancePaymentModal(false)}
+          onClose={() => setShowAccountBalancePaymentModal(false)}
           onConfirm={handleConfirmPayment}
           isBusinessPayment={isBusinessPayment}
         />

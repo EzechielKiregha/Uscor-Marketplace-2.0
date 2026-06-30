@@ -1,17 +1,22 @@
 "use client";
 
-import { AlertTriangle } from "lucide-react";
-import Loader from "@/components/seraui/Loader";
-import { useIndexedDB } from "@/hooks/use-indexed-db";
+import { useCallback, useState } from "react";
+import { Barcode } from "lucide-react";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
+import { SyncStatusBar } from "@/components/SyncStatusBar";
+import { Button } from "@/components/ui/button";
+import { useOfflinePOS } from "@/hooks/use-offline-pos";
 import { useMe } from "@/lib/useMe";
-import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
 import CurrentSalePanel from "@/app/(Business)/business/sales/_components/CurrentSalePanel";
 import SalesDashboard from "@/app/(Business)/business/sales/_components/SalesDashboard";
 import SalesHistoryPanel from "@/app/(Business)/business/sales/_components/SalesHistoryPanel";
+import QuickSaleGrid from "./QuickSaleGrid";
+import BarcodeScannerModal from "./BarcodeScannerModal";
+import CustomerLookup from "./CustomerLookup";
 
 interface PosPageProps {
   selectedStoreId: string | null;
-  viewMode?: "worker" | "business"; // New prop
+  viewMode?: "worker" | "business";
   workerId?: string;
 }
 
@@ -21,39 +26,95 @@ export default function PosPage({
   workerId,
 }: PosPageProps) {
   const { user, role } = useMe();
-  const { isOnline } = useIndexedDB();
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
 
   const effectiveWorkerId =
     viewMode === "business" && workerId ? workerId : user?.id;
 
   const {
+    isOnline,
+    pendingCount,
+    syncStatus,
+    lastSyncTime,
+    conflicts,
     getCurrentSale,
     getSalesHistory,
     createSale,
+    addProductToSale,
     activeSalesLoading,
     salesHistoryLoading,
-  } = useSales(selectedStoreId || "", effectiveWorkerId || "", role || "");
+    syncPendingOperations,
+    currentSaleId,
+  } = useOfflinePOS(
+    selectedStoreId || "",
+    effectiveWorkerId || "",
+    role || "",
+  );
 
-  if (activeSalesLoading) return <Loader loading={true} />;
+  // Quick-add product from QuickSaleGrid or BarcodeScanner
+  const handleQuickProductSelect = useCallback(
+    async (productId: string, quantity: number = 1) => {
+      let saleId = currentSaleId;
+
+      // Auto-create sale if none active
+      if (!saleId && !getCurrentSale()) {
+        saleId = await createSale(effectiveWorkerId || undefined, selectedClient?.id);
+      }
+
+      if (saleId || getCurrentSale()) {
+        await addProductToSale(
+          saleId || getCurrentSale()?.id,
+          productId,
+          quantity,
+        );
+      }
+    },
+    [currentSaleId, getCurrentSale, createSale, addProductToSale, effectiveWorkerId, selectedClient],
+  );
+
+  if (activeSalesLoading) return <PageSkeleton variant="split" />;
 
   return (
-    <div className="space-y-6">
-      {/* Offline Mode Indicator */}
-      {!isOnline && (
-        <div className="bg-warning/10 border border-warning/30 rounded-lg p-3 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-warning" />
-          <div>
-            <p className="font-medium">Offline Mode</p>
-            <p className="text-sm text-muted-foreground">
-              Sales will sync when connection is restored. Currently saving to
-              local storage.
-            </p>
-          </div>
+    <div className="space-y-4">
+      {/* Sync Status Bar — always visible */}
+      <SyncStatusBar
+        isOnline={isOnline}
+        pendingCount={pendingCount}
+        syncStatus={syncStatus}
+        lastSyncTime={lastSyncTime}
+        conflictCount={conflicts.length}
+        onSyncNow={syncPendingOperations}
+      />
+
+      {/* Customer Lookup + Barcode Scanner Row */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex-1">
+          <CustomerLookup
+            storeId={selectedStoreId || ""}
+            isOnline={isOnline}
+            onClientSelected={setSelectedClient}
+            selectedClient={selectedClient}
+          />
         </div>
-      )}
+        <Button
+          variant="outline"
+          className="sm:self-start h-10 gap-2"
+          onClick={() => setShowBarcodeScanner(true)}
+        >
+          <Barcode className="h-4 w-4" />
+          Scan Barcode
+        </Button>
+      </div>
+
+      {/* Quick Sale Grid */}
+      <QuickSaleGrid
+        storeId={selectedStoreId || ""}
+        onProductSelect={handleQuickProductSelect}
+      />
 
       {/* Main POS Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Current Sale Panel */}
         <div className="lg:col-span-2 space-y-6">
           <CurrentSalePanel
@@ -74,6 +135,17 @@ export default function PosPage({
         </div>
       </div>
       <SalesDashboard storeId={selectedStoreId || ""} />
+
+      {/* Barcode Scanner Modal */}
+      <BarcodeScannerModal
+        isOpen={showBarcodeScanner}
+        onClose={() => setShowBarcodeScanner(false)}
+        storeId={selectedStoreId || ""}
+        onProductFound={(product) => {
+          handleQuickProductSelect(product.id, 1);
+          setShowBarcodeScanner(false);
+        }}
+      />
     </div>
   );
 }

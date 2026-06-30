@@ -25,7 +25,7 @@ import PosPage from "@/app/(worker)/worker/_components/PosPage";
 import ProfilePage from "@/app/(worker)/worker/_components/ProfilePage";
 import ReportsPage from "@/app/(worker)/worker/_components/ReportsPage";
 import ShiftsPage from "@/app/(worker)/worker/_components/ShiftsPage";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { GET_WORKER_PERFORMANCE } from "@/graphql/reports.gql";
 import { useMe } from "@/lib/useMe";
 
@@ -74,7 +74,7 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
   const performance = performanceData?.workerPerformance;
 
   if (authLoading || workerLoading || performanceLoading)
-    return <Loader loading={true} />;
+    return <DashboardSkeleton />;
   if (workerError || !worker)
     return (
       <div>
@@ -136,7 +136,7 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
 
       {/* Worker Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <DollarSign className="h-5 w-5" />
@@ -150,7 +150,7 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
               <ShoppingCart className="h-5 w-5" />
@@ -164,7 +164,7 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-warning">
               <Clock className="h-5 w-5" />
@@ -178,7 +178,7 @@ export default function WorkerDetailPage({ params }: WorkerDetailPageProps) {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-4">
+        <div className="bg-card border border-border rounded-lg p-4 card-hover">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info">
               <TrendingUp className="h-5 w-5" />
@@ -316,7 +316,7 @@ function WorkerOverview({
   return (
     <div className="space-y-6">
       {/* Worker Info */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <h2 className="font-semibold">Worker Information</h2>
         </div>
@@ -401,7 +401,7 @@ function WorkerOverview({
       </div>
 
       {/* Performance Stats */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <h2 className="font-semibold">Performance Overview</h2>
         </div>

@@ -82,7 +82,7 @@ export default function BusinessChatsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-2xl font-bold">Business Chat</h1>
+              <h1 className="text-page-title">Business Chat</h1>
               <p className="text-muted-foreground">
                 Connect with clients and manage conversations
               </p>
@@ -144,7 +144,7 @@ export default function BusinessChatsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Business Conversations</h1>
+            <h1 className="text-page-title">Business Conversations</h1>
             <p className="text-muted-foreground">
               Manage conversations with your clients and customers
             </p>

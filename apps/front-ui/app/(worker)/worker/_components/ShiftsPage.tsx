@@ -11,7 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +31,9 @@ import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
 import { startOfDay, subDays } from "date-fns";
 import { intervalToDuration } from "date-fns";
+import ShiftSummary from "./ShiftSummary";
+import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 function useShiftDuration(startTime?: string) {
   const [now, setNow] = useState(Date.now());
@@ -71,6 +74,8 @@ export default function ShiftsPage({
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month">(
     "week",
   );
+  const [showShiftSummary, setShowShiftSummary] = useState(false);
+  const [endedShiftData, setEndedShiftData] = useState<any>(null);
   const { showToast } = useToast();
   const effectiveWorkerId =
     viewMode === "business" && workerId ? workerId : user?.id;
@@ -120,6 +125,17 @@ export default function ShiftsPage({
   const [updateSaleProduct] = useMutation(UPDATE_SALE_PRODUCT);
   const [removeSaleProduct] = useMutation(REMOVE_SALE_PRODUCT);
   const [completeSale] = useMutation(COMPLETE_SALE);
+
+  // Fetch shift sales for summary
+  const { data: shiftSalesData } = useQuery(GET_SALES_HISTORY, {
+    variables: {
+      storeId: selectedStoreId,
+      status: "COMPLETED",
+      workerId: effectiveWorkerId,
+      startDate: currentShift?.startTime,
+    },
+    skip: !currentShift?.startTime || !selectedStoreId || !showShiftSummary,
+  });
 
   useEffect(() => {
     if (currentShiftData?.workerCurrentShift) {
@@ -185,6 +201,12 @@ export default function ShiftsPage({
   const handleEndShift = async () => {
     if (!currentShift) return;
 
+    // Save shift data for summary before clearing
+    const shiftForSummary = {
+      ...currentShift,
+      endTime: new Date().toISOString(),
+    };
+
     if (!isOnline) {
       // Handle offline shift end
       const updatedShift = {
@@ -199,6 +221,8 @@ export default function ShiftsPage({
         shift: updatedShift,
       });
 
+      setEndedShiftData(shiftForSummary);
+      setShowShiftSummary(true);
       setCurrentShift(null);
       showToast("info", "Offline Mode", "Shift ended. Will sync when online.");
     } else {
@@ -211,6 +235,8 @@ export default function ShiftsPage({
           variables: { input },
         });
 
+        setEndedShiftData(shiftForSummary);
+        setShowShiftSummary(true);
         setCurrentShift(null);
         showToast("success", "Shift Ended", "Your shift has been completed");
         refetchCurrentShift();
@@ -242,7 +268,7 @@ export default function ShiftsPage({
 
   const duration = useShiftDuration(currentShift?.startTime);
 
-  if (currentShiftLoading || shiftsLoading) return <Loader loading={true} />;
+  if (currentShiftLoading || shiftsLoading) return <DashboardSkeleton showChart={false} />;
 
   const shifts = shiftsData?.workerShifts?.items || [];
   const totalShifts = shiftsData?.workerShifts?.total || 0;
@@ -265,14 +291,14 @@ export default function ShiftsPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Shift Management</h1>
+        <h1 className="text-page-title">Shift Management</h1>
         <p className="text-muted-foreground">
           Track your work shifts and performance metrics
         </p>
       </div>
 
       {/* Current Shift Status */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <div className="flex justify-between items-center">
             <h2 className="font-semibold">Current Shift Status</h2>
@@ -322,7 +348,7 @@ export default function ShiftsPage({
                       Sales Today
                     </span>
                   </div>
-                  <p className="text-2xl font-bold">
+                  <p className="text-stat">
                     ${currentShift.sales?.toFixed(2) || "0.00"}
                   </p>
                 </div>
@@ -336,7 +362,7 @@ export default function ShiftsPage({
                     </span>
                   </div>
 
-                  <p className="text-2xl font-bold tabular-nums">
+                  <p className="text-stat tabular-nums">
                     {duration
                       ? `${duration.hours ?? 0}h ${duration.minutes ?? 0}m ${duration.seconds ?? 0}s`
                       : "0h 0m 0s"}
@@ -350,7 +376,7 @@ export default function ShiftsPage({
                       Transactions
                     </span>
                   </div>
-                  <p className="text-2xl font-bold">
+                  <p className="text-stat">
                     {currentShift.transactionCount}
                   </p>
                 </div>
@@ -393,7 +419,7 @@ export default function ShiftsPage({
       </div>
 
       {/* Shift History */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
         <div className="p-4 bg-muted border-b border-border">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Shift History</h2>
@@ -405,13 +431,12 @@ export default function ShiftsPage({
 
         <div className="p-4">
           {shifts.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <Clock className="h-8 w-8 mx-auto mb-3" />
-              <p>No shift history available</p>
-              <p className="text-sm mt-1">
-                Your shift records will appear here after you complete shifts
-              </p>
-            </div>
+            <EmptyState
+              icon={emptyStateIcons.shifts}
+              title="No shift history available"
+              description="Your shift records will appear here after you complete shifts"
+              compact
+            />
           ) : (
             <div className="space-y-3 max-h-100 overflow-y-auto">
               {shifts.map((shift: any) => (
@@ -473,7 +498,7 @@ export default function ShiftsPage({
 
       {/* Shift Analytics */}
       {shifts.length > 0 && (
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
           <div className="p-4 bg-muted border-b border-border">
             <h2 className="font-semibold">Shift Analytics</h2>
           </div>
@@ -487,7 +512,7 @@ export default function ShiftsPage({
                     Total Shifts
                   </span>
                 </div>
-                <p className="text-2xl font-bold">{totalShifts}</p>
+                <p className="text-stat">{totalShifts}</p>
               </div>
 
               <div className="border border-border rounded-lg p-4">
@@ -497,7 +522,7 @@ export default function ShiftsPage({
                     Total Sales
                   </span>
                 </div>
-                <p className="text-2xl font-bold">${totalSales.toFixed(2)}</p>
+                <p className="text-stat">${totalSales.toFixed(2)}</p>
               </div>
 
               <div className="border border-border rounded-lg p-4">
@@ -507,7 +532,7 @@ export default function ShiftsPage({
                     Avg. Sales
                   </span>
                 </div>
-                <p className="text-2xl font-bold">${averageSales.toFixed(2)}</p>
+                <p className="text-stat">${averageSales.toFixed(2)}</p>
               </div>
 
               <div className="border border-border rounded-lg p-4">
@@ -517,11 +542,23 @@ export default function ShiftsPage({
                     Total Hours
                   </span>
                 </div>
-                <p className="text-2xl font-bold">{totalHours.toFixed(1)}h</p>
+                <p className="text-stat">{totalHours.toFixed(1)}h</p>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {/* End-of-Shift Summary Modal */}
+      {showShiftSummary && endedShiftData && (
+        <ShiftSummary
+          shift={endedShiftData}
+          shiftSales={shiftSalesData?.salesHistory?.items || []}
+          onClose={() => {
+            setShowShiftSummary(false);
+            setEndedShiftData(null);
+          }}
+        />
       )}
     </div>
   );

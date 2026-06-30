@@ -1,6 +1,5 @@
 "use client";
 
-import Loader from "@/components/seraui/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,7 +10,6 @@ import {
 import { GET_PRODUCTS } from "@/graphql/product.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
-  ArrowRight,
   BriefcaseBusiness,
   Filter,
   Gift,
@@ -24,11 +22,19 @@ import {
   X,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import BusinessTypeIcon from "./_components/BusinessTypeIcons";
-import ProductCard from "./_components/ProductCard";
+import { useEffect, useMemo, useState } from "react";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
+import TypedProductCard from "./_components/TypedProductCard";
+import BusinessTypeShowcase from "./_components/BusinessTypeShowcase";
 import SearchModal from "./_components/SearchModal";
 import ServiceCard from "./_components/ServiceCard";
+import HorizontalCategoryScroll from "./_components/HorizontalCategoryScroll";
+import FeaturedProductsCarousel from "./_components/FeaturedProductsCarousel";
+import FeaturedStoresSection from "./_components/FeaturedStoresSection";
+import ProductCardSkeleton from "./_components/ProductCardSkeleton";
+import EnhancedPagination from "./_components/EnhancedPagination";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
 
 export default function MarketplacePage() {
   const search_params = useSearchParams();
@@ -51,7 +57,7 @@ export default function MarketplacePage() {
   });
   const [page, setPage] = useState(1);
 
-  // Determine whether any filters are active (treat default sort='relevance' and false toggles as no-filter)
+  // Determine whether any filters are active
   const hasActiveFilters = Boolean(
     filters.search ||
     filters.category ||
@@ -63,7 +69,7 @@ export default function MarketplacePage() {
     (filters.sort && filters.sort !== "relevance"),
   );
 
-  // Use GET_PRODUCTS for initial (no-filter) product load; skip when filters active or user on services tab
+  // Use GET_PRODUCTS for initial (no-filter) product load
   const {
     data: productsAllData,
     loading: productsAllLoading,
@@ -72,7 +78,7 @@ export default function MarketplacePage() {
     skip: !(activeTab === "products" && !hasActiveFilters),
   });
 
-  // Use marketplace query when filters are active OR when on services tab
+  // Use marketplace query when filters are active OR on services tab
   const {
     data,
     loading: marketplaceLoading,
@@ -94,10 +100,10 @@ export default function MarketplacePage() {
     skip: activeTab === "products" && !hasActiveFilters,
   });
 
-  // Handle real-time updates; refetch the active query
+  // Real-time updates
   useSubscription(ON_PRODUCT_ADDED, {
     variables: { businessId: null },
-    onData: ({ data }) => {
+    onData: () => {
       if (activeTab === "products" && !hasActiveFilters) {
         refetchProducts?.();
       } else {
@@ -108,7 +114,7 @@ export default function MarketplacePage() {
 
   useSubscription(ON_SERVICE_ADDED, {
     variables: { businessId: null },
-    onData: ({ data }) => {
+    onData: () => {
       if (activeTab === "products" && !hasActiveFilters) {
         refetchProducts?.();
       } else {
@@ -117,7 +123,7 @@ export default function MarketplacePage() {
     },
   });
 
-  // Choose data source: GET_PRODUCTS when no filters on products tab, otherwise use marketplace query
+  // Data sources
   const products =
     activeTab === "products" && !hasActiveFilters
       ? productsAllData?.products || []
@@ -133,111 +139,42 @@ export default function MarketplacePage() {
     activeTab === "products"
       ? Math.max(1, Math.ceil(totalProducts / pageSize))
       : Math.max(1, Math.ceil(totalServices / pageSize));
-  const businessTypes = [
-    {
-      id: "ARTISAN",
-      name: "Artisan & Handcrafted Goods",
-      description:
-        "Craftsmen, wood workers, local artisans creating handmade products",
-    },
-    {
-      id: "BOOKSTORE",
-      name: "Bookstore & Stationery",
-      description: "Book sellers, stationery shops, and publishing businesses",
-    },
-    {
-      id: "ELECTRONICS",
-      name: "Electronics & Gadgets",
-      description:
-        "Electronics retailers, gadget stores, and tech repair services",
-    },
-    {
-      id: "HARDWARE",
-      name: "Hardware & Tools",
-      description:
-        "Hardware stores, tool suppliers, and building material retailers",
-    },
-    {
-      id: "GROCERY",
-      name: "Grocery & Convenience",
-      description: "Grocery stores, supermarkets, and convenience shops",
-    },
-    {
-      id: "CAFE",
-      name: "Café & Coffee Shops",
-      description: "Coffee shops, cafés, and beverage-focused businesses",
-    },
-    {
-      id: "RESTAURANT",
-      name: "Restaurant & Dining",
-      description:
-        "Full-service restaurants, eateries, and dining establishments",
-    },
-    {
-      id: "RETAIL",
-      name: "Retail & General Stores",
-      description:
-        "General retail stores, department stores, and variety shops",
-    },
-    {
-      id: "BAR",
-      name: "Bar & Pub",
-      description:
-        "Bars, pubs, and establishments focused on alcoholic beverages",
-    },
-    {
-      id: "CLOTHING",
-      name: "Clothing & Accessories",
-      description:
-        "Clothing retailers, fashion boutiques, and accessory stores",
-    },
-  ];
-  const productCategories = data?.productCategories || [
-    {
-      id: "FOOD",
-      name: "Food & Beverages",
-      description: "Fresh produce, packaged foods, and beverages",
-    },
-    {
-      id: "CLOTHING",
-      name: "Clothing & Accessories",
-      description: "Apparel, footwear, and fashion accessories",
-    },
-    {
-      id: "ELECTRONICS",
-      name: "Electronics",
-      description: "Phones, computers, and electronic devices",
-    },
-    {
-      id: "HOME",
-      name: "Home & Kitchen",
-      description: "Furniture, kitchenware, and home essentials",
-    },
-    {
-      id: "BOOKS",
-      name: "Books & Stationery",
-      description: "Books, notebooks, and office supplies",
-    },
-    {
-      id: "TOOLS",
-      name: "Tools & Hardware",
-      description: "Hand tools, power tools, and building materials",
-    },
-    {
-      id: "CRAFTS",
-      name: "Craft Supplies",
-      description: "Materials for handmade crafts and DIY projects",
-    },
-  ];
 
-  // console.log('products: ', products);
+  const businessTypes = BUSINESS_TYPE_LIST.map((bt) => ({
+    id: bt.key,
+    name: bt.label,
+    description: bt.description,
+  }));
+  const productCategories = data?.productCategories || [];
+
+  // Featured products (from all products when unfiltered)
+  const featuredProducts = useMemo(() => {
+    if (hasActiveFilters || activeTab !== "products") return [];
+    return products.filter((p: any) => p.featured).slice(0, 12);
+  }, [products, hasActiveFilters, activeTab]);
+
+  // Group products by business type for showcase sections
+  const productsByType = useMemo(() => {
+    if (hasActiveFilters || activeTab !== "products") return {};
+    const grouped: Record<string, any[]> = {};
+    for (const p of products) {
+      const bt = p.business?.businessType;
+      if (!bt) continue;
+      if (!grouped[bt]) grouped[bt] = [];
+      grouped[bt].push(p);
+    }
+    return grouped;
+  }, [products, hasActiveFilters, activeTab]);
+
+  const showcaseTypes = useMemo(() => {
+    return Object.entries(productsByType)
+      .filter(([, items]) => items.length > 0)
+      .sort((a, b) => b[1].length - a[1].length)
+      .map(([type]) => type);
+  }, [productsByType]);
 
   const handleFilterChange = (name: string, value: any) => {
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-      page: 1,
-    }));
+    setFilters((prev) => ({ ...prev, [name]: value }));
     setPage(1);
   };
 
@@ -262,7 +199,6 @@ export default function MarketplacePage() {
   };
 
   useEffect(() => {
-    // Apply filters from URL params on initial load
     setFilters({
       search: "",
       category: search_params.get("category") || "",
@@ -275,188 +211,31 @@ export default function MarketplacePage() {
     });
   }, [search_params]);
 
-  if (marketplaceLoading) return <Loader loading={true} />;
-  if (marketplaceError)
+  const isLoading = activeTab === "products" && !hasActiveFilters
+    ? productsAllLoading
+    : marketplaceLoading;
+
+  if (marketplaceError) {
     return <div>Error loading marketplace: {marketplaceError.message}</div>;
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Marketplace</h1>
+    <MotionPage className="container mx-auto px-4 py-8">
+      {/* Page header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-1">Marketplace</h1>
         <p className="text-muted-foreground">
           Discover products and services from local businesses
         </p>
       </div>
 
-      {/* Search and Filter Controls */}
-      {/* <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden mb-6">
-        <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="relative w-full sm:w-64">
-            <Input
-              type="text"
-              placeholder="Search products and services..."
-              value={filters.search}
-              onChange={(e) => handleFilterChange("search", e.target.value)}
-              className="pl-9"
-              onClick={() => setShowSearchModal(true)}
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant={activeTab === "products" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveTab("products")}
-              className="flex items-center gap-1"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              Products
-            </Button>
-
-            <Button
-              variant={activeTab === "services" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveTab("services")}
-              className="flex items-center gap-1"
-            >
-              <BriefcaseBusiness className="h-4 w-4" />
-              Services
-            </Button>
-
-            <div className="flex border border-orange-400/60 dark:border-orange-500/70 rounded-md">
-              <Button
-                variant={viewMode === "grid" ? "default" : "outline"}
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setViewMode("grid")}
-              >
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "list" ? "default" : "outline"}
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => setViewMode("list")}
-              >
-                <List className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 flex flex-wrap gap-2">
-          <select
-            value={filters.businessType}
-            onChange={(e) => handleFilterChange("businessType", e.target.value)}
-            className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            <option value="">All Business Types</option>
-            {businessTypes.map((type: any) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-
-          {activeTab === "products" && (
-            <select
-              value={filters.category}
-              onChange={(e) => handleFilterChange("category", e.target.value)}
-              className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              <option value="">All Product Categories</option>
-              {productCategories.map((category: any) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          )}
-
-          {activeTab === "services" && (
-            <select
-              value={filters.category}
-              onChange={(e) => handleFilterChange("category", e.target.value)}
-              className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
-            >
-              <option value="">All Service Categories</option>
-              <option value="DESIGN">Design & Creative</option>
-              <option value="DEV">Development</option>
-              <option value="PLUMBER">Plumbing</option>
-              <option value="ELECTRICIAN">Electrical</option>
-              <option value="CARPENTER">Carpentry</option>
-              <option value="MECHANIC">Mechanics</option>
-              <option value="TUTOR">Tutoring</option>
-            </select>
-          )}
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm">Price:</span>
-            <Input
-              type="number"
-              placeholder="Min"
-              value={filters.minPrice}
-              onChange={(e) => handleFilterChange("minPrice", e.target.value)}
-              className="w-20"
-            />
-            <span>-</span>
-            <Input
-              type="number"
-              placeholder="Max"
-              value={filters.maxPrice}
-              onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
-              className="w-20"
-            />
-          </div>
-
-          <Button
-            variant={filters.hasPromotion ? "default" : "outline"}
-            size="sm"
-            onClick={() =>
-              handleFilterChange("hasPromotion", !filters.hasPromotion)
-            }
-            className="flex items-center gap-1"
-          >
-            <Gift className="h-4 w-4" />
-            On Sale
-          </Button>
-
-          <Button
-            variant={filters.featured ? "default" : "outline"}
-            size="sm"
-            onClick={() => handleFilterChange("featured", !filters.featured)}
-            className="flex items-center gap-1"
-          >
-            <Star className="h-4 w-4" />
-            Featured
-          </Button>
-
-          <select
-            value={filters.sort}
-            onChange={(e) => handleFilterChange("sort", e.target.value)}
-            className="p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            <option value="relevance">Relevance</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-            <option value="rating">Highest Rated</option>
-            <option value="newest">Newest First</option>
-          </select>
-
-          {(filters.category ||
-            filters.businessType ||
-            filters.hasPromotion ||
-            filters.featured ||
-            filters.minPrice ||
-            filters.maxPrice) && (
-            <Button variant="outline" size="sm" onClick={handleClearFilters}>
-              <Filter className="h-4 w-4 mr-2" />
-              Clear Filters
-            </Button>
-          )}
-        </div>
-      </div> */}
+      {/* Horizontal Category Scroll */}
+      <div className="mb-6">
+        <HorizontalCategoryScroll
+          selected={filters.businessType}
+          onSelect={(bt) => handleFilterChange("businessType", bt)}
+        />
+      </div>
 
       {/* Search + Filter Sticky Controls */}
       <div className="sticky top-2 z-40 mb-6">
@@ -473,7 +252,6 @@ export default function MarketplacePage() {
                 className="pl-10 h-11 rounded-xl bg-background"
                 onClick={() => setShowSearchModal(true)}
               />
-
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
 
@@ -501,7 +279,6 @@ export default function MarketplacePage() {
               >
                 <LayoutGrid className="h-4 w-4" />
               </Button>
-
               <Button
                 variant={viewMode === "list" ? "default" : "ghost"}
                 size="icon"
@@ -526,7 +303,6 @@ export default function MarketplacePage() {
                   <ShoppingCart className="h-4 w-4 mr-2" />
                   Products
                 </Button>
-
                 <Button
                   variant={activeTab === "services" ? "default" : "outline"}
                   onClick={() => setActiveTab("services")}
@@ -546,7 +322,6 @@ export default function MarketplacePage() {
                   >
                     <LayoutGrid className="h-4 w-4" />
                   </Button>
-
                   <Button
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="icon"
@@ -560,7 +335,6 @@ export default function MarketplacePage() {
 
               {/* FILTER GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-                {/* Business Type */}
                 <select
                   value={filters.businessType}
                   onChange={(e) =>
@@ -569,7 +343,6 @@ export default function MarketplacePage() {
                   className="h-11 px-3 rounded-xl border border-orange-400/60 dark:border-orange-500/70 bg-background"
                 >
                   <option value="">All Business Types</option>
-
                   {businessTypes.map((type: any) => (
                     <option key={type.id} value={type.id}>
                       {type.name}
@@ -577,7 +350,6 @@ export default function MarketplacePage() {
                   ))}
                 </select>
 
-                {/* Category */}
                 {activeTab === "products" ? (
                   <select
                     value={filters.category}
@@ -587,7 +359,6 @@ export default function MarketplacePage() {
                     className="h-11 px-3 rounded-xl border border-orange-400/60 dark:border-orange-500/70 bg-background"
                   >
                     <option value="">All Product Categories</option>
-
                     {productCategories.map((category: any) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
@@ -613,7 +384,6 @@ export default function MarketplacePage() {
                   </select>
                 )}
 
-                {/* Sort */}
                 <select
                   value={filters.sort}
                   onChange={(e) => handleFilterChange("sort", e.target.value)}
@@ -626,7 +396,6 @@ export default function MarketplacePage() {
                   <option value="newest">Newest First</option>
                 </select>
 
-                {/* Price */}
                 <div className="flex items-center gap-2">
                   <Input
                     type="number"
@@ -637,7 +406,6 @@ export default function MarketplacePage() {
                     }
                     className="h-11 rounded-xl"
                   />
-
                   <Input
                     type="number"
                     placeholder="Max"
@@ -663,7 +431,6 @@ export default function MarketplacePage() {
                   <Gift className="h-4 w-4 mr-2" />
                   On Sale
                 </Button>
-
                 <Button
                   variant={filters.featured ? "default" : "outline"}
                   size="sm"
@@ -698,313 +465,143 @@ export default function MarketplacePage() {
         </div>
       </div>
 
-      {/* Results Summary */}
-      <div className="mb-4 flex justify-between items-center">
-        <p className="text-muted-foreground">
-          {activeTab === "products"
-            ? `${totalProducts} ${totalProducts === 1 ? "product" : "products"} found`
-            : `${totalServices} ${totalServices === 1 ? "service" : "services"} found`}
-        </p>
-        <p className="text-muted-foreground">
-          Page {page} of {totalPages}
-        </p>
-      </div>
-
-      {/* Products/Services Grid/List */}
-      {activeTab === "products" ? (
-        products.length === 0 ? (
-          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-12 text-center">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <ShoppingCart className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-medium mb-1">No products found</h3>
-            <p className="text-muted-foreground mb-6">
-              Try adjusting your search or filter criteria
-            </p>
-
-            <Button variant="outline" onClick={handleClearFilters}>
-              Clear All Filters
-            </Button>
-          </div>
-        ) : (
-          <div
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                : "space-y-4"
-            }
-          >
-            {products.map((product: any) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                viewMode={viewMode}
-              />
-            ))}
-          </div>
-        )
-      ) : services.length === 0 ? (
-        <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-12 text-center">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <BriefcaseBusiness className="h-8 w-8 text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-medium mb-1">No services found</h3>
-          <p className="text-muted-foreground mb-6">
-            Try adjusting your search or filter criteria
-          </p>
-
-          <Button variant="outline" onClick={handleClearFilters}>
-            Clear All Filters
-          </Button>
-        </div>
-      ) : (
-        <div
-          className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              : "space-y-4"
-          }
-        >
-          {services.map((service: any) => (
-            <ServiceCard
-              key={service.id}
-              service={service}
-              viewMode={viewMode}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Pagination */}
-      {(products.length > 0 || services.length > 0) && (
-        <div className="mt-8 flex justify-center items-center gap-2">
-          <Button
-            variant="outline"
-            disabled={page === 1}
-            onClick={() => handlePageChange(page - 1)}
-          >
-            Previous
-          </Button>
-
-          <span className="px-4 py-2">
-            Page {page} of {totalPages}
-          </span>
-
-          <Button
-            variant="outline"
-            disabled={page === totalPages}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            Next
-          </Button>
-        </div>
-      )}
-
-      {/* Business Type Categories */}
-      <div className="mt-12">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Shop by Business Type</h2>
-          <Button
-            variant="link"
-            onClick={() => (window.location.href = "/all-businesses")}
-          >
-            View All Businesses <ArrowRight className="h-4 w-4 ml-1" />
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {businessTypes.map((type: any) => (
-            <Button
-              key={type.id}
-              variant="outline"
-              className="flex flex-col items-center justify-center p-4 h-auto hover:bg-muted/50"
-              onClick={() => handleFilterChange("businessType", type.id)}
-            >
-              <BusinessTypeIcon
-                businessType={type.id}
-                className="h-16 w-16  text-primary shrink-0"
-              />
-              <span className="text-sm font-medium text-center mt-2">
-                {type.name}
-              </span>
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {/* Featured Products/Services */}
-      <div className="mt-12">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">
-            Featured {activeTab === "products" ? "Products" : "Services"}
-          </h2>
-          <Button variant="link">
-            View All <ArrowRight className="h-4 w-4 ml-1" />
-          </Button>
-        </div>
-
-        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {activeTab === "products" ? (
-            <>
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
-                <div className="h-48 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      {BusinessTypeIcon({
-                        businessType: "Electronics",
-                        className: "h-4 w-4 text-primary shrink-0",
-                      })}
-                    </div>
-                    <h3 className="font-medium">Handcrafted Wooden Table</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    Beautifully crafted from local Rwandan wood, perfect for
-                    your dining room
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-warning fill-warning" />
-                      <span>4.8 (42)</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">$149.99</p>
-                      <p className="text-xs text-warning">20% off</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
-                <div className="h-48 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      ☕
-                    </div>
-                    <h3 className="font-medium">Premium Rwandan Coffee</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    Freshly roasted beans from the hills of Rwanda, medium roast
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-warning fill-warning" />
-                      <span>4.7 (128)</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">$12.99</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
-                <div className="h-48 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      📚
-                    </div>
-                    <h3 className="font-medium">Handmade Notebooks</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    Eco-friendly notebooks made from recycled paper and local
-                    materials
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-warning fill-warning" />
-                      <span>4.9 (76)</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">$8.99</p>
-                      <p className="text-xs text-warning">3 for $20</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
+      {/* ═══════════════════════════════════════════════════════════
+          MARKETPLACE HOME — Rich homepage when no filters active
+          ═══════════════════════════════════════════════════════════ */}
+      {!hasActiveFilters && activeTab === "products" ? (
+        <div className="space-y-10">
+          {/* Loading state */}
+          {isLoading ? (
+            <ProductCardSkeleton viewMode={viewMode} count={8} />
           ) : (
             <>
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
-                <div className="h-48 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      🔨
-                    </div>
-                    <h3 className="font-medium">Home Repair Service</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    Professional home repairs including plumbing, electrical,
-                    and carpentry
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-warning fill-warning" />
-                      <span>4.8 (42)</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">$50/hr</p>
-                      <p className="text-xs">Available today</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Featured Products Carousel */}
+              {featuredProducts.length > 0 && (
+                <FeaturedProductsCarousel
+                  products={featuredProducts}
+                  onViewAll={() => handleFilterChange("featured", true)}
+                  onProductClick={() => {}}
+                />
+              )}
 
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
-                <div className="h-48 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      📱
-                    </div>
-                    <h3 className="font-medium">Mobile App Development</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    Custom mobile app development for iOS and Android platforms
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-warning fill-warning" />
-                      <span>4.7 (128)</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">$75/hr</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Featured Stores */}
+              <FeaturedStoresSection />
 
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden bg-card">
-                <div className="h-48 bg-muted" />
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      🧑‍🏫
-                    </div>
-                    <h3 className="font-medium">Math Tutoring</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    One-on-one math tutoring for students of all ages and levels
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-warning fill-warning" />
-                      <span>4.9 (76)</span>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">$25/hr</p>
-                      <p className="text-xs">First lesson free</p>
-                    </div>
-                  </div>
+              {/* Business Type Showcase Sections */}
+              {showcaseTypes.length > 0 && (
+                <div className="space-y-2">
+                  {showcaseTypes.map((type) => (
+                    <BusinessTypeShowcase
+                      key={type}
+                      businessType={type}
+                      products={productsByType[type]}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Browse All Products */}
+              <div>
+                <h2 className="text-xl font-bold mb-4">Browse All Products</h2>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {totalProducts} {totalProducts === 1 ? "product" : "products"} available
+                </p>
+                <div
+                  className={
+                    viewMode === "grid"
+                      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                      : "space-y-4"
+                  }
+                >
+                  {products.map((product: any) => (
+                    <TypedProductCard
+                      key={product.id}
+                      product={product}
+                      viewMode={viewMode}
+                    />
+                  ))}
                 </div>
               </div>
             </>
           )}
-        </div> */}
-      </div>
+        </div>
+      ) : (
+        /* ═══════════════════════════════════════════════════════════
+           FILTERED VIEW — Flat grid with pagination
+           ═══════════════════════════════════════════════════════════ */
+        <div>
+          {/* Results summary */}
+          <div className="mb-4">
+            <p className="text-muted-foreground">
+              {activeTab === "products"
+                ? `${totalProducts} ${totalProducts === 1 ? "product" : "products"} found`
+                : `${totalServices} ${totalServices === 1 ? "service" : "services"} found`}
+            </p>
+          </div>
+
+          {/* Loading */}
+          {isLoading ? (
+            <ProductCardSkeleton viewMode={viewMode} count={8} />
+          ) : activeTab === "products" ? (
+            products.length === 0 ? (
+              <EmptyState
+                icon={emptyStateIcons.cart}
+                title="No products found"
+                description="Try adjusting your search or filter criteria"
+                action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
+              />
+            ) : (
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                    : "space-y-4"
+                }
+              >
+                {products.map((product: any) => (
+                  <TypedProductCard
+                    key={product.id}
+                    product={product}
+                    viewMode={viewMode}
+                  />
+                ))}
+              </div>
+            )
+          ) : services.length === 0 ? (
+            <EmptyState
+              icon={emptyStateIcons.search}
+              title="No services found"
+              description="Try adjusting your search or filter criteria"
+              action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
+            />
+          ) : (
+            <div
+              className={
+                viewMode === "grid"
+                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  : "space-y-4"
+              }
+            >
+              {services.map((service: any) => (
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  viewMode={viewMode}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Enhanced Pagination */}
+          <EnhancedPagination
+            page={page}
+            totalPages={totalPages}
+            totalItems={activeTab === "products" ? totalProducts : totalServices}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
 
       {/* Search Modal */}
       {showSearchModal && (
@@ -1016,6 +613,6 @@ export default function MarketplacePage() {
           }}
         />
       )}
-    </div>
+    </MotionPage>
   );
 }

@@ -13,10 +13,11 @@ import {
 	Users,
 } from "lucide-react";
 import { useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_AUDIT_LOGS } from "@/graphql/admin.gql";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 type AuditLogsProps = {};
 
@@ -87,7 +88,7 @@ export default function AuditLogs({}: AuditLogsProps) {
 		}
 	};
 
-	if (auditLogsLoading) return <Loader loading={true} />;
+	if (auditLogsLoading) return <TableSkeleton />;
 	if (auditLogsError)
 		return <div>Error loading audit logs: {auditLogsError.message}</div>;
 
@@ -160,11 +161,13 @@ export default function AuditLogs({}: AuditLogsProps) {
 					<tbody>
 						{auditLogs.length === 0 ? (
 							<tr>
-								<td
-									colSpan={5}
-									className="p-8 text-center text-muted-foreground"
-								>
-									No audit logs found matching your criteria
+								<td colSpan={5}>
+									<EmptyState
+										icon={emptyStateIcons.reports}
+										title="No audit logs found"
+										description="Try adjusting your search or filter criteria"
+										compact
+									/>
 								</td>
 							</tr>
 						) : (

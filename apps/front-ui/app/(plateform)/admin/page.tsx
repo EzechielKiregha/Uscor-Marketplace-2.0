@@ -14,7 +14,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useCallback, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import UserDropdown from "@/components/seraui/UserDrodown";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +28,7 @@ import { useMe } from "@/lib/useMe";
 import AnnouncementManagement from "./_components/AnnouncementManagement";
 import AuditLogs from "./_components/AuditLogs";
 import DashboardOverview from "./_components/DashboardOverview";
+import PlatformDashboard from "./_components/PlatformDashboard";
 import DisputeResolution from "./_components/DisputeResolution";
 import PlatformSettings from "./_components/PlatformSettings";
 import SideBar, { sidebarItems } from "./_components/SideBar";
@@ -35,7 +36,11 @@ import UserManagement from "./_components/UserManagement";
 import { useActiveSection } from "./_components/useActiveSection";
 import KycVerificationModal from "./_components/KycVerificationModal";
 import KycManagement from "./_components/KycManagement";
+import BusinessManagement from "./_components/BusinessManagement";
+import WorkerManagement from "./_components/WorkerManagement";
+import TokenDashboard from "./_components/TokenDashboard";
 import { useToast } from "@/components/toast-provider";
+import MotionPage from "@/components/MotionPage";
 
 export default function AdminDashboard() {
   const { user, role, loading: authLoading } = useMe();
@@ -45,7 +50,10 @@ export default function AdminDashboard() {
     ? (activeSectionParam as
         | "dashboard"
         | "users"
+        | "businesses"
+        | "workers"
         | "kyc"
+        | "tokens"
         | "disputes"
         | "settings"
         | "announcements"
@@ -123,7 +131,7 @@ export default function AdminDashboard() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  if (authLoading) return <Loader loading={true} />;
+  if (authLoading) return <DashboardSkeleton statCount={4} showChart={false} showTable={false} />;
   if (!user || role !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -145,7 +153,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <MotionPage className="min-h-screen bg-background">
       <div className="flex">
         {/* Sidebar Navigation */}
         <SideBar isOpen={isSidebarOpen} selectedSection={activeSection} />
@@ -226,7 +234,10 @@ export default function AdminDashboard() {
               <h1 className="text-2xl font-bold">
                 {activeSection === "dashboard" && "Platform Dashboard"}
                 {activeSection === "users" && "User Management"}
+                {activeSection === "businesses" && "Business Management"}
+                {activeSection === "workers" && "Worker Management"}
                 {activeSection === "kyc" && "KYC Verification"}
+                {activeSection === "tokens" && "Tokens & Wallets"}
                 {activeSection === "disputes" && "Dispute Resolution"}
                 {activeSection === "settings" && "Platform Settings"}
                 {activeSection === "announcements" && "Announcement Management"}
@@ -237,8 +248,14 @@ export default function AdminDashboard() {
                   "Overview of platform metrics and activity"}
                 {activeSection === "users" &&
                   "Manage all users and businesses on the platform"}
+                {activeSection === "businesses" &&
+                  "Verify, suspend, and manage registered businesses"}
+                {activeSection === "workers" &&
+                  "Overview of workers across all businesses"}
                 {activeSection === "kyc" &&
                   "Review and verify KYC documents submitted by businesses"}
+                {activeSection === "tokens" &&
+                  "Monitor token circulation, wallet recharges, and revenue"}
                 {activeSection === "disputes" &&
                   "Resolve customer disputes and issues"}
                 {activeSection === "settings" &&
@@ -251,12 +268,7 @@ export default function AdminDashboard() {
             </div>
 
             {dashboardLoading ? (
-              <div className="flex justify-center items-center h-64">
-                <div className="text-center">
-                  <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-muted-foreground">Loading dashboard...</p>
-                </div>
-              </div>
+              <DashboardSkeleton statCount={4} showChart showTable />
             ) : dashboardError ? (
               <div className="bg-card border border-destructive rounded-lg p-6 text-center">
                 <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
@@ -273,12 +285,20 @@ export default function AdminDashboard() {
             ) : (
               <>
                 {activeSection === "dashboard" && (
-                  <DashboardOverview
+                  <PlatformDashboard
                     metrics={dashboardData.platformMetrics}
                     settings={dashboardData.platformSettings}
                   />
                 )}
                 {activeSection === "users" && <UserManagement />}
+                {activeSection === "businesses" && <BusinessManagement />}
+                {activeSection === "workers" && <WorkerManagement />}
+                {activeSection === "tokens" && (
+                  <TokenDashboard
+                    metrics={dashboardData.platformMetrics}
+                    settings={dashboardData.platformSettings}
+                  />
+                )}
                 {activeSection === "kyc" && (
                   <KycManagement
                     onKycSelected={(kyc) => {
@@ -333,16 +353,7 @@ export default function AdminDashboard() {
             <nav className="space-y-1">
               {sidebarItems.map((item) => {
                 const isActive =
-                  [
-                    "dashboard",
-                    "kyc",
-                    "users",
-                    "disputes",
-                    "settings",
-                    "announcements",
-                    "audit",
-                  ].includes(activeSection) &&
-                  item.label.toLowerCase() === activeSection;
+                  activeSection === item.section.toLowerCase();
                 return (
                   <Button
                     variant={isActive ? "secondary" : "ghost"}
@@ -350,7 +361,7 @@ export default function AdminDashboard() {
                     key={item.label}
                     onClick={() => {
                       handleActiveSectionChange(
-                        item.label.toLowerCase() as any,
+                        item.section.toLowerCase() as any,
                       );
                       setShowMobileMenu(false);
                     }}
@@ -380,6 +391,6 @@ export default function AdminDashboard() {
           }}
         />
       )}
-    </div>
+    </MotionPage>
   );
 }

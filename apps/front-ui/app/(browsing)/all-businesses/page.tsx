@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loader from "@/components/seraui/Loader";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,6 +23,8 @@ import {
 	ON_BUSINESS_ADDED,
 } from "@/graphql/business-listing.gql";
 import BusinessCard from "./_components/BusinessCard";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
 
 export default function BusinessListingPage() {
 	const searchParams = useSearchParams();
@@ -127,12 +129,12 @@ export default function BusinessListingPage() {
 	}, [searchParams]);
 
 	if (businessesLoading || businessTypesLoading)
-		return <Loader loading={true} />;
+		return <CardGridSkeleton variant="store" columns={4} />;
 	if (businessesError)
 		return <div>Error loading businesses: {businessesError.message}</div>;
 
 	return (
-		<div className="container mx-auto px-4 py-8">
+		<MotionPage className="container mx-auto px-4 py-8">
 			<div className="mb-8">
 				<h1 className="text-3xl font-bold mb-2">Business Directory</h1>
 				<p className="text-muted-foreground">
@@ -276,19 +278,12 @@ export default function BusinessListingPage() {
 
 			{/* Business Grid/List */}
 			{businesses.length === 0 ? (
-				<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-12 text-center">
-					<div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-						<MapPin className="h-8 w-8 text-muted-foreground" />
-					</div>
-					<h3 className="text-lg font-medium mb-1">No businesses found</h3>
-					<p className="text-muted-foreground mb-6">
-						Try adjusting your search or filter criteria
-					</p>
-
-					<Button variant="outline" onClick={handleClearFilters}>
-						Clear All Filters
-					</Button>
-				</div>
+				<EmptyState
+					icon={emptyStateIcons.stores}
+					title="No businesses found"
+					description="Try adjusting your search or filter criteria"
+					action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
+				/>
 			) : (
 				<div
 					className={
@@ -437,6 +432,6 @@ export default function BusinessListingPage() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</MotionPage>
 	);
 }

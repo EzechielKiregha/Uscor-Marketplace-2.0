@@ -510,9 +510,10 @@ type ChatParticipantEntity {
 type KnowYourCustomerEntity {
   id: String!
   status: String!
-  documentUrl: String!
+  documentUrl: String
   submittedAt: DateTime!
   verifiedAt: DateTime
+  rejectionReason: String
   businessId: String
   clientId: String
   workerId: String
@@ -876,6 +877,13 @@ type ProductEntity {
   updatedAt: DateTime!
   featured: Boolean!
   approvedForSale: Boolean!
+  brand: String
+  serialNumber: String
+  imei: String
+  warrantyMonths: Int
+  sku: String
+  barcode: String
+  variants: JSON
   medias: [MediaEntity!]
   business: BusinessEntity
   store: StoreEntity
@@ -899,6 +907,19 @@ type AdEntity {
   endedAt: DateTime
   business: BusinessEntity!
   product: ProductEntity!
+}
+
+type KycDocumentEntity {
+  id: String!
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
+  status: String!
+  rejectionReason: String
+  submittedAt: DateTime!
+  verifiedAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type LoyaltyTierBenefitEntity {
@@ -964,17 +985,6 @@ type HardwareConfigEntity {
   cardReader: String
 }
 
-type KycDocumentEntity {
-  id: String!
-  businessId: String!
-  documentType: String!
-  documentUrl: String!
-  status: String!
-  rejectionReason: String
-  submittedAt: DateTime!
-  verifiedAt: DateTime
-}
-
 type PaymentConfigEntity {
   id: String!
   mtnCode: String
@@ -1020,7 +1030,8 @@ type BusinessEntity {
   ads: [AdEntity!]!
   paymentConfig: PaymentConfigEntity
   hardwareConfig: HardwareConfigEntity
-  kyc: [KycDocumentEntity!]
+  kyc: KnowYourCustomerEntity
+  kycDocuments: [KycDocumentEntity!]
   stores: [StoreEntity!]
   loyaltyProgram: LoyaltyProgramEntity
   promotions: [PromotionEntity!]
@@ -1249,6 +1260,104 @@ type AuthPayloadBusiness {
   coverImage: String
   accessToken: String!
   refreshToken: String!
+}
+
+type MessageResult {
+  success: Boolean!
+  message: String!
+}
+
+type OfflineWorkerProfile {
+  id: String!
+  email: String!
+  fullName: String
+  avatar: String
+  role: String!
+}
+
+type OfflineBusinessInfo {
+  id: String!
+  name: String!
+  businessType: String
+  storeIds: [String!]!
+  storeNames: [String!]!
+}
+
+type OfflineAccessPayload {
+  offlineToken: String!
+  expiresAt: DateTime!
+  permissions: [String!]!
+  workerProfile: OfflineWorkerProfile!
+  businessInfo: OfflineBusinessInfo!
+}
+
+type SecurityLogEntity {
+  id: String!
+  userId: String!
+  userRole: String!
+  action: String!
+  ipAddress: String
+  userAgent: String
+  deviceId: String
+  metadata: JSON
+  createdAt: DateTime!
+}
+
+type WholesalePriceEntity {
+  id: String!
+  productId: String!
+  businessId: String!
+  minQuantity: Int!
+  price: Float!
+  maxQuantity: Int
+  businessTypeRestriction: String
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type B2BOrderItemEntity {
+  id: String!
+  orderId: String!
+  productId: String!
+  quantity: Int!
+  unitPrice: Float!
+  totalPrice: Float!
+  notes: String
+  createdAt: DateTime!
+  product: ProductEntity
+}
+
+type B2BOrderEntity {
+  id: String!
+  orderNumber: String!
+  buyerId: String!
+  sellerId: String!
+  status: String!
+  paymentTerms: String!
+  notes: String
+  rejectionReason: String
+  subtotal: Float!
+  tax: Float!
+  total: Float!
+  shippingAddress: String
+  items: [B2BOrderItemEntity!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  submittedAt: DateTime
+  approvedAt: DateTime
+  shippedAt: DateTime
+  deliveredAt: DateTime
+  cancelledAt: DateTime
+  buyer: BusinessEntity
+  seller: BusinessEntity
+}
+
+type B2BOrderListResponse {
+  items: [B2BOrderEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
 }
 
 type DashboardStats {
@@ -1628,6 +1737,22 @@ type LoyaltyAnalyticsEntity {
   pointsByDay: [PointsByDayEntity!]!
 }
 
+type FeaturedStoreItem {
+  id: String!
+  name: String!
+  avatar: String
+  businessType: String
+  kycStatus: String
+  isVerified: Boolean!
+  totalSales: Int!
+  totalProductsSold: Int!
+  productCount: Int!
+}
+
+type FeaturedStoresResponse {
+  items: [FeaturedStoreItem!]!
+}
+
 type PaginatedProductsResponse {
   items: [ProductEntity!]!
   total: Int!
@@ -1640,23 +1765,8 @@ type SearchMarketplaceResponse {
   services: [FreelanceServiceEntity!]!
 }
 
-type KycSubmission {
-  id: String!
-  businessId: String!
-  documentType: String!
-  documentUrl: String!
-  status: KycStatus!
-  rejectionReason: String
-  notes: String
-  submittedAt: DateTime!
-  verifiedAt: DateTime
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  business: BusinessEntity!
-}
-
 type KycSubmissionPagination {
-  items: [KycSubmission!]!
+  items: [KnowYourCustomerEntity!]!
   total: Float!
   page: Float!
   limit: Float!
@@ -1664,6 +1774,16 @@ type KycSubmissionPagination {
 
 type DailyCount {
   date: String!
+  count: Int!
+}
+
+type DailyAmount {
+  date: String!
+  amount: Float!
+}
+
+type BusinessTypeCount {
+  type: String!
   count: Int!
 }
 
@@ -1688,6 +1808,18 @@ type PlatformMetrics {
   last24Hours: [DailyCount!]!
   last7Days: [DailyCount!]!
   last30Days: [DailyCount!]!
+  totalWorkers: Int!
+  totalStores: Int!
+  totalOrders: Int!
+  totalTokenVolume: Float!
+  totalRechargeVolume: Float!
+  totalSales: Int!
+  totalSalesRevenue: Float!
+  activeWorkersToday: Int!
+  userSignups30d: [DailyCount!]!
+  businessSignups30d: [DailyCount!]!
+  gmv30d: [DailyAmount!]!
+  businessTypeDistribution: [BusinessTypeCount!]!
 }
 
 type PlatformSettings {
@@ -1703,6 +1835,36 @@ type PlatformSettings {
   marketplaceEnabled: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type TokenHolderBalance {
+  id: String!
+  name: String!
+  type: String!
+  tokenBalance: Float!
+  rechargeBalance: Float!
+  transactionCount: Int!
+}
+
+type TokenReconciliation {
+  totalTokensIssued: Float!
+  totalTokensRedeemed: Float!
+  totalTokensReleased: Float!
+  totalTokensPending: Float!
+  totalTokensReserved: Float!
+  totalWalletTokenBalance: Float!
+  totalBusinessTokenBalance: Float!
+  totalClientTokenBalance: Float!
+  totalLedgerCredits: Float!
+  totalLedgerDebits: Float!
+  ledgerNetBalance: Float!
+  discrepancy: Float!
+  isBalanced: Boolean!
+  reconciliationDate: DateTime!
+  topHolders: [TokenHolderBalance!]!
+  totalTokenTransactions: Int!
+  totalRechargeTransactions: Int!
+  totalLedgerEntries: Int!
 }
 
 type DeleteResponse {
@@ -1753,6 +1915,22 @@ type SalesDashboard {
   chartData: [ChartDataPoint!]!
 }
 
+type SyncResultItem {
+  localId: String!
+  serverId: String
+  status: String!
+  error: String
+  conflictDetails: String
+}
+
+type SyncResult {
+  synced: Int!
+  failed: Int!
+  conflicts: Int!
+  duplicates: Int!
+  results: [SyncResultItem!]!
+}
+
 type BusinessSettingsEntity {
   id: String!
   name: String!
@@ -1772,7 +1950,8 @@ type BusinessSettingsEntity {
   termsAgreedAt: DateTime
   paymentConfig: PaymentConfigEntity
   hardwareConfig: HardwareConfigEntity
-  kyc: [KycDocumentEntity!]
+  kycDocuments: [KycDocumentEntity!]
+  kyc: KnowYourCustomerEntity
   createdAt: DateTime!
   updatedAt: DateTime!
   taxId: String
@@ -1798,6 +1977,68 @@ type BusinessSettingsEntity {
   referralsReceived: [ReferralEntity!]!
   chats: [ChatEntity!]!
   postOfSales: [PostOfSaleEntity!]
+}
+
+type WalletAuditLogEntity {
+  id: String!
+  businessId: String
+  clientId: String
+  action: WalletAuditAction!
+  amount: Float!
+  balanceBefore: Float!
+  balanceAfter: Float!
+  metadata: JSON
+  idempotencyKey: String
+  createdAt: DateTime!
+}
+
+enum WalletAuditAction {
+  REDEEM
+  RELEASE
+  RECHARGE
+  WITHDRAW
+  CONVERT
+  TRANSFER
+  ADJUSTMENT
+}
+
+type WalletAuditLogListResponse {
+  items: [WalletAuditLogEntity!]!
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
+type LedgerEntryEntity {
+  id: String!
+  businessId: String
+  clientId: String
+  type: LedgerEntryType!
+  amount: Float!
+  balanceAfter: Float!
+  reference: String
+  referenceType: String
+  referenceId: String
+  description: String!
+  createdAt: DateTime!
+}
+
+enum LedgerEntryType {
+  CREDIT
+  DEBIT
+}
+
+type LedgerEntryListResponse {
+  items: [LedgerEntryEntity!]!
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
+type WalletSecuritySummary {
+  totalAuditLogs: Float!
+  totalLedgerEntries: Float!
+  recentActivity: [WalletAuditLogEntity!]!
 }
 
 type Query {
@@ -1922,13 +2163,14 @@ type Query {
 
   """Retrieves a single re-owned product by ID."""
   reOwnedProduct(id: String!): ReOwnedProductEntity!
+  kycDocuments(businessId: String!): [KycDocumentEntity!]!
 
   """Retrieves payment transactions based on user role."""
   paymentTransactions: [PaymentTransactionEntity!]!
 
   """Retrieves a single payment transaction by ID."""
   paymentTransaction(id: String!): PaymentTransactionEntity!
-  latestPaymentTransaction(phone: String!): PaymentTransactionEntity
+  latestPaymentTransaction(phone: String!, status: String): PaymentTransactionEntity
 
   """check a payment transaction’s status or QR code."""
   checkPaymentTransactionStatus(id: String!): PaymentTransactionEntity!
@@ -1949,6 +2191,14 @@ type Query {
   freelanceOrder(id: String!): FreelanceOrderEntity!
   whatIsUserRole(SignInInput: SignInInput!): UserPayload!
   verifyCurrentUser: AuthPayload!
+  securityLogs: [SecurityLogEntity!]!
+  wholesalePrices(productId: String!): [WholesalePriceEntity!]!
+  myWholesalePrices: [WholesalePriceEntity!]!
+  b2bOrders(role: String! = "all", status: String, page: Int! = 1, limit: Int! = 20): B2BOrderListResponse!
+  b2bOrder(orderId: String!): B2BOrderEntity!
+
+  """List B2B-enabled vendors"""
+  b2bVendors(page: Int! = 1, limit: Int! = 20, businessType: String): B2BOrderListResponse!
   postOfSale(id: Int!): PostOfSaleEntity!
 
   """Retrieves all categories with their products."""
@@ -2032,6 +2282,8 @@ type Query {
   marketplaceServices(search: String, category: String, businessType: String, minPrice: Float, maxPrice: Float, sort: String, page: Int! = 1, limit: Int! = 12): PaginatedFreelanceServicesResponse!
   productCategories: [CategoryEntity!]!
   searchMarketplace(query: String!): SearchMarketplaceResponse!
+  featuredStores(limit: Int! = 8): FeaturedStoresResponse!
+  productsByBusinessType(businessType: String!, limit: Int! = 8): PaginatedProductsResponse!
 
   """Find a single admin by ID."""
   admin(id: String!): Admin!
@@ -2048,6 +2300,10 @@ type Query {
   platformMetrics: PlatformMetrics!
   platformSettings: PlatformSettings!
   kycSubmissions(search: String, status: KycStatus, businessType: String, page: Int! = 1, limit: Int! = 10): KycSubmissionPagination!
+  tokenReconciliation: TokenReconciliation!
+  walletAuditLogs(action: String, page: Int, limit: Int): WalletAuditLogListResponse!
+  ledgerEntries(type: String, page: Int, limit: Int): LedgerEntryListResponse!
+  walletSecuritySummary: WalletSecuritySummary!
 }
 
 input SignInInput {
@@ -2204,6 +2460,10 @@ type Mutation {
 
   """Creates shipping details for a re-owned product."""
   createShipping(createShippingInput: CreateShippingInput!): ShippingEntity!
+  verifyKyc(input: VerifyKycInput!): KnowYourCustomerEntity!
+  updateKyc(input: UpdateKycInput!): KnowYourCustomerEntity!
+  submitKyc(businessId: String!): BusinessEntity!
+  rejectKyc(input: RejectKycInput!): KnowYourCustomerEntity!
 
   """Creates a new payment transaction."""
   createPaymentTransaction(createPaymentTransactionInput: CreatePaymentTransactionInput!): PaymentTransactionEntity!
@@ -2251,6 +2511,20 @@ type Mutation {
   signWorkerIn(SignInInput: SignInInput!): AuthPayloadWorker!
   signAdminIn(SignInInput: SignInInput!): AuthPayloadAdmin!
   refreshToken(refreshToken: String!): AuthPayloadClient!
+  forgotPassword(input: ForgotPasswordInput!): MessageResult!
+  resetPassword(input: ResetPasswordInput!): MessageResult!
+  changePassword(input: ChangePasswordInput!): MessageResult!
+  verifyEmail(input: VerifyEmailInput!): MessageResult!
+  resendOtp(input: ResendOtpInput!): MessageResult!
+  sendVerificationOtp(email: String!): MessageResult!
+  requestOfflineAccess(input: RequestOfflineAccessInput!): OfflineAccessPayload!
+  revokeOfflineAccess(workerId: String!, deviceId: String!): MessageResult!
+  createWholesalePrice(input: CreateWholesalePriceInput!): WholesalePriceEntity!
+  updateWholesalePrice(input: UpdateWholesalePriceInput!): WholesalePriceEntity!
+  deleteWholesalePrice(id: String!): WholesalePriceEntity!
+  createB2BOrder(input: CreateB2BOrderInput!): B2BOrderEntity!
+  submitB2BOrder(orderId: String!): B2BOrderEntity!
+  updateB2BOrderStatus(input: UpdateB2BOrderStatusInput!): B2BOrderEntity!
   createPostOfSale(createPostOfSaleInput: CreatePostOfSaleInput!): PostOfSaleEntity!
   updatePostOfSale(updatePostOfSaleInput: UpdatePostOfSaleInput!): PostOfSaleEntity!
   removePostOfSale(id: Int!): PostOfSaleEntity!
@@ -2272,6 +2546,11 @@ type Mutation {
 
   """Generates a PDF receipt and optionally emails it."""
   generateReceipt(generateReceiptInput: GenerateReceiptInput!): ReceiptEntity!
+
+  """
+  Sync batch of offline sales. Deduplicates by localId, checks inventory, resolves conflicts.
+  """
+  syncOfflineSales(input: SyncOfflineSalesInput!): SyncResult!
 
   """Creates a new store for a business."""
   createStore(input: CreateStoreInput!): StoreEntity!
@@ -2343,10 +2622,6 @@ type Mutation {
   updateShift(id: String!, updateShiftInput: UpdateShiftInput!): ShiftEntity!
   updatePaymentConfig(businessId: String!, input: UpdatePaymentConfigInput!): BusinessSettingsEntity!
   updateHardwareConfig(businessId: String!, input: UpdateHardwareConfigInput!): BusinessSettingsEntity!
-  uploadKycDocument(input: UploadKycDocumentInput!): KycDocumentEntity!
-  submitKyc(businessId: String!): BusinessSettingsEntity!
-  verifyKyc(input: VerifyKycInput!): BusinessEntity!
-  rejectKyc(input: RejectKycInput!): BusinessEntity!
   agreeToTerms(businessId: String!): BusinessSettingsEntity!
   createAdmin(input: CreateAdminInput!): Admin!
   updateAdmin(id: String!, input: UpdateAdminInput!): Admin!
@@ -2369,6 +2644,13 @@ input CreateProductInput {
   categoryId: String!
   featured: Boolean! = false
   approvedForSale: Boolean! = true
+  brand: String
+  serialNumber: String
+  imei: String
+  warrantyMonths: Int
+  sku: String
+  barcode: String
+  variants: JSON
 }
 
 input AddMediaInput {
@@ -2389,6 +2671,13 @@ input UpdateProductInput {
   categoryId: String!
   featured: Boolean! = false
   approvedForSale: Boolean! = true
+  brand: String
+  serialNumber: String
+  imei: String
+  warrantyMonths: Int
+  sku: String
+  barcode: String
+  variants: JSON
 }
 
 input CreateOrderInput {
@@ -2734,6 +3023,23 @@ input CreateShippingInput {
   carrier: String!
 }
 
+input VerifyKycInput {
+  businessId: String!
+  notes: String
+  documentUrl: String
+}
+
+input UpdateKycInput {
+  businessId: String!
+  documentUrl: String!
+}
+
+input RejectKycInput {
+  businessId: String!
+  rejectionReason: String!
+  documentUrl: String
+}
+
 input UpdatePaymentTransactionInput {
   status: String
   qrCode: String
@@ -2781,6 +3087,74 @@ enum EscrowStatus {
   HELD
   RELEASED
   DISPUTED
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  otp: String!
+  newPassword: String!
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+input VerifyEmailInput {
+  email: String!
+  otp: String!
+}
+
+input ResendOtpInput {
+  email: String!
+  purpose: String!
+}
+
+input RequestOfflineAccessInput {
+  deviceId: String!
+  deviceName: String
+}
+
+input CreateWholesalePriceInput {
+  productId: String!
+  minQuantity: Int!
+  price: Float!
+  maxQuantity: Int
+  businessTypeRestriction: String
+}
+
+input UpdateWholesalePriceInput {
+  id: String!
+  price: Float
+  minQuantity: Int
+  maxQuantity: Int
+  businessTypeRestriction: String
+  isActive: Boolean
+}
+
+input CreateB2BOrderInput {
+  sellerId: String!
+  items: [B2BOrderItemInput!]!
+  paymentTerms: String
+  notes: String
+  shippingAddress: String
+}
+
+input B2BOrderItemInput {
+  productId: String!
+  quantity: Int!
+  notes: String
+}
+
+input UpdateB2BOrderStatusInput {
+  orderId: String!
+  status: String!
+  rejectionReason: String
+  notes: String
 }
 
 input CreatePostOfSaleInput {
@@ -2841,6 +3215,30 @@ input CreateReturnInput {
 input GenerateReceiptInput {
   saleId: String!
   email: String
+}
+
+input SyncOfflineSalesInput {
+  sales: [OfflineSaleInput!]!
+}
+
+input OfflineSaleInput {
+  localId: String!
+  storeId: String!
+  workerId: String!
+  clientId: String
+  totalAmount: Float!
+  discount: Float! = 0
+  paymentMethod: String!
+  localTimestamp: String!
+  deviceId: String!
+  saleProducts: [OfflineSaleProductInput!]!
+}
+
+input OfflineSaleProductInput {
+  productId: String!
+  quantity: Int!
+  price: Float!
+  modifiers: JSON
 }
 
 input CreateStoreInput {
@@ -2988,22 +3386,6 @@ input UpdateHardwareConfigInput {
   cardReader: String
 }
 
-input UploadKycDocumentInput {
-  businessId: String!
-  documentType: String!
-  documentUrl: String!
-}
-
-input VerifyKycInput {
-  businessId: String!
-  notes: String
-}
-
-input RejectKycInput {
-  businessId: String!
-  rejectionReason: String!
-}
-
 input CreateAdminInput {
   email: String!
   fullName: String
@@ -3068,6 +3450,8 @@ type Subscription {
   messageReceived(chatId: String!): ChatMessageEntity!
   chatCreated(userId: String!): ChatEntity!
   chatStatusUpdated(userId: String!): ChatEntity!
+  kycUpdated: KnowYourCustomerEntity!
+  kycSubmitted: KnowYourCustomerEntity!
   freelanceServiceCreated(businessId: String!): FreelanceServiceEntity!
   freelanceServiceUpdated(businessId: String!): FreelanceServiceEntity!
   freelanceOrderCreated(clientId: String!): FreelanceOrderEntity!
@@ -3083,13 +3467,9 @@ type Subscription {
   transferOrderCreated(fromStoreId: String!, toStoreId: String!): TransferOrderEntity!
   transferOrderUpdated(fromStoreId: String!): TransferOrderEntity!
   settingsUpdated: BusinessSettingsEntity!
-  kycUpdated: BusinessSettingsEntity!
-  kycSubmitted: BusinessSettingsEntity!
   productAdded(businessId: String): ProductEntity!
   serviceAdded(businessId: String): FreelanceServiceEntity!
   newAdmin: Admin!
-  kycVerified: BusinessEntity!
-  kycRejected: BusinessEntity!
   newAnnouncement: AnnouncementEntity!
   newDispute: DisputeEntity!
   platformSettingsUpdated: PlatformSettings!

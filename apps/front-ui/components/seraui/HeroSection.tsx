@@ -38,7 +38,7 @@ export default function HeroSection() {
         {/* CTA Buttons */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button asChild size="lg" className="px-8 glow-button">
-            <Link href="/marketplace">Visite Our Marketplace</Link>
+            <Link href="/marketplace">Visit Our Marketplace</Link>
           </Button>
           <Button
             asChild
@@ -49,7 +49,7 @@ export default function HeroSection() {
             <Link href="/marketplace?tab=services">Hire Talent</Link>
           </Button>
           <Button asChild size="lg" className="px-8 glow-button">
-            <Link href="/signup">join as Business</Link>
+            <Link href="/signup">Join as Business</Link>
           </Button>
         </div>
       </div>
