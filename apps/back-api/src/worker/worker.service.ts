@@ -355,6 +355,33 @@ export class WorkerService {
 			take: 5,
 		});
 
+        console.log({
+			todaySales: todaySales._sum.totalAmount || 0,
+			todayOrders,
+			lowStockItems,
+			activeChats,
+			currentShift,
+			salesThisWeek: salesThisWeek._sum.totalAmount || 0,
+			salesThisMonth: salesThisMonth._sum.totalAmount || 0,
+			topSellingProducts,
+			recentOrders,
+			workerPerformance: {
+				totalSales: salesThisMonth._sum.totalAmount || 0,
+				totalTransactions: await this.prisma.sale.count({
+					where: { workerId },
+				}),
+				customerSatisfaction: 4.5,
+				attendanceRate: 95,
+				shiftsCompleted: await this.prisma.shift.count({
+					where: {
+						workerId,
+						endTime: { not: null },
+					},
+				}),
+				personalSales: todaySales._sum.totalAmount || 0,
+			},
+		})
+
 		return {
 			todaySales: todaySales._sum.totalAmount || 0,
 			todayOrders,
@@ -619,13 +646,74 @@ export class WorkerService {
 	}
 
 	async createInventoryAdjustment(input: CreateInventoryAdjustmentInput) {
-		return this.prisma.inventoryAdjustment.create({
-			data: input,
-			include: {
-				product: true,
-				store: true,
-			},
-		});
+
+        const {productId, storeId, adjustmentType, quantity, reason} = input
+        let adjustment
+
+        if (!productId || !storeId) throw new Error("Store ID or Product ID is missing.")
+            
+            const product =
+              await this.prisma.product.findUnique(
+                { where: { id: productId } },
+              )
+
+            if (!product)
+              throw new Error('Product not found')
+
+            if (product.storeId !== storeId) {
+              throw new Error(
+                `Product ${productId} does not belong to store ${storeId}`,
+              )
+            }
+
+            if (
+              adjustmentType === 'REMOVE' &&
+              product.quantity < quantity
+            ) {
+              throw new Error(
+                `Insufficient stock for product ${productId}`,
+              )
+            }
+            
+            await this.prisma.$transaction(async (tx) => {
+                adjustment =
+                  tx.inventoryAdjustment.create(
+                    {
+                      data: {
+                        quantity,
+                        adjustmentType,
+                        reason,
+                        product: {
+                          connect: { id: productId },
+                        },
+                        store: {
+                          connect: { id: storeId },
+                        },
+                      },
+                      include: {
+                        product: true,
+                        store: true,
+                      },
+                    },
+                  )
+                  await tx.product.update({
+                    where: {
+                      id: product.id,
+                    },
+                    data: {
+                      quantity:
+                        adjustmentType === 'ADD'
+                          ? {
+                              increment: quantity,
+                            }
+                          : {
+                              decrement: quantity,
+                            },
+                    },
+                  })
+            })
+
+		return adjustment
 	}
 
 	// ============================================

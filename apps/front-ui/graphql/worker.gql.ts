@@ -296,27 +296,6 @@ export const SALE_PRODUCT_ENTITY = gql`
   }
 `;
 
-export const INVENTORY_ADJUSTMENT_ENTITY = gql`
-  fragment InventoryAdjustmentEntity on InventoryAdjustment {
-    id
-    productId
-    product {
-      id
-      title
-      price
-    }
-    storeId
-    store {
-      id
-      name
-    }
-    adjustmentType
-    quantity
-    reason
-    createdAt
-  }
-`;
-
 export const SHIFT_ENTITY = gql`
   fragment ShiftEntity on ShiftEntityWorker {
     id
@@ -658,10 +637,23 @@ export const END_SHIFT = gql`
 export const CREATE_INVENTORY_ADJUSTMENT = gql`
   mutation CreateInventoryAdjustment($input: CreateInventoryAdjustmentInput!) {
     createInventoryAdjustment(input: $input) {
-      ...InventoryAdjustmentEntity
+      id
+      productId
+      product {
+        id
+        title
+      }
+      storeId
+      store {
+        id
+        name
+      }
+      adjustmentType
+      quantity
+      reason
+      createdAt
     }
   }
-  ${INVENTORY_ADJUSTMENT_ENTITY}
 `;
 
 export const SEND_CHAT_MESSAGE = gql`

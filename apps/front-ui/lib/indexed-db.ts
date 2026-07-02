@@ -131,7 +131,10 @@ export async function getFromIndexedDB(storeName: string, key: string) {
 
 export async function getAllFromIndexedDB(storeName: string) {
 	const db = await initDB();
-	return db.getAll(storeName);
+    const allFromIDB = db.getAll(storeName);
+
+    // console.log(allFromIDB)
+	return allFromIDB
 }
 
 export async function updateIndexedDB(

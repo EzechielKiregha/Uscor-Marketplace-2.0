@@ -1,22 +1,22 @@
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
 import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
-  DELETE_PRODUCT,
-  GET_PRODUCTS_BY_BUSINESS_ID,
-  SEARCHED_PRODUCTS,
+    DELETE_PRODUCT,
+    GET_PRODUCTS_BY_BUSINESS_ID,
+    SEARCHED_PRODUCTS,
 } from "@/graphql/product.gql";
 import { ProductEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { Edit, Package, Plus, Search, Trash2 } from "lucide-react";
+import { Edit, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateProductModal from "../_components/modals/CreateProductModal";
 import { useOpenCreateProductModal } from "../_hooks/use-open-create-product-modal";
-import MotionPage from "@/components/MotionPage";
 
 export default function BusinessProductsPage() {
   const { isOpen, setIsOpen } = useOpenCreateProductModal();
@@ -102,7 +102,7 @@ export default function BusinessProductsPage() {
             className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Categories</option>
-            {/* In real app, fetch categories */}
+  
             <option value="1">Electronics</option>
             <option value="2">Clothing</option>
             <option value="3">Home & Kitchen</option>

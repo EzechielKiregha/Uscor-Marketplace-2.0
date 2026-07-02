@@ -677,6 +677,7 @@ type TopSellingProductEntity {
   title: String
   quantitySold: Float
   revenue: Float
+  product: ProductEntity
 }
 
 type RecentOrderEntity {
@@ -881,6 +882,7 @@ type ProductEntity {
   serialNumber: String
   imei: String
   warrantyMonths: Int
+  rating: Int
   sku: String
   barcode: String
   variants: JSON
@@ -2226,6 +2228,7 @@ type Query {
   storeReports(storeId: String!, period: String! = "week"): StoreReportEntity!
   storeShifts(storeId: String!, status: ShiftStatus): [ShiftEntityWorker!]!
   storeInventory(storeId: String!): StoreInventoryEntity!
+  storeProducts(storeId: String!): [ProductEntity!]!
   reportHistory(storeId: String!): [ReportHistoryEntity!]!
 
   """Retrieves points transactions for a client."""

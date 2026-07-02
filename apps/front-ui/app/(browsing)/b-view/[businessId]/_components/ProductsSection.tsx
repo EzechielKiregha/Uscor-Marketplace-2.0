@@ -1,26 +1,25 @@
 // app/business/[id]/_components/ProductsSection.tsx
 "use client";
 
-import {
-  Filter,
-  Grid,
-  List,
-  Search,
-  ShoppingCart,
-  Star,
-  Tag,
-} from "lucide-react";
-import { useState } from "react";
+import { useCart } from "@/app/context/use-cart";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ProductEntity } from "@/lib/types";
-import { p } from "framer-motion/client";
-import { useCart } from "@/app/context/use-cart";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import {
+    Filter,
+    Grid,
+    List,
+    Search,
+    ShoppingCart,
+    Star,
+    Tag,
+} from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 
 interface ProductsSectionProps {
-  products: ProductEntity[];
+  products: any[];
   loading: boolean;
   business: any;
   selectedStoreId: string | null;
@@ -185,17 +184,14 @@ export default function ProductsSection({
                 className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
               >
                 <div className="relative pb-[100%] h-0">
-                  {product.medias && product.medias.length > 0 ? (
-                    <img
-                      src={product.medias[0].url}
-                      alt={product.title}
+                  
+                    <Image
+                      src={product?.media?.url}
+                      alt={product?.title}
                       className="absolute top-0 left-0 w-full h-full object-cover"
+                      width={250}
+                      height={260}
                     />
-                  ) : (
-                    <div className="absolute top-0 left-0 w-full h-full bg-muted flex items-center justify-center">
-                      <ShoppingCart className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                  )}
                 </div>
 
                 <div className="p-4">
@@ -225,7 +221,7 @@ export default function ProductsSection({
                   <div className="mt-3 flex justify-between items-center">
                     <div className="flex items-center">
                       <Star className="h-4 w-4 text-warning mr-1" />
-                      <span className="text-sm">4.7 (124)</span>
+                      <span className="text-sm">{product.reviews ? `${product.reviews?.reduce((r: any, sum: number) => sum + r.rating, 0)} (${product.reviews.length})` : '0 (0)'}</span>
                     </div>
                     <Button
                       variant="default"

@@ -76,6 +76,9 @@ export class ProductEntity {
 
 	@Field(() => Int, { nullable: true })
 	warrantyMonths?: number | null;
+    
+	@Field(() => Int, { nullable: true })
+	rating?: number | null;
 
 	@Field(() => String, { nullable: true })
 	sku?: string | null;

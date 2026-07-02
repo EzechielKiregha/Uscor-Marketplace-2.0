@@ -1,30 +1,25 @@
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  AlertCircle,
-  AlertTriangle,
-  ArrowDown,
-  ArrowUp,
-  Minus,
-  Package,
-  Plus,
-  Search,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  CREATE_INVENTORY_ADJUSTMENT,
-  GET_WORKER_INVENTORY,
-} from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
-import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import {
+    AlertCircle,
+    AlertTriangle,
+    ArrowDown,
+    ArrowUp,
+    Minus,
+    Package,
+    Plus,
+    Search,
+    X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface InventoryPageProps {
   selectedStoreId: string | null;
@@ -56,22 +51,9 @@ export default function InventoryPage({
   const { showToast } = useToast();
 
   const effectiveWorkerId =
-    viewMode === "business" && workerId ? workerId : user?.id;
+    viewMode === "business" && workerId ? workerId : user?.id;  
 
-  const {
-    data: inventoryData,
-    loading: inventoryLoading,
-    refetch: refetchInventory,
-  } = useQuery(GET_WORKER_INVENTORY, {
-    variables: {
-      storeId: selectedStoreId,
-    },
-    skip: !effectiveWorkerId,
-  });
-
-  const [createInventoryAdjustment] = useMutation(CREATE_INVENTORY_ADJUSTMENT);
-
-  const { getInventory } = useInventory(
+  const { getInventory, createInventoryAdjustment, refetchInventory, inventoryLoading } = useInventory(
     selectedStoreId || "",
     user && typeof user === "object" && "business" in user
       ? viewMode === "business"
@@ -146,32 +128,20 @@ export default function InventoryPage({
     } else {
       try {
         await createInventoryAdjustment({
-          variables: {
-            input: {
-              productId: selectedProduct.productId,
-              storeId: selectedProduct.storeId,
-              adjustmentType: adjustmentType,
-              quantity:
-                adjustmentType === "ADD"
-                  ? adjustmentQuantity
-                  : -adjustmentQuantity,
-              reason: adjustmentReason || "Manual adjustment",
-            },
-          },
+          productId: selectedProduct.productId,
+          storeId: selectedProduct.storeId,
+          adjustmentType: adjustmentType,
+          quantity: adjustmentQuantity,
+          reason: adjustmentReason || "Manual adjustment",
         });
 
-        showToast("success", "Success", "Inventory adjusted successfully");
         setShowAdjustModal(false);
         setSelectedProduct(null);
         setAdjustmentQuantity(1);
         setAdjustmentReason("");
         refetchInventory();
       } catch (error: any) {
-        showToast(
-          "error",
-          "Error",
-          error.message || "Failed to adjust inventory",
-        );
+        console.log(error.message)
       }
     }
   };
@@ -241,8 +211,8 @@ export default function InventoryPage({
       {/* Inventory Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredInventory.map((item: any) => {
-          const isLowStock = item.stockQuantity < item.minQuantity;
-          const isOutOfStock = item.stockQuantity === 0;
+          const isLowStock = item.quantity < item.minQuantity;
+          const isOutOfStock = item.quantity === 0;
 
           return (
             <div
@@ -289,7 +259,9 @@ export default function InventoryPage({
                   </div>
 
                   <div className="text-right">
-                    <p className="font-bold text-lg">{item.stockQuantity}</p>
+                    <p className="font-bold text-lg">
+                      {item?.quantity}
+                    </p>
                     <p className="text-xs text-muted-foreground">in stock</p>
                   </div>
                 </div>

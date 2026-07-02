@@ -30,9 +30,9 @@ export const GET_BUSINESS_BY_ID = gql`
         address
         products {
           id
-          name
+          title
           price
-          media {
+          medias {
             url
           }
         }
@@ -81,6 +81,9 @@ export const GET_BUSINESS_PRODUCTS = gql`
         id
         name
       }
+        reviews{
+            rating
+        }
     }
   }
 `;

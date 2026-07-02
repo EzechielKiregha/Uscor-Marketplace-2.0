@@ -3,8 +3,8 @@ import { PubSub } from "graphql-subscriptions";
 import { AuthPayload } from "../auth/entities/auth-payload.entity";
 import { BusinessService } from "../business/business.service";
 import {
-	PurchaseOrderStatus,
-	TransferOrderStatus,
+    PurchaseOrderStatus,
+    TransferOrderStatus,
 } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
 import { ProductService } from "../product/product.service";

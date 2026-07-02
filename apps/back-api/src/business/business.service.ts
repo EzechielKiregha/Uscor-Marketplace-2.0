@@ -521,24 +521,31 @@ export class BusinessService {
     // New API: get products for a business with optional store/category/search filters
     // Normalizes a product returned from Prisma to the shape expected by the frontend
     private normalizeProduct(product: any) {
-        const media = product.medias?.length ? product.medias[0] : null;
-        return {
-            id: product.id,
-            name: product.title || product.name || "",
-            description: product.description || null,
-            price: product.price || 0,
-            category: product.category || null,
-            stockQuantity: product.quantity ?? product.stock ?? 0,
-            media,
-            store: product.store
-                ? {
-                      id: product.store.id,
-                      name: product.store.name,
-                  }
-                : null,
-            createdAt: product.createdAt,
-            updatedAt: product.updatedAt,
-        };
+        const p = {
+          id: product.id,
+          name:
+            product.title || product.name || '',
+          description:
+            product.description || null,
+          price: product.price || 0,
+          category: product.category || null,
+          stockQuantity:
+            product.quantity ??
+            product.stock ??
+            0,
+          media: product.medias[0] || null,
+          reviews: product.reviews,
+          store: product.store
+            ? {
+                id: product.store.id,
+                name: product.store.name,
+              }
+            : null,
+          createdAt: product.createdAt,
+          updatedAt: product.updatedAt,
+        }
+        console.log({"prod: ": p})
+        return p
     }
 
     async getProducts(opts: {
@@ -576,23 +583,29 @@ export class BusinessService {
                 },
             ];
 
-        const products = await this.prisma.product.findMany({
+        const products =
+          await this.prisma.product.findMany({
             where,
             include: {
-                medias: {
-                    select: { url: true, type: true },
-                },
-                store: {
-                    select: { id: true, name: true },
-                },
-                category: {
-                    select: { id: true, name: true },
-                },
+              medias: {
+                select: { url: true, type: true },
+              },
+              store: {
+                select: { id: true, name: true },
+              },
+              category: {
+                select: { id: true, name: true },
+              },
+              reviews:{
+                select: { rating: true}
+              }
             } as any,
-            orderBy: { createdAt: "desc" },
+            orderBy: { createdAt: 'desc' },
             skip: (page - 1) * limit,
             take: limit,
-        });
+          })
+
+        // console.log({products})
 
         // Map to frontend shape (name, stockQuantity, media)
         return products.map((p: any) => this.normalizeProduct(p));

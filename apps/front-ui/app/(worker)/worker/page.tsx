@@ -1,31 +1,30 @@
 "use client";
 
+import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
+import NewSaleModal from "@/app/(Business)/business/sales/_components/NewSaleModal";
+import ChatPage from "@/components/chat/ChatComponent";
+import MotionPage from "@/components/MotionPage";
+import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
+import { OfflineWorkerBanner } from "@/components/OfflineWorkerBanner";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { SyncStatusBar } from "@/components/SyncStatusBar";
+import { Button } from "@/components/ui/button";
+import { GET_STORES } from "@/graphql/store.gql";
+import { GET_WORKER_DASHBOARD } from "@/graphql/worker.gql";
+import { useOfflinePOS } from "@/hooks/use-offline-pos";
+import { getActiveOfflineSession, isOfflineMode, setActiveOfflineSession } from "@/lib/auth";
+import { StoreEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import { DollarSign, Package, Plus, ShoppingCart, Users } from "lucide-react";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { Button } from "@/components/ui/button";
-import { GET_WORKER_DASHBOARD } from "@/graphql/worker.gql";
-import { useMe } from "@/lib/useMe";
-import ChatsPage from "./_components/ChatsPage";
+import { useEffect, useState } from "react";
 import InventoryPage from "./_components/InventoryPage";
+import LowStockAlerts from "./_components/LowStockAlerts";
 import PosPage from "./_components/PosPage";
 import ProfilePage from "./_components/ProfilePage";
 import ReportsPage from "./_components/ReportsPage";
 import ShiftsPage from "./_components/ShiftsPage";
 import { useWorkerLayout } from "./WorkerLayout";
-import { useEffect, useState } from "react";
-import { GET_STORES } from "@/graphql/store.gql";
-import NewSaleModal from "@/app/(Business)/business/sales/_components/NewSaleModal";
-import { StoreEntity } from "@/lib/types";
-import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
-import ChatPage from "@/components/chat/ChatComponent";
-import LowStockAlerts from "./_components/LowStockAlerts";
-import { OfflineWorkerBanner } from "@/components/OfflineWorkerBanner";
-import { SyncStatusBar } from "@/components/SyncStatusBar";
-import { useOfflinePOS } from "@/hooks/use-offline-pos";
-import { getActiveOfflineSession, isOfflineMode, setActiveOfflineSession } from "@/lib/auth";
-import MotionPage from "@/components/MotionPage";
-import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 
 export default function WorkerPage() {
   const { user, loading: authLoading, role, isOfflineSession } = useMe();
@@ -55,7 +54,7 @@ export default function WorkerPage() {
     if (!selectedStoreId && storesData?.stores?.length > 0) {
       setSelectedStoreId(storesData.stores[0].id);
     }
-  }, [storesData, selectedStoreId]);
+  }, [storesData, selectedStoreId, setSelectedStoreId]);
 
   const { createSale } = useSales(
     selectedStoreId || "",
@@ -80,6 +79,7 @@ export default function WorkerPage() {
     data: dashboardData,
     loading: dashboardLoading,
     error: dashboardError,
+    refetch: refetchDashboardData
   } = useQuery(GET_WORKER_DASHBOARD, {
     variables: {
       workerId: user?.id,
@@ -87,6 +87,8 @@ export default function WorkerPage() {
     },
     skip: !user?.id || !selectedStoreId,
   });
+
+//   console.log(dashboardData?.workerDashboard);
 
   if (authLoading || dashboardLoading || !selectedStoreId || storesLoading)
     return <DashboardSkeleton statCount={4} showChart={false} showTable={false} />;

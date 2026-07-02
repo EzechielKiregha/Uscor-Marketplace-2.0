@@ -1,21 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { Heart, Plus, Search, Star, TrendingUp, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
-  getCachedProducts,
-  searchCachedProducts,
-  type CachedProduct,
+    type CachedProduct,
+    getCachedProducts,
+    searchCachedProducts,
 } from "@/lib/catalog-cache";
 import {
-  getAllFromIndexedDB,
-  getFromIndexedDB,
-  initDB,
-  saveToIndexedDB,
+    getAllFromIndexedDB,
+    getFromIndexedDB,
+    initDB,
+    saveToIndexedDB,
 } from "@/lib/indexed-db";
+import { Heart, Plus, Search, Star, TrendingUp, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 // ─── Types ─────────────────────────────────────────────
 
@@ -156,6 +156,8 @@ export default function QuickSaleGrid({
 
     load();
   }, [storeId]);
+
+//   console.log({"Cached Products" : products})
 
   // Search products
   useEffect(() => {

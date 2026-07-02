@@ -1,30 +1,29 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import {
-  AlertTriangle,
-  ArrowRight,
-  BarChart,
-  Clock,
-  DollarSign,
-  Package,
-  ShoppingCart,
-  TrendingUp,
-  Users,
+    AlertTriangle,
+    ArrowRight,
+    BarChart,
+    DollarSign,
+    Package,
+    ShoppingCart,
+    TrendingUp,
+    Users
 } from "lucide-react";
 import { useState } from "react";
 import {
-  Bar,
-  BarChart as BarChartRecharts,
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Bar,
+    BarChart as BarChartRecharts,
+    CartesianGrid,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import { CHART_COLORS } from "@/lib/chart-theme";
 
 interface StoreOverviewProps {
   store: any;
@@ -39,7 +38,6 @@ export default function StoreOverview({
 }: StoreOverviewProps) {
   const [timeRange, setTimeRange] = useState<"day" | "week" | "month">("week");
 
-  // Sample data for charts - in real app, this comes from stats
   const salesData = [
     { name: "Mon", sales: stats?.dailySales?.[0]?.sales || 1200, orders: 12 },
     { name: "Tue", sales: stats?.dailySales?.[1]?.sales || 1900, orders: 18 },

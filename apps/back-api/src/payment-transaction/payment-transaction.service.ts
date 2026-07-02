@@ -29,6 +29,18 @@ export class PaymentTransactionService {
         private readonly clientService: ClientService,
     ) {}
 
+    async processPayment(input: any) {
+        const result = {
+          status: 'PENDING_SYNC',
+        }
+
+        return result
+    }
+
+    async generateUssdCode(provider: string, amount: number, phone: string, country: string){
+
+    }
+
     async validateBalance(
         clientId: string,
         amount: number,

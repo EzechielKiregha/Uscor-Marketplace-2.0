@@ -1,34 +1,33 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import {
-  Mail,
-  MapPin,
-  Phone,
-  Plus,
-  Search,
-  User,
-  UserCheck,
-  Users,
-  WifiOff,
-  X,
-} from "lucide-react";
 import { useToast } from "@/components/toast-provider";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
-  CREATE_CLIENT_FOR_POS,
-  GET_CLIENTS,
-  SEARCH_CLIENTS,
+    CREATE_CLIENT_FOR_POS,
+    GET_CLIENTS,
+    SEARCH_CLIENTS,
 } from "@/graphql/client.gql";
 import {
-  getAllFromIndexedDB,
-  initDB,
-  saveToIndexedDB,
+    getAllFromIndexedDB,
+    initDB,
+    saveToIndexedDB,
 } from "@/lib/indexed-db";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import {
+    Mail,
+    Phone,
+    Plus,
+    Search,
+    User,
+    UserCheck,
+    Users,
+    WifiOff,
+    X
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 // ─── Types ─────────────────────────────────────────────
 
@@ -176,7 +175,7 @@ export default function CustomerLookup({
         setRecentClients(clients.slice(0, 5));
       });
     }
-  }, [isOnline]);
+  }, [isOnline, fetchAllClients]);
 
   // Search handler
   const handleSearch = useCallback(async () => {
@@ -446,7 +445,7 @@ export default function CustomerLookup({
             <div>
               <Label className="text-xs">Phone</Label>
               <Input
-                placeholder="+243..."
+                placeholder="+250..."
                 value={newClientData.phone}
                 onChange={(e) =>
                   setNewClientData((prev) => ({

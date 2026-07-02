@@ -1,11 +1,11 @@
 "use client";
 
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { CREATE_STORE, GET_STORES, UPDATE_STORE } from "@/graphql/store.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
 
 interface StoreFormProps {
 	initialData?: {
@@ -52,7 +52,7 @@ export default function StoreForm({
 		try {
 			const storeData = {
 				...formData,
-				businessId: user?.id, // In real app, get from useMe()
+				businessId: user?.id,
 			};
 
 			if (initialData) {

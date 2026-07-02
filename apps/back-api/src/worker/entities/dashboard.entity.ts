@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
 import { ClientEntity } from "../../client/entities/client.entity";
+import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
 export class WorkerPerformanceEntity {
@@ -46,6 +47,9 @@ export class TopSellingProductEntity {
 	@Field({ nullable: true })
 	@IsOptional()
 	revenue: number;
+
+    @Field(() => ProductEntity, { nullable: true})
+      product?: ProductEntity;
 }
 
 @ObjectType()

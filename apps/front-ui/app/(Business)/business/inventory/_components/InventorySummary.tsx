@@ -1,10 +1,7 @@
-// app/business/inventory/_components/InventorySummary.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { AlertTriangle, Package, ShoppingCart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_INVENTORY } from "@/graphql/inventory.gql";
+import { AlertTriangle, Package, ShoppingCart } from "lucide-react";
 import { useInventory } from "../../_hooks/use-inventory";
 
 interface InventorySummaryProps {
@@ -16,17 +13,13 @@ export default function InventorySummary({
   businessId,
   storeId,
 }: InventorySummaryProps) {
-  const { data, loading, error, refetch } = useQuery(GET_INVENTORY, {
-    variables: {
-      storeId,
-      lowStockOnly: true,
-    },
-    skip: !storeId,
-  });
 
-  const { getInventory } = useInventory(storeId || "", businessId || "");
+  const { getInventory, inventoryLoading, errorLoading, refetchInventory } = useInventory(
+    storeId || "",
+    businessId || "",
+  );
 
-  if (loading)
+  if (inventoryLoading)
     return (
       <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
         <CardContent className="h-[80px] flex items-center justify-center">
@@ -38,7 +31,7 @@ export default function InventorySummary({
       </Card>
     );
 
-  if (error)
+  if (errorLoading)
     return (
       <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
         <CardContent className="h-[80px] flex items-center justify-center">
@@ -48,7 +41,7 @@ export default function InventorySummary({
             </div>
             <button
               className="text-primary hover:underline"
-              onClick={() => refetch()}
+              onClick={() => refetchInventory()}
             >
               Try Again
             </button>
@@ -58,7 +51,6 @@ export default function InventorySummary({
     );
 
   const inventoryItems = getInventory() || [];
-  console.log(data?.inventory);
   const totalItems = inventoryItems.length;
   const lowStockItems = inventoryItems.filter(
     (item: any) => item.quantity < item.minQuantity,

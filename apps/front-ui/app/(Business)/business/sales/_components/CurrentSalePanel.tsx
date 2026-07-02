@@ -6,26 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_PRODUCTS_BY_NAME } from "@/graphql/product.gql";
 import {
-  ADD_SALE_PRODUCT,
-  COMPLETE_SALE,
-  GET_SALE_BY_ID,
-  REMOVE_SALE_PRODUCT,
-  UPDATE_SALE_PRODUCT,
+    ADD_SALE_PRODUCT,
+    COMPLETE_SALE,
+    GET_SALE_BY_ID,
+    REMOVE_SALE_PRODUCT,
+    UPDATE_SALE_PRODUCT,
 } from "@/graphql/sales.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { ProductEntity } from "@/lib/types";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  ArrowRightLeft,
-  CreditCard,
-  Mail,
-  Minus,
-  Plus,
-  RefreshCcw,
-  Search,
-  ShoppingCart,
-  User,
-  X,
+    CreditCard,
+    Minus,
+    Plus,
+    RefreshCcw,
+    ShoppingCart,
+    X
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -39,6 +35,8 @@ interface CurrentSalePanelProps {
   onNewSale: (workerId?: string, clientId?: string) => Promise<any>;
   userRole: string;
   userId: string;
+  client: any;
+  onCompleteSale?: () => void;
 }
 
 export default function CurrentSalePanel({
@@ -47,6 +45,8 @@ export default function CurrentSalePanel({
   onNewSale,
   userRole,
   userId,
+  onCompleteSale,
+  client
 }: CurrentSalePanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -57,7 +57,7 @@ export default function CurrentSalePanel({
   const [isCompleting, setIsCompleting] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState<any>({});
   const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<any>(null);
+  const [selectedClient, setSelectedClient] = useState<any>(client||null);
   const [showClientModal, setShowClientModal] = useState(false);
   const [showNewSaleModal, setShowNewSaleModal] = useState(false);
   const [currentSale, setCurrentSale] = useState<any>(sale);
@@ -166,12 +166,18 @@ export default function CurrentSalePanel({
 
     router.refresh();
   };
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies(refreshFunction): intentionally omitting unstable function prop
   useEffect(() => {
     if (!currentSaleDetails) {
       refreshFunction();
     }
   }, [currentSaleDetails]);
+
+  useEffect(()=>{
+    if (client){
+        setSelectedClient(client)
+    }
+  }, [client])
 
   const handleAddProduct = async (product: any) => {
     if (!isOnline) {
@@ -357,6 +363,7 @@ export default function CurrentSalePanel({
                 : undefined,
           },
         });
+        onCompleteSale?.();
         showToast(
           "success",
           "Sale Completed",
@@ -366,7 +373,7 @@ export default function CurrentSalePanel({
         // setCurrentSale(newSale);
         // refreshFunction();
       } catch (error: any) {
-        showToast("error", "Error", error.message);
+        showToast("error", "Error", "Select A client To Complete the sale", false, 5000);
       } finally {
         setIsCompleting(false);
         setPaymentMethod(null);
@@ -409,7 +416,7 @@ export default function CurrentSalePanel({
 
   if (!currentSale && !currentSaleDetails) {
     return (
-      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-150 flex flex-col items-center justify-center p-8">
+      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-auto flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
           <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
             <ShoppingCart className="h-10 w-10 text-primary" />
@@ -455,7 +462,7 @@ export default function CurrentSalePanel({
   }
 
   return (
-    <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-225 overflow-hidden flex flex-col">
+    <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-auto overflow-hidden flex flex-col">
       {/* Sale Header */}
       <div className="border-b border-border p-4 flex items-center justify-between">
         <div>
@@ -475,13 +482,13 @@ export default function CurrentSalePanel({
             size="icon"
             onClick={() => setShowNewSaleModal(true)}
           >
-            <ArrowRightLeft className="h-5 w-5" />
+            <Plus className="h-5 w-5" />
           </Button>
         </div>
       </div>
 
       {/* Client Selection */}
-      <div className="border-b border-border p-4">
+      {/* <div className="border-b border-border p-4">
         {selectedClient || currentSaleDetails?.client ? (
           <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-3">
@@ -521,10 +528,10 @@ export default function CurrentSalePanel({
             Select Client (Optional)
           </Button>
         )}
-      </div>
+      </div> */}
 
       {/* Product Search */}
-      <div className="p-4 border-b border-border">
+      {/* <div className="p-4 border-b border-border">
         <div className="relative">
           <Input
             type="text"
@@ -535,10 +542,10 @@ export default function CurrentSalePanel({
           />
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         </div>
-      </div>
+      </div> */}
 
       {/* Products Grid */}
-      <div className="flex-1 overflow-y-auto p-4">
+      {/* <div className="flex-1 overflow-y-auto p-4">
         {productsLoading ? (
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -558,7 +565,9 @@ export default function CurrentSalePanel({
                 onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative pt-[100%]">
-                  <img
+                  <Image
+                  width={200}
+                  height={200}
                     src={
                       product.medias && product.medias.length > 0
                         ? product.medias[0].url
@@ -583,7 +592,7 @@ export default function CurrentSalePanel({
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Product Selection Modal */}
       {selectedProduct && (
@@ -597,13 +606,10 @@ export default function CurrentSalePanel({
                       selectedProduct.medias &&
                       selectedProduct.medias.length > 0
                         ? selectedProduct.medias[0].url
-                        : "https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}"
+                        : `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(selectedProduct.product.title)}`
                     }
                     alt={selectedProduct.title}
                     className="w-full h-full object-cover rounded"
-                    onError={(event) => {
-                      event.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(selectedProduct.title)}`;
-                    }}
                   />
                 </div>
                 <div className="flex-1 min-w-0">

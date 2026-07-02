@@ -1,13 +1,13 @@
+import { getAccessToken, refreshToken } from "@/lib/auth";
 import {
-	ApolloClient,
-	ApolloLink,
-	HttpLink,
-	InMemoryCache,
+    ApolloClient,
+    ApolloLink,
+    HttpLink,
+    InMemoryCache,
 } from "@apollo/client";
 import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
 import { onError } from "@apollo/client/link/error";
 import { Observable } from "@apollo/client/utilities";
-import { getAccessToken, refreshToken } from "@/lib/auth";
 
 if (process.env.NODE_ENV !== "production") {
 	loadErrorMessages();
@@ -30,31 +30,45 @@ const authLink = new ApolloLink((operation, forward) => {
 });
 
 const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-	if (
-		graphQLErrors?.some((err) => err.extensions?.code === "UNAUTHENTICATED")
-	) {
-		return new Observable((observer) => {
-			refreshToken()
-				.then((accessToken) => {
-					operation.setContext(({ headers = {} }) => ({
-						headers: { ...headers, Authorization: `Bearer ${accessToken}` },
-					}));
-					const subscriber = {
-						next: observer.next.bind(observer),
-						error: observer.error.bind(observer),
-						complete: observer.complete.bind(observer),
-					};
-					return forward(operation).subscribe(subscriber);
-				})
-				.catch((error) => {
-					if (typeof window !== "undefined") {
-						window.location.href = "/login";
-					}
-					observer.error(error);
-				});
-		});
-	}
-	return forward(operation);
+  const unauthenticated = graphQLErrors?.some(
+    (err) => err.extensions?.code === "UNAUTHENTICATED",
+  );
+
+  if (!unauthenticated) {
+    return;
+  }
+
+  const token = getAccessToken();
+
+  // Guest user
+  if (!token) {
+    return;
+  }
+
+  return new Observable((observer) => {
+    refreshToken()
+      .then((accessToken) => {
+        operation.setContext(({ headers = {} }) => ({
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }));
+
+        forward(operation).subscribe(observer);
+      })
+      .catch((err) => {
+        // Session expired
+        localStorage.removeItem("accessToken");
+
+        // only redirect if page actually requires auth
+        if (window.location.pathname.startsWith("/dashboard")) {
+          window.location.href = "/login";
+        }
+
+        observer.error(err);
+      });
+  });
 });
 
 export const client = new ApolloClient({

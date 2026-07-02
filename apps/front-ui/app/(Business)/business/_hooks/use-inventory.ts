@@ -1,18 +1,18 @@
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { useCallback, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import {
-	CREATE_INVENTORY_ADJUSTMENT,
-	CREATE_PURCHASE_ORDER,
-	CREATE_TRANSFER_ORDER,
-	GET_INVENTORY,
-	GET_PURCHASE_ORDERS,
-	GET_TRANSFER_ORDERS,
-	ON_PURCHASE_ORDER_CREATED,
-	ON_PURCHASE_ORDER_UPDATED,
-	ON_TRANSFER_ORDER_CREATED,
-	ON_TRANSFER_ORDER_UPDATED,
+    CREATE_INVENTORY_ADJUSTMENT,
+    CREATE_PURCHASE_ORDER,
+    CREATE_TRANSFER_ORDER,
+    GET_INVENTORY,
+    GET_PURCHASE_ORDERS,
+    GET_TRANSFER_ORDERS,
+    ON_PURCHASE_ORDER_CREATED,
+    ON_PURCHASE_ORDER_UPDATED,
+    ON_TRANSFER_ORDER_CREATED,
+    ON_TRANSFER_ORDER_UPDATED,
 } from "@/graphql/inventory.gql";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { useCallback, useState } from "react";
 
 export const useInventory = (storeId: string, businessId?: string) => {
 	const [inventoryFilter, setInventoryFilter] = useState({
@@ -37,6 +37,7 @@ export const useInventory = (storeId: string, businessId?: string) => {
 		data: inventoryData,
 		loading: inventoryLoading,
 		refetch: refetchInventory,
+        error: errorLoading
 	} = useQuery(GET_INVENTORY, {
 		variables: {
 			storeId,
@@ -186,6 +187,8 @@ export const useInventory = (storeId: string, businessId?: string) => {
 
 	return {
 		getInventory,
+        refetchInventory,
+        errorLoading,
 		getPurchaseOrders,
 		getTransferOrders,
 		createPurchaseOrder,

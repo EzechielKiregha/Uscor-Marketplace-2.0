@@ -1,29 +1,31 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { Barcode } from "lucide-react";
-import PageSkeleton from "@/components/skeletons/PageSkeleton";
-import { SyncStatusBar } from "@/components/SyncStatusBar";
-import { Button } from "@/components/ui/button";
-import { useOfflinePOS } from "@/hooks/use-offline-pos";
-import { useMe } from "@/lib/useMe";
 import CurrentSalePanel from "@/app/(Business)/business/sales/_components/CurrentSalePanel";
 import SalesDashboard from "@/app/(Business)/business/sales/_components/SalesDashboard";
 import SalesHistoryPanel from "@/app/(Business)/business/sales/_components/SalesHistoryPanel";
-import QuickSaleGrid from "./QuickSaleGrid";
+import { SyncStatusBar } from "@/components/SyncStatusBar";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
+import { Button } from "@/components/ui/button";
+import { useOfflinePOS } from "@/hooks/use-offline-pos";
+import { useMe } from "@/lib/useMe";
+import { Barcode } from "lucide-react";
+import { useCallback, useState } from "react";
 import BarcodeScannerModal from "./BarcodeScannerModal";
 import CustomerLookup from "./CustomerLookup";
+import QuickSaleGrid from "./QuickSaleGrid";
 
 interface PosPageProps {
   selectedStoreId: string | null;
   viewMode?: "worker" | "business";
   workerId?: string;
+  retchDashData?: () => void;
 }
 
 export default function PosPage({
   selectedStoreId,
   viewMode = "worker",
   workerId,
+  retchDashData,
 }: PosPageProps) {
   const { user, role } = useMe();
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
@@ -123,6 +125,8 @@ export default function PosPage({
             onNewSale={createSale}
             userRole={role || ""}
             userId={effectiveWorkerId || ""}
+            client={selectedClient}
+            onCompleteSale={retchDashData}
           />
         </div>
 

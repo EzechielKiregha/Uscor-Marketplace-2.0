@@ -295,49 +295,49 @@ export function exportToExcel(data: any[], filename: string) {
 ## Test Categories
 
 ### 1. Offline Sales (HIGHEST PRIORITY)
-- [ ] Create sale while online → verify normal flow
-- [ ] Create sale while offline → verify IndexedDB storage
-- [ ] Reconnect → verify automatic sync
-- [ ] Create multiple sales offline → verify batch sync
-- [ ] Offline + reconnect + offline again → verify queue integrity
-- [ ] Conflict scenario: two terminals sell same product → verify flagging
-- [ ] Dedup test: retry sync of already-synced sale → verify skip
-- [ ] Extended offline (50+ sales) → verify bulk sync performance
+- [x] Create sale while online → verify normal flow
+- [x] Create sale while offline → verify IndexedDB storage
+- [x] Reconnect → verify automatic sync
+- [x] Create multiple sales offline → verify batch sync
+- [x] Offline + reconnect + offline again → verify queue integrity
+- [x] Conflict scenario: two terminals sell same product → verify flagging
+- [x] Dedup test: retry sync of already-synced sale → verify skip
+- [x] Extended offline (50+ sales) → verify bulk sync performance
 
 ### 2. POS Workflows
-- [ ] Create sale, add products, complete with cash
-- [ ] Create sale, add products, complete with mobile money
-- [ ] Create sale, add products, complete with token
-- [ ] Create sale, add products, remove product, verify total
-- [ ] Create sale, update product quantity, verify total
-- [ ] Create return, verify stock restored
-- [ ] Generate receipt, verify PDF accessible
-- [ ] Shift clock-in, process sales, clock-out, verify shift summary
+- [x] Create sale, add products, complete with cash
+- [x] Create sale, add products, complete with mobile money
+- [x] Create sale, add products, complete with token
+- [x] Create sale, add products, remove product, verify total
+- [x] Create sale, update product quantity, verify total
+- [x] Create return, verify stock restored
+- [x] Generate receipt, verify PDF accessible
+- [x] Shift clock-in, process sales, clock-out, verify shift summary
 
 ### 3. Inventory
-- [ ] Create inventory adjustment (ADD) → verify stock increase
-- [ ] Create inventory adjustment (REMOVE) → verify stock decrease
-- [ ] Low stock alert triggers at minQuantity
-- [ ] Transfer order between stores → verify both stores updated
-- [ ] Purchase order creation → verify supplier reference
+- [x] Create inventory adjustment (ADD) → verify stock increase
+- [x] Create inventory adjustment (REMOVE) → verify stock decrease
+- [x] Low stock alert triggers at minQuantity
+- [x] Transfer order between stores → verify both stores updated
+- [x] Purchase order creation → verify supplier reference
 
 ### 4. Marketplace
-- [ ] Search by product title → verify results
-- [ ] Filter by business type → verify filtered
-- [ ] Filter by price range → verify filtered
-- [ ] Featured products filter → verify
-- [ ] Promotion badge displays → verify discount calculation
-- [ ] Add to cart → verify cart state
-- [ ] Checkout flow → verify order creation
+- [x] Search by product title → verify results
+- [x] Filter by business type → verify filtered
+- [x] Filter by price range → verify filtered
+- [x] Featured products filter → verify
+- [x] Promotion badge displays → verify discount calculation
+- [x] Add to cart → verify cart state
+- [x] Checkout flow → verify order creation
 - [ ] Mobile money payment → verify USSD generation
 
 ### 5. Permissions & Roles
-- [ ] Worker can only see own sales
-- [ ] Worker cannot access other business's store
-- [ ] Business owner can see all workers' sales
-- [ ] Admin can verify KYC
-- [ ] Client cannot access worker/business pages
-- [ ] Unauthorized page redirects to /unauthorized
+-[x] Worker can only see own sales
+-[x] Worker cannot access other business's store
+-[x] Business owner can see all workers' sales
+-[x] Admin can verify KYC
+-[x] Client cannot access worker/business pages
+-[x] Unauthorized page redirects to /unauthorized
 
 ### 6. Responsive Layouts
 - [ ] Mobile (375px) — All pages render correctly

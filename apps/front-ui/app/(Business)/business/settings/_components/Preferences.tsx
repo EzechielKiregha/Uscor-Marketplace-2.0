@@ -7,29 +7,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
 import {
-  GET_BUSINESS_TYPES,
-  UPDATE_BUSINESS_PROFILE,
+    GET_BUSINESS_TYPES,
+    UPDATE_BUSINESS_PROFILE,
 } from "@/graphql/settings.gql";
 import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  BookOpen,
-  Building2,
-  CheckCircle,
-  Coffee,
-  Globe,
-  Hammer,
-  Loader2,
-  MessageSquare,
-  Palette,
-  Plug,
-  Shirt,
-  ShoppingCart,
-  Store,
-  Users,
-  UtensilsCrossed,
-  Wine,
-  X,
+    BookOpen,
+    Building2,
+    CheckCircle,
+    Coffee,
+    Globe,
+    Hammer,
+    Loader2,
+    MessageSquare,
+    Palette,
+    Plug,
+    Shirt,
+    ShoppingCart,
+    Store,
+    Users,
+    UtensilsCrossed,
+    Wine,
+    X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -243,7 +243,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
     if (businessData) {
       setFormData({
         isB2BEnabled: businessData?.isB2BEnabled,
-        receiveNotifications: true, // In real app, this would come from settings
+        receiveNotifications: true,
         receiveEmails: true,
         allowMessaging: true,
         showInMarketplace: true,

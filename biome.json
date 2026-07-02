@@ -22,6 +22,7 @@
         "noStaticElementInteractions": "off",
         "noLabelWithoutControl": "off",
         "noAutofocus": "off",
+        "useButtonType": "off",
         "useKeyWithClickEvents": "off"
       },
       "correctness": {
@@ -40,6 +41,9 @@
       },
       "complexity": {
         "useOptionalChain": "off"
+      },
+      "performance":{
+        "noImgElement":"off"
       },
       "style": {
         "noNonNullAssertion": "off",

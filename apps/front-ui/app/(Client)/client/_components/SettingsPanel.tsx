@@ -1,31 +1,31 @@
 // app/client/_components/SettingsPanel.tsx
 "use client";
 
-import { useMutation } from "@apollo/client";
-import {
-	CreditCard,
-	Edit,
-	Loader2,
-	Mail,
-	MapPin,
-	Phone,
-	Plus,
-	Trash2,
-	User,
-	X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-	ADD_CLIENT_ADDRESS,
-	ADD_CLIENT_PAYMENT_METHOD,
-	DELETE_CLIENT_ADDRESS,
-	UPDATE_CLIENT_ADDRESS,
-	UPDATE_CLIENT_PROFILE,
+    ADD_CLIENT_ADDRESS,
+    ADD_CLIENT_PAYMENT_METHOD,
+    DELETE_CLIENT_ADDRESS,
+    UPDATE_CLIENT_ADDRESS,
+    UPDATE_CLIENT_PROFILE,
 } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation } from "@apollo/client";
+import {
+    CreditCard,
+    Edit,
+    Loader2,
+    Mail,
+    MapPin,
+    Phone,
+    Plus,
+    Trash2,
+    User,
+    X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface SettingsPanelProps {
 	client: any;
@@ -79,7 +79,7 @@ export default function SettingsPanel({ client }: SettingsPanelProps) {
 			fullName: client.fullName,
 			email: client.email,
 			phone: client.phone || "",
-			marketingOptIn: true, // In real app, this would come from settings
+			marketingOptIn: true,
 		});
 	}, [client]);
 

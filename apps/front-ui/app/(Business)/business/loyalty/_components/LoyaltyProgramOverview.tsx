@@ -1,54 +1,45 @@
 // app/business/loyalty/_components/LoyaltyProgramOverview.tsx (Updated)
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import {
-  GET_LOYALTY_PROGRAM_BY_ID,
-  GET_LOYALTY_ANALYTICS,
-  GET_LOYALTY_TIERS,
-  GET_POINTS_TRANSACTIONS,
-} from "@/graphql/loyalty.gql";
-
-import { Button } from "@/components/ui/button";
-import {
-  Star,
-  Users,
-  TrendingUp,
-  Gift,
-  BarChart,
-  LineChart,
-  Download,
-  Plus,
-  Edit,
-  Trash2,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  Filter,
-  Search,
-} from "lucide-react";
-import {
-  Bar,
-  BarChart as BarChartRecharts,
-  Line,
-  LineChart as LineChartRecharts,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Pie,
-  Cell,
-  PieChart,
-} from "recharts";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { useToast } from "@/components/toast-provider";
-import { useMe } from "@/lib/useMe";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+    GET_LOYALTY_ANALYTICS,
+    GET_LOYALTY_PROGRAM_BY_ID,
+    GET_LOYALTY_TIERS,
+    GET_POINTS_TRANSACTIONS,
+} from "@/graphql/loyalty.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { BusinessEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import {
+    AlertTriangle,
+    Download,
+    Edit,
+    Gift,
+    Search,
+    Star,
+    Trash2,
+    TrendingUp,
+    Users
+} from "lucide-react";
+import { useState } from "react";
+import {
+    Bar,
+    BarChart as BarChartRecharts,
+    CartesianGrid,
+    Cell,
+    Legend,
+    Pie,
+    PieChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis
+} from "recharts";
 
 interface LoyaltyProgramOverviewProps {
   programId: string;
@@ -124,7 +115,7 @@ export default function LoyaltyProgramOverview({
   const tiers = tiersData?.loyaltyTiers || [];
   const transactions = transactionsData?.pointsTransactions?.items || [];
 
-  // Sample data for charts (in real app, this comes from analytics)
+
   const pointsByDay = [
     { name: "Mon", earned: 120, redeemed: 45 },
     { name: "Tue", earned: 190, redeemed: 60 },

@@ -3,12 +3,12 @@ import { OfflineLoginForm } from "@/components/OfflineLoginForm";
 import { GlowButton } from "@/components/seraui/GlowButton";
 import { useToast } from "@/components/toast-provider";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { GET_ROLE_IF_USER_EXIST, getLoginMutation } from "@/graphql/auth.gql";
 import { getUserRole, setActiveOfflineSession, setAuthToken } from "@/lib/auth";
@@ -17,12 +17,12 @@ import { removeTypename } from "@/lib/removeTypeName";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CloudLightning,
-  Eye,
-  EyeOff,
-  Lock,
-  Palette,
-  Smartphone,
+    CloudLightning,
+    Eye,
+    EyeOff,
+    Lock,
+    Palette,
+    Smartphone,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -221,7 +221,7 @@ export default function LoginPage() {
       } else if (role && role === "business") {
         router.push("/business/dashboard");
       } else if (role && role === "worker") {
-        router.push("/");
+        router.push("/worker");
       } else if (role && role === "admin") {
         router.push("/admin");
       } else {

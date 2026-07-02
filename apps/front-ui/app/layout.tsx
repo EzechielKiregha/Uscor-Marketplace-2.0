@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 
 const APP_NAME = "Uscor Marketplace";
 const APP_DEFAULT_TITLE = "Uscor";
-const APP_TITLE_TEMPLATE = "%s - Uscor Marketplace";
+const APP_TITLE_TEMPLATE = "%s";
 const APP_DESCRIPTION =
   "Empowering creators and businesses through a seamless digital marketplace experience.";
 

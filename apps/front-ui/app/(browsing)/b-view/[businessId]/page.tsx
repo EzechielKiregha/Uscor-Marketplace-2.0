@@ -1,32 +1,32 @@
 // app/business/[id]/page.tsx
 "use client";
 
-import { useQuery, useSubscription } from "@apollo/client";
-import {
-	BriefcaseBusiness,
-	Gift,
-	Mail,
-	MapPin,
-	MessageSquare,
-	Phone,
-	Plus,
-	ShieldCheck,
-	ShoppingCart,
-	Star,
-	Users,
-} from "lucide-react";
-import { useParams } from "next/navigation";
-import { useState } from "react";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import {
-	GET_BUSINESS_BY_ID,
-	GET_BUSINESS_PRODUCTS,
-	GET_BUSINESS_REVIEWS,
-	GET_BUSINESS_SERVICES,
-	ON_BUSINESS_UPDATED,
+    GET_BUSINESS_BY_ID,
+    GET_BUSINESS_PRODUCTS,
+    GET_BUSINESS_REVIEWS,
+    GET_BUSINESS_SERVICES,
+    ON_BUSINESS_UPDATED,
 } from "@/graphql/business-page.gql";
 import { useMe } from "@/lib/useMe";
+import { useQuery, useSubscription } from "@apollo/client";
+import {
+    BriefcaseBusiness,
+    Gift,
+    Mail,
+    MapPin,
+    MessageSquare,
+    Phone,
+    Plus,
+    ShieldCheck,
+    ShoppingCart,
+    Star,
+    Users,
+} from "lucide-react";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 import BusinessHeader from "./_components/BusinessHeader";
 import ProductsSection from "./_components/ProductsSection";
 import ReviewsSection from "./_components/ReviewsSection";
@@ -59,15 +59,18 @@ export default function BusinessPage() {
 	});
 
 	const { data: productsData, loading: productsLoading } = useQuery(
-		GET_BUSINESS_PRODUCTS,
-		{
-			variables: {
-				businessId: businessId,
-				storeId: selectedStoreId || undefined,
-			},
-			skip: activeTab !== "products",
-		},
-	);
+    GET_BUSINESS_PRODUCTS,
+    {
+      variables: {
+        businessId: businessId,
+        storeId: selectedStoreId || undefined,
+      },
+      skip:
+        activeTab === "services" ||
+        activeTab === "workers" ||
+        activeTab === "reviews",
+    },
+  );
 
 	const { data: servicesData, loading: servicesLoading } = useQuery(
 		GET_BUSINESS_SERVICES,
@@ -138,7 +141,7 @@ export default function BusinessPage() {
 						<div className="flex items-center gap-2">
 							<ShoppingCart className="h-5 w-5 text-primary" />
 							<div>
-								<p className="text-sm text-muted-foreground">Products</p>
+								<p className="text-sm text-muted-foreground">Products Sold</p>
 								<p className="font-bold text-lg">
 									{business.totalProductsSold}
 								</p>
@@ -162,8 +165,8 @@ export default function BusinessPage() {
 						<div className="flex items-center gap-2">
 							<Users className="h-5 w-5 text-primary" />
 							<div>
-								<p className="text-sm text-muted-foreground">Workers</p>
-								<p className="font-bold text-lg">{business.totalWorkers}</p>
+								<p className="text-sm text-muted-foreground">Active Workers</p>
+								<p className="font-bold text-lg">{business.workers.length}</p>
 							</div>
 						</div>
 					</div>
@@ -173,7 +176,7 @@ export default function BusinessPage() {
 							<Star className="h-5 w-5 text-primary" />
 							<div>
 								<p className="text-sm text-muted-foreground">Rating</p>
-								<p className="font-bold text-lg">4.8 ⭐</p>
+								<p className="font-bold text-lg">5.0 ⭐</p>
 							</div>
 						</div>
 					</div>

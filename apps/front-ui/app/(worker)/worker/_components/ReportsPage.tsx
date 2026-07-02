@@ -1,41 +1,40 @@
 "use client";
 
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
+import {
+    GET_WORKER_PERFORMANCE,
+    GET_WORKER_REPORTS,
+    GET_WORKER_SALES_HISTORY,
+} from "@/graphql/reports.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
-  BarChart,
-  Clock,
-  DollarSign,
-  Download,
-  Package,
-  PieChart,
-  ShoppingCart,
-  Star,
-  TrendingUp,
-  Users,
+    BarChart,
+    Clock,
+    DollarSign,
+    Download,
+    Package,
+    PieChart,
+    ShoppingCart,
+    Star,
+    TrendingUp,
+    Users,
 } from "lucide-react";
 import { useState } from "react";
 import {
-  Bar,
-  BarChart as BarChartRecharts,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Pie,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Bar,
+    BarChart as BarChartRecharts,
+    CartesianGrid,
+    Cell,
+    Legend,
+    Pie,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import {
-  GET_WORKER_PERFORMANCE,
-  GET_WORKER_REPORTS,
-  GET_WORKER_SALES_HISTORY,
-} from "@/graphql/reports.gql";
-import { useMe } from "@/lib/useMe";
 
 interface ReportsPageProps {
   selectedStoreId: string | null;
@@ -103,7 +102,6 @@ export default function ReportsPage({
   const performanceData = performanceD?.workerPerformance;
   const _salesHistoryData = salesHistoryD?.workerSalesHistory;
 
-  // Sample data for charts (in real app, this comes from the API)
   const salesData = [
     { name: "Mon", sales: 1200, orders: 12 },
     { name: "Tue", sales: 1900, orders: 18 },

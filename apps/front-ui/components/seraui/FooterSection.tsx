@@ -122,7 +122,7 @@ export default function Footer() {
 						Email: kireghacorp@gmail.com
 					</p>
 					<p className="text-muted-foreground text-sm">
-						Phone: +1 (800) 555-USOR
+						Phone: +250 790 802 201
 					</p>
 				</div>
 			</div>

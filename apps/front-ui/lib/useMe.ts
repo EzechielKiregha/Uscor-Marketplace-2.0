@@ -1,17 +1,17 @@
 "use client";
 
+import { GET_POINTS_TRANSACTIONS_BY_CLIENT } from "@/graphql/loyalty.gql";
+import { useQuery } from "@apollo/client";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getActiveOfflineSession, isOfflineMode } from "./auth";
 import { fetchMe } from "./fetchMe";
 import {
-	AdminEntity,
-	BusinessEntity,
-	ClientEntity,
-	WorkerEntity,
+    AdminEntity,
+    BusinessEntity,
+    ClientEntity,
+    WorkerEntity,
 } from "./types";
-import { useQuery } from "@apollo/client";
-import { GET_POINTS_TRANSACTIONS, GET_POINTS_TRANSACTIONS_BY_CLIENT } from "@/graphql/loyalty.gql";
-import { getActiveOfflineSession, isOfflineMode } from "./auth";
 
 type MeResult =
 	| { role: "client"; id: string; user: ClientEntity }
@@ -77,7 +77,7 @@ export function useMe() {
 							bio: null,
 							businessId: offlineSession.businessInfo.id,
 							isVerified: true,
-						} as WorkerEntity);
+						} as any);
 						setRole("worker");
 						setId(profile.id);
 						setIsOfflineSession(true);

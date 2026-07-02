@@ -13,7 +13,7 @@ export default function UserDropdown() {
 
   if (loading)
     return (
-      <div className="w-5 h-5 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <div className="w-5 h-5 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
     );
 
   if (!user) {
