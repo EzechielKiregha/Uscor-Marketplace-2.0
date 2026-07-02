@@ -9,7 +9,7 @@ import {
     Test,
     TestingModule,
 } from '@nestjs/testing'
-import { AuthPayload } from 'src/auth/entities/auth-payload.entity'
+import { AuthPayload } from '../auth/entities/auth-payload.entity'
 import { PrismaService } from '../prisma/prisma.service'
 import { SaleService } from './sale.service'
 

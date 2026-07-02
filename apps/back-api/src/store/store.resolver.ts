@@ -8,11 +8,11 @@ import {
     Subscription,
 } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
-import { ProductEntity } from "src/product/entities/product.entity";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { RolesGuard } from "../auth/guards/roles.guard";
 import { ShiftStatus } from "../generated/prisma/enums";
+import { ProductEntity } from "../product/entities/product.entity";
 import { CreateWorkerInput } from "../worker/dto";
 import { ShiftEntityWorker } from "../worker/entities/shift.entity";
 import { WorkerEntity } from "../worker/entities/worker.entity";
