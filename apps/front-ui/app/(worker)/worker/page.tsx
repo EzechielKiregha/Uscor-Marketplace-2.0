@@ -262,7 +262,10 @@ export default function WorkerPage() {
       {/* Main Content */}
       <div>
         {activeSection === "pos" && (
-          <PosPage selectedStoreId={selectedStoreId} />
+          <PosPage
+            selectedStoreId={selectedStoreId}
+            retchDashData={refetchDashboardData}
+          />
         )}
         {activeSection === "inventory" && (
           <InventoryPage selectedStoreId={selectedStoreId} />

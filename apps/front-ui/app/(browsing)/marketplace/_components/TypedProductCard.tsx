@@ -6,6 +6,8 @@ import ProductCard from "./ProductCard";
 import TypeSpecificFields from "./TypeSpecificFields";
 
 interface TypedProductCardProps {
+prodID?: string| null;
+setProdID?: (id: string | null)=> void;
   product: any;
   viewMode: "grid" | "list";
 }
@@ -16,6 +18,8 @@ interface TypedProductCardProps {
  * and type-specific field badges below the card content.
  */
 export default function TypedProductCard({
+prodID,
+setProdID,
   product,
   viewMode,
 }: TypedProductCardProps) {
@@ -39,7 +43,7 @@ export default function TypedProductCard({
       />
 
       {/* Core product card (border suppressed — this wrapper provides it) */}
-      <ProductCard product={product} viewMode={viewMode} noBorder />
+      <ProductCard prodID={prodID} setProdID={setProdID} product={product} viewMode={viewMode} noBorder />
 
       {/* Type-specific field badges */}
       <TypeSpecificFields

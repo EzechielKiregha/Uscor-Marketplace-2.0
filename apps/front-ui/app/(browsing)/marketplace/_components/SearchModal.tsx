@@ -1,11 +1,11 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { BriefcaseBusiness, Search, ShoppingCart, Star, X } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SEARCH_MARKETPLACE } from "@/graphql/marketplace.gql";
+import { useQuery } from "@apollo/client";
+import { BriefcaseBusiness, Search, ShoppingCart, Star, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface SearchModalProps {
 	onClose: () => void;
@@ -139,7 +139,7 @@ export default function SearchModal({ onClose, onSearch }: SearchModalProps) {
 														key={product.id}
 														className="flex items-center gap-3 p-3 hover:bg-muted/50 rounded-lg cursor-pointer"
 														onClick={() => {
-															window.location.href = `/marketplace/products/${product.id}`;
+															window.location.href = `/marketplace?idFromSearch=${product.id}`;
 															onClose();
 														}}
 													>

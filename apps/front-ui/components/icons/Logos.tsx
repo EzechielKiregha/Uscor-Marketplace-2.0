@@ -271,7 +271,7 @@ export const Logo: React.FC = () => {
 					<span className="hidden font-bold lg:block">Freelance / Jobs</span>
 				) : (
 					path.includes("/") && (
-						<span className="hidden font-bold lg:block">Intelligent POS</span>
+						<span className="hidden font-bold lg:block">MarketPlace</span>
 					)
 				)}
 			</span>

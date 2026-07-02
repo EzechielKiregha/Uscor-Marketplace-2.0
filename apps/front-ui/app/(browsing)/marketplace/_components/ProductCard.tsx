@@ -1,25 +1,25 @@
 "use client";
 
-import { Gift, Handshake, MapPin, ShieldCheck, ShoppingCart, Tag } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/app/context/use-cart";
-import ProductDetailsModal from "./ProductDetailsModal";
-import { useMutation } from "@apollo/client";
-import { CREATE_CHAT } from "@/graphql/chat.gql";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Gift, Handshake, MapPin, ShieldCheck, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 import NewChatSession from "../../../../components/chat/NewChatSession";
 import BusinessTypeIcon from "./BusinessTypeIcons";
+import ProductDetailsModal from "./ProductDetailsModal";
 
 interface ProductCardProps {
+  prodID?: string| null;
+  setProdID?: (id: string | null) => void;
   product: any;
   viewMode: "grid" | "list";
   /** When true, suppress the card's own border (used inside TypedProductCard wrapper) */
   noBorder?: boolean;
 }
 
-export default function ProductCard({ product, viewMode, noBorder }: ProductCardProps) {
+export default function ProductCard({ prodID, setProdID, product, viewMode, noBorder }: ProductCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const { showToast } = useToast();
   const [openChat, setOpenChat] = useState(false);
@@ -34,6 +34,14 @@ export default function ProductCard({ product, viewMode, noBorder }: ProductCard
 
     return () => clearTimeout(timeout);
   }, []);
+
+  useEffect(()=>{
+    console.log(prodID === product.id)
+    if(prodID === product.id){
+        setShowDetails(true)
+        setProdID?.(null)
+    }
+  },[prodID, product, setProdID])
 
   // Check if product has an active promotion
   const hasPromotion = product.promotions && product.promotions.length > 0;

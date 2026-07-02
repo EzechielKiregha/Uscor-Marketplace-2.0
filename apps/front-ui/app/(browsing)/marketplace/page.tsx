@@ -1,48 +1,51 @@
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
 import {
-  GET_MARKETPLACE_DATA,
-  ON_PRODUCT_ADDED,
-  ON_SERVICE_ADDED,
+    GET_MARKETPLACE_DATA,
+    ON_PRODUCT_ADDED,
+    ON_SERVICE_ADDED,
 } from "@/graphql/marketplace.gql";
 import { GET_PRODUCTS } from "@/graphql/product.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
-  BriefcaseBusiness,
-  Filter,
-  Gift,
-  LayoutGrid,
-  List,
-  Search,
-  ShoppingCart,
-  SlidersHorizontal,
-  Star,
-  X,
+    BriefcaseBusiness,
+    Filter,
+    Gift,
+    LayoutGrid,
+    List,
+    Search,
+    ShoppingCart,
+    SlidersHorizontal,
+    Star,
+    X,
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { BUSINESS_TYPE_LIST } from "@/config/business-types";
-import TypedProductCard from "./_components/TypedProductCard";
 import BusinessTypeShowcase from "./_components/BusinessTypeShowcase";
-import SearchModal from "./_components/SearchModal";
-import ServiceCard from "./_components/ServiceCard";
-import HorizontalCategoryScroll from "./_components/HorizontalCategoryScroll";
+import EnhancedPagination from "./_components/EnhancedPagination";
 import FeaturedProductsCarousel from "./_components/FeaturedProductsCarousel";
 import FeaturedStoresSection from "./_components/FeaturedStoresSection";
+import HorizontalCategoryScroll from "./_components/HorizontalCategoryScroll";
 import ProductCardSkeleton from "./_components/ProductCardSkeleton";
-import EnhancedPagination from "./_components/EnhancedPagination";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import MotionPage from "@/components/MotionPage";
+import SearchModal from "./_components/SearchModal";
+import ServiceCard from "./_components/ServiceCard";
+import TypedProductCard from "./_components/TypedProductCard";
 
 export default function MarketplacePage() {
+    const router = useRouter()
   const search_params = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const tab = search_params.get("tab");
   const [activeTab, setActiveTab] = useState<"products" | "services">(
     (tab as "products" | "services") || "products",
   );
+  const idFromSearch = search_params.get("idFromSearch");
+  const [prodID, setProdID] = useState<string|undefined|null>(idFromSearch)
   const [showFilters, setShowFilters] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [filters, setFilters] = useState({
@@ -210,6 +213,15 @@ export default function MarketplacePage() {
       sort: search_params.get("sort") || "relevance",
     });
   }, [search_params]);
+
+  useEffect(()=>{
+    if(idFromSearch){
+        setProdID(idFromSearch)
+        router.replace("/marketplace")
+    }
+  }, [idFromSearch, router])
+
+  console.log(prodID)
 
   const isLoading = activeTab === "products" && !hasActiveFilters
     ? productsAllLoading
@@ -518,8 +530,11 @@ export default function MarketplacePage() {
                       key={product.id}
                       product={product}
                       viewMode={viewMode}
+                      prodID={prodID}
+                      setProdID={setProdID}
                     />
-                  ))}
+                  )
+                  )}
                 </div>
               </div>
             </>

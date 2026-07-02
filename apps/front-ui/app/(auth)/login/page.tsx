@@ -24,6 +24,7 @@ import {
     Palette,
     Smartphone,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -249,26 +250,28 @@ export default function LoginPage() {
       </div>
 
       {/* Left Panel - Branding (Hidden on mobile, visible on lg+) */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-gradient-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 mix-blend-overlay"></div>
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-linear-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-accent/5 mix-blend-overlay"></div>
 
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-              USCOR MARKETPLACE
-            </span>
+            <Link href="/">
+              <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                USCOR MARKETPLACE
+              </span>
+            </Link>
           </div>
 
           <div className="mt-16 space-y-6">
             <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Welcome to the Future
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
                 of Digital Excellence
               </span>
             </h1>
@@ -311,7 +314,9 @@ export default function LoginPage() {
                   <h3 className="font-semibold text-foreground text-sm">
                     {feature.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground">{feature.desc}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {feature.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -324,7 +329,7 @@ export default function LoginPage() {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 border-2 border-background flex items-center justify-center text-xs text-foreground font-medium"
+                  className="w-10 h-10 rounded-full bg-linear-to-br from-primary/30 to-accent/30 border-2 border-background flex items-center justify-center text-xs text-foreground font-medium"
                 >
                   {String.fromCharCode(64 + i)}
                 </div>
@@ -349,10 +354,10 @@ export default function LoginPage() {
         <div className="w-full max-w-md relative z-10">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               Uscor Marketplace
             </span>
           </div>
@@ -376,7 +381,7 @@ export default function LoginPage() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
               Welcome Back
             </h2>
             <p className="text-muted-foreground">
@@ -487,7 +492,7 @@ export default function LoginPage() {
               <GlowButton
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">

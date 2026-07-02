@@ -1,35 +1,29 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  BarChart,
-  Clock,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Package,
-  Settings,
-  ShoppingCart,
-  Users,
-  ChevronLeft,
-  ChevronRight,
-  SunIcon,
-  MoonIcon,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import NotificationsPopover from "@/components/seraui/Notifications";
 import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
-import { StoreEntity } from "@/lib/types";
+import { logout } from "@/lib/auth";
 import { useMe } from "@/lib/useMe";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@apollo/client";
+import {
+    BarChart,
+    Clock,
+    LogOut,
+    Menu,
+    MessageSquare,
+    MoonIcon,
+    Package,
+    Settings,
+    ShoppingCart,
+    SunIcon
+} from "lucide-react";
 import { useTheme } from "next-themes";
-import NotificationsPopover from "@/components/seraui/Notifications";
-import FloatingChat from "@/components/FloatingChat";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const workerSideLinks = [
   { section: "pos", icon: ShoppingCart, label: "Point of Sale" },
@@ -337,7 +331,7 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
                 variant="outline"
                 className="w-full justify-start"
                 onClick={() => {
-                  // In a real app, this would handle logout
+                  logout()
                   localStorage.removeItem("access_token");
                   localStorage.removeItem("refresh_token");
                   window.location.href = "/login";
