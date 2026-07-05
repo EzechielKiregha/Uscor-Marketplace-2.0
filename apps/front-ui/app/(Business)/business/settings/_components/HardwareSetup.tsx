@@ -6,19 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
 import {
-  GET_HARDWARE_RECOMMENDATIONS,
-  UPDATE_HARDWARE_CONFIG,
+    GET_HARDWARE_RECOMMENDATIONS,
+    UPDATE_HARDWARE_CONFIG,
 } from "@/graphql/settings.gql";
 import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  Box,
-  CheckCircle,
-  CreditCard as CreditCardIcon,
-  ExternalLink,
-  Loader2,
-  Printer,
-  ScanLine,
+    Box,
+    CheckCircle,
+    CreditCard as CreditCardIcon,
+    ExternalLink,
+    Loader2,
+    Printer,
+    ScanLine,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -135,7 +135,7 @@ export default function HardwareSetup({ businessT }: HardwareSetupProps) {
 
   if (authLoading || hardwareLoading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -162,7 +162,7 @@ export default function HardwareSetup({ businessT }: HardwareSetupProps) {
     ) || {};
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -189,7 +189,7 @@ export default function HardwareSetup({ businessT }: HardwareSetupProps) {
               return (
                 <div
                   key={type.id}
-                  className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden"
+                  className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden"
                 >
                   <div className="p-4 bg-muted border-b border-border flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -285,7 +285,7 @@ export default function HardwareSetup({ businessT }: HardwareSetupProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
+          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Hardware Tips for{" "}
@@ -423,7 +423,7 @@ export default function HardwareSetup({ businessT }: HardwareSetupProps) {
               )}
             </ul>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
               <p className="text-sm">
                 <strong>Pro Tip:</strong> In East Africa, many businesses start
                 with a basic mobile POS setup (smartphone/tablet + portable

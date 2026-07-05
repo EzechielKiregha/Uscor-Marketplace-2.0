@@ -1,15 +1,15 @@
 // app/business/freelance-services/page.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { BriefcaseBusiness, Download, Plus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_STORES } from "@/graphql/store.gql";
 import { FreelanceServiceEntity, StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import { BriefcaseBusiness, Download, Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useOpenCreateServiceModal } from "../_hooks/use-open-create-service-modal";
 import OrderManagement from "./_components/OrderManagement";
 import ServiceManagement from "./_components/ServiceManagement";
@@ -82,7 +82,7 @@ export default function FreelanceServicesPage() {
               title="selected store ID"
               value={selectedStoreId || ""}
               onChange={(e) => setSelectedStoreId(e.target.value)}
-              className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
               {storesData.stores.map((store: StoreEntity) => (
                 <option key={store.id} value={store.id}>
@@ -184,7 +184,7 @@ export default function FreelanceServicesPage() {
           </div>
         </div>
       ) : (
-        <div className="text-center py-12 bg-card rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+        <div className="text-center py-12 bg-card rounded-lg border border-border hover:border-primary hover:bg-primary/5">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
               <BriefcaseBusiness className="h-8 w-8 text-primary" />

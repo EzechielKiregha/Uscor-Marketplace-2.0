@@ -2,24 +2,24 @@
 "use client";
 
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useQuery } from "@apollo/client";
-import {
-  BarChart3,
-  Building,
-  Calendar,
-  DollarSign,
-  Users,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import MotionPage from "@/components/MotionPage";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import {
+    BarChart3,
+    Building,
+    Calendar,
+    DollarSign,
+    Users,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import DailyClosing from "./_components/DailyClosing";
 import FinancialSummary from "./_components/FinancialSummary";
 import MultiStoreComparison from "./_components/MultiStoreComparison";
 import WorkerPerformance from "./_components/WorkerPerformance";
-import MotionPage from "@/components/MotionPage";
 
 type ReportTab = "daily" | "financial" | "workers" | "stores";
 
@@ -94,7 +94,7 @@ export default function BusinessReportsPage() {
             title="Select store"
             value={selectedStoreId || ""}
             onChange={(e) => setSelectedStoreId(e.target.value)}
-            className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             {stores.map((store: any) => (
               <option key={store.id} value={store.id}>

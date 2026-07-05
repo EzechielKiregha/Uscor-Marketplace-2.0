@@ -81,6 +81,7 @@ export default function ReportsPage({
       variables: {
         workerId: effectiveWorkerId,
         storeId: selectedStoreId,
+        timeRange,
       },
       skip: !effectiveWorkerId,
     },
@@ -98,25 +99,23 @@ export default function ReportsPage({
     },
   );
 
-  const reportData = reportsData?.workerReports;
+  const reportData = reportsData?.workerReports?.items?.[0];
   const performanceData = performanceD?.workerPerformance;
-  const _salesHistoryData = salesHistoryD?.workerSalesHistory;
+  const salesHistoryData = salesHistoryD?.workerSalesHistory;
 
-  const salesData = [
-    { name: "Mon", sales: 1200, orders: 12 },
-    { name: "Tue", sales: 1900, orders: 18 },
-    { name: "Wed", sales: 1500, orders: 15 },
-    { name: "Thu", sales: 2100, orders: 21 },
-    { name: "Fri", sales: 2800, orders: 28 },
-    { name: "Sat", sales: 3200, orders: 32 },
-    { name: "Sun", sales: 2400, orders: 24 },
-  ];
+  const salesChartData = (performanceData?.salesByHour || []).map(
+    (item: any) => ({
+      name: item.hour,
+      sales: Number(item.sales || 0),
+    }),
+  );
 
-  const inventoryData = [
-    { name: "Electronics", value: 45 },
-    { name: "Hardware", value: 30 },
-    { name: "Accessories", value: 25 },
-  ];
+  const inventoryData = (reportData?.topSellingProducts || []).map(
+    (item: any) => ({
+      name: item.title || "Product",
+      value: Number(item.revenue || 0),
+    }),
+  );
 
   const COLORS = CHART_COLORS.palette;
 
@@ -177,7 +176,7 @@ export default function ReportsPage({
             <div>
               <p className="text-sm text-muted-foreground">Total Sales</p>
               <p className="text-stat">
-                ${reportData?.totalSales?.toFixed(2) || "12,450.00"}
+                ${Number(reportData?.totalSales || 0).toFixed(2)}
               </p>
             </div>
           </div>
@@ -190,9 +189,7 @@ export default function ReportsPage({
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Orders</p>
-              <p className="text-stat">
-                {reportData?.totalOrders || 124}
-              </p>
+              <p className="text-stat">{reportData?.totalOrders || 0}</p>
             </div>
           </div>
         </div>
@@ -205,10 +202,7 @@ export default function ReportsPage({
             <div>
               <p className="text-sm text-muted-foreground">Average Order</p>
               <p className="text-stat">
-                $
-                {(
-                  reportData?.totalSales / reportData?.totalOrders || 100.4
-                ).toFixed(2)}
+                ${Number(reportData?.averageOrderValue || 0).toFixed(2)}
               </p>
             </div>
           </div>
@@ -221,9 +215,7 @@ export default function ReportsPage({
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Active Customers</p>
-              <p className="text-stat">
-                {reportData?.activeCustomers || 89}
-              </p>
+              <p className="text-stat">{reportData?.activeCustomers || 0}</p>
             </div>
           </div>
         </div>
@@ -242,7 +234,9 @@ export default function ReportsPage({
 
           <div className="p-4 h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChartRecharts data={salesData}>
+              <BarChartRecharts
+                data={salesChartData.length ? salesChartData : []}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
@@ -252,11 +246,6 @@ export default function ReportsPage({
                   dataKey="sales"
                   fill={CHART_COLORS.primary}
                   name="Sales ($)"
-                />
-                <Bar
-                  dataKey="orders"
-                  fill={CHART_COLORS.success}
-                  name="Orders"
                 />
               </BarChartRecharts>
             </ResponsiveContainer>
@@ -276,7 +265,7 @@ export default function ReportsPage({
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={inventoryData}
+                  data={inventoryData.length ? inventoryData : []}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -284,15 +273,19 @@ export default function ReportsPage({
                   fill={CHART_COLORS.accent}
                   dataKey="value"
                   label={({ name, percent }) =>
-                    `${name} ${(percent || 0 * 100).toFixed(0)}%`
+                    `${name} ${((percent || 0) * 100).toFixed(0)}%`
                   }
                 >
-                  {inventoryData.map((_entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
+                  {(
+                    inventoryData as Array<{ name: string; value: number }>
+                  ).map(
+                    (entry: { name: string; value: number }, index: number) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ),
+                  )}
                 </Pie>
                 <Tooltip formatter={(value) => [`${value}%`, "Percentage"]} />
                 <Legend />
@@ -324,7 +317,7 @@ export default function ReportsPage({
                 </tr>
               </thead>
               <tbody>
-                {reportData?.topSellingProducts?.map((product: any) => (
+                {(reportData?.topSellingProducts || []).map((product: any) => (
                   <tr
                     key={product.id}
                     className="border-b border-border hover:bg-muted/50"
@@ -345,10 +338,12 @@ export default function ReportsPage({
                         <span>{product.title}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4">{product.quantitySold}</td>
-                    <td className="py-3 px-4">${product.revenue.toFixed(2)}</td>
+                    <td className="py-3 px-4">{product.quantitySold || 0}</td>
                     <td className="py-3 px-4">
-                      {product.profitMargin.toFixed(1)}%
+                      ${Number(product.revenue || 0).toFixed(2)}
+                    </td>
+                    <td className="py-3 px-4">
+                      {Number(product.profitMargin || 0).toFixed(1)}%
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-1">
@@ -360,6 +355,68 @@ export default function ReportsPage({
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Sales History */}
+      <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
+        <div className="p-4 bg-muted border-b border-border">
+          <h2 className="font-semibold flex items-center gap-2">
+            <ShoppingCart className="h-5 w-5" />
+            Recent Sales
+          </h2>
+        </div>
+
+        <div className="p-4">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border text-left">
+                  <th className="py-3 px-4 font-medium">Order</th>
+                  <th className="py-3 px-4 font-medium">Client</th>
+                  <th className="py-3 px-4 font-medium">Amount</th>
+                  <th className="py-3 px-4 font-medium">Payment</th>
+                  <th className="py-3 px-4 font-medium">Status</th>
+                  <th className="py-3 px-4 font-medium">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(salesHistoryData?.items || []).map((sale: any) => (
+                  <tr
+                    key={sale.id}
+                    className="border-b border-border hover:bg-muted/50"
+                  >
+                    <td className="py-3 px-4">{sale.orderNumber}</td>
+                    <td className="py-3 px-4">
+                      {sale.client?.fullName || "Walk-in"}
+                    </td>
+                    <td className="py-3 px-4">
+                      ${Number(sale.totalAmount || 0).toFixed(2)}
+                    </td>
+                    <td className="py-3 px-4">{sale.paymentMethod || "-"}</td>
+                    <td className="py-3 px-4">
+                      <span className="px-2 py-1 rounded text-xs bg-success/10 text-success">
+                        {sale.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      {new Date(sale.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+                {!salesHistoryData?.items?.length && (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className="py-6 px-4 text-center text-muted-foreground"
+                    >
+                      No sales in this period
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -380,7 +437,7 @@ export default function ReportsPage({
             <div className="border border-border rounded-lg p-4">
               <h3 className="font-medium mb-2">Shift Performance</h3>
               <p className="text-stat">
-                {performanceData?.shiftsCompleted || 24}
+                {performanceData?.shiftsCompleted || 0}
               </p>
               <p className="text-sm text-muted-foreground">
                 Shifts completed this {timeRange}
@@ -390,7 +447,7 @@ export default function ReportsPage({
             <div className="border border-border rounded-lg p-4">
               <h3 className="font-medium mb-2">Sales Contribution</h3>
               <p className="text-stat">
-                ${performanceData?.personalSales?.toFixed(2) || "3,240.00"}
+                ${Number(performanceData?.personalSales || 0).toFixed(2)}
               </p>
               <p className="text-sm text-muted-foreground">
                 Sales processed by you
@@ -400,7 +457,7 @@ export default function ReportsPage({
             <div className="border border-border rounded-lg p-4">
               <h3 className="font-medium mb-2">Customer Satisfaction</h3>
               <p className="text-stat">
-                {performanceData?.customerSatisfaction?.toFixed(1) || "4.7"}
+                {Number(performanceData?.customerSatisfaction || 0).toFixed(1)}
               </p>
               <p className="text-sm text-muted-foreground">
                 Average rating from customers
@@ -412,7 +469,9 @@ export default function ReportsPage({
             <h3 className="font-medium mb-3">Performance Trends</h3>
             <div className="h-40">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChartRecharts data={salesData}>
+                <BarChartRecharts
+                  data={salesChartData.length ? salesChartData : []}
+                >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="name" />
                   <YAxis />

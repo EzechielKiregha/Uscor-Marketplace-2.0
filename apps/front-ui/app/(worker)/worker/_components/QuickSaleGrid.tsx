@@ -134,7 +134,7 @@ export default function QuickSaleGrid({
   const [favorites, setFavorites] = useState<FavoriteProduct[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [view, setView] = useState<"favorites" | "frequent" | "all">(
-    "favorites",
+    "all",
   );
   const [loading, setLoading] = useState(true);
 

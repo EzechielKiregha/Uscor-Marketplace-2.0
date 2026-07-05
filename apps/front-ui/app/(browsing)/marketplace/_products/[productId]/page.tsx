@@ -1,9 +1,5 @@
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { Check, MessageCircle, Shield } from "lucide-react";
-import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
 import AddToCartButton from "@/components/AddToCartButton";
 import ImageSlider from "@/components/ImageSlider";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
@@ -18,6 +14,10 @@ import { useGetProductIdParam } from "@/hooks/use-get-product-params";
 import { removeTypename } from "@/lib/removeTypeName";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
+import { useMutation, useQuery } from "@apollo/client";
+import { Check, MessageCircle, Shield } from "lucide-react";
+import Link from "next/link";
+import { notFound, useRouter } from "next/navigation";
 
 const BREADCRUMBS = [
 	{ id: 1, name: "Home", href: "/" },
@@ -186,7 +186,7 @@ export default function Page() {
 
 						{/* Product Images */}
 						<div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
-							<div className="aspect-square rounded-xl overflow-hidden border border-orange-400/60 dark:border-orange-500/70/50 shadow-sm">
+							<div className="aspect-square rounded-xl overflow-hidden border border-border hover:border-primary hover:bg-primary/5/50 shadow-sm">
 								<ImageSlider urls={validUrls} />
 							</div>
 						</div>

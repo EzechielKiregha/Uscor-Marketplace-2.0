@@ -370,7 +370,7 @@ export class ClientService {
 			},
 		});
 
-        console.log({client})
+        // console.log({client})
 		return client
 	}
 

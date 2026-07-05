@@ -2,28 +2,28 @@
 "use client";
 
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  AlertTriangle,
-  Download,
-  FileText,
-  Minus,
-  Package,
-  Pencil,
-  Plus,
-  Search,
-  X,
-} from "lucide-react";
-import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CREATE_INVENTORY_ADJUSTMENT } from "@/graphql/inventory.gql";
 import { GET_PRODUCTS } from "@/graphql/product.gql";
-import { ProductEntity } from "@/lib/types";
 import { exportInventoryCSV } from "@/lib/export-utils";
 import { downloadInventoryReportPDF } from "@/lib/pdf/inventory-report-pdf";
+import { ProductEntity } from "@/lib/types";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    AlertTriangle,
+    Download,
+    FileText,
+    Minus,
+    Package,
+    Pencil,
+    Plus,
+    Search,
+    X,
+} from "lucide-react";
+import { useState } from "react";
 
 interface StockManagementProps {
   storeId: string;
@@ -114,7 +114,7 @@ export default function StockManagement({
 
   if (loading || productsLoading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-[400px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -125,7 +125,7 @@ export default function StockManagement({
     );
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -276,7 +276,7 @@ export default function StockManagement({
       {/* Stock Adjustment Modal */}
       {showAdjustModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
+          <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -315,7 +315,7 @@ export default function StockManagement({
                       (product: ProductEntity) => (
                         <div
                           key={product.id}
-                          className="flex items-center justify-between p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer"
+                          className="flex items-center justify-between p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg hover:bg-muted/50 cursor-pointer"
                           onClick={() => {
                             const inventoryItem = inventory.find(
                               (i) => i.productId === product.id,

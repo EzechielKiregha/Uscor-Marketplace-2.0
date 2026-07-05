@@ -1031,7 +1031,7 @@ export class StoreService {
       }
     })
 
-    console.log(items)
+    // console.log(items)
 
     return {
       items,

@@ -1,21 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 import { useQuery } from "@apollo/client";
 import {
-  AlertTriangle,
-  Calendar,
-  CheckCircle,
-  Clock,
-  Package,
-  Shield,
-  ShieldAlert,
-  ShieldCheck,
-  XCircle,
+    AlertTriangle,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Package,
+    Shield,
+    ShieldAlert,
+    ShieldCheck,
+    XCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
+import { useMemo, useState } from "react";
 
 interface WarrantyTrackerProps {
   client: any;
@@ -107,7 +107,7 @@ export default function WarrantyTracker({ client }: WarrantyTrackerProps) {
 
   if (loading) {
     return (
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-muted rounded" />
           <div className="space-y-3">

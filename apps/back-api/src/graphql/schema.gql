@@ -663,13 +663,84 @@ type ChatEntityWorker {
   client: ClientEntity
 }
 
+type WorkerSalesHourPointEntity {
+  hour: String
+  sales: Float
+}
+
+type WorkerCategorySalesEntity {
+  category: String
+  sales: Float
+  quantity: Float
+}
+
 type WorkerPerformanceEntity {
   totalSales: Float
   totalTransactions: Float
+  totalRevenue: Float
+  averageTicket: Float
   customerSatisfaction: Float
   attendanceRate: Float
   shiftsCompleted: Float
   personalSales: Float
+  salesByHour: [WorkerSalesHourPointEntity!]
+  salesByProductCategory: [WorkerCategorySalesEntity!]
+  topSellingProducts: [TopSellingProductEntity!]
+}
+
+type WorkerReportProductEntity {
+  id: String
+  title: String
+  imageUrl: String
+  quantitySold: Float
+  revenue: Float
+  profitMargin: Float
+  averageRating: Float
+}
+
+type WorkerReportSummaryEntity {
+  id: String
+  totalSales: Float
+  totalOrders: Float
+  totalRevenue: Float
+  averageOrderValue: Float
+  activeCustomers: Float
+  topSellingProducts: [WorkerReportProductEntity!]
+  period: String
+  reportType: String
+}
+
+type PaginatedWorkerReportsEntity {
+  items: [WorkerReportSummaryEntity!]!
+  total: Float
+  page: Float
+  limit: Float
+}
+
+type WorkerSalesHistoryProductEntity {
+  id: String
+  name: String
+  quantity: Float
+  price: Float
+}
+
+type WorkerSalesHistoryItemEntity {
+  id: String
+  orderNumber: String
+  totalAmount: Float
+  status: String
+  createdAt: DateTime
+  client: ClientEntity
+  products: [WorkerSalesHistoryProductEntity!]
+  paymentMethod: String
+  deliveryAddress: String
+}
+
+type PaginatedWorkerSalesHistoryEntity {
+  items: [WorkerSalesHistoryItemEntity!]!
+  total: Float
+  page: Float
+  limit: Float
 }
 
 type TopSellingProductEntity {
@@ -677,6 +748,9 @@ type TopSellingProductEntity {
   title: String
   quantitySold: Float
   revenue: Float
+  imageUrl: String
+  profitMargin: Float
+  averageRating: Float
   product: ProductEntity
 }
 
@@ -2127,6 +2201,10 @@ type Query {
   searchClients(query: String!): [ClientEntity!]!
   workers(storeId: String): [WorkerEntity!]!
   worker(id: String!): WorkerEntity!
+  workerById(id: String!): WorkerEntity!
+  workerReports(workerId: String!, storeId: String, timeRange: String, reportType: String, page: Int! = 1, limit: Int! = 20): PaginatedWorkerReportsEntity!
+  workerPerformance(workerId: String!, storeId: String, timeRange: String): WorkerPerformanceEntity!
+  workerSalesHistory(workerId: String!, storeId: String, timeRange: String, status: String, page: Int! = 1, limit: Int! = 20): PaginatedWorkerSalesHistoryEntity!
   workerDashboard(workerId: String!, storeId: String!): WorkerDashboardEntity!
   workerDashboardStats(workerId: String!, storeId: String!): WorkerDashboardStatsEntity!
   workerSales(workerId: String!, storeId: String, status: String, startDate: DateTime, endDate: DateTime, page: Int! = 1, limit: Int! = 20): SalesPagedResult!

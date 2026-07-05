@@ -1,29 +1,26 @@
 // app/business/reports/_components/MultiStoreComparison.tsx
 "use client";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_STORES } from "@/graphql/store.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { useQuery } from "@apollo/client";
 import {
-  ArrowUpRight,
-  Building,
-  DollarSign,
-  Package,
-  TrendingUp,
-  Users,
+    Building,
+    DollarSign,
+    TrendingUp,
+    Users
 } from "lucide-react";
-import { useState } from "react";
 import {
-  Bar,
-  CartesianGrid,
-  ComposedChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-  Legend,
+    Bar,
+    CartesianGrid,
+    ComposedChart,
+    Legend,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { GET_STORES } from "@/graphql/store.gql";
 
 const STORE_COLORS = CHART_COLORS.palette;
 
@@ -32,7 +29,7 @@ export default function MultiStoreComparison() {
 
   if (loading) {
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-64 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -47,7 +44,7 @@ export default function MultiStoreComparison() {
 
   if (stores.length < 2) {
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="py-12 text-center">
           <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">
@@ -112,7 +109,7 @@ export default function MultiStoreComparison() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building className="h-5 w-5 text-primary" />
@@ -126,7 +123,7 @@ export default function MultiStoreComparison() {
 
       {/* Aggregate Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Building className="h-4 w-4 text-primary" />
@@ -137,7 +134,7 @@ export default function MultiStoreComparison() {
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-green-500" />
@@ -148,7 +145,7 @@ export default function MultiStoreComparison() {
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="h-4 w-4 text-orange-500" />
@@ -161,7 +158,7 @@ export default function MultiStoreComparison() {
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Users className="h-4 w-4 text-blue-500" />
@@ -176,7 +173,7 @@ export default function MultiStoreComparison() {
       </div>
 
       {/* Revenue Comparison Chart */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <CardTitle className="text-sm font-medium">
             Revenue & Sales Comparison
@@ -233,7 +230,7 @@ export default function MultiStoreComparison() {
           return (
             <Card
               key={store.id}
-              className="border border-orange-400/60 dark:border-orange-500/70 bg-card overflow-hidden"
+              className="border border-border hover:border-primary hover:bg-primary/5 bg-card overflow-hidden"
             >
               <div
                 className="h-1"

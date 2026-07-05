@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 @InputType()
 export class RequestOfflineAccessInput {
@@ -9,5 +9,7 @@ export class RequestOfflineAccessInput {
 	deviceId: string;
 
 	@Field(() => String, { nullable: true })
+    @IsString()
+    @IsOptional()
 	deviceName?: string;
 }

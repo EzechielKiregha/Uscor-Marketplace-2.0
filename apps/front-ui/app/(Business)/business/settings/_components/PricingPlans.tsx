@@ -1,16 +1,16 @@
 // app/business/settings/_components/PricingPlans.tsx
 "use client";
 
-import { ArrowRight, Check, X } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  SUBSCRIPTION_PLANS,
-  FEATURE_DEFINITIONS,
-  formatPlanPrice,
-  type FeatureKey,
+    FEATURE_DEFINITIONS,
+    type FeatureKey,
+    formatPlanPrice,
+    SUBSCRIPTION_PLANS,
 } from "@/config/subscription-plans";
+import { ArrowRight, Check, X } from "lucide-react";
+import Link from "next/link";
 
 // The current tier — will come from a real query once subscriptions ship
 const CURRENT_TIER = "STARTER" as const;
@@ -29,7 +29,7 @@ export default function PricingPlans() {
   const PlanIcon = plan.icon;
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           <PlanIcon className="h-5 w-5" />

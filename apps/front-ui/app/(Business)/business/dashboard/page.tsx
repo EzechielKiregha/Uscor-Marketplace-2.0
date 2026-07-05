@@ -1,18 +1,10 @@
 "use client";
 
+import TypeDashboardWidgets from "@/components/dashboard/TypeDashboardWidgets";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useQuery } from "@apollo/client";
-import {
-  DollarSign,
-  MessageSquare,
-  Package,
-  Plus,
-  ShoppingCart,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import MotionPage from "@/components/MotionPage";
+import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { CHART_COLORS } from "@/lib/chart-theme";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,20 +13,27 @@ import { GET_BUSINESS_ORDERS } from "@/graphql/order.gql";
 import { GET_PRODUCTS_BY_BUSINESS_ID } from "@/graphql/product.gql";
 import { GET_STORES } from "@/graphql/store.gql";
 import {
-  BusinessEntity,
-  OrderEntity,
-  ProductEntity,
-  SaleEntity,
-  StoreEntity,
+    BusinessEntity,
+    OrderEntity,
+    ProductEntity,
+    SaleEntity,
+    StoreEntity,
 } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import TypeDashboardWidgets from "@/components/dashboard/TypeDashboardWidgets";
+import { useQuery } from "@apollo/client";
+import {
+    DollarSign,
+    MessageSquare,
+    Package,
+    Plus,
+    ShoppingCart,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import { useOpenOrderDetailsModal } from "../_hooks/use-open-order-details-modal";
 import SalesDashboard from "../sales/_components/SalesDashboard";
 import OrderDetailsModal from "./orders/_components/OrderDetailsModal";
-import MotionPage from "@/components/MotionPage";
-import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 
 export default function BusinessDashboardPage() {
   const { isOpen: isOpenOrder, setIsOpen: setIsOpenOrder } =
@@ -208,7 +207,7 @@ export default function BusinessDashboardPage() {
       {/* Stats Grid */}
       <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MotionStaggerItem>
-          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Total Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -223,7 +222,7 @@ export default function BusinessDashboardPage() {
         </MotionStaggerItem>
 
         <MotionStaggerItem>
-          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Total Orders</CardTitle>
               <ShoppingCart className="h-4 w-4 text-muted-foreground" />
@@ -238,7 +237,7 @@ export default function BusinessDashboardPage() {
         </MotionStaggerItem>
 
         <MotionStaggerItem>
-          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Products</CardTitle>
               <Package className="h-4 w-4 text-muted-foreground" />
@@ -253,7 +252,7 @@ export default function BusinessDashboardPage() {
         </MotionStaggerItem>
 
         <MotionStaggerItem>
-          <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Messages</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
@@ -281,7 +280,7 @@ export default function BusinessDashboardPage() {
           title="selected store ID"
           value={selectedStoreId || ""}
           onChange={(e) => setSelectedStoreId(e.target.value)}
-          className="w-full sm:w-64 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
           {storesData.stores.map((store: StoreEntity) => (
             <option key={store.id} value={store.id}>
@@ -332,7 +331,7 @@ export default function BusinessDashboardPage() {
         />
       ) : (
         <>
-          {/* <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+          {/* <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
             <CardHeader>
               <CardTitle>Sales Overview</CardTitle>
             </CardHeader>

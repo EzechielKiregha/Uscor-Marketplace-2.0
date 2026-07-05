@@ -1,23 +1,23 @@
 // app/admin/_components/AuditLogs.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-	Activity,
-	AlertTriangle,
-	CheckCircle,
-	Eye,
-	Search,
-	Settings,
-	ShieldCheck,
-	Users,
-} from "lucide-react";
-import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_AUDIT_LOGS } from "@/graphql/admin.gql";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useQuery } from "@apollo/client";
+import {
+    Activity,
+    AlertTriangle,
+    CheckCircle,
+    Eye,
+    Search,
+    Settings,
+    ShieldCheck,
+    Users,
+} from "lucide-react";
+import { useState } from "react";
 
 type AuditLogsProps = {};
 
@@ -93,7 +93,7 @@ export default function AuditLogs({}: AuditLogsProps) {
 		return <div>Error loading audit logs: {auditLogsError.message}</div>;
 
 	return (
-		<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
 			{/* Header */}
 			<div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 				<div className="relative w-full sm:w-64">
@@ -111,7 +111,7 @@ export default function AuditLogs({}: AuditLogsProps) {
 					<select
 						value={filters.action}
 						onChange={(e) => handleFilterChange("action", e.target.value)}
-						className="w-full sm:w-32 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						<option value="">All Actions</option>
 						<option value="LOGIN">Login</option>

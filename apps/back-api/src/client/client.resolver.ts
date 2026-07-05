@@ -229,7 +229,7 @@ export class ClientResolver {
 		@Args("phone", { type: () => String })
 		phone: string,
 	) {
-        console.log({phone})
+        // console.log({phone})
 		return this.clientService.findByPhone(phone);
 	}
 

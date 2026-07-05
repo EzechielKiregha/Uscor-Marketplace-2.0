@@ -1,10 +1,10 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FREELANCE_SERVICE_CATEGORIES } from "@/config/freelance-categories";
 import { useOnClickOutside } from "@/hooks/use-on-outside-click";
+import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 // --- Mobile Drawer Component ---
 const MobileFreelanceDrawer = () => {
@@ -130,7 +130,7 @@ const DesktopFreelancePopover = () => {
 						</Button>
 
 						{isOpen && (
-							<div className="absolute left-0 top-full mt-2 w-80 rounded-xl bg-card border border-orange-400/60 dark:border-orange-500/70 shadow-lg overflow-hidden z-10">
+							<div className="absolute left-0 top-full mt-2 w-80 rounded-xl bg-card border border-border hover:border-primary hover:bg-primary/5 shadow-lg overflow-hidden z-10">
 								<div className="p-4 max-h-96 overflow-y-auto">
 									{category.services.map((service) => (
 										<a

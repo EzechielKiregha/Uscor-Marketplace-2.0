@@ -1,16 +1,6 @@
 // app/business/settings/_components/PaymentConfiguration.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  CheckCircle,
-  Copy,
-  CreditCard,
-  Landmark,
-  Loader2,
-  Phone,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +10,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
 import { UPDATE_PAYMENT_CONFIG } from "@/graphql/settings.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    CheckCircle,
+    Copy,
+    CreditCard,
+    Landmark,
+    Loader2,
+    Phone,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface PaymentCodeProps {
   productOwnerCodes: {
@@ -222,7 +222,7 @@ export default function PaymentConfiguration({}: PaymentConfigurationProps) {
 
   if (authLoading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -236,7 +236,7 @@ export default function PaymentConfiguration({}: PaymentConfigurationProps) {
   const businessType = businessData?.businessType || "ARTISAN";
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -365,7 +365,7 @@ export default function PaymentConfiguration({}: PaymentConfigurationProps) {
                 </div>
 
                 {/* Payment Code Preview */}
-                <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
+                <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
                   <h4 className="font-medium mb-2">Payment Code Preview</h4>
                   <p className="text-sm text-muted-foreground mb-3">
                     See how your payment code will appear to customers at
@@ -511,7 +511,7 @@ export default function PaymentConfiguration({}: PaymentConfigurationProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
+          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Payment Tips for{" "}
@@ -648,7 +648,7 @@ export default function PaymentConfiguration({}: PaymentConfigurationProps) {
               )}
             </ul>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+            <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
               <p className="text-sm">
                 <strong>Pro Tip:</strong> In East Africa, mobile money is the
                 preferred payment method for over 80% of transactions. Make sure

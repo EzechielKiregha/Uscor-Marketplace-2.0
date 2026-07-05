@@ -137,7 +137,7 @@ const FeatureCard = ({
 	children: React.ReactNode;
 	title: string;
 }) => (
-	<div className="bg-card border border-orange-400/60 dark:border-orange-500/70/60 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+	<div className="bg-card border border-border hover:border-primary hover:bg-primary/5/60 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
 		<h3 className="font-semibold text-foreground mb-2">{title}</h3>
 		<p className="text-sm text-muted-foreground leading-relaxed">{children}</p>
 	</div>

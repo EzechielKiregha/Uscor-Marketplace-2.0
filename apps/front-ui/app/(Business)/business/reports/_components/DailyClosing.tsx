@@ -1,36 +1,35 @@
 // app/business/reports/_components/DailyClosing.tsx
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_SALES_DASHBOARD, GET_SALES_HISTORY } from "@/graphql/sales.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { exportSalesCSV } from "@/lib/export-utils";
+import { downloadSalesReportPDF } from "@/lib/pdf/sales-report-pdf";
 import { useQuery } from "@apollo/client";
 import {
-  Calendar,
-  CreditCard,
-  DollarSign,
-  Download,
-  FileText,
-  Package,
-  Receipt,
-  RotateCcw,
-  TrendingDown,
-  TrendingUp,
+    Calendar,
+    CreditCard,
+    DollarSign,
+    Download,
+    FileText,
+    Package,
+    Receipt,
+    RotateCcw,
+    TrendingDown,
+    TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
 import {
-  Bar,
-  CartesianGrid,
-  ComposedChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Bar,
+    CartesianGrid,
+    ComposedChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
-import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
-import { exportSalesCSV } from "@/lib/export-utils";
-import { downloadSalesReportPDF } from "@/lib/pdf/sales-report-pdf";
 
 interface DailyClosingProps {
   storeId: string;
@@ -74,7 +73,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
 
   if (loading) {
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-64 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -189,7 +188,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
   return (
     <div className="space-y-6">
       {/* Date Selector & Header */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -215,7 +214,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   max={new Date().toISOString().split("T")[0]}
-                  className="pl-10 pr-3 py-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="pl-10 pr-3 py-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               {!isToday && (
@@ -260,7 +259,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-green-500" />
@@ -273,7 +272,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="h-4 w-4 text-primary" />
@@ -286,7 +285,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <TrendingDown className="h-4 w-4 text-orange-500" />
@@ -299,7 +298,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <RotateCcw className="h-4 w-4 text-red-500" />
@@ -315,7 +314,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hourly Sales Chart */}
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium">
               Hourly Sales Breakdown
@@ -363,7 +362,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
         </Card>
 
         {/* Payment Methods */}
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
@@ -412,7 +411,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
         </Card>
 
         {/* Top Products */}
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Package className="h-4 w-4" />
@@ -455,7 +454,7 @@ export default function DailyClosing({ storeId, storeName }: DailyClosingProps) 
         </Card>
 
         {/* Worker Performance */}
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium">Worker Summary</CardTitle>
           </CardHeader>

@@ -1,20 +1,7 @@
 "use client";
 
-import { useMutation } from "@apollo/client";
-import {
-  ArrowLeft,
-  Banknote,
-  CheckCircle2,
-  CreditCard,
-  Loader2,
-  Plus,
-  ShoppingCart,
-  Smartphone,
-} from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 import ResponsiveModal from "@/app/(Business)/business/_components/responsive-modal";
+import { useCart } from "@/app/context/use-cart";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -24,9 +11,22 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { CREATE_ORDER } from "@/graphql/order.gql";
-import { useCart } from "@/app/context/use-cart";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
+import { useMutation } from "@apollo/client";
+import {
+    ArrowLeft,
+    Banknote,
+    CheckCircle2,
+    CreditCard,
+    Loader2,
+    Plus,
+    ShoppingCart,
+    Smartphone,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import PaymentCode from "./paymentCodeV1";
 
 const PAYMENT_METHODS = [
@@ -480,7 +480,7 @@ export default function CheckoutPage() {
   if (!userLoading && (!user || role !== "client")) {
     return (
       <div className="max-w-3xl mx-auto p-6">
-        <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
+        <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
           <div className="text-center max-w-md">
             <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
               <ShoppingCart className="h-10 w-10 text-primary" />
@@ -509,7 +509,7 @@ export default function CheckoutPage() {
   if (!userLoading && user && role === "business") {
     return (
       <div className="max-w-3xl mx-auto p-6">
-        <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
+        <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-card h-[600px] flex flex-col items-center justify-center p-8">
           <div className="text-center max-w-md">
             <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
               <ShoppingCart className="h-10 w-10 text-primary" />
@@ -557,7 +557,7 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Order Form */}
           <div className="space-y-6">
-            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
               <CardHeader>
                 <CardTitle>Delivery Information</CardTitle>
               </CardHeader>
@@ -568,7 +568,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="country">Country *</Label>
                     <select
                       id="country"
-                      className="w-full bg-card mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                      className="w-full bg-card mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
                       required
@@ -590,7 +590,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="province">Province *</Label>
                         <select
                           id="province"
-                          className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           value={province}
                           onChange={(e) => setProvince(e.target.value)}
                           disabled={!rwanda}
@@ -607,7 +607,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="district">District *</Label>
                         <select
                           id="district"
-                          className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           value={district}
                           onChange={(e) => setDistrict(e.target.value)}
                           disabled={!province}
@@ -624,7 +624,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="sector">Sector *</Label>
                         <select
                           id="sector"
-                          className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           value={sector}
                           onChange={(e) => setSector(e.target.value)}
                           disabled={!district}
@@ -641,7 +641,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="cell">Cell *</Label>
                         <select
                           id="cell"
-                          className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           value={cell}
                           onChange={(e) => setCell(e.target.value)}
                           disabled={!sector}
@@ -658,7 +658,7 @@ export default function CheckoutPage() {
                         <Label htmlFor="village">Village *</Label>
                         <select
                           id="village"
-                          className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                          className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           value={village}
                           onChange={(e) => setVillage(e.target.value)}
                           disabled={!cell}
@@ -682,7 +682,7 @@ export default function CheckoutPage() {
                         placeholder="Enter your full delivery address"
                         value={deliveryAddress}
                         onChange={(e) => setDeliveryAddress(e.target.value)}
-                        className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md mt-1"
+                        className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md mt-1"
                         rows={3}
                         required
                       />
@@ -692,7 +692,7 @@ export default function CheckoutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
               <CardHeader className="flex items-center justify-between">
                 <CardTitle>Payment Method</CardTitle>
                 {paymentMethod === "TOKEN" && (
@@ -761,7 +761,7 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="space-y-6">
-            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
@@ -855,7 +855,7 @@ export default function CheckoutPage() {
                   Mobile Money Provider
                 </label>
                 <select
-                  className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                  className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   value={paymentDetails.mobileMoneyProvider || ""}
                   onChange={(e) =>
                     setPaymentDetails({
@@ -874,7 +874,7 @@ export default function CheckoutPage() {
               <div>
                 <label className="text-sm font-medium">Country</label>
                 <select
-                  className="w-full mt-1 bg-card p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                  className="w-full mt-1 bg-card p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   value={paymentDetails.country || ""}
                   onChange={(e) =>
                     setPaymentDetails({
@@ -921,7 +921,7 @@ export default function CheckoutPage() {
                               }))
                             }
                             placeholder="e.g. MTN, Airtel"
-                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                            className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           />
                         </div>
                         <div className="space-y-2">
@@ -939,7 +939,7 @@ export default function CheckoutPage() {
                             }
                             placeholder="e.g. 078 123 4567"
                             inputMode="numeric"
-                            className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                            className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                           />
                         </div>
                       </>
@@ -984,7 +984,7 @@ export default function CheckoutPage() {
                     }))
                   }
                   placeholder="Full name"
-                  className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                  className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                 />
               </div>
               <div className="space-y-2">
@@ -1000,7 +1000,7 @@ export default function CheckoutPage() {
                   }
                   placeholder="1234 5678 9012 3456"
                   inputMode="numeric"
-                  className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                  className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -1017,7 +1017,7 @@ export default function CheckoutPage() {
                     }
                     placeholder="MM/YY"
                     inputMode="numeric"
-                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                    className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   />
                 </div>
                 <div className="space-y-2">
@@ -1033,7 +1033,7 @@ export default function CheckoutPage() {
                     }
                     placeholder="123"
                     inputMode="numeric"
-                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                    className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   />
                 </div>
               </div>

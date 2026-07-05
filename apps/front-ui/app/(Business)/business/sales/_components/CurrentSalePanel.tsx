@@ -23,7 +23,6 @@ import {
     ShoppingCart,
     X
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useSales } from "../../_hooks/use-sales";
 import ClientSelectionModal from "./ClientSelectionModal";
@@ -35,7 +34,7 @@ interface CurrentSalePanelProps {
   onNewSale: (workerId?: string, clientId?: string) => Promise<any>;
   userRole: string;
   userId: string;
-  client: any;
+  client?: any;
   onCompleteSale?: () => void;
 }
 
@@ -63,7 +62,6 @@ export default function CurrentSalePanel({
   const [currentSale, setCurrentSale] = useState<any>(sale);
 
   const { showToast } = useToast();
-  const router = useRouter();
 
   // Get products for the store
   const {
@@ -104,17 +102,24 @@ export default function CurrentSalePanel({
     refetch: refetchSale,
   } = useQuery(GET_SALE_BY_ID, {
     variables: { id: currentSale?.id },
-    skip: !currentSale?.id,
+    skip: !currentSale?.id || !isOnline,
     // fetchPolicy: "cache-and-network",
   });
   const currentSaleDetails = saleData?.sale || currentSale;
 
-  // Auto-sync when coming online
+  // Restore any locally saved sale when offline
   useEffect(() => {
-    if (!isOnline) {
-      const locallyFetchedSale = getLocalSales();
-      setCurrentSale(locallyFetchedSale);
-    }
+    const restoreLocalSale = async () => {
+      if (!isOnline) {
+        const locallyFetchedSales = await getLocalSales();
+        const openSale = locallyFetchedSales.find(
+          (sale: any) => sale.status === "OPEN" || sale.status === "PENDING_SYNC",
+        );
+        setCurrentSale(openSale || null);
+      }
+    };
+
+    restoreLocalSale();
   }, [isOnline, getLocalSales]);
 
   // Auto-sync when coming online
@@ -149,11 +154,10 @@ export default function CurrentSalePanel({
     return activeSalesData.activeSales[0]; // Assuming only one active sale per worker
   }, [activeSalesData]);
 
-  const refreshFunction = () => {
+  const refreshFunction = useCallback(() => {
     refetchActiveSales();
 
     const cs = getCurrentSale();
-    console.log("Current Sale: ", { cs });
     if (cs && cs.status === "OPEN") {
       setCurrentSale(cs);
 
@@ -163,15 +167,26 @@ export default function CurrentSalePanel({
         },
       });
     }
+  }, [getCurrentSale, refetchActiveSales, refetchSale]);
 
-    router.refresh();
-  };
-  // biome-ignore lint/correctness/useExhaustiveDependencies(refreshFunction): intentionally omitting unstable function prop
+  const isOfflineCompletionFlow = useCallback(() => {
+    const browserOffline =
+      typeof navigator !== "undefined" &&
+      typeof navigator.onLine === "boolean" &&
+      !navigator.onLine;
+    const salePendingSync =
+      currentSale?.status === "PENDING_SYNC" ||
+      currentSaleDetails?.status === "PENDING_SYNC" ||
+      currentSale?.syncStatus === "PENDING_SYNC" ||
+      currentSaleDetails?.syncStatus === "PENDING_SYNC";
+
+    return !isOnline || browserOffline || salePendingSync;
+  }, [currentSale, currentSaleDetails, isOnline]);
   useEffect(() => {
     if (!currentSaleDetails) {
       refreshFunction();
     }
-  }, [currentSaleDetails]);
+  }, [currentSaleDetails, refreshFunction]);
 
   useEffect(()=>{
     if (client){
@@ -181,7 +196,8 @@ export default function CurrentSalePanel({
 
   const handleAddProduct = async (product: any) => {
     if (!isOnline) {
-      // Add to local storage for offline processing
+      const activeSale = currentSale || currentSaleDetails;
+      const saleId = activeSale?.id || (await onNewSale());
       const newSaleProduct = {
         productId: product.id,
         product: product,
@@ -191,9 +207,10 @@ export default function CurrentSalePanel({
       };
 
       const updatedSale = {
-        ...currentSale,
-        saleProducts: [...(currentSale?.saleProducts || []), newSaleProduct],
-        totalAmount: (currentSale?.totalAmount || 0) + product.price * quantity,
+        ...(activeSale || {}),
+        id: saleId,
+        saleProducts: [...(activeSale?.saleProducts || []), newSaleProduct],
+        totalAmount: (activeSale?.totalAmount || 0) + product.price * quantity,
       };
 
       setCurrentSale(updatedSale);
@@ -201,7 +218,7 @@ export default function CurrentSalePanel({
       await saveLocalSale(updatedSale);
       await saveOfflineOperation({
         type: "ADD_PRODUCT",
-        saleId: currentSale?.id || `temp_${Date.now()}`,
+        saleId,
         productId: product.id,
         quantity: quantity,
       });
@@ -211,55 +228,62 @@ export default function CurrentSalePanel({
         "Offline Mode",
         "Product added to local sale. Will sync when online.",
       );
-    } else {
-      if (!currentSaleDetails?.id) {
-        const sale = await onNewSale();
-        // Wait for new sale to be created
-        setTimeout(async () => {
-          await addSaleProduct({
-            variables: {
-              input: {
-                saleId: currentSaleDetails.id,
-                productId: product.id,
-                quantity,
-                modifiers: Object.keys(modifiers).length > 0 ? modifiers : null,
-              },
-            },
-          });
-
-          setSelectedProduct(null);
-          setQuantity(1);
-          setModifiers({});
-          setShowModifiers(false);
-          setCurrentSale(sale);
-        }, 2000);
-      } else {
-        try {
-          await addSaleProduct({
-            variables: {
-              input: {
-                saleId: currentSaleDetails.id,
-                productId: product.id,
-                quantity,
-                modifiers: Object.keys(modifiers).length > 0 ? modifiers : null,
-              },
-            },
-          });
-
-          setSelectedProduct(null);
-          setQuantity(1);
-          setModifiers({});
-          setShowModifiers(false);
-        } catch (error: any) {
-          showToast(
-            "error",
-            "Error",
-            error.message || "Failed to remove product",
-          );
-        }
-      }
-      refreshFunction();
+      return;
     }
+
+    if (!currentSaleDetails?.id) {
+      const saleId = await onNewSale();
+      try {
+        await addSaleProduct({
+          variables: {
+            input: {
+              saleId,
+              productId: product.id,
+              quantity,
+              modifiers: Object.keys(modifiers).length > 0 ? modifiers : null,
+            },
+          },
+        });
+      } catch (error: any) {
+        showToast(
+          "error",
+          "Error",
+          error.message || "Failed to add product",
+        );
+        return;
+      }
+
+      setSelectedProduct(null);
+      setQuantity(1);
+      setModifiers({});
+      setShowModifiers(false);
+      setCurrentSale({ id: saleId, saleProducts: [], totalAmount: 0 });
+    } else {
+      try {
+        await addSaleProduct({
+          variables: {
+            input: {
+              saleId: currentSaleDetails.id,
+              productId: product.id,
+              quantity,
+              modifiers: Object.keys(modifiers).length > 0 ? modifiers : null,
+            },
+          },
+        });
+
+        setSelectedProduct(null);
+        setQuantity(1);
+        setModifiers({});
+        setShowModifiers(false);
+      } catch (error: any) {
+        showToast(
+          "error",
+          "Error",
+          error.message || "Failed to add product",
+        );
+      }
+    }
+    refreshFunction();
   };
 
   const handleUpdateQuantity = async (
@@ -267,6 +291,35 @@ export default function CurrentSalePanel({
     newQuantity: number,
   ) => {
     if (newQuantity <= 0) return;
+
+    if (!isOnline) {
+      const activeSale = currentSale || currentSaleDetails;
+      if (!activeSale) return;
+
+      const updatedProducts = activeSale.saleProducts.map((item: any) =>
+        item.id === saleProductId ? { ...item, quantity: newQuantity } : item,
+      );
+      const updatedSale = {
+        ...activeSale,
+        saleProducts: updatedProducts,
+        totalAmount: updatedProducts.reduce(
+          (sum: number, item: any) => sum + item.price * item.quantity,
+          0,
+        ),
+      };
+
+      setCurrentSale(updatedSale);
+      await saveLocalSale(updatedSale);
+      await saveOfflineOperation({
+        type: "UPDATE_QUANTITY",
+        saleId: activeSale.id,
+        saleProductId,
+        quantity: newQuantity,
+      });
+      showToast("info", "Offline Mode", "Quantity updated locally");
+      return;
+    }
+
     try {
       await updateSaleProduct({
         variables: {
@@ -283,14 +336,16 @@ export default function CurrentSalePanel({
 
   const handleRemoveProduct = async (saleProductId: string) => {
     if (!isOnline) {
-      // Handle offline removal
+      const activeSale = currentSale || currentSaleDetails;
+      if (!activeSale) return;
+
       const updatedSale = {
-        ...currentSale,
-        saleProducts: currentSale.saleProducts.filter(
-          (sp: any) => sp.productId !== saleProductId,
+        ...activeSale,
+        saleProducts: activeSale.saleProducts.filter(
+          (sp: any) => sp.id !== saleProductId,
         ),
-        totalAmount: currentSale.saleProducts
-          .filter((sp: any) => sp.productId !== saleProductId)
+        totalAmount: activeSale.saleProducts
+          .filter((sp: any) => sp.id !== saleProductId)
           .reduce((sum: number, sp: any) => sum + sp.price * sp.quantity, 0),
       };
 
@@ -299,8 +354,8 @@ export default function CurrentSalePanel({
       await saveLocalSale(updatedSale);
       await saveOfflineOperation({
         type: "REMOVE_PRODUCT",
-        saleId: currentSale.id,
-        saleProductId: saleProductId,
+        saleId: activeSale.id,
+        saleProductId,
       });
 
       showToast(
@@ -324,56 +379,42 @@ export default function CurrentSalePanel({
   };
 
   const handleCompleteSale = async () => {
-    if (!paymentMethod || !currentSaleDetails?.id) return;
+    const activeSaleId = currentSale?.id || currentSaleDetails?.id;
+    if (!paymentMethod || !activeSaleId) return;
 
     setIsCompleting(true);
 
-    if (!isOnline) {
-      // Save to local storage for later sync
-      const completedSale = {
-        ...currentSale,
-        status: "COMPLETED",
-        paymentMethod,
-        completedAt: new Date().toISOString(),
-      };
+    const shouldCompleteLocally = isOfflineCompletionFlow();
 
-      await saveLocalSale(completedSale);
-      await saveOfflineOperation({
-        type: "COMPLETE_SALE",
-        saleId: currentSale.id,
-        paymentMethod: paymentMethod,
-      });
-      showToast(
-        "info",
-        "Offline Mode",
-        "Sale completed offline. Will sync when online.",
-      );
-      setCurrentSale(null);
-      setPaymentMethod(null);
-    } else {
+    if (shouldCompleteLocally) {
       try {
-        await completeSale({
-          variables: {
-            id: currentSaleDetails.id,
-            clientId: selectedClient?.id || currentSale.clientId,
-            paymentMethod,
-            paymentDetails:
-              Object.keys(paymentDetails).length > 0
-                ? paymentDetails
-                : undefined,
-          },
+        const completedSale = {
+          ...(currentSale || currentSaleDetails),
+          id: activeSaleId,
+          status: "COMPLETED",
+          paymentMethod,
+          completedAt: new Date().toISOString(),
+        };
+
+        await saveLocalSale(completedSale);
+        await saveOfflineOperation({
+          type: "COMPLETE_SALE",
+          saleId: activeSaleId,
+          paymentMethod,
         });
+
         onCompleteSale?.();
         showToast(
-          "success",
-          "Sale Completed",
-          "Payment processed successfully",
+          "info",
+          "Offline Mode",
+          "Sale completed offline. Will sync when online.",
         );
-        // const newSale = await onNewSale();
-        // setCurrentSale(newSale);
-        // refreshFunction();
       } catch (error: any) {
-        showToast("error", "Error", "Select A client To Complete the sale", false, 5000);
+        showToast(
+          "error",
+          "Error",
+          error.message || "Failed to save sale offline",
+        );
       } finally {
         setIsCompleting(false);
         setPaymentMethod(null);
@@ -383,6 +424,43 @@ export default function CurrentSalePanel({
         setCurrentSale(null);
         refetchSalesHistory();
       }
+      return;
+    }
+
+    try {
+      await completeSale({
+        variables: {
+          id: activeSaleId,
+          clientId: selectedClient?.id || currentSale?.clientId,
+          paymentMethod,
+          paymentDetails:
+            Object.keys(paymentDetails).length > 0
+              ? paymentDetails
+              : undefined,
+        },
+      });
+      onCompleteSale?.();
+      showToast(
+        "success",
+        "Sale Completed",
+        "Payment processed successfully",
+      );
+    } catch (error: any) {
+      showToast(
+        "error",
+        "Error",
+        error.message || "Select A client To Complete the sale",
+        false,
+        5000,
+      );
+    } finally {
+      setIsCompleting(false);
+      setPaymentMethod(null);
+      setPaymentDetails({});
+      setShowPaymentForm(false);
+      setSelectedClient(null);
+      setCurrentSale(null);
+      refetchSalesHistory();
     }
   };
 
@@ -416,7 +494,7 @@ export default function CurrentSalePanel({
 
   if (!currentSale && !currentSaleDetails) {
     return (
-      <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-auto flex flex-col items-center justify-center p-8">
+      <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-card h-auto flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
           <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
             <ShoppingCart className="h-10 w-10 text-primary" />
@@ -462,7 +540,7 @@ export default function CurrentSalePanel({
   }
 
   return (
-    <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-card h-auto overflow-hidden flex flex-col">
+    <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-card h-auto overflow-hidden flex flex-col">
       {/* Sale Header */}
       <div className="border-b border-border p-4 flex items-center justify-between">
         <div>
@@ -561,7 +639,7 @@ export default function CurrentSalePanel({
             {filteredProducts.map((product: ProductEntity) => (
               <div
                 key={product.id}
-                className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors"
+                className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors"
                 onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative pt-[100%]">
@@ -597,7 +675,7 @@ export default function CurrentSalePanel({
       {/* Product Selection Modal */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md overflow-hidden">
+          <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md overflow-hidden">
             <div className="p-6">
               <div className="flex -mx-4 -mt-4 bg-muted border-b border-border p-4 mb-4">
                 <div className="w-24 h-24 shrink-0 mr-4">
@@ -630,7 +708,7 @@ export default function CurrentSalePanel({
               {/* Quantity Selector */}
               <div className="flex items-center justify-between mb-6">
                 <label className="text-sm font-medium">Quantity</label>
-                <div className="flex items-center border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
+                <div className="flex items-center border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -773,7 +851,7 @@ export default function CurrentSalePanel({
                 Card
                 {/* Payment Form */}
                 {showPaymentForm && paymentMethod && (
-                  <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 space-y-4">
+                  <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium">Payment Details</h3>
                       <Button
@@ -796,7 +874,7 @@ export default function CurrentSalePanel({
                             Mobile Money Provider
                           </label>
                           <select
-                            className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                            className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                             value={paymentDetails.mobileMoneyMethod || ""}
                             onChange={(e) =>
                               setPaymentDetails({
@@ -815,7 +893,7 @@ export default function CurrentSalePanel({
                         <div>
                           <label className="text-sm font-medium">Country</label>
                           <select
-                            className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                            className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                             value={paymentDetails.country || ""}
                             onChange={(e) =>
                               setPaymentDetails({
@@ -992,7 +1070,7 @@ export default function CurrentSalePanel({
 
           {/* Payment Form */}
           {showPaymentForm && paymentMethod && (
-            <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 space-y-4">
+            <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Payment Details</h3>
                 <Button
@@ -1015,7 +1093,7 @@ export default function CurrentSalePanel({
                       Mobile Money Provider
                     </label>
                     <select
-                      className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                      className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                       value={paymentDetails.mobileMoneyMethod || ""}
                       onChange={(e) =>
                         setPaymentDetails({
@@ -1034,7 +1112,7 @@ export default function CurrentSalePanel({
                   <div>
                     <label className="text-sm font-medium">Country</label>
                     <select
-                      className="w-full mt-1 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                      className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                       value={paymentDetails.country || ""}
                       onChange={(e) =>
                         setPaymentDetails({

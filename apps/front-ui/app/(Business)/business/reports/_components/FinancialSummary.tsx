@@ -1,32 +1,31 @@
 // app/business/reports/_components/FinancialSummary.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  ArrowDownRight,
-  ArrowUpRight,
-  DollarSign,
-  Download,
-  FileText,
-  Percent,
-  TrendingUp,
-} from "lucide-react";
-import { useState } from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { CHART_COLORS } from "@/lib/chart-theme";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
 import { GET_STORE_REPORTS } from "@/graphql/store.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { downloadSalesReportPDF } from "@/lib/pdf/sales-report-pdf";
+import { useQuery } from "@apollo/client";
+import {
+    ArrowDownRight,
+    ArrowUpRight,
+    DollarSign,
+    FileText,
+    Percent,
+    TrendingUp
+} from "lucide-react";
+import { useState } from "react";
+import {
+    Area,
+    AreaChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
 
 interface FinancialSummaryProps {
   storeId: string;
@@ -59,7 +58,7 @@ export default function FinancialSummary({
 
   if (loading) {
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-64 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -134,7 +133,7 @@ export default function FinancialSummary({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -180,7 +179,7 @@ export default function FinancialSummary({
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-green-500" />
@@ -202,7 +201,7 @@ export default function FinancialSummary({
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="h-4 w-4 text-primary" />
@@ -219,7 +218,7 @@ export default function FinancialSummary({
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Percent className="h-4 w-4 text-orange-500" />
@@ -230,7 +229,7 @@ export default function FinancialSummary({
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-blue-500" />
@@ -251,7 +250,7 @@ export default function FinancialSummary({
       </div>
 
       {/* Revenue Trend Chart */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <CardTitle className="text-sm font-medium">Revenue Trend</CardTitle>
         </CardHeader>
@@ -304,7 +303,7 @@ export default function FinancialSummary({
       </Card>
 
       {/* Payment Methods Summary */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <CardTitle className="text-sm font-medium">
             Revenue by Payment Method
@@ -360,7 +359,7 @@ export default function FinancialSummary({
 
       {/* Top Products Revenue */}
       {dashboard?.topProducts && dashboard.topProducts.length > 0 && (
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium">
               Top Revenue Products

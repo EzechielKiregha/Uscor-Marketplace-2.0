@@ -137,7 +137,7 @@ export default function BusinessPage() {
 
 				{/* Business Stats */}
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4 my-6">
-					<div className="p-4 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
+					<div className="p-4 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
 						<div className="flex items-center gap-2">
 							<ShoppingCart className="h-5 w-5 text-primary" />
 							<div>
@@ -149,7 +149,7 @@ export default function BusinessPage() {
 						</div>
 					</div>
 
-					<div className="p-4 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
+					<div className="p-4 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
 						<div className="flex items-center gap-2">
 							<BriefcaseBusiness className="h-5 w-5 text-primary" />
 							<div>
@@ -161,7 +161,7 @@ export default function BusinessPage() {
 						</div>
 					</div>
 
-					<div className="p-4 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
+					<div className="p-4 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
 						<div className="flex items-center gap-2">
 							<Users className="h-5 w-5 text-primary" />
 							<div>
@@ -171,7 +171,7 @@ export default function BusinessPage() {
 						</div>
 					</div>
 
-					<div className="p-4 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
+					<div className="p-4 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
 						<div className="flex items-center gap-2">
 							<Star className="h-5 w-5 text-primary" />
 							<div>
@@ -187,7 +187,7 @@ export default function BusinessPage() {
 					{/* Left Column - Business Details */}
 					<div className="lg:col-span-1 space-y-6">
 						{/* Contact Information */}
-						<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+						<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
 							<div className="p-4 bg-muted border-b border-border">
 								<h3 className="font-semibold">Contact Information</h3>
 							</div>
@@ -227,7 +227,7 @@ export default function BusinessPage() {
 
 						{/* Store Selection */}
 						{business.stores.length > 1 && (
-							<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+							<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
 								<div className="p-4 bg-muted border-b border-border">
 									<h3 className="font-semibold">Store Locations</h3>
 								</div>
@@ -287,7 +287,7 @@ export default function BusinessPage() {
 						</div>
 
 						{/* Quick Actions */}
-						<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
+						<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
 							<h3 className="font-semibold mb-3">Discover More</h3>
 
 							<div className="space-y-2">

@@ -313,7 +313,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
 
   if (authLoading || businessTypesLoading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -329,7 +329,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
     ] || businessBenefitsMap.ARTISAN;
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -484,7 +484,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
                     onChange={(e) =>
                       handleSelectChange("language", e.target.value)
                     }
-                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                    className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   >
                     <option value="en">English</option>
                     <option value="sw">Swahili</option>
@@ -502,7 +502,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
                     onChange={(e) =>
                       handleSelectChange("timeZone", e.target.value)
                     }
-                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                    className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   >
                     <option value="Africa/Kigali">
                       Kigali, Rwanda (GMT+2)
@@ -547,7 +547,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
                                   ? "BIF"
                                   : "RWF"
                     }
-                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                    className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                     disabled
                   >
                     <option value="RWF">Rwandan Franc (RWF)</option>
@@ -568,7 +568,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
                   </label>
                   <select
                     value="metric"
-                    className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                    className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                   >
                     <option value="metric">Metric (kg, m)</option>
                     <option value="imperial">Imperial (lb, ft)</option>
@@ -579,7 +579,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
+          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}
@@ -595,7 +595,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
             </ul>
 
             {benefits.tip && (
-              <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+              <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
                 <p className="text-sm">
                   <strong>Pro Tip:</strong> {benefits.tip}
                 </p>
@@ -604,7 +604,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
           </div>
 
           {/* East Africa Specific Settings */}
-          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
+          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Building2 className="h-4 w-4 text-primary" />
               East Africa Specific Settings
@@ -734,7 +734,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
         {/* Business Type Modal */}
         {showBusinessTypeModal && (
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-2xl">
+            <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-2xl">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-6">
                   <div>

@@ -1,24 +1,24 @@
 // app/admin/_components/PlatformSettings.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-	BarChart,
-	DollarSign,
-	Loader2,
-	ShieldCheck,
-	TrendingUp,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import {
-	GET_PLATFORM_SETTINGS,
-	UPDATE_PLATFORM_SETTINGS,
+    GET_PLATFORM_SETTINGS,
+    UPDATE_PLATFORM_SETTINGS,
 } from "@/graphql/admin.gql";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    BarChart,
+    DollarSign,
+    Loader2,
+    ShieldCheck,
+    TrendingUp,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface PlatformSettingsProps {
 	settings: any;
@@ -117,7 +117,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 		return <div>Error loading settings: {settingsError.message}</div>;
 
 	return (
-		<div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
 			<div className="p-4 bg-muted border-b border-border">
 				<div className="flex justify-between items-start">
 					<div>
@@ -322,7 +322,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 								</div>
 							</div>
 
-							<div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+							<div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
 								<p className="text-sm">
 									<span className="font-medium">Current Configuration:</span> 1{" "}
 									{formData.tokenSymbol} = ${formData.tokenValue} USD
@@ -522,7 +522,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 					</div>
 
 					{/* East Africa Information */}
-					<div className="p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+					<div className="p-4 bg-muted rounded-lg border border-border hover:border-primary hover:bg-primary/5">
 						<div className="flex items-start gap-3">
 							<BarChart className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
 							<div>
@@ -535,7 +535,7 @@ export default function PlatformSettings({ settings }: PlatformSettingsProps) {
 									types, and regional requirements.
 								</p>
 
-								<div className="mt-3 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+								<div className="mt-3 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
 									<p className="text-sm">
 										<span className="font-medium">Pro Tip:</span> For East
 										African markets, we recommend setting the token value to 10

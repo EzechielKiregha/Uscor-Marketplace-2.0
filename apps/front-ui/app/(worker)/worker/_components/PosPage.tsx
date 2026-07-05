@@ -57,19 +57,16 @@ export default function PosPage({
   // Quick-add product from QuickSaleGrid or BarcodeScanner
   const handleQuickProductSelect = useCallback(
     async (productId: string, quantity: number = 1) => {
-      let saleId = currentSaleId;
+      const existingSale = getCurrentSale();
+      let saleId = currentSaleId || existingSale?.id;
 
       // Auto-create sale if none active
-      if (!saleId && !getCurrentSale()) {
+      if (!saleId) {
         saleId = await createSale(effectiveWorkerId || undefined, selectedClient?.id);
       }
 
-      if (saleId || getCurrentSale()) {
-        await addProductToSale(
-          saleId || getCurrentSale()?.id,
-          productId,
-          quantity,
-        );
+      if (saleId) {
+        await addProductToSale(saleId, productId, quantity);
       }
     },
     [currentSaleId, getCurrentSale, createSale, addProductToSale, effectiveWorkerId, selectedClient],

@@ -1,15 +1,12 @@
 "use client";
 
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { format } from "date-fns";
-import { Calendar, Download, Eye, Filter, Package, Search } from "lucide-react";
-import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useMutation } from "@apollo/client";
-import { GENERATE_RECEIPT } from "@/graphql/sales.gql";
-import { useToast } from "@/components/toast-provider";
+import { format } from "date-fns";
+import { Calendar, Download, Eye, Filter, Package, Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import ReceiptGenerator from "./ReceiptGenerator";
 
 interface SalesHistoryPanelProps {
@@ -82,7 +79,7 @@ export default function SalesHistoryPanel({
 
   if (loading) {
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <CardTitle className="text-lg">Recent Sales</CardTitle>
         </CardHeader>
@@ -97,7 +94,7 @@ export default function SalesHistoryPanel({
   }
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Recent Sales</CardTitle>
@@ -140,7 +137,7 @@ export default function SalesHistoryPanel({
               {filteredSales.slice(0, 5).map((sale) => (
                 <div
                   key={sale.id}
-                  className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-3 hover:bg-muted/50 cursor-pointer"
+                  className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-3 hover:bg-muted/50 cursor-pointer"
                   onClick={() => setSelectedSale(sale)}
                 >
                   <div className="flex justify-between items-start">
@@ -189,7 +186,7 @@ export default function SalesHistoryPanel({
       {/* Sale Details Modal */}
       {selectedSale && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-2xl overflow-hidden">
+          <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-2xl overflow-hidden">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>

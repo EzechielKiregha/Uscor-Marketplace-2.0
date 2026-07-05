@@ -1,22 +1,22 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import { DollarSign, Package, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
-  Bar,
-  CartesianGrid,
-  ComposedChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Bar,
+    CartesianGrid,
+    ComposedChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
-import { useMe } from "@/lib/useMe";
 
 interface SalesDashboardProps {
   storeId: string;
@@ -25,28 +25,62 @@ interface SalesDashboardProps {
 export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   const { role } = useMe();
   const [period, setPeriod] = useState<"day" | "week" | "month">("day");
+  const [isOffline, setIsOffline] = useState(
+    typeof navigator !== "undefined" ? !navigator.onLine : false,
+  );
+
+  useEffect(() => {
+    const updateConnectionState = () => {
+      setIsOffline(typeof navigator !== "undefined" ? !navigator.onLine : false);
+    };
+
+    updateConnectionState();
+    window.addEventListener("online", updateConnectionState);
+    window.addEventListener("offline", updateConnectionState);
+
+    return () => {
+      window.removeEventListener("online", updateConnectionState);
+      window.removeEventListener("offline", updateConnectionState);
+    };
+  }, []);
 
   const { data, loading, error, refetch } = useQuery(GET_SALES_DASHBOARD, {
     variables: {
       storeId,
       period,
     },
-    skip: !storeId,
+    skip: !storeId || isOffline,
+    fetchPolicy: "network-only",
   });
 
   useEffect(() => {
-    if (storeId) {
+    if (storeId && !isOffline) {
       refetch();
     }
-  }, [storeId, refetch]);
+  }, [storeId, refetch, isOffline]);
 
   useEffect(() => {
     if (role === "worker") setPeriod("week");
   }, [role]);
 
+  if (isOffline) {
+    return (
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+        <CardContent className="h-75 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-muted-foreground mb-2">Offline view</div>
+            <p className="text-sm text-muted-foreground">
+              Sales insights will sync again when you reconnect.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   if (loading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-75 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -56,9 +90,23 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
       </Card>
     );
 
+  if (error && isOffline)
+    return (
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+        <CardContent className="h-75 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-muted-foreground mb-2">Offline view</div>
+            <p className="text-sm text-muted-foreground">
+              Sales insights will sync again when you reconnect.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+
   if (error)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-75 flex items-center justify-center">
           <div className="text-center">
             <div className="text-destructive mb-2">Error loading dashboard</div>
@@ -77,7 +125,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   const chartData = dashboardData?.chartData || [];
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Sales Dashboard</CardTitle>
         <div className="flex gap-1">

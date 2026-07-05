@@ -1,18 +1,18 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { Plus, Store, User } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { GET_WORKERS } from "@/graphql/worker.gql";
+import { useQuery } from "@apollo/client";
+import { Plus, Store, User } from "lucide-react";
+import { useEffect, useState } from "react";
 import ClientSelectionModal from "./ClientSelectionModal";
 
 interface Worker {
@@ -214,7 +214,7 @@ export default function NewSaleModal({
             <div className="space-y-3">
               <Label>Client (Optional)</Label>
               {selectedClient ? (
-                <div className="p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg">
+                <div className="p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">

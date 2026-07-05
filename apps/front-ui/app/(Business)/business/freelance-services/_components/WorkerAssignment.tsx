@@ -91,7 +91,7 @@ export default function WorkerAssignment({
 
   if (loading || workersLoading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -102,7 +102,7 @@ export default function WorkerAssignment({
     );
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -215,7 +215,7 @@ export default function WorkerAssignment({
       {/* Assign Worker Modal */}
       {showAssignModal && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-md">
+          <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -267,7 +267,7 @@ export default function WorkerAssignment({
                       {filteredWorkers.map((worker: WorkerEntity) => (
                         <div
                           key={worker.id}
-                          className="flex items-center justify-between p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer mb-2"
+                          className="flex items-center justify-between p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg hover:bg-muted/50 cursor-pointer mb-2"
                           onClick={() => setSelectedWorker(worker)}
                         >
                           <div className="flex items-center gap-3">
@@ -311,7 +311,7 @@ export default function WorkerAssignment({
                     <select
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
-                      className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+                      className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
                     >
                       <option value="PRIMARY">Primary Worker</option>
                       <option value="ASSISTANT">Assistant</option>

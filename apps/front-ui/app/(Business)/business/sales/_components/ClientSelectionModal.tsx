@@ -3,17 +3,17 @@
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  CREATE_CLIENT_FOR_POS,
-  GET_CLIENT_BY_EMAIL,
-  SEARCH_CLIENTS,
+    CREATE_CLIENT_FOR_POS,
+    GET_CLIENT_BY_EMAIL,
+    SEARCH_CLIENTS,
 } from "@/graphql/client.gql";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { Mail, MapPin, Phone, Plus, Search, User } from "lucide-react";
@@ -107,6 +107,11 @@ export default function ClientSelectionModal({
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
 
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      showToast("info", "Offline", "Client search is unavailable offline. You can still continue with a walk-in sale.");
+      return;
+    }
+
     if (isValidEmail(searchQuery)) {
       // Search by email first
       getClientByEmail({ variables: { email: searchQuery } });
@@ -191,7 +196,7 @@ export default function ClientSelectionModal({
                   {searchResults.map((client) => (
                     <div
                       key={client.id}
-                      className="p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                      className="p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                       onClick={() => {
                         onClientSelected(client);
                         handleClose();

@@ -1,23 +1,23 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Clock,
-  CreditCard,
-  Package,
-  Truck,
-} from "lucide-react";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useCart } from "@/app/context/use-cart";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
-import { useCart } from "@/app/context/use-cart";
 import { formatPrice } from "@/lib/utils";
+import { useQuery } from "@apollo/client";
+import {
+    ArrowLeft,
+    CheckCircle2,
+    Clock,
+    CreditCard,
+    Package,
+    Truck,
+} from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 
 export default function OrderDetailsPage() {
   const params = useParams<{ id: string }>();
@@ -48,7 +48,7 @@ export default function OrderDetailsPage() {
             Back to Products
           </Link>
         </div>
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle>Order not found</CardTitle>
           </CardHeader>
@@ -110,7 +110,7 @@ export default function OrderDetailsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left column */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <Package className="h-5 w-5" />
@@ -142,7 +142,7 @@ export default function OrderDetailsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Truck className="h-5 w-5" />
@@ -169,7 +169,7 @@ export default function OrderDetailsPage() {
 
           {/* Right column */}
           <div className="space-y-6">
-            <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+            <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CreditCard className="h-5 w-5" />

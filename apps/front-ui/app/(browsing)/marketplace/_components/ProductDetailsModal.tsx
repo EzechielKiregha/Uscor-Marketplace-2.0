@@ -5,20 +5,20 @@ import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getBusinessTypeConfig, getBusinessTypeEmoji } from "@/config/business-types";
-import TypeSpecificFields from "./TypeSpecificFields";
 import {
-  AlertTriangle,
-  BaggageClaim,
-  Gift,
-  MapPin,
-  MessageSquare,
-  Minus,
-  Plus,
-  ShieldCheck,
-  ShoppingCart,
-  X,
+    AlertTriangle,
+    BaggageClaim,
+    Gift,
+    MapPin,
+    MessageSquare,
+    Minus,
+    Plus,
+    ShieldCheck,
+    ShoppingCart,
+    X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import TypeSpecificFields from "./TypeSpecificFields";
 
 interface ProductDetailsModalProps {
   product: any;
@@ -91,7 +91,7 @@ export default function ProductDetailsModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -167,7 +167,7 @@ export default function ProductDetailsModal({
             {/* Right Column - Product Details */}
             <div className="space-y-6">
               {/* Business Info */}
-              <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4">
+              <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
                 <div className="flex items-start gap-3">
                   <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-xl font-bold shrink-0">
                     {getBusinessTypeIcon()}
@@ -270,7 +270,7 @@ export default function ProductDetailsModal({
               {/* Quantity Selector */}
               <div className="flex items-center gap-3">
                 <label className="font-medium">Quantity:</label>
-                <div className="flex items-center border border-orange-400/60 dark:border-orange-500/70 rounded-md">
+                <div className="flex items-center border border-border hover:border-primary hover:bg-primary/5 rounded-md">
                   <Button
                     variant="outline"
                     size="icon"
@@ -326,7 +326,7 @@ export default function ProductDetailsModal({
               {(() => {
                 const config = getBusinessTypeConfig(product.business?.businessType);
                 return (
-                  <div className="mt-6 p-4 bg-muted rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+                  <div className="mt-6 p-4 bg-muted rounded-lg border border-border hover:border-primary hover:bg-primary/5">
                     <div className="flex items-start gap-3">
                       <div className={`p-1.5 rounded-md ${config.color.badge} shrink-0`}>
                         <config.icon className="h-4 w-4" />

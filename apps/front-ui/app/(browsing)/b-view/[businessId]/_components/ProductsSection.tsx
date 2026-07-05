@@ -70,7 +70,7 @@ export default function ProductsSection({
 
   if (loading) {
     return (
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -83,7 +83,7 @@ export default function ProductsSection({
 
   if (filteredProducts.length === 0) {
     return (
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
         <EmptyState
           icon={emptyStateIcons.products}
           title="No products found"
@@ -104,7 +104,7 @@ export default function ProductsSection({
   }
 
   return (
-    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+    <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-64">
@@ -131,7 +131,7 @@ export default function ProductsSection({
                 : "All Categories"}
             </Button>
             {categories.length > 0 && (
-              <div className="absolute right-0 mt-2 w-48 bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-md shadow-lg z-10 hidden group-hover:block">
+              <div className="absolute right-0 mt-2 w-48 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-md shadow-lg z-10 hidden group-hover:block">
                 <div className="py-1">
                   <button
                     onClick={() => setSelectedCategory(null)}
@@ -153,7 +153,7 @@ export default function ProductsSection({
             )}
           </div>
 
-          <div className="flex border border-orange-400/60 dark:border-orange-500/70 rounded-md">
+          <div className="flex border border-border hover:border-primary hover:bg-primary/5 rounded-md">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
               size="icon"
@@ -181,7 +181,7 @@ export default function ProductsSection({
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
               >
                 <div className="relative pb-[100%] h-0">
                   
@@ -250,7 +250,7 @@ export default function ProductsSection({
           {filteredProducts.map((product) => (
             <div key={product.id} className="p-4 hover:bg-muted/50">
               <div className="flex gap-4">
-                <div className="w-24 h-24 shrink-0 border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+                <div className="w-24 h-24 shrink-0 border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
                   {product.medias && product.medias.length > 0 ? (
                     <img
                       src={product.medias[0].url}

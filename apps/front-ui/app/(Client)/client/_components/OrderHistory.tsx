@@ -2,6 +2,7 @@
 
 import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
 import { useCart } from "@/app/context/use-cart";
+import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,20 +11,19 @@ import { GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
 import { ProductEntity } from "@/lib/types";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  ArrowRight,
-  Calendar,
-  CheckCircle,
-  CreditCard,
-  Download,
-  Loader2,
-  MapPin,
-  Search,
-  ShoppingBag,
-  Star,
-  Truck,
-  X,
+    ArrowRight,
+    Calendar,
+    CheckCircle,
+    CreditCard,
+    Download,
+    Loader2,
+    MapPin,
+    Search,
+    ShoppingBag,
+    Star,
+    Truck,
+    X,
 } from "lucide-react";
-import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
 import { useState } from "react";
 
 interface OrderHistoryProps {
@@ -200,7 +200,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
 
   if (ordersLoading) {
     return (
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading order history...</p>
@@ -211,7 +211,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
 
   if (ordersError) {
     return (
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <ShoppingBag className="h-8 w-8 text-muted-foreground" />
@@ -229,7 +229,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
 
   if (filteredOrders.length === 0) {
     return (
-      <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-6">
+      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <ShoppingBag className="h-8 w-8 text-muted-foreground" />
@@ -268,7 +268,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
   }
 
   return (
-    <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+    <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -293,7 +293,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-48 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Statuses</option>
             <option value="PENDING">Pending</option>
@@ -601,7 +601,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
       {/* Order Details Modal */}
       {activeOrder && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-orange-400/60 dark:border-orange-500/70 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -623,7 +623,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                 {/* Order Summary */}
                 <div className="lg:col-span-2 space-y-6">
                   {/* Order Items */}
-                  <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+                  <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
                     <div className="p-4 bg-muted border-b border-border">
                       <h3 className="font-semibold">Order Items</h3>
                     </div>
@@ -693,7 +693,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                   </div>
 
                   {/* Order Activity Timeline */}
-                  <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+                  <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
                     <div className="p-4 bg-muted border-b border-border">
                       <h3 className="font-semibold">Order Timeline</h3>
                     </div>
@@ -709,7 +709,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                 {/* Business & Payment Info */}
                 <div className="space-y-6">
                   {/* Business Info */}
-                  <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+                  <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
                     <div className="p-4 bg-muted border-b border-border">
                       <h3 className="font-semibold">Business Information</h3>
                     </div>
@@ -753,7 +753,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
                   </div>
 
                   {/* Payment Info */}
-                  <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+                  <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
                     <div className="p-4 bg-muted border-b border-border">
                       <h3 className="font-semibold">Payment Information</h3>
                     </div>
@@ -785,7 +785,7 @@ export default function OrderHistory({ client }: OrderHistoryProps) {
 
                   {/* Delivery Address */}
                   {activeOrder.deliveryAddress && (
-                    <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg overflow-hidden">
+                    <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
                       <div className="p-4 bg-muted border-b border-border">
                         <h3 className="font-semibold">Delivery Address</h3>
                       </div>

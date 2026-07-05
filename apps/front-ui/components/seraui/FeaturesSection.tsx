@@ -119,7 +119,7 @@ export default function FeaturesSection() {
 										imageOnRight ? "order-1 md:order-2" : "order-1 md:order-1"
 									}
 								>
-									<div className="relative w-full overflow-hidden rounded-2xl border border-orange-400/60 dark:border-orange-500/70 bg-card shadow-sm">
+									<div className="relative w-full overflow-hidden rounded-2xl border border-border hover:border-primary hover:bg-primary/5 bg-card shadow-sm">
 										<Image
 											src={feature.imageSrc}
 											alt={feature.imageAlt}

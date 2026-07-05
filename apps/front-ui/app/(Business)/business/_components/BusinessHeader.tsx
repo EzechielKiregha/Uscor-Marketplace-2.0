@@ -1,19 +1,19 @@
 "use client";
 
-import {
-	Menu,
-	MoonIcon,
-	Search,
-	SidebarClose,
-	SidebarOpen,
-	SunIcon,
-	X,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState } from "react";
 import NotificationsPopover from "@/components/seraui/Notifications";
 import UserDropdown from "@/components/seraui/UserDrodown";
 import { Button } from "@/components/ui/button";
+import {
+    Menu,
+    MoonIcon,
+    Search,
+    SidebarClose,
+    SidebarOpen,
+    SunIcon,
+    X,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import { useState } from "react";
 import { sidebarItems } from "./BusinessSidebar";
 
 interface BusinessHeaderProps {
@@ -72,7 +72,7 @@ export default function BusinessHeader({
 					<input
 						type="text"
 						placeholder="Search products, orders, customers..."
-						className="w-full pl-9 pr-4 py-2 rounded-lg border border-orange-400/60 dark:border-orange-500/70 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full pl-9 pr-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
 					/>
 				</div>
 			</div>

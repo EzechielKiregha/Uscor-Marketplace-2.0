@@ -71,7 +71,7 @@ export default function ProductCard({ prodID, setProdID, product, viewMode, noBo
       <>
         <div className={cn(
           "rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card",
-          !noBorder && "border border-orange-400/60 dark:border-orange-500/70",
+          !noBorder && "border border-border hover:border-primary hover:bg-primary/5",
         )}>
           {/* Product Image */}
           <div className="h-72 bg-muted relative">
@@ -225,7 +225,7 @@ export default function ProductCard({ prodID, setProdID, product, viewMode, noBo
     <>
       <div className={cn(
         "rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row",
-        !noBorder && "border border-orange-400/60 dark:border-orange-500/70",
+        !noBorder && "border border-border hover:border-primary hover:bg-primary/5",
       )}>
         {/* Product Image */}
         <div className="md:w-48 h-32 md:h-auto bg-muted relative">

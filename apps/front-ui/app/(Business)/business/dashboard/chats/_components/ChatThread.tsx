@@ -1,13 +1,13 @@
 // app/business/chats/_components/ChatThread.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { ArrowLeft, MoreVertical, Paperclip, Send, Smile } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_CHAT_BY_ID, SEND_MESSAGE } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { ArrowLeft, MoreVertical, Paperclip, Send, Smile } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface ChatThreadProps {
 	chatId: string;
@@ -114,7 +114,7 @@ export default function ChatThread({ chatId, onBack }: ChatThreadProps) {
 						<div
 							className={`max-w-[85%] md:max-w-[70%] rounded-lg p-2 md:p-3 ${
 								message.senderType === "CLIENT"
-									? "bg-card border border-orange-400/60 dark:border-orange-500/70"
+									? "bg-card border border-border hover:border-primary hover:bg-primary/5"
 									: "bg-primary text-primary-foreground"
 							}`}
 						>
@@ -157,7 +157,7 @@ export default function ChatThread({ chatId, onBack }: ChatThreadProps) {
 							onChange={(e) => setMessage(e.target.value)}
 							onKeyPress={handleKeyPress}
 							placeholder="Type a message..."
-							className="w-full p-2 md:p-3 border border-orange-400/60 dark:border-orange-500/70 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[40px] max-h-[120px] text-sm md:text-base"
+							className="w-full p-2 md:p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[40px] max-h-[120px] text-sm md:text-base"
 							rows={1}
 						/>
 					</div>

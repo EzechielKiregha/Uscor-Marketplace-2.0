@@ -128,7 +128,7 @@ export default function LoginPage() {
       8000,
       "bottom-right",
     );
-    router.push("/worker");
+    window.location.assign("/worker");
   };
 
   const [getRoleQuery, { loading: roleLoading }] = useLazyQuery(

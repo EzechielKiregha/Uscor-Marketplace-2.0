@@ -1,17 +1,16 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  AlertTriangle,
-  ChevronDown,
-  ChevronUp,
-  Package,
-  TrendingDown,
-} from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GET_INVENTORY } from "@/graphql/inventory.gql";
+import { useQuery } from "@apollo/client";
+import {
+    AlertTriangle,
+    ChevronDown,
+    ChevronUp,
+    Package,
+    TrendingDown,
+} from "lucide-react";
+import { useState } from "react";
 
 interface LowStockAlertsProps {
   storeId: string;
@@ -48,7 +47,7 @@ export default function LowStockAlerts({
       limit: 50,
     },
     skip: !storeId,
-    pollInterval: 60000, // Refresh every minute
+    pollInterval: 120000, // Refresh every minute
   });
 
   const lowStockItems: InventoryItem[] = data?.inventory?.items || [];

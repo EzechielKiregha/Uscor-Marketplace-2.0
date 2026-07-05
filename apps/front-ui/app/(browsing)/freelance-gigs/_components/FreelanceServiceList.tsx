@@ -1,9 +1,9 @@
-import { ApolloError } from "@apollo/client";
-import { AlertTriangle } from "lucide-react";
-import { useEffect, useState } from "react";
 import MasonryGrid, { ServiceGridItem } from "@/components/seraui/MasonryGrid";
 import { GET_FREELANCE_SERVICES } from "@/graphql/freelance-service.gql";
 import { client } from "@/lib/apollo-client";
+import { ApolloError } from "@apollo/client";
+import { AlertTriangle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function FreelanceServiceList() {
   const [freelanceServices, setFreelanceServices] = useState([]);
@@ -38,7 +38,7 @@ export default function FreelanceServiceList() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white  text-gray-900 p-2 dark:text-gray-100 border border-orange-400/60 dark:border-orange-500/70 rounded-xl">
+    <div className="min-h-screen bg-white  text-gray-900 p-2 dark:text-gray-100 border border-border hover:border-primary hover:bg-primary/5 rounded-xl">
       {isloading && (
         <div className="flex flex-col bg-transparent justify-center items-center">
           <div className="w-8 h-8 bg-orange-600 rounded mt-20 animate-spin"></div>

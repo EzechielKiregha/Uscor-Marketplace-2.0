@@ -5,6 +5,7 @@ import NewSaleModal from "@/app/(Business)/business/sales/_components/NewSaleMod
 import ChatPage from "@/components/chat/ChatComponent";
 import MotionPage from "@/components/MotionPage";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
+import { OfflineAccessCard } from "@/components/OfflineAccessCard";
 import { OfflineWorkerBanner } from "@/components/OfflineWorkerBanner";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { SyncStatusBar } from "@/components/SyncStatusBar";
@@ -17,7 +18,7 @@ import { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import { DollarSign, Package, Plus, ShoppingCart, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import InventoryPage from "./_components/InventoryPage";
 import LowStockAlerts from "./_components/LowStockAlerts";
 import PosPage from "./_components/PosPage";
@@ -32,6 +33,15 @@ export default function WorkerPage() {
     useWorkerLayout();
   const [showNewSaleModal, setShowNewSaleModal] = useState(false);
   const offlineSession = isOfflineMode() ? getActiveOfflineSession() : null;
+  const isOfflineAuthenticated = Boolean(offlineSession);
+
+  const fallbackStores = useMemo(() => {
+    if (!offlineSession) return [];
+    return offlineSession.businessInfo.storeIds.map((storeId, index) => ({
+      id: storeId,
+      name: offlineSession.businessInfo.storeNames[index] || `Store ${index + 1}`,
+    })) as StoreEntity[];
+  }, [offlineSession]);
 
   const handleOfflineLogout = () => {
     setActiveOfflineSession(null);
@@ -48,13 +58,23 @@ export default function WorkerPage() {
     data: storesData,
     loading: storesLoading,
     error: storesError,
-  } = useQuery(GET_STORES);
+  } = useQuery(GET_STORES, {
+    skip: isOfflineAuthenticated || !user?.id,
+  });
+
+  const storeOptions = useMemo(() => {
+    if (isOfflineAuthenticated) return fallbackStores;
+    return storesData?.stores ?? [];
+  }, [fallbackStores, isOfflineAuthenticated, storesData?.stores]);
 
   useEffect(() => {
-    if (!selectedStoreId && storesData?.stores?.length > 0) {
-      setSelectedStoreId(storesData.stores[0].id);
+    if (!selectedStoreId) {
+      const firstStoreId = storeOptions[0]?.id;
+      if (firstStoreId) {
+        setSelectedStoreId(firstStoreId);
+      }
     }
-  }, [storesData, selectedStoreId, setSelectedStoreId]);
+  }, [selectedStoreId, setSelectedStoreId, storeOptions]);
 
   const { createSale } = useSales(
     selectedStoreId || "",
@@ -85,14 +105,14 @@ export default function WorkerPage() {
       workerId: user?.id,
       storeId: selectedStoreId,
     },
-    skip: !user?.id || !selectedStoreId,
+    skip: !user?.id || !selectedStoreId || isOfflineAuthenticated,
   });
 
 //   console.log(dashboardData?.workerDashboard);
 
-  if (authLoading || dashboardLoading || !selectedStoreId || storesLoading)
+  if (authLoading || (dashboardLoading && !isOfflineAuthenticated) || !selectedStoreId || (storesLoading && !isOfflineAuthenticated))
     return <DashboardSkeleton statCount={4} showChart={false} showTable={false} />;
-  if (dashboardError || storesError)
+  if (!isOfflineAuthenticated && (dashboardError || storesError))
     return (
       <div>
         Error loading dashboard:{" "}
@@ -134,9 +154,9 @@ export default function WorkerPage() {
             title="selected store ID"
             value={selectedStoreId || ""}
             onChange={(e) => setSelectedStoreId(e.target.value)}
-            className="w-full sm:w-72 p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-72 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
-            {storesData.stores.map((store: StoreEntity) => (
+            {storeOptions.map((store: StoreEntity) => (
               <option key={store.id} value={store.id}>
                 {store.name} {store.address ? `• ${store.address}` : ""}
               </option>
@@ -175,6 +195,10 @@ export default function WorkerPage() {
           onReconnect={handleReconnect}
           onLogout={handleOfflineLogout}
         />
+      )}
+
+      {!offlineSession && (
+        <OfflineAccessCard workerId={user?.id} />
       )}
 
       {/* Sync Status Bar */}

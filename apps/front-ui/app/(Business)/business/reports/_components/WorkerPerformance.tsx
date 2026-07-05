@@ -9,23 +9,23 @@ import { exportShiftsCSV } from "@/lib/export-utils";
 import { downloadShiftReportPDF } from "@/lib/pdf/shift-report-pdf";
 import { useQuery } from "@apollo/client";
 import {
-  Award,
-  Clock,
-  DollarSign,
-  Download,
-  FileText,
-  TrendingUp,
-  Users,
+    Award,
+    Clock,
+    DollarSign,
+    Download,
+    FileText,
+    TrendingUp,
+    Users,
 } from "lucide-react";
 import { useState } from "react";
 import {
-  Bar,
-  CartesianGrid,
-  ComposedChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Bar,
+    CartesianGrid,
+    ComposedChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
 import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
@@ -60,7 +60,7 @@ export default function WorkerPerformance({
 
   if (loading) {
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-64 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -116,7 +116,7 @@ export default function WorkerPerformance({
   return (
     <div className="space-y-6">
       {/* Period Selector */}
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -176,7 +176,7 @@ export default function WorkerPerformance({
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Users className="h-4 w-4 text-primary" />
@@ -191,7 +191,7 @@ export default function WorkerPerformance({
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-green-500" />
@@ -206,7 +206,7 @@ export default function WorkerPerformance({
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Clock className="h-4 w-4 text-blue-500" />
@@ -223,7 +223,7 @@ export default function WorkerPerformance({
           </CardContent>
         </Card>
 
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="h-4 w-4 text-orange-500" />
@@ -243,7 +243,7 @@ export default function WorkerPerformance({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Per Worker Chart */}
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium">
               Revenue by Worker
@@ -282,7 +282,7 @@ export default function WorkerPerformance({
         </Card>
 
         {/* Worker Rankings */}
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Award className="h-4 w-4" />
@@ -357,7 +357,7 @@ export default function WorkerPerformance({
 
       {/* Active Shifts */}
       {activeShifts.length > 0 && (
-        <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
           <CardHeader>
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Clock className="h-4 w-4 text-green-500" />

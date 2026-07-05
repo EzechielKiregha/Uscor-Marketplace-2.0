@@ -5,7 +5,7 @@ import { gql } from "@apollo/client";
 // ======================
 
 export const WORKER_REPORT_ENTITY = gql`
-  fragment WorkerReportEntity on WorkerReport {
+  fragment WorkerReport on WorkerReportEntity {
     id
     workerId
     storeId
@@ -44,44 +44,55 @@ export const GET_WORKER_REPORTS = gql`
   query GetWorkerReports(
     $workerId: String!
     $storeId: String
-    $startDate: DateTime
-    $endDate: DateTime
-    $period: String = "MONTH"
+    $timeRange: String
+    $reportType: String
     $page: Int = 1
     $limit: Int = 20
   ) {
     workerReports(
       workerId: $workerId
       storeId: $storeId
-      startDate: $startDate
-      endDate: $endDate
-      period: $period
+      timeRange: $timeRange
+      reportType: $reportType
       page: $page
       limit: $limit
     ) {
       items {
-        ...WorkerReportEntity
+        id
+        totalSales
+        totalOrders
+        totalRevenue
+        averageOrderValue
+        activeCustomers
+        topSellingProducts {
+          id
+          title
+          imageUrl
+          quantitySold
+          revenue
+          profitMargin
+          averageRating
+        }
+        period
+        reportType
       }
       total
       page
       limit
     }
   }
-  ${WORKER_REPORT_ENTITY}
 `;
 
 export const GET_WORKER_PERFORMANCE = gql`
   query GetWorkerPerformance(
     $workerId: String!
     $storeId: String
-    $startDate: DateTime
-    $endDate: DateTime
+    $timeRange: String
   ) {
     workerPerformance(
       workerId: $workerId
       storeId: $storeId
-      startDate: $startDate
-      endDate: $endDate
+      timeRange: $timeRange
     ) {
       totalSales
       totalTransactions
@@ -89,7 +100,8 @@ export const GET_WORKER_PERFORMANCE = gql`
       averageTicket
       customerSatisfaction
       attendanceRate
-      shiftsWorked
+      shiftsCompleted
+      personalSales
       salesByHour {
         hour
         sales
@@ -101,9 +113,11 @@ export const GET_WORKER_PERFORMANCE = gql`
       }
       topSellingProducts {
         id
-        name
+        title
         quantitySold
         revenue
+        profitMargin
+        averageRating
       }
     }
   }
@@ -113,8 +127,7 @@ export const GET_WORKER_SALES_HISTORY = gql`
   query GetWorkerSalesHistory(
     $workerId: String!
     $storeId: String
-    $startDate: DateTime
-    $endDate: DateTime
+    $timeRange: String
     $status: String
     $page: Int = 1
     $limit: Int = 20
@@ -122,8 +135,7 @@ export const GET_WORKER_SALES_HISTORY = gql`
     workerSalesHistory(
       workerId: $workerId
       storeId: $storeId
-      startDate: $startDate
-      endDate: $endDate
+      timeRange: $timeRange
       status: $status
       page: $page
       limit: $limit

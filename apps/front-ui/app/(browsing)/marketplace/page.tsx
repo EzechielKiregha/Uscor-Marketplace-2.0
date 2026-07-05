@@ -251,7 +251,7 @@ export default function MarketplacePage() {
 
       {/* Search + Filter Sticky Controls */}
       <div className="sticky top-2 z-40 mb-6">
-        <div className="bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/80 border border-orange-400/60 dark:border-orange-500/70 rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/80 border border-border hover:border-primary hover:bg-primary/5 rounded-2xl shadow-lg overflow-hidden">
           {/* TOP TOOLBAR */}
           <div className="p-3 sm:p-4 flex items-center gap-2 flex-wrap">
             {/* Search */}
@@ -282,7 +282,7 @@ export default function MarketplacePage() {
             </Button>
 
             {/* View Mode */}
-            <div className="hidden sm:flex border border-orange-400/60 dark:border-orange-500/70 rounded-xl overflow-hidden">
+            <div className="hidden sm:flex border border-border hover:border-primary hover:bg-primary/5 rounded-xl overflow-hidden">
               <Button
                 variant={viewMode === "grid" ? "default" : "ghost"}
                 size="icon"
@@ -325,7 +325,7 @@ export default function MarketplacePage() {
                 </Button>
 
                 {/* Mobile View Toggle */}
-                <div className="sm:hidden ml-auto flex border border-orange-400/60 dark:border-orange-500/70 rounded-xl overflow-hidden">
+                <div className="sm:hidden ml-auto flex border border-border hover:border-primary hover:bg-primary/5 rounded-xl overflow-hidden">
                   <Button
                     variant={viewMode === "grid" ? "default" : "ghost"}
                     size="icon"
@@ -352,7 +352,7 @@ export default function MarketplacePage() {
                   onChange={(e) =>
                     handleFilterChange("businessType", e.target.value)
                   }
-                  className="h-11 px-3 rounded-xl border border-orange-400/60 dark:border-orange-500/70 bg-background"
+                  className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
                 >
                   <option value="">All Business Types</option>
                   {businessTypes.map((type: any) => (
@@ -368,7 +368,7 @@ export default function MarketplacePage() {
                     onChange={(e) =>
                       handleFilterChange("category", e.target.value)
                     }
-                    className="h-11 px-3 rounded-xl border border-orange-400/60 dark:border-orange-500/70 bg-background"
+                    className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
                   >
                     <option value="">All Product Categories</option>
                     {productCategories.map((category: any) => (
@@ -383,7 +383,7 @@ export default function MarketplacePage() {
                     onChange={(e) =>
                       handleFilterChange("category", e.target.value)
                     }
-                    className="h-11 px-3 rounded-xl border border-orange-400/60 dark:border-orange-500/70 bg-background"
+                    className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
                   >
                     <option value="">All Service Categories</option>
                     <option value="DESIGN">Design & Creative</option>
@@ -399,7 +399,7 @@ export default function MarketplacePage() {
                 <select
                   value={filters.sort}
                   onChange={(e) => handleFilterChange("sort", e.target.value)}
-                  className="h-11 px-3 rounded-xl border border-orange-400/60 dark:border-orange-500/70 bg-background"
+                  className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
                 >
                   <option value="relevance">Relevance</option>
                   <option value="price_asc">Price: Low to High</option>

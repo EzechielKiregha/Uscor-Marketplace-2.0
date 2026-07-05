@@ -15,24 +15,24 @@ import { businessProfileSchema } from "@/lib/validators/form-schemas";
 import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
-  Beer,
-  BookOpen,
-  Camera,
-  CheckCircle,
-  Coffee,
-  Hammer,
-  Image as ImageIcon,
-  Laptop,
-  Loader2,
-  Mail,
-  MapPin,
-  Palette,
-  Phone,
-  Shirt,
-  ShoppingCart,
-  Store,
-  User,
-  Utensils,
+    Beer,
+    BookOpen,
+    Camera,
+    CheckCircle,
+    Coffee,
+    Hammer,
+    Image as ImageIcon,
+    Laptop,
+    Loader2,
+    Mail,
+    MapPin,
+    Palette,
+    Phone,
+    Shirt,
+    ShoppingCart,
+    Store,
+    User,
+    Utensils,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -394,7 +394,7 @@ export default function ProfileSettings() {
 
   if (authLoading)
     return (
-      <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -410,7 +410,7 @@ export default function ProfileSettings() {
     ] || businessBenefitsMap.ARTISAN;
 
   return (
-    <Card className="border border-orange-400/60 dark:border-orange-500/70 bg-card">
+    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -596,7 +596,7 @@ export default function ProfileSettings() {
               name="country"
               value={formData.country}
               onChange={handleSelectChange}
-              className="w-full p-2 border border-orange-400/60 dark:border-orange-500/70 rounded-md"
+              className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
             >
               <option value="RWANDA">Rwanda</option>
               <option value="UGANDA">Uganda</option>
@@ -661,7 +661,7 @@ export default function ProfileSettings() {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-orange-400/60 dark:border-orange-500/70 rounded-lg p-4 bg-muted">
+          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}
@@ -677,7 +677,7 @@ export default function ProfileSettings() {
             </ul>
 
             {benefits.tip && (
-              <div className="mt-4 p-3 bg-background rounded-lg border border-orange-400/60 dark:border-orange-500/70">
+              <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
                 <p className="text-sm">
                   <strong>Pro Tip:</strong> {benefits.tip}
                 </p>
