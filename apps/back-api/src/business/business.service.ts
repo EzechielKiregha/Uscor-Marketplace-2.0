@@ -980,10 +980,10 @@ export class BusinessService {
             ? ((totalOrders - previousOrders) / previousOrders) * 100
             : 100;
 
-        console.log("Revenues: ", {
-            totalRevenue,
-            previousOrders,
-        });
+        // console.log("Revenues: ", {
+        //     totalRevenue,
+        //     previousOrders,
+        // });
 
         return {
             totalRevenue,

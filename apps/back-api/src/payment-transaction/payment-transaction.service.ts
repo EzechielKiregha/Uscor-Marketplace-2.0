@@ -211,6 +211,7 @@ export class PaymentTransactionService {
             (item) => item.product.businessId === userId,
         );
 
+
         if (!isBusinessOwner && order.clientId !== userId) {
             throw new Error(
                 "You are not authorized to update this payment transaction",

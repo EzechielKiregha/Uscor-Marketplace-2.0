@@ -1,6 +1,6 @@
 import {
-  Injectable,
-  Logger,
+    Injectable,
+    Logger,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { put } from '@vercel/blob'
@@ -8,15 +8,15 @@ import * as puppeteer from 'puppeteer'
 import QRCode from 'qrcode'
 import { AuthPayload } from '../auth/entities/auth-payload.entity'
 import {
-  calcCommission,
-  lineTotal,
-  mulPrecise,
-  REPOST_COMMISSION_RATE,
-  sumPrecise,
+    calcCommission,
+    lineTotal,
+    mulPrecise,
+    REPOST_COMMISSION_RATE,
+    sumPrecise,
 } from '../common/token-math'
 import {
-  OrderStatus,
-  PaymentStatus,
+    OrderStatus,
+    PaymentStatus,
 } from '../generated/prisma/enums'
 import { UpdatePaymentTransactionInput } from '../payment-transaction/dto/update-payment-transaction.input'
 import { PaymentTransactionService } from '../payment-transaction/payment-transaction.service'
@@ -24,8 +24,8 @@ import { PrismaService } from '../prisma/prisma.service'
 import { TokenTransactionType } from '../token-transaction/dto/create-token-transaction.input'
 import { TokenTransactionService } from '../token-transaction/token-transaction.service'
 import {
-  CreateOrderInput,
-  CreateOrderProductInput,
+    CreateOrderInput,
+    CreateOrderProductInput,
 } from './dto/create-order.input'
 import { GenerateOrderReceiptInput } from './dto/receipt.input'
 import { UpdateOrderInput } from './dto/update-order.input'
@@ -323,7 +323,7 @@ export class OrderService {
                   (item) => ({
                     productId: item.productId,
                     quantity: item.quantity,
-                    price: item.price || 0, // You should pass price
+                    price: item.price || 0,
                   }),
                 ),
               },

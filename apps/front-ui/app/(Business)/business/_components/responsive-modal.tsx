@@ -1,10 +1,10 @@
 "use client";
 
-import { X } from "lucide-react";
-import { useMedia } from "react-use";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import { X } from "lucide-react";
+import { useMedia } from "react-use";
 
 interface ResponsiveModalProps {
 	children: React.ReactNode;
@@ -40,14 +40,6 @@ export default function ResponsiveModal({
 				>
 					<DialogTitle className="hidden">{title}</DialogTitle>
 					<div className="relative">
-						{/* <Button
-              variant="ghost"
-              size="icon"
-              className="absolute -top-2 -right-2 z-10"
-              onClick={() => setIsOpen(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button> */}
 						{title && (
 							<div className="border-b border-border px-6 py-4">
 								<h2 className="text-lg font-semibold">{title}</h2>

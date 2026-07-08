@@ -1,18 +1,22 @@
 // app/business/orders/_components/OrderDetailsModal.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { CheckCircle, CreditCard, Package, Truck, XCircle } from "lucide-react";
 import ResponsiveModal from "@/app/(Business)/business/_components/responsive-modal";
 import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
-import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
+import { CANCEL_ORDER, GET_ORDER_BY_ID } from "@/graphql/order.gql";
 import { UPDATE_PAYMENT_TRANSACTION } from "@/graphql/payment.gql";
 import { removeTypename } from "@/lib/removeTypeName";
+import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { CheckCircle, CreditCard, Package, Truck, XCircle } from "lucide-react";
 import { useOpenOrderDetailsModal } from "../../../_hooks/use-open-order-details-modal";
 
 export default function OrderDetailsModal() {
   const { isOpen, setIsOpen, orderId } = useOpenOrderDetailsModal();
+  const { user } = useMe()
+  const { showToast } = useToast()
 
   const { data, loading, error } = useQuery(GET_ORDER_BY_ID, {
     variables: { id: orderId },
@@ -20,6 +24,7 @@ export default function OrderDetailsModal() {
   });
 
   const [updatePaymentTransaction] = useMutation(UPDATE_PAYMENT_TRANSACTION);
+  const [cancelOrder] = useMutation(CANCEL_ORDER);
 
   const orderData = removeTypename(data?.order);
 
@@ -31,14 +36,26 @@ export default function OrderDetailsModal() {
   };
 
   const handleOrderPayment = () => {
-    updatePaymentTransaction({
-      variables: {
-        id: orderData.payment.id,
-        input: {
-          status: "COMPLETED",
-        },
-      },
-    });
+    try {
+        updatePaymentTransaction({
+          variables: {
+            id: orderData.payment.id,
+            input: {
+              status: "COMPLETED",
+            },
+            phone: user?.phone
+          },
+        });
+    } catch (error: any) {
+        showToast(
+          "info",
+          "Permission",
+          error.message,
+          true,
+          4000,
+          "top-center"
+        );
+    }
   };
 
   if (!orderId) return null;
@@ -53,7 +70,7 @@ export default function OrderDetailsModal() {
         })
       }
       title={`Order #${orderId ? orderId.substring(0, 8) : ""}`}
-      size="lg"
+      size="xl"
     >
       {loading ? (
         <div className="p-6">
@@ -222,7 +239,11 @@ export default function OrderDetailsModal() {
                 variant="destructive"
                 onClick={() => {
                   if (confirm("Are you sure you want to cancel this order?")) {
-                    // In a real app, you'd call a mutation to cancel the order
+                    cancelOrder({
+                        variables:{
+                            id: orderId
+                        }
+                    });
                     alert("Order cancelled");
                     handleClose();
                   }
