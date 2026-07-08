@@ -11,13 +11,13 @@ import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import { Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import CurrentSalePanel from "../../../(worker)/worker/_components/_sales/CurrentSalePanel";
+import NewSaleModal from "../../../(worker)/worker/_components/_sales/NewSaleModal";
+import SalesDashboard from "../../../(worker)/worker/_components/_sales/SalesDashboard";
+import SalesHistoryPanel from "../../../(worker)/worker/_components/_sales/SalesHistoryPanel";
 import CreateStoreModal from "../_components/modals/CreateStoreModal";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import { useSales } from "../_hooks/use-sales";
-import CurrentSalePanel from "./_components/CurrentSalePanel";
-import NewSaleModal from "./_components/NewSaleModal";
-import SalesDashboard from "./_components/SalesDashboard";
-import SalesHistoryPanel from "./_components/SalesHistoryPanel";
 
 export default function SalesManagementPage() {
   const { user, role, loading: authLoading } = useMe();

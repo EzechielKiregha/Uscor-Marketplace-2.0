@@ -1,26 +1,26 @@
 "use client";
 
+import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
-  BarChart,
-  BarChart3,
-  BriefcaseBusiness,
-  Building,
-  Crown,
-  Handshake,
-  MessageSquare,
-  Package,
-  Settings,
-  ShoppingCart,
-  Star,
-  Users,
-  Wallet,
+    BarChart,
+    BarChart3,
+    BriefcaseBusiness,
+    Building,
+    Crown,
+    Handshake,
+    MessageSquare,
+    Package,
+    Settings,
+    ShoppingCart,
+    Star,
+    Users,
+    Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
-import { cn } from "@/lib/utils";
 
 interface BusinessSidebarProps {
   business: any; // Replace with actual BusinessEntity type
@@ -30,7 +30,7 @@ interface BusinessSidebarProps {
 export const sidebarItems = [
   { href: "/business/dashboard", icon: BarChart, label: "Dashboard" },
   { href: "/business/stores", icon: Building, label: "Stores" },
-  { href: "/business/sales", icon: ShoppingCart, label: "Point of Sale" },
+//   { href: "/business/sales", icon: ShoppingCart, label: "Point of Sale" },
   { href: "/business/inventory", icon: Package, label: "Inventory" },
   { href: "/business/products", icon: Package, label: "Products" },
   { href: "/business/dashboard/orders", icon: ShoppingCart, label: "Orders" },

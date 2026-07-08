@@ -1,7 +1,7 @@
 "use client";
 
 import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
-import NewSaleModal from "@/app/(Business)/business/sales/_components/NewSaleModal";
+import NewSaleModal from "@/app/(worker)/worker/_components/_sales/NewSaleModal";
 import ChatPage from "@/components/chat/ChatComponent";
 import MotionPage from "@/components/MotionPage";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";

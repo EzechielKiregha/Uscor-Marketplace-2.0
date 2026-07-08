@@ -1,8 +1,8 @@
 "use client";
 
-import CurrentSalePanel from "@/app/(Business)/business/sales/_components/CurrentSalePanel";
-import SalesDashboard from "@/app/(Business)/business/sales/_components/SalesDashboard";
-import SalesHistoryPanel from "@/app/(Business)/business/sales/_components/SalesHistoryPanel";
+import CurrentSalePanel from "@/app/(worker)/worker/_components/_sales/CurrentSalePanel";
+import SalesDashboard from "@/app/(worker)/worker/_components/_sales/SalesDashboard";
+import SalesHistoryPanel from "@/app/(worker)/worker/_components/_sales/SalesHistoryPanel";
 import { SyncStatusBar } from "@/components/SyncStatusBar";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";

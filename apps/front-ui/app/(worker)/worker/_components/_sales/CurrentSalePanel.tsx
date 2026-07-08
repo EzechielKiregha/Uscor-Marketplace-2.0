@@ -24,7 +24,7 @@ import {
     X
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { useSales } from "../../_hooks/use-sales";
+import { useSales } from "../../../../(Business)/business/_hooks/use-sales";
 import ClientSelectionModal from "./ClientSelectionModal";
 import NewSaleModal from "./NewSaleModal";
 

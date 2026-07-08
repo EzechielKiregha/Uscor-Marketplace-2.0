@@ -30,9 +30,9 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import SalesDashboard from "../../../(worker)/worker/_components/_sales/SalesDashboard";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import { useOpenOrderDetailsModal } from "../_hooks/use-open-order-details-modal";
-import SalesDashboard from "../sales/_components/SalesDashboard";
 import OrderDetailsModal from "./orders/_components/OrderDetailsModal";
 
 export default function BusinessDashboardPage() {
