@@ -1,23 +1,17 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-	Building2,
-	CheckCircle,
-	Handshake,
-	MapPin,
-	Package,
-	Search,
-	ShieldCheck,
-	Store,
-	Users,
-} from "lucide-react";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { GET_B2B_VENDORS } from "@/graphql/b2b.gql";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { GET_B2B_VENDORS } from "@/graphql/b2b.gql";
+import { useQuery } from "@apollo/client";
+import {
+    CheckCircle,
+    Handshake,
+    MapPin,
+    ShieldCheck
+} from "lucide-react";
+import { useState } from "react";
 
 export default function VendorProfile() {
 	const [businessTypeFilter, setBusinessTypeFilter] = useState("");

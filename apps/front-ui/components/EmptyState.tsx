@@ -1,25 +1,25 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  Package,
-  ShoppingCart,
-  ShoppingBag,
-  Store,
-  Users,
-  MessageSquare,
-  DollarSign,
-  ClipboardList,
-  Clock,
-  FileText,
-  Heart,
-  Search,
-  TrendingUp,
-  Truck,
-  AlertTriangle,
-  type LucideIcon,
+    AlertTriangle,
+    ClipboardList,
+    Clock,
+    DollarSign,
+    FileText,
+    Heart,
+    type LucideIcon,
+    MessageSquare,
+    Package,
+    Search,
+    ShoppingBag,
+    ShoppingCart,
+    Store,
+    TrendingUp,
+    Truck,
+    Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface EmptyStateAction {
   label: string;
@@ -130,4 +130,5 @@ export const emptyStateIcons = {
   revenue: TrendingUp,
   transfers: Truck,
   warnings: AlertTriangle,
+  users: Users
 } as const;

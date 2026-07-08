@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
 import {
-	clearIndexedDB,
-	getAllFromIndexedDB,
-	getFromIndexedDB,
-	initDB,
-	removeFromIndexedDB,
-	saveToIndexedDB,
-	syncOfflineOperations,
-	updateIndexedDB,
+    clearIndexedDB,
+    getAllFromIndexedDB,
+    getFromIndexedDB,
+    initDB,
+    removeFromIndexedDB,
+    saveToIndexedDB,
+    syncOfflineOperations,
+    updateIndexedDB,
 } from "@/lib/indexed-db";
+import { useEffect, useState } from "react";
 
 export const useIndexedDB = () => {
 	const [isInitialized, setIsInitialized] = useState(false);
@@ -51,8 +51,8 @@ export const useIndexedDB = () => {
 	}, [isOnline, isInitialized]);
 
 	const saveData = async (storeName: string, data: any) => {
-		if (!isInitialized) return;
 		try {
+			await initDB(); // idempotent — safe even if the init effect hasn't resolved yet
 			return await saveToIndexedDB(storeName, data);
 		} catch (error) {
 			console.error("Failed to save to IndexedDB:", error);
@@ -86,8 +86,8 @@ export const useIndexedDB = () => {
 	};
 
 	const getData = async (storeName: string, key: string) => {
-		if (!isInitialized) return null;
 		try {
+			await initDB();
 			return await getFromIndexedDB(storeName, key);
 		} catch (error) {
 			console.error("Failed to get from IndexedDB:", error);
@@ -96,8 +96,8 @@ export const useIndexedDB = () => {
 	};
 
 	const getAllData = async (storeName: string) => {
-		if (!isInitialized) return [];
 		try {
+			await initDB();
 			return await getAllFromIndexedDB(storeName);
 		} catch (error) {
 			console.error("Failed to get all from IndexedDB:", error);
@@ -106,8 +106,8 @@ export const useIndexedDB = () => {
 	};
 
 	const updateData = async (storeName: string, key: string, data: any) => {
-		if (!isInitialized) return;
 		try {
+			await initDB();
 			return await updateIndexedDB(storeName, key, data);
 		} catch (error) {
 			console.error("Failed to update IndexedDB:", error);
@@ -116,8 +116,8 @@ export const useIndexedDB = () => {
 	};
 
 	const removeData = async (storeName: string, key: string) => {
-		if (!isInitialized) return;
 		try {
+			await initDB();
 			return await removeFromIndexedDB(storeName, key);
 		} catch (error) {
 			console.error("Failed to remove from IndexedDB:", error);
@@ -126,8 +126,8 @@ export const useIndexedDB = () => {
 	};
 
 	const clearStore = async (storeName: string) => {
-		if (!isInitialized) return;
 		try {
+			await initDB();
 			return await clearIndexedDB(storeName);
 		} catch (error) {
 			console.error("Failed to clear IndexedDB store:", error);
@@ -139,7 +139,7 @@ export const useIndexedDB = () => {
 	const saveLocalSale = async (sale: any) => {
 		return saveData("localSales", {
 			...sale,
-			status: "PENDING_SYNC",
+			status: sale.status || "PENDING_SYNC", // don't clobber a status the caller already set (e.g. "COMPLETED")
 			createdAt: sale.createdAt || new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
 		});

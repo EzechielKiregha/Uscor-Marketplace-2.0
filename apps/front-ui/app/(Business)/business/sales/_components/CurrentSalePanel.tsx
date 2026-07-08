@@ -398,7 +398,7 @@ export default function CurrentSalePanel({
 
         await saveLocalSale(completedSale);
         await saveOfflineOperation({
-          type: "COMPLETE_SALE",
+          type: "SYNC_COMPLETED_SALE",
           saleId: activeSaleId,
           paymentMethod,
         });

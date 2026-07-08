@@ -1,18 +1,16 @@
-// app/business/sales/_hooks/use-sales.ts
-
+import { useToast } from "@/components/toast-provider";
+import {
+    ADD_SALE_PRODUCT,
+    COMPLETE_SALE,
+    CREATE_SALE,
+    GET_ACTIVE_SALES,
+    GET_SALES_HISTORY,
+    ON_SALE_CREATED,
+    ON_SALE_UPDATED,
+} from "@/graphql/sales.gql";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import {
-	ADD_SALE_PRODUCT,
-	COMPLETE_SALE,
-	CREATE_SALE,
-	GET_ACTIVE_SALES,
-	GET_SALES_HISTORY,
-	ON_SALE_CREATED,
-	ON_SALE_UPDATED,
-} from "@/graphql/sales.gql";
 
 export const useSales = (storeId: string, wUserId: string, role?: string) => {
 	const [currentSaleId, setCurrentSaleId] = useState<string | null>(null);
