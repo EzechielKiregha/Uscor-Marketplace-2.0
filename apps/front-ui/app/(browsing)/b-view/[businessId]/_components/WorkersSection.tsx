@@ -1,11 +1,11 @@
 // app/business/[id]/_components/WorkersSection.tsx
 "use client";
 
+import { Filter, MessageSquare, Search, Star, Users } from "lucide-react";
+import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Filter, MessageSquare, Search, Star, Users } from "lucide-react";
-import { useState } from "react";
 
 interface WorkersSectionProps {
 	workers: any[];

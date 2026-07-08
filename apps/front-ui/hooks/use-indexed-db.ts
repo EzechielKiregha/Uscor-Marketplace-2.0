@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
     clearIndexedDB,
     getAllFromIndexedDB,
@@ -8,7 +9,6 @@ import {
     syncOfflineOperations,
     updateIndexedDB,
 } from "@/lib/indexed-db";
-import { useEffect, useState } from "react";
 
 export const useIndexedDB = () => {
 	const [isInitialized, setIsInitialized] = useState(false);

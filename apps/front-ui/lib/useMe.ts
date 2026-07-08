@@ -1,9 +1,9 @@
 "use client";
 
-import { GET_POINTS_TRANSACTIONS_BY_CLIENT } from "@/graphql/loyalty.gql";
 import { useQuery } from "@apollo/client";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { GET_POINTS_TRANSACTIONS_BY_CLIENT } from "@/graphql/loyalty.gql";
 import { getActiveOfflineSession, isOfflineMode } from "./auth";
 import { fetchMe } from "./fetchMe";
 import {

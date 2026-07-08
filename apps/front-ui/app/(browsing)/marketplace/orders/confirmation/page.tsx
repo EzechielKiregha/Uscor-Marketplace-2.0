@@ -52,9 +52,11 @@ export default function OrderConfirmationPage() {
     data,
     loading: queryLoading,
     error,
+    refetch
   } = useQuery(GET_ORDER_BY_ID, {
     variables: { id: orderId },
     skip: !orderId,
+    fetchPolicy: 'network-only'
   });
 
   const [paymentCancelled, setPaymentCancelled] = useState(
@@ -457,11 +459,8 @@ export default function OrderConfirmationPage() {
                       0,
                     ) + order.deliveryFee
                   }
-                  onPaymentConfirmed={() =>
-                    useQuery(GET_ORDER_BY_ID, {
-                      variables: { id: orderId },
-                      fetchPolicy: "network-only",
-                    })
+                  onPaymentConfirmed={
+                    refetch
                   }
                   onOrderCancelled={() => setPaymentCancelled(true)}
                 />

@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
   Home,
   Menu,
@@ -14,7 +12,9 @@ import {
   Wallet,
   Wallet2,
 } from "lucide-react";
-import { useClientPanel, type ClientSection } from "../../ClientPanelContext";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { type ClientSection, useClientPanel } from "../../ClientPanelContext";
 
 const clientSideLinks: {
   section: ClientSection;

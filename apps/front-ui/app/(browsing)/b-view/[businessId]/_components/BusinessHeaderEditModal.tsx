@@ -1,16 +1,16 @@
 // app/business/[id]/_components/BusinessHeaderEditModal.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { put } from "@vercel/blob";
+import { Image as ImageIcon, Loader2, X } from "lucide-react";
+import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_BUSINESS_BY_ID } from "@/graphql/business-page.gql";
 import { UPDATE_BUSINESS_PROFILE } from "@/graphql/settings.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { put } from "@vercel/blob";
-import { Image as ImageIcon, Loader2, X } from "lucide-react";
-import { useState } from "react";
 
 interface BusinessHeaderEditModalProps {
 	business: any;

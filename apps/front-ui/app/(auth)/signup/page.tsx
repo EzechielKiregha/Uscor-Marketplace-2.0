@@ -1,24 +1,4 @@
 "use client";
-import { GlowButton } from "@/components/seraui/GlowButton";
-import { StatusBadge } from "@/components/StatusBadge";
-import { useToast } from "@/components/toast-provider";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { BUSINESS_TYPE_LIST } from "@/config/business-types";
-import {
-  CREATE_BUSINESS,
-  CREATE_CLIENT,
-  CREATE_WORKER,
-  getLoginMutation,
-  SEND_VERIFICATION_OTP,
-} from "@/graphql/auth.gql";
-import { setAuthToken } from "@/lib/auth";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -42,6 +22,26 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { StatusBadge } from "@/components/StatusBadge";
+import { GlowButton } from "@/components/seraui/GlowButton";
+import { useToast } from "@/components/toast-provider";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
+import {
+  CREATE_BUSINESS,
+  CREATE_CLIENT,
+  CREATE_WORKER,
+  getLoginMutation,
+  SEND_VERIFICATION_OTP,
+} from "@/graphql/auth.gql";
+import { setAuthToken } from "@/lib/auth";
 
 // Electronics & Hardware are active; others are "Coming Soon"
 const ACTIVE_BUSINESS_TYPES = new Set(["ELECTRONICS", "HARDWARE"]);

@@ -1,9 +1,9 @@
 "use client";
 
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { GET_STORE_INVENTORY } from "@/graphql/store.gql";
 import { useQuery } from "@apollo/client";
 import { AlertTriangle, ArrowDown, CheckCircle, Package } from "lucide-react";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { GET_STORE_INVENTORY } from "@/graphql/store.gql";
 
 interface StoreInventoryProps {
   storeId: string;

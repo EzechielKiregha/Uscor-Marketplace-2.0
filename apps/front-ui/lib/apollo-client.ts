@@ -1,4 +1,3 @@
-import { getAccessToken, refreshToken } from "@/lib/auth";
 import {
     ApolloClient,
     ApolloLink,
@@ -8,6 +7,7 @@ import {
 import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
 import { onError } from "@apollo/client/link/error";
 import { Observable } from "@apollo/client/utilities";
+import { getAccessToken, refreshToken } from "@/lib/auth";
 
 if (process.env.NODE_ENV !== "production") {
 	loadErrorMessages();

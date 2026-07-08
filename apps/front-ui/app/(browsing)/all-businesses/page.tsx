@@ -1,15 +1,5 @@
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import MotionPage from "@/components/MotionPage";
-import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    GET_BUSINESS_TYPES,
-    GET_BUSINESSES,
-    ON_BUSINESS_ADDED,
-} from "@/graphql/business-listing.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
     ArrowRight,
@@ -24,6 +14,16 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    GET_BUSINESS_TYPES,
+    GET_BUSINESSES,
+    ON_BUSINESS_ADDED,
+} from "@/graphql/business-listing.gql";
 import BusinessCard from "./_components/BusinessCard";
 
 export default function BusinessListingPage() {

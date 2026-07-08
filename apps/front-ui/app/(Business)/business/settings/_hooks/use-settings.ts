@@ -1,5 +1,7 @@
 // app/business/settings/_hooks/use-settings.ts
 
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { SUBMIT_KYC, UPLOAD_KYC_DOCUMENT } from "@/graphql/kyc.gql";
 import {
@@ -11,8 +13,6 @@ import {
   UPDATE_HARDWARE_CONFIG,
   UPDATE_PAYMENT_CONFIG,
 } from "@/graphql/settings.gql";
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { useState } from "react";
 
 export const useSettings = (businessId: string) => {
   const [activeSection, setActiveSection] = useState<

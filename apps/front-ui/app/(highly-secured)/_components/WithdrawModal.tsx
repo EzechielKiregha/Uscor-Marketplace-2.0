@@ -1,10 +1,10 @@
 "use client";
 
+import { AlertTriangle, ArrowDown, DollarSign, Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AlertTriangle, ArrowDown, DollarSign, Loader2, X } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface WithdrawModalProps {
   isOpen: boolean;

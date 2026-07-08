@@ -1,12 +1,5 @@
 "use client";
 
-import { useCart } from "@/app/context/use-cart";
-import PageSkeleton from "@/components/skeletons/PageSkeleton";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
-import { formatPrice } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
     ArrowLeft,
@@ -18,6 +11,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useCart } from "@/app/context/use-cart";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
+import { formatPrice } from "@/lib/utils";
 
 export default function OrderDetailsPage() {
   const params = useParams<{ id: string }>();

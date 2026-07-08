@@ -1,12 +1,12 @@
 "use client";
-import { ChevronDown } from "lucide-react";
-import Link from "next/link";
 import { FREELANCE_SERVICE_CATEGORIES } from "@/config/freelance-categories";
 import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+import Link from "next/link";
 import {
-  PopoverCategory,
-  PopoverCategoryContent,
-  PopoverCategoryTrigger,
+    PopoverCategory,
+    PopoverCategoryContent,
+    PopoverCategoryTrigger,
 } from "./seraui/PopOverCategory";
 import { Button } from "./ui/button";
 
@@ -64,7 +64,7 @@ const FreelanceNavItem = ({
                         onError={(e) => {
                           e.currentTarget.src = `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.name)}`; // Fallback image
                         }}
-                        alt="freelance service category image"
+                        alt="freelance service category"
                       />
                     </div>
                     <Link

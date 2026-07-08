@@ -1,13 +1,13 @@
 // app/business/chats/_components/ChatThread.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { ArrowLeft, MoreVertical, Paperclip, Send, Smile } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_CHAT_BY_ID, SEND_MESSAGE } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { ArrowLeft, MoreVertical, Paperclip, Send, Smile } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 interface ChatThreadProps {
 	chatId: string;

@@ -1,12 +1,5 @@
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { REJECT_KYC, UPDATE_KYC, VERIFY_KYC } from "@/graphql/kyc.gql";
-import {
-  downloadKycCertificatePDF,
-  uploadKycCertificateToBlob,
-} from "@/lib/pdf/kyc-certificate-pdf";
 import { useMutation } from "@apollo/client";
 import {
   AlertTriangle,
@@ -23,6 +16,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { REJECT_KYC, UPDATE_KYC, VERIFY_KYC } from "@/graphql/kyc.gql";
+import {
+  downloadKycCertificatePDF,
+  uploadKycCertificateToBlob,
+} from "@/lib/pdf/kyc-certificate-pdf";
 
 interface KycVerificationModalProps {
   kyc: any;

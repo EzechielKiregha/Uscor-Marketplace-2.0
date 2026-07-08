@@ -1,22 +1,22 @@
 // app/business/loyalty/_components/EarnPointsModal.tsx
 "use client";
 
-import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { EARN_POINTS } from "@/graphql/loyalty.gql";
+import {
+  AlertTriangle,
+  Coins,
+  Loader2,
+  Search,
+  Star,
+  Users,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Users,
-  Coins,
-  Star,
-  Loader2,
-  X,
-  AlertTriangle,
-  Search,
-} from "lucide-react";
-import { useToast } from "@/components/toast-provider";
 import { Textarea } from "@/components/ui/textarea";
+import { EARN_POINTS } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
 
 interface EarnPointsModalProps {

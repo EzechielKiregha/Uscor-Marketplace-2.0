@@ -1,8 +1,5 @@
 "use client";
 
-import { GlowButton } from "@/components/seraui/GlowButton";
-import { useToast } from "@/components/toast-provider";
-import { RESEND_OTP, VERIFY_EMAIL } from "@/graphql/auth.gql";
 import { useMutation } from "@apollo/client";
 import {
   CheckCircleIcon,
@@ -14,6 +11,9 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GlowButton } from "@/components/seraui/GlowButton";
+import { useToast } from "@/components/toast-provider";
+import { RESEND_OTP, VERIFY_EMAIL } from "@/graphql/auth.gql";
 
 const OTP_LENGTH = 6;
 const OTP_EXPIRY_SECONDS = 600;

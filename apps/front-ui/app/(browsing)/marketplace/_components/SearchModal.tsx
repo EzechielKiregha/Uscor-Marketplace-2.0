@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { SEARCH_MARKETPLACE } from "@/graphql/marketplace.gql";
 import { useQuery } from "@apollo/client";
 import { BriefcaseBusiness, Search, ShoppingCart, Star, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { SEARCH_MARKETPLACE } from "@/graphql/marketplace.gql";
 
 interface SearchModalProps {
 	onClose: () => void;

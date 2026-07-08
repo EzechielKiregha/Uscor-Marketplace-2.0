@@ -1,12 +1,6 @@
 // app/business/reports/page.tsx
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import MotionPage from "@/components/MotionPage";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { Button } from "@/components/ui/button";
-import { GET_STORES } from "@/graphql/store.gql";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
     BarChart3,
@@ -16,6 +10,12 @@ import {
     Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
+import { GET_STORES } from "@/graphql/store.gql";
+import { useMe } from "@/lib/useMe";
 import DailyClosing from "./_components/DailyClosing";
 import FinancialSummary from "./_components/FinancialSummary";
 import MultiStoreComparison from "./_components/MultiStoreComparison";

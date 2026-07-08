@@ -1,10 +1,10 @@
 "use client";
 
+import { Calendar, Hash, Shield } from "lucide-react";
 import {
-  getBusinessTypeConfig,
-  type ProductFieldConfig,
+    getBusinessTypeConfig,
+    type ProductFieldConfig,
 } from "@/config/business-types";
-import { Shield, Calendar, Hash } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TypeSpecificFieldsProps {
@@ -99,7 +99,7 @@ function formatFieldValue(field: ProductFieldConfig, value: any): string {
   if (field.key === "calories") return `${value} cal`;
   if (field.key === "expiryDate") {
     const d = new Date(value);
-    return isNaN(d.getTime()) ? String(value) : d.toLocaleDateString();
+    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString();
   }
   return String(value);
 }

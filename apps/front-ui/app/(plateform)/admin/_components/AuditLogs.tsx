@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-type AuditLogsProps = {};
+// type AuditLogsProps = {};
 
-export default function AuditLogs({}: AuditLogsProps) {
+export default function AuditLogs() {
 	const [filters, setFilters] = useState({
 		search: "",
 		action: "",

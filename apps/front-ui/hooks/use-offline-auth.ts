@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useCallback, useEffect, useState } from "react";
 import { REQUEST_OFFLINE_ACCESS } from "@/graphql/auth.gql";
 import { getDeviceId } from "@/lib/device-id";
 import {
@@ -9,8 +9,8 @@ import {
 	clearOfflineCredentials,
 	getOfflineCredentials,
 	getOfflineTokenDaysRemaining,
-	validateOfflineToken,
 	type OfflineSessionData,
+	validateOfflineToken,
 } from "@/lib/offline-auth";
 
 interface UseOfflineAuthReturn {

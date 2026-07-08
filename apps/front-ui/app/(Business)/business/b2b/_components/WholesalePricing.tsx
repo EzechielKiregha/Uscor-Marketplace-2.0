@@ -1,5 +1,15 @@
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    DollarSign,
+    Package,
+    Plus,
+    Tag,
+    Trash2,
+    X,
+} from "lucide-react";
+import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
@@ -11,16 +21,6 @@ import {
     DELETE_WHOLESALE_PRICE,
     GET_MY_WHOLESALE_PRICES
 } from "@/graphql/b2b.gql";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-    DollarSign,
-    Package,
-    Plus,
-    Tag,
-    Trash2,
-    X,
-} from "lucide-react";
-import { useState } from "react";
 
 interface Props {
 	products: any[];

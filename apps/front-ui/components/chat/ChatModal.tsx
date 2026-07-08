@@ -1,35 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import {
+  AlertCircle,
+  BookOpen,
+  Bot,
+  CheckCircle,
+  ChevronLeft,
+  Home,
+  Loader2,
+  MessageCircle,
+  Phone,
+  Plus,
+  Send,
+  Sparkles,
+  Star,
+  Store,
+  User,
+  X,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import ChatList from "@/components/chat/ChatList";
+import ChatThread from "@/components/chat/ChatThread";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  MessageCircle,
-  X,
-  Send,
-  Home,
-  User,
-  Store,
-  ChevronLeft,
-  Bot,
-  Sparkles,
-  BookOpen,
-  Phone,
-  Loader2,
-  CheckCircle,
-  AlertCircle,
-  Star,
-  Plus,
-} from "lucide-react";
-import { useQuery } from "@apollo/client";
 import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
-import { useRouter } from "next/navigation";
 import { useMe } from "@/lib/useMe";
-import ChatList from "@/components/chat/ChatList";
-import NewChatSession from "./NewChatSession";
-import ChatThread from "@/components/chat/ChatThread";
 import AccordionLast from "../../app/(browsing)/faq/accordion-last";
+import NewChatSession from "./NewChatSession";
 
 interface ChatModalProps {
   isOpen: boolean;

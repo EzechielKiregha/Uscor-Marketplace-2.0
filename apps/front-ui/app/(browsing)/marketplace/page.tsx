@@ -1,16 +1,5 @@
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import MotionPage from "@/components/MotionPage";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { BUSINESS_TYPE_LIST } from "@/config/business-types";
-import {
-    GET_MARKETPLACE_DATA,
-    ON_PRODUCT_ADDED,
-    ON_SERVICE_ADDED,
-} from "@/graphql/marketplace.gql";
-import { GET_PRODUCTS } from "@/graphql/product.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
     BriefcaseBusiness,
@@ -26,6 +15,17 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
+import {
+    GET_MARKETPLACE_DATA,
+    ON_PRODUCT_ADDED,
+    ON_SERVICE_ADDED,
+} from "@/graphql/marketplace.gql";
+import { GET_PRODUCTS } from "@/graphql/product.gql";
 import BusinessTypeShowcase from "./_components/BusinessTypeShowcase";
 import EnhancedPagination from "./_components/EnhancedPagination";
 import FeaturedProductsCarousel from "./_components/FeaturedProductsCarousel";

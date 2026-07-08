@@ -1,11 +1,6 @@
 // app/client/page.tsx
 "use client";
 
-import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
-import { Button } from "@/components/ui/button";
-import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
-import { useMe } from "@/lib/useMe";
-import { cn } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
   BarChart3,
@@ -25,20 +20,25 @@ import {
   Wallet2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import MotionPage from "@/components/MotionPage";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
+import { Button } from "@/components/ui/button";
+import { GET_CLIENT_PROFILE } from "@/graphql/client-panel.gql";
+import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 import ChatPage from "../../../components/chat/ChatComponent";
+import CustomerStats from "./_components/CustomerStats";
+import FavoriteStores from "./_components/FavoriteStores";
 import LoyaltyDashboard from "./_components/LoyaltyDashboard";
 import OrderHistory from "./_components/OrderHistory";
 import ProfileOverview from "./_components/ProfileOverview";
+import PurchaseHistory from "./_components/PurchaseHistory";
 import Recommendations from "./_components/Recommendations";
+import ReturnRequestForm from "./_components/ReturnRequestForm";
 import ReviewsPage from "./_components/Reviews";
 import SettingsPanel from "./_components/SettingsPanel";
-import WalletPage from "./wallet/page";
-import PurchaseHistory from "./_components/PurchaseHistory";
 import WarrantyTracker from "./_components/WarrantyTracker";
-import CustomerStats from "./_components/CustomerStats";
-import FavoriteStores from "./_components/FavoriteStores";
-import ReturnRequestForm from "./_components/ReturnRequestForm";
-import MotionPage from "@/components/MotionPage";
+import WalletPage from "./wallet/page";
 
 type ClientSection =
   | "profile"

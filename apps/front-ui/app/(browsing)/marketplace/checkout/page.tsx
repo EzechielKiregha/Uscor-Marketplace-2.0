@@ -1,5 +1,18 @@
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  ArrowLeft,
+  CheckCircle,
+  CheckCircle2,
+  CircleAlert,
+  CreditCard,
+  MapPin,
+  ShieldCheck,
+  ShoppingBag,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useCart } from "@/app/context/use-cart";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
@@ -15,19 +28,6 @@ import { GET_ACCOUNT_BALANCE } from "@/graphql/wallet.gql";
 import { Address } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  ArrowLeft,
-  CheckCircle,
-  CheckCircle2,
-  CircleAlert,
-  CreditCard,
-  MapPin,
-  ShieldCheck,
-  ShoppingBag,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import AddressSelector from "../_components/AddressSelector";
 import { GetBusinessType } from "../_components/BusinessType";
 import BusinessTypeIcon from "../_components/BusinessTypeIcons";

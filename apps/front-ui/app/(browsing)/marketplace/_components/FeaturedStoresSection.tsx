@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_FEATURED_STORES } from "@/graphql/marketplace.gql";
-import { getBusinessTypeConfig } from "@/config/business-types";
 import { ArrowRight, BadgeCheck, ChevronLeft, ChevronRight, Store } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { getBusinessTypeConfig } from "@/config/business-types";
+import { GET_FEATURED_STORES } from "@/graphql/marketplace.gql";
 
 export default function FeaturedStoresSection() {
   const scrollRef = useRef<HTMLDivElement>(null);

@@ -1,5 +1,18 @@
 "use client";
 
+import { useLazyQuery, useMutation } from "@apollo/client";
+import {
+    Mail,
+    Phone,
+    Plus,
+    Search,
+    User,
+    UserCheck,
+    Users,
+    WifiOff,
+    X
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,19 +28,6 @@ import {
     initDB,
     saveToIndexedDB,
 } from "@/lib/indexed-db";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import {
-    Mail,
-    Phone,
-    Plus,
-    Search,
-    User,
-    UserCheck,
-    Users,
-    WifiOff,
-    X
-} from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 
 // ─── Types ─────────────────────────────────────────────
 

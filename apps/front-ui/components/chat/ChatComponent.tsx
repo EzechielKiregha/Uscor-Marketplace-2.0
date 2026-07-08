@@ -1,20 +1,20 @@
 // app/chat/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
+  AlertCircle,
+  ChevronLeft,
+  Loader2,
   MessageSquare,
   Search,
-  Loader2,
-  AlertCircle,
   X,
-  ChevronLeft,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/components/toast-provider";
 import { GET_CHATS } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
 import ChatModal from "./ChatModal";

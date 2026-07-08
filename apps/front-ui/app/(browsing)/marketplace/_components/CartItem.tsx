@@ -1,7 +1,7 @@
 "use client";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { CartItem as CI } from "@/app/context/use-cart";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2 } from "lucide-react";
 
 interface CartItemProps {
   item: CI;

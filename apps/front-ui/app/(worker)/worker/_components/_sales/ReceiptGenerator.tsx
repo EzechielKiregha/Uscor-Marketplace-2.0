@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button } from "@/components/ui/button";
 import {
-  Download,
-  Mail,
-  Loader2,
-  FileText,
   CheckCircle,
-  XCircle,
+  Download,
+  FileText,
+  Loader2,
+  Mail,
   Printer,
+  XCircle,
 } from "lucide-react";
+import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
 import { GENERATE_RECEIPT, GET_SALE_BY_ID } from "@/graphql/sales.gql";
 import { downloadReceiptPDF } from "@/lib/pdf/receipt-pdf";
 

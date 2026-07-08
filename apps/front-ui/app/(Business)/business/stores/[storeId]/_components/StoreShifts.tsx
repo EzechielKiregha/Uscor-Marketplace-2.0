@@ -2,9 +2,9 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_STORE_SHIFTS } from "@/graphql/store.gql";
-import { Clock, User, CheckCircle, AlertTriangle } from "lucide-react";
+import { AlertTriangle, CheckCircle, Clock, User } from "lucide-react";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { GET_STORE_SHIFTS } from "@/graphql/store.gql";
 
 interface StoreShiftsProps {
   storeId: string;

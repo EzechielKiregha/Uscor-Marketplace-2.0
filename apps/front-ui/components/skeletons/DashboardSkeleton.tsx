@@ -108,4 +108,4 @@ export default function DashboardSkeleton({
   );
 }
 
-export { StatCardSkeleton, ChartSkeleton, TableRowSkeleton };
+export { ChartSkeleton, StatCardSkeleton, TableRowSkeleton };

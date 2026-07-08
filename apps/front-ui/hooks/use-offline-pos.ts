@@ -1,5 +1,7 @@
 "use client";
 
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import {
     ADD_SALE_PRODUCT,
@@ -26,8 +28,6 @@ import {
     saveToIndexedDB,
     updateIndexedDB,
 } from "@/lib/indexed-db";
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 // ─── Types ─────────────────────────────────────────────
 

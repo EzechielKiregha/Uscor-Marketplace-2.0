@@ -1,15 +1,15 @@
 // app/business/freelance-services/page.tsx
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { BriefcaseBusiness, Download, Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_STORES } from "@/graphql/store.gql";
 import { FreelanceServiceEntity, StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useQuery } from "@apollo/client";
-import { BriefcaseBusiness, Download, Plus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useOpenCreateServiceModal } from "../_hooks/use-open-create-service-modal";
 import OrderManagement from "./_components/OrderManagement";
 import ServiceManagement from "./_components/ServiceManagement";
@@ -54,14 +54,15 @@ export default function FreelanceServicesPage() {
     }
   }, [storesData, selectedStoreId]);
 
-  if (storesError)
-    return <div>Error loading stores: {storesError.message}</div>;
-
   useEffect(() => {
     if (services.length > 0 && !selectedService) {
       setSelectedServiceId(services[0].id);
     }
   }, [services, selectedService, setSelectedServiceId]);
+
+  if (storesError)
+    return <div>Error loading stores: {storesError.message}</div>;
+
 
   if (authLoading || storesLoading) return <PageSkeleton />;
 

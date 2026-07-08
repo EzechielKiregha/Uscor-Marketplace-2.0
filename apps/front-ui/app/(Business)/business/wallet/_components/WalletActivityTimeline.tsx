@@ -9,8 +9,8 @@ import {
 	Shield,
 	TrendingUp,
 } from "lucide-react";
-import { GET_WALLET_AUDIT_LOGS, GET_WALLET_SECURITY_SUMMARY } from "@/graphql/wallet.gql";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
+import { GET_WALLET_AUDIT_LOGS, GET_WALLET_SECURITY_SUMMARY } from "@/graphql/wallet.gql";
 
 const ACTION_CONFIG: Record<string, { icon: any; color: string; label: string }> = {
 	REDEEM: { icon: ArrowDown, color: "text-success", label: "Token Redeemed" },

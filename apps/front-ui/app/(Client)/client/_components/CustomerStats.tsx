@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useQuery } from "@apollo/client";
 import {
   Award,
@@ -14,6 +13,7 @@ import {
   Store,
   TrendingUp,
 } from "lucide-react";
+import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 

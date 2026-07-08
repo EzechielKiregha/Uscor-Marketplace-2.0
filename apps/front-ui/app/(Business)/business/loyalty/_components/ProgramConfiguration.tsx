@@ -1,6 +1,9 @@
 // app/business/loyalty/_components/ProgramConfiguration.tsx
 "use client";
 
+import { useMutation } from "@apollo/client";
+import { AlertCircle, CheckCircle, Coins, Gift, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +14,6 @@ import {
     UPDATE_LOYALTY_PROGRAM,
 } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation } from "@apollo/client";
-import { AlertCircle, CheckCircle, Coins, Gift, Star } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface ProgramConfigurationProps {
   program: any; // Replace with LoyaltyProgramEntity

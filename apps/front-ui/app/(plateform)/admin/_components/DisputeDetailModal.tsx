@@ -1,11 +1,6 @@
 // app/admin/_components/DisputeDetailModal.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { RESOLVE_DISPUTE } from "@/graphql/admin.gql";
 import { useMutation } from "@apollo/client";
 import {
     AlertTriangle,
@@ -17,6 +12,11 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { RESOLVE_DISPUTE } from "@/graphql/admin.gql";
 
 interface DisputeDetailModalProps {
 	dispute: any;

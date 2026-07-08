@@ -12,9 +12,9 @@ import { CheckCircle, Megaphone, Users } from "lucide-react";
 import { useState } from "react";
 import AnnouncementDetailModal from "./AnnouncementDetailModal";
 
-type AnnouncementManagementProps = {};
+// type AnnouncementManagementProps = {};
 
-export default function AnnouncementManagement({}: AnnouncementManagementProps) {
+export default function AnnouncementManagement() {
 	const [filters, setFilters] = useState({
 		search: "",
 		status: "",

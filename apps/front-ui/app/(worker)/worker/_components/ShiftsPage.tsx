@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "@apollo/client";
+import { intervalToDuration, startOfDay, subDays } from "date-fns";
 import {
   ArrowRightLeft,
   CheckCircle,
@@ -11,29 +12,26 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
+import {
+  ADD_SALE_PRODUCT,
+  COMPLETE_SALE,
+  GET_SALE_BY_ID,GET_SALES_HISTORY, 
+  REMOVE_SALE_PRODUCT,
+  UPDATE_SALE_PRODUCT
+} from "@/graphql/sales.gql";
 import {
   END_SHIFT,
   GET_WORKER_CURRENT_SHIFT,
   GET_WORKER_SHIFTS,
   START_SHIFT,
 } from "@/graphql/worker.gql";
-import {
-  ADD_SALE_PRODUCT,
-  COMPLETE_SALE,
-  GET_SALE_BY_ID,
-  REMOVE_SALE_PRODUCT,
-  UPDATE_SALE_PRODUCT,
-} from "@/graphql/sales.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { useMe } from "@/lib/useMe";
-import { startOfDay, subDays } from "date-fns";
-import { intervalToDuration } from "date-fns";
 import ShiftSummary from "./ShiftSummary";
-import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 function useShiftDuration(startTime?: string) {
   const [now, setNow] = useState(Date.now());

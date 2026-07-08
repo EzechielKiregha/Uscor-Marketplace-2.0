@@ -1,14 +1,5 @@
 "use client";
 
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { Button } from "@/components/ui/button";
-import {
-    GET_WORKER_PERFORMANCE,
-    GET_WORKER_REPORTS,
-    GET_WORKER_SALES_HISTORY,
-} from "@/graphql/reports.gql";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
     BarChart,
@@ -35,6 +26,15 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
+import {
+    GET_WORKER_PERFORMANCE,
+    GET_WORKER_REPORTS,
+    GET_WORKER_SALES_HISTORY,
+} from "@/graphql/reports.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { useMe } from "@/lib/useMe";
 
 interface ReportsPageProps {
   selectedStoreId: string | null;

@@ -1,30 +1,5 @@
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { BUSINESS_TYPES, isDedicatedField, type ProductFieldConfig } from "@/config/business-types";
-import { CREATE_CATEGORY, GET_CATEGORIES } from "@/graphql/category.gql";
-import {
-    CREATE_PRODUCT,
-    GET_PRODUCTS,
-    GET_PRODUCTS_BY_BUSINESS_ID,
-    UPDATE_PRODUCT,
-} from "@/graphql/product.gql";
-import { GET_STORES } from "@/graphql/store.gql";
-import { BusinessEntity, StoreEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
-import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -57,6 +32,31 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { BUSINESS_TYPES, isDedicatedField, type ProductFieldConfig } from "@/config/business-types";
+import { CREATE_CATEGORY, GET_CATEGORIES } from "@/graphql/category.gql";
+import {
+    CREATE_PRODUCT,
+    GET_PRODUCTS,
+    GET_PRODUCTS_BY_BUSINESS_ID,
+    UPDATE_PRODUCT,
+} from "@/graphql/product.gql";
+import { GET_STORES } from "@/graphql/store.gql";
+import { BusinessEntity, StoreEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 
 // ─── Category definitions per business type ──────────────────────────────────
 
@@ -871,9 +871,9 @@ export default function ProductForm({
   const validate = (): string | null => {
     if (!formData.title.trim()) return "Product name is required.";
     if (!formData.description.trim()) return "Description is required.";
-    if (!formData.price || isNaN(parseFloat(formData.price)))
+    if (!formData.price || Number.isNaN(parseFloat(formData.price)))
       return "A valid price is required.";
-    if (!formData.quantity || isNaN(parseInt(formData.quantity, 10)))
+    if (!formData.quantity || Number.isNaN(parseInt(formData.quantity, 10)))
       return "A valid stock quantity is required.";
     if (!selectedCatId) return "Please select a category.";
     if (!selectedStoreId && !formData.storeId) return "Please select a store.";

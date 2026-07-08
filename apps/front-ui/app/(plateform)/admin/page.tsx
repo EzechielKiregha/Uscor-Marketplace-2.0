@@ -14,8 +14,10 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useCallback, useState } from "react";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import MotionPage from "@/components/MotionPage";
 import UserDropdown from "@/components/seraui/UserDrodown";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
   GET_PLATFORM_DASHBOARD,
@@ -27,20 +29,18 @@ import {
 import { useMe } from "@/lib/useMe";
 import AnnouncementManagement from "./_components/AnnouncementManagement";
 import AuditLogs from "./_components/AuditLogs";
+import BusinessManagement from "./_components/BusinessManagement";
 import DashboardOverview from "./_components/DashboardOverview";
-import PlatformDashboard from "./_components/PlatformDashboard";
 import DisputeResolution from "./_components/DisputeResolution";
+import KycManagement from "./_components/KycManagement";
+import KycVerificationModal from "./_components/KycVerificationModal";
+import PlatformDashboard from "./_components/PlatformDashboard";
 import PlatformSettings from "./_components/PlatformSettings";
 import SideBar, { sidebarItems } from "./_components/SideBar";
+import TokenDashboard from "./_components/TokenDashboard";
 import UserManagement from "./_components/UserManagement";
 import { useActiveSection } from "./_components/useActiveSection";
-import KycVerificationModal from "./_components/KycVerificationModal";
-import KycManagement from "./_components/KycManagement";
-import BusinessManagement from "./_components/BusinessManagement";
 import WorkerManagement from "./_components/WorkerManagement";
-import TokenDashboard from "./_components/TokenDashboard";
-import { useToast } from "@/components/toast-provider";
-import MotionPage from "@/components/MotionPage";
 
 export default function AdminDashboard() {
   const { user, role, loading: authLoading } = useMe();

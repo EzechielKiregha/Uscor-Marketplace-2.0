@@ -1,9 +1,9 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
 import { BUSINESS_TYPE_LIST } from "@/config/business-types";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface HorizontalCategoryScrollProps {
   selected: string;

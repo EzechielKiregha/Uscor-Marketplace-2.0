@@ -1,10 +1,6 @@
 // app/admin/_components/UserDetailModal.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { UPDATE_USER_STATUS } from "@/graphql/admin.gql";
-import { REJECT_KYC, VERIFY_KYC } from "@/graphql/kyc.gql";
 import { useMutation } from "@apollo/client";
 import {
     AlertTriangle,
@@ -25,6 +21,10 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { UPDATE_USER_STATUS } from "@/graphql/admin.gql";
+import { REJECT_KYC, VERIFY_KYC } from "@/graphql/kyc.gql";
 
 interface UserDetailModalProps {
   user: any;

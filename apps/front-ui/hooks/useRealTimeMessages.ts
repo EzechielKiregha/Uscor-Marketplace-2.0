@@ -1,6 +1,6 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { getPusherClient } from '@/lib/pusher-client';
 import { MessageDeduplicator } from '@/lib/message-deduplicator';
+import { getPusherClient } from '@/lib/pusher-client';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface Message {
   id: string;
@@ -132,7 +132,7 @@ export function useRealTimeMessages({
         console.error('[Real-Time] ✗ Subscription error on channel:', channelName, error);
       });
 
-      console.log('[Real-Time] ✓ Pusher subscribed to channel: ${channelName}');
+      console.log(`[Real-Time] ✓ Pusher subscribed to channel: ${channelName}`);
 
       // Cleanup
       return () => {
@@ -142,7 +142,7 @@ export function useRealTimeMessages({
         channel.unbind('pusher:subscription_error');
         pusher.unsubscribe(channelName);
         pusherChannelRef.current = null;
-        console.log('[Real-Time] ✓ Unsubscribed from channel: ${channelName}');
+        console.log(`[Real-Time] ✓ Unsubscribed from channel: ${channelName}`);
       };
     } catch (error) {
       console.error('[Real-Time] ✗ Pusher subscription failed (non-critical):', error);

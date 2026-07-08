@@ -1,11 +1,6 @@
 // app/business/[id]/_components/ServicesSection.tsx
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FreelanceServiceEntity } from "@/lib/types";
 import {
     Box,
     BriefcaseBusiness,
@@ -23,6 +18,11 @@ import {
     Wrench,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FreelanceServiceEntity } from "@/lib/types";
 
 // Map service categories to icons (Lucide icons)
 const SERVICE_CATEGORY_ICONS: Record<string, LucideIcon> = {

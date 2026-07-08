@@ -1,19 +1,19 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_STORE_REPORTS } from "@/graphql/store.gql";
+import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { GET_STORE_REPORTS } from "@/graphql/store.gql";
 import { CHART_COLORS } from "@/lib/chart-theme";
-import { DollarSign, ShoppingCart, Users, TrendingUp } from "lucide-react";
 
 interface StoreReportsProps {
   storeId: string;

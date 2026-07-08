@@ -1,14 +1,5 @@
 "use client";
 
-import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
-import { useCart } from "@/app/context/use-cart";
-import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
-import { GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
-import { ProductEntity } from "@/lib/types";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     ArrowRight,
@@ -25,6 +16,15 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
+import { useCart } from "@/app/context/use-cart";
+import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
+import { GENERATE_ORDER_RECEIPT } from "@/graphql/order.gql";
+import { ProductEntity } from "@/lib/types";
 
 interface OrderHistoryProps {
   client: any;

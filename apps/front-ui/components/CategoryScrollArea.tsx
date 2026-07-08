@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FREELANCE_SERVICE_CATEGORIES } from "@/config/freelance-categories";
 import { PRODUCT_CATEGORIES } from "@/config/product-categories";
-import Link from "next/link";
 
 interface CategoryScrollAreaProps {
 	type: "products" | "freelance";

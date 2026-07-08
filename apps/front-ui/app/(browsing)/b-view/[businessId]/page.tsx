@@ -1,16 +1,6 @@
 // app/business/[id]/page.tsx
 "use client";
 
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { Button } from "@/components/ui/button";
-import {
-    GET_BUSINESS_BY_ID,
-    GET_BUSINESS_PRODUCTS,
-    GET_BUSINESS_REVIEWS,
-    GET_BUSINESS_SERVICES,
-    ON_BUSINESS_UPDATED,
-} from "@/graphql/business-page.gql";
-import { useMe } from "@/lib/useMe";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
     BriefcaseBusiness,
@@ -27,6 +17,16 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
+import {
+    GET_BUSINESS_BY_ID,
+    GET_BUSINESS_PRODUCTS,
+    GET_BUSINESS_REVIEWS,
+    GET_BUSINESS_SERVICES,
+    ON_BUSINESS_UPDATED,
+} from "@/graphql/business-page.gql";
+import { useMe } from "@/lib/useMe";
 import BusinessHeader from "./_components/BusinessHeader";
 import ProductsSection from "./_components/ProductsSection";
 import ReviewsSection from "./_components/ReviewsSection";

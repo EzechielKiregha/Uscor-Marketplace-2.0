@@ -1,7 +1,6 @@
 // app/businesses/_components/BusinessCard.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
     ArrowRight,
     BriefcaseBusiness,
@@ -10,6 +9,7 @@ import {
     ShieldCheck,
     Star,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface BusinessCardProps {
 	business: any;

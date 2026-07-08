@@ -1,15 +1,6 @@
 // app/business/settings/_components/HardwareSetup.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import {
-    GET_HARDWARE_RECOMMENDATIONS,
-    UPDATE_HARDWARE_CONFIG,
-} from "@/graphql/settings.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     Box,
@@ -21,6 +12,15 @@ import {
     ScanLine,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import {
+    GET_HARDWARE_RECOMMENDATIONS,
+    UPDATE_HARDWARE_CONFIG,
+} from "@/graphql/settings.gql";
+import { useMe } from "@/lib/useMe";
 
 // Hardware types with icons
 const hardwareTypes = [

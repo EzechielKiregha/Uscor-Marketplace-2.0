@@ -1,17 +1,17 @@
 // app/business/chats/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import { MessageSquare, Search, Loader2, AlertCircle } from "lucide-react";
+import { useMutation, useQuery } from "@apollo/client";
+import { AlertCircle, Loader2, MessageSquare, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import ChatModal from "@/components/chat/ChatModal";
+import FloatingChat from "@/components/FloatingChat";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/components/toast-provider";
 import { GET_CHATS } from "@/graphql/chat.gql";
-import FloatingChat from "@/components/FloatingChat";
 import { useMe } from "@/lib/useMe";
-import ChatModal from "@/components/chat/ChatModal";
 
 export default function BusinessChatsPage() {
   const { user, role, loading: authLoading } = useMe();

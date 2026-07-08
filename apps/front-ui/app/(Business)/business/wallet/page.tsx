@@ -1,6 +1,24 @@
 // app/wallet/page.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  BarChart,
+  CheckCircle,
+  Coins,
+  CreditCard,
+  DollarSign,
+  Download,
+  Gift,
+  Plus,
+  Shield,
+  Smartphone,
+  TrendingUp,
+} from "lucide-react";
+import { useState } from "react";
 import ConvertModal from "@/app/(highly-secured)/_components/ConvertModal";
 import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
 import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
@@ -21,24 +39,6 @@ import {
   WITHDRAW_ACCOUNT_FUNDS,
 } from "@/graphql/wallet.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  AlertTriangle,
-  ArrowDown,
-  ArrowUp,
-  BarChart,
-  CheckCircle,
-  Coins,
-  CreditCard,
-  DollarSign,
-  Download,
-  Gift,
-  Plus,
-  Shield,
-  Smartphone,
-  TrendingUp,
-} from "lucide-react";
-import { useState } from "react";
 import TransactionConfirmDialog from "./_components/TransactionConfirmDialog";
 import WalletActivityTimeline from "./_components/WalletActivityTimeline";
 

@@ -1,7 +1,5 @@
 "use client";
 
-import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
-import { cn } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
     BarChart,
@@ -21,6 +19,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
+import { cn } from "@/lib/utils";
 
 interface BusinessSidebarProps {
   business: any; // Replace with actual BusinessEntity type

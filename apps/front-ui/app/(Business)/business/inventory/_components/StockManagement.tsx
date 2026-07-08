@@ -1,16 +1,6 @@
 // app/business/inventory/_components/StockManagement.tsx
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { CREATE_INVENTORY_ADJUSTMENT } from "@/graphql/inventory.gql";
-import { GET_PRODUCTS } from "@/graphql/product.gql";
-import { exportInventoryCSV } from "@/lib/export-utils";
-import { downloadInventoryReportPDF } from "@/lib/pdf/inventory-report-pdf";
-import { ProductEntity } from "@/lib/types";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     AlertTriangle,
@@ -24,6 +14,16 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { CREATE_INVENTORY_ADJUSTMENT } from "@/graphql/inventory.gql";
+import { GET_PRODUCTS } from "@/graphql/product.gql";
+import { exportInventoryCSV } from "@/lib/export-utils";
+import { downloadInventoryReportPDF } from "@/lib/pdf/inventory-report-pdf";
+import { ProductEntity } from "@/lib/types";
 
 interface StockManagementProps {
   storeId: string;

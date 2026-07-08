@@ -1,19 +1,5 @@
 "use client";
 
-import { StatusBadge } from "@/components/StatusBadge";
-import { GlowButton } from "@/components/seraui/GlowButton";
-import { useToast } from "@/components/toast-provider";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { UPDATE_BUSINESS } from "@/graphql/business.gql";
-import { BusinessEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -60,6 +46,20 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { StatusBadge } from "@/components/StatusBadge";
+import { GlowButton } from "@/components/seraui/GlowButton";
+import { useToast } from "@/components/toast-provider";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { UPDATE_BUSINESS } from "@/graphql/business.gql";
+import { BusinessEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 
 // Business types configuration
 const businessTypes = [

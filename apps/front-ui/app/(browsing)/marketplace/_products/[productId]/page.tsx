@@ -1,5 +1,9 @@
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { Check, MessageCircle, Shield } from "lucide-react";
+import Link from "next/link";
+import { notFound, useRouter } from "next/navigation";
 import AddToCartButton from "@/components/AddToCartButton";
 import ImageSlider from "@/components/ImageSlider";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
@@ -14,10 +18,6 @@ import { useGetProductIdParam } from "@/hooks/use-get-product-params";
 import { removeTypename } from "@/lib/removeTypeName";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
-import { useMutation, useQuery } from "@apollo/client";
-import { Check, MessageCircle, Shield } from "lucide-react";
-import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
 
 const BREADCRUMBS = [
 	{ id: 1, name: "Home", href: "/" },

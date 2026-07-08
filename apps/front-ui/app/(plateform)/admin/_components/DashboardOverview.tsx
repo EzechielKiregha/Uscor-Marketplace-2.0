@@ -1,8 +1,6 @@
 // app/admin/_components/DashboardOverview.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
 import {
     AlertTriangle,
     BarChart,
@@ -19,6 +17,8 @@ import {
     Users,
 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
 
 interface DashboardOverviewProps {
 	metrics: any;

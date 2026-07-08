@@ -1,6 +1,9 @@
 // app/client/_components/LoyaltyDashboard.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { ArrowRight, CheckCircle, Coins, Gift, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,9 +12,6 @@ import {
     REDEEM_POINTS,
 } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { ArrowRight, CheckCircle, Coins, Gift, Star } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface LoyaltyDashboardProps {
   client: any;

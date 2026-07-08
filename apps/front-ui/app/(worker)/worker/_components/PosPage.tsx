@@ -1,5 +1,7 @@
 "use client";
 
+import { Barcode } from "lucide-react";
+import { useCallback, useState } from "react";
 import CurrentSalePanel from "@/app/(worker)/worker/_components/_sales/CurrentSalePanel";
 import SalesDashboard from "@/app/(worker)/worker/_components/_sales/SalesDashboard";
 import SalesHistoryPanel from "@/app/(worker)/worker/_components/_sales/SalesHistoryPanel";
@@ -8,8 +10,6 @@ import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { useOfflinePOS } from "@/hooks/use-offline-pos";
 import { useMe } from "@/lib/useMe";
-import { Barcode } from "lucide-react";
-import { useCallback, useState } from "react";
 import BarcodeScannerModal from "./BarcodeScannerModal";
 import CustomerLookup from "./CustomerLookup";
 import QuickSaleGrid from "./QuickSaleGrid";

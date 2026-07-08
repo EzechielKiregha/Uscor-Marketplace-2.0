@@ -3,8 +3,8 @@
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GET_FEATURED_PRODUCTS } from "@/graphql/product.gql";
 import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
+import { GET_FEATURED_PRODUCTS } from "@/graphql/product.gql";
 import MasonryGrid, { ProductGridItem } from "./MasonryGrid";
 
 interface ProductReelProps {

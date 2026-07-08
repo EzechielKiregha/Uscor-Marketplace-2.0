@@ -1,6 +1,9 @@
 // app/business/sales/page.tsx
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import MotionPage from "@/components/MotionPage";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
@@ -8,9 +11,6 @@ import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useQuery } from "@apollo/client";
-import { Plus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
 import CurrentSalePanel from "../../../(worker)/worker/_components/_sales/CurrentSalePanel";
 import NewSaleModal from "../../../(worker)/worker/_components/_sales/NewSaleModal";
 import SalesDashboard from "../../../(worker)/worker/_components/_sales/SalesDashboard";

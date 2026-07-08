@@ -10,6 +10,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,6 @@ import type {
   ClientEntity,
 } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 type ChatMessageWithContentEntity = ChatMessageEntity & {
   content: string;

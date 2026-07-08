@@ -425,7 +425,7 @@ export const WithdrawFundsDialog: React.FC<WithdrawFundsDialogProps> = ({
     }
 
     const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount <= 0) {
+    if (Number.isNaN(numAmount) || numAmount <= 0) {
       toast({
         title: 'Error',
         description: 'Please enter a valid amount',
@@ -609,7 +609,7 @@ export const ConvertToTokensDialog: React.FC<ConvertToTokensDialogProps> = ({
   const estimatedTokens = useMemo(() => {
     if (!amount) return 0;
     const numAmount = parseFloat(amount);
-    if (isNaN(numAmount)) return 0;
+    if (Number.isNaN(numAmount)) return 0;
     // Assuming 1% fee
     const afterFee = numAmount * 0.99;
     return Math.floor(afterFee / exchangeRate);
@@ -626,7 +626,7 @@ export const ConvertToTokensDialog: React.FC<ConvertToTokensDialogProps> = ({
     }
 
     const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount <= 0) {
+    if (Number.isNaN(numAmount) || numAmount <= 0) {
       toast({
         title: 'Error',
         description: 'Please enter a valid amount',
@@ -798,7 +798,7 @@ export const MobileMoneyPaymentDialog: React.FC<MobileMoneyPaymentDialogProps> =
     }
 
     const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount <= 0) {
+    if (Number.isNaN(numAmount) || numAmount <= 0) {
       toast({
         title: 'Error',
         description: 'Please enter a valid amount',

@@ -11,7 +11,7 @@ import {
   Store,
   User,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,8 +20,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GET_WORKERS } from "@/graphql/worker.gql";
 import {
   Select,
   SelectContent,
@@ -29,10 +29,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CREATE_CHAT } from "@/graphql/chat.gql";
+import { GET_WORKERS } from "@/graphql/worker.gql";
 import { NegotiationType } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { Input } from "@/components/ui/input";
-import { CREATE_CHAT } from "@/graphql/chat.gql";
 
 interface Worker {
   id: string;

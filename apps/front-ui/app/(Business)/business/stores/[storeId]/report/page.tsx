@@ -1,7 +1,4 @@
 "use client";
-import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
-import { Button } from "@/components/ui/button";
-import { GET_REPORT_HISTORY } from "@/graphql/store.gql";
 import { useQuery } from "@apollo/client";
 import {
   Clock,
@@ -13,6 +10,9 @@ import {
   Users,
 } from "lucide-react";
 import { use, useState } from "react";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
+import { Button } from "@/components/ui/button";
+import { GET_REPORT_HISTORY } from "@/graphql/store.gql";
 import { ReportCard } from "./_components/ReportCard";
 import { ReportHistory } from "./_components/ReportHistory";
 

@@ -1,10 +1,10 @@
+import africastalking from "africastalking";
+import { NextRequest } from 'next/server';
 import { GET_BUSINESS_BY_PHONE } from '@/graphql/business.gql';
 import { GET_CLIENT_BY_PHONE } from '@/graphql/client.gql';
 import { GET_PAYMENT_LATEST_TRANSACTION, UPDATE_PAYMENT_TRANSACTION } from '@/graphql/payment.gql';
 import { GET_ACCOUNT_BALANCE } from '@/graphql/wallet.gql';
 import { client as executeQuery } from "@/lib/apollo-client";
-import africastalking from "africastalking";
-import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.formData();
@@ -422,7 +422,7 @@ Enter amount to convert:
       const availableTokens = balance?.tokenBalance?.availableTokens || 0;
       
       const tokenAmount = parseInt(amount);
-      if (isNaN(tokenAmount) || tokenAmount <= 0) {
+      if (Number.isNaN(tokenAmount) || tokenAmount <= 0) {
         response = `END ❌ Invalid amount entered.`;
         return new Response(response, { headers: { 'Content-Type': 'text/plain' } });
       }

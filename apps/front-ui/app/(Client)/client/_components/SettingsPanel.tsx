@@ -1,17 +1,6 @@
 // app/client/_components/SettingsPanel.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    ADD_CLIENT_ADDRESS,
-    ADD_CLIENT_PAYMENT_METHOD,
-    DELETE_CLIENT_ADDRESS,
-    UPDATE_CLIENT_ADDRESS,
-    UPDATE_CLIENT_PROFILE,
-} from "@/graphql/client-panel.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation } from "@apollo/client";
 import {
     CreditCard,
@@ -26,6 +15,17 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    ADD_CLIENT_ADDRESS,
+    ADD_CLIENT_PAYMENT_METHOD,
+    DELETE_CLIENT_ADDRESS,
+    UPDATE_CLIENT_ADDRESS,
+    UPDATE_CLIENT_PROFILE,
+} from "@/graphql/client-panel.gql";
+import { useMe } from "@/lib/useMe";
 
 interface SettingsPanelProps {
 	client: any;

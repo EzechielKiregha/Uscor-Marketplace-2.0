@@ -1,17 +1,5 @@
 "use client";
 
-import FormFieldWrapper from "@/components/FormFieldWrapper";
-import { StatusBadge } from "@/components/StatusBadge";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import { UPDATE_BUSINESS_PROFILE } from "@/graphql/settings.gql";
-import { useFormValidation } from "@/hooks/use-form-validation";
-import { useMe } from "@/lib/useMe";
-import { businessProfileSchema } from "@/lib/validators/form-schemas";
 import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -36,6 +24,18 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import FormFieldWrapper from "@/components/FormFieldWrapper";
+import { StatusBadge } from "@/components/StatusBadge";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import { UPDATE_BUSINESS_PROFILE } from "@/graphql/settings.gql";
+import { useFormValidation } from "@/hooks/use-form-validation";
+import { useMe } from "@/lib/useMe";
+import { businessProfileSchema } from "@/lib/validators/form-schemas";
 
 // Business types with icons
 export const businessTypes = [

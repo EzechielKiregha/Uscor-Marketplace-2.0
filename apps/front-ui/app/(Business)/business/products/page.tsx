@@ -1,5 +1,8 @@
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { Edit, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import MotionPage from "@/components/MotionPage";
 import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
@@ -12,9 +15,6 @@ import {
 } from "@/graphql/product.gql";
 import { ProductEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { Edit, Plus, Search, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
 import CreateProductModal from "../_components/modals/CreateProductModal";
 import { useOpenCreateProductModal } from "../_hooks/use-open-create-product-modal";
 
@@ -134,7 +134,7 @@ export default function BusinessProductsPage() {
                 src={
                   product.medias && product.medias.length > 0
                     ? product.medias[0].url
-                    : "https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}"
+                    : `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}`
                 }
                 alt={product.title}
                 className="absolute inset-0 w-full h-full object-cover"

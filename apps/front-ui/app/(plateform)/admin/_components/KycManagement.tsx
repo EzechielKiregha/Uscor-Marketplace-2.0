@@ -1,14 +1,14 @@
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { CheckCircle, Clock, Eye, Search, ShieldCheck, X } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GET_KYC_SUBMISSIONS } from "@/graphql/admin.gql";
-import { useQuery } from "@apollo/client";
-import { CheckCircle, Clock, Eye, Search, ShieldCheck, X } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
 
 interface KycManagementProps {
   onKycSelected: (kyc: any) => void;

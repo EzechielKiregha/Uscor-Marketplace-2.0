@@ -1,15 +1,6 @@
 // app/admin/_components/PlatformSettings.tsx
 "use client";
 
-import FormSkeleton from "@/components/skeletons/FormSkeleton";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import {
-    GET_PLATFORM_SETTINGS,
-    UPDATE_PLATFORM_SETTINGS,
-} from "@/graphql/admin.gql";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     BarChart,
@@ -19,6 +10,15 @@ import {
     TrendingUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import FormSkeleton from "@/components/skeletons/FormSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import {
+    GET_PLATFORM_SETTINGS,
+    UPDATE_PLATFORM_SETTINGS,
+} from "@/graphql/admin.gql";
 
 interface PlatformSettingsProps {
 	settings: any;

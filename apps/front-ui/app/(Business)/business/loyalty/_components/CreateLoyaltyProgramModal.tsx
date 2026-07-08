@@ -1,16 +1,6 @@
 // app/business/loyalty/_components/CreateLoyaltyProgramModal.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  CREATE_LOYALTY_PROGRAM,
-  CREATE_LOYALTY_TIER,
-} from "@/graphql/loyalty.gql";
-import { BusinessEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 import { useMutation } from "@apollo/client";
 import {
   AlertTriangle,
@@ -24,6 +14,16 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  CREATE_LOYALTY_PROGRAM,
+  CREATE_LOYALTY_TIER,
+} from "@/graphql/loyalty.gql";
+import { BusinessEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 
 interface CreateLoyaltyProgramModalProps {
   isOpen: boolean;

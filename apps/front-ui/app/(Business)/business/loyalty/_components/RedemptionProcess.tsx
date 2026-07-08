@@ -1,11 +1,5 @@
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { GET_CUSTOMER_POINTS, REDEEM_POINTS } from "@/graphql/loyalty.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     AlertTriangle,
@@ -20,6 +14,12 @@ import {
     X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { GET_CUSTOMER_POINTS, REDEEM_POINTS } from "@/graphql/loyalty.gql";
+import { useMe } from "@/lib/useMe";
 
 interface RedemptionProcessProps {
 	programId: string;

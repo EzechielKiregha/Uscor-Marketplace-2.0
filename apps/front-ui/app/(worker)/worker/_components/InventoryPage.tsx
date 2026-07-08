@@ -1,13 +1,5 @@
 "use client";
 
-import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useIndexedDB } from "@/hooks/use-indexed-db";
-import { useMe } from "@/lib/useMe";
 import {
     AlertCircle,
     AlertTriangle,
@@ -20,6 +12,14 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useInventory } from "@/app/(Business)/business/_hooks/use-inventory";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useIndexedDB } from "@/hooks/use-indexed-db";
+import { useMe } from "@/lib/useMe";
 
 interface InventoryPageProps {
   selectedStoreId: string | null;

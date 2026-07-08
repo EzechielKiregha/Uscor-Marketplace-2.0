@@ -1,10 +1,10 @@
 "use client";
 
+import { AlertTriangle, CheckCircle2, Loader2, ShieldCheck, WifiOff } from "lucide-react";
+import { useMemo } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { useOfflineAuth } from "@/hooks/use-offline-auth";
-import { AlertTriangle, CheckCircle2, Loader2, ShieldCheck, WifiOff } from "lucide-react";
-import { useMemo } from "react";
 
 interface OfflineAccessCardProps {
   workerId?: string;

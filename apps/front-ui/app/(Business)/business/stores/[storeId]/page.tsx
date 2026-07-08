@@ -1,14 +1,5 @@
 "use client";
 
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { Button } from "@/components/ui/button";
-import {
-  GET_STORE_BY_ID,
-  GET_STORE_DASHBOARD_STATS,
-} from "@/graphql/store.gql";
-import { GET_WORKERS } from "@/graphql/worker.gql";
-import { WorkerEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
   BarChart,
@@ -23,6 +14,15 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
+import {
+  GET_STORE_BY_ID,
+  GET_STORE_DASHBOARD_STATS,
+} from "@/graphql/store.gql";
+import { GET_WORKERS } from "@/graphql/worker.gql";
+import { WorkerEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 import AddWorkerModal from "./_components/AddWorkerModal";
 import StoreInventory from "./_components/StoreInventory";
 import StoreOverview from "./_components/StoreOverview";

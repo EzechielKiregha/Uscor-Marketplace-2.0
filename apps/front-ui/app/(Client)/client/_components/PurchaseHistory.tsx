@@ -1,9 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 import { useQuery } from "@apollo/client";
 import {
     ChevronDown,
@@ -17,6 +13,10 @@ import {
     X
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 
 interface PurchaseHistoryProps {
   client: any;

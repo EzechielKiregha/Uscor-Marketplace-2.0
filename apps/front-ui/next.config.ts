@@ -1,5 +1,5 @@
-import { NextConfig  } from "next";
 import withSerwist  from "@serwist/next";
+import { NextConfig  } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,

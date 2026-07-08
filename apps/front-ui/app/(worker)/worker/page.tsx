@@ -1,5 +1,8 @@
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { DollarSign, Package, Plus, ShoppingCart, Users } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useSales } from "@/app/(Business)/business/_hooks/use-sales";
 import NewSaleModal from "@/app/(worker)/worker/_components/_sales/NewSaleModal";
 import ChatPage from "@/components/chat/ChatComponent";
@@ -7,8 +10,8 @@ import MotionPage from "@/components/MotionPage";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 import { OfflineAccessCard } from "@/components/OfflineAccessCard";
 import { OfflineWorkerBanner } from "@/components/OfflineWorkerBanner";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { SyncStatusBar } from "@/components/SyncStatusBar";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { GET_WORKER_DASHBOARD } from "@/graphql/worker.gql";
@@ -16,9 +19,6 @@ import { useOfflinePOS } from "@/hooks/use-offline-pos";
 import { getActiveOfflineSession, isOfflineMode, setActiveOfflineSession } from "@/lib/auth";
 import { StoreEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useQuery } from "@apollo/client";
-import { DollarSign, Package, Plus, ShoppingCart, Users } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
 import InventoryPage from "./_components/InventoryPage";
 import LowStockAlerts from "./_components/LowStockAlerts";
 import PosPage from "./_components/PosPage";

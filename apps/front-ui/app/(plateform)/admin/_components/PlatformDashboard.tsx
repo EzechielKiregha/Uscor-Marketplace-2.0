@@ -1,21 +1,6 @@
 "use client";
 
 import {
-	AreaChart,
-	Area,
-	BarChart,
-	Bar,
-	XAxis,
-	YAxis,
-	CartesianGrid,
-	Tooltip,
-	ResponsiveContainer,
-	PieChart,
-	Pie,
-	Cell,
-	Legend,
-} from "recharts";
-import {
 	Building2,
 	Coins,
 	CreditCard,
@@ -29,9 +14,24 @@ import {
 	Wrench,
 } from "lucide-react";
 import { useState } from "react";
+import {
+	Area,
+	AreaChart,
+	Bar,
+	BarChart,
+	CartesianGrid,
+	Cell,
+	Legend,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
+import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 import { Button } from "@/components/ui/button";
 import { CHART_COLORS, CHART_TOOLTIP_STYLE } from "@/lib/chart-theme";
-import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 
 interface PlatformDashboardProps {
 	metrics: any;

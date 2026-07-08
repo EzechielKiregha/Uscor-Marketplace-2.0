@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { GET_WORKER_BY_ID } from "@/graphql/worker.gql";
 import { useQuery } from "@apollo/client";
 import {
   ArrowLeft,
@@ -17,7 +15,6 @@ import {
   User,
 } from "lucide-react";
 import { use, useState } from "react";
-
 // Import the existing worker components
 import ChatsPage from "@/app/(worker)/worker/_components/ChatsPage";
 import InventoryPage from "@/app/(worker)/worker/_components/InventoryPage";
@@ -26,7 +23,9 @@ import ProfilePage from "@/app/(worker)/worker/_components/ProfilePage";
 import ReportsPage from "@/app/(worker)/worker/_components/ReportsPage";
 import ShiftsPage from "@/app/(worker)/worker/_components/ShiftsPage";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
 import { GET_WORKER_PERFORMANCE } from "@/graphql/reports.gql";
+import { GET_WORKER_BY_ID } from "@/graphql/worker.gql";
 import { useMe } from "@/lib/useMe";
 
 interface WorkerDetailPageProps {

@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { CONVERT_TO_TOKENS } from "@/graphql/wallet.gql";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
+  AlertTriangle,
   Coins,
   DollarSign,
+  Info,
+  Loader2,
   TrendingUp,
   X,
-  Loader2,
-  Info,
-  AlertTriangle,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CONVERT_TO_TOKENS } from "@/graphql/wallet.gql";
 
 interface ConvertModalProps {
   isOpen: boolean;

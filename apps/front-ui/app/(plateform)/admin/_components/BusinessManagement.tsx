@@ -1,12 +1,5 @@
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GET_USERS } from "@/graphql/admin.gql";
-import { REJECT_KYC, VERIFY_KYC } from "@/graphql/kyc.gql";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   Building2,
@@ -22,6 +15,13 @@ import {
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GET_USERS } from "@/graphql/admin.gql";
+import { REJECT_KYC, VERIFY_KYC } from "@/graphql/kyc.gql";
 
 export default function BusinessManagement() {
   const [search, setSearch] = useState("");

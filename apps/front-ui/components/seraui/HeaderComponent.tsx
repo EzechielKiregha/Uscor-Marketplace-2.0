@@ -1,8 +1,4 @@
 "use client";
-import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
-import SearchModal from "@/app/(browsing)/marketplace/_components/SearchModal";
-import { useCart } from "@/app/context/use-cart";
-import { BUSINESS_TYPE_LIST } from "@/config/business-types";
 import {
     ArrowUpRight,
     ChevronDown,
@@ -12,10 +8,14 @@ import {
     ShoppingCart,
     SunIcon,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import type React from "react";
 import { type ReactNode, useCallback, useState } from "react";
+import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
+import SearchModal from "@/app/(browsing)/marketplace/_components/SearchModal";
+import { useCart } from "@/app/context/use-cart";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
 import { Logo } from "../icons/Logos";
 import MobileNavDrawer from "../MobileNavDrawer";
 import { Button } from "../ui/button";

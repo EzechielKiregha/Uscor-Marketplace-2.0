@@ -1,6 +1,9 @@
 // app/business/loyalty/_components/CustomerPointsManagement.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { Gift, Minus, Plus, Search, User, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +14,6 @@ import {
     REDEEM_POINTS,
 } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { Gift, Minus, Plus, Search, User, X } from "lucide-react";
-import { useMemo, useState } from "react";
 
 interface CustomerPointsManagementProps {
 	programId: string;

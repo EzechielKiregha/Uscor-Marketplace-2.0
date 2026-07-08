@@ -1,15 +1,6 @@
 // app/business/settings/_components/PaymentConfiguration.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import { UPDATE_PAYMENT_CONFIG } from "@/graphql/settings.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     CheckCircle,
@@ -20,6 +11,15 @@ import {
     Phone,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import { UPDATE_PAYMENT_CONFIG } from "@/graphql/settings.gql";
+import { useMe } from "@/lib/useMe";
 
 interface PaymentCodeProps {
   productOwnerCodes: {
@@ -134,9 +134,9 @@ function PaymentCode({
   }
 }
 
-type PaymentConfigurationProps = {};
+// type PaymentConfigurationProps = {};
 
-export default function PaymentConfiguration({}: PaymentConfigurationProps) {
+export default function PaymentConfiguration() {
   const { user, loading: authLoading } = useMe();
   const [formData, setFormData] = useState({
     mobileMoneyEnabled: true,

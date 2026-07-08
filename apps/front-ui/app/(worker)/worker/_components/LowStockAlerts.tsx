@@ -1,7 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { GET_INVENTORY } from "@/graphql/inventory.gql";
 import { useQuery } from "@apollo/client";
 import {
     AlertTriangle,
@@ -11,6 +9,8 @@ import {
     TrendingDown,
 } from "lucide-react";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { GET_INVENTORY } from "@/graphql/inventory.gql";
 
 interface LowStockAlertsProps {
   storeId: string;

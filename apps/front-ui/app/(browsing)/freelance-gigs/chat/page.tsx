@@ -1,4 +1,8 @@
 "use client";
+import { useMutation, useQuery } from "@apollo/client";
+import { Menu, MessageSquare } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 import ChatList from "@/components/chat/ChatList";
 import ChatThread from "@/components/chat/ChatThread";
 import HeaderComponent from "@/components/seraui/HeaderComponent";
@@ -9,10 +13,6 @@ import {
     SEND_MESSAGE,
 } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { Menu, MessageSquare } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import React from "react";
 
 export default function ChatThreadListPage() {
   const user = useMe();

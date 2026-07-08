@@ -1,5 +1,15 @@
 "use client";
 
+import { useQuery } from "@apollo/client";
+import {
+    DollarSign,
+    MessageSquare,
+    Package,
+    Plus,
+    ShoppingCart,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import TypeDashboardWidgets from "@/components/dashboard/TypeDashboardWidgets";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import MotionPage from "@/components/MotionPage";
@@ -20,16 +30,6 @@ import {
     StoreEntity,
 } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useQuery } from "@apollo/client";
-import {
-    DollarSign,
-    MessageSquare,
-    Package,
-    Plus,
-    ShoppingCart,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import SalesDashboard from "../../../(worker)/worker/_components/_sales/SalesDashboard";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import { useOpenOrderDetailsModal } from "../_hooks/use-open-order-details-modal";

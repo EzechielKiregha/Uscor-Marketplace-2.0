@@ -1,9 +1,6 @@
 // app/business/freelance-services/_components/ServiceOverview.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CHART_COLORS } from "@/lib/chart-theme";
 import {
     BriefcaseBusiness,
     CheckCircle,
@@ -22,6 +19,9 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CHART_COLORS } from "@/lib/chart-theme";
 
 interface ServiceOverviewProps {
 	services: any[];

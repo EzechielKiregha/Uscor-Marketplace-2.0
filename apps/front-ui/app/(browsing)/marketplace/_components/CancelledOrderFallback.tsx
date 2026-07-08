@@ -1,8 +1,6 @@
 // marketplace/checkout/_components/CancelledOrderFallback.tsx
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   AlertTriangle,
   ArrowRight,
@@ -13,6 +11,8 @@ import {
   XCircle,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const TOKEN_RATE = 10; // 1 uTn = $10
 

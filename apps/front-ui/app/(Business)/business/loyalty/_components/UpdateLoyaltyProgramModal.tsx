@@ -1,25 +1,25 @@
 // app/business/loyalty/_components/UpdateLoyaltyProgramModal.tsx
 "use client";
 
-import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import {
-  UPDATE_LOYALTY_PROGRAM,
-  GET_LOYALTY_PROGRAMS,
-} from "@/graphql/loyalty.gql";
+  AlertTriangle,
+  CheckCircle,
+  Coins,
+  Gift,
+  Loader2,
+  Star,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Star,
-  Coins,
-  Gift,
-  Loader2,
-  X,
-  AlertTriangle,
-  CheckCircle,
-} from "lucide-react";
-import { useToast } from "@/components/toast-provider";
+  GET_LOYALTY_PROGRAMS,
+  UPDATE_LOYALTY_PROGRAM,
+} from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
 
 interface UpdateLoyaltyProgramModalProps {

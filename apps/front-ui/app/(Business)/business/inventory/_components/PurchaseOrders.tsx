@@ -1,17 +1,6 @@
 // app/business/inventory/_components/PurchaseOrders.tsx
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-    CREATE_PURCHASE_ORDER,
-    MARK_PURCHASE_ORDER_RECEIVED,
-} from "@/graphql/inventory.gql";
-import { GET_PRODUCTS } from "@/graphql/product.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     Download,
@@ -23,6 +12,17 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+    CREATE_PURCHASE_ORDER,
+    MARK_PURCHASE_ORDER_RECEIVED,
+} from "@/graphql/inventory.gql";
+import { GET_PRODUCTS } from "@/graphql/product.gql";
+import { useMe } from "@/lib/useMe";
 
 interface PurchaseOrdersProps {
 	storeId: string;

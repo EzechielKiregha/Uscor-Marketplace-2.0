@@ -1,12 +1,6 @@
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ADD_WORKER_TO_STORE } from "@/graphql/store.gql";
 import { useMutation } from "@apollo/client";
-
 import {
   Briefcase,
   Loader2,
@@ -18,8 +12,12 @@ import {
   UserPlus,
   X,
 } from "lucide-react";
-
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ADD_WORKER_TO_STORE } from "@/graphql/store.gql";
 
 interface AddWorkerModalProps {
   isOpen: boolean;

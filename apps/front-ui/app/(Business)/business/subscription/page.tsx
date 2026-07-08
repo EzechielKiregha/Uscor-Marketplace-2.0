@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
 	Check,
 	Crown,
@@ -8,19 +7,20 @@ import {
 	Sparkles,
 	X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/StatusBadge";
-import { useMe } from "@/lib/useMe";
-import {
-	FEATURE_DEFINITIONS,
-	getPlansArray,
-	formatPlanPrice,
-	type FeatureKey,
-	type SubscriptionPlan,
-} from "@/config/subscription-plans";
+import { useState } from "react";
 import MotionPage from "@/components/MotionPage";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
+import { StatusBadge } from "@/components/StatusBadge";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { Button } from "@/components/ui/button";
+import {
+	FEATURE_DEFINITIONS,
+	type FeatureKey,
+	formatPlanPrice,
+	getPlansArray,
+	type SubscriptionPlan,
+} from "@/config/subscription-plans";
+import { useMe } from "@/lib/useMe";
 
 // Feature keys to show in the comparison matrix
 const MATRIX_FEATURES: FeatureKey[] = [

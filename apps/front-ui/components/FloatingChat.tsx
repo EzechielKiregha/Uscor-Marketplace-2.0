@@ -1,11 +1,11 @@
 // marketplace/_components/FloatingChat.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { MessageCircle, Sparkles, Loader2 } from "lucide-react";
-import { useMe } from "@/lib/useMe";
+import { Loader2, MessageCircle, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import ChatModal from "@/components/chat/ChatModal";
+import { Button } from "@/components/ui/button";
+import { useMe } from "@/lib/useMe";
 
 export default function FloatingChat() {
   const { user, loading: authLoading } = useMe();

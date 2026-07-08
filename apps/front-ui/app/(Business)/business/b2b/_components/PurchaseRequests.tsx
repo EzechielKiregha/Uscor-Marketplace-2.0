@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
 	ArrowDownLeft,
 	ArrowUpRight,
@@ -17,15 +16,16 @@ import {
 	X,
 	XCircle,
 } from "lucide-react";
+import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
 	GET_B2B_ORDERS,
 	SUBMIT_B2B_ORDER,
 	UPDATE_B2B_ORDER_STATUS,
 } from "@/graphql/b2b.gql";
-import { useToast } from "@/components/toast-provider";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: any }> = {
 	DRAFT: { label: "Draft", color: "bg-muted text-muted-foreground", icon: Clock },

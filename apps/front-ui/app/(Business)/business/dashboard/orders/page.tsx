@@ -1,15 +1,15 @@
 // app/business/orders/page.tsx
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { Search } from "lucide-react";
+import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_BUSINESS_ORDERS } from "@/graphql/order.gql";
 import { OrderEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useQuery } from "@apollo/client";
-import { Search } from "lucide-react";
-import { useState } from "react";
 import { useOpenOrderDetailsModal } from "../../_hooks/use-open-order-details-modal";
 import OrderDetailsModal from "./_components/OrderDetailsModal";
 

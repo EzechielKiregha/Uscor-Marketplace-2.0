@@ -1,9 +1,6 @@
 // app/client/_components/Recommendations.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { GET_CLIENT_RECOMMENDATIONS } from "@/graphql/client-panel.gql";
 import { useQuery } from "@apollo/client";
 import {
     ArrowRight,
@@ -14,6 +11,9 @@ import {
     Users,
 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { GET_CLIENT_RECOMMENDATIONS } from "@/graphql/client-panel.gql";
 
 interface RecommendationsProps {
 	client: any;

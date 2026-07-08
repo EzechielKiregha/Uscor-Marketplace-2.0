@@ -1,22 +1,18 @@
 "use client";
 
-import {
-  getBusinessTypeConfig,
-  type BusinessTypeConfig,
-} from "@/config/business-types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    type BusinessTypeConfig,
+    getBusinessTypeConfig,
+} from "@/config/business-types";
 import { cn } from "@/lib/utils";
 import {
-  AlertTriangle,
-  Award,
-  BookOpen,
-  Calendar,
-  Package,
-  Palette,
-  Ruler,
-  Shield,
-  Tag,
-  Wine,
+    Award,
+    BookOpen,
+    Calendar,
+    Package,
+    Shield,
+    Tag
 } from "lucide-react";
 
 interface TypeDashboardWidgetsProps {
@@ -109,7 +105,7 @@ function ExpiryWidget({ products, config }: { products: any[]; config: BusinessT
   const sevenDays = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
   const withExpiry = products.filter((p) => {
     const date = p.variants?.expiryDate;
-    return date && !isNaN(new Date(date).getTime());
+    return date && !Number.isNaN(new Date(date).getTime());
   });
   const expiringSoon = withExpiry.filter((p) => {
     const d = new Date(p.variants.expiryDate);

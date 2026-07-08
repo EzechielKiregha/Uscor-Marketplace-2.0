@@ -2,8 +2,7 @@
 "use client";
 
 import { useSubscription } from "@apollo/client";
-import { GET_PRODUCTS } from "@/graphql/product.gql"; // your existing list query
-import { ON_PRODUCT_CREATED, ON_PRODUCT_UPDATED } from "@/graphql/product.gql";
+import { GET_PRODUCTS, ON_PRODUCT_CREATED, ON_PRODUCT_UPDATED } from "@/graphql/product.gql";
 
 /**
  * Call once at the products list level.

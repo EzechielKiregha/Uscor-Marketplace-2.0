@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import {
-  Star,
-  Users,
-  TrendingUp,
-  Gift,
   BarChart,
-  Settings,
-  Plus,
   Filter,
+  Gift,
+  Plus,
+  Settings,
+  Star,
+  TrendingUp,
+  Users,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import PageSkeleton from "@/components/skeletons/PageSkeleton";
+import { Button } from "@/components/ui/button";
+import { useMe } from "@/lib/useMe";
+import CreateLoyaltyProgramModal from "./_components/CreateLoyaltyProgramModal";
+import CustomerPointsManagement from "./_components/CustomerPointsManagement";
 import LoyaltyProgramOverview from "./_components/LoyaltyProgramOverview";
 import ProgramConfiguration from "./_components/ProgramConfiguration";
-import CustomerPointsManagement from "./_components/CustomerPointsManagement";
 import RedemptionProcess from "./_components/RedemptionProcess";
-import CreateLoyaltyProgramModal from "./_components/CreateLoyaltyProgramModal";
 import { useLoyalty } from "./_hooks/use-loyalty";
-import { useMe } from "@/lib/useMe";
-import PageSkeleton from "@/components/skeletons/PageSkeleton";
 
 export default function LoyaltyProgramPage() {
   const { user, role, loading: authLoading } = useMe();

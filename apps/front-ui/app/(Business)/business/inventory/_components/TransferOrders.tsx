@@ -1,18 +1,6 @@
 // app/business/inventory/_components/TransferOrders.tsx
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-    CREATE_TRANSFER_ORDER,
-    MARK_TRANSFER_ORDER_RECEIVED,
-} from "@/graphql/inventory.gql";
-import { GET_PRODUCTS } from "@/graphql/product.gql";
-import { GET_STORES } from "@/graphql/store.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     ArrowRightLeft,
@@ -25,6 +13,18 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+    CREATE_TRANSFER_ORDER,
+    MARK_TRANSFER_ORDER_RECEIVED,
+} from "@/graphql/inventory.gql";
+import { GET_PRODUCTS } from "@/graphql/product.gql";
+import { GET_STORES } from "@/graphql/store.gql";
+import { useMe } from "@/lib/useMe";
 
 interface TransferOrdersProps {
 	storeId: string;

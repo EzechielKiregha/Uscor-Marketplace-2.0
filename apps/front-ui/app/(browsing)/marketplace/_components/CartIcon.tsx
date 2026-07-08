@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { useState } from "react";
 import { useCart } from "@/app/context/use-cart";
+import { Button } from "@/components/ui/button";
 import CartDrawer from "./CartDrawer";
 
 export default function CartIcon() {

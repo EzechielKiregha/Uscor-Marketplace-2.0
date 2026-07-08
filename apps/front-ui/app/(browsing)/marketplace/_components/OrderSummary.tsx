@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { AlertTriangle, CheckCircle, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface OrderSummaryProps {
   items: any[];

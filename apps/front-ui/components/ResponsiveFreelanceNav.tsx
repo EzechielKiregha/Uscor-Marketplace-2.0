@@ -1,10 +1,10 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FREELANCE_SERVICE_CATEGORIES } from "@/config/freelance-categories";
 import { useOnClickOutside } from "@/hooks/use-on-outside-click";
-import { Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 // --- Mobile Drawer Component ---
 const MobileFreelanceDrawer = () => {

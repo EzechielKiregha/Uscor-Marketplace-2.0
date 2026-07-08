@@ -1,12 +1,6 @@
 // app/business/settings/page.tsx
 "use client";
 
-import SecuritySettings from "@/components/SecuritySettings";
-import FormSkeleton from "@/components/skeletons/FormSkeleton";
-import { Button } from "@/components/ui/button";
-import { GET_STORES } from "@/graphql/store.gql";
-import { BusinessEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
   AlertTriangle,
@@ -17,6 +11,12 @@ import {
   ShieldIcon,
   User,
 } from "lucide-react";
+import SecuritySettings from "@/components/SecuritySettings";
+import FormSkeleton from "@/components/skeletons/FormSkeleton";
+import { Button } from "@/components/ui/button";
+import { GET_STORES } from "@/graphql/store.gql";
+import { BusinessEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 import HardwareSetup from "./_components/HardwareSetup";
 import KycVerification from "./_components/KycVerification";
 import PaymentConfiguration from "./_components/PaymentConfiguration";

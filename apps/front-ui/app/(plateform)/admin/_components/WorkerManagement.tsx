@@ -1,9 +1,5 @@
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { Input } from "@/components/ui/input";
-import { GET_USERS } from "@/graphql/admin.gql";
 import { useQuery } from "@apollo/client";
 import {
     Building2,
@@ -15,6 +11,10 @@ import {
     XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { Input } from "@/components/ui/input";
+import { GET_USERS } from "@/graphql/admin.gql";
 
 export default function WorkerManagement() {
 	const [search, setSearch] = useState("");

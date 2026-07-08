@@ -3,11 +3,11 @@
 import { ApolloProvider } from "@apollo/client";
 import { usePathname, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import FloatingChat from "@/components/FloatingChat";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { ToastProvider } from "@/components/toast-provider";
 import { client } from "@/lib/apollo-client";
 import { useLoading } from "./context/loadingContext";
-import FloatingChat from "@/components/FloatingChat";
-import { ToastProvider } from "@/components/toast-provider";
 
 export default function ClientWrapper({
   children,

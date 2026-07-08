@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CheckCircle, AlertCircle, Clock } from "lucide-react";
 import { format } from "date-fns";
+import { AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useMe } from "@/lib/useMe";
 
 interface MessageBubbleProps {

@@ -1,10 +1,10 @@
+import { gql } from "@apollo/client";
 import { client } from "@/lib/apollo-client";
 import {
     getAllFromIndexedDB,
     initDB,
     saveToIndexedDB
 } from "@/lib/indexed-db";
-import { gql } from "@apollo/client";
 
 const GET_STORE_PRODUCTS_FOR_CACHE = gql`
 	query GetStoreProductsForCache($storeId: String!) {

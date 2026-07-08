@@ -23,6 +23,7 @@
         "noLabelWithoutControl": "off",
         "noAutofocus": "off",
         "useButtonType": "off",
+        "noSvgWithoutTitle": "off",
         "useKeyWithClickEvents": "off"
       },
       "correctness": {
@@ -31,17 +32,20 @@
         "noUnusedFunctionParameters": "off",
         "useParseIntRadix": "off",
         "useExhaustiveDependencies": "off",
+        "useHookAtTopLevel": "off",
         "noConstructorReturn": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
         "noNonNullAssertedOptionalChain": "off",
         "noGlobalAssign": "off",
+        "useIterableCallbackReturn": "off",
         "noArrayIndexKey": "off",
         "noImplicitAnyLet": "off"
       },
       "complexity": {
-        "useOptionalChain": "off"
+        "useOptionalChain": "off",
+        "noUselessFragments": "off"
       },
       "performance":{
         "noImgElement":"off"

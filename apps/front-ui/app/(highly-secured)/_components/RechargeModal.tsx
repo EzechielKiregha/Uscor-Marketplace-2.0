@@ -1,5 +1,8 @@
 "use client";
 
+import { useMutation } from "@apollo/client";
+import { CreditCard, DollarSign, Loader2, Smartphone, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import MobileMoneyPaymentUI from "@/app/(browsing)/marketplace/_components/MobileMoneyPaymentUI";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -7,9 +10,6 @@ import {
   CANCEL_PAYMENT_TRANSACTION,
   CREATE_PAYMENT_TRANSACTION_FOR_ACCOUNT_RECHARGE,
 } from "@/graphql/payment.gql";
-import { useMutation } from "@apollo/client";
-import { CreditCard, DollarSign, Loader2, Smartphone, X } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface RechargeModalProps {
   user: any;

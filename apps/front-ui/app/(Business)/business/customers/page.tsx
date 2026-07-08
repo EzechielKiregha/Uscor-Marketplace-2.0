@@ -1,15 +1,6 @@
 // app/business/customers/page.tsx
 "use client";
 
-import MotionPage from "@/components/MotionPage";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
-import { GET_STORES } from "@/graphql/store.gql";
-import { exportCustomersCSV } from "@/lib/export-utils";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
     ChevronDown,
@@ -24,6 +15,15 @@ import {
     X
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import MotionPage from "@/components/MotionPage";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
+import { GET_STORES } from "@/graphql/store.gql";
+import { exportCustomersCSV } from "@/lib/export-utils";
+import { useMe } from "@/lib/useMe";
 
 interface CustomerRecord {
   id: string;
@@ -131,7 +131,7 @@ export default function CustomersPage() {
 
   // Filter and sort
   const filteredCustomers = useMemo(() => {
-    let result = customers.filter(
+    const result = customers.filter(
       (c) =>
         c.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.email.toLowerCase().includes(searchQuery.toLowerCase()),

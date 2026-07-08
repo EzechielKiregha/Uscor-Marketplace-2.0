@@ -1,16 +1,6 @@
 // app/business/settings/_components/Preferences.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import {
-    GET_BUSINESS_TYPES,
-    UPDATE_BUSINESS_PROFILE,
-} from "@/graphql/settings.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     BookOpen,
@@ -32,6 +22,16 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import {
+    GET_BUSINESS_TYPES,
+    UPDATE_BUSINESS_PROFILE,
+} from "@/graphql/settings.gql";
+import { useMe } from "@/lib/useMe";
 
 // Business types with icons
 export const businessTypes = [

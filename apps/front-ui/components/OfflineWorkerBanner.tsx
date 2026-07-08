@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
 	AlertTriangle,
 	ChevronDown,
@@ -13,6 +12,7 @@ import {
 	Wifi,
 	WifiOff,
 } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { OfflineSessionData } from "@/lib/offline-auth";
 import { getOfflineTokenDaysRemaining } from "@/lib/offline-auth";

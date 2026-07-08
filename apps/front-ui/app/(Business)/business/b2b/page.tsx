@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import {
 	Handshake,
@@ -9,15 +8,16 @@ import {
 	Store,
 	Tag,
 } from "lucide-react";
-import { useMe } from "@/lib/useMe";
-import { GET_PRODUCTS_BY_BUSINESS_ID } from "@/graphql/product.gql";
-import { StatusBadge } from "@/components/StatusBadge";
-import { getMinimumPlanForFeature } from "@/config/subscription-plans";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { useState } from "react";
 import MotionPage from "@/components/MotionPage";
-import WholesalePricing from "./_components/WholesalePricing";
+import { StatusBadge } from "@/components/StatusBadge";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { getMinimumPlanForFeature } from "@/config/subscription-plans";
+import { GET_PRODUCTS_BY_BUSINESS_ID } from "@/graphql/product.gql";
+import { useMe } from "@/lib/useMe";
 import PurchaseRequests from "./_components/PurchaseRequests";
 import VendorProfile from "./_components/VendorProfile";
+import WholesalePricing from "./_components/WholesalePricing";
 
 const TABS = [
 	{ key: "orders", label: "Purchase Orders", icon: ShoppingCart },

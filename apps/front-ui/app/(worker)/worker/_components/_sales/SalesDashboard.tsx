@@ -1,10 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import { DollarSign, Package, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,6 +12,11 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { useMe } from "@/lib/useMe";
 
 interface SalesDashboardProps {
   storeId: string;

@@ -1,14 +1,14 @@
 // app/business/orders/_components/OrderDetailsModal.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { CheckCircle, CreditCard, Package, Truck, XCircle } from "lucide-react";
 import ResponsiveModal from "@/app/(Business)/business/_components/responsive-modal";
 import ActivityTimeline, { buildOrderTimelineItems } from "@/components/ActivityTimeline";
 import { Button } from "@/components/ui/button";
 import { GET_ORDER_BY_ID } from "@/graphql/order.gql";
 import { UPDATE_PAYMENT_TRANSACTION } from "@/graphql/payment.gql";
 import { removeTypename } from "@/lib/removeTypeName";
-import { useMutation, useQuery } from "@apollo/client";
-import { CheckCircle, CreditCard, Package, Truck, XCircle } from "lucide-react";
 import { useOpenOrderDetailsModal } from "../../../_hooks/use-open-order-details-modal";
 
 export default function OrderDetailsModal() {
@@ -169,7 +169,7 @@ export default function OrderDetailsModal() {
                     src={
                       item.product.medias && item.product.medias.length > 0
                         ? item.product.medias[0].url
-                        : "https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}"
+                        : `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}`
                     }
                     alt={item.product.title}
                     className="w-16 h-16 bg-muted rounded flex items-center justify-center object-cover"

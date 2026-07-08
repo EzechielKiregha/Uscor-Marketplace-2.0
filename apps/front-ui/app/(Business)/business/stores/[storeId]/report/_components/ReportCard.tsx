@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { GENERATE_STORE_REPORT } from "@/graphql/store.gql";
 import { useMutation } from "@apollo/client";
 import { Download, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { GENERATE_STORE_REPORT } from "@/graphql/store.gql";
 
 export function ReportCard({ report, storeId, period }: any) {
   const [generating, setGenerating] = useState<string | null>(null);

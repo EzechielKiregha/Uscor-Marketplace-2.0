@@ -1,9 +1,6 @@
 // app/business/reports/_components/MultiStoreComparison.tsx
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_STORES } from "@/graphql/store.gql";
-import { CHART_COLORS } from "@/lib/chart-theme";
 import { useQuery } from "@apollo/client";
 import {
     Building,
@@ -21,6 +18,9 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_STORES } from "@/graphql/store.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
 
 const STORE_COLORS = CHART_COLORS.palette;
 

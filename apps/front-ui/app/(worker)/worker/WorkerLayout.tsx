@@ -1,14 +1,5 @@
 "use client";
 
-import NotificationsPopover from "@/components/seraui/Notifications";
-import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
-import { Button } from "@/components/ui/button";
-import { GET_STORES } from "@/graphql/store.gql";
-import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
-import { useIndexedDB } from "@/hooks/use-indexed-db";
-import { logout } from "@/lib/auth";
-import { useMe } from "@/lib/useMe";
-import { cn } from "@/lib/utils";
 import { useQuery } from "@apollo/client";
 import {
     BarChart,
@@ -24,6 +15,15 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { createContext, useContext, useEffect, useState } from "react";
+import NotificationsPopover from "@/components/seraui/Notifications";
+import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
+import { Button } from "@/components/ui/button";
+import { GET_STORES } from "@/graphql/store.gql";
+import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
+import { useIndexedDB } from "@/hooks/use-indexed-db";
+import { logout } from "@/lib/auth";
+import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 
 const workerSideLinks = [
   { section: "pos", icon: ShoppingCart, label: "Point of Sale" },

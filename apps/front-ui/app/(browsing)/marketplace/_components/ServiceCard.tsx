@@ -1,11 +1,11 @@
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { CREATE_CHAT } from "@/graphql/chat.gql";
 import { useMutation } from "@apollo/client";
 import { MapPin, MessageSquare, ShieldCheck, Users } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { CREATE_CHAT } from "@/graphql/chat.gql";
 import BusinessTypeIcon from "./BusinessTypeIcons";
 import ServiceDetailsModal from "./ServiceDetailsModal";
 

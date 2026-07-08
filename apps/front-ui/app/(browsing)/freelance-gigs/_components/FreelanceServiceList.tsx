@@ -1,9 +1,9 @@
-import MasonryGrid, { ServiceGridItem } from "@/components/seraui/MasonryGrid";
-import { GET_FREELANCE_SERVICES } from "@/graphql/freelance-service.gql";
-import { client } from "@/lib/apollo-client";
 import { ApolloError } from "@apollo/client";
 import { AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
+import MasonryGrid, { ServiceGridItem } from "@/components/seraui/MasonryGrid";
+import { GET_FREELANCE_SERVICES } from "@/graphql/freelance-service.gql";
+import { client } from "@/lib/apollo-client";
 
 export default function FreelanceServiceList() {
   const [freelanceServices, setFreelanceServices] = useState([]);

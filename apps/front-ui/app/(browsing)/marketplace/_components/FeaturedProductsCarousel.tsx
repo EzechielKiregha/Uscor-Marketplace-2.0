@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { getBusinessTypeConfig } from "@/config/business-types";
 

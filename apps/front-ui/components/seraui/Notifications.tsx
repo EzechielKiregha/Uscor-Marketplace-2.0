@@ -1,14 +1,14 @@
 "use client";
-import { useQuery } from "@apollo/client";
-import { Bell } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/seraui/PopOver";
 import { GET_CHAT_NOTIFICATIONS } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import { Bell } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import Button from "./button";
 
 function NotificationsPopover() {
@@ -109,8 +109,6 @@ function NotificationsPopover() {
             items.map((n: any) => (
               <div
                 key={n.id}
-                role="button"
-                tabIndex={0}
                 onClick={() => handleClick(n.chatId)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleClick(n.chatId);

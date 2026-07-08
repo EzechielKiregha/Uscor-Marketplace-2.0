@@ -1,7 +1,7 @@
-import { ThemeProvider } from "@/components/theme-provider";
 import { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import ClientWrapper from "./ClientWrapper";
 import { LoadingProvider } from "./context/loadingContext";
 import { CartProvider } from "./context/use-cart";

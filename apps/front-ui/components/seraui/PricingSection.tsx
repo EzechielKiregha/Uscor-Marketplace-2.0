@@ -1,15 +1,15 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { Check, X } from "lucide-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusBadge } from "@/components/StatusBadge";
 import {
     FEATURE_DEFINITIONS,
     type FeatureKey,
     getPlansArray
 } from "@/config/subscription-plans";
-import { motion } from "framer-motion";
-import { Check, X } from "lucide-react";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
 
 // Feature keys to show in pricing cards
 const CARD_FEATURES: FeatureKey[] = [

@@ -1,22 +1,22 @@
 // app/business/loyalty/_components/RedeemPointsModal.tsx
 "use client";
 
-import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { REDEEM_POINTS } from "@/graphql/loyalty.gql";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
+  AlertTriangle,
   Gift,
+  Loader2,
+  Search,
   Star,
   Users,
-  Loader2,
   X,
-  AlertTriangle,
-  Search,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { REDEEM_POINTS } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
 
 interface RedeemPointsModalProps {

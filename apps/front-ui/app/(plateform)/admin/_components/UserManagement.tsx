@@ -1,18 +1,6 @@
 // app/admin/_components/UserManagement.tsx
 "use client";
 
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    GET_USERS,
-    ON_NEW_ADMIN,
-    ON_NEW_BUSINESS,
-    ON_NEW_CLIENT,
-    ON_NEW_WORKER,
-} from "@/graphql/admin.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
     Briefcase,
@@ -25,6 +13,18 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    GET_USERS,
+    ON_NEW_ADMIN,
+    ON_NEW_BUSINESS,
+    ON_NEW_CLIENT,
+    ON_NEW_WORKER,
+} from "@/graphql/admin.gql";
 import UserDetailModal from "./UserDetailModal";
 
 // type UserManagementProps = {};

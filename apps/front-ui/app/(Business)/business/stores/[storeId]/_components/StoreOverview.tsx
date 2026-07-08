@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { CHART_COLORS } from "@/lib/chart-theme";
 import {
     AlertTriangle,
     ArrowRight,
@@ -24,6 +22,8 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { Button } from "@/components/ui/button";
+import { CHART_COLORS } from "@/lib/chart-theme";
 
 interface StoreOverviewProps {
   store: any;

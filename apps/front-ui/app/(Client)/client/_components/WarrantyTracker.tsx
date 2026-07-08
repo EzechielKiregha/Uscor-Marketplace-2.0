@@ -1,8 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 import { useQuery } from "@apollo/client";
 import {
     AlertTriangle,
@@ -16,6 +13,9 @@ import {
     XCircle,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 
 interface WarrantyTrackerProps {
   client: any;

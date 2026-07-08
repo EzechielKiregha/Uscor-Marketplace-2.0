@@ -1,27 +1,27 @@
 // app/wallet/_components/TokenManagement.tsx (Updated)
 "use client";
 
-import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
+  AlertTriangle,
+  CheckCircle,
   Coins,
   Gift,
-  TrendingUp,
-  TrendingDown,
-  Users,
-  CheckCircle,
-  AlertTriangle,
-  X,
-  Plus,
-  Minus,
   Loader2,
+  Minus,
+  Plus,
+  TrendingDown,
+  TrendingUp,
+  Users,
+  X,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { EARN_POINTS } from "@/graphql/loyalty.gql";
 import { REDEEM_TOKENS, RELEASE_TOKENS } from "@/graphql/wallet.gql";
 import { useMe } from "@/lib/useMe";
-import { EARN_POINTS } from "@/graphql/loyalty.gql";
 
 interface TokenManagementProps {
   tokenBalance: any;

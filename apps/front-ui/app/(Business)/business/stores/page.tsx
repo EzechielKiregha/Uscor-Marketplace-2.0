@@ -1,14 +1,5 @@
 "use client";
 
-import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
-import { Button } from "@/components/ui/button";
-import {
-  GET_REPORT_HISTORY,
-  GET_STORES,
-  ON_WORKER_ADDED_TO_STORE,
-  ON_WORKER_REMOVED_FROM_STORE,
-} from "@/graphql/store.gql";
-import { useMe } from "@/lib/useMe";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
   ArrowRight,
@@ -22,13 +13,22 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import MotionPage from "@/components/MotionPage";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
+import { Button } from "@/components/ui/button";
+import {
+  GET_REPORT_HISTORY,
+  GET_STORES,
+  ON_WORKER_ADDED_TO_STORE,
+  ON_WORKER_REMOVED_FROM_STORE,
+} from "@/graphql/store.gql";
+import { useMe } from "@/lib/useMe";
 import CreateStoreModal from "../_components/modals/CreateStoreModal";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
+import StoreCard from "./_components/StoreCard";
 import AddWorkerModal from "./[storeId]/_components/AddWorkerModal";
 import { useOpenAddWorkerModal } from "./[storeId]/_hooks/use-open-add-worker-modal";
 import { ReportHistory } from "./[storeId]/report/_components/ReportHistory";
-import StoreCard from "./_components/StoreCard";
-import MotionPage from "@/components/MotionPage";
 
 export default function StoresPage() {
   const { user, role, loading: authLoading } = useMe();

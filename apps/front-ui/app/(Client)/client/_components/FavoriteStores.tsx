@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
 import {
   ExternalLink,
@@ -12,11 +11,12 @@ import {
   Store,
   X,
 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 import { BUSINESS_TYPES } from "@/config/business-types";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 
 interface FavoriteStoresProps {
   client: any;

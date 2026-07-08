@@ -1,5 +1,8 @@
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { Plus, Store, User } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { GET_WORKERS } from "@/graphql/worker.gql";
-import { useQuery } from "@apollo/client";
-import { Plus, Store, User } from "lucide-react";
-import { useEffect, useState } from "react";
 import ClientSelectionModal from "./ClientSelectionModal";
 
 interface Worker {

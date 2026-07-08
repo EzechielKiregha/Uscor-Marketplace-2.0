@@ -4,6 +4,7 @@ import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useCart } from "@/hooks/use-cart-v1";
 import { formatPrice } from "@/lib/utils";
 import CartItem from "./CartItem";
 import { buttonVariants } from "./ui/button";
@@ -17,7 +18,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { useCart } from "@/hooks/use-cart-v1";
 
 const Cart = () => {
   const { items } = useCart();

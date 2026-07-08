@@ -1,10 +1,10 @@
 "use client";
 
+import { DollarSign, LogOutIcon, UserIcon, Wallet } from "lucide-react";
+import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { BusinessEntity, ClientEntity, WorkerEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { DollarSign, LogOutIcon, UserIcon, Wallet } from "lucide-react";
-import Link from "next/link";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./PopOver";
 

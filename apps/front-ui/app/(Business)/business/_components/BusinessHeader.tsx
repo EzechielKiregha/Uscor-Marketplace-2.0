@@ -1,8 +1,5 @@
 "use client";
 
-import NotificationsPopover from "@/components/seraui/Notifications";
-import UserDropdown from "@/components/seraui/UserDrodown";
-import { Button } from "@/components/ui/button";
 import {
     Menu,
     MoonIcon,
@@ -14,6 +11,9 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
+import NotificationsPopover from "@/components/seraui/Notifications";
+import UserDropdown from "@/components/seraui/UserDrodown";
+import { Button } from "@/components/ui/button";
 import { sidebarItems } from "./BusinessSidebar";
 
 interface BusinessHeaderProps {

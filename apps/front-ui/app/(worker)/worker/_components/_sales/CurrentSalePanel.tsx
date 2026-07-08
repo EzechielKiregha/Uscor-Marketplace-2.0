@@ -1,6 +1,16 @@
 // app/business/sales/_components/CurrentSalePanel.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    CreditCard,
+    Minus,
+    Plus,
+    RefreshCcw,
+    ShoppingCart,
+    X
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,16 +24,6 @@ import {
 } from "@/graphql/sales.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { ProductEntity } from "@/lib/types";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-    CreditCard,
-    Minus,
-    Plus,
-    RefreshCcw,
-    ShoppingCart,
-    X
-} from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { useSales } from "../../../../(Business)/business/_hooks/use-sales";
 import ClientSelectionModal from "./ClientSelectionModal";
 import NewSaleModal from "./NewSaleModal";
@@ -649,7 +649,7 @@ export default function CurrentSalePanel({
                     src={
                       product.medias && product.medias.length > 0
                         ? product.medias[0].url
-                        : "https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}"
+                        : `https://placehold.co/400x300/EA580C/FFFFFF?text=${encodeURIComponent(item.product.title)}`
                     }
                     alt={product.title}
                     className="absolute inset-0 w-full h-full object-cover"

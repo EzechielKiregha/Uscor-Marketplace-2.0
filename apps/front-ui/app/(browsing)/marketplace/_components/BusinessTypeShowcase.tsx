@@ -1,9 +1,9 @@
 "use client";
 
-import { getBusinessTypeConfig } from "@/config/business-types";
-import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { getBusinessTypeConfig } from "@/config/business-types";
+import { cn } from "@/lib/utils";
 import TypedProductCard from "./TypedProductCard";
 
 interface BusinessTypeShowcaseProps {

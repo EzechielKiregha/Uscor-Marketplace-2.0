@@ -12,9 +12,9 @@ import { CheckCircle, MessageSquare, Search } from "lucide-react";
 import { useState } from "react";
 import DisputeDetailModal from "./DisputeDetailModal";
 
-type DisputeResolutionProps = {};
+// type DisputeResolutionProps = {};
 
-export default function DisputeResolution({}: DisputeResolutionProps) {
+export default function DisputeResolution() {
 	const [filters, setFilters] = useState({
 		search: "",
 		status: "",

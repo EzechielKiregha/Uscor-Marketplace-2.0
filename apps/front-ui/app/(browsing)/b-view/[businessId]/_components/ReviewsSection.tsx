@@ -1,9 +1,9 @@
 // app/business/[id]/_components/ReviewsSection.tsx
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { MessageSquare, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ReviewsSectionProps {
 	reviews: any[];

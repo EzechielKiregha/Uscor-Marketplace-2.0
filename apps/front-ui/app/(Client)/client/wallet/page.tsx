@@ -1,24 +1,5 @@
 "use client";
 
-import ConvertModal from "@/app/(highly-secured)/_components/ConvertModal";
-import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
-import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
-import TransactionHistory from "@/app/(highly-secured)/_components/TransactionHistory";
-import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { StatusBadge } from "@/components/StatusBadge";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import {
-  CONVERT_TO_TOKENS,
-  CREATE_ACCOUNT_RECHARGE,
-  GET_ACCOUNT_BALANCE,
-  GET_ACCOUNT_RECHARGES,
-  REDEEM_TOKENS,
-  RELEASE_TOKENS,
-  WITHDRAW_ACCOUNT_FUNDS,
-} from "@/graphql/wallet.gql";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   AlertTriangle,
@@ -36,6 +17,25 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
+import ConvertModal from "@/app/(highly-secured)/_components/ConvertModal";
+import RechargeModal from "@/app/(highly-secured)/_components/RechargeModal";
+import TokenManagement from "@/app/(highly-secured)/_components/TokenManagement";
+import TransactionHistory from "@/app/(highly-secured)/_components/TransactionHistory";
+import WithdrawModal from "@/app/(highly-secured)/_components/WithdrawModal";
+import { StatusBadge } from "@/components/StatusBadge";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import {
+  CONVERT_TO_TOKENS,
+  CREATE_ACCOUNT_RECHARGE,
+  GET_ACCOUNT_BALANCE,
+  GET_ACCOUNT_RECHARGES,
+  REDEEM_TOKENS,
+  RELEASE_TOKENS,
+  WITHDRAW_ACCOUNT_FUNDS,
+} from "@/graphql/wallet.gql";
+import { useMe } from "@/lib/useMe";
 
 export default function WalletPage() {
   const { user, role, loading: authLoading } = useMe();

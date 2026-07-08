@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import {
-  X,
-  ShoppingCart,
-  Trash2,
-  Minus,
-  Plus,
-  MapPin,
   AlertTriangle,
   CheckCircle,
+  MapPin,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Trash2,
+  X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import CartItem from "./CartItem";
+import { useEffect, useState } from "react";
 import { CartItem as CI, useCart } from "@/app/context/use-cart";
+import { Button } from "@/components/ui/button";
+import CartItem from "./CartItem";
 
 interface CartDrawerProps {
   isOpen: boolean;

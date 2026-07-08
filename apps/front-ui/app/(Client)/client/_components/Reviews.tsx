@@ -1,15 +1,15 @@
 // app/client/_components/Reviews.tsx
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { Camera, MessageSquare, ShoppingCart, Star, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { GET_CLIENT_REVIEWS, SUBMIT_REVIEW } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { Camera, MessageSquare, ShoppingCart, Star, X } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface ReviewsProps {
 	client: any;

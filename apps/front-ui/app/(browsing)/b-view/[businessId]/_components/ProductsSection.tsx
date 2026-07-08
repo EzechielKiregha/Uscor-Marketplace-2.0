@@ -1,11 +1,6 @@
 // app/business/[id]/_components/ProductsSection.tsx
 "use client";
 
-import { useCart } from "@/app/context/use-cart";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
     Filter,
     Grid,
@@ -17,6 +12,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useCart } from "@/app/context/use-cart";
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface ProductsSectionProps {
   products: any[];

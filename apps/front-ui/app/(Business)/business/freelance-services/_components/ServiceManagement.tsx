@@ -1,6 +1,14 @@
 // app/business/freelance-services/_components/ServiceManagement.tsx
 "use client";
 
+import { useMutation } from "@apollo/client";
+import {
+    AlertCircle,
+    BriefcaseBusiness,
+    CheckCircle,
+    Coins,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,14 +19,6 @@ import {
 } from "@/graphql/freelance.gql";
 import { BusinessEntity, FreelanceServiceEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useMutation } from "@apollo/client";
-import {
-    AlertCircle,
-    BriefcaseBusiness,
-    CheckCircle,
-    Coins,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface ServiceManagementProps {
   service: FreelanceServiceEntity; // Replace with FreelanceServiceEntity

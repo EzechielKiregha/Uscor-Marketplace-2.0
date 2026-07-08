@@ -1,19 +1,6 @@
 // app/business/settings/_components/KycVerification.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import {
-    GET_KYC_DOCUMENTS,
-    ON_KYC_UPDATED,
-    SUBMIT_KYC,
-    UPLOAD_KYC_DOCUMENT,
-} from "@/graphql/kyc.gql";
-import { downloadKycCertificatePDF } from "@/lib/pdf/kyc-certificate-pdf";
-import { Document } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -28,6 +15,19 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import {
+    GET_KYC_DOCUMENTS,
+    ON_KYC_UPDATED,
+    SUBMIT_KYC,
+    UPLOAD_KYC_DOCUMENT,
+} from "@/graphql/kyc.gql";
+import { downloadKycCertificatePDF } from "@/lib/pdf/kyc-certificate-pdf";
+import { Document } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 
 // Document types for KYC
 export const DOCUMENT_TYPES = [

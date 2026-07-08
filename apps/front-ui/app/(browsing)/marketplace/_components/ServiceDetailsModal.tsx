@@ -1,6 +1,4 @@
 "use client";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
 import {
     BriefcaseBusiness,
     MapPin,
@@ -9,6 +7,8 @@ import {
     X,
 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
 import BusinessTypeIcon from "./BusinessTypeIcons";
 
 interface ServiceDetailsModalProps {

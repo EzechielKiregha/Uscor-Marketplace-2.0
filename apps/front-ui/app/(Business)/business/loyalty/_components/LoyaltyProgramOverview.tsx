@@ -1,19 +1,6 @@
 // app/business/loyalty/_components/LoyaltyProgramOverview.tsx (Updated)
 "use client";
 
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    GET_LOYALTY_ANALYTICS,
-    GET_LOYALTY_PROGRAM_BY_ID,
-    GET_LOYALTY_TIERS,
-    GET_POINTS_TRANSACTIONS,
-} from "@/graphql/loyalty.gql";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { BusinessEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
     AlertTriangle,
@@ -40,6 +27,19 @@ import {
     XAxis,
     YAxis
 } from "recharts";
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    GET_LOYALTY_ANALYTICS,
+    GET_LOYALTY_PROGRAM_BY_ID,
+    GET_LOYALTY_TIERS,
+    GET_POINTS_TRANSACTIONS,
+} from "@/graphql/loyalty.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { BusinessEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 
 interface LoyaltyProgramOverviewProps {
   programId: string;

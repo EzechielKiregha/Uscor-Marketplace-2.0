@@ -1,11 +1,6 @@
 // app/admin/_components/AnnouncementDetailModal.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { CREATE_ANNOUNCEMENT } from "@/graphql/admin.gql";
 import { useMutation } from "@apollo/client";
 import {
     AlertTriangle,
@@ -16,6 +11,11 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { CREATE_ANNOUNCEMENT } from "@/graphql/admin.gql";
 
 interface AnnouncementDetailModalProps {
 	announcement?: any;

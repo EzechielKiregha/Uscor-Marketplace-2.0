@@ -1,10 +1,10 @@
+import { NextRequest } from 'next/server';
 import { GET_BUSINESS_BY_PHONE } from '@/graphql/business.gql';
 import { GET_CLIENT_BY_PHONE } from '@/graphql/client.gql';
 import { GET_PAYMENT_LATEST_TRANSACTION, UPDATE_PAYMENT_TRANSACTION_FOR_ACCOUNT_RECHARGE } from '@/graphql/payment.gql';
 import { CREATE_ACCOUNT_RECHARGE_FROM_USSD, GET_ACCOUNT_BALANCE } from '@/graphql/wallet.gql';
 import { client as executeQuery } from "@/lib/apollo-client";
 import { BusinessEntity } from '@/lib/types';
-import { NextRequest } from 'next/server';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -92,7 +92,7 @@ You are using a ${
 
       if (confirmation !== '1') return end('❌ Recharge cancelled.');
       if (!methodName) return end('❌ Invalid payment method.');
-      if (isNaN(amount) || amount <= 0) return end('❌ Invalid amount.');
+      if (Number.isNaN(amount) || amount <= 0) return end('❌ Invalid amount.');
 
       return await doRecharge({ phoneNumber, amount, methodName, userCountry });
     }
@@ -125,7 +125,7 @@ Select Payment Method:
       }
 
       const amount = parseFloat(customAmount);
-      if (isNaN(amount) || amount <= 0) return end('❌ Invalid amount. Please enter a positive number.');
+      if (Number.isNaN(amount) || amount <= 0) return end('❌ Invalid amount. Please enter a positive number.');
 
       const { client, business } = await resolveUser(phoneNumber);
       if (!client && !business) return end('❌ No account found.');
@@ -228,7 +228,7 @@ Select Payment Method:
       const amount = parseFloat(parts[2]);
 
       if (confirmation !== '1') return end('❌ Token conversion cancelled.');
-      if (isNaN(amount) || amount <= 0) return end('❌ Invalid amount.');
+      if (Number.isNaN(amount) || amount <= 0) return end('❌ Invalid amount.');
 
       return await doTokenConversion({ phoneNumber, amount, userCountry });
     }
@@ -248,7 +248,7 @@ Select Payment Method:
       }
 
       const amount = parseFloat(customAmount);
-      if (isNaN(amount) || amount <= 0) return end('❌ Invalid amount. Please enter a positive number.');
+      if (Number.isNaN(amount) || amount <= 0) return end('❌ Invalid amount. Please enter a positive number.');
 
       // Check balance before confirm screen
       const clientResult = await executeQuery.query({

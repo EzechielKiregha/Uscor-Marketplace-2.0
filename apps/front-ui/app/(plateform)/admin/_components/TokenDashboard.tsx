@@ -1,18 +1,6 @@
 "use client";
 
 import {
-	AreaChart,
-	Area,
-	BarChart,
-	Bar,
-	XAxis,
-	YAxis,
-	CartesianGrid,
-	Tooltip,
-	ResponsiveContainer,
-	Legend,
-} from "recharts";
-import {
 	ArrowUpRight,
 	Coins,
 	CreditCard,
@@ -21,9 +9,21 @@ import {
 	Wallet,
 } from "lucide-react";
 import { useState } from "react";
+import {
+	Area,
+	AreaChart,
+	Bar,
+	BarChart,
+	CartesianGrid,
+	Legend,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
+import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 import { Button } from "@/components/ui/button";
 import { CHART_COLORS, CHART_TOOLTIP_STYLE } from "@/lib/chart-theme";
-import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 
 interface TokenDashboardProps {
 	metrics: any;

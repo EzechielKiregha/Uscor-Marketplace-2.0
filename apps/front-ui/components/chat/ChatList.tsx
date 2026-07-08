@@ -1,22 +1,22 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_CHATS, GET_UNREAD_COUNT } from "@/graphql/chat.gql";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  User,
-  Store,
-  MessageCircle,
-  CheckCircle,
-  Clock,
-  ChevronRight,
-} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Button } from "../ui/button";
-import { useMe } from "@/lib/useMe";
+import {
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  MessageCircle,
+  Store,
+  User,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import BusinessTypeIcon from "@/app/(browsing)/marketplace/_components/BusinessTypeIcons";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { GET_CHATS, GET_UNREAD_COUNT } from "@/graphql/chat.gql";
+import { useMe } from "@/lib/useMe";
+import { Button } from "../ui/button";
 
 interface ChatListProps {
   chats: any[];

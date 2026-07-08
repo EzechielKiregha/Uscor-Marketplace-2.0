@@ -1,13 +1,6 @@
 // marketplace/checkout/_components/MobileMoneyPaymentCard.tsx
 "use client";
 
-import { useToast } from "@/components/toast-provider";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-    CANCEL_PAYMENT_TRANSACTION,
-    CHECK_PAYMENT_TRANSACTION_STATUS,
-} from "@/graphql/payment.gql";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     CheckCircle,
@@ -18,6 +11,13 @@ import {
     XCircle,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useToast } from "@/components/toast-provider";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+    CANCEL_PAYMENT_TRANSACTION,
+    CHECK_PAYMENT_TRANSACTION_STATUS,
+} from "@/graphql/payment.gql";
 
 const COUNTDOWN_DURATION = 25 * 60; // 25 minutes
 

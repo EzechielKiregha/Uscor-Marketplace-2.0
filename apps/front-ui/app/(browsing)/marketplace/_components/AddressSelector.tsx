@@ -1,5 +1,8 @@
 "use client";
 
+import { useMutation, useQuery } from "@apollo/client";
+import { CheckCircle, MapPin, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,9 +13,6 @@ import {
 } from "@/graphql/client-panel.gql";
 import { Address } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
-import { useMutation, useQuery } from "@apollo/client";
-import { CheckCircle, MapPin, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
 
 interface AddressSelectorProps {
   selectedAddress?: Address | null;

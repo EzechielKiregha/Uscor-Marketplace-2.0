@@ -1,34 +1,34 @@
 // marketplace/_components/ChatThread.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useMutation, useSubscription, useQuery } from "@apollo/client";
-import {
-  ArrowLeft,
-  Send,
-  Plus,
-  X,
-  Loader2,
-  AlertCircle,
-  MessageCircle,
-  Store,
-  User,
-} from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import MessageBubble from "./MessageBubble";
-import {
-  GET_CHAT_BY_ID,
-  SEND_MESSAGE,
-  ON_MESSAGE_RECEIVED,
-  MARK_MESSAGES_AS_READ,
-  GET_UNREAD_COUNT,
-} from "@/graphql/chat.gql";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useMe } from "@/lib/useMe";
+import {
+  AlertCircle,
+  ArrowLeft,
+  Loader2,
+  MessageCircle,
+  Plus,
+  Send,
+  Store,
+  User,
+  X,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import BusinessTypeIcon from "@/app/(browsing)/marketplace/_components/BusinessTypeIcons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  GET_CHAT_BY_ID,
+  GET_UNREAD_COUNT,
+  MARK_MESSAGES_AS_READ,
+  ON_MESSAGE_RECEIVED,
+  SEND_MESSAGE,
+} from "@/graphql/chat.gql";
+import { useMe } from "@/lib/useMe";
+import MessageBubble from "./MessageBubble";
 
 interface ChatThreadProps {
   chatId: string;
