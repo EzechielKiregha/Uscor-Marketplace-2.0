@@ -1,20 +1,20 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-	Handshake,
-	Package,
-	ShoppingCart,
-	Store,
-	Tag,
-} from "lucide-react";
-import { useState } from "react";
 import MotionPage from "@/components/MotionPage";
 import { StatusBadge } from "@/components/StatusBadge";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { getMinimumPlanForFeature } from "@/config/subscription-plans";
 import { GET_PRODUCTS_BY_BUSINESS_ID } from "@/graphql/product.gql";
+import { BusinessEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import {
+    Handshake,
+    ShoppingCart,
+    Store,
+    Tag
+} from "lucide-react";
+import { useState } from "react";
 import PurchaseRequests from "./_components/PurchaseRequests";
 import VendorProfile from "./_components/VendorProfile";
 import WholesalePricing from "./_components/WholesalePricing";
@@ -28,8 +28,10 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"];
 
 export default function B2BPage() {
-	const { user, loading: authLoading } = useMe();
+	const { user: u, loading: authLoading } = useMe();
 	const [activeTab, setActiveTab] = useState<TabKey>("orders");
+
+    const user = u as BusinessEntity
 
 	const { data: productsData } = useQuery(GET_PRODUCTS_BY_BUSINESS_ID, {
 		skip: !user,

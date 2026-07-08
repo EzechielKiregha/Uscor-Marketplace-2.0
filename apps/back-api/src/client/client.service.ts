@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { hash } from "argon2";
-import { PaymentMethod, RechargeMethod } from "../generated/prisma/enums";
+import { OrderStatus, PaymentMethod, RechargeMethod } from "../generated/prisma/enums";
 import { PrismaService } from "../prisma/prisma.service";
 import { AddressInput } from "./dto/address.input";
 import {
@@ -706,6 +706,7 @@ export class ClientService {
 			where: {
 				clientId,
 				payment: { status: "COMPLETED" },
+                status: { not: OrderStatus.CANCELLED }
 			},
 			_sum: { totalAmount: true },
 		});
