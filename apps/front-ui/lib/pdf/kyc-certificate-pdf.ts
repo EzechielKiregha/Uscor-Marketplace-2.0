@@ -25,12 +25,12 @@ interface KycCertificateData {
   certificateId: string;
 }
 
-const ORANGE = [249, 115, 22] as const;
-const DARK = [31, 41, 55] as const;
-const GRAY = [107, 114, 128] as const;
-const LIGHT_BG = [249, 250, 251] as const;
-const GREEN = [22, 163, 74] as const;
-const RED = [220, 38, 38] as const;
+const ORANGE: [number, number, number] = [249, 115, 22] as const;
+const DARK: [number, number, number] = [31, 41, 55] as const;
+const GRAY: [number, number, number] = [107, 114, 128] as const;
+const LIGHT_BG: [number, number, number] = [249, 250, 251] as const;
+const GREEN: [number, number, number] = [22, 163, 74] as const;
+const RED: [number, number, number] = [220, 38, 38] as const;
 
 function formatDocumentType(type: string): string {
   return type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
