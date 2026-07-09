@@ -1,6 +1,8 @@
 // Reusable animation variants for framer-motion
 // Import: import { fadeIn, slideUp, staggerContainer, ... } from "@/lib/motion";
 
+import { Transition } from "framer-motion";
+
 export const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -46,5 +48,8 @@ export const staggerItem = {
 export const pageTransition = {
   initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
+  transition: {
+    duration: 0.3,
+    ease: [0.25, 0.1, 0.25, 1],
+  } satisfies Transition,
 };
