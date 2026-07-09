@@ -45,6 +45,7 @@ interface InvoiceOptions {
   dueDate?: string;
 }
 
+const RECEIPT_WIDTH = 80;
 const ORANGE = [249, 115, 22] as const; // #f97316
 const DARK = [31, 41, 55] as const;
 const GRAY = [107, 114, 128] as const;
