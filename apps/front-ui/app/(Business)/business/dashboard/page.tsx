@@ -48,7 +48,7 @@ export default function BusinessDashboardPage() {
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [lowStockProducts, setLowStockProducts] = useState<number>(0);
-  const user = useMe();
+  const {user} = useMe();
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const route = useRouter();
   const [ordersCount, setOdersCount] = useState<number>(0);
