@@ -21,6 +21,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
 const STORE_COLORS = CHART_COLORS.palette;
 

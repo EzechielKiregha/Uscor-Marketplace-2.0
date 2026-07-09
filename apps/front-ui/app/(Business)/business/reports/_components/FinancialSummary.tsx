@@ -26,6 +26,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { NameType } from "recharts/types/component/DefaultTooltipContent";
 
 interface FinancialSummaryProps {
   storeId: string;
