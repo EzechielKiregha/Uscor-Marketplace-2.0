@@ -1,6 +1,12 @@
 // app/business/reports/_components/FinancialSummary.tsx
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
+import { GET_STORE_REPORTS } from "@/graphql/store.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
+import { downloadSalesReportPDF } from "@/lib/pdf/sales-report-pdf";
 import { useQuery } from "@apollo/client";
 import {
     ArrowDownRight,
@@ -20,12 +26,6 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_SALES_DASHBOARD } from "@/graphql/sales.gql";
-import { GET_STORE_REPORTS } from "@/graphql/store.gql";
-import { CHART_COLORS } from "@/lib/chart-theme";
-import { downloadSalesReportPDF } from "@/lib/pdf/sales-report-pdf";
 
 interface FinancialSummaryProps {
   storeId: string;
@@ -277,7 +277,7 @@ export default function FinancialSummary({
                   <XAxis dataKey="name" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip
-                    formatter={(value: any, name: string) => [
+                    formatter={(value: any, name: NameType | undefined) => [
                       name === "revenue"
                         ? `$${Number(value).toFixed(2)}`
                         : `${value}`,

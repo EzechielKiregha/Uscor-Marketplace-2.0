@@ -1,6 +1,9 @@
 // app/business/reports/_components/MultiStoreComparison.tsx
 "use client";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_STORES } from "@/graphql/store.gql";
+import { CHART_COLORS } from "@/lib/chart-theme";
 import { useQuery } from "@apollo/client";
 import {
     Building,
@@ -18,9 +21,6 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_STORES } from "@/graphql/store.gql";
-import { CHART_COLORS } from "@/lib/chart-theme";
 
 const STORE_COLORS = CHART_COLORS.palette;
 
@@ -188,7 +188,7 @@ export default function MultiStoreComparison() {
                 <YAxis yAxisId="left" tick={{ fontSize: 11 }} />
                 <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
                 <Tooltip
-                  formatter={(value: any, name: string) => [
+                  formatter={(value: any, name: NameType | undefined) => [
                     name === "revenue"
                       ? `$${Number(value).toFixed(2)}`
                       : `${value}`,
