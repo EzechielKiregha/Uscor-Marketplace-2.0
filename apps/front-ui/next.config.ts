@@ -1,5 +1,5 @@
-import withSerwist  from "@serwist/next";
-import { NextConfig  } from "next";
+import withSerwist from "@serwist/next";
+import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -12,12 +12,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname:
-          "msgv9mjjuhaiuo1b.public.blob.vercel-storage.com",
+        hostname: "msgv9mjjuhaiuo1b.public.blob.vercel-storage.com",
         pathname: "/**",
       },
     ],
   },
+  turbopack: {},
 };
 
 // 👇 FIRST configure Serwist
