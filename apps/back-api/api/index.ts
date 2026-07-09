@@ -11,6 +11,7 @@ async function bootstrap() {
 		app.enableCors({
 			origin: [
 				"http://localhost:3000",
+				"https://uscor.vercel.app",
 				"https://uscor-marketplace-2-0-front-ui.vercel.app",
 			],
 			credentials: true,
