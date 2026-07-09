@@ -1,29 +1,28 @@
 "use client";
 
-import {
-	ArrowUpRight,
-	Coins,
-	CreditCard,
-	DollarSign,
-	TrendingUp,
-	Wallet,
-} from "lucide-react";
-import { useState } from "react";
-import {
-	Area,
-	AreaChart,
-	Bar,
-	BarChart,
-	CartesianGrid,
-	Legend,
-	ResponsiveContainer,
-	Tooltip,
-	XAxis,
-	YAxis,
-} from "recharts";
 import { MotionStagger, MotionStaggerItem } from "@/components/MotionStagger";
 import { Button } from "@/components/ui/button";
 import { CHART_COLORS, CHART_TOOLTIP_STYLE } from "@/lib/chart-theme";
+import {
+    ArrowUpRight,
+    Coins,
+    CreditCard,
+    DollarSign,
+    TrendingUp,
+    Wallet,
+} from "lucide-react";
+import { useState } from "react";
+import {
+    Area,
+    AreaChart,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis
+} from "recharts";
 
 interface TokenDashboardProps {
 	metrics: any;
@@ -221,7 +220,7 @@ export default function TokenDashboard({ metrics, settings }: TokenDashboardProp
 								/>
 								<Tooltip
 									{...CHART_TOOLTIP_STYLE}
-									formatter={(value: number) => [formatCurrency(value), "GMV"]}
+									formatter={(value: any) => [formatCurrency(value), "GMV"]}
 								/>
 								<Area
 									type="monotone"
