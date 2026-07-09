@@ -1,22 +1,21 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  ExternalLink,
-  Heart,
-  HeartOff,
-  MapPin,
-  Plug,
-  Search,
-  Store,
-  X,
-} from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BUSINESS_TYPES } from "@/config/business-types";
 import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
+import { useQuery } from "@apollo/client";
+import {
+    ExternalLink,
+    Heart,
+    HeartOff,
+    Plug,
+    Search,
+    Store,
+    X
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface FavoriteStoresProps {
   client: any;
@@ -247,7 +246,7 @@ export default function FavoriteStores({ client }: FavoriteStoresProps) {
                 {typeConfig && (
                   <div
                     className="h-1"
-                    style={{ backgroundColor: typeConfig.color }}
+                    style={{ backgroundColor: typeConfig.color as any}}
                   />
                 )}
 

@@ -1,15 +1,15 @@
 import {
-  BookOpen,
-  Coffee,
-  Hammer,
-  type LucideIcon,
-  Palette,
-  Plug,
-  Shirt,
-  ShoppingCart,
-  Store,
-  UtensilsCrossed,
-  Wine,
+    BookOpen,
+    Coffee,
+    Hammer,
+    type LucideIcon,
+    Palette,
+    Plug,
+    Shirt,
+    ShoppingCart,
+    Store,
+    UtensilsCrossed,
+    Wine,
 } from "lucide-react";
 
 // ─── Product Field Configuration ────────────────────────────────────────────
