@@ -1,5 +1,5 @@
-import "tsconfig-paths/register";
 import "reflect-metadata";
+import "tsconfig-paths/register";
 
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
@@ -15,13 +15,14 @@ async function bootstrap() {
 		}),
 	); // Enable validation for incoming requests
 	app.enableCors({
-		origin: [
-			"http://localhost:3000",
-			"http://localhost:3001",
-			"https://uscor-marketplace-2-0-front-ui.vercel.app",
-		], // Allow CORS from specified origins
-		credentials: true, // if you're using cookies or auth headers
-	});
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://uscor.vercel.app',
+      'https://uscor-marketplace-2-0-front-ui.vercel.app',
+    ], // Allow CORS from specified origins
+    credentials: true, // if you're using cookies or auth headers
+  })
 
 	await app.listen(process.env.PORT ?? 8000);
 }
