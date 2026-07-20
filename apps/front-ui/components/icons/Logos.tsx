@@ -261,19 +261,15 @@ const VueLogo = () => (
 export const Logo: React.FC = () => {
 	const path = usePathname();
 	return (
-		<div className="flex items-center justify-center gap-1">
-			<Image alt="logo" src="/logo.png" width={50} height={40} />
-			<span className="font-bold sm:text-lg tracking-wider text-primary text-2xl ">
-				Uscor{" "}
+		<div className="flex items-center justify-center gap-2">
+			<Image alt="USCOR" src="/logo/logo.png" width={36} height={36} className="rounded-lg" />
+			<span className="font-bold text-lg sm:text-xl tracking-tight text-foreground">
+				USCOR
 				{path.includes("/marketplace") ? (
-					<span className="hidden font-bold lg:block">MarketPlace</span>
+					<span className="hidden lg:inline text-sm font-medium text-muted-foreground ml-1.5">Marketplace</span>
 				) : path.includes("/freelance-gigs") ? (
-					<span className="hidden font-bold lg:block">Freelance / Jobs</span>
-				) : (
-					path.includes("/") && (
-						<span className="hidden font-bold lg:block">MarketPlace</span>
-					)
-				)}
+					<span className="hidden lg:inline text-sm font-medium text-muted-foreground ml-1.5">Freelance</span>
+				) : null}
 			</span>
 		</div>
 	);

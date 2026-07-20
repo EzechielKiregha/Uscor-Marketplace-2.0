@@ -1,27 +1,23 @@
 "use client";
 
-import {
-  Bell,
-  ChevronDown,
-  MenuIcon,
-  MoonIcon,
-  Search,
-  ShoppingCart,
-  SunIcon,
-  X,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import type React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
 import CartDrawer from "@/app/(browsing)/marketplace/_components/CartDrawer";
 import SearchModal from "@/app/(browsing)/marketplace/_components/SearchModal";
 import { useCart } from "@/app/context/use-cart";
 import { BUSINESS_TYPE_LIST } from "@/config/business-types";
+import {
+    ChevronDown,
+    MenuIcon,
+    MoonIcon,
+    Search,
+    ShoppingCart,
+    SunIcon
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Logo } from "../icons/Logos";
 import MobileNavDrawer from "../MobileNavDrawer";
-import { Button } from "../ui/button";
 import NotificationsPopover from "./Notifications";
 import UserDropdown from "./UserDrodown";
 
@@ -42,7 +38,7 @@ const navLinks = [
   { href: "/uscor-features", label: "Features" },
   { href: "/hardware", label: "Hardware" },
   { href: "/marketplace", label: "Marketplace" },
-  { href: "/#pricing", label: "Pricing" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/faq", label: "FAQ" },
 ];
 
@@ -85,14 +81,14 @@ function HeaderComponent() {
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-950 border-b border-orange-200/60 dark:border-orange-900/40 sticky top-0 z-50">
+      <header className="bg-white dark:bg-gray-950/95 dark:backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
         {/* Top bar - promotional or branding */}
-        <div className="hidden lg:block bg-gradient-to-r from-orange-500 to-orange-600 text-white text-center text-xs py-1.5 font-medium tracking-wide">
+        <div className="hidden lg:block bg-gradient-to-r from-orange-600 to-orange-500 text-white text-center text-xs py-1.5 font-medium tracking-wide">
           USCOR Marketplace — Local businesses, delivered to you
         </div>
 
         {/* Main navbar */}
-        <div className="flex h-14 lg:h-16 items-center justify-between px-4 lg:px-8 max-w-[1440px] mx-auto">
+        <div className="flex h-14 lg:h-16 items-center justify-between px-4 lg:px-8 max-w-360 mx-auto">
           {/* Left: hamburger + logo */}
           <div className="flex items-center gap-3">
             <button

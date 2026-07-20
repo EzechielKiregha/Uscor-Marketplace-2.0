@@ -253,14 +253,32 @@ export default function MarketplacePage() {
   }
 
   return (
-    <MotionPage className="container mx-auto px-4 py-8">
-      {/* Page header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-1">Marketplace</h1>
-        <p className="text-muted-foreground">
-          Discover products and services from local businesses
-        </p>
-      </div>
+    <MotionPage className="container mx-auto px-4 py-0">
+      {/* Hero */}
+      <section className="relative py-14 md:py-18 px-4 sm:px-6 lg:px-8 overflow-hidden -mx-4">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-orange-500/8 dark:bg-orange-500/5 blur-[100px]" />
+        </div>
+
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/40 rounded-full border border-orange-200 dark:border-orange-800/50 mb-5">
+            <ShoppingCart className="h-3.5 w-3.5" />
+            Shop Local
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-[1.1] tracking-tight">
+            The{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-500">
+              USCOR Marketplace
+            </span>
+          </h1>
+
+          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Discover products and services from verified local businesses.
+            Shop, compare, and get it delivered.
+          </p>
+        </div>
+      </section>
 
       {/* Horizontal Category Scroll */}
       <div className="mb-6">

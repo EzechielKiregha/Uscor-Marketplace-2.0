@@ -1,8 +1,10 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import type React from "react";
 
-// --- SVG Icons (Optional: Replace with your branded icons) ---
+// --- SVG Icons ---
 const ZapIcon = () => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
@@ -118,12 +120,12 @@ const FeatureSection = ({
 }) => (
 	<section className="mb-16 last:mb-0">
 		<div className="flex items-center gap-3 mb-8">
-			<div className="p-2 bg-primary/10 text-primary rounded-lg">
+			<div className="p-2.5 bg-orange-100 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 rounded-xl">
 				<Icon />
 			</div>
 			<h2 className="text-2xl font-bold text-foreground">{title}</h2>
 		</div>
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 			{children}
 		</div>
 	</section>
@@ -137,8 +139,8 @@ const FeatureCard = ({
 	children: React.ReactNode;
 	title: string;
 }) => (
-	<div className="bg-card border border-border hover:border-primary hover:bg-primary/5/60 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
-		<h3 className="font-semibold text-foreground mb-2">{title}</h3>
+	<div className="group bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/50 transition-all duration-300">
+		<h3 className="font-semibold text-foreground mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">{title}</h3>
 		<p className="text-sm text-muted-foreground leading-relaxed">{children}</p>
 	</div>
 );
@@ -146,142 +148,201 @@ const FeatureCard = ({
 // --- Main Export ---
 export default function IntelligentPOS() {
 	return (
-		<div className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+		<div className="min-h-screen">
 			{/* Hero */}
-			<div className="text-center mb-16">
-				<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-					Intelligent POS for Modern Businesses
-				</h1>
-				<p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-					Power your retail, restaurant, or service business with a
-					full-featured, cloud-based point-of-sale system built for speed,
-					insight, and growth.
-				</p>
+			<section className="relative py-20 md:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+				<div className="absolute inset-0 -z-10">
+					<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-orange-500/8 dark:bg-orange-500/5 blur-[100px]" />
+				</div>
+
+				<div className="max-w-4xl mx-auto text-center">
+					<div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/40 rounded-full border border-orange-200 dark:border-orange-800/50 mb-6">
+						<ZapIcon />
+						Built for Speed & Growth
+					</div>
+
+					<h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-[1.1] tracking-tight">
+						Intelligent POS for{" "}
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-500">
+							Modern Businesses
+						</span>
+					</h1>
+
+					<p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+						Power your retail, restaurant, or service business with a
+						full-featured, cloud-based point-of-sale system. Sell faster,
+						track smarter, grow bigger.
+					</p>
+
+					<div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+						<Link
+							href="/hardware"
+							className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium shadow-lg shadow-orange-600/20 transition-all"
+						>
+							View Compatible Hardware
+							<ArrowRight className="h-4 w-4" />
+						</Link>
+						<Link
+							href="/#pricing"
+							className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg font-medium text-foreground hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-all"
+						>
+							See Pricing
+						</Link>
+					</div>
+				</div>
+			</section>
+
+			{/* Feature Sections */}
+			<div className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+				{/* Sales */}
+				<FeatureSection title="Sales & Checkout" icon={ShoppingCartIcon}>
+					<FeatureCard title="Open & Edit Tickets">
+						Create, save, and modify orders with ease. Perfect for split checks or
+						delayed payments.
+					</FeatureCard>
+					<FeatureCard title="Multiple Payment Methods">
+						Accept cash, card, mobile money, and Uscor Tokens in one seamless
+						flow.
+					</FeatureCard>
+					<FeatureCard title="Discounts & Refunds">
+						Apply item-level or receipt-wide discounts. Process full or partial
+						refunds instantly.
+					</FeatureCard>
+					<FeatureCard title="Item Variants & Modifiers">
+						Offer sizes, colors, or add-ons with simple modifiers and variant
+						groups.
+					</FeatureCard>
+					<FeatureCard title="Receipts & History">
+						Generate digital or printed receipts. View full transaction history
+						with filters.
+					</FeatureCard>
+					<FeatureCard title="Work Offline">
+						Keep selling even without internet. All data syncs automatically when
+						connection resumes.
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* Inventory */}
+				<FeatureSection title="Inventory Management" icon={PackageIcon}>
+					<FeatureCard title="Stock Tracking">
+						Real-time inventory sync across all sales channels and locations.
+					</FeatureCard>
+					<FeatureCard title="Low-Stock Alerts">
+						Get notified when stock levels fall below your threshold.
+					</FeatureCard>
+					<FeatureCard title="Purchase & Transfer Orders">
+						Create purchase orders from suppliers or transfer stock between
+						stores.
+					</FeatureCard>
+					<FeatureCard title="Stock Adjustments">
+						Record damages, losses, or manual inventory changes with audit logs.
+					</FeatureCard>
+					<FeatureCard title="Bulk Import/Export (CSV)">
+						Add or update thousands of products via CSV upload or export for
+						analysis.
+					</FeatureCard>
+					<FeatureCard title="Composite Items">
+						Build combo meals or kits from multiple components (e.g., "Burger
+						Meal").
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* Workers */}
+				<FeatureSection title="Workers & Access Control" icon={UsersIcon}>
+					<FeatureCard title="Clock In/Out & Shifts">
+						Track employee hours, breaks, and shift performance.
+					</FeatureCard>
+					<FeatureCard title="Sales by Employee">
+						See who’s selling what and reward top performers.
+					</FeatureCard>
+					<FeatureCard title="Role-Based Permissions">
+						Control access: manager, cashier, admin, with custom permissions.
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* Analytics */}
+				<FeatureSection title="Analytics & Reporting" icon={BarChartIcon}>
+					<FeatureCard title="Sales Trends">
+						View daily, weekly, monthly sales with visual charts.
+					</FeatureCard>
+					<FeatureCard title="Item Performance">
+						Identify best-sellers and underperformers to optimize stock.
+					</FeatureCard>
+					<FeatureCard title="Tax Reports">
+						Generate compliant tax reports for local and national requirements.
+					</FeatureCard>
+					<FeatureCard title="Shift & Worker Reports">
+						Analyze productivity, sales per shift, and labor costs.
+					</FeatureCard>
+					<FeatureCard title="Exportable Dashboards">
+						Export data to CSV or PDF for deeper analysis or accounting.
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* CRM & Loyalty */}
+				<FeatureSection title="CRM & Loyalty" icon={ShieldIcon}>
+					<FeatureCard title="Customer Profiles">
+						Track purchase history, contact info, and preferences.
+					</FeatureCard>
+					<FeatureCard title="Notes & Preferences">
+						Remember special requests (e.g., "no ice", "allergy to peanuts").
+					</FeatureCard>
+					<FeatureCard title="Loyalty Cards & Points">
+						Reward repeat customers with points or tiered loyalty programs.
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* Multi-Store */}
+				<FeatureSection title="Multi-Store Management" icon={ZapIcon}>
+					<FeatureCard title="Central Dashboard">
+						Manage all locations from one unified interface.
+					</FeatureCard>
+					<FeatureCard title="Sync Inventory & Sales">
+						Keep stock and sales data consistent across branches.
+					</FeatureCard>
+					<FeatureCard title="Branch-Specific Workers">
+						Assign employees to specific stores with role overrides.
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* Customer Display */}
+				<FeatureSection title="Customer Display (CDS)" icon={MonitorIcon}>
+					<FeatureCard title="Real-Time Order Display">
+						Show order details to customers on a second screen during checkout.
+					</FeatureCard>
+					<FeatureCard title="Brand Messaging & Ads">
+						Display promotions, thank-you messages, or social media links.
+					</FeatureCard>
+					<FeatureCard title="Builds Trust & Transparency">
+						Customers see exactly what they’re buying — reducing disputes.
+					</FeatureCard>
+				</FeatureSection>
+
+				{/* Bottom CTA */}
+				<div className="mt-20 text-center py-12 px-6 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-orange-900/10 border border-orange-200/50 dark:border-orange-800/30">
+					<h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+						Ready to upgrade your business?
+					</h2>
+					<p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+						Get started with USCOR POS today. Choose a plan that fits your needs and start selling smarter.
+					</p>
+					<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+						<Link
+							href="/#pricing"
+							className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium shadow-lg shadow-orange-600/20 transition-all"
+						>
+							View Pricing Plans
+							<ArrowRight className="h-4 w-4" />
+						</Link>
+						<Link
+							href="/hardware"
+							className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg font-medium text-foreground hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-all"
+						>
+							Browse Hardware
+						</Link>
+					</div>
+				</div>
 			</div>
-
-			{/* Sales */}
-			<FeatureSection title="Sales & Checkout" icon={ShoppingCartIcon}>
-				<FeatureCard title="Open & Edit Tickets">
-					Create, save, and modify orders with ease. Perfect for split checks or
-					delayed payments.
-				</FeatureCard>
-				<FeatureCard title="Multiple Payment Methods">
-					Accept cash, card, mobile money, and Uscor Tokens in one seamless
-					flow.
-				</FeatureCard>
-				<FeatureCard title="Discounts & Refunds">
-					Apply item-level or receipt-wide discounts. Process full or partial
-					refunds instantly.
-				</FeatureCard>
-				<FeatureCard title="Item Variants & Modifiers">
-					Offer sizes, colors, or add-ons with simple modifiers and variant
-					groups.
-				</FeatureCard>
-				<FeatureCard title="Receipts & History">
-					Generate digital or printed receipts. View full transaction history
-					with filters.
-				</FeatureCard>
-				<FeatureCard title="Work Offline">
-					Keep selling even without internet. All data syncs automatically when
-					connection resumes.
-				</FeatureCard>
-			</FeatureSection>
-
-			{/* Inventory */}
-			<FeatureSection title="Inventory Management" icon={PackageIcon}>
-				<FeatureCard title="Stock Tracking">
-					Real-time inventory sync across all sales channels and locations.
-				</FeatureCard>
-				<FeatureCard title="Low-Stock Alerts">
-					Get notified when stock levels fall below your threshold.
-				</FeatureCard>
-				<FeatureCard title="Purchase & Transfer Orders">
-					Create purchase orders from suppliers or transfer stock between
-					stores.
-				</FeatureCard>
-				<FeatureCard title="Stock Adjustments">
-					Record damages, losses, or manual inventory changes with audit logs.
-				</FeatureCard>
-				<FeatureCard title="Bulk Import/Export (CSV)">
-					Add or update thousands of products via CSV upload or export for
-					analysis.
-				</FeatureCard>
-				<FeatureCard title="Composite Items">
-					Build combo meals or kits from multiple components (e.g., "Burger
-					Meal").
-				</FeatureCard>
-			</FeatureSection>
-
-			{/* Workers */}
-			<FeatureSection title="Workers & Access Control" icon={UsersIcon}>
-				<FeatureCard title="Clock In/Out & Shifts">
-					Track employee hours, breaks, and shift performance.
-				</FeatureCard>
-				<FeatureCard title="Sales by Employee">
-					See who’s selling what and reward top performers.
-				</FeatureCard>
-				<FeatureCard title="Role-Based Permissions">
-					Control access: manager, cashier, admin, with custom permissions.
-				</FeatureCard>
-			</FeatureSection>
-
-			{/* Analytics */}
-			<FeatureSection title="Analytics & Reporting" icon={BarChartIcon}>
-				<FeatureCard title="Sales Trends">
-					View daily, weekly, monthly sales with visual charts.
-				</FeatureCard>
-				<FeatureCard title="Item Performance">
-					Identify best-sellers and underperformers to optimize stock.
-				</FeatureCard>
-				<FeatureCard title="Tax Reports">
-					Generate compliant tax reports for local and national requirements.
-				</FeatureCard>
-				<FeatureCard title="Shift & Worker Reports">
-					Analyze productivity, sales per shift, and labor costs.
-				</FeatureCard>
-				<FeatureCard title="Exportable Dashboards">
-					Export data to CSV or PDF for deeper analysis or accounting.
-				</FeatureCard>
-			</FeatureSection>
-
-			{/* CRM & Loyalty */}
-			<FeatureSection title="CRM & Loyalty" icon={ShieldIcon}>
-				<FeatureCard title="Customer Profiles">
-					Track purchase history, contact info, and preferences.
-				</FeatureCard>
-				<FeatureCard title="Notes & Preferences">
-					Remember special requests (e.g., "no ice", "allergy to peanuts").
-				</FeatureCard>
-				<FeatureCard title="Loyalty Cards & Points">
-					Reward repeat customers with points or tiered loyalty programs.
-				</FeatureCard>
-			</FeatureSection>
-
-			{/* Multi-Store */}
-			<FeatureSection title="Multi-Store Management" icon={ZapIcon}>
-				<FeatureCard title="Central Dashboard">
-					Manage all locations from one unified interface.
-				</FeatureCard>
-				<FeatureCard title="Sync Inventory & Sales">
-					Keep stock and sales data consistent across branches.
-				</FeatureCard>
-				<FeatureCard title="Branch-Specific Workers">
-					Assign employees to specific stores with role overrides.
-				</FeatureCard>
-			</FeatureSection>
-
-			{/* Customer Display */}
-			<FeatureSection title="Customer Display (CDS)" icon={MonitorIcon}>
-				<FeatureCard title="Real-Time Order Display">
-					Show order details to customers on a second screen during checkout.
-				</FeatureCard>
-				<FeatureCard title="Brand Messaging & Ads">
-					Display promotions, thank-you messages, or social media links.
-				</FeatureCard>
-				<FeatureCard title="Builds Trust & Transparency">
-					Customers see exactly what they’re buying — reducing disputes.
-				</FeatureCard>
-			</FeatureSection>
 		</div>
 	);
 }

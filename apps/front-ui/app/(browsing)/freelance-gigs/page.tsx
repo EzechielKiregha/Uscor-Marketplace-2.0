@@ -6,7 +6,7 @@ import FreelanceServiceList from "./_components/FreelanceServiceList";
 
 export default function FreelanceGigsPage() {
 	return (
-		<div className="flex flex-col min-h-screen bg-white  text-foreground">
+		<div className="flex flex-col min-h-screen bg-background text-foreground">
 			{/* Hero */}
 			<FreelanceHero />
 

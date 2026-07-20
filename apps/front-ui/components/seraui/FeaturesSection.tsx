@@ -17,7 +17,7 @@ const features: Feature[] = [
 		title: "B2B Marketplace & E‑commerce",
 		description:
 			"Sell to businesses and consumers in one place. Custom catalogs, negotiated pricing, purchase orders, secure escrow, and global tax/currency support.",
-		imageSrc: "/nav/businessHandshake.jpg", // existing asset
+		imageSrc: "/nav/businessHandshake.jpg",
 		imageAlt: "Marketplace and e‑commerce showcase",
 		href: "/uscor-features",
 	},
@@ -25,7 +25,7 @@ const features: Feature[] = [
 		title: "Multi‑Store Management",
 		description:
 			"Run multiple stores from a single dashboard. Shared inventory, localized catalogs and pricing, role-based access, and unified reporting.",
-		imageSrc: "/nav/multi-stores.jpg", // existing asset
+		imageSrc: "/nav/multi-stores.jpg",
 		imageAlt: "Multi‑store management dashboard",
 		href: "/uscor-features",
 	},
@@ -33,7 +33,7 @@ const features: Feature[] = [
 		title: "Intelligent POS",
 		description:
 			"Fast in‑store checkout synced with your online catalog. Real‑time inventory, offline mode, multi‑payment support, and AI-powered sales insights.",
-		imageSrc: "/nav/pos.jpg", // existing asset
+		imageSrc: "/nav/pos.jpg",
 		imageAlt: "Point of sale experience",
 		href: "/uscor-features",
 	},
@@ -41,7 +41,7 @@ const features: Feature[] = [
 		title: "Freelance Marketplace",
 		description:
 			"Hire vetted professionals or sell services with milestones, contracts, escrow, and instant payouts powered by Uscor.",
-		imageSrc: "/nav/freelance.jpg", // existing asset
+		imageSrc: "/nav/freelance.jpg",
 		imageAlt: "Freelance marketplace and gigs",
 		href: "/uscor-features",
 	},
@@ -49,7 +49,7 @@ const features: Feature[] = [
 		title: "Security & Fraud Prevention",
 		description:
 			"End‑to‑end encryption, device checks, rate limiting, and anomaly detection to keep accounts and transactions safe.",
-		imageSrc: "/nav/security.jpg", // existing asset
+		imageSrc: "/nav/security.jpg",
 		imageAlt: "Secure technology background",
 		href: "/uscor-features",
 	},
@@ -57,7 +57,7 @@ const features: Feature[] = [
 		title: "KYC & Compliance",
 		description:
 			"Verify identities to unlock higher limits and trust badges, with automated checks to meet regional regulations.",
-		imageSrc: "/nav/kyc.png", // existing asset
+		imageSrc: "/nav/kyc.png",
 		imageAlt: "Compliance and verification",
 		href: "/uscor-features",
 	},
@@ -65,28 +65,31 @@ const features: Feature[] = [
 
 export default function FeaturesSection() {
 	return (
-		<section className="py-20 px-4 sm:px-6 lg:px-8">
+		<section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/30">
 			<div className="max-w-7xl mx-auto">
 				{/* Section header */}
-				<div className="text-center mb-14">
-					<h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
+				<div className="text-center mb-16">
+					<div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/40 rounded-full border border-orange-200 dark:border-orange-800/50 mb-4">
+						Platform Features
+					</div>
+					<h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
 						Built for Modern Commerce
 					</h2>
 					<p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
 						From B2B sales to multi-location operations and in‑store
-						checkout—grow every channel with one platform.
+						checkout — grow every channel with one platform.
 					</p>
 				</div>
 
-				{/* Features list - alternating image/text on desktop; image above text on mobile */}
-				<div className="space-y-16">
+				{/* Features list */}
+				<div className="space-y-20">
 					{features.map((feature, idx) => {
-						const imageOnRight = idx % 2 === 0; // first: image right; second: image left; etc.
+						const imageOnRight = idx % 2 === 0;
 
 						return (
 							<article
 								key={feature.title}
-								className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center"
+								className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center"
 							>
 								{/* Text block */}
 								<div
@@ -94,7 +97,7 @@ export default function FeaturesSection() {
 										imageOnRight ? "order-2 md:order-1" : "order-2 md:order-2"
 									}
 								>
-									<h3 className="text-2xl sm:text-3xl font-semibold text-foreground">
+									<h3 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight">
 										{feature.title}
 									</h3>
 									<p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
@@ -104,22 +107,22 @@ export default function FeaturesSection() {
 										<div className="mt-6">
 											<Link
 												href={feature.href}
-												className="inline-flex items-center text-primary hover:text-accent transition-colors text-sm font-medium"
+												className="inline-flex items-center gap-2 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 text-sm font-medium transition-colors group"
 											>
 												Learn more
-												<ArrowRight className="ml-2 h-4 w-4" />
+												<ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
 											</Link>
 										</div>
 									)}
 								</div>
 
-								{/* Image block: mobile above text; desktop alternates left/right */}
+								{/* Image block */}
 								<div
 									className={
 										imageOnRight ? "order-1 md:order-2" : "order-1 md:order-1"
 									}
 								>
-									<div className="relative w-full overflow-hidden rounded-2xl border border-border hover:border-primary hover:bg-primary/5 bg-card shadow-sm">
+									<div className="relative w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm hover:shadow-lg transition-shadow duration-300">
 										<Image
 											src={feature.imageSrc}
 											alt={feature.imageAlt}

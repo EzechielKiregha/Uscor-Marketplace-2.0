@@ -224,12 +224,12 @@ const SearchIcon = () => (
 // --- Hardware Card ---
 const HardwareCard = ({ item }: { item: HardwareItem }) => {
 	return (
-		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5/60 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
-			<div className="aspect-square overflow-hidden">
+		<div className="group bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/50 transition-all duration-300 hover:-translate-y-1">
+			<div className="aspect-square overflow-hidden bg-gray-50 dark:bg-gray-900">
 				<img
 					src={item.image}
 					alt={item.title}
-					className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+					className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
 					onError={(e) => {
 						const target = e.target as HTMLImageElement;
 						target.src = `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(item.title)}`;
@@ -237,7 +237,7 @@ const HardwareCard = ({ item }: { item: HardwareItem }) => {
 				/>
 			</div>
 			<div className="p-5">
-				<h3 className="text-lg font-semibold text-foreground mb-2">
+				<h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
 					{item.title}
 				</h3>
 				<p className="text-sm text-muted-foreground mb-3 leading-relaxed">
@@ -250,11 +250,11 @@ const HardwareCard = ({ item }: { item: HardwareItem }) => {
 						<span
 							key={os}
 							className={`
-                text-xs px-2 py-1 rounded-full capitalize
-                ${os === "android" ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" : ""}
-                ${os === "ios" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300" : ""}
-                ${os === "desktop" ? "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300" : ""}
-                ${os === "card-readers" ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300" : ""}
+                text-xs px-2 py-1 rounded-full capitalize font-medium
+                ${os === "android" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" : ""}
+                ${os === "ios" ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" : ""}
+                ${os === "desktop" ? "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" : ""}
+                ${os === "card-readers" ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" : ""}
               `}
 						>
 							{os.replace("-readers", "")}
@@ -263,11 +263,11 @@ const HardwareCard = ({ item }: { item: HardwareItem }) => {
 				</div>
 
 				{/* Connectivity */}
-				<div className="flex flex-wrap gap-1">
+				<div className="flex flex-wrap gap-1.5">
 					{item.connectivity.map((tech) => (
 						<span
 							key={tech}
-							className="text-xs px-2 py-1 bg-muted text-muted-foreground rounded"
+							className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded font-medium"
 						>
 							{tech}
 						</span>
@@ -281,73 +281,100 @@ const HardwareCard = ({ item }: { item: HardwareItem }) => {
 // --- Main Export ---
 export default function HardwarePage() {
 	const [filter, setFilter] = useState<"all" | "android" | "ios">("all");
+	const [search, setSearch] = useState("");
 
 	const filteredItems = hardwareItems.filter((item) => {
-		if (filter === "all") return true;
-		return item.compatibility.includes(filter);
+		const matchesFilter = filter === "all" || item.compatibility.includes(filter);
+		const matchesSearch = !search || item.title.toLowerCase().includes(search.toLowerCase()) || item.description.toLowerCase().includes(search.toLowerCase());
+		return matchesFilter && matchesSearch;
 	});
 
 	return (
-		<div className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+		<div className="min-h-screen">
 			{/* Hero */}
-			<div className="text-center mb-12">
-				<h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
-					Hardware for Your Uscor POS
-				</h1>
-				<p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-					Pair your Uscor Intelligent POS with best-in-class hardware — from
-					receipt printers to card readers — all tested and compatible.
-				</p>
-			</div>
-
-			{/* Filters */}
-			<div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
-				<div className="flex items-center border border-border hover:border-primary hover:bg-primary/5 rounded-lg px-3 py-2 bg-muted w-full sm:w-auto">
-					<SearchIcon />
-					<input
-						type="text"
-						placeholder="Search hardware..."
-						className="ml-2 bg-transparent outline-none text-foreground placeholder-muted-foreground w-full"
-					/>
+			<section className="relative py-20 md:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+				<div className="absolute inset-0 -z-10">
+					<div className="absolute top-0 right-1/4 w-[500px] h-[400px] rounded-full bg-orange-500/8 dark:bg-orange-500/5 blur-[100px]" />
+					<div className="absolute bottom-0 left-1/3 w-[300px] h-[300px] rounded-full bg-amber-500/5 dark:bg-amber-500/3 blur-[80px]" />
 				</div>
 
-				<div className="flex border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden bg-muted w-full sm:w-auto">
-					<button
-						onClick={() => setFilter("all")}
-						className={`px-4 py-2 text-sm font-medium ${filter === "all" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-					>
-						All
-					</button>
-					<button
-						onClick={() => setFilter("android")}
-						className={`px-4 py-2 text-sm font-medium ${filter === "android" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-					>
-						Android
-					</button>
-					<button
-						onClick={() => setFilter("ios")}
-						className={`px-4 py-2 text-sm font-medium ${filter === "ios" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-					>
-						iOS
+				<div className="max-w-4xl mx-auto text-center">
+					<div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/40 rounded-full border border-orange-200 dark:border-orange-800/50 mb-6">
+						<svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+						Tested & Compatible
+					</div>
+
+					<h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-foreground leading-[1.1] tracking-tight">
+						Hardware Built for{" "}
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-500">
+							USCOR POS
+						</span>
+					</h1>
+
+					<p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+						From receipt printers to card readers — pair your Intelligent POS
+						with best-in-class hardware, all tested for reliability.
+					</p>
+				</div>
+			</section>
+
+			{/* Content */}
+			<div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
+				{/* Filters */}
+				<div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+					<div className="flex items-center border border-border focus-within:border-orange-300 dark:focus-within:border-orange-700 rounded-lg px-3 py-2.5 bg-card w-full sm:w-auto transition-colors">
+						<SearchIcon />
+						<input
+							type="text"
+							placeholder="Search hardware..."
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+							className="ml-2 bg-transparent outline-none text-foreground placeholder-muted-foreground w-full text-sm"
+						/>
+					</div>
+
+					<div className="flex rounded-lg overflow-hidden border border-border bg-card w-full sm:w-auto">
+						{(["all", "android", "ios"] as const).map((f) => (
+							<button
+								key={f}
+								onClick={() => setFilter(f)}
+								className={`px-5 py-2.5 text-sm font-medium capitalize transition-colors ${
+									filter === f
+										? "bg-orange-600 text-white"
+										: "text-muted-foreground hover:text-foreground hover:bg-muted"
+								}`}
+							>
+								{f === "all" ? "All Devices" : f}
+							</button>
+						))}
+					</div>
+				</div>
+
+				{/* Hardware Grid */}
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+					{filteredItems.map((item) => (
+						<HardwareCard key={item.id} item={item} />
+					))}
+				</div>
+
+				{filteredItems.length === 0 && (
+					<div className="text-center py-16">
+						<p className="text-muted-foreground">No hardware matches your search.</p>
+					</div>
+				)}
+
+				{/* CTA */}
+				<div className="mt-20 text-center py-12 px-6 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-orange-900/10 border border-orange-200/50 dark:border-orange-800/30">
+					<h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+						Need help choosing the right setup?
+					</h2>
+					<p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+						Our team can recommend the perfect hardware combination for your business type and volume.
+					</p>
+					<button className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium shadow-lg shadow-orange-600/20 transition-all">
+						Contact Sales
 					</button>
 				</div>
-			</div>
-
-			{/* Hardware Grid */}
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-				{filteredItems.map((item) => (
-					<HardwareCard key={item.id} item={item} />
-				))}
-			</div>
-
-			{/* CTA */}
-			<div className="text-center mt-16">
-				<p className="text-muted-foreground mb-6">
-					Need help choosing the right setup?
-				</p>
-				<button className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-accent transition-colors shadow-md hover:shadow-lg">
-					Contact Sales
-				</button>
 			</div>
 		</div>
 	);

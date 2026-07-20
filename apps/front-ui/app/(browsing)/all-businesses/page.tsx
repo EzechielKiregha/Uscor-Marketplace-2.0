@@ -134,13 +134,32 @@ export default function BusinessListingPage() {
 		return <div>Error loading businesses: {businessesError.message}</div>;
 
 	return (
-		<MotionPage className="container mx-auto px-4 py-8">
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold mb-2">Business Directory</h1>
-				<p className="text-muted-foreground">
-					Discover local businesses with special offers and features
-				</p>
-			</div>
+		<MotionPage className="container mx-auto px-4 py-0">
+			{/* Hero */}
+			<section className="relative py-16 md:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden -mx-4">
+				<div className="absolute inset-0 -z-10">
+					<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full bg-orange-500/8 dark:bg-orange-500/5 blur-[100px]" />
+				</div>
+
+				<div className="max-w-3xl mx-auto text-center">
+					<div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/40 rounded-full border border-orange-200 dark:border-orange-800/50 mb-5">
+						<MapPin className="h-3.5 w-3.5" />
+						Local Business Directory
+					</div>
+
+					<h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-[1.1] tracking-tight">
+						Discover{" "}
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 dark:from-orange-400 dark:to-orange-500">
+							Local Businesses
+						</span>
+					</h1>
+
+					<p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+						Explore verified stores, restaurants, and service providers
+						in your area. Support local commerce.
+					</p>
+				</div>
+			</section>
 
 			{/* Search and Filter Controls */}
 			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden mb-6">
