@@ -1,33 +1,26 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  AlertCircle,
-  BookOpen,
-  Bot,
-  CheckCircle,
-  ChevronLeft,
-  Home,
-  Loader2,
-  MessageCircle,
-  Phone,
-  Plus,
-  Send,
-  Sparkles,
-  Star,
-  Store,
-  User,
-  X,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import ChatList from "@/components/chat/ChatList";
 import ChatThread from "@/components/chat/ChatThread";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import {
+    BookOpen,
+    Bot,
+    ChevronLeft,
+    Home,
+    MessageCircle,
+    Plus,
+    Sparkles,
+    Store,
+    User,
+    X
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import AccordionLast from "../../app/(browsing)/faq/accordion-last";
 import NewChatSession from "./NewChatSession";
 
@@ -208,7 +201,7 @@ export default function ChatModal({ isOpen, onClose, chatId }: ChatModalProps) {
                 {simulatedMessages.map((msg) => (
                   <div key={msg.id} className="flex items-start gap-3 mb-2">
                     {msg.sender === "system" && (
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                         <Bot className="h-4 w-4 text-primary" />
                       </div>
                     )}
@@ -226,7 +219,7 @@ export default function ChatModal({ isOpen, onClose, chatId }: ChatModalProps) {
 
                 {isTyping && (
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                       <Bot className="h-4 w-4 text-primary" />
                     </div>
                     <div className="bg-muted rounded-2xl rounded-bl-none p-3">

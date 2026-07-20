@@ -1,36 +1,35 @@
 // marketplace/_components/ChatThread.tsx
 "use client";
 
-import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import {
-  AlertCircle,
-  ArrowLeft,
-  Loader2,
-  MessageCircle,
-  Package,
-  Plus,
-  Send,
-  Store,
-  User,
-  X,
-} from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
 import BusinessTypeIcon from "@/app/(browsing)/marketplace/_components/BusinessTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  GET_CHAT_BY_ID,
-  GET_UNREAD_COUNT,
-  MARK_MESSAGES_AS_READ,
-  ON_MESSAGE_RECEIVED,
-  SEND_MESSAGE,
-  TRIGGER_TYPING,
+    GET_CHAT_BY_ID,
+    GET_UNREAD_COUNT,
+    MARK_MESSAGES_AS_READ,
+    ON_MESSAGE_RECEIVED,
+    SEND_MESSAGE,
+    TRIGGER_TYPING,
 } from "@/graphql/chat.gql";
 import { getPusherClient } from "@/lib/pusher-client";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { format } from "date-fns";
+import {
+    AlertCircle,
+    ArrowLeft,
+    Loader2,
+    MessageCircle,
+    Package,
+    Plus,
+    Send,
+    Store,
+    User,
+    X,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import MessageBubble from "./MessageBubble";
 
 interface ChatThreadProps {
@@ -104,7 +103,7 @@ export default function ChatThread({
   // Debounced typing trigger
   const emitTyping = useCallback(() => {
     if (typingTimeoutRef.current) return; // already sent recently
-    const name = user?.fullName || user?.name || user?.username || "Someone";
+    const name = user?.fullName || "Someone";
     triggerTypingMutation({
       variables: { chatId, userId, userName: name },
     }).catch(() => {});

@@ -100,6 +100,7 @@ export enum NegotiationType {
 	GENERAL = "GENERAL",
 	COMPLAINT = "COMPLAINT",
 	SUPPORT = "SUPPORT",
+	ORDER = "ORDER",
 }
 
 export enum TokenTransactionType {
