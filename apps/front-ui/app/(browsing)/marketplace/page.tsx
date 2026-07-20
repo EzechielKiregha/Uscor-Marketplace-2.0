@@ -280,276 +280,213 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* Horizontal Category Scroll */}
-      <div className="mb-6">
+      {/* Tabs + Category Scroll */}
+      <div className="mb-4">
+        <div className="flex items-center gap-4 mb-4">
+          <button
+            onClick={() => setActiveTab("products")}
+            className={`text-sm font-medium pb-1 border-b-2 transition-colors ${
+              activeTab === "products"
+                ? "border-orange-600 text-orange-600 dark:text-orange-400 dark:border-orange-400"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Products
+          </button>
+          <button
+            onClick={() => setActiveTab("services")}
+            className={`text-sm font-medium pb-1 border-b-2 transition-colors ${
+              activeTab === "services"
+                ? "border-orange-600 text-orange-600 dark:text-orange-400 dark:border-orange-400"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Services
+          </button>
+        </div>
         <HorizontalCategoryScroll
           selected={filters.businessType}
           onSelect={(bt) => handleFilterChange("businessType", bt)}
         />
       </div>
 
-      {/* Search + Filter Sticky Controls */}
+      {/* Search + Controls */}
       <div className="sticky top-2 z-40 mb-6">
-        <div className="bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/80 border border-border hover:border-primary hover:bg-primary/5 rounded-2xl shadow-lg overflow-hidden">
-          {/* TOP TOOLBAR */}
-          <div className="p-3 sm:p-4 flex items-center gap-2 flex-wrap">
-            {/* Search */}
-            <div className="relative flex-1 min-w-50">
-              <Input
-                type="text"
-                placeholder="Search products and services..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="pl-10 h-11 rounded-xl bg-background"
-                onClick={() => setShowSearchModal(true)}
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
-
-            {/* Toggle Filters */}
-            <Button
-              variant={showFilters ? "default" : "outline"}
-              className="h-11 rounded-xl shrink-0"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              {showFilters ? (
-                <X className="h-4 w-4 mr-2" />
-              ) : (
-                <SlidersHorizontal className="h-4 w-4 mr-2" />
-              )}
-              Filters
-            </Button>
-
-            {/* View Mode */}
-            <div className="hidden sm:flex border border-border rounded-xl overflow-hidden">
-              <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
-                size="icon"
-                className="rounded-none h-11 w-11"
-                onClick={() => setViewMode("list")}
-                title="List view"
-              >
-                <List className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "small" ? "default" : "ghost"}
-                size="icon"
-                className="rounded-none h-11 w-11"
-                onClick={() => setViewMode("small")}
-                title="Small grid"
-              >
-                <Grid3x3 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "medium" ? "default" : "ghost"}
-                size="icon"
-                className="rounded-none h-11 w-11"
-                onClick={() => setViewMode("medium")}
-                title="Medium grid"
-              >
-                <Grid2x2 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "large" ? "default" : "ghost"}
-                size="icon"
-                className="rounded-none h-11 w-11"
-                onClick={() => setViewMode("large")}
-                title="Large cards"
-              >
-                <Square className="h-4 w-4" />
-              </Button>
-            </div>
+        <div className="bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-sm p-3 flex items-center gap-2">
+          {/* Search */}
+          <div className="relative flex-1 min-w-0">
+            <Input
+              type="text"
+              placeholder={activeTab === "products" ? "Search products..." : "Search services..."}
+              value={filters.search}
+              onChange={(e) => handleFilterChange("search", e.target.value)}
+              className="pl-9 h-10 rounded-lg bg-background text-sm"
+              onClick={() => setShowSearchModal(true)}
+            />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
 
-          {/* COLLAPSIBLE FILTER PANEL */}
-          {showFilters && (
-            <div className="border-t border-border p-4 space-y-4 animate-in slide-in-from-top-2 duration-200">
-              {/* Tabs */}
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={activeTab === "products" ? "default" : "outline"}
-                  onClick={() => setActiveTab("products")}
-                  className="rounded-xl"
-                >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Products
-                </Button>
-                <Button
-                  variant={activeTab === "services" ? "default" : "outline"}
-                  onClick={() => setActiveTab("services")}
-                  className="rounded-xl"
-                >
-                  <BriefcaseBusiness className="h-4 w-4 mr-2" />
-                  Services
-                </Button>
+          {/* Sort */}
+          <select
+            value={filters.sort}
+            onChange={(e) => handleFilterChange("sort", e.target.value)}
+            className="hidden sm:block h-10 px-3 rounded-lg border border-border bg-background text-sm text-foreground"
+          >
+            <option value="relevance">Relevance</option>
+            <option value="price_asc">Price: Low → High</option>
+            <option value="price_desc">Price: High → Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="newest">Newest</option>
+          </select>
 
-                {/* Mobile View Toggle */}
-                <div className="sm:hidden ml-auto flex border border-border rounded-xl overflow-hidden">
-                  <Button
-                    variant={viewMode === "list" ? "default" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("list")}
-                  >
-                    <List className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "small" ? "default" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("small")}
-                  >
-                    <Grid3x3 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "medium" ? "default" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("medium")}
-                  >
-                    <Grid2x2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "large" ? "default" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("large")}
-                  >
-                    <Square className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+          {/* Filters Toggle */}
+          <Button
+            variant={showFilters ? "default" : "ghost"}
+            size="icon"
+            className="h-10 w-10 rounded-lg shrink-0"
+            onClick={() => setShowFilters(!showFilters)}
+            title="Filters"
+          >
+            {showFilters ? <X className="h-4 w-4" /> : <SlidersHorizontal className="h-4 w-4" />}
+          </Button>
 
-              {/* FILTER GRID */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+          {/* View Mode - desktop */}
+          <div className="hidden md:flex items-center border border-border rounded-lg overflow-hidden">
+            {([
+              { mode: "list" as const, icon: <List className="h-4 w-4" /> },
+              { mode: "small" as const, icon: <Grid3x3 className="h-4 w-4" /> },
+              { mode: "medium" as const, icon: <Grid2x2 className="h-4 w-4" /> },
+              { mode: "large" as const, icon: <Square className="h-4 w-4" /> },
+            ]).map(({ mode, icon }) => (
+              <button
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className={`p-2 transition-colors ${
+                  viewMode === mode
+                    ? "bg-orange-600 text-white"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`}
+                title={mode}
+              >
+                {icon}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Expanded Filters */}
+        {showFilters && (
+          <div className="mt-2 bg-card border border-border rounded-xl p-4 shadow-sm animate-in slide-in-from-top-1 duration-150">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <select
+                value={filters.businessType}
+                onChange={(e) => handleFilterChange("businessType", e.target.value)}
+                className="h-10 px-3 rounded-lg border border-border bg-background text-sm"
+              >
+                <option value="">All Business Types</option>
+                {businessTypes.map((type: any) => (
+                  <option key={type.id} value={type.id}>{type.name}</option>
+                ))}
+              </select>
+
+              {activeTab === "products" ? (
                 <select
-                  value={filters.businessType}
-                  onChange={(e) =>
-                    handleFilterChange("businessType", e.target.value)
-                  }
-                  className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
+                  value={filters.category}
+                  onChange={(e) => handleFilterChange("category", e.target.value)}
+                  className="h-10 px-3 rounded-lg border border-border bg-background text-sm"
                 >
-                  <option value="">All Business Types</option>
-                  {businessTypes.map((type: any) => (
-                    <option key={type.id} value={type.id}>
-                      {type.name}
-                    </option>
+                  <option value="">All Categories</option>
+                  {productCategories.map((category: any) => (
+                    <option key={category.id} value={category.id}>{category.name}</option>
                   ))}
                 </select>
-
-                {activeTab === "products" ? (
-                  <select
-                    value={filters.category}
-                    onChange={(e) =>
-                      handleFilterChange("category", e.target.value)
-                    }
-                    className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
-                  >
-                    <option value="">All Product Categories</option>
-                    {productCategories.map((category: any) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <select
-                    value={filters.category}
-                    onChange={(e) =>
-                      handleFilterChange("category", e.target.value)
-                    }
-                    className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
-                  >
-                    <option value="">All Service Categories</option>
-                    <option value="DESIGN">Design & Creative</option>
-                    <option value="DEV">Development</option>
-                    <option value="PLUMBER">Plumbing</option>
-                    <option value="ELECTRICIAN">Electrical</option>
-                    <option value="CARPENTER">Carpentry</option>
-                    <option value="MECHANIC">Mechanics</option>
-                    <option value="TUTOR">Tutoring</option>
-                  </select>
-                )}
-
+              ) : (
                 <select
-                  value={filters.sort}
-                  onChange={(e) => handleFilterChange("sort", e.target.value)}
-                  className="h-11 px-3 rounded-xl border border-border hover:border-primary hover:bg-primary/5 bg-background"
+                  value={filters.category}
+                  onChange={(e) => handleFilterChange("category", e.target.value)}
+                  className="h-10 px-3 rounded-lg border border-border bg-background text-sm"
                 >
-                  <option value="relevance">Relevance</option>
-                  <option value="price_asc">Price: Low to High</option>
-                  <option value="price_desc">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="newest">Newest First</option>
+                  <option value="">All Service Types</option>
+                  <option value="DESIGN">Design & Creative</option>
+                  <option value="DEV">Development</option>
+                  <option value="PLUMBER">Plumbing</option>
+                  <option value="ELECTRICIAN">Electrical</option>
+                  <option value="CARPENTER">Carpentry</option>
+                  <option value="MECHANIC">Mechanics</option>
+                  <option value="TUTOR">Tutoring</option>
                 </select>
+              )}
 
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    placeholder="Min"
-                    value={filters.minPrice}
-                    onChange={(e) =>
-                      handleFilterChange("minPrice", e.target.value)
-                    }
-                    className="h-11 rounded-xl"
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Max"
-                    value={filters.maxPrice}
-                    onChange={(e) =>
-                      handleFilterChange("maxPrice", e.target.value)
-                    }
-                    className="h-11 rounded-xl"
-                  />
-                </div>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  placeholder="Min $"
+                  value={filters.minPrice}
+                  onChange={(e) => handleFilterChange("minPrice", e.target.value)}
+                  className="h-10 rounded-lg text-sm"
+                />
+                <span className="text-muted-foreground text-xs">–</span>
+                <Input
+                  type="number"
+                  placeholder="Max $"
+                  value={filters.maxPrice}
+                  onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
+                  className="h-10 rounded-lg text-sm"
+                />
               </div>
 
-              {/* QUICK FILTERS */}
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={filters.hasPromotion ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-xl"
-                  onClick={() =>
-                    handleFilterChange("hasPromotion", !filters.hasPromotion)
-                  }
-                >
-                  <Gift className="h-4 w-4 mr-2" />
-                  On Sale
-                </Button>
-                <Button
-                  variant={filters.featured ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-xl"
-                  onClick={() =>
-                    handleFilterChange("featured", !filters.featured)
-                  }
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  Featured
-                </Button>
-
-                {(filters.category ||
-                  filters.businessType ||
-                  filters.hasPromotion ||
-                  filters.featured ||
-                  filters.minPrice ||
-                  filters.maxPrice) && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl ml-auto"
-                    onClick={handleClearFilters}
-                  >
-                    <Filter className="h-4 w-4 mr-2" />
-                    Clear Filters
-                  </Button>
-                )}
-              </div>
+              {/* Sort - mobile only (already shown in toolbar on desktop) */}
+              <select
+                value={filters.sort}
+                onChange={(e) => handleFilterChange("sort", e.target.value)}
+                className="sm:hidden h-10 px-3 rounded-lg border border-border bg-background text-sm"
+              >
+                <option value="relevance">Relevance</option>
+                <option value="price_asc">Price: Low → High</option>
+                <option value="price_desc">Price: High → Low</option>
+                <option value="rating">Top Rated</option>
+                <option value="newest">Newest</option>
+              </select>
             </div>
-          )}
-        </div>
+
+            {/* Quick filters + Clear */}
+            <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border">
+              <button
+                onClick={() => handleFilterChange("hasPromotion", !filters.hasPromotion)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  filters.hasPromotion
+                    ? "bg-orange-600 text-white"
+                    : "bg-muted text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Gift className="h-3 w-3" />
+                On Sale
+              </button>
+              <button
+                onClick={() => handleFilterChange("featured", !filters.featured)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  filters.featured
+                    ? "bg-orange-600 text-white"
+                    : "bg-muted text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Star className="h-3 w-3" />
+                Featured
+              </button>
+
+              {(filters.category || filters.businessType || filters.hasPromotion ||
+                filters.featured || filters.minPrice || filters.maxPrice) && (
+                <button
+                  onClick={handleClearFilters}
+                  className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="h-3 w-3" />
+                  Clear all
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════

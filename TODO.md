@@ -455,5 +455,27 @@
 
 ---
 
-*Last updated: July 20, 2026*
+## Future Feature Work
+
+### Brand Identity Refresh (from Figma export)
+
+Source: `C:\Users\thinkBIG\Documents\Corporation works\Create cohesive brand identity`
+
+Apply the full USCOR brand system generated from Figma to the front-ui:
+
+- [ ] Swap `--primary` from `#ea580c` to `#ff7143` (warmer orange from brand board)
+- [ ] Import Manrope (400–800) as `font-sans` and DM Mono (500) as `font-mono`
+- [ ] Update hero badge pills to DM Mono uppercase style with wider letter-spacing (`.1em`)
+- [ ] Update heading letter-spacing to tighter values (`-.07em` on large headings)
+- [ ] Dark mode palette: deeper bg `#0a0d14`, borders `#252b38`/`#2a3040`, muted text `#9ca6b8`
+- [ ] Add subtle grid/aurora background texture to hero sections (48px repeating lines, mask-image fade)
+- [ ] Apply product-specific gradient colors (Marketplace = `#55a7ff→#174dd1`, POS = `#aa84ff→#5919b8`, Pay = `#42d695→#087052`, etc.)
+- [ ] Logo: adopt the "USC[icon]R" pattern with squircle container (22% radius), per-product icon in the O
+- [ ] Product suite tile cards with gradient backgrounds + sheen overlay + ray texture
+- [ ] Spec footer style for brand-consistent UI elements (DM Mono uppercase labels, 8-9px)
+- [ ] Eyebrow component: orange dot with glow + DM Mono uppercase + muted secondary text
+
+---
+
+*Last updated: July 21, 2026*
 *Author: Kambale Kiregha Ezechiel + Claude Code*
