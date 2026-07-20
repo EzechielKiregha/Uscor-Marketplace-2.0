@@ -1,5 +1,6 @@
 import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
+import { PaymentTransactionEntity } from "../../payment-transaction/entities/payment-transaction.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
 
 @ObjectType()
@@ -41,6 +42,7 @@ export class B2BOrderEntity {
 
     @Field(() => BusinessEntity, { nullable: true }) buyer?: any;
     @Field(() => BusinessEntity, { nullable: true }) seller?: any;
+    @Field(() => PaymentTransactionEntity, { nullable: true }) payment?: any;
 }
 
 @ObjectType()

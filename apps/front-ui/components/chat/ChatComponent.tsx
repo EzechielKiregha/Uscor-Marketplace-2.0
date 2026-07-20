@@ -375,6 +375,11 @@ export default function ChatPage() {
                                 Purchase
                               </span>
                             )}
+                            {chat.negotiationType === "ORDER" && (
+                              <span className="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-full">
+                                Order
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>

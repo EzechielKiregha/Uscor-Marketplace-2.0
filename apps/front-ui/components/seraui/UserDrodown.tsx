@@ -1,36 +1,54 @@
 "use client";
 
-import { DollarSign, LogOutIcon, UserIcon, Wallet } from "lucide-react";
+import { DollarSign, Gauge, LogOutIcon, UserIcon, Wallet } from "lucide-react";
 import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { logout } from "@/lib/auth";
 import { BusinessEntity, ClientEntity, WorkerEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "./PopOver";
 
 export default function UserDropdown() {
-  const { user, role, loading, error } = useMe();
+  const { user, role, loading } = useMe();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  if (loading)
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  if (loading) {
     return (
-      <div className="w-5 h-5 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+      <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 animate-pulse" />
     );
+  }
 
   if (!user) {
-    console.warn("No user data found");
     return (
       <Button
         asChild
-        variant="ghost"
         size="sm"
-        className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+        className="rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4"
       >
         <a href="/login">Sign In</a>
       </Button>
     );
   }
 
-  // Determine display name and avatar
   let displayName: string;
   let avatar: string | undefined;
   if (role === "client") {
@@ -38,125 +56,131 @@ export default function UserDropdown() {
       (user as ClientEntity).fullName ||
       (user as ClientEntity).username ||
       "Client";
-    avatar = `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(displayName[0])}`; // ClientEntity lacks avatar
+    avatar = undefined;
   } else if (role === "business") {
     displayName = (user as BusinessEntity).name;
-    avatar =
-      (user as BusinessEntity).avatar ||
-      `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(displayName[0])}`;
+    avatar = (user as BusinessEntity).avatar || undefined;
   } else {
     displayName = (user as WorkerEntity).fullName || "Worker";
-    avatar =
-      (user as WorkerEntity).avatar ||
-      `https://placehold.co/300x300/E2E8F0/333333?text=${encodeURIComponent(displayName[0])}`; // WorkerEntity lacks avatar
+    avatar = (user as WorkerEntity).avatar || undefined;
   }
+
+  const initials = displayName[0]?.toUpperCase() || "U";
 
   const pathname =
     typeof window !== "undefined" ? window.location.pathname : "";
 
   const getDashboardLink = () => {
     switch (role) {
-      case "client":
-        return "/client";
-      case "business":
-        return "/business/dashboard";
-      case "worker":
-        return "/worker";
-      case "admin": {
-        return pathname === "/admin" ? "/" : "/admin";
-      }
-      default:
-        return "/";
+      case "client": return "/client";
+      case "business": return "/business/dashboard";
+      case "worker": return "/worker";
+      case "admin": return pathname === "/admin" ? "/" : "/admin";
+      default: return "/";
     }
   };
+
   const getWalletLink = () => {
     switch (role) {
-      case "client":
-        return "/client/wallet";
-      case "business":
-        return "/business/wallet";
-      default:
-        return "/";
+      case "client": return "/client/wallet";
+      case "business": return "/business/wallet";
+      default: return "/";
+    }
+  };
+
+  const getRoleLabel = () => {
+    switch (role) {
+      case "admin": return "Administrator";
+      case "business": return "Business Owner";
+      case "client": return "Client";
+      case "worker": return "Worker";
+      default: return "User";
     }
   };
 
   return (
-    <Popover>
-      <PopoverTrigger>
-        <div className="flex items-center  hover:bg-gray-100 dark:hover:bg-background px-2 py-1 rounded-lg transition-colors cursor-pointer">
-          <img
-            src={avatar}
-            alt="User avatar"
-            className="w-8 h-8 rounded-full mr-2 object-cover border border-gray-300 dark:border-gray-600"
-          />
-          <span className="text-sm sm:hidden lg:block font-medium text-gray-700 dark:text-gray-200 hidden">
-            {displayName}
-          </span>
-          {role === "client" && (
-            <span className="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded-full hidden sm:block">
-              {(user as ClientEntity).loyaltyPoints} pts
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors"
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        <div className="w-8 h-8 rounded-full overflow-hidden bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center shrink-0 border border-orange-200 dark:border-orange-800">
+          {avatar ? (
+            <img src={avatar} alt={displayName} className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-xs font-bold text-orange-600 dark:text-orange-400">
+              {initials}
             </span>
           )}
         </div>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="p-0 w-56">
-        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-card">
-          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-            {displayName}
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-            {role === "admin"
-              ? "Administrator"
-              : role === "business"
-                ? "Business Owner"
-                : role === "client"
-                  ? "Client"
-                  : "Worker"}
-          </p>
-          <p className="text-sm italic text-orange-600 dark:text-orange-400 mt-1">
-            {(user as ClientEntity).loyaltyTier}
-          </p>
-        </div>
-        <div className="py-1">
-          <Link
-            href={getDashboardLink()}
-            className="flex items-center px-4 py-2 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
-          >
-            {pathname === "/admin" ? (
-              <>
-                <UserIcon className="w-4 h-4 mr-3 opacity-70" />
-                Home Page
-              </>
-            ) : (
-              <>
-                <UserIcon className="w-4 h-4 mr-3 opacity-70" />
-                Dashboard
-              </>
+        <span className="hidden xl:block text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[100px] truncate">
+          {displayName}
+        </span>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-60 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl shadow-black/5 dark:shadow-black/30 overflow-hidden z-50 animate-fade-in">
+          {/* User info header */}
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+              {displayName}
+            </p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {getRoleLabel()}
+            </p>
+            {role === "client" && (user as ClientEntity).loyaltyTier && (
+              <span className="inline-block text-xs text-orange-600 dark:text-orange-400 font-medium mt-1">
+                {(user as ClientEntity).loyaltyTier} · {(user as ClientEntity).loyaltyPoints} pts
+              </span>
             )}
-          </Link>
-          <Link
-            href={getWalletLink()}
-            className="flex items-center px-4 py-2 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
-          >
-            <Wallet className="w-4 h-4 mr-3 opacity-70" />
-            Wallet
-          </Link>
-          <Link
-            href="/pricing"
-            className="flex items-center px-4 py-2 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]"
-          >
-            <DollarSign className="w-4 h-4 mr-3 opacity-70" />
-            Pricing
-          </Link>
-          <button
-            onClick={logout}
-            className="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-          >
-            <LogOutIcon className="w-4 h-4 mr-3 opacity-70" />
-            Logout
-          </button>
+          </div>
+
+          {/* Menu items */}
+          <div className="py-1.5">
+            <Link
+              href={getDashboardLink()}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+            >
+              <Gauge className="w-4 h-4 opacity-60" />
+              {pathname === "/admin" ? "Home Page" : "Dashboard"}
+            </Link>
+
+            {(role === "client" || role === "business") && (
+              <Link
+                href={getWalletLink()}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+              >
+                <Wallet className="w-4 h-4 opacity-60" />
+                Wallet
+              </Link>
+            )}
+
+            <Link
+              href="/pricing"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+            >
+              <DollarSign className="w-4 h-4 opacity-60" />
+              Pricing
+            </Link>
+          </div>
+
+          {/* Logout */}
+          <div className="border-t border-gray-100 dark:border-gray-800 py-1.5">
+            <button
+              onClick={() => { setOpen(false); logout(); }}
+              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+            >
+              <LogOutIcon className="w-4 h-4 opacity-60" />
+              Sign Out
+            </button>
+          </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
   );
 }

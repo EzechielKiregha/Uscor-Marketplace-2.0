@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { Check, CheckCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMe } from "@/lib/useMe";
 
@@ -34,33 +34,14 @@ export default function MessageBubble({
   }, []);
 
   const getStatusIcon = () => {
-    switch (status) {
-      case "read":
-        return <CheckCircle className="h-3 w-3 text-primary" />;
-      // case "delivered":
-      //   return <CheckCircle className="h-3 w-3 text-muted-foreground" />;
-      // case "pending":
-      //   return <Clock className="h-3 w-3 text-muted-foreground" />;
-      // case "error":
-      //   return <AlertCircle className="h-3 w-3 text-destructive" />;
-      default:
-        return <CheckCircle className="h-3 w-3 text-muted-foreground" />;
+    if (status === "read") {
+      return <CheckCheck className="h-3.5 w-3.5 text-blue-400" />;
     }
+    return <Check className="h-3 w-3 text-muted-foreground/70" />;
   };
 
   const getMessageStatus = () => {
-    switch (status) {
-      case "read":
-        return "Read";
-      // case "delivered":
-      //   return "Delivered";
-      // case "pending":
-      //   return "Sending...";
-      // case "error":
-      //   return "Failed";
-      default:
-        return "sent";
-    }
+    return status === "read" ? "Read" : "Sent";
   };
 
   return (

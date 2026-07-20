@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
+import { PusherService } from "../chat/pusher.service";
 import { PrismaModule } from "../prisma/prisma.module";
 import { PrismaService } from "../prisma/prisma.service";
 import { DisputeResolver } from "./dispute.resolver";
@@ -11,6 +12,7 @@ const pubSub = new PubSub();
 		DisputeResolver,
 		DisputeService,
 		PrismaService,
+		PusherService,
 		{ provide: "PUB_SUB", useValue: pubSub },
 	],
 	imports: [PrismaModule],

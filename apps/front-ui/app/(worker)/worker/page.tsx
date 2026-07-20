@@ -14,7 +14,7 @@ import { SyncStatusBar } from "@/components/SyncStatusBar";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
-import { GET_WORKER_DASHBOARD } from "@/graphql/worker.gql";
+import { GET_WORKER_DASHBOARD, GET_WORKER_PROFILE } from "@/graphql/worker.gql";
 import { useOfflinePOS } from "@/hooks/use-offline-pos";
 import { getActiveOfflineSession, isOfflineMode, setActiveOfflineSession } from "@/lib/auth";
 import { StoreEntity } from "@/lib/types";
@@ -25,6 +25,7 @@ import PosPage from "./_components/PosPage";
 import ProfilePage from "./_components/ProfilePage";
 import ReportsPage from "./_components/ReportsPage";
 import ShiftsPage from "./_components/ShiftsPage";
+import WorkerOrdersPage from "./_components/WorkerOrdersPage";
 import { useWorkerLayout } from "./WorkerLayout";
 
 export default function WorkerPage() {
@@ -61,6 +62,13 @@ export default function WorkerPage() {
   } = useQuery(GET_STORES, {
     skip: isOfflineAuthenticated || !user?.id,
   });
+
+  const { data: workerProfileData } = useQuery(GET_WORKER_PROFILE, {
+    variables: { id: user?.id },
+    skip: !user?.id || isOfflineAuthenticated,
+  });
+
+  const workerBusinessId = workerProfileData?.worker?.business?.id;
 
   const storeOptions = useMemo(() => {
     if (isOfflineAuthenticated) return fallbackStores;
@@ -285,6 +293,9 @@ export default function WorkerPage() {
 
       {/* Main Content */}
       <div>
+        {activeSection === "orders" && workerBusinessId && (
+          <WorkerOrdersPage businessId={workerBusinessId} />
+        )}
         {activeSection === "pos" && (
           <PosPage
             selectedStoreId={selectedStoreId}

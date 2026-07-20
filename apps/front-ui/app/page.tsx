@@ -1,7 +1,5 @@
 "use client";
-import { ArrowDownToLine, DollarSign, Paintbrush } from "lucide-react";
 import { logos1, logos2 } from "@/components/icons/Logos";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import FeaturesSection from "@/components/seraui/FeaturesSection";
 import Footer from "@/components/seraui/FooterSection";
 import HeaderComponent from "@/components/seraui/HeaderComponent";
@@ -10,6 +8,7 @@ import MarqueeScroller from "@/components/seraui/MarqueeScroller";
 import PricingSection from "@/components/seraui/PricingSection";
 import TeamSection from "@/components/seraui/TeamMemberCard";
 import TestimonialSection from "@/components/seraui/TestimonialSection";
+import { ArrowDownToLine, DollarSign, Paintbrush } from "lucide-react";
 import AccordionLast from "./(browsing)/faq/accordion-last";
 
 // --- Perks Data (in English) ---
@@ -48,7 +47,7 @@ export default function HomePage() {
       <FeaturesSection />
 
       {/* <FeaturedProducts title='Featured Products' subtitle='' href='/marketplace/products' /> */}
-      <section className=" bg-muted">
+      {/* <section className=" bg-muted">
         <MaxWidthWrapper>
           <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
             {perks.map((perk) => (
@@ -73,7 +72,7 @@ export default function HomePage() {
             ))}
           </div>
         </MaxWidthWrapper>
-      </section>
+      </section> */}
 
       {/* Logos Marquee */}
       <div className="py-12 px-4">

@@ -11,11 +11,6 @@ interface BusinessTypeShowcaseProps {
   products: any[];
 }
 
-/**
- * Horizontal showcase section for a single business type.
- * Displays up to 4 products with type-specific accent styling
- * and a "View All" link that filters the marketplace.
- */
 export default function BusinessTypeShowcase({
   businessType,
   products,
@@ -23,52 +18,58 @@ export default function BusinessTypeShowcase({
   const config = getBusinessTypeConfig(businessType);
   if (!products || products.length === 0) return null;
 
+  const featured = products[0];
+
   return (
     <section
       className={cn(
-        "rounded-xl p-5 mb-6 border",
+        "rounded-xl p-4 border flex flex-col sm:flex-row sm:items-center gap-4",
         config.color.bg,
         config.color.border,
       )}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={cn(
-              "w-9 h-9 rounded-lg flex items-center justify-center",
-              config.color.badge,
-            )}
-          >
-            <config.icon className="h-4.5 w-4.5" />
-          </div>
-          <div>
-            <h2 className="text-base font-bold leading-tight">{config.label}</h2>
-            <p className="text-xs text-muted-foreground">{config.description}</p>
-          </div>
+      {/* Info + CTA */}
+      <div className="flex items-center gap-3 sm:min-w-[200px]">
+        <div
+          className={cn(
+            "w-9 h-9 rounded-lg flex items-center justify-center shrink-0",
+            config.color.badge,
+          )}
+        >
+          <config.icon className="h-4.5 w-4.5" />
+        </div>
+        <div className="min-w-0">
+          <h3 className="text-sm font-bold leading-tight truncate">{config.label}</h3>
+          <p className="text-xs text-muted-foreground line-clamp-1">{products.length} products</p>
         </div>
         <Link
           href={`/marketplace?businessType=${businessType}`}
           className={cn(
-            "flex items-center gap-1 text-sm font-medium hover:underline underline-offset-2",
+            "hidden sm:flex items-center gap-1 text-xs font-medium hover:underline underline-offset-2 whitespace-nowrap ml-auto",
             config.color.text,
           )}
         >
           View All
-          <ArrowRight className="h-3.5 w-3.5" />
+          <ArrowRight className="h-3 w-3" />
         </Link>
       </div>
 
-      {/* Product Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {products.slice(0, 4).map((product: any) => (
-          <TypedProductCard
-            key={product.id}
-            product={product}
-            viewMode="grid"
-          />
-        ))}
+      {/* Single recommended product */}
+      <div className="flex-1 max-w-sm">
+        <TypedProductCard product={featured} viewMode="grid" />
       </div>
+
+      {/* Mobile CTA */}
+      <Link
+        href={`/marketplace?businessType=${businessType}`}
+        className={cn(
+          "sm:hidden flex items-center justify-center gap-1 text-xs font-medium py-2 rounded-lg",
+          config.color.badge,
+        )}
+      >
+        View All {config.label}
+        <ArrowRight className="h-3 w-3" />
+      </Link>
     </section>
   );
 }

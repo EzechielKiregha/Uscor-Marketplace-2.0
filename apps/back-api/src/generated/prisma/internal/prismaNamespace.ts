@@ -460,7 +460,8 @@ export const ModelName = {
   Subscription: 'Subscription',
   SubscriptionFeature: 'SubscriptionFeature',
   WalletAuditLog: 'WalletAuditLog',
-  LedgerEntry: 'LedgerEntry'
+  LedgerEntry: 'LedgerEntry',
+  PlatformSettlement: 'PlatformSettlement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -476,7 +477,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "paymentConfig" | "hardwareConfig" | "kycDocument" | "pricingPlan" | "pricingFeature" | "hardwareRecommendation" | "businessType" | "client" | "worker" | "admin" | "otp" | "securityLog" | "trustedDevice" | "category" | "product" | "media" | "order" | "orderBusinessGroup" | "orderItem" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "loyaltyTier" | "loyaltyTierBenefit" | "promotion" | "address" | "clientPaymentMethod" | "pointsTransaction" | "return" | "stripeCustomer" | "platformSettings" | "announcement" | "auditLog" | "dispute" | "disputeMessage" | "wholesalePrice" | "b2BOrder" | "b2BOrderItem" | "subscription" | "subscriptionFeature" | "walletAuditLog" | "ledgerEntry"
+    modelProps: "business" | "paymentConfig" | "hardwareConfig" | "kycDocument" | "pricingPlan" | "pricingFeature" | "hardwareRecommendation" | "businessType" | "client" | "worker" | "admin" | "otp" | "securityLog" | "trustedDevice" | "category" | "product" | "media" | "order" | "orderBusinessGroup" | "orderItem" | "orderProduct" | "review" | "chat" | "chatParticipant" | "chatMessage" | "repostedProduct" | "reOwnedProduct" | "shipping" | "tokenTransaction" | "kYC" | "accountRecharge" | "token" | "paymentTransaction" | "ad" | "freelanceService" | "workerServiceAssignment" | "freelanceOrder" | "freelanceOrderBusiness" | "referral" | "postOfSale" | "postTransaction" | "store" | "sale" | "saleProduct" | "purchaseOrder" | "transferOrder" | "purchaseOrderProduct" | "transferOrderProduct" | "inventoryAdjustment" | "shift" | "loyaltyProgram" | "loyaltyTier" | "loyaltyTierBenefit" | "promotion" | "address" | "clientPaymentMethod" | "pointsTransaction" | "return" | "stripeCustomer" | "platformSettings" | "announcement" | "auditLog" | "dispute" | "disputeMessage" | "wholesalePrice" | "b2BOrder" | "b2BOrderItem" | "subscription" | "subscriptionFeature" | "walletAuditLog" | "ledgerEntry" | "platformSettlement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5734,6 +5735,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PlatformSettlement: {
+      payload: Prisma.$PlatformSettlementPayload<ExtArgs>
+      fields: Prisma.PlatformSettlementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlatformSettlementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlatformSettlementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>
+        }
+        findFirst: {
+          args: Prisma.PlatformSettlementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlatformSettlementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>
+        }
+        findMany: {
+          args: Prisma.PlatformSettlementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>[]
+        }
+        create: {
+          args: Prisma.PlatformSettlementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>
+        }
+        createMany: {
+          args: Prisma.PlatformSettlementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlatformSettlementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>[]
+        }
+        delete: {
+          args: Prisma.PlatformSettlementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>
+        }
+        update: {
+          args: Prisma.PlatformSettlementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlatformSettlementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlatformSettlementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlatformSettlementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlatformSettlementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlatformSettlementPayload>
+        }
+        aggregate: {
+          args: Prisma.PlatformSettlementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlatformSettlement>
+        }
+        groupBy: {
+          args: Prisma.PlatformSettlementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlatformSettlementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlatformSettlementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlatformSettlementCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -6285,7 +6360,9 @@ export const PaymentTransactionScalarFieldEnum = {
   transactionDate: 'transactionDate',
   qrCode: 'qrCode',
   createdAt: 'createdAt',
-  freelanceOrderId: 'freelanceOrderId'
+  freelanceOrderId: 'freelanceOrderId',
+  businessGroupId: 'businessGroupId',
+  b2bOrderId: 'b2bOrderId'
 } as const
 
 export type PaymentTransactionScalarFieldEnum = (typeof PaymentTransactionScalarFieldEnum)[keyof typeof PaymentTransactionScalarFieldEnum]
@@ -6840,6 +6917,25 @@ export const LedgerEntryScalarFieldEnum = {
 } as const
 
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+export const PlatformSettlementScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  businessGroupId: 'businessGroupId',
+  businessId: 'businessId',
+  grossAmount: 'grossAmount',
+  platformFee: 'platformFee',
+  deliveryFee: 'deliveryFee',
+  netAmount: 'netAmount',
+  status: 'status',
+  distributedAt: 'distributedAt',
+  distributedBy: 'distributedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlatformSettlementScalarFieldEnum = (typeof PlatformSettlementScalarFieldEnum)[keyof typeof PlatformSettlementScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -7455,6 +7551,20 @@ export type EnumLedgerEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
 export type ListEnumLedgerEntryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LedgerEntryType[]'>
     
 
+
+/**
+ * Reference to a field of type 'SettlementStatus'
+ */
+export type EnumSettlementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SettlementStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'SettlementStatus[]'
+ */
+export type ListEnumSettlementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SettlementStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -7613,6 +7723,7 @@ export type GlobalOmitConfig = {
   subscriptionFeature?: Prisma.SubscriptionFeatureOmit
   walletAuditLog?: Prisma.WalletAuditLogOmit
   ledgerEntry?: Prisma.LedgerEntryOmit
+  platformSettlement?: Prisma.PlatformSettlementOmit
 }
 
 /* Types for Logging */

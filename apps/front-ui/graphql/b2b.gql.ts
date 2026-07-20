@@ -179,6 +179,13 @@ export const GET_B2B_ORDERS = gql`
             price
           }
         }
+        payment {
+          id
+          amount
+          status
+          method
+          createdAt
+        }
         buyer {
           id
           name
@@ -190,6 +197,13 @@ export const GET_B2B_ORDERS = gql`
           name
           avatar
           businessType
+          paymentConfig {
+            mtnCode
+            airtelCode
+            orangeCode
+            mpesaCode
+            bankAccount
+          }
         }
       }
       total
@@ -249,6 +263,24 @@ export const GET_B2B_ORDER = gql`
         avatar
         businessType
         kycStatus
+      }
+    }
+  }
+`;
+
+// ─── B2B Payment ───────────────────────────────────────
+
+export const PAY_B2B_ORDER = gql`
+  mutation PayB2BOrder($orderId: String!, $method: String) {
+    payB2BOrder(orderId: $orderId, method: $method) {
+      id
+      status
+      total
+      payment {
+        id
+        amount
+        status
+        method
       }
     }
   }

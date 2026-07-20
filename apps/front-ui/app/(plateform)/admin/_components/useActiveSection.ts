@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export function useActiveSection() {
 	const [activeSection, setActiveSection] = useState<
-		"dashboard" | "users" | "disputes" | "settings" | "announcements" | "audits"
+		"dashboard" | "users" | "disputes" | "settings" | "announcements" | "audits" | "settlements" | "orders"
 	>("dashboard");
 	const router = useRouter();
 
@@ -16,7 +16,9 @@ export function useActiveSection() {
 			| "disputes"
 			| "settings"
 			| "announcements"
-			| "audits",
+			| "audits"
+			| "settlements"
+			| "orders",
 	) => {
 		setActiveSection(section);
 		router.push(`/admin?section=${section === "dashboard" ? "" : section}`);

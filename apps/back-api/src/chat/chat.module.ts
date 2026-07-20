@@ -9,5 +9,6 @@ import { PusherService } from "./pusher.service";
 @Module({
 	providers: [ChatResolver, ChatService, PrismaService, PusherService],
 	imports: [PrismaModule],
+	exports: [ChatService, PusherService],
 })
 export class ChatModule {}

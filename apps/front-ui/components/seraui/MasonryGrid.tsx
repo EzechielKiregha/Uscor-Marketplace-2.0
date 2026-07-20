@@ -1,14 +1,14 @@
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { CREATE_CHAT } from "@/graphql/chat.gql";
+import { useMe } from "@/lib/useMe";
 import { useMutation } from "@apollo/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
 import { useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { CREATE_CHAT } from "@/graphql/chat.gql";
-import { useMe } from "@/lib/useMe";
 
 // --- TypeScript Interfaces ---
 interface Product {
@@ -165,7 +165,7 @@ export const ProductGridItem: React.FC<GridItemProps<Product>> = ({
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
 							exit={{ opacity: 0 }}
-							className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"
+							className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent pointer-events-none"
 						>
 							<div className="p-4 h-full flex flex-col justify-between pointer-events-auto">
 								<div className="flex justify-start space-x-2">
@@ -351,7 +351,7 @@ export const ServiceGridItem: React.FC<GridItemProps<FreelanceService>> = ({
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
 							exit={{ opacity: 0 }}
-							className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-center justify-center"
+							className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex items-center justify-center"
 						>
 							<div className="p-6 text-center">
 								<div className="flex justify-center space-x-2 mb-4">

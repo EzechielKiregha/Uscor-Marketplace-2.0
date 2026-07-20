@@ -1,47 +1,47 @@
 "use client";
+import { StatusBadge } from "@/components/StatusBadge";
+import { GlowButton } from "@/components/seraui/GlowButton";
+import { useToast } from "@/components/toast-provider";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { BUSINESS_TYPE_LIST } from "@/config/business-types";
+import {
+    CREATE_BUSINESS,
+    CREATE_CLIENT,
+    CREATE_WORKER,
+    getLoginMutation,
+    SEND_VERIFICATION_OTP,
+} from "@/graphql/auth.gql";
+import { setAuthToken } from "@/lib/auth";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  ArrowLeft,
-  ArrowRight,
-  Briefcase,
-  Building2,
-  Check,
-  Eye,
-  EyeOff,
-  Globe,
-  Lock,
-  Mail,
-  ShieldCheck,
-  Smartphone,
-  Sparkles,
-  User,
-  Zap,
+    ArrowLeft,
+    ArrowRight,
+    Briefcase,
+    Building2,
+    Check,
+    Eye,
+    EyeOff,
+    Globe,
+    Lock,
+    Mail,
+    ShieldCheck,
+    Smartphone,
+    Sparkles,
+    User,
+    Zap,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { StatusBadge } from "@/components/StatusBadge";
-import { GlowButton } from "@/components/seraui/GlowButton";
-import { useToast } from "@/components/toast-provider";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { BUSINESS_TYPE_LIST } from "@/config/business-types";
-import {
-  CREATE_BUSINESS,
-  CREATE_CLIENT,
-  CREATE_WORKER,
-  getLoginMutation,
-  SEND_VERIFICATION_OTP,
-} from "@/graphql/auth.gql";
-import { setAuthToken } from "@/lib/auth";
 
 // Electronics & Hardware are active; others are "Coming Soon"
 const ACTIVE_BUSINESS_TYPES = new Set(["ELECTRONICS", "HARDWARE"]);
@@ -252,26 +252,26 @@ export default function SignupPage() {
       </div>
 
       {/* Left Panel - Branding (Hidden on mobile, visible on lg+) */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-gradient-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 mix-blend-overlay"></div>
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-linear-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-accent/5 mix-blend-overlay"></div>
 
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               USCOR MARKETPLACE
             </span>
           </div>
 
           <div className="mt-16 space-y-6">
             <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Start Your Journey
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
                 With USCOR Today
               </span>
             </h1>
@@ -325,7 +325,7 @@ export default function SignupPage() {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 border-2 border-background flex items-center justify-center text-xs text-foreground font-medium"
+                  className="w-10 h-10 rounded-full bg-linear-to-br from-primary/30 to-accent/30 border-2 border-background flex items-center justify-center text-xs text-foreground font-medium"
                 >
                   {String.fromCharCode(64 + i)}
                 </div>
@@ -350,10 +350,10 @@ export default function SignupPage() {
         <div className="w-full max-w-2xl relative z-10">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               USCOR MARKETPLACE
             </span>
           </div>
@@ -367,7 +367,7 @@ export default function SignupPage() {
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300 ${
                         step >= s.number
-                          ? "bg-gradient-to-r from-primary to-accent text-white shadow-lg shadow-primary/25"
+                          ? "bg-linear-to-r from-primary to-accent text-white shadow-lg shadow-primary/25"
                           : "bg-muted text-muted-foreground border border-border"
                       }`}
                     >
@@ -387,7 +387,7 @@ export default function SignupPage() {
                     <div
                       className={`w-8 sm:w-16 h-0.5 mx-2 transition-all duration-300 ${
                         step > s.number
-                          ? "bg-gradient-to-r from-primary to-accent"
+                          ? "bg-linear-to-r from-primary to-accent"
                           : "bg-border"
                       }`}
                     />
@@ -407,7 +407,7 @@ export default function SignupPage() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
               {step === 1 && "Choose Your Account Type"}
               {step === 2 && "Tell Us About Yourself"}
               {step === 3 && "Secure Your Account"}
@@ -462,7 +462,7 @@ export default function SignupPage() {
                                 onClick={() => field.onChange(option.value)}
                                 className={`group p-4 rounded-xl border transition-all duration-300 text-left ${
                                   field.value === option.value
-                                    ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                    ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                     : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                 }`}
                               >
@@ -492,7 +492,7 @@ export default function SignupPage() {
                     type="button"
                     onClick={handleNext}
                     disabled={!role}
-                    className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                    className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                   >
                     Next Step <ArrowRight className="h-4 w-4" />
                   </GlowButton>
@@ -572,7 +572,7 @@ export default function SignupPage() {
                                       !isActive
                                         ? "opacity-50 cursor-not-allowed bg-muted/50 dark:bg-white/3 border-border/50"
                                         : field.value === bt.key
-                                          ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50"
+                                          ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50"
                                           : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10"
                                     }`}
                                   >
@@ -632,7 +632,7 @@ export default function SignupPage() {
                                     onClick={() => field.onChange(wr.value)}
                                     className={`p-3 rounded-lg border transition-all duration-200 text-left ${
                                       field.value === wr.value
-                                        ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50"
+                                        ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50"
                                         : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10"
                                     }`}
                                   >
@@ -690,7 +690,7 @@ export default function SignupPage() {
                         !watch("fullName") ||
                         (role === "Worker" && !watch("workerRole"))
                       }
-                      className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                      className="flex-1 h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                     >
                       Next Step <ArrowRight className="h-4 w-4" />
                     </GlowButton>
@@ -812,7 +812,7 @@ export default function SignupPage() {
                         !watch("password") ||
                         watch("password").length < 6
                       }
-                      className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                      className="flex-1 h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                     >
                       Next Step <ArrowRight className="h-4 w-4" />
                     </GlowButton>
@@ -923,7 +923,7 @@ export default function SignupPage() {
                     <GlowButton
                       type="submit"
                       disabled={loading}
-                      className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                      className="flex-1 h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                     >
                       {loading ? (
                         <>

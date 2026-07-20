@@ -9,13 +9,14 @@ import {
   ArrowLeft,
   Loader2,
   MessageCircle,
+  Package,
   Plus,
   Send,
   Store,
   User,
   X,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import BusinessTypeIcon from "@/app/(browsing)/marketplace/_components/BusinessTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,9 @@ import {
   MARK_MESSAGES_AS_READ,
   ON_MESSAGE_RECEIVED,
   SEND_MESSAGE,
+  TRIGGER_TYPING,
 } from "@/graphql/chat.gql";
+import { getPusherClient } from "@/lib/pusher-client";
 import { useMe } from "@/lib/useMe";
 import MessageBubble from "./MessageBubble";
 
@@ -49,8 +52,11 @@ export default function ChatThread({
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [remoteTypingUser, setRemoteTypingUser] = useState<string | null>(null);
   const [newMessageIndicatorVisible, setNewMessageIndicatorVisible] =
     useState(false);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const remoteTypingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const wasAtBottomRef = useRef(true);
@@ -69,8 +75,43 @@ export default function ChatThread({
 
   const [sendMessage] = useMutation(SEND_MESSAGE);
   const [markMessagesAsRead] = useMutation(MARK_MESSAGES_AS_READ);
+  const [triggerTypingMutation] = useMutation(TRIGGER_TYPING);
 
   const chat = chatData?.chat;
+
+  // Pusher-based remote typing indicator
+  useEffect(() => {
+    if (!chatId) return;
+    try {
+      const pusher = getPusherClient();
+      const channel = pusher.subscribe(`chat-${chatId}`);
+      channel.bind("client-typing", (data: { userId: string; userName: string }) => {
+        if (data.userId !== userId) {
+          setRemoteTypingUser(data.userName);
+          if (remoteTypingTimeoutRef.current) clearTimeout(remoteTypingTimeoutRef.current);
+          remoteTypingTimeoutRef.current = setTimeout(() => setRemoteTypingUser(null), 3000);
+        }
+      });
+      return () => {
+        channel.unbind_all();
+        pusher.unsubscribe(`chat-${chatId}`);
+      };
+    } catch {
+      // Pusher not configured, skip
+    }
+  }, [chatId, userId]);
+
+  // Debounced typing trigger
+  const emitTyping = useCallback(() => {
+    if (typingTimeoutRef.current) return; // already sent recently
+    const name = user?.fullName || user?.name || user?.username || "Someone";
+    triggerTypingMutation({
+      variables: { chatId, userId, userName: name },
+    }).catch(() => {});
+    typingTimeoutRef.current = setTimeout(() => {
+      typingTimeoutRef.current = null;
+    }, 2000);
+  }, [chatId, userId, user, triggerTypingMutation]);
 
   // Handle real-time message updates
   useSubscription(ON_MESSAGE_RECEIVED, {
@@ -208,11 +249,9 @@ export default function ChatThread({
       handleSend();
     }
 
-    // Handle typing indicator
-    if (e.key !== "Enter" && !isTyping) {
-      setIsTyping(true);
-      // Reset typing indicator after 2 seconds of inactivity
-      setTimeout(() => setIsTyping(false), 2000);
+    // Emit typing to remote participants
+    if (e.key !== "Enter") {
+      emitTyping();
     }
   };
 
@@ -433,6 +472,12 @@ export default function ChatThread({
                 Purchase
               </span>
             )}
+            {chat.negotiationType === "ORDER" && (
+              <span className="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Package className="h-3 w-3" />
+                Order Chat
+              </span>
+            )}
           </div>
         </div>
 
@@ -485,12 +530,13 @@ export default function ChatThread({
               </div>
             )}
 
-            {isTyping && (
+            {remoteTypingUser && (
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
                   <MessageCircle className="h-4 w-4 text-primary" />
                 </div>
                 <div className="bg-muted rounded-2xl rounded-bl-none p-3">
+                  <p className="text-xs text-muted-foreground mb-1">{remoteTypingUser} is typing</p>
                   <div className="flex space-x-1.5">
                     <div
                       className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"

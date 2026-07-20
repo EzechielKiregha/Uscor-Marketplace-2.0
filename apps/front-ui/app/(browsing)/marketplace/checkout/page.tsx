@@ -7,12 +7,14 @@ import {
   CheckCircle2,
   CircleAlert,
   CreditCard,
+  Gift,
   MapPin,
   ShieldCheck,
   ShoppingBag,
+  Smartphone,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCart } from "@/app/context/use-cart";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
@@ -25,6 +27,8 @@ import {
 } from "@/graphql/loyalty.gql";
 import { CREATE_ORDER } from "@/graphql/order.gql";
 import { GET_ACCOUNT_BALANCE } from "@/graphql/wallet.gql";
+import { GET_BUSINESS_PAYMENT_CONFIG } from "@/graphql/business.gql";
+import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
 import { Address } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
@@ -39,6 +43,13 @@ interface RwandaLocation {
   statusCode: number;
   message: string;
   data: Record<string, Array<Record<string, string>>>;
+}
+
+interface LoyaltyRedemption {
+  businessId: string;
+  pointsToRedeem: number;
+  discount: number;
+  programId: string;
 }
 
 function getTierForPoints(tiers: any[] = [], points: number) {
@@ -68,12 +79,37 @@ export default function CheckoutPage() {
   const [groupedOrders, setGroupedOrders] = useState<any[]>([]);
   const [useUnifiedPayment, setUseUnifiedPayment] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState<any>({});
+  const [loyaltyRedemptions, setLoyaltyRedemptions] = useState<
+    Record<string, LoyaltyRedemption>
+  >({});
+  const [businessPaymentConfigs, setBusinessPaymentConfigs] = useState<
+    Record<string, any>
+  >({});
   const { loading: userLoading, user } = useMe();
 
   const [createOrder] = useMutation(CREATE_ORDER);
 
   const activeBusinessOrder = groupedOrders[activeBusinessIndex];
   const activeBusinessId = activeBusinessOrder?.businessId;
+
+  // Fetch payment configs for all businesses in the order
+  const { data: activeBusinessPaymentData } = useQuery(
+    GET_BUSINESS_PAYMENT_CONFIG,
+    {
+      variables: { id: activeBusinessId || "" },
+      skip: !activeBusinessId,
+    },
+  );
+
+  useEffect(() => {
+    if (activeBusinessPaymentData?.business) {
+      const biz = activeBusinessPaymentData.business;
+      setBusinessPaymentConfigs((prev) => ({
+        ...prev,
+        [biz.id]: biz,
+      }));
+    }
+  }, [activeBusinessPaymentData]);
 
   const { data: loyaltyProgramsData } = useQuery(GET_LOYALTY_PROGRAMS, {
     variables: { businessId: activeBusinessId || "" },
@@ -122,6 +158,46 @@ export default function CheckoutPage() {
   const projectedTier = getTierForPoints(
     loyaltyProgram?.tiers,
     projectedPointsAfterPayment,
+  );
+
+  // Toggle loyalty redemption for a business group
+  const toggleLoyaltyRedemption = useCallback(
+    (
+      businessId: string,
+      pointsAvailable: number,
+      pointsPerPurchase: number,
+      programId: string,
+    ) => {
+      setLoyaltyRedemptions((prev) => {
+        if (prev[businessId]) {
+          const { [businessId]: _, ...rest } = prev;
+          return rest;
+        }
+        const pointValue =
+          pointsPerPurchase > 0 ? 1 / pointsPerPurchase : 0;
+        const discount = pointsAvailable * pointValue;
+        return {
+          ...prev,
+          [businessId]: {
+            businessId,
+            pointsToRedeem: pointsAvailable,
+            discount,
+            programId,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  // Total loyalty discount
+  const totalLoyaltyDiscount = useMemo(
+    () =>
+      Object.values(loyaltyRedemptions).reduce(
+        (sum, r) => sum + r.discount,
+        0,
+      ),
+    [loyaltyRedemptions],
   );
 
   // Calculate totals
@@ -177,6 +253,47 @@ export default function CheckoutPage() {
 
   if (userLoading) {
     return <FormSkeleton fields={4} />;
+  }
+
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center animate-fade-in-up">
+            <div className="w-16 h-16 rounded-full bg-orange-100 dark:bg-orange-950/40 flex items-center justify-center mx-auto mb-5">
+              <ShoppingBag className="h-8 w-8 text-orange-500" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              Sign in to continue
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+              Create an account or sign in to complete your purchase, track orders, and earn loyalty rewards at USCOR Marketplace.
+            </p>
+            <div className="space-y-3">
+              <Button
+                className="w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm"
+                onClick={() => router.push("/login?redirect=/marketplace/checkout")}
+              >
+                Sign In
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full h-12 rounded-xl font-medium text-sm"
+                onClick={() => router.push("/register?redirect=/marketplace/checkout")}
+              >
+                Create Account
+              </Button>
+              <button
+                onClick={() => router.back()}
+                className="text-xs text-muted-foreground hover:text-orange-500 transition-colors mt-2"
+              >
+                ← Continue browsing
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const handleApplyPromotion = async () => {
@@ -255,10 +372,11 @@ export default function CheckoutPage() {
     setSelectedBusinessPaymentMethod(method);
   };
 
-  const unifiedTotal = groupedOrders.reduce(
-    (sum, order) => sum + (order?.total || 0),
-    0,
-  );
+  const unifiedTotal =
+    groupedOrders.reduce(
+      (sum, order) => sum + (order?.total || 0),
+      0,
+    ) - totalLoyaltyDiscount;
 
   const handleCheckout = async () => {
     if (!selectedAddress) {
@@ -293,6 +411,14 @@ export default function CheckoutPage() {
         qrCode = `CARD:****${last4}`;
       }
 
+      // Build loyalty redemptions array for the mutation
+      const redemptionsInput = Object.values(loyaltyRedemptions).map(
+        (r) => ({
+          businessId: r.businessId,
+          pointsToRedeem: r.pointsToRedeem,
+        }),
+      );
+
       // Create the main client order with all products
       const { data: clientOrderData } = await createOrder({
         variables: {
@@ -312,8 +438,11 @@ export default function CheckoutPage() {
             payment: {
               method: paymentMethod,
               status: "PENDING",
-              amount: total,
+              amount: total - totalLoyaltyDiscount,
             },
+            ...(redemptionsInput.length > 0 && {
+              loyaltyRedemptions: redemptionsInput,
+            }),
           },
         },
       });
@@ -525,10 +654,20 @@ export default function CheckoutPage() {
                           Total Unified Balance
                         </span>
                         <span className="text-amber-600 dark:text-amber-400 font-bold">
-                          {/* Dynamically computes total sum of all order items when unified */}
                           ${unifiedTotal.toFixed(2)}
                         </span>
                       </div>
+                      {totalLoyaltyDiscount > 0 && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-amber-600/70 dark:text-amber-400/70 flex items-center gap-1">
+                            <Gift className="h-3.5 w-3.5" />
+                            Loyalty Discount
+                          </span>
+                          <span className="text-green-500 font-bold">
+                            -${totalLoyaltyDiscount.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
                       <div className="flex justify-between items-center pt-1 border-t border-amber-500/10">
                         <span className="text-amber-600/70 dark:text-amber-400/70">
                           Clearance Status
@@ -594,6 +733,36 @@ export default function CheckoutPage() {
                 )}
               </div>
             </div>
+
+            {/* Business Direct Payment Codes */}
+            {groupedOrders.length > 0 && (
+              <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
+                <div className="p-4 bg-muted border-b border-border">
+                  <h2 className="font-semibold flex items-center gap-2 text-foreground">
+                    <Smartphone className="h-5 w-5 text-muted-foreground" />
+                    Direct Business Payment Codes
+                  </h2>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Alternative: pay each business directly via mobile money
+                  </p>
+                </div>
+                <div className="p-4 space-y-3">
+                  {groupedOrders.map((order) => {
+                    const bizConfig = businessPaymentConfigs[order.businessId];
+                    return (
+                      <BusinessPaymentCodes
+                        key={order.businessId}
+                        businessName={bizConfig?.name || order.business?.name || "Business"}
+                        businessAvatar={bizConfig?.avatar || order.business?.avatar}
+                        paymentConfig={bizConfig?.paymentConfig}
+                        amount={order.total}
+                        compact
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Promotion Section */}
             <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
@@ -782,6 +951,65 @@ export default function CheckoutPage() {
                         {projectedTier?.name ?? currentTier?.name ?? "Member"}
                       </span>
                     </div>
+
+                    {/* Loyalty Redemption Toggle */}
+                    {activeBusinessId &&
+                      customerPointsData?.customerPoints
+                        ?.pointsAvailable > 0 &&
+                      (customerPointsData?.customerPoints
+                        ?.pointsAvailable >=
+                        (loyaltyProgram.minimumPointsToRedeem || 0)) && (
+                        <div className="mt-3 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <Gift className="h-4 w-4 text-amber-500" />
+                              <span className="text-sm font-medium text-foreground">
+                                Redeem{" "}
+                                {
+                                  customerPointsData.customerPoints
+                                    .pointsAvailable
+                                }{" "}
+                                points
+                              </span>
+                            </div>
+                            <input
+                              type="checkbox"
+                              checked={!!loyaltyRedemptions[activeBusinessId]}
+                              onChange={() =>
+                                toggleLoyaltyRedemption(
+                                  activeBusinessId,
+                                  customerPointsData.customerPoints
+                                    .pointsAvailable,
+                                  loyaltyProgram.pointsPerPurchase ?? 0,
+                                  loyaltyProgram.id,
+                                )
+                              }
+                              className="h-4 w-4 rounded border-border text-amber-500 focus:ring-amber-500 cursor-pointer accent-amber-500"
+                            />
+                          </div>
+                          {loyaltyRedemptions[activeBusinessId] && (
+                            <p className="text-xs text-amber-600 dark:text-amber-400 mt-1.5">
+                              -$
+                              {loyaltyRedemptions[
+                                activeBusinessId
+                              ].discount.toFixed(2)}{" "}
+                              discount applied to this business order
+                            </p>
+                          )}
+                          {!loyaltyRedemptions[activeBusinessId] && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Save $
+                              {(
+                                customerPointsData.customerPoints
+                                  .pointsAvailable /
+                                (loyaltyProgram.pointsPerPurchase || 1)
+                              ).toFixed(2)}{" "}
+                              on this order
+                            </p>
+                          )}
+                        </div>
+                      )}
+
                     <div className="rounded-md bg-primary/5 p-3 text-xs text-muted-foreground leading-relaxed">
                       Half of this business order's earned points are registered
                       now, with the remaining loyalty rewards processed after

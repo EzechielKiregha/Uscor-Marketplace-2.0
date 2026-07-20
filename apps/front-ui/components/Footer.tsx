@@ -1,8 +1,8 @@
 "use client";
 
+import { useNavigation } from "@/hooks/useNavigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useNavigation } from "@/hooks/useNavigation";
 import { Icons } from "./Icons";
 import { NewsletterSignup } from "./landing-components";
 import MaxWidthWrapper from "./MaxWidthWrapper";
@@ -31,7 +31,7 @@ const Footer = () => {
 								<div className="absolute inset-0 overflow-hidden rounded-lg">
 									<div
 										aria-hidden="true"
-										className="absolute bg-zinc-50 inset-0 bg-gradient-to-br bg-opacity-90"
+										className="absolute bg-zinc-50 inset-0 bg-linear-to-br bg-opacity-90"
 									/>
 								</div>
 

@@ -1,19 +1,19 @@
 "use client";
 
+import { GlowButton } from "@/components/seraui/GlowButton";
+import { useToast } from "@/components/toast-provider";
+import { RESEND_OTP, VERIFY_EMAIL } from "@/graphql/auth.gql";
 import { useMutation } from "@apollo/client";
 import {
-  CheckCircleIcon,
-  MailIcon,
-  RefreshCwIcon,
-  ShieldCheckIcon,
-  TimerIcon,
+    CheckCircleIcon,
+    MailIcon,
+    RefreshCwIcon,
+    ShieldCheckIcon,
+    TimerIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { GlowButton } from "@/components/seraui/GlowButton";
-import { useToast } from "@/components/toast-provider";
-import { RESEND_OTP, VERIFY_EMAIL } from "@/graphql/auth.gql";
 
 const OTP_LENGTH = 6;
 const OTP_EXPIRY_SECONDS = 600;
@@ -145,25 +145,25 @@ export default function VerifyEmailPage() {
       </div>
 
       {/* Left Panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-gradient-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/3 dark:from-primary/5 via-transparent to-accent/5 mix-blend-overlay" />
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-linear-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-linear-to-br from-primary/3 dark:from-primary/5 via-transparent to-accent/5 mix-blend-overlay" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               USCOR MARKETPLACE
             </span>
           </div>
 
           <div className="mt-16 space-y-6">
             <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Verify Your
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
                 Email Address
               </span>
             </h1>
@@ -224,10 +224,10 @@ export default function VerifyEmailPage() {
         <div className="w-full max-w-md relative z-10">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               USCOR
             </span>
           </div>
@@ -238,7 +238,7 @@ export default function VerifyEmailPage() {
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-500/20 mb-4">
                 <CheckCircleIcon className="h-10 w-10 text-green-400" />
               </div>
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Email Verified!
               </h2>
               <p className="text-muted-foreground">
@@ -247,7 +247,7 @@ export default function VerifyEmailPage() {
               </p>
               <GlowButton
                 onClick={() => router.push("/login")}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
               >
                 Sign In
               </GlowButton>
@@ -258,7 +258,7 @@ export default function VerifyEmailPage() {
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 mb-4">
                 <MailIcon className="h-10 w-10 text-primary" />
               </div>
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Check Your Email
               </h2>
               <p className="text-muted-foreground">
@@ -266,7 +266,7 @@ export default function VerifyEmailPage() {
                 check your inbox and click the link to verify.
               </p>
               <Link href="/login">
-                <GlowButton className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 mt-4">
+                <GlowButton className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 mt-4">
                   Go to Sign In
                 </GlowButton>
               </Link>
@@ -278,7 +278,7 @@ export default function VerifyEmailPage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
                   <MailIcon className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
+                <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
                   Verify Email
                 </h2>
                 <p className="text-muted-foreground">
@@ -331,7 +331,7 @@ export default function VerifyEmailPage() {
               <GlowButton
                 onClick={handleVerify}
                 disabled={!isOtpComplete || verifying || timeLeft <= 0}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mb-4"
+                className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mb-4"
               >
                 {verifying ? (
                   <div className="flex items-center justify-center gap-2">

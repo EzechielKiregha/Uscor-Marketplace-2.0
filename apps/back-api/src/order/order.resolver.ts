@@ -15,7 +15,7 @@ import { RolesGuard } from "../auth/guards/roles.guard";
 import { CreateOrderInput } from "./dto/create-order.input";
 import { ProcessPaymentInput } from "./dto/process-payment.input";
 import { GenerateOrderReceiptInput } from "./dto/receipt.input";
-import { UpdateOrderInput } from "./dto/update-order.input";
+import { UpdateOrderInput, UpdateOrderStatusInput } from "./dto/update-order.input";
 import { OrderBusinessGroupEntity } from "./entities/order-business-group.entity";
 import {
     OrderEntity,
@@ -293,6 +293,31 @@ export class OrderResolver {
     ) {
         const user = context.req.user;
         return this.orderService.generateReceipt(input, user);
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles("worker", "business", "admin")
+    @Mutation(() => OrderBusinessGroupEntity, {
+        description: "Updates the status of an order business group. Workers set PROCESSING/READY_FOR_SHIPMENT, admins set SHIPPED/DELIVERED/COMPLETED.",
+    })
+    async updateBusinessOrderStatus(
+        @Args("input") input: UpdateOrderStatusInput,
+        @Context() context,
+    ) {
+        const user = context.req.user;
+        const updated = await this.orderService.updateOrderStatus(
+            input.businessGroupId,
+            input.status,
+            user.id,
+            user.role,
+        );
+
+        // Publish subscription event
+        this.pubSub.publish("orderUpdated", {
+            orderUpdated: updated.order,
+        });
+
+        return updated;
     }
 
     // Subscriptions

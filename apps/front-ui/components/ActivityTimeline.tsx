@@ -1,21 +1,21 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import {
-  ArrowRight,
-  CheckCircle2,
-  DollarSign,
-  MessageSquare,
-  Minus,
-  Package,
-  Plus,
-  RefreshCw,
-  ShoppingCart,
-  Truck,
-  User,
-  XCircle,
+    ArrowRight,
+    CheckCircle2,
+    DollarSign,
+    MessageSquare,
+    Minus,
+    Package,
+    Plus,
+    RefreshCw,
+    ShoppingCart,
+    Truck,
+    User,
+    XCircle,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -200,7 +200,7 @@ export default function ActivityTimeline({
             {!isLast && (
               <div
                 className={cn(
-                  "absolute left-[11px] bg-gradient-to-b from-orange-400 to-orange-600",
+                  "absolute left-[11px] bg-linear-to-b from-orange-400 to-orange-600",
                   compact
                     ? "top-[22px] bottom-0 w-[2px]"
                     : "top-[26px] bottom-0 w-[2px]",

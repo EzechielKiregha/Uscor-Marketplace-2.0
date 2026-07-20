@@ -372,3 +372,8 @@ export type WalletAuditLog = Prisma.WalletAuditLogModel
  * 
  */
 export type LedgerEntry = Prisma.LedgerEntryModel
+/**
+ * Model PlatformSettlement
+ * 
+ */
+export type PlatformSettlement = Prisma.PlatformSettlementModel

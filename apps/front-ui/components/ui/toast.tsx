@@ -212,7 +212,7 @@ const Notification: React.FC<NotificationProps> = ({
 			className={`relative w-full max-w-sm rounded-xl p-4 backdrop-blur-xl bg-white/15 /15 border border-gray-300/60 dark:border-gray-700/60 overflow-hidden ring-1 ring-gray-200/40 dark:ring-gray-700/40 drop-shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105`}
 		>
 			<div
-				className={`absolute top-0 left-0 h-full w-full bg-gradient-to-br ${config.gradient} opacity-50`}
+				className={`absolute top-0 left-0 h-full w-full bg-linear-to-br ${config.gradient} opacity-50`}
 			></div>
 			<div className="relative z-10 flex items-center space-x-4">
 				{showIcon && (
@@ -245,7 +245,7 @@ const Notification: React.FC<NotificationProps> = ({
 						animate={{ width: "100%" }}
 						transition={{ duration: duration / 1000, ease: "linear" }}
 						onAnimationComplete={() => onClose()} // Call onClose when progress bar animation completes
-						className={`h-full bg-gradient-to-r from-green-400 via-blue-400 to-sky-400 dark:from-green-500 dark:via-blue-500 dark:to-sky-500`}
+						className={`h-full bg-linear-to-r from-green-400 via-blue-400 to-sky-400 dark:from-green-500 dark:via-blue-500 dark:to-sky-500`}
 					></motion.div>
 				</div>
 			)}

@@ -78,7 +78,7 @@ const businessTypes = [
         color: "from-orange-500 to-amber-500",
     },
     {
-        isActive: true,
+        isActive: false,
         value: "CLOTHING",
         label: "Clothing & Accessories",
         icon: Shirt,
@@ -769,7 +769,7 @@ export default function BusinessSetupPage() {
                             }}
                             className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
                                 !isServiceMode
-                                    ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                    ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                     : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                             }`}
                         >
@@ -793,7 +793,7 @@ export default function BusinessSetupPage() {
                             }}
                             className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
                                 isServiceMode
-                                    ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                    ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                     : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                             }`}
                         >
@@ -831,7 +831,7 @@ export default function BusinessSetupPage() {
                                         }}
                                         className={`relative group p-4 rounded-xl border transition-all duration-300 text-left ${
                                             isSelected
-                                                ? `bg-gradient-to-br ${type.color} border-transparent shadow-lg`
+                                                ? `bg-linear-to-br ${type.color} border-transparent shadow-lg`
                                                 : !type.isActive
                                                   ? "opacity-50 cursor-not-allowed bg-muted/50 dark:bg-white/3 border-border/50"
                                                   : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
@@ -917,7 +917,7 @@ export default function BusinessSetupPage() {
                                     }}
                                     className={`group p-4 rounded-xl border transition-all duration-300 text-left flex items-start gap-3 ${
                                         isSelected
-                                            ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                            ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                             : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                     }`}
                                 >
@@ -979,7 +979,7 @@ export default function BusinessSetupPage() {
                                     }
                                     className={`group p-4 rounded-xl border transition-all duration-300 text-left flex items-start gap-3 ${
                                         isSelected
-                                            ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                            ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                             : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                     }`}
                                 >
@@ -1041,7 +1041,7 @@ export default function BusinessSetupPage() {
                                     }
                                     className={`group p-4 rounded-xl border transition-all duration-300 text-left flex items-start gap-3 ${
                                         isSelected
-                                            ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                            ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                             : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                     }`}
                                 >
@@ -1108,7 +1108,7 @@ export default function BusinessSetupPage() {
                                     }
                                     className={`group p-4 rounded-xl border transition-all duration-300 text-left flex items-start gap-3 ${
                                         isSelected
-                                            ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                            ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                             : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                     }`}
                                 >
@@ -1174,7 +1174,7 @@ export default function BusinessSetupPage() {
                                         }
                                         className={`p-3 rounded-lg border text-left transition-all duration-300 ${
                                             isSelected
-                                                ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50"
+                                                ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50"
                                                 : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10"
                                         }`}
                                     >
@@ -1215,7 +1215,7 @@ export default function BusinessSetupPage() {
                                         }
                                         className={`p-3 rounded-lg border text-center transition-all duration-300 ${
                                             isSelected
-                                                ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50"
+                                                ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50"
                                                 : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10"
                                         }`}
                                     >
@@ -1266,7 +1266,7 @@ export default function BusinessSetupPage() {
                                     }
                                     className={`group p-4 rounded-xl border transition-all duration-300 text-left flex items-start gap-3 ${
                                         isSelected
-                                            ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                            ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                             : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                     }`}
                                 >
@@ -1339,7 +1339,7 @@ export default function BusinessSetupPage() {
                                     }}
                                     className={`group p-4 rounded-xl border transition-all duration-300 text-left flex items-start gap-3 ${
                                         isSelected
-                                            ? "bg-gradient-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
+                                            ? "bg-linear-to-br from-primary/15 to-accent/15 border-primary/50 shadow-lg shadow-primary/10"
                                             : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10 hover:border-primary/30"
                                     }`}
                                 >
@@ -1369,7 +1369,7 @@ export default function BusinessSetupPage() {
                     </div>
 
                     {/* Mobile Money Highlight */}
-                    <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20">
+                    <div className="mt-6 p-4 rounded-xl bg-linear-to-r from-primary/10 to-accent/10 border border-primary/20">
                         <div className="flex items-start gap-3">
                             <Smartphone className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                             <div>
@@ -1553,7 +1553,7 @@ export default function BusinessSetupPage() {
             return (
                 <div className="space-y-6">
                     <div className="text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 mb-4">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-linear-to-br from-primary/20 to-accent/20 mb-4">
                             <Sparkles className="h-8 w-8 text-primary" />
                         </div>
                         <h3 className="text-2xl font-bold text-foreground mb-2">
@@ -1565,11 +1565,11 @@ export default function BusinessSetupPage() {
                     </div>
 
                     {/* Summary Card */}
-                    <div className="bg-gradient-to-br from-card/50 to-card/80 dark:from-white/5 dark:to-white/10 border border-border dark:border-white/10 rounded-2xl p-6 space-y-4">
+                    <div className="bg-linear-to-br from-card/50 to-card/80 dark:from-white/5 dark:to-white/10 border border-border dark:border-white/10 rounded-2xl p-6 space-y-4">
                         <div className="flex items-center gap-3 pb-4 border-b border-border dark:border-white/10">
                             {selectedType && (
                                 <div
-                                    className={`p-3 rounded-xl bg-gradient-to-br ${selectedType.color}`}
+                                    className={`p-3 rounded-xl bg-linear-to-br ${selectedType.color}`}
                                 >
                                     <selectedType.icon className="h-6 w-6 text-white" />
                                 </div>
@@ -1717,13 +1717,13 @@ export default function BusinessSetupPage() {
         <div className="relative w-full min-h-screen bg-background flex overflow-hidden">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-1/2 -left-1/4 w-full h-full bg-gradient-to-br from-primary/5 dark:from-primary/10 via-transparent to-transparent rounded-full blur-3xl animate-pulse" />
-                <div className="absolute -bottom-1/2 -right-1/4 w-full h-full bg-gradient-to-tl from-accent/5 dark:from-accent/10 via-transparent to-transparent rounded-full blur-3xl animate-pulse delay-1000" />
+                <div className="absolute -top-1/2 -left-1/4 w-full h-full bg-linear-to-br from-primary/5 dark:from-primary/10 via-transparent to-transparent rounded-full blur-3xl animate-pulse" />
+                <div className="absolute -bottom-1/2 -right-1/4 w-full h-full bg-linear-to-tl from-accent/5 dark:from-accent/10 via-transparent to-transparent rounded-full blur-3xl animate-pulse delay-1000" />
                 <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/3 dark:bg-primary/5 rounded-full blur-3xl animate-pulse delay-500" />
             </div>
 
             {/* Grid Pattern Overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(249,115,22,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(249,115,22,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+            <div className="absolute inset-0 bg-[linear-linear(rgba(249,115,22,0.03)_1px,transparent_1px),linear-linear(90deg,rgba(249,115,22,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
             <div className="relative w-full flex min-h-screen">
                 {/* Left Panel - Branding (Hidden on mobile, visible on lg+) */}
@@ -1732,13 +1732,13 @@ export default function BusinessSetupPage() {
                     <div className="relative z-10">
                         {/* Logo */}
                         <div className="flex items-center gap-3 mb-8">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/30">
+                            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/30">
                                 <span className="text-3xl font-bold text-white">
                                     U
                                 </span>
                             </div>
                             <div>
-                                <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                                <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                                     USCOR
                                 </span>
                                 <p className="text-xs text-muted-foreground">
@@ -1750,11 +1750,11 @@ export default function BusinessSetupPage() {
                         {/* Hero content */}
                         <div className="mt-16 space-y-6">
                             <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-                                <span className="bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+                                <span className="bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                                     Build Your Business
                                 </span>
                                 <br />
-                                <span className="bg-gradient-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
+                                <span className="bg-linear-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
                                     With Confidence
                                 </span>
                             </h1>
@@ -1812,7 +1812,7 @@ export default function BusinessSetupPage() {
                                 {[1, 2, 3, 4].map((i) => (
                                     <div
                                         key={i}
-                                        className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 border-2 border-background flex items-center justify-center text-xs text-foreground font-medium"
+                                        className="w-10 h-10 rounded-full bg-linear-to-br from-primary/30 to-accent/30 border-2 border-background flex items-center justify-center text-xs text-foreground font-medium"
                                     >
                                         {String.fromCharCode(64 + i)}
                                     </div>
@@ -1838,12 +1838,12 @@ export default function BusinessSetupPage() {
                     <div className="w-full max-w-2xl relative z-10">
                         {/* Mobile logo */}
                         <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+                            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
                                 <span className="text-2xl font-bold text-white">
                                     U
                                 </span>
                             </div>
-                            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                                 USCOR
                             </span>
                         </div>
@@ -1862,7 +1862,7 @@ export default function BusinessSetupPage() {
                                                 <div
                                                     className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-300 ${
                                                         step >= s.number
-                                                            ? "bg-gradient-to-r from-primary to-accent text-white shadow-lg shadow-primary/25"
+                                                            ? "bg-linear-to-r from-primary to-accent text-white shadow-lg shadow-primary/25"
                                                             : "bg-card/50 dark:bg-white/5 text-muted-foreground border border-border dark:border-white/10"
                                                     }`}
                                                 >
@@ -1886,7 +1886,7 @@ export default function BusinessSetupPage() {
                                                 <div
                                                     className={`w-4 sm:w-8 h-0.5 mx-1 sm:mx-2 transition-all duration-300 ${
                                                         step > s.number
-                                                            ? "bg-gradient-to-r from-primary to-accent"
+                                                            ? "bg-linear-to-r from-primary to-accent"
                                                             : "bg-border dark:bg-white/10"
                                                     }`}
                                                 />
@@ -1907,7 +1907,7 @@ export default function BusinessSetupPage() {
                             {/* Progress bar */}
                             <div className="w-full bg-muted dark:bg-white/5 rounded-full h-1.5 mt-3 overflow-hidden">
                                 <div
-                                    className="bg-gradient-to-r from-primary to-accent h-full rounded-full transition-all duration-500 ease-out"
+                                    className="bg-linear-to-r from-primary to-accent h-full rounded-full transition-all duration-500 ease-out"
                                     style={{
                                         width: `${(step / steps.length) * 100}%`,
                                     }}
@@ -1917,7 +1917,7 @@ export default function BusinessSetupPage() {
 
                         {/* Header */}
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
+                            <h2 className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
                                 {step === 1 && "Choose Your Business Type"}
                                 {step === 2 && "Sales Channels"}
                                 {step === 3 && "Business Stage"}
@@ -1981,7 +1981,7 @@ export default function BusinessSetupPage() {
                                         <GlowButton
                                             type="button"
                                             onClick={handleNext}
-                                            className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+                                            className="flex-1 h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
                                         >
                                             Next{" "}
                                             <ArrowRight className="h-4 w-4" />
@@ -1993,7 +1993,7 @@ export default function BusinessSetupPage() {
                                                 saving ||
                                                 !watch("hasAgreedToTerms")
                                             }
-                                            className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                                            className="flex-1 h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                                         >
                                             {saving ? (
                                                 <>

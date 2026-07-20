@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PubSub } from "graphql-subscriptions";
+import { PusherService } from "../chat/pusher.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateAnnouncementInput } from "./dto/create-announcement.input";
 
@@ -8,16 +9,33 @@ export class AnnouncementService {
 	constructor(
 		private prisma: PrismaService,
 		@Inject("PUB_SUB") private pubSub: PubSub,
+		private pusherService: PusherService,
 	) {}
 
 	async create(input: CreateAnnouncementInput) {
 		const announcement = await (this.prisma as any).announcement.create({
 			data: { ...input },
 		});
-		// publish if needed
+		// publish via GraphQL subscriptions
 		await this.pubSub.publish("NEW_ANNOUNCEMENT", {
 			newAnnouncement: announcement,
 		});
+		// Push to all connected browsers via Pusher
+		try {
+			await this.pusherService.trigger(
+				"platform-announcements",
+				"new-announcement",
+				{
+					id: announcement.id,
+					title: announcement.title,
+					content: announcement.content,
+					priority: announcement.priority,
+					createdAt: announcement.createdAt,
+				},
+			);
+		} catch (error) {
+			console.warn("Failed to send Pusher announcement notification", error);
+		}
 		return announcement;
 	}
 

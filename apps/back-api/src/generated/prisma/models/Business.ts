@@ -448,6 +448,7 @@ export type BusinessWhereInput = {
   promotions?: Prisma.PromotionListRelationFilter
   disputes?: Prisma.DisputeListRelationFilter
   orderBusinessGroups?: Prisma.OrderBusinessGroupListRelationFilter
+  settlements?: Prisma.PlatformSettlementListRelationFilter
   wholesalePrices?: Prisma.WholesalePriceListRelationFilter
   b2bOrdersSent?: Prisma.B2BOrderListRelationFilter
   b2bOrdersReceived?: Prisma.B2BOrderListRelationFilter
@@ -511,6 +512,7 @@ export type BusinessOrderByWithRelationInput = {
   promotions?: Prisma.PromotionOrderByRelationAggregateInput
   disputes?: Prisma.DisputeOrderByRelationAggregateInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupOrderByRelationAggregateInput
+  settlements?: Prisma.PlatformSettlementOrderByRelationAggregateInput
   wholesalePrices?: Prisma.WholesalePriceOrderByRelationAggregateInput
   b2bOrdersSent?: Prisma.B2BOrderOrderByRelationAggregateInput
   b2bOrdersReceived?: Prisma.B2BOrderOrderByRelationAggregateInput
@@ -577,6 +579,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   promotions?: Prisma.PromotionListRelationFilter
   disputes?: Prisma.DisputeListRelationFilter
   orderBusinessGroups?: Prisma.OrderBusinessGroupListRelationFilter
+  settlements?: Prisma.PlatformSettlementListRelationFilter
   wholesalePrices?: Prisma.WholesalePriceListRelationFilter
   b2bOrdersSent?: Prisma.B2BOrderListRelationFilter
   b2bOrdersReceived?: Prisma.B2BOrderListRelationFilter
@@ -714,6 +717,7 @@ export type BusinessCreateInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -777,6 +781,7 @@ export type BusinessUncheckedCreateInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -840,6 +845,7 @@ export type BusinessUpdateInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -903,6 +909,7 @@ export type BusinessUncheckedUpdateInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -1675,6 +1682,20 @@ export type BusinessUpdateOneWithoutLedgerEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutLedgerEntriesInput, Prisma.BusinessUpdateWithoutLedgerEntriesInput>, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
 }
 
+export type BusinessCreateNestedOneWithoutSettlementsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSettlementsInput, Prisma.BusinessUncheckedCreateWithoutSettlementsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSettlementsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSettlementsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSettlementsInput, Prisma.BusinessUncheckedCreateWithoutSettlementsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSettlementsInput
+  upsert?: Prisma.BusinessUpsertWithoutSettlementsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSettlementsInput, Prisma.BusinessUpdateWithoutSettlementsInput>, Prisma.BusinessUncheckedUpdateWithoutSettlementsInput>
+}
+
 export type BusinessCreateWithoutPaymentConfigInput = {
   id?: string
   name: string
@@ -1729,6 +1750,7 @@ export type BusinessCreateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -1791,6 +1813,7 @@ export type BusinessUncheckedCreateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -1869,6 +1892,7 @@ export type BusinessUpdateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -1931,6 +1955,7 @@ export type BusinessUncheckedUpdateWithoutPaymentConfigInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -1993,6 +2018,7 @@ export type BusinessCreateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -2055,6 +2081,7 @@ export type BusinessUncheckedCreateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -2133,6 +2160,7 @@ export type BusinessUpdateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -2195,6 +2223,7 @@ export type BusinessUncheckedUpdateWithoutHardwareConfigInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -2257,6 +2286,7 @@ export type BusinessCreateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -2319,6 +2349,7 @@ export type BusinessUncheckedCreateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -2397,6 +2428,7 @@ export type BusinessUpdateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -2459,6 +2491,7 @@ export type BusinessUncheckedUpdateWithoutKycDocumentsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -2521,6 +2554,7 @@ export type BusinessCreateWithoutWorkersInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -2583,6 +2617,7 @@ export type BusinessUncheckedCreateWithoutWorkersInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -2661,6 +2696,7 @@ export type BusinessUpdateWithoutWorkersInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -2723,6 +2759,7 @@ export type BusinessUncheckedUpdateWithoutWorkersInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -2785,6 +2822,7 @@ export type BusinessCreateWithoutProductsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -2847,6 +2885,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -2925,6 +2964,7 @@ export type BusinessUpdateWithoutProductsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -2987,6 +3027,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -3049,6 +3090,7 @@ export type BusinessCreateWithoutMediasInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -3111,6 +3153,7 @@ export type BusinessUncheckedCreateWithoutMediasInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -3189,6 +3232,7 @@ export type BusinessUpdateWithoutMediasInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -3251,6 +3295,7 @@ export type BusinessUncheckedUpdateWithoutMediasInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -3313,6 +3358,7 @@ export type BusinessCreateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -3375,6 +3421,7 @@ export type BusinessUncheckedCreateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -3453,6 +3500,7 @@ export type BusinessUpdateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -3515,6 +3563,7 @@ export type BusinessUncheckedUpdateWithoutOrderBusinessGroupsInput = {
   medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -3577,6 +3626,7 @@ export type BusinessCreateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -3639,6 +3689,7 @@ export type BusinessUncheckedCreateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -3717,6 +3768,7 @@ export type BusinessUpdateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -3779,6 +3831,7 @@ export type BusinessUncheckedUpdateWithoutChatParticipantsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -3841,6 +3894,7 @@ export type BusinessCreateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -3903,6 +3957,7 @@ export type BusinessUncheckedCreateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -3981,6 +4036,7 @@ export type BusinessUpdateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -4043,6 +4099,7 @@ export type BusinessUncheckedUpdateWithoutRepostedItemsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -4105,6 +4162,7 @@ export type BusinessCreateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -4167,6 +4225,7 @@ export type BusinessUncheckedCreateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -4286,6 +4345,7 @@ export type BusinessCreateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -4348,6 +4408,7 @@ export type BusinessUncheckedCreateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -4426,6 +4487,7 @@ export type BusinessUpdateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -4488,6 +4550,7 @@ export type BusinessUncheckedUpdateWithoutTokenTransactionsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -4550,6 +4613,7 @@ export type BusinessCreateWithoutKycInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -4612,6 +4676,7 @@ export type BusinessUncheckedCreateWithoutKycInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -4690,6 +4755,7 @@ export type BusinessUpdateWithoutKycInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -4752,6 +4818,7 @@ export type BusinessUncheckedUpdateWithoutKycInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -4814,6 +4881,7 @@ export type BusinessCreateWithoutRechargesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -4876,6 +4944,7 @@ export type BusinessUncheckedCreateWithoutRechargesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -4954,6 +5023,7 @@ export type BusinessUpdateWithoutRechargesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -5016,6 +5086,7 @@ export type BusinessUncheckedUpdateWithoutRechargesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -5078,6 +5149,7 @@ export type BusinessCreateWithoutAdsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -5140,6 +5212,7 @@ export type BusinessUncheckedCreateWithoutAdsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -5218,6 +5291,7 @@ export type BusinessUpdateWithoutAdsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -5280,6 +5354,7 @@ export type BusinessUncheckedUpdateWithoutAdsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -5342,6 +5417,7 @@ export type BusinessCreateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -5404,6 +5480,7 @@ export type BusinessUncheckedCreateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -5482,6 +5559,7 @@ export type BusinessUpdateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -5544,6 +5622,7 @@ export type BusinessUncheckedUpdateWithoutFreelanceServicesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -5606,6 +5685,7 @@ export type BusinessCreateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -5668,6 +5748,7 @@ export type BusinessUncheckedCreateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -5746,6 +5827,7 @@ export type BusinessUpdateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -5808,6 +5890,7 @@ export type BusinessUncheckedUpdateWithoutFreelanceOrderBusinessInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -5870,6 +5953,7 @@ export type BusinessCreateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -5932,6 +6016,7 @@ export type BusinessUncheckedCreateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -5999,6 +6084,7 @@ export type BusinessCreateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -6061,6 +6147,7 @@ export type BusinessUncheckedCreateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -6139,6 +6226,7 @@ export type BusinessUpdateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -6201,6 +6289,7 @@ export type BusinessUncheckedUpdateWithoutReferralsMadeInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -6274,6 +6363,7 @@ export type BusinessUpdateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -6336,6 +6426,7 @@ export type BusinessUncheckedUpdateWithoutReferralsReceivedInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -6398,6 +6489,7 @@ export type BusinessCreateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -6460,6 +6552,7 @@ export type BusinessUncheckedCreateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -6538,6 +6631,7 @@ export type BusinessUpdateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -6600,6 +6694,7 @@ export type BusinessUncheckedUpdateWithoutPostOfSalesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -6662,6 +6757,7 @@ export type BusinessCreateWithoutStoresInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -6724,6 +6820,7 @@ export type BusinessUncheckedCreateWithoutStoresInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -6802,6 +6899,7 @@ export type BusinessUpdateWithoutStoresInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -6864,6 +6962,7 @@ export type BusinessUncheckedUpdateWithoutStoresInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -6926,6 +7025,7 @@ export type BusinessCreateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -6988,6 +7088,7 @@ export type BusinessUncheckedCreateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -7066,6 +7167,7 @@ export type BusinessUpdateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -7128,6 +7230,7 @@ export type BusinessUncheckedUpdateWithoutPurchaseOrdersInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -7190,6 +7293,7 @@ export type BusinessCreateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -7252,6 +7356,7 @@ export type BusinessUncheckedCreateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -7330,6 +7435,7 @@ export type BusinessUpdateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -7392,6 +7498,7 @@ export type BusinessUncheckedUpdateWithoutLoyaltyProgramsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -7454,6 +7561,7 @@ export type BusinessCreateWithoutPromotionsInput = {
   medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -7516,6 +7624,7 @@ export type BusinessUncheckedCreateWithoutPromotionsInput = {
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -7599,6 +7708,7 @@ export type BusinessCreateWithoutDisputesInput = {
   medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -7661,6 +7771,7 @@ export type BusinessUncheckedCreateWithoutDisputesInput = {
   medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -7739,6 +7850,7 @@ export type BusinessUpdateWithoutDisputesInput = {
   medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -7801,6 +7913,7 @@ export type BusinessUncheckedUpdateWithoutDisputesInput = {
   medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -7864,6 +7977,7 @@ export type BusinessCreateWithoutWholesalePricesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
@@ -7926,6 +8040,7 @@ export type BusinessUncheckedCreateWithoutWholesalePricesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
@@ -8004,6 +8119,7 @@ export type BusinessUpdateWithoutWholesalePricesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
@@ -8066,6 +8182,7 @@ export type BusinessUncheckedUpdateWithoutWholesalePricesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
@@ -8128,6 +8245,7 @@ export type BusinessCreateWithoutB2bOrdersSentInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
@@ -8190,6 +8308,7 @@ export type BusinessUncheckedCreateWithoutB2bOrdersSentInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
@@ -8257,6 +8376,7 @@ export type BusinessCreateWithoutB2bOrdersReceivedInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
@@ -8319,6 +8439,7 @@ export type BusinessUncheckedCreateWithoutB2bOrdersReceivedInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
@@ -8397,6 +8518,7 @@ export type BusinessUpdateWithoutB2bOrdersSentInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
@@ -8459,6 +8581,7 @@ export type BusinessUncheckedUpdateWithoutB2bOrdersSentInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
@@ -8532,6 +8655,7 @@ export type BusinessUpdateWithoutB2bOrdersReceivedInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
@@ -8594,6 +8718,7 @@ export type BusinessUncheckedUpdateWithoutB2bOrdersReceivedInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
@@ -8656,6 +8781,7 @@ export type BusinessCreateWithoutSubscriptionInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -8718,6 +8844,7 @@ export type BusinessUncheckedCreateWithoutSubscriptionInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -8796,6 +8923,7 @@ export type BusinessUpdateWithoutSubscriptionInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -8858,6 +8986,7 @@ export type BusinessUncheckedUpdateWithoutSubscriptionInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -8920,6 +9049,7 @@ export type BusinessCreateWithoutWalletAuditLogsInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -8982,6 +9112,7 @@ export type BusinessUncheckedCreateWithoutWalletAuditLogsInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -9060,6 +9191,7 @@ export type BusinessUpdateWithoutWalletAuditLogsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -9122,6 +9254,7 @@ export type BusinessUncheckedUpdateWithoutWalletAuditLogsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -9184,6 +9317,7 @@ export type BusinessCreateWithoutLedgerEntriesInput = {
   promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
@@ -9246,6 +9380,7 @@ export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
   promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
   disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  settlements?: Prisma.PlatformSettlementUncheckedCreateNestedManyWithoutBusinessInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
@@ -9324,6 +9459,7 @@ export type BusinessUpdateWithoutLedgerEntriesInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -9386,11 +9522,280 @@ export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
   walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSettlementsInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSettlementsInput = {
+  id?: string
+  name: string
+  email: string
+  description?: string | null
+  avatar?: string | null
+  coverImage?: string | null
+  address?: string | null
+  phone: string
+  password: string
+  isVerified?: boolean
+  businessType?: string | null
+  taxId?: string | null
+  registrationNumber?: string | null
+  website?: string | null
+  country?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: number | null
+  totalWorkers?: number | null
+  totalSales?: number | null
+  totalRevenueGenerated?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lastLogin?: Date | string | null
+  kycStatus?: $Enums.KycStatus
+  isB2BEnabled?: boolean
+  totalProductsSold?: number
+  hasAgreedToTerms?: boolean
+  termsAgreedAt?: Date | string | null
+  kyc?: Prisma.KYCUncheckedCreateNestedOneWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  workers?: Prisma.WorkerUncheckedCreateNestedManyWithoutBusinessInput
+  repostedItems?: Prisma.RepostedProductUncheckedCreateNestedManyWithoutBusinessInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedCreateNestedManyWithoutBusinessProductOwnersInput
+  recharges?: Prisma.AccountRechargeUncheckedCreateNestedManyWithoutBusinessInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedCreateNestedManyWithoutBusinessInput
+  referralsMade?: Prisma.ReferralUncheckedCreateNestedManyWithoutAffiliateBusinessInput
+  referralsReceived?: Prisma.ReferralUncheckedCreateNestedManyWithoutReferredBusinessInput
+  postOfSales?: Prisma.PostOfSaleUncheckedCreateNestedManyWithoutBusinessInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedCreateNestedManyWithoutBusinessInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutBusinessInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedCreateNestedOneWithoutBusinessInput
+  kycDocuments?: Prisma.KycDocumentUncheckedCreateNestedManyWithoutBusinessInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutBusinessInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedCreateNestedManyWithoutBusinessInput
+  stores?: Prisma.StoreUncheckedCreateNestedManyWithoutBusinessInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutBusinessInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedCreateNestedManyWithoutBusinessInput
+  medias?: Prisma.MediaUncheckedCreateNestedManyWithoutBusinessInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutApplicableBusinessesInput
+  disputes?: Prisma.DisputeUncheckedCreateNestedManyWithoutBusinessInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedCreateNestedManyWithoutBusinessInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedCreateNestedManyWithoutBusinessInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutBuyerInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedCreateNestedManyWithoutSellerInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSettlementsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSettlementsInput, Prisma.BusinessUncheckedCreateWithoutSettlementsInput>
+}
+
+export type BusinessUpsertWithoutSettlementsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSettlementsInput, Prisma.BusinessUncheckedUpdateWithoutSettlementsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSettlementsInput, Prisma.BusinessUncheckedCreateWithoutSettlementsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSettlementsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSettlementsInput, Prisma.BusinessUncheckedUpdateWithoutSettlementsInput>
+}
+
+export type BusinessUpdateWithoutSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSettlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registrationNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  totalClients?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalWorkers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalSales?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalRevenueGenerated?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kycStatus?: Prisma.EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+  isB2BEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  totalProductsSold?: Prisma.IntFieldUpdateOperationsInput | number
+  hasAgreedToTerms?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAgreedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  kyc?: Prisma.KYCUncheckedUpdateOneWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  workers?: Prisma.WorkerUncheckedUpdateManyWithoutBusinessNestedInput
+  repostedItems?: Prisma.RepostedProductUncheckedUpdateManyWithoutBusinessNestedInput
+  reownedItems?: Prisma.ReOwnedProductUncheckedUpdateManyWithoutBusinessProductOwnersNestedInput
+  recharges?: Prisma.AccountRechargeUncheckedUpdateManyWithoutBusinessNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceServices?: Prisma.FreelanceServiceUncheckedUpdateManyWithoutBusinessNestedInput
+  referralsMade?: Prisma.ReferralUncheckedUpdateManyWithoutAffiliateBusinessNestedInput
+  referralsReceived?: Prisma.ReferralUncheckedUpdateManyWithoutReferredBusinessNestedInput
+  postOfSales?: Prisma.PostOfSaleUncheckedUpdateManyWithoutBusinessNestedInput
+  freelanceOrderBusiness?: Prisma.FreelanceOrderBusinessUncheckedUpdateManyWithoutBusinessNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  hardwareConfig?: Prisma.HardwareConfigUncheckedUpdateOneWithoutBusinessNestedInput
+  kycDocuments?: Prisma.KycDocumentUncheckedUpdateManyWithoutBusinessNestedInput
+  chatParticipants?: Prisma.ChatParticipantUncheckedUpdateManyWithoutBusinessNestedInput
+  tokenTransactions?: Prisma.TokenTransactionUncheckedUpdateManyWithoutBusinessNestedInput
+  stores?: Prisma.StoreUncheckedUpdateManyWithoutBusinessNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutBusinessNestedInput
+  loyaltyPrograms?: Prisma.LoyaltyProgramUncheckedUpdateManyWithoutBusinessNestedInput
+  medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
+  disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
+  orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
+  b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
+  b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
+  walletAuditLogs?: Prisma.WalletAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUpdateWithoutReownedItemsInput = {
@@ -9447,6 +9852,7 @@ export type BusinessUpdateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -9509,6 +9915,7 @@ export type BusinessUncheckedUpdateWithoutReownedItemsInput = {
   promotions?: Prisma.PromotionUncheckedUpdateManyWithoutApplicableBusinessesNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -9604,6 +10011,7 @@ export type BusinessUpdateWithoutPromotionsInput = {
   medias?: Prisma.MediaUpdateManyWithoutBusinessNestedInput
   disputes?: Prisma.DisputeUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUpdateManyWithoutSellerNestedInput
@@ -9666,6 +10074,7 @@ export type BusinessUncheckedUpdateWithoutPromotionsInput = {
   medias?: Prisma.MediaUncheckedUpdateManyWithoutBusinessNestedInput
   disputes?: Prisma.DisputeUncheckedUpdateManyWithoutBusinessNestedInput
   orderBusinessGroups?: Prisma.OrderBusinessGroupUncheckedUpdateManyWithoutBusinessNestedInput
+  settlements?: Prisma.PlatformSettlementUncheckedUpdateManyWithoutBusinessNestedInput
   wholesalePrices?: Prisma.WholesalePriceUncheckedUpdateManyWithoutBusinessNestedInput
   b2bOrdersSent?: Prisma.B2BOrderUncheckedUpdateManyWithoutBuyerNestedInput
   b2bOrdersReceived?: Prisma.B2BOrderUncheckedUpdateManyWithoutSellerNestedInput
@@ -9734,6 +10143,7 @@ export type BusinessCountOutputType = {
   promotions: number
   disputes: number
   orderBusinessGroups: number
+  settlements: number
   wholesalePrices: number
   b2bOrdersSent: number
   b2bOrdersReceived: number
@@ -9763,6 +10173,7 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   promotions?: boolean | BusinessCountOutputTypeCountPromotionsArgs
   disputes?: boolean | BusinessCountOutputTypeCountDisputesArgs
   orderBusinessGroups?: boolean | BusinessCountOutputTypeCountOrderBusinessGroupsArgs
+  settlements?: boolean | BusinessCountOutputTypeCountSettlementsArgs
   wholesalePrices?: boolean | BusinessCountOutputTypeCountWholesalePricesArgs
   b2bOrdersSent?: boolean | BusinessCountOutputTypeCountB2bOrdersSentArgs
   b2bOrdersReceived?: boolean | BusinessCountOutputTypeCountB2bOrdersReceivedArgs
@@ -9930,6 +10341,13 @@ export type BusinessCountOutputTypeCountOrderBusinessGroupsArgs<ExtArgs extends 
 /**
  * BusinessCountOutputType without action
  */
+export type BusinessCountOutputTypeCountSettlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlatformSettlementWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
 export type BusinessCountOutputTypeCountWholesalePricesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WholesalePriceWhereInput
 }
@@ -10018,6 +10436,7 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   promotions?: boolean | Prisma.Business$promotionsArgs<ExtArgs>
   disputes?: boolean | Prisma.Business$disputesArgs<ExtArgs>
   orderBusinessGroups?: boolean | Prisma.Business$orderBusinessGroupsArgs<ExtArgs>
+  settlements?: boolean | Prisma.Business$settlementsArgs<ExtArgs>
   wholesalePrices?: boolean | Prisma.Business$wholesalePricesArgs<ExtArgs>
   b2bOrdersSent?: boolean | Prisma.Business$b2bOrdersSentArgs<ExtArgs>
   b2bOrdersReceived?: boolean | Prisma.Business$b2bOrdersReceivedArgs<ExtArgs>
@@ -10152,6 +10571,7 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   promotions?: boolean | Prisma.Business$promotionsArgs<ExtArgs>
   disputes?: boolean | Prisma.Business$disputesArgs<ExtArgs>
   orderBusinessGroups?: boolean | Prisma.Business$orderBusinessGroupsArgs<ExtArgs>
+  settlements?: boolean | Prisma.Business$settlementsArgs<ExtArgs>
   wholesalePrices?: boolean | Prisma.Business$wholesalePricesArgs<ExtArgs>
   b2bOrdersSent?: boolean | Prisma.Business$b2bOrdersSentArgs<ExtArgs>
   b2bOrdersReceived?: boolean | Prisma.Business$b2bOrdersReceivedArgs<ExtArgs>
@@ -10190,6 +10610,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     promotions: Prisma.$PromotionPayload<ExtArgs>[]
     disputes: Prisma.$DisputePayload<ExtArgs>[]
     orderBusinessGroups: Prisma.$OrderBusinessGroupPayload<ExtArgs>[]
+    settlements: Prisma.$PlatformSettlementPayload<ExtArgs>[]
     wholesalePrices: Prisma.$WholesalePricePayload<ExtArgs>[]
     b2bOrdersSent: Prisma.$B2BOrderPayload<ExtArgs>[]
     b2bOrdersReceived: Prisma.$B2BOrderPayload<ExtArgs>[]
@@ -10646,6 +11067,7 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   promotions<T extends Prisma.Business$promotionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$promotionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disputes<T extends Prisma.Business$disputesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$disputesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisputePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderBusinessGroups<T extends Prisma.Business$orderBusinessGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$orderBusinessGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderBusinessGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  settlements<T extends Prisma.Business$settlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$settlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   wholesalePrices<T extends Prisma.Business$wholesalePricesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$wholesalePricesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WholesalePricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   b2bOrdersSent<T extends Prisma.Business$b2bOrdersSentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$b2bOrdersSentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$B2BOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   b2bOrdersReceived<T extends Prisma.Business$b2bOrdersReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$b2bOrdersReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$B2BOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11657,6 +12079,30 @@ export type Business$orderBusinessGroupsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.OrderBusinessGroupScalarFieldEnum | Prisma.OrderBusinessGroupScalarFieldEnum[]
+}
+
+/**
+ * Business.settlements
+ */
+export type Business$settlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformSettlement
+   */
+  select?: Prisma.PlatformSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformSettlement
+   */
+  omit?: Prisma.PlatformSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformSettlementInclude<ExtArgs> | null
+  where?: Prisma.PlatformSettlementWhereInput
+  orderBy?: Prisma.PlatformSettlementOrderByWithRelationInput | Prisma.PlatformSettlementOrderByWithRelationInput[]
+  cursor?: Prisma.PlatformSettlementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlatformSettlementScalarFieldEnum | Prisma.PlatformSettlementScalarFieldEnum[]
 }
 
 /**

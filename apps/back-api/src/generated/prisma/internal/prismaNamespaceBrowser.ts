@@ -119,7 +119,8 @@ export const ModelName = {
   Subscription: 'Subscription',
   SubscriptionFeature: 'SubscriptionFeature',
   WalletAuditLog: 'WalletAuditLog',
-  LedgerEntry: 'LedgerEntry'
+  LedgerEntry: 'LedgerEntry',
+  PlatformSettlement: 'PlatformSettlement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -650,7 +651,9 @@ export const PaymentTransactionScalarFieldEnum = {
   transactionDate: 'transactionDate',
   qrCode: 'qrCode',
   createdAt: 'createdAt',
-  freelanceOrderId: 'freelanceOrderId'
+  freelanceOrderId: 'freelanceOrderId',
+  businessGroupId: 'businessGroupId',
+  b2bOrderId: 'b2bOrderId'
 } as const
 
 export type PaymentTransactionScalarFieldEnum = (typeof PaymentTransactionScalarFieldEnum)[keyof typeof PaymentTransactionScalarFieldEnum]
@@ -1205,6 +1208,25 @@ export const LedgerEntryScalarFieldEnum = {
 } as const
 
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+export const PlatformSettlementScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  businessGroupId: 'businessGroupId',
+  businessId: 'businessId',
+  grossAmount: 'grossAmount',
+  platformFee: 'platformFee',
+  deliveryFee: 'deliveryFee',
+  netAmount: 'netAmount',
+  status: 'status',
+  distributedAt: 'distributedAt',
+  distributedBy: 'distributedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlatformSettlementScalarFieldEnum = (typeof PlatformSettlementScalarFieldEnum)[keyof typeof PlatformSettlementScalarFieldEnum]
 
 
 export const SortOrder = {

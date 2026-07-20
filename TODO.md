@@ -328,6 +328,95 @@
 - [ ] Output: 14 deliverable reports (Auth, Offline, Platform, KYC, Wallet, Token, Payment, B2B, Subscription, Commerce, Security, Production, Debt, Final Assessment)
 - **Status: PLANNED** | Output: `PHASE_14_TO_21_PLANS.md`
 
+## Phase 22 — Pusher Notifications + Worker Order Processing + Admin Fulfillment
+- [x] Add `READY_FOR_SHIPMENT` to `OrderStatus` enum in Prisma schema
+- [x] Backend `updateOrderStatus()` service method with role-based permissions (worker: PROCESSING/READY_FOR_SHIPMENT, admin: SHIPPED/DELIVERED/COMPLETED) and Pusher notifications to all parties (`admin-orders`, `business-{id}`, `client-{id}` channels)
+- [x] `updateBusinessOrderStatus` resolver mutation + `UpdateOrderStatusInput` DTO
+- [x] Frontend GraphQL: `UPDATE_BUSINESS_ORDER_STATUS` mutation (updated), `GET_WORKER_BUSINESS_ORDERS` query (new)
+- [x] Worker Orders page (`WorkerOrdersPage.tsx`) — expandable order cards with status-based action buttons (Start Processing → Ready for Shipment → Awaiting USCOR Pickup + Chat with Admin), cancel capability, search/filter
+- [x] Added "Orders" section to worker sidebar (`WorkerLayout.tsx` — `ClipboardList` icon, `orders` section type)
+- [x] Wired `WorkerOrdersPage` into worker `page.tsx` with business ID from worker profile
+- [x] Business orders page → read-only (removed Mark as Completed / Cancel buttons from `OrderDetailsModal`, added info banner directing to workers/settlements)
+- [x] Pusher notifications in `AnnouncementService` — fires `platform-announcements` channel on new announcement
+- [x] Pusher notifications in `KnowYourCustomerService` — fires `business-{id}` channel on KYC verify (with approval message) and reject (with rejection reason)
+- [x] Pusher notifications in `DisputeService` — fires `admin-disputes` on new dispute, `business-{id}` and `client-{id}` on resolution
+- [x] Added `PusherService` to announcement, KYC, and dispute module providers
+- [x] Created `usePusherNotifications` hook — role-based Pusher channel subscriptions, browser Notification API integration (permission request, click-to-focus), event-specific notification messages for announcements, KYC, orders, disputes
+- [x] Integrated `usePusherNotifications` into 4 layouts: Worker (`WorkerLayout.tsx`), Business (`ClientLayout.tsx`), Admin (`admin/page.tsx` with dashboard refetch), Client (`(Client)/ClientLayout.tsx`)
+- [x] Admin Order Fulfillment page (`OrderFulfillment.tsx`) — status filter tabs (Ready for Pickup, Shipped, Delivered, etc.), stat cards (Awaiting Pickup, In Transit, Delivered, Total), expandable orders with per-business-group actions (Mark Shipped, Mark Delivered, Chat with Worker)
+- [x] Added "Order Fulfillment" to admin sidebar (`SideBar.tsx` — `ClipboardList` icon) and `useActiveSection` type union
+- [x] Wired `OrderFulfillment` into admin page routing with section title/description
+- [ ] Run `prisma migrate dev` to apply `READY_FOR_SHIPMENT` enum addition
+- **Status: COMPLETE** (implementation done, migration pending) | Output: 3 new files, 17 modified files
+
+### Session Summary (for continuation)
+
+**Completed this session (Phase 22):**
+- Full order lifecycle: Worker processes order → marks READY_FOR_SHIPMENT → Pusher notifies admin browser → admin opens Order Fulfillment → chats with worker for pickup coordination → marks SHIPPED → marks DELIVERED → all parties notified at each step
+- Business owner sees orders read-only; views settlements for payment info
+- Browser push notifications via Pusher for: announcements (all users), KYC verify/reject with reason (business), dispute creation (admin) and resolution (business + client), order status changes (all parties)
+- `usePusherNotifications` hook handles channel subscription, browser Notification API permission, and event-specific messages across all 4 role layouts
+
+**Pending migrations:**
+- `READY_FOR_SHIPMENT` added to `OrderStatus` enum (from Phase 22)
+- `ORDER` added to `NegotiationType` enum (from Phase 21 sessions)
+- `PlatformSettlement` model + `SettlementStatus` enum (from Phase 21 sessions)
+
+**Key files created:**
+- `apps/front-ui/app/(worker)/worker/_components/WorkerOrdersPage.tsx`
+- `apps/front-ui/hooks/usePusherNotifications.ts`
+- `apps/front-ui/app/(plateform)/admin/_components/OrderFulfillment.tsx`
+
+---
+
+## Phase 23 — Business Group Payments, USSD Admin/B2B Routes, Payment Code Display
+- [x] **Prisma schema**: Added `businessGroupId` (unique) and `b2bOrderId` (unique) fields to `PaymentTransaction` model, with back-relations to `OrderBusinessGroup` and `B2BOrder`
+- [x] **OrderBusinessGroup payment creation**: In `order.service.ts` `create()`, each business group now gets its own `PaymentTransaction` (PENDING status) alongside the main order payment — fixes the bug where grouped business orders had no payment record
+- [x] **B2B Pusher notifications**: Injected `PusherService` into `B2BService` — fires `b2b-order-new` to seller on order creation, `b2b-order-update` to both parties on status changes with per-status messages (approved, rejected with reason, shipped, delivered, cancelled), `b2b-payment-received` on payment
+- [x] **B2B order chat creation**: On `createB2BOrder()`, creates an ORDER-type chat between buyer and seller businesses with system message showing order context (items, total, counterparty names)
+- [x] **B2B payment system**: Added `payB2BOrder(orderId, method)` mutation + service method — validates order status (APPROVED/PROCESSING), creates or updates `PaymentTransaction`, notifies seller via Pusher. Auto-creates PENDING payment on order approval.
+- [x] **B2B phone lookup**: Added `getB2BOrdersByPhone(phone, role)` service method and `b2bOrdersByPhone` resolver query for USSD integration
+- [x] **Admin phone lookup**: Added `findByPhone(phone)` to `AdminService` and `adminByPhone` query to `AdminResolver` — enables USSD admin verification
+- [x] **USSD Admin route** (`/api/ussd/admin/route.ts`): Phone-verified admin access, 3 flows — distribute all pending settlements (with confirm), view settlement stats (pending/distributed/fees), check pending settlements (list + distribute individual). Uses `GET_SETTLEMENT_STATS`, `GET_SETTLEMENTS`, `DISTRIBUTE_SETTLEMENT`, `BATCH_DISTRIBUTE_SETTLEMENTS`.
+- [x] **USSD B2B route** (`/api/ussd/b2b/route.ts`): Business phone identification, 3 flows — pay approved B2B order (select order → choose MoMo provider → confirm → SMS via Africa's Talking), view B2B orders (buyer/seller/all), check balance. Uses `GET_B2B_ORDERS`, `PAY_B2B_ORDER`.
+- [x] **BusinessPaymentCodes component** (`components/BusinessPaymentCodes.tsx`): Reusable card showing business MoMo codes (MTN, Airtel, Orange, M-Pesa) + bank account with provider-colored rows, amount formatting, and USSD dial tip
+- [x] **Checkout page integration**: Added `BusinessPaymentCodes` section between payment and promotions in B2C checkout — fetches each business's `paymentConfig` via `GET_BUSINESS_PAYMENT_CONFIG` query, displays as "Direct Business Payment Codes" alternative
+- [x] **Order confirmation integration**: Added `BusinessPaymentCodes` inside each business group card on confirmation page — shows seller payment codes for direct payment
+- [x] **B2B PurchaseRequests improvements**: Added ChatModal integration (chat button per active order), payment status badge (COMPLETED/PENDING), seller payment codes for buyer view, imported `PAY_B2B_ORDER` mutation
+- [x] **Frontend GraphQL updates**: Added `GET_ADMIN_BY_PHONE` query, `PAY_B2B_ORDER` mutation, `GET_BUSINESS_PAYMENT_CONFIG` query. Updated `GET_B2B_ORDERS` to include `payment` and `seller.paymentConfig` fields.
+- [ ] Run `prisma migrate dev` to apply PaymentTransaction schema changes (businessGroupId, b2bOrderId)
+- **Status: COMPLETE** (implementation done, migration pending) | Output: 4 new files, 12 modified files
+
+### Session Summary (for continuation)
+
+**Completed this session (Phase 23):**
+- Fixed bug: OrderBusinessGroup now gets its own PaymentTransaction on order creation
+- Full B2B payment lifecycle: create order → chat opens → seller reviews → approves (payment created) → buyer pays via USSD or web → seller notified
+- USSD admin portal: distribute settlements to businesses via phone
+- USSD B2B portal: pay B2B orders, view orders, check balance via phone
+- Business payment codes displayed everywhere: B2C checkout, order confirmation, B2B purchase orders
+
+**Pending migrations (cumulative):**
+- `businessGroupId` + `b2bOrderId` on PaymentTransaction (Phase 23)
+- `READY_FOR_SHIPMENT` on OrderStatus enum (Phase 22)
+- `ORDER` on NegotiationType enum (Phase 21)
+- `PlatformSettlement` model + `SettlementStatus` enum (Phase 21)
+
+**Key files created:**
+- `apps/front-ui/app/api/ussd/admin/route.ts` — USSD admin fund distribution
+- `apps/front-ui/app/api/ussd/b2b/route.ts` — USSD B2B payment
+- `apps/front-ui/components/BusinessPaymentCodes.tsx` — reusable payment code display
+
+**Key files modified:**
+- `apps/back-api/prisma/schema.prisma` — PaymentTransaction + OrderBusinessGroup + B2BOrder
+- `apps/back-api/src/b2b/b2b.service.ts` — Pusher, Chat, Payment, phone lookup
+- `apps/back-api/src/b2b/b2b.module.ts` — ChatModule import
+- `apps/back-api/src/b2b/b2b.resolver.ts` — payB2BOrder + b2bOrdersByPhone
+- `apps/back-api/src/order/order.service.ts` — business group payment creation
+- `apps/front-ui/app/(browsing)/marketplace/checkout/page.tsx` — payment codes
+- `apps/front-ui/app/(browsing)/marketplace/orders/confirmation/page.tsx` — payment codes
+- `apps/front-ui/app/(Business)/business/b2b/_components/PurchaseRequests.tsx` — chat + payment codes
+
 ---
 
 ## Summary
@@ -356,13 +445,15 @@
 | **Phase 19 — Token System Review** | **COMPLETE** | **100%** |
 | **Phase 20 — Payment Architecture Review** | **COMPLETE** | **100%** |
 | Phase 21 — Commerce Testing | PLANNED | 0% |
+| **Phase 22 — Pusher Notifications + Worker Orders + Admin Fulfillment** | **COMPLETE** | **100%** |
+| **Phase 23 — Business Group Payments + USSD Admin/B2B + Payment Codes** | **COMPLETE** | **100%** |
 
-**Files Created:** 106 new files (55 from Phases 1-11, 19 from Phase 13, 7 from Phase 14, 4 from Phase 15, 12 from Phase 16, 2 from Phase 17, 5 from Phase 18, 1 from Phase 19, 1 from Phase 20)
-**Files Modified:** 180 files (139 from Phases 1-11, 12 from Phase 13, 7 from Phase 14, 3 from Phase 15, 3 from Phase 16, 3 from Phase 17, 8 from Phase 19, 5 from Phase 20)
+**Files Created:** 120 new files (55 from Phases 1-11, 19 from Phase 13, 7 from Phase 14, 4 from Phase 15, 12 from Phase 16, 2 from Phase 17, 5 from Phase 18, 1 from Phase 19, 1 from Phase 20, 7 from Phase 21 sessions, 3 from Phase 22, 4 from Phase 23)
+**Files Modified:** 226 files (139 from Phases 1-11, 12 from Phase 13, 7 from Phase 14, 3 from Phase 15, 3 from Phase 16, 3 from Phase 17, 8 from Phase 19, 5 from Phase 20, 17 from Phase 21-22 sessions, 12 from Phase 23)
 **Files Deleted:** 1 file
-**Lines of Code Added:** ~16,100+
+**Lines of Code Added:** ~19,800+
 
 ---
 
-*Last updated: June 28, 2026*
+*Last updated: July 20, 2026*
 *Author: Kambale Kiregha Ezechiel + Claude Code*

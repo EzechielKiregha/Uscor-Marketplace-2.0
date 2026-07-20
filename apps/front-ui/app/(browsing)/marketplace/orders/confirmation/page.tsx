@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
 import CancelledOrderFallback from "../../_components/CancelledOrderFallback";
 import MobileMoneyPaymentCard from "../../_components/MobileMoneyPaymentCard";
 
@@ -548,6 +549,19 @@ export default function OrderConfirmationPage() {
                       <span>${group.total.toFixed(2)}</span>
                     </div>
                   </div>
+
+                  {/* Business Direct Payment Codes */}
+                  {group.business?.paymentConfig && (
+                    <div className="pt-3 mt-3 border-t border-border">
+                      <BusinessPaymentCodes
+                        businessName={group.business.name}
+                        businessAvatar={group.business.avatar}
+                        paymentConfig={group.business.paymentConfig}
+                        amount={group.total}
+                        compact
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

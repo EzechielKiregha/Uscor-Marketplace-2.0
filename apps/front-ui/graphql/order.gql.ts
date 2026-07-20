@@ -440,12 +440,77 @@ export const GET_PROMOTIONS = gql`
 // ======================
 
 export const UPDATE_BUSINESS_ORDER_STATUS = gql`
-  mutation UpdateBusinessOrderStatus($id: String!, $status: OrderStatus!) {
-    updateBusinessOrderStatus(id: $id, status: $status) {
+  mutation UpdateBusinessOrderStatus($input: UpdateOrderStatusInput!) {
+    updateBusinessOrderStatus(input: $input) {
       id
+      orderId
+      businessId
       status
+      subtotal
+      deliveryFee
+      total
+      business {
+        id
+        name
+      }
+      order {
+        id
+        clientId
+        client {
+          id
+          fullName
+          email
+        }
+      }
     }
   }
+`;
+
+export const GET_WORKER_BUSINESS_ORDERS = gql`
+  query GetWorkerBusinessOrders($businessId: String!, $page: Int = 1, $limit: Int = 20, $status: String) {
+    businessOrders(businessId: $businessId, page: $page, limit: $limit, status: $status) {
+      items {
+        id
+        deliveryFee
+        receiptUrl
+        qrCode
+        createdAt
+        updatedAt
+        clientId
+        client {
+          id
+          fullName
+          email
+        }
+        payment {
+          id
+          amount
+          method
+          status
+        }
+        products {
+          id
+          quantity
+          product {
+            id
+            title
+            price
+            medias {
+              url
+            }
+          }
+        }
+        status
+        businessGroups {
+          ...OrderBusinessGroupFragment
+        }
+      }
+      total
+      page
+      limit
+    }
+  }
+  ${ORDER_BUSINESS_GROUP_FRAGMENT}
 `;
 
 export const CREATE_GROUPED_ORDER = gql`

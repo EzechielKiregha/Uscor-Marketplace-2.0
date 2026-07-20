@@ -9,6 +9,15 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface BusinessGroup {
+  businessId: string;
+  businessName: string;
+  businessType?: string;
+  businessAvatar?: string;
+  items: CartItem[];
+  subtotal: number;
+}
+
 type CartContextType = {
   items: CartItem[];
   addItem: (product: ProductEntity, quantity?: number) => void;
@@ -17,6 +26,7 @@ type CartContextType = {
   clearCart: () => void;
   getItemCount: () => number;
   getCartTotal: () => number;
+  getItemsByBusiness: () => BusinessGroup[];
 }
 
 type CartState = {
@@ -27,6 +37,7 @@ type CartState = {
   clearCart: () => void;
   getItemCount: () => number;
   getCartTotal: () => number;
+  getItemsByBusiness: () => BusinessGroup[];
 };
 
 const useCartStore = create<CartState>()(
@@ -67,6 +78,26 @@ const useCartStore = create<CartState>()(
       },
       getCartTotal: () => {
         return get().items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+      },
+      getItemsByBusiness: (): BusinessGroup[] => {
+        const groups: Record<string, BusinessGroup> = {};
+        for (const item of get().items) {
+          const biz = item.product?.business;
+          const bizId = biz?.id ?? "unknown";
+          if (!groups[bizId]) {
+            groups[bizId] = {
+              businessId: bizId,
+              businessName: biz?.name ?? "Unknown Business",
+              businessType: biz?.businessType,
+              businessAvatar: biz?.avatar,
+              items: [],
+              subtotal: 0,
+            };
+          }
+          groups[bizId].items.push(item);
+          groups[bizId].subtotal += item.product.price * item.quantity;
+        }
+        return Object.values(groups);
       },
     }),
     {

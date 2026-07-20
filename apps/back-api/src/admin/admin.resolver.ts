@@ -35,6 +35,11 @@ export class AdminResolver {
 	async admin(@Args("id") id: string) {
 		return this.adminService.findOne(id);
 	}
+
+	@Query(() => Admin, { nullable: true, description: "Find admin by phone number (for USSD)." })
+	async adminByPhone(@Args("phone") phone: string) {
+		return this.adminService.findByPhone(phone);
+	}
 	@UseGuards(JwtAuthGuard)
 	@Mutation(() => Admin)
 	async createAdmin(@Args("input") input: CreateAdminInput) {

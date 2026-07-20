@@ -137,7 +137,7 @@ export const AnimatedBadge = ({
 }: AnimatedBadgeProps) => {
 	return (
 		<div
-			className={`rounded-full p-[1px] bg-gradient-to-r from-transparent ${borderColor} to-transparent [background-size:400%_100%] ${className}`}
+			className={`rounded-full p-[1px] bg-linear-to-r from-transparent ${borderColor} to-transparent [background-size:400%_100%] ${className}`}
 			style={{ animation: "move-bg 8s linear infinite" }}
 		>
 			<div className="inline-flex items-center gap-2 rounded-full bg-white dark:bg-[#0a091e] px-4 py-1.5 text-sm text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-transparent">

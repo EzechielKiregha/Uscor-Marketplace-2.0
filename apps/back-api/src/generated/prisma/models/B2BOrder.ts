@@ -339,6 +339,7 @@ export type B2BOrderWhereInput = {
   buyer?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   seller?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   items?: Prisma.B2BOrderItemListRelationFilter
+  payment?: Prisma.XOR<Prisma.PaymentTransactionNullableScalarRelationFilter, Prisma.PaymentTransactionWhereInput> | null
 }
 
 export type B2BOrderOrderByWithRelationInput = {
@@ -364,6 +365,7 @@ export type B2BOrderOrderByWithRelationInput = {
   buyer?: Prisma.BusinessOrderByWithRelationInput
   seller?: Prisma.BusinessOrderByWithRelationInput
   items?: Prisma.B2BOrderItemOrderByRelationAggregateInput
+  payment?: Prisma.PaymentTransactionOrderByWithRelationInput
 }
 
 export type B2BOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -392,6 +394,7 @@ export type B2BOrderWhereUniqueInput = Prisma.AtLeast<{
   buyer?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   seller?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   items?: Prisma.B2BOrderItemListRelationFilter
+  payment?: Prisma.XOR<Prisma.PaymentTransactionNullableScalarRelationFilter, Prisma.PaymentTransactionWhereInput> | null
 }, "id" | "orderNumber">
 
 export type B2BOrderOrderByWithAggregationInput = {
@@ -467,6 +470,7 @@ export type B2BOrderCreateInput = {
   buyer: Prisma.BusinessCreateNestedOneWithoutB2bOrdersSentInput
   seller: Prisma.BusinessCreateNestedOneWithoutB2bOrdersReceivedInput
   items?: Prisma.B2BOrderItemCreateNestedManyWithoutOrderInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderUncheckedCreateInput = {
@@ -490,6 +494,7 @@ export type B2BOrderUncheckedCreateInput = {
   deliveredAt?: Date | string | null
   cancelledAt?: Date | string | null
   items?: Prisma.B2BOrderItemUncheckedCreateNestedManyWithoutOrderInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderUpdateInput = {
@@ -513,6 +518,7 @@ export type B2BOrderUpdateInput = {
   buyer?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersSentNestedInput
   seller?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersReceivedNestedInput
   items?: Prisma.B2BOrderItemUpdateManyWithoutOrderNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderUncheckedUpdateInput = {
@@ -536,6 +542,7 @@ export type B2BOrderUncheckedUpdateInput = {
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.B2BOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderCreateManyInput = {
@@ -610,6 +617,11 @@ export type B2BOrderListRelationFilter = {
 
 export type B2BOrderOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type B2BOrderNullableScalarRelationFilter = {
+  is?: Prisma.B2BOrderWhereInput | null
+  isNot?: Prisma.B2BOrderWhereInput | null
 }
 
 export type B2BOrderCountOrderByAggregateInput = {
@@ -779,6 +791,22 @@ export type B2BOrderUncheckedUpdateManyWithoutSellerNestedInput = {
   deleteMany?: Prisma.B2BOrderScalarWhereInput | Prisma.B2BOrderScalarWhereInput[]
 }
 
+export type B2BOrderCreateNestedOneWithoutPaymentInput = {
+  create?: Prisma.XOR<Prisma.B2BOrderCreateWithoutPaymentInput, Prisma.B2BOrderUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.B2BOrderCreateOrConnectWithoutPaymentInput
+  connect?: Prisma.B2BOrderWhereUniqueInput
+}
+
+export type B2BOrderUpdateOneWithoutPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.B2BOrderCreateWithoutPaymentInput, Prisma.B2BOrderUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.B2BOrderCreateOrConnectWithoutPaymentInput
+  upsert?: Prisma.B2BOrderUpsertWithoutPaymentInput
+  disconnect?: Prisma.B2BOrderWhereInput | boolean
+  delete?: Prisma.B2BOrderWhereInput | boolean
+  connect?: Prisma.B2BOrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.B2BOrderUpdateToOneWithWhereWithoutPaymentInput, Prisma.B2BOrderUpdateWithoutPaymentInput>, Prisma.B2BOrderUncheckedUpdateWithoutPaymentInput>
+}
+
 export type EnumB2BOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.B2BOrderStatus
 }
@@ -821,6 +849,7 @@ export type B2BOrderCreateWithoutBuyerInput = {
   cancelledAt?: Date | string | null
   seller: Prisma.BusinessCreateNestedOneWithoutB2bOrdersReceivedInput
   items?: Prisma.B2BOrderItemCreateNestedManyWithoutOrderInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderUncheckedCreateWithoutBuyerInput = {
@@ -843,6 +872,7 @@ export type B2BOrderUncheckedCreateWithoutBuyerInput = {
   deliveredAt?: Date | string | null
   cancelledAt?: Date | string | null
   items?: Prisma.B2BOrderItemUncheckedCreateNestedManyWithoutOrderInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderCreateOrConnectWithoutBuyerInput = {
@@ -875,6 +905,7 @@ export type B2BOrderCreateWithoutSellerInput = {
   cancelledAt?: Date | string | null
   buyer: Prisma.BusinessCreateNestedOneWithoutB2bOrdersSentInput
   items?: Prisma.B2BOrderItemCreateNestedManyWithoutOrderInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderUncheckedCreateWithoutSellerInput = {
@@ -897,6 +928,7 @@ export type B2BOrderUncheckedCreateWithoutSellerInput = {
   deliveredAt?: Date | string | null
   cancelledAt?: Date | string | null
   items?: Prisma.B2BOrderItemUncheckedCreateNestedManyWithoutOrderInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderCreateOrConnectWithoutSellerInput = {
@@ -966,6 +998,114 @@ export type B2BOrderUpdateManyWithWhereWithoutSellerInput = {
   data: Prisma.XOR<Prisma.B2BOrderUpdateManyMutationInput, Prisma.B2BOrderUncheckedUpdateManyWithoutSellerInput>
 }
 
+export type B2BOrderCreateWithoutPaymentInput = {
+  id?: string
+  orderNumber?: string
+  status?: $Enums.B2BOrderStatus
+  paymentTerms?: $Enums.B2BPaymentTerms
+  notes?: string | null
+  rejectionReason?: string | null
+  subtotal?: number
+  tax?: number
+  total?: number
+  shippingAddress?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  submittedAt?: Date | string | null
+  approvedAt?: Date | string | null
+  shippedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  buyer: Prisma.BusinessCreateNestedOneWithoutB2bOrdersSentInput
+  seller: Prisma.BusinessCreateNestedOneWithoutB2bOrdersReceivedInput
+  items?: Prisma.B2BOrderItemCreateNestedManyWithoutOrderInput
+}
+
+export type B2BOrderUncheckedCreateWithoutPaymentInput = {
+  id?: string
+  orderNumber?: string
+  buyerId: string
+  sellerId: string
+  status?: $Enums.B2BOrderStatus
+  paymentTerms?: $Enums.B2BPaymentTerms
+  notes?: string | null
+  rejectionReason?: string | null
+  subtotal?: number
+  tax?: number
+  total?: number
+  shippingAddress?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  submittedAt?: Date | string | null
+  approvedAt?: Date | string | null
+  shippedAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  items?: Prisma.B2BOrderItemUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type B2BOrderCreateOrConnectWithoutPaymentInput = {
+  where: Prisma.B2BOrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.B2BOrderCreateWithoutPaymentInput, Prisma.B2BOrderUncheckedCreateWithoutPaymentInput>
+}
+
+export type B2BOrderUpsertWithoutPaymentInput = {
+  update: Prisma.XOR<Prisma.B2BOrderUpdateWithoutPaymentInput, Prisma.B2BOrderUncheckedUpdateWithoutPaymentInput>
+  create: Prisma.XOR<Prisma.B2BOrderCreateWithoutPaymentInput, Prisma.B2BOrderUncheckedCreateWithoutPaymentInput>
+  where?: Prisma.B2BOrderWhereInput
+}
+
+export type B2BOrderUpdateToOneWithWhereWithoutPaymentInput = {
+  where?: Prisma.B2BOrderWhereInput
+  data: Prisma.XOR<Prisma.B2BOrderUpdateWithoutPaymentInput, Prisma.B2BOrderUncheckedUpdateWithoutPaymentInput>
+}
+
+export type B2BOrderUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumB2BOrderStatusFieldUpdateOperationsInput | $Enums.B2BOrderStatus
+  paymentTerms?: Prisma.EnumB2BPaymentTermsFieldUpdateOperationsInput | $Enums.B2BPaymentTerms
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  shippedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  buyer?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersSentNestedInput
+  seller?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersReceivedNestedInput
+  items?: Prisma.B2BOrderItemUpdateManyWithoutOrderNestedInput
+}
+
+export type B2BOrderUncheckedUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  buyerId?: Prisma.StringFieldUpdateOperationsInput | string
+  sellerId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumB2BOrderStatusFieldUpdateOperationsInput | $Enums.B2BOrderStatus
+  paymentTerms?: Prisma.EnumB2BPaymentTermsFieldUpdateOperationsInput | $Enums.B2BPaymentTerms
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  shippedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  items?: Prisma.B2BOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+}
+
 export type B2BOrderCreateWithoutItemsInput = {
   id?: string
   orderNumber?: string
@@ -986,6 +1126,7 @@ export type B2BOrderCreateWithoutItemsInput = {
   cancelledAt?: Date | string | null
   buyer: Prisma.BusinessCreateNestedOneWithoutB2bOrdersSentInput
   seller: Prisma.BusinessCreateNestedOneWithoutB2bOrdersReceivedInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderUncheckedCreateWithoutItemsInput = {
@@ -1008,6 +1149,7 @@ export type B2BOrderUncheckedCreateWithoutItemsInput = {
   shippedAt?: Date | string | null
   deliveredAt?: Date | string | null
   cancelledAt?: Date | string | null
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutB2bOrderInput
 }
 
 export type B2BOrderCreateOrConnectWithoutItemsInput = {
@@ -1046,6 +1188,7 @@ export type B2BOrderUpdateWithoutItemsInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyer?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersSentNestedInput
   seller?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersReceivedNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderUncheckedUpdateWithoutItemsInput = {
@@ -1068,6 +1211,7 @@ export type B2BOrderUncheckedUpdateWithoutItemsInput = {
   shippedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderCreateManyBuyerInput = {
@@ -1132,6 +1276,7 @@ export type B2BOrderUpdateWithoutBuyerInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   seller?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersReceivedNestedInput
   items?: Prisma.B2BOrderItemUpdateManyWithoutOrderNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderUncheckedUpdateWithoutBuyerInput = {
@@ -1154,6 +1299,7 @@ export type B2BOrderUncheckedUpdateWithoutBuyerInput = {
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.B2BOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderUncheckedUpdateManyWithoutBuyerInput = {
@@ -1197,6 +1343,7 @@ export type B2BOrderUpdateWithoutSellerInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyer?: Prisma.BusinessUpdateOneRequiredWithoutB2bOrdersSentNestedInput
   items?: Prisma.B2BOrderItemUpdateManyWithoutOrderNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderUncheckedUpdateWithoutSellerInput = {
@@ -1219,6 +1366,7 @@ export type B2BOrderUncheckedUpdateWithoutSellerInput = {
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.B2BOrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutB2bOrderNestedInput
 }
 
 export type B2BOrderUncheckedUpdateManyWithoutSellerInput = {
@@ -1296,6 +1444,7 @@ export type B2BOrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   buyer?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   items?: boolean | Prisma.B2BOrder$itemsArgs<ExtArgs>
+  payment?: boolean | Prisma.B2BOrder$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.B2BOrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["b2BOrder"]>
 
@@ -1374,6 +1523,7 @@ export type B2BOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   buyer?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   items?: boolean | Prisma.B2BOrder$itemsArgs<ExtArgs>
+  payment?: boolean | Prisma.B2BOrder$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.B2BOrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type B2BOrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1391,6 +1541,7 @@ export type $B2BOrderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     buyer: Prisma.$BusinessPayload<ExtArgs>
     seller: Prisma.$BusinessPayload<ExtArgs>
     items: Prisma.$B2BOrderItemPayload<ExtArgs>[]
+    payment: Prisma.$PaymentTransactionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1809,6 +1960,7 @@ export interface Prisma__B2BOrderClient<T, Null = never, ExtArgs extends runtime
   buyer<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   seller<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.B2BOrder$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.B2BOrder$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$B2BOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payment<T extends Prisma.B2BOrder$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.B2BOrder$paymentArgs<ExtArgs>>): Prisma.Prisma__PaymentTransactionClient<runtime.Types.Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2274,6 +2426,25 @@ export type B2BOrder$itemsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.B2BOrderItemScalarFieldEnum | Prisma.B2BOrderItemScalarFieldEnum[]
+}
+
+/**
+ * B2BOrder.payment
+ */
+export type B2BOrder$paymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentTransaction
+   */
+  select?: Prisma.PaymentTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentTransaction
+   */
+  omit?: Prisma.PaymentTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentTransactionInclude<ExtArgs> | null
+  where?: Prisma.PaymentTransactionWhereInput
 }
 
 /**

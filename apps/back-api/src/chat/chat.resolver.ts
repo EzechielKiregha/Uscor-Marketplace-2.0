@@ -444,4 +444,22 @@ export class ChatResolver {
 
 		return updatedChat;
 	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("client", "business", "worker")
+	@Mutation(() => Boolean, {
+		description: "Triggers a typing indicator for a chat.",
+	})
+	async triggerTyping(
+		@Args("chatId") chatId: string,
+		@Args("userId") userId: string,
+		@Args("userName") userName: string,
+	): Promise<boolean> {
+		await this.pusherService.trigger(
+			`chat-${chatId}`,
+			"client-typing",
+			{ userId, userName },
+		);
+		return true;
+	}
 }

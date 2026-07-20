@@ -74,7 +74,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
 	return (
 		<div className="group flex flex-col items-center text-center p-6 bg-card rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border hover:border-primary hover:-translate-y-1">
 			<div className="relative w-32 h-32 md:w-40 md:h-40 mb-4">
-				<div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-orange-400/30 to-accent/40 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+				<div className="absolute inset-0 bg-linear-to-br from-primary/40 via-orange-400/30 to-accent/40 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
 				<img
 					className="relative w-full h-full rounded-full object-cover ring-4 ring-background group-hover:ring-primary transition-all duration-300"
 					src={member.imageUrl}
@@ -130,7 +130,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
 
 const TeamMemberSection: React.FC = () => {
 	return (
-		<section className="relative bg-gradient-to-br from-muted/50 via-background to-muted/50 font-sans transition-colors overflow-hidden">
+		<section className="relative bg-linear-to-br from-muted/50 via-background to-muted/50 font-sans transition-colors overflow-hidden">
 			{/* Background Pattern */}
 			<div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.05)_1px,transparent_0)] dark:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.05)_1px,transparent_0)] bg-[size:20px_20px]"></div>
 

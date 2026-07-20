@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { AccountRechargeModule } from "../account-recharge/account-recharge.module";
 import { AccountRechargeService } from "../account-recharge/account-recharge.service";
 import { BusinessService } from "../business/business.service";
+import { ChatModule } from "../chat/chat.module";
 import { ClientService } from "../client/client.service";
 import { PaymentTransactionService } from "../payment-transaction/payment-transaction.service";
 import { PrismaService } from "../prisma/prisma.service";
@@ -22,6 +23,6 @@ import { OrderService } from "./order.service";
         BusinessService,
         ClientService,
     ],
-    imports: [TokenTransactionModule, AccountRechargeModule],
+    imports: [TokenTransactionModule, AccountRechargeModule, ChatModule],
 })
 export class OrderModule {}

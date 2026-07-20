@@ -1,29 +1,29 @@
 // app/client/_components/ProfileOverview.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { put } from "@vercel/blob";
-import {
-  Award,
-  Calendar,
-  Camera,
-  DollarSign,
-  Loader2,
-  Mail,
-  Phone,
-  ShoppingBag,
-  User,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  GET_CLIENT_PROFILE,
-  UPDATE_CLIENT_PROFILE,
+    GET_CLIENT_PROFILE,
+    UPDATE_CLIENT_PROFILE,
 } from "@/graphql/client-panel.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { put } from "@vercel/blob";
+import {
+    Award,
+    Calendar,
+    Camera,
+    DollarSign,
+    Loader2,
+    Mail,
+    Phone,
+    ShoppingBag,
+    User,
+    X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ProfileOverviewProps {
   client: any;

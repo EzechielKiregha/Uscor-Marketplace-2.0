@@ -1,11 +1,11 @@
 "use client";
 
+import Notification, {
+    type NotificationPosition,
+    type NotificationType,
+} from "@/components/ui/toast";
 import { AnimatePresence } from "framer-motion";
 import React from "react";
-import Notification, {
-	type NotificationPosition,
-	type NotificationType,
-} from "@/components/ui/toast";
 
 // Define the notification item interface
 interface NotificationItem {
@@ -784,7 +784,7 @@ export default function ToastView() {
 								"Your payment of $29.99 has been processed successfully!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-600 dark:to-purple-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-600 dark:hover:from-blue-700 dark:hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-blue-500 to-purple-500 dark:from-blue-600 dark:to-purple-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-600 dark:hover:from-blue-700 dark:hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Payment Processing
 					</button>
@@ -797,7 +797,7 @@ export default function ToastView() {
 								"All files have been uploaded successfully!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-green-500 to-teal-500 dark:from-green-600 dark:to-teal-600 text-white rounded-lg text-sm font-medium hover:from-green-600 hover:to-teal-600 dark:hover:from-green-700 dark:hover:to-teal-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-green-500 to-teal-500 dark:from-green-600 dark:to-teal-600 text-white rounded-lg text-sm font-medium hover:from-green-600 hover:to-teal-600 dark:hover:from-green-700 dark:hover:to-teal-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						File Upload
 					</button>
@@ -810,7 +810,7 @@ export default function ToastView() {
 								"Your email has been delivered successfully!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-orange-500 to-red-500 dark:from-orange-600 dark:to-red-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-red-600 dark:hover:from-orange-700 dark:hover:to-red-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-orange-500 to-red-500 dark:from-orange-600 dark:to-red-600 text-white rounded-lg text-sm font-medium hover:from-orange-600 hover:to-red-600 dark:hover:from-orange-700 dark:hover:to-red-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Send Email
 					</button>
@@ -823,7 +823,7 @@ export default function ToastView() {
 								"Your report has been generated and is ready to download!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 dark:from-indigo-600 dark:to-blue-600 text-white rounded-lg text-sm font-medium hover:from-indigo-600 hover:to-blue-600 dark:hover:from-indigo-700 dark:hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-indigo-500 to-blue-500 dark:from-indigo-600 dark:to-blue-600 text-white rounded-lg text-sm font-medium hover:from-indigo-600 hover:to-blue-600 dark:hover:from-indigo-700 dark:hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Generate Report
 					</button>
@@ -836,7 +836,7 @@ export default function ToastView() {
 								"System has been updated successfully!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 text-white rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 dark:hover:from-purple-700 dark:hover:to-pink-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-purple-500 to-pink-500 dark:from-purple-600 dark:to-pink-600 text-white rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 dark:hover:from-purple-700 dark:hover:to-pink-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Install Update
 					</button>
@@ -849,7 +849,7 @@ export default function ToastView() {
 								"Your data has been backed up successfully!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white rounded-lg text-sm font-medium hover:from-cyan-600 hover:to-blue-600 dark:hover:from-cyan-700 dark:hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-cyan-500 to-blue-500 dark:from-cyan-600 dark:to-blue-600 text-white rounded-lg text-sm font-medium hover:from-cyan-600 hover:to-blue-600 dark:hover:from-cyan-700 dark:hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Backup Data
 					</button>
@@ -862,7 +862,7 @@ export default function ToastView() {
 								"Your order has been processed and confirmed!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-emerald-500 to-green-500 dark:from-emerald-600 dark:to-green-600 text-white rounded-lg text-sm font-medium hover:from-emerald-600 hover:to-green-600 dark:hover:from-emerald-700 dark:hover:to-green-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-emerald-500 to-green-500 dark:from-emerald-600 dark:to-green-600 text-white rounded-lg text-sm font-medium hover:from-emerald-600 hover:to-green-600 dark:hover:from-emerald-700 dark:hover:to-green-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Process Order
 					</button>
@@ -875,7 +875,7 @@ export default function ToastView() {
 								"All your data has been synchronized!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-violet-500 to-purple-500 dark:from-violet-600 dark:to-purple-600 text-white rounded-lg text-sm font-medium hover:from-violet-600 hover:to-purple-600 dark:hover:from-violet-700 dark:hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-violet-500 to-purple-500 dark:from-violet-600 dark:to-purple-600 text-white rounded-lg text-sm font-medium hover:from-violet-600 hover:to-purple-600 dark:hover:from-violet-700 dark:hover:to-purple-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Sync Data
 					</button>
@@ -888,7 +888,7 @@ export default function ToastView() {
 								"Files have been compressed and are ready!",
 							)
 						}
-						className="px-3 py-2 bg-gradient-to-r from-slate-500 to-gray-500 dark:from-slate-600 dark:to-gray-600 text-white rounded-lg text-sm font-medium hover:from-slate-600 hover:to-gray-600 dark:hover:from-slate-700 dark:hover:to-gray-700 transition-all duration-200 hover:scale-105 shadow-md"
+						className="px-3 py-2 bg-linear-to-r from-slate-500 to-gray-500 dark:from-slate-600 dark:to-gray-600 text-white rounded-lg text-sm font-medium hover:from-slate-600 hover:to-gray-600 dark:hover:from-slate-700 dark:hover:to-gray-700 transition-all duration-200 hover:scale-105 shadow-md"
 					>
 						Compress Files
 					</button>

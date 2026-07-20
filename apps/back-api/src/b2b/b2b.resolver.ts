@@ -128,4 +128,27 @@ export class B2BResolver {
 	) {
 		return this.b2bService.getB2BVendors(page, limit, businessType);
 	}
+
+	// ─── B2B Payment ───────────────────────────────────────
+
+	@Mutation(() => B2BOrderEntity, { description: "Pay for a B2B order" })
+	@UseGuards(JwtAuthGuard)
+	async payB2BOrder(
+		@Context() context: any,
+		@Args("orderId") orderId: string,
+		@Args("method", { defaultValue: "MOBILE_MONEY" }) method: string,
+	) {
+		const user = context.req.user;
+		return this.b2bService.payB2BOrder(user.id, orderId, method);
+	}
+
+	// ─── Phone-based B2B orders (for USSD) ─────────────────
+
+	@Query(() => B2BOrderListResponse, { description: "Get B2B orders by phone number" })
+	async b2bOrdersByPhone(
+		@Args("phone") phone: string,
+		@Args("role", { defaultValue: "buyer" }) role: string,
+	) {
+		return this.b2bService.getB2BOrdersByPhone(phone, role as "buyer" | "seller" | "all");
+	}
 }

@@ -2,6 +2,7 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common'
+import { PusherService } from '../chat/pusher.service'
 import { KycStatus } from '../generated/prisma/enums'
 import { PrismaService } from '../prisma/prisma.service'
 import { UploadKycDocumentInput } from './dto/upload-kyc-document.input'
@@ -11,6 +12,7 @@ export class KnowYourCustomerService {
   constructor(
     private prisma: PrismaService,
     @Inject('PUB_SUB') private pubSub: any,
+    private pusherService: PusherService,
   ) {}
 
   async getBusinessGetKycDocuments(
@@ -158,6 +160,20 @@ export class KnowYourCustomerService {
     await this.pubSub.publish('KYC_VERIFIED', {
       kycVerified: updated,
     })
+    // Push browser notification to business
+    try {
+      await this.pusherService.trigger(
+        `business-${businessId}`,
+        'kyc-update',
+        {
+          status: 'VERIFIED',
+          businessId,
+          message: 'Your KYC verification has been approved! Your business is now verified.',
+        },
+      )
+    } catch (error) {
+      // Non-critical — log but don't fail
+    }
     return updated
   }
 
@@ -270,6 +286,21 @@ export class KnowYourCustomerService {
     await this.pubSub.publish('KYC_REJECTED', {
       kycRejected: updated,
     })
+    // Push browser notification to business with rejection reason
+    try {
+      await this.pusherService.trigger(
+        `business-${businessId}`,
+        'kyc-update',
+        {
+          status: 'REJECTED',
+          businessId,
+          reason: rejectionReason,
+          message: `Your KYC verification was rejected. Reason: ${rejectionReason}`,
+        },
+      )
+    } catch (error) {
+      // Non-critical — log but don't fail
+    }
     return updated
   }
 }

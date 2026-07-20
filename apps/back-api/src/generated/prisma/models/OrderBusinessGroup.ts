@@ -259,6 +259,8 @@ export type OrderBusinessGroupWhereInput = {
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   items?: Prisma.OrderItemListRelationFilter
+  settlement?: Prisma.XOR<Prisma.PlatformSettlementNullableScalarRelationFilter, Prisma.PlatformSettlementWhereInput> | null
+  payment?: Prisma.XOR<Prisma.PaymentTransactionNullableScalarRelationFilter, Prisma.PaymentTransactionWhereInput> | null
 }
 
 export type OrderBusinessGroupOrderByWithRelationInput = {
@@ -274,6 +276,8 @@ export type OrderBusinessGroupOrderByWithRelationInput = {
   order?: Prisma.OrderOrderByWithRelationInput
   business?: Prisma.BusinessOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
+  settlement?: Prisma.PlatformSettlementOrderByWithRelationInput
+  payment?: Prisma.PaymentTransactionOrderByWithRelationInput
 }
 
 export type OrderBusinessGroupWhereUniqueInput = Prisma.AtLeast<{
@@ -293,6 +297,8 @@ export type OrderBusinessGroupWhereUniqueInput = Prisma.AtLeast<{
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   items?: Prisma.OrderItemListRelationFilter
+  settlement?: Prisma.XOR<Prisma.PlatformSettlementNullableScalarRelationFilter, Prisma.PlatformSettlementWhereInput> | null
+  payment?: Prisma.XOR<Prisma.PaymentTransactionNullableScalarRelationFilter, Prisma.PaymentTransactionWhereInput> | null
 }, "id" | "orderId_businessId">
 
 export type OrderBusinessGroupOrderByWithAggregationInput = {
@@ -338,6 +344,8 @@ export type OrderBusinessGroupCreateInput = {
   order: Prisma.OrderCreateNestedOneWithoutBusinessGroupsInput
   business: Prisma.BusinessCreateNestedOneWithoutOrderBusinessGroupsInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupUncheckedCreateInput = {
@@ -351,6 +359,8 @@ export type OrderBusinessGroupUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementUncheckedCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupUpdateInput = {
@@ -364,6 +374,8 @@ export type OrderBusinessGroupUpdateInput = {
   order?: Prisma.OrderUpdateOneRequiredWithoutBusinessGroupsNestedInput
   business?: Prisma.BusinessUpdateOneRequiredWithoutOrderBusinessGroupsNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupUncheckedUpdateInput = {
@@ -377,6 +389,8 @@ export type OrderBusinessGroupUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUncheckedUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupCreateManyInput = {
@@ -481,6 +495,11 @@ export type OrderBusinessGroupScalarRelationFilter = {
   isNot?: Prisma.OrderBusinessGroupWhereInput
 }
 
+export type OrderBusinessGroupNullableScalarRelationFilter = {
+  is?: Prisma.OrderBusinessGroupWhereInput | null
+  isNot?: Prisma.OrderBusinessGroupWhereInput | null
+}
+
 export type OrderBusinessGroupCreateNestedManyWithoutBusinessInput = {
   create?: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutBusinessInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutBusinessInput> | Prisma.OrderBusinessGroupCreateWithoutBusinessInput[] | Prisma.OrderBusinessGroupUncheckedCreateWithoutBusinessInput[]
   connectOrCreate?: Prisma.OrderBusinessGroupCreateOrConnectWithoutBusinessInput | Prisma.OrderBusinessGroupCreateOrConnectWithoutBusinessInput[]
@@ -579,6 +598,36 @@ export type OrderBusinessGroupUpdateOneRequiredWithoutItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderBusinessGroupUpdateToOneWithWhereWithoutItemsInput, Prisma.OrderBusinessGroupUpdateWithoutItemsInput>, Prisma.OrderBusinessGroupUncheckedUpdateWithoutItemsInput>
 }
 
+export type OrderBusinessGroupCreateNestedOneWithoutPaymentInput = {
+  create?: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutPaymentInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.OrderBusinessGroupCreateOrConnectWithoutPaymentInput
+  connect?: Prisma.OrderBusinessGroupWhereUniqueInput
+}
+
+export type OrderBusinessGroupUpdateOneWithoutPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutPaymentInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.OrderBusinessGroupCreateOrConnectWithoutPaymentInput
+  upsert?: Prisma.OrderBusinessGroupUpsertWithoutPaymentInput
+  disconnect?: Prisma.OrderBusinessGroupWhereInput | boolean
+  delete?: Prisma.OrderBusinessGroupWhereInput | boolean
+  connect?: Prisma.OrderBusinessGroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderBusinessGroupUpdateToOneWithWhereWithoutPaymentInput, Prisma.OrderBusinessGroupUpdateWithoutPaymentInput>, Prisma.OrderBusinessGroupUncheckedUpdateWithoutPaymentInput>
+}
+
+export type OrderBusinessGroupCreateNestedOneWithoutSettlementInput = {
+  create?: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutSettlementInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutSettlementInput>
+  connectOrCreate?: Prisma.OrderBusinessGroupCreateOrConnectWithoutSettlementInput
+  connect?: Prisma.OrderBusinessGroupWhereUniqueInput
+}
+
+export type OrderBusinessGroupUpdateOneRequiredWithoutSettlementNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutSettlementInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutSettlementInput>
+  connectOrCreate?: Prisma.OrderBusinessGroupCreateOrConnectWithoutSettlementInput
+  upsert?: Prisma.OrderBusinessGroupUpsertWithoutSettlementInput
+  connect?: Prisma.OrderBusinessGroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderBusinessGroupUpdateToOneWithWhereWithoutSettlementInput, Prisma.OrderBusinessGroupUpdateWithoutSettlementInput>, Prisma.OrderBusinessGroupUncheckedUpdateWithoutSettlementInput>
+}
+
 export type OrderBusinessGroupCreateWithoutBusinessInput = {
   id?: string
   subtotal: number
@@ -589,6 +638,8 @@ export type OrderBusinessGroupCreateWithoutBusinessInput = {
   updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutBusinessGroupsInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupUncheckedCreateWithoutBusinessInput = {
@@ -601,6 +652,8 @@ export type OrderBusinessGroupUncheckedCreateWithoutBusinessInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementUncheckedCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupCreateOrConnectWithoutBusinessInput = {
@@ -654,6 +707,8 @@ export type OrderBusinessGroupCreateWithoutOrderInput = {
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutOrderBusinessGroupsInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupUncheckedCreateWithoutOrderInput = {
@@ -666,6 +721,8 @@ export type OrderBusinessGroupUncheckedCreateWithoutOrderInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementUncheckedCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupCreateOrConnectWithoutOrderInput = {
@@ -704,6 +761,8 @@ export type OrderBusinessGroupCreateWithoutItemsInput = {
   updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutBusinessGroupsInput
   business: Prisma.BusinessCreateNestedOneWithoutOrderBusinessGroupsInput
+  settlement?: Prisma.PlatformSettlementCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupUncheckedCreateWithoutItemsInput = {
@@ -716,6 +775,8 @@ export type OrderBusinessGroupUncheckedCreateWithoutItemsInput = {
   status?: $Enums.OrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  settlement?: Prisma.PlatformSettlementUncheckedCreateNestedOneWithoutBusinessGroupInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutBusinessGroupInput
 }
 
 export type OrderBusinessGroupCreateOrConnectWithoutItemsInput = {
@@ -744,6 +805,8 @@ export type OrderBusinessGroupUpdateWithoutItemsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutBusinessGroupsNestedInput
   business?: Prisma.BusinessUpdateOneRequiredWithoutOrderBusinessGroupsNestedInput
+  settlement?: Prisma.PlatformSettlementUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupUncheckedUpdateWithoutItemsInput = {
@@ -756,6 +819,152 @@ export type OrderBusinessGroupUncheckedUpdateWithoutItemsInput = {
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settlement?: Prisma.PlatformSettlementUncheckedUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutBusinessGroupNestedInput
+}
+
+export type OrderBusinessGroupCreateWithoutPaymentInput = {
+  id?: string
+  subtotal: number
+  deliveryFee?: number
+  total: number
+  status?: $Enums.OrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  order: Prisma.OrderCreateNestedOneWithoutBusinessGroupsInput
+  business: Prisma.BusinessCreateNestedOneWithoutOrderBusinessGroupsInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementCreateNestedOneWithoutBusinessGroupInput
+}
+
+export type OrderBusinessGroupUncheckedCreateWithoutPaymentInput = {
+  id?: string
+  orderId: string
+  businessId: string
+  subtotal: number
+  deliveryFee?: number
+  total: number
+  status?: $Enums.OrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderBusinessGroupInput
+  settlement?: Prisma.PlatformSettlementUncheckedCreateNestedOneWithoutBusinessGroupInput
+}
+
+export type OrderBusinessGroupCreateOrConnectWithoutPaymentInput = {
+  where: Prisma.OrderBusinessGroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutPaymentInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutPaymentInput>
+}
+
+export type OrderBusinessGroupUpsertWithoutPaymentInput = {
+  update: Prisma.XOR<Prisma.OrderBusinessGroupUpdateWithoutPaymentInput, Prisma.OrderBusinessGroupUncheckedUpdateWithoutPaymentInput>
+  create: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutPaymentInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutPaymentInput>
+  where?: Prisma.OrderBusinessGroupWhereInput
+}
+
+export type OrderBusinessGroupUpdateToOneWithWhereWithoutPaymentInput = {
+  where?: Prisma.OrderBusinessGroupWhereInput
+  data: Prisma.XOR<Prisma.OrderBusinessGroupUpdateWithoutPaymentInput, Prisma.OrderBusinessGroupUncheckedUpdateWithoutPaymentInput>
+}
+
+export type OrderBusinessGroupUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  order?: Prisma.OrderUpdateOneRequiredWithoutBusinessGroupsNestedInput
+  business?: Prisma.BusinessUpdateOneRequiredWithoutOrderBusinessGroupsNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUpdateOneWithoutBusinessGroupNestedInput
+}
+
+export type OrderBusinessGroupUncheckedUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUncheckedUpdateOneWithoutBusinessGroupNestedInput
+}
+
+export type OrderBusinessGroupCreateWithoutSettlementInput = {
+  id?: string
+  subtotal: number
+  deliveryFee?: number
+  total: number
+  status?: $Enums.OrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  order: Prisma.OrderCreateNestedOneWithoutBusinessGroupsInput
+  business: Prisma.BusinessCreateNestedOneWithoutOrderBusinessGroupsInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderBusinessGroupInput
+  payment?: Prisma.PaymentTransactionCreateNestedOneWithoutBusinessGroupInput
+}
+
+export type OrderBusinessGroupUncheckedCreateWithoutSettlementInput = {
+  id?: string
+  orderId: string
+  businessId: string
+  subtotal: number
+  deliveryFee?: number
+  total: number
+  status?: $Enums.OrderStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderBusinessGroupInput
+  payment?: Prisma.PaymentTransactionUncheckedCreateNestedOneWithoutBusinessGroupInput
+}
+
+export type OrderBusinessGroupCreateOrConnectWithoutSettlementInput = {
+  where: Prisma.OrderBusinessGroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutSettlementInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutSettlementInput>
+}
+
+export type OrderBusinessGroupUpsertWithoutSettlementInput = {
+  update: Prisma.XOR<Prisma.OrderBusinessGroupUpdateWithoutSettlementInput, Prisma.OrderBusinessGroupUncheckedUpdateWithoutSettlementInput>
+  create: Prisma.XOR<Prisma.OrderBusinessGroupCreateWithoutSettlementInput, Prisma.OrderBusinessGroupUncheckedCreateWithoutSettlementInput>
+  where?: Prisma.OrderBusinessGroupWhereInput
+}
+
+export type OrderBusinessGroupUpdateToOneWithWhereWithoutSettlementInput = {
+  where?: Prisma.OrderBusinessGroupWhereInput
+  data: Prisma.XOR<Prisma.OrderBusinessGroupUpdateWithoutSettlementInput, Prisma.OrderBusinessGroupUncheckedUpdateWithoutSettlementInput>
+}
+
+export type OrderBusinessGroupUpdateWithoutSettlementInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  order?: Prisma.OrderUpdateOneRequiredWithoutBusinessGroupsNestedInput
+  business?: Prisma.BusinessUpdateOneRequiredWithoutOrderBusinessGroupsNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutBusinessGroupNestedInput
+}
+
+export type OrderBusinessGroupUncheckedUpdateWithoutSettlementInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  deliveryFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupCreateManyBusinessInput = {
@@ -779,6 +988,8 @@ export type OrderBusinessGroupUpdateWithoutBusinessInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutBusinessGroupsNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupUncheckedUpdateWithoutBusinessInput = {
@@ -791,6 +1002,8 @@ export type OrderBusinessGroupUncheckedUpdateWithoutBusinessInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUncheckedUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupUncheckedUpdateManyWithoutBusinessInput = {
@@ -825,6 +1038,8 @@ export type OrderBusinessGroupUpdateWithoutOrderInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutOrderBusinessGroupsNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupUncheckedUpdateWithoutOrderInput = {
@@ -837,6 +1052,8 @@ export type OrderBusinessGroupUncheckedUpdateWithoutOrderInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderBusinessGroupNestedInput
+  settlement?: Prisma.PlatformSettlementUncheckedUpdateOneWithoutBusinessGroupNestedInput
+  payment?: Prisma.PaymentTransactionUncheckedUpdateOneWithoutBusinessGroupNestedInput
 }
 
 export type OrderBusinessGroupUncheckedUpdateManyWithoutOrderInput = {
@@ -894,6 +1111,8 @@ export type OrderBusinessGroupSelect<ExtArgs extends runtime.Types.Extensions.In
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   items?: boolean | Prisma.OrderBusinessGroup$itemsArgs<ExtArgs>
+  settlement?: boolean | Prisma.OrderBusinessGroup$settlementArgs<ExtArgs>
+  payment?: boolean | Prisma.OrderBusinessGroup$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.OrderBusinessGroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["orderBusinessGroup"]>
 
@@ -942,6 +1161,8 @@ export type OrderBusinessGroupInclude<ExtArgs extends runtime.Types.Extensions.I
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   items?: boolean | Prisma.OrderBusinessGroup$itemsArgs<ExtArgs>
+  settlement?: boolean | Prisma.OrderBusinessGroup$settlementArgs<ExtArgs>
+  payment?: boolean | Prisma.OrderBusinessGroup$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.OrderBusinessGroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderBusinessGroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -959,6 +1180,8 @@ export type $OrderBusinessGroupPayload<ExtArgs extends runtime.Types.Extensions.
     order: Prisma.$OrderPayload<ExtArgs>
     business: Prisma.$BusinessPayload<ExtArgs>
     items: Prisma.$OrderItemPayload<ExtArgs>[]
+    settlement: Prisma.$PlatformSettlementPayload<ExtArgs> | null
+    payment: Prisma.$PaymentTransactionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1367,6 +1590,8 @@ export interface Prisma__OrderBusinessGroupClient<T, Null = never, ExtArgs exten
   order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.OrderBusinessGroup$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderBusinessGroup$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  settlement<T extends Prisma.OrderBusinessGroup$settlementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderBusinessGroup$settlementArgs<ExtArgs>>): Prisma.Prisma__PlatformSettlementClient<runtime.Types.Result.GetResult<Prisma.$PlatformSettlementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  payment<T extends Prisma.OrderBusinessGroup$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderBusinessGroup$paymentArgs<ExtArgs>>): Prisma.Prisma__PaymentTransactionClient<runtime.Types.Result.GetResult<Prisma.$PaymentTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1822,6 +2047,44 @@ export type OrderBusinessGroup$itemsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.OrderItemScalarFieldEnum | Prisma.OrderItemScalarFieldEnum[]
+}
+
+/**
+ * OrderBusinessGroup.settlement
+ */
+export type OrderBusinessGroup$settlementArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformSettlement
+   */
+  select?: Prisma.PlatformSettlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformSettlement
+   */
+  omit?: Prisma.PlatformSettlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformSettlementInclude<ExtArgs> | null
+  where?: Prisma.PlatformSettlementWhereInput
+}
+
+/**
+ * OrderBusinessGroup.payment
+ */
+export type OrderBusinessGroup$paymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentTransaction
+   */
+  select?: Prisma.PaymentTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentTransaction
+   */
+  omit?: Prisma.PaymentTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentTransactionInclude<ExtArgs> | null
+  where?: Prisma.PaymentTransactionWhereInput
 }
 
 /**

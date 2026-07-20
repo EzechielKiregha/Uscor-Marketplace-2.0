@@ -2,10 +2,10 @@
 import { Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import {
-	animate,
-	motion,
-	useMotionTemplate,
-	useMotionValue,
+    animate,
+    motion,
+    useMotionTemplate,
+    useMotionValue,
 } from "framer-motion";
 import { useEffect } from "react";
 import { FiArrowRight } from "react-icons/fi";
@@ -39,7 +39,7 @@ export const AuroraHero = () => {
 				<span className="mb-1.5 inline-block rounded-full bg-gray-600/50 px-3 py-1.5 text-sm">
 					Elegance alie Style et Confort!
 				</span>
-				<h1 className="capitalize max-w-5xl bg-gradient-to-br from-white to-gray-400 bg-clip-text text-center text-3xl font-medium leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
+				<h1 className="capitalize max-w-5xl bg-linear-to-br from-white to-gray-400 bg-clip-text text-center text-3xl font-medium leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
 					Faites vos achats/ventes avec{" "}
 					<span className="text-blue-600">Uscor Marketplace</span>
 				</h1>

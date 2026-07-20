@@ -5,11 +5,13 @@ import {
     BriefcaseBusiness,
     Filter,
     Gift,
-    LayoutGrid,
+    Grid2x2,
+    Grid3x3,
     List,
     Search,
     ShoppingCart,
     SlidersHorizontal,
+    Square,
     Star,
     X,
 } from "lucide-react";
@@ -39,7 +41,7 @@ import TypedProductCard from "./_components/TypedProductCard";
 export default function MarketplacePage() {
     const router = useRouter()
   const search_params = useSearchParams();
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"list" | "small" | "medium" | "large">("medium");
   const tab = search_params.get("tab");
   const [activeTab, setActiveTab] = useState<"products" | "services">(
     (tab as "products" | "services") || "products",
@@ -201,6 +203,25 @@ export default function MarketplacePage() {
     }
   };
 
+  const getGridClasses = (mode: typeof viewMode) => {
+    switch (mode) {
+      case "list":
+        return "space-y-3";
+      case "small":
+        return "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3";
+      case "medium":
+        return "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5";
+      case "large":
+        return "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6";
+      default:
+        return "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5";
+    }
+  };
+
+  const getProductViewMode = (mode: typeof viewMode): "grid" | "list" => {
+    return mode === "list" ? "list" : "grid";
+  };
+
   useEffect(() => {
     setFilters({
       search: "",
@@ -282,22 +303,42 @@ export default function MarketplacePage() {
             </Button>
 
             {/* View Mode */}
-            <div className="hidden sm:flex border border-border hover:border-primary hover:bg-primary/5 rounded-xl overflow-hidden">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="icon"
-                className="rounded-none h-11 w-11"
-                onClick={() => setViewMode("grid")}
-              >
-                <LayoutGrid className="h-4 w-4" />
-              </Button>
+            <div className="hidden sm:flex border border-border rounded-xl overflow-hidden">
               <Button
                 variant={viewMode === "list" ? "default" : "ghost"}
                 size="icon"
                 className="rounded-none h-11 w-11"
                 onClick={() => setViewMode("list")}
+                title="List view"
               >
                 <List className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "small" ? "default" : "ghost"}
+                size="icon"
+                className="rounded-none h-11 w-11"
+                onClick={() => setViewMode("small")}
+                title="Small grid"
+              >
+                <Grid3x3 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "medium" ? "default" : "ghost"}
+                size="icon"
+                className="rounded-none h-11 w-11"
+                onClick={() => setViewMode("medium")}
+                title="Medium grid"
+              >
+                <Grid2x2 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "large" ? "default" : "ghost"}
+                size="icon"
+                className="rounded-none h-11 w-11"
+                onClick={() => setViewMode("large")}
+                title="Large cards"
+              >
+                <Square className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -325,15 +366,7 @@ export default function MarketplacePage() {
                 </Button>
 
                 {/* Mobile View Toggle */}
-                <div className="sm:hidden ml-auto flex border border-border hover:border-primary hover:bg-primary/5 rounded-xl overflow-hidden">
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "ghost"}
-                    size="icon"
-                    className="rounded-none"
-                    onClick={() => setViewMode("grid")}
-                  >
-                    <LayoutGrid className="h-4 w-4" />
-                  </Button>
+                <div className="sm:hidden ml-auto flex border border-border rounded-xl overflow-hidden">
                   <Button
                     variant={viewMode === "list" ? "default" : "ghost"}
                     size="icon"
@@ -341,6 +374,30 @@ export default function MarketplacePage() {
                     onClick={() => setViewMode("list")}
                   >
                     <List className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "small" ? "default" : "ghost"}
+                    size="icon"
+                    className="rounded-none"
+                    onClick={() => setViewMode("small")}
+                  >
+                    <Grid3x3 className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "medium" ? "default" : "ghost"}
+                    size="icon"
+                    className="rounded-none"
+                    onClick={() => setViewMode("medium")}
+                  >
+                    <Grid2x2 className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "large" ? "default" : "ghost"}
+                    size="icon"
+                    className="rounded-none"
+                    onClick={() => setViewMode("large")}
+                  >
+                    <Square className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
@@ -484,7 +541,7 @@ export default function MarketplacePage() {
         <div className="space-y-10">
           {/* Loading state */}
           {isLoading ? (
-            <ProductCardSkeleton viewMode={viewMode} count={8} />
+            <ProductCardSkeleton viewMode={getProductViewMode(viewMode)} count={8} />
           ) : (
             <>
               {/* Featured Products Carousel */}
@@ -518,18 +575,12 @@ export default function MarketplacePage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   {totalProducts} {totalProducts === 1 ? "product" : "products"} available
                 </p>
-                <div
-                  className={
-                    viewMode === "grid"
-                      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                      : "space-y-4"
-                  }
-                >
+                <div className={getGridClasses(viewMode)}>
                   {products.map((product: any) => (
                     <TypedProductCard
                       key={product.id}
                       product={product}
-                      viewMode={viewMode}
+                      viewMode={getProductViewMode(viewMode)}
                       prodID={prodID}
                       setProdID={setProdID}
                     />
@@ -556,7 +607,7 @@ export default function MarketplacePage() {
 
           {/* Loading */}
           {isLoading ? (
-            <ProductCardSkeleton viewMode={viewMode} count={8} />
+            <ProductCardSkeleton viewMode={getProductViewMode(viewMode)} count={8} />
           ) : activeTab === "products" ? (
             products.length === 0 ? (
               <EmptyState
@@ -566,18 +617,12 @@ export default function MarketplacePage() {
                 action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
               />
             ) : (
-              <div
-                className={
-                  viewMode === "grid"
-                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                    : "space-y-4"
-                }
-              >
+              <div className={getGridClasses(viewMode)}>
                 {products.map((product: any) => (
                   <TypedProductCard
                     key={product.id}
                     product={product}
-                    viewMode={viewMode}
+                    viewMode={getProductViewMode(viewMode)}
                   />
                 ))}
               </div>
@@ -590,18 +635,12 @@ export default function MarketplacePage() {
               action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
             />
           ) : (
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                  : "space-y-4"
-              }
-            >
+            <div className={getGridClasses(viewMode)}>
               {services.map((service: any) => (
                 <ServiceCard
                   key={service.id}
                   service={service}
-                  viewMode={viewMode}
+                  viewMode={getProductViewMode(viewMode)}
                 />
               ))}
             </div>

@@ -523,3 +523,9 @@ export const ON_UNREAD_COUNT_UPDATED = gql`
     }
   }
 `;
+
+export const TRIGGER_TYPING = gql`
+  mutation TriggerTyping($chatId: String!, $userId: String!, $userName: String!) {
+    triggerTyping(chatId: $chatId, userId: $userId, userName: $userName)
+  }
+`;

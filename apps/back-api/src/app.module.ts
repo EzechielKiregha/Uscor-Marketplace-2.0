@@ -42,6 +42,7 @@ import { ReferralModule } from "./referral/referral.module";
 import { RepostedProductModule } from "./reposted-product/reposted-product.module";
 import { ReviewModule } from "./review/review.module";
 import { SaleModule } from "./sale/sale.module";
+import { SettlementModule } from "./settlement/settlement.module";
 import { SettingsModule } from "./settings/settings.module";
 import { ShiftModule } from "./shift/shift.module";
 import { StoreModule } from "./store/store.module";
@@ -96,6 +97,7 @@ import { WorkerModule } from "./worker/worker.module";
 		CategoryModule,
 		TokenTransactionModule,
 		SaleModule,
+		SettlementModule,
 		StoreModule,
 		InventoryModule,
 		ShiftModule,

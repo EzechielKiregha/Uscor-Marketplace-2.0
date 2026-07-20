@@ -156,4 +156,11 @@ export class AdminService {
 		});
 		return admin;
 	}
+
+	async findByPhone(phone: string) {
+		return (this.prisma as any).admin.findFirst({
+			where: { phone },
+			select: { id: true, fullName: true, email: true, phone: true, role: true, isActive: true },
+		});
+	}
 }

@@ -9,6 +9,8 @@ import {
 	ChevronDown,
 	ChevronUp,
 	Clock,
+	CreditCard,
+	MessageSquare,
 	Package,
 	Send,
 	ShoppingCart,
@@ -17,12 +19,15 @@ import {
 	XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
+import ChatModal from "@/components/chat/ChatModal";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
 	GET_B2B_ORDERS,
+	PAY_B2B_ORDER,
 	SUBMIT_B2B_ORDER,
 	UPDATE_B2B_ORDER_STATUS,
 } from "@/graphql/b2b.gql";
@@ -47,6 +52,8 @@ export default function PurchaseRequests({ businessId }: Props) {
 	const [roleFilter, setRoleFilter] = useState<string>("all");
 	const [statusFilter, setStatusFilter] = useState<string>("");
 	const [expandedId, setExpandedId] = useState<string | null>(null);
+	const [chatModalOpen, setChatModalOpen] = useState(false);
+	const [activeChatId, setActiveChatId] = useState<string | null>(null);
 	const { showToast } = useToast();
 
 	const { data, loading, refetch } = useQuery(GET_B2B_ORDERS, {
@@ -245,8 +252,44 @@ export default function PurchaseRequests({ businessId }: Props) {
 											</p>
 										)}
 
+										{/* Payment Status */}
+										{order.payment && (
+											<div className="flex items-center gap-2 text-sm bg-muted/50 rounded-lg p-2">
+												<CreditCard className="h-4 w-4 text-muted-foreground" />
+												<span className="text-muted-foreground">Payment:</span>
+												<span className={`font-medium ${order.payment.status === "COMPLETED" ? "text-success" : "text-warning"}`}>
+													{order.payment.status} — ${order.payment.amount?.toFixed(2)}
+												</span>
+											</div>
+										)}
+
+										{/* Seller Payment Codes (for buyer) */}
+										{isBuyer && order.seller?.paymentConfig && ["APPROVED", "PROCESSING"].includes(order.status) && (
+											<BusinessPaymentCodes
+												businessName={order.seller.name}
+												businessAvatar={order.seller.avatar}
+												paymentConfig={order.seller.paymentConfig}
+												amount={order.total}
+												compact
+											/>
+										)}
+
 										{/* Actions */}
-										<div className="flex gap-2 pt-2 border-t border-border">
+										<div className="flex gap-2 pt-2 border-t border-border flex-wrap">
+											{/* Chat button (always visible for active orders) */}
+											{!["DRAFT", "CANCELLED", "DELIVERED"].includes(order.status) && (
+												<Button
+													variant="outline"
+													size="sm"
+													onClick={() => {
+														setActiveChatId(null);
+														setChatModalOpen(true);
+													}}
+												>
+													<MessageSquare className="h-4 w-4 mr-1" /> Chat
+												</Button>
+											)}
+
 											{/* Buyer actions */}
 											{isBuyer && order.status === "DRAFT" && (
 												<Button size="sm" onClick={() => handleSubmit(order.id)}>
@@ -328,6 +371,13 @@ export default function PurchaseRequests({ businessId }: Props) {
 					})}
 				</div>
 			)}
+
+			{/* Chat Modal */}
+			<ChatModal
+				isOpen={chatModalOpen}
+				onClose={() => setChatModalOpen(false)}
+				chatId={activeChatId || undefined}
+			/>
 		</div>
 	);
 }

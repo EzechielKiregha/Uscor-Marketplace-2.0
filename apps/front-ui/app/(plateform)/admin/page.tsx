@@ -26,6 +26,7 @@ import {
   ON_NEW_USER,
   ON_PLATFORM_SETTINGS_UPDATED,
 } from "@/graphql/admin.gql";
+import { usePusherNotifications } from "@/hooks/usePusherNotifications";
 import { useMe } from "@/lib/useMe";
 import AnnouncementManagement from "./_components/AnnouncementManagement";
 import AuditLogs from "./_components/AuditLogs";
@@ -34,8 +35,10 @@ import DashboardOverview from "./_components/DashboardOverview";
 import DisputeResolution from "./_components/DisputeResolution";
 import KycManagement from "./_components/KycManagement";
 import KycVerificationModal from "./_components/KycVerificationModal";
+import OrderFulfillment from "./_components/OrderFulfillment";
 import PlatformDashboard from "./_components/PlatformDashboard";
 import PlatformSettings from "./_components/PlatformSettings";
+import SettlementManagement from "./_components/SettlementManagement";
 import SideBar, { sidebarItems } from "./_components/SideBar";
 import TokenDashboard from "./_components/TokenDashboard";
 import UserManagement from "./_components/UserManagement";
@@ -54,6 +57,7 @@ export default function AdminDashboard() {
         | "workers"
         | "kyc"
         | "tokens"
+        | "orders"
         | "disputes"
         | "settings"
         | "announcements"
@@ -97,6 +101,23 @@ export default function AdminDashboard() {
   });
 
   const { theme, setTheme } = useTheme();
+
+  // Pusher notifications for admin — orders, disputes, announcements
+  usePusherNotifications({
+    role: "admin",
+    userId: user?.id,
+    enabled: !!user?.id && role === "admin",
+    onNotification: (notification) => {
+      // Refetch dashboard data on relevant events
+      if (
+        notification.event === "order-ready-for-shipment" ||
+        notification.event === "new-dispute" ||
+        notification.event === "order-status-update"
+      ) {
+        refetchDashboard();
+      }
+    },
+  });
 
   const toggleTheme = useCallback(() => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -238,6 +259,8 @@ export default function AdminDashboard() {
                 {activeSection === "workers" && "Worker Management"}
                 {activeSection === "kyc" && "KYC Verification"}
                 {activeSection === "tokens" && "Tokens & Wallets"}
+                {activeSection === "orders" && "Order Fulfillment"}
+                {activeSection === "settlements" && "Fund Distribution"}
                 {activeSection === "disputes" && "Dispute Resolution"}
                 {activeSection === "settings" && "Platform Settings"}
                 {activeSection === "announcements" && "Announcement Management"}
@@ -256,6 +279,10 @@ export default function AdminDashboard() {
                   "Review and verify KYC documents submitted by businesses"}
                 {activeSection === "tokens" &&
                   "Monitor token circulation, wallet recharges, and revenue"}
+                {activeSection === "orders" &&
+                  "Manage order pickups, shipping, and delivery coordination"}
+                {activeSection === "settlements" &&
+                  "Distribute funds to businesses and track commissions"}
                 {activeSection === "disputes" &&
                   "Resolve customer disputes and issues"}
                 {activeSection === "settings" &&
@@ -307,6 +334,8 @@ export default function AdminDashboard() {
                     }}
                   />
                 )}
+                {activeSection === "orders" && <OrderFulfillment />}
+                {activeSection === "settlements" && <SettlementManagement />}
                 {activeSection === "disputes" && <DisputeResolution />}
                 {activeSection === "settings" && (
                   <PlatformSettings settings={dashboardData.platformSettings} />

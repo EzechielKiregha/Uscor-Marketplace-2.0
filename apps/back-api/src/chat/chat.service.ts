@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import {
-	PaginatedChatsResponse,
-	PaginatedMessagesResponse,
-	UnreadCountResponse,
+    PaginatedChatsResponse,
+    PaginatedMessagesResponse,
+    UnreadCountResponse,
 } from "./dto/chat-response.dto";
 import {
-	ChatStatus,
-	type CreateChatInput,
-	type CreateChatMessageInput,
-	NegotiationType,
-	type SendMessageInput,
+    ChatStatus,
+    type CreateChatInput,
+    type CreateChatMessageInput,
+    NegotiationType,
+    type SendMessageInput,
 } from "./dto/create-chat.input";
 import { UpdateChatInput } from "./dto/update-chat.input";
 // Service
@@ -1148,6 +1148,48 @@ export class ChatService {
 				},
 			},
 		});
+	}
+
+	async createOrderChat(params: {
+		orderId: string;
+		clientId: string | undefined;
+		businessId: string;
+		businessName: string;
+		itemCount: number;
+		total: number;
+	}) {
+		const { orderId, clientId, businessId, businessName, itemCount, total } = params;
+
+		const chat = await this.prisma.chat.create({
+			data: {
+				status: ChatStatus.ACTIVE,
+				isSecure: false,
+				negotiationType: NegotiationType.ORDER,
+				participants: {
+					create: [
+						{ clientId },
+						{ businessId },
+					],
+				},
+			},
+		});
+
+		// Send system message with order context
+		const orderRef = orderId.substring(0, 8).toUpperCase();
+		await this.prisma.chatMessage.create({
+			data: {
+				chat: { connect: { id: chat.id } },
+				message: `Order #${orderRef} created — ${itemCount} item${itemCount > 1 ? "s" : ""}, $${total.toFixed(2)} from ${businessName}. The business will be notified to process your order.`,
+				senderId: "system",
+			},
+		});
+
+		await this.prisma.chat.update({
+			where: { id: chat.id },
+			data: { updatedAt: new Date() },
+		});
+
+		return chat;
 	}
 
 	// Helper methods

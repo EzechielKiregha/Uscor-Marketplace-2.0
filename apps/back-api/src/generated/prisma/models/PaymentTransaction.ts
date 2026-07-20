@@ -45,6 +45,8 @@ export type PaymentTransactionMinAggregateOutputType = {
   qrCode: string | null
   createdAt: Date | null
   freelanceOrderId: string | null
+  businessGroupId: string | null
+  b2bOrderId: string | null
 }
 
 export type PaymentTransactionMaxAggregateOutputType = {
@@ -58,6 +60,8 @@ export type PaymentTransactionMaxAggregateOutputType = {
   qrCode: string | null
   createdAt: Date | null
   freelanceOrderId: string | null
+  businessGroupId: string | null
+  b2bOrderId: string | null
 }
 
 export type PaymentTransactionCountAggregateOutputType = {
@@ -71,6 +75,8 @@ export type PaymentTransactionCountAggregateOutputType = {
   qrCode: number
   createdAt: number
   freelanceOrderId: number
+  businessGroupId: number
+  b2bOrderId: number
   _all: number
 }
 
@@ -94,6 +100,8 @@ export type PaymentTransactionMinAggregateInputType = {
   qrCode?: true
   createdAt?: true
   freelanceOrderId?: true
+  businessGroupId?: true
+  b2bOrderId?: true
 }
 
 export type PaymentTransactionMaxAggregateInputType = {
@@ -107,6 +115,8 @@ export type PaymentTransactionMaxAggregateInputType = {
   qrCode?: true
   createdAt?: true
   freelanceOrderId?: true
+  businessGroupId?: true
+  b2bOrderId?: true
 }
 
 export type PaymentTransactionCountAggregateInputType = {
@@ -120,6 +130,8 @@ export type PaymentTransactionCountAggregateInputType = {
   qrCode?: true
   createdAt?: true
   freelanceOrderId?: true
+  businessGroupId?: true
+  b2bOrderId?: true
   _all?: true
 }
 
@@ -220,6 +232,8 @@ export type PaymentTransactionGroupByOutputType = {
   qrCode: string | null
   createdAt: Date
   freelanceOrderId: string | null
+  businessGroupId: string | null
+  b2bOrderId: string | null
   _count: PaymentTransactionCountAggregateOutputType | null
   _avg: PaymentTransactionAvgAggregateOutputType | null
   _sum: PaymentTransactionSumAggregateOutputType | null
@@ -256,9 +270,13 @@ export type PaymentTransactionWhereInput = {
   qrCode?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PaymentTransaction"> | Date | string
   freelanceOrderId?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
+  businessGroupId?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
+  b2bOrderId?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
   freelanceOrder?: Prisma.XOR<Prisma.FreelanceOrderNullableScalarRelationFilter, Prisma.FreelanceOrderWhereInput> | null
+  businessGroup?: Prisma.XOR<Prisma.OrderBusinessGroupNullableScalarRelationFilter, Prisma.OrderBusinessGroupWhereInput> | null
+  b2bOrder?: Prisma.XOR<Prisma.B2BOrderNullableScalarRelationFilter, Prisma.B2BOrderWhereInput> | null
   postTransactions?: Prisma.PostTransactionListRelationFilter
 }
 
@@ -273,9 +291,13 @@ export type PaymentTransactionOrderByWithRelationInput = {
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   freelanceOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  b2bOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   client?: Prisma.ClientOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
   freelanceOrder?: Prisma.FreelanceOrderOrderByWithRelationInput
+  businessGroup?: Prisma.OrderBusinessGroupOrderByWithRelationInput
+  b2bOrder?: Prisma.B2BOrderOrderByWithRelationInput
   postTransactions?: Prisma.PostTransactionOrderByRelationAggregateInput
 }
 
@@ -283,6 +305,8 @@ export type PaymentTransactionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   orderId?: string
   freelanceOrderId?: string
+  businessGroupId?: string
+  b2bOrderId?: string
   AND?: Prisma.PaymentTransactionWhereInput | Prisma.PaymentTransactionWhereInput[]
   OR?: Prisma.PaymentTransactionWhereInput[]
   NOT?: Prisma.PaymentTransactionWhereInput | Prisma.PaymentTransactionWhereInput[]
@@ -296,8 +320,10 @@ export type PaymentTransactionWhereUniqueInput = Prisma.AtLeast<{
   client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
   freelanceOrder?: Prisma.XOR<Prisma.FreelanceOrderNullableScalarRelationFilter, Prisma.FreelanceOrderWhereInput> | null
+  businessGroup?: Prisma.XOR<Prisma.OrderBusinessGroupNullableScalarRelationFilter, Prisma.OrderBusinessGroupWhereInput> | null
+  b2bOrder?: Prisma.XOR<Prisma.B2BOrderNullableScalarRelationFilter, Prisma.B2BOrderWhereInput> | null
   postTransactions?: Prisma.PostTransactionListRelationFilter
-}, "id" | "orderId" | "freelanceOrderId">
+}, "id" | "orderId" | "freelanceOrderId" | "businessGroupId" | "b2bOrderId">
 
 export type PaymentTransactionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -310,6 +336,8 @@ export type PaymentTransactionOrderByWithAggregationInput = {
   qrCode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   freelanceOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessGroupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  b2bOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PaymentTransactionCountOrderByAggregateInput
   _avg?: Prisma.PaymentTransactionAvgOrderByAggregateInput
   _max?: Prisma.PaymentTransactionMaxOrderByAggregateInput
@@ -331,6 +359,8 @@ export type PaymentTransactionScalarWhereWithAggregatesInput = {
   qrCode?: Prisma.StringNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PaymentTransaction"> | Date | string
   freelanceOrderId?: Prisma.StringNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
+  businessGroupId?: Prisma.StringNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
+  b2bOrderId?: Prisma.StringNullableWithAggregatesFilter<"PaymentTransaction"> | string | null
 }
 
 export type PaymentTransactionCreateInput = {
@@ -344,6 +374,8 @@ export type PaymentTransactionCreateInput = {
   client?: Prisma.ClientCreateNestedOneWithoutPaymentTransactionsInput
   order?: Prisma.OrderCreateNestedOneWithoutPaymentInput
   freelanceOrder?: Prisma.FreelanceOrderCreateNestedOneWithoutPaymentInput
+  businessGroup?: Prisma.OrderBusinessGroupCreateNestedOneWithoutPaymentInput
+  b2bOrder?: Prisma.B2BOrderCreateNestedOneWithoutPaymentInput
   postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -358,6 +390,8 @@ export type PaymentTransactionUncheckedCreateInput = {
   qrCode?: string | null
   createdAt?: Date | string
   freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
   postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -372,6 +406,8 @@ export type PaymentTransactionUpdateInput = {
   client?: Prisma.ClientUpdateOneWithoutPaymentTransactionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutPaymentNestedInput
   freelanceOrder?: Prisma.FreelanceOrderUpdateOneWithoutPaymentNestedInput
+  businessGroup?: Prisma.OrderBusinessGroupUpdateOneWithoutPaymentNestedInput
+  b2bOrder?: Prisma.B2BOrderUpdateOneWithoutPaymentNestedInput
   postTransactions?: Prisma.PostTransactionUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -386,6 +422,8 @@ export type PaymentTransactionUncheckedUpdateInput = {
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -400,6 +438,8 @@ export type PaymentTransactionCreateManyInput = {
   qrCode?: string | null
   createdAt?: Date | string
   freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
 }
 
 export type PaymentTransactionUpdateManyMutationInput = {
@@ -423,6 +463,8 @@ export type PaymentTransactionUncheckedUpdateManyInput = {
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PaymentTransactionListRelationFilter = {
@@ -451,6 +493,8 @@ export type PaymentTransactionCountOrderByAggregateInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   freelanceOrderId?: Prisma.SortOrder
+  businessGroupId?: Prisma.SortOrder
+  b2bOrderId?: Prisma.SortOrder
 }
 
 export type PaymentTransactionAvgOrderByAggregateInput = {
@@ -468,6 +512,8 @@ export type PaymentTransactionMaxOrderByAggregateInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   freelanceOrderId?: Prisma.SortOrder
+  businessGroupId?: Prisma.SortOrder
+  b2bOrderId?: Prisma.SortOrder
 }
 
 export type PaymentTransactionMinOrderByAggregateInput = {
@@ -481,6 +527,8 @@ export type PaymentTransactionMinOrderByAggregateInput = {
   qrCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   freelanceOrderId?: Prisma.SortOrder
+  businessGroupId?: Prisma.SortOrder
+  b2bOrderId?: Prisma.SortOrder
 }
 
 export type PaymentTransactionSumOrderByAggregateInput = {
@@ -561,6 +609,38 @@ export type PaymentTransactionUncheckedUpdateOneWithoutOrderNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentTransactionUpdateToOneWithWhereWithoutOrderInput, Prisma.PaymentTransactionUpdateWithoutOrderInput>, Prisma.PaymentTransactionUncheckedUpdateWithoutOrderInput>
 }
 
+export type PaymentTransactionCreateNestedOneWithoutBusinessGroupInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedCreateWithoutBusinessGroupInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutBusinessGroupInput
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+}
+
+export type PaymentTransactionUncheckedCreateNestedOneWithoutBusinessGroupInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedCreateWithoutBusinessGroupInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutBusinessGroupInput
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+}
+
+export type PaymentTransactionUpdateOneWithoutBusinessGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedCreateWithoutBusinessGroupInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutBusinessGroupInput
+  upsert?: Prisma.PaymentTransactionUpsertWithoutBusinessGroupInput
+  disconnect?: Prisma.PaymentTransactionWhereInput | boolean
+  delete?: Prisma.PaymentTransactionWhereInput | boolean
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentTransactionUpdateToOneWithWhereWithoutBusinessGroupInput, Prisma.PaymentTransactionUpdateWithoutBusinessGroupInput>, Prisma.PaymentTransactionUncheckedUpdateWithoutBusinessGroupInput>
+}
+
+export type PaymentTransactionUncheckedUpdateOneWithoutBusinessGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedCreateWithoutBusinessGroupInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutBusinessGroupInput
+  upsert?: Prisma.PaymentTransactionUpsertWithoutBusinessGroupInput
+  disconnect?: Prisma.PaymentTransactionWhereInput | boolean
+  delete?: Prisma.PaymentTransactionWhereInput | boolean
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentTransactionUpdateToOneWithWhereWithoutBusinessGroupInput, Prisma.PaymentTransactionUpdateWithoutBusinessGroupInput>, Prisma.PaymentTransactionUncheckedUpdateWithoutBusinessGroupInput>
+}
+
 export type EnumPaymentMethodFieldUpdateOperationsInput = {
   set?: $Enums.PaymentMethod
 }
@@ -613,6 +693,38 @@ export type PaymentTransactionUpdateOneWithoutPostTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentTransactionUpdateToOneWithWhereWithoutPostTransactionsInput, Prisma.PaymentTransactionUpdateWithoutPostTransactionsInput>, Prisma.PaymentTransactionUncheckedUpdateWithoutPostTransactionsInput>
 }
 
+export type PaymentTransactionCreateNestedOneWithoutB2bOrderInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedCreateWithoutB2bOrderInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutB2bOrderInput
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+}
+
+export type PaymentTransactionUncheckedCreateNestedOneWithoutB2bOrderInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedCreateWithoutB2bOrderInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutB2bOrderInput
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+}
+
+export type PaymentTransactionUpdateOneWithoutB2bOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedCreateWithoutB2bOrderInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutB2bOrderInput
+  upsert?: Prisma.PaymentTransactionUpsertWithoutB2bOrderInput
+  disconnect?: Prisma.PaymentTransactionWhereInput | boolean
+  delete?: Prisma.PaymentTransactionWhereInput | boolean
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentTransactionUpdateToOneWithWhereWithoutB2bOrderInput, Prisma.PaymentTransactionUpdateWithoutB2bOrderInput>, Prisma.PaymentTransactionUncheckedUpdateWithoutB2bOrderInput>
+}
+
+export type PaymentTransactionUncheckedUpdateOneWithoutB2bOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedCreateWithoutB2bOrderInput>
+  connectOrCreate?: Prisma.PaymentTransactionCreateOrConnectWithoutB2bOrderInput
+  upsert?: Prisma.PaymentTransactionUpsertWithoutB2bOrderInput
+  disconnect?: Prisma.PaymentTransactionWhereInput | boolean
+  delete?: Prisma.PaymentTransactionWhereInput | boolean
+  connect?: Prisma.PaymentTransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentTransactionUpdateToOneWithWhereWithoutB2bOrderInput, Prisma.PaymentTransactionUpdateWithoutB2bOrderInput>, Prisma.PaymentTransactionUncheckedUpdateWithoutB2bOrderInput>
+}
+
 export type PaymentTransactionCreateWithoutClientInput = {
   id?: string
   status?: $Enums.PaymentStatus
@@ -623,6 +735,8 @@ export type PaymentTransactionCreateWithoutClientInput = {
   createdAt?: Date | string
   order?: Prisma.OrderCreateNestedOneWithoutPaymentInput
   freelanceOrder?: Prisma.FreelanceOrderCreateNestedOneWithoutPaymentInput
+  businessGroup?: Prisma.OrderBusinessGroupCreateNestedOneWithoutPaymentInput
+  b2bOrder?: Prisma.B2BOrderCreateNestedOneWithoutPaymentInput
   postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -636,6 +750,8 @@ export type PaymentTransactionUncheckedCreateWithoutClientInput = {
   qrCode?: string | null
   createdAt?: Date | string
   freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
   postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -679,6 +795,8 @@ export type PaymentTransactionScalarWhereInput = {
   qrCode?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PaymentTransaction"> | Date | string
   freelanceOrderId?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
+  businessGroupId?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
+  b2bOrderId?: Prisma.StringNullableFilter<"PaymentTransaction"> | string | null
 }
 
 export type PaymentTransactionCreateWithoutOrderInput = {
@@ -691,6 +809,8 @@ export type PaymentTransactionCreateWithoutOrderInput = {
   createdAt?: Date | string
   client?: Prisma.ClientCreateNestedOneWithoutPaymentTransactionsInput
   freelanceOrder?: Prisma.FreelanceOrderCreateNestedOneWithoutPaymentInput
+  businessGroup?: Prisma.OrderBusinessGroupCreateNestedOneWithoutPaymentInput
+  b2bOrder?: Prisma.B2BOrderCreateNestedOneWithoutPaymentInput
   postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -704,6 +824,8 @@ export type PaymentTransactionUncheckedCreateWithoutOrderInput = {
   qrCode?: string | null
   createdAt?: Date | string
   freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
   postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -733,6 +855,8 @@ export type PaymentTransactionUpdateWithoutOrderInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneWithoutPaymentTransactionsNestedInput
   freelanceOrder?: Prisma.FreelanceOrderUpdateOneWithoutPaymentNestedInput
+  businessGroup?: Prisma.OrderBusinessGroupUpdateOneWithoutPaymentNestedInput
+  b2bOrder?: Prisma.B2BOrderUpdateOneWithoutPaymentNestedInput
   postTransactions?: Prisma.PostTransactionUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -746,6 +870,84 @@ export type PaymentTransactionUncheckedUpdateWithoutOrderInput = {
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPaymentTransactionNestedInput
+}
+
+export type PaymentTransactionCreateWithoutBusinessGroupInput = {
+  id?: string
+  status?: $Enums.PaymentStatus
+  method?: $Enums.PaymentMethod
+  amount?: number
+  transactionDate?: Date | string
+  qrCode?: string | null
+  createdAt?: Date | string
+  client?: Prisma.ClientCreateNestedOneWithoutPaymentTransactionsInput
+  order?: Prisma.OrderCreateNestedOneWithoutPaymentInput
+  freelanceOrder?: Prisma.FreelanceOrderCreateNestedOneWithoutPaymentInput
+  b2bOrder?: Prisma.B2BOrderCreateNestedOneWithoutPaymentInput
+  postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutPaymentTransactionInput
+}
+
+export type PaymentTransactionUncheckedCreateWithoutBusinessGroupInput = {
+  id?: string
+  clientId?: string | null
+  orderId?: string | null
+  status?: $Enums.PaymentStatus
+  method?: $Enums.PaymentMethod
+  amount?: number
+  transactionDate?: Date | string
+  qrCode?: string | null
+  createdAt?: Date | string
+  freelanceOrderId?: string | null
+  b2bOrderId?: string | null
+  postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPaymentTransactionInput
+}
+
+export type PaymentTransactionCreateOrConnectWithoutBusinessGroupInput = {
+  where: Prisma.PaymentTransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedCreateWithoutBusinessGroupInput>
+}
+
+export type PaymentTransactionUpsertWithoutBusinessGroupInput = {
+  update: Prisma.XOR<Prisma.PaymentTransactionUpdateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedUpdateWithoutBusinessGroupInput>
+  create: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedCreateWithoutBusinessGroupInput>
+  where?: Prisma.PaymentTransactionWhereInput
+}
+
+export type PaymentTransactionUpdateToOneWithWhereWithoutBusinessGroupInput = {
+  where?: Prisma.PaymentTransactionWhereInput
+  data: Prisma.XOR<Prisma.PaymentTransactionUpdateWithoutBusinessGroupInput, Prisma.PaymentTransactionUncheckedUpdateWithoutBusinessGroupInput>
+}
+
+export type PaymentTransactionUpdateWithoutBusinessGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.ClientUpdateOneWithoutPaymentTransactionsNestedInput
+  order?: Prisma.OrderUpdateOneWithoutPaymentNestedInput
+  freelanceOrder?: Prisma.FreelanceOrderUpdateOneWithoutPaymentNestedInput
+  b2bOrder?: Prisma.B2BOrderUpdateOneWithoutPaymentNestedInput
+  postTransactions?: Prisma.PostTransactionUpdateManyWithoutPaymentTransactionNestedInput
+}
+
+export type PaymentTransactionUncheckedUpdateWithoutBusinessGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -759,6 +961,8 @@ export type PaymentTransactionCreateWithoutFreelanceOrderInput = {
   createdAt?: Date | string
   client?: Prisma.ClientCreateNestedOneWithoutPaymentTransactionsInput
   order?: Prisma.OrderCreateNestedOneWithoutPaymentInput
+  businessGroup?: Prisma.OrderBusinessGroupCreateNestedOneWithoutPaymentInput
+  b2bOrder?: Prisma.B2BOrderCreateNestedOneWithoutPaymentInput
   postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -772,6 +976,8 @@ export type PaymentTransactionUncheckedCreateWithoutFreelanceOrderInput = {
   transactionDate?: Date | string
   qrCode?: string | null
   createdAt?: Date | string
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
   postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPaymentTransactionInput
 }
 
@@ -801,6 +1007,8 @@ export type PaymentTransactionUpdateWithoutFreelanceOrderInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneWithoutPaymentTransactionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutPaymentNestedInput
+  businessGroup?: Prisma.OrderBusinessGroupUpdateOneWithoutPaymentNestedInput
+  b2bOrder?: Prisma.B2BOrderUpdateOneWithoutPaymentNestedInput
   postTransactions?: Prisma.PostTransactionUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -814,6 +1022,8 @@ export type PaymentTransactionUncheckedUpdateWithoutFreelanceOrderInput = {
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -828,6 +1038,8 @@ export type PaymentTransactionCreateWithoutPostTransactionsInput = {
   client?: Prisma.ClientCreateNestedOneWithoutPaymentTransactionsInput
   order?: Prisma.OrderCreateNestedOneWithoutPaymentInput
   freelanceOrder?: Prisma.FreelanceOrderCreateNestedOneWithoutPaymentInput
+  businessGroup?: Prisma.OrderBusinessGroupCreateNestedOneWithoutPaymentInput
+  b2bOrder?: Prisma.B2BOrderCreateNestedOneWithoutPaymentInput
 }
 
 export type PaymentTransactionUncheckedCreateWithoutPostTransactionsInput = {
@@ -841,6 +1053,8 @@ export type PaymentTransactionUncheckedCreateWithoutPostTransactionsInput = {
   qrCode?: string | null
   createdAt?: Date | string
   freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
 }
 
 export type PaymentTransactionCreateOrConnectWithoutPostTransactionsInput = {
@@ -870,6 +1084,8 @@ export type PaymentTransactionUpdateWithoutPostTransactionsInput = {
   client?: Prisma.ClientUpdateOneWithoutPaymentTransactionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutPaymentNestedInput
   freelanceOrder?: Prisma.FreelanceOrderUpdateOneWithoutPaymentNestedInput
+  businessGroup?: Prisma.OrderBusinessGroupUpdateOneWithoutPaymentNestedInput
+  b2bOrder?: Prisma.B2BOrderUpdateOneWithoutPaymentNestedInput
 }
 
 export type PaymentTransactionUncheckedUpdateWithoutPostTransactionsInput = {
@@ -883,6 +1099,84 @@ export type PaymentTransactionUncheckedUpdateWithoutPostTransactionsInput = {
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type PaymentTransactionCreateWithoutB2bOrderInput = {
+  id?: string
+  status?: $Enums.PaymentStatus
+  method?: $Enums.PaymentMethod
+  amount?: number
+  transactionDate?: Date | string
+  qrCode?: string | null
+  createdAt?: Date | string
+  client?: Prisma.ClientCreateNestedOneWithoutPaymentTransactionsInput
+  order?: Prisma.OrderCreateNestedOneWithoutPaymentInput
+  freelanceOrder?: Prisma.FreelanceOrderCreateNestedOneWithoutPaymentInput
+  businessGroup?: Prisma.OrderBusinessGroupCreateNestedOneWithoutPaymentInput
+  postTransactions?: Prisma.PostTransactionCreateNestedManyWithoutPaymentTransactionInput
+}
+
+export type PaymentTransactionUncheckedCreateWithoutB2bOrderInput = {
+  id?: string
+  clientId?: string | null
+  orderId?: string | null
+  status?: $Enums.PaymentStatus
+  method?: $Enums.PaymentMethod
+  amount?: number
+  transactionDate?: Date | string
+  qrCode?: string | null
+  createdAt?: Date | string
+  freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  postTransactions?: Prisma.PostTransactionUncheckedCreateNestedManyWithoutPaymentTransactionInput
+}
+
+export type PaymentTransactionCreateOrConnectWithoutB2bOrderInput = {
+  where: Prisma.PaymentTransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedCreateWithoutB2bOrderInput>
+}
+
+export type PaymentTransactionUpsertWithoutB2bOrderInput = {
+  update: Prisma.XOR<Prisma.PaymentTransactionUpdateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedUpdateWithoutB2bOrderInput>
+  create: Prisma.XOR<Prisma.PaymentTransactionCreateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedCreateWithoutB2bOrderInput>
+  where?: Prisma.PaymentTransactionWhereInput
+}
+
+export type PaymentTransactionUpdateToOneWithWhereWithoutB2bOrderInput = {
+  where?: Prisma.PaymentTransactionWhereInput
+  data: Prisma.XOR<Prisma.PaymentTransactionUpdateWithoutB2bOrderInput, Prisma.PaymentTransactionUncheckedUpdateWithoutB2bOrderInput>
+}
+
+export type PaymentTransactionUpdateWithoutB2bOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.ClientUpdateOneWithoutPaymentTransactionsNestedInput
+  order?: Prisma.OrderUpdateOneWithoutPaymentNestedInput
+  freelanceOrder?: Prisma.FreelanceOrderUpdateOneWithoutPaymentNestedInput
+  businessGroup?: Prisma.OrderBusinessGroupUpdateOneWithoutPaymentNestedInput
+  postTransactions?: Prisma.PostTransactionUpdateManyWithoutPaymentTransactionNestedInput
+}
+
+export type PaymentTransactionUncheckedUpdateWithoutB2bOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPaymentTransactionNestedInput
 }
 
 export type PaymentTransactionCreateManyClientInput = {
@@ -895,6 +1189,8 @@ export type PaymentTransactionCreateManyClientInput = {
   qrCode?: string | null
   createdAt?: Date | string
   freelanceOrderId?: string | null
+  businessGroupId?: string | null
+  b2bOrderId?: string | null
 }
 
 export type PaymentTransactionUpdateWithoutClientInput = {
@@ -907,6 +1203,8 @@ export type PaymentTransactionUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneWithoutPaymentNestedInput
   freelanceOrder?: Prisma.FreelanceOrderUpdateOneWithoutPaymentNestedInput
+  businessGroup?: Prisma.OrderBusinessGroupUpdateOneWithoutPaymentNestedInput
+  b2bOrder?: Prisma.B2BOrderUpdateOneWithoutPaymentNestedInput
   postTransactions?: Prisma.PostTransactionUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -920,6 +1218,8 @@ export type PaymentTransactionUncheckedUpdateWithoutClientInput = {
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postTransactions?: Prisma.PostTransactionUncheckedUpdateManyWithoutPaymentTransactionNestedInput
 }
 
@@ -933,6 +1233,8 @@ export type PaymentTransactionUncheckedUpdateManyWithoutClientInput = {
   qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   freelanceOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessGroupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  b2bOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -977,9 +1279,13 @@ export type PaymentTransactionSelect<ExtArgs extends runtime.Types.Extensions.In
   qrCode?: boolean
   createdAt?: boolean
   freelanceOrderId?: boolean
+  businessGroupId?: boolean
+  b2bOrderId?: boolean
   client?: boolean | Prisma.PaymentTransaction$clientArgs<ExtArgs>
   order?: boolean | Prisma.PaymentTransaction$orderArgs<ExtArgs>
   freelanceOrder?: boolean | Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>
+  businessGroup?: boolean | Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>
+  b2bOrder?: boolean | Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>
   postTransactions?: boolean | Prisma.PaymentTransaction$postTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.PaymentTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["paymentTransaction"]>
@@ -995,9 +1301,13 @@ export type PaymentTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.
   qrCode?: boolean
   createdAt?: boolean
   freelanceOrderId?: boolean
+  businessGroupId?: boolean
+  b2bOrderId?: boolean
   client?: boolean | Prisma.PaymentTransaction$clientArgs<ExtArgs>
   order?: boolean | Prisma.PaymentTransaction$orderArgs<ExtArgs>
   freelanceOrder?: boolean | Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>
+  businessGroup?: boolean | Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>
+  b2bOrder?: boolean | Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>
 }, ExtArgs["result"]["paymentTransaction"]>
 
 export type PaymentTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1011,9 +1321,13 @@ export type PaymentTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.
   qrCode?: boolean
   createdAt?: boolean
   freelanceOrderId?: boolean
+  businessGroupId?: boolean
+  b2bOrderId?: boolean
   client?: boolean | Prisma.PaymentTransaction$clientArgs<ExtArgs>
   order?: boolean | Prisma.PaymentTransaction$orderArgs<ExtArgs>
   freelanceOrder?: boolean | Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>
+  businessGroup?: boolean | Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>
+  b2bOrder?: boolean | Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>
 }, ExtArgs["result"]["paymentTransaction"]>
 
 export type PaymentTransactionSelectScalar = {
@@ -1027,13 +1341,17 @@ export type PaymentTransactionSelectScalar = {
   qrCode?: boolean
   createdAt?: boolean
   freelanceOrderId?: boolean
+  businessGroupId?: boolean
+  b2bOrderId?: boolean
 }
 
-export type PaymentTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "orderId" | "status" | "method" | "amount" | "transactionDate" | "qrCode" | "createdAt" | "freelanceOrderId", ExtArgs["result"]["paymentTransaction"]>
+export type PaymentTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "orderId" | "status" | "method" | "amount" | "transactionDate" | "qrCode" | "createdAt" | "freelanceOrderId" | "businessGroupId" | "b2bOrderId", ExtArgs["result"]["paymentTransaction"]>
 export type PaymentTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.PaymentTransaction$clientArgs<ExtArgs>
   order?: boolean | Prisma.PaymentTransaction$orderArgs<ExtArgs>
   freelanceOrder?: boolean | Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>
+  businessGroup?: boolean | Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>
+  b2bOrder?: boolean | Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>
   postTransactions?: boolean | Prisma.PaymentTransaction$postTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.PaymentTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1041,11 +1359,15 @@ export type PaymentTransactionIncludeCreateManyAndReturn<ExtArgs extends runtime
   client?: boolean | Prisma.PaymentTransaction$clientArgs<ExtArgs>
   order?: boolean | Prisma.PaymentTransaction$orderArgs<ExtArgs>
   freelanceOrder?: boolean | Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>
+  businessGroup?: boolean | Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>
+  b2bOrder?: boolean | Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>
 }
 export type PaymentTransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.PaymentTransaction$clientArgs<ExtArgs>
   order?: boolean | Prisma.PaymentTransaction$orderArgs<ExtArgs>
   freelanceOrder?: boolean | Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>
+  businessGroup?: boolean | Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>
+  b2bOrder?: boolean | Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>
 }
 
 export type $PaymentTransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1054,6 +1376,8 @@ export type $PaymentTransactionPayload<ExtArgs extends runtime.Types.Extensions.
     client: Prisma.$ClientPayload<ExtArgs> | null
     order: Prisma.$OrderPayload<ExtArgs> | null
     freelanceOrder: Prisma.$FreelanceOrderPayload<ExtArgs> | null
+    businessGroup: Prisma.$OrderBusinessGroupPayload<ExtArgs> | null
+    b2bOrder: Prisma.$B2BOrderPayload<ExtArgs> | null
     postTransactions: Prisma.$PostTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1067,6 +1391,8 @@ export type $PaymentTransactionPayload<ExtArgs extends runtime.Types.Extensions.
     qrCode: string | null
     createdAt: Date
     freelanceOrderId: string | null
+    businessGroupId: string | null
+    b2bOrderId: string | null
   }, ExtArgs["result"]["paymentTransaction"]>
   composites: {}
 }
@@ -1464,6 +1790,8 @@ export interface Prisma__PaymentTransactionClient<T, Null = never, ExtArgs exten
   client<T extends Prisma.PaymentTransaction$clientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentTransaction$clientArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   order<T extends Prisma.PaymentTransaction$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentTransaction$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   freelanceOrder<T extends Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentTransaction$freelanceOrderArgs<ExtArgs>>): Prisma.Prisma__FreelanceOrderClient<runtime.Types.Result.GetResult<Prisma.$FreelanceOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  businessGroup<T extends Prisma.PaymentTransaction$businessGroupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentTransaction$businessGroupArgs<ExtArgs>>): Prisma.Prisma__OrderBusinessGroupClient<runtime.Types.Result.GetResult<Prisma.$OrderBusinessGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  b2bOrder<T extends Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentTransaction$b2bOrderArgs<ExtArgs>>): Prisma.Prisma__B2BOrderClient<runtime.Types.Result.GetResult<Prisma.$B2BOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   postTransactions<T extends Prisma.PaymentTransaction$postTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentTransaction$postTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1504,6 +1832,8 @@ export interface PaymentTransactionFieldRefs {
   readonly qrCode: Prisma.FieldRef<"PaymentTransaction", 'String'>
   readonly createdAt: Prisma.FieldRef<"PaymentTransaction", 'DateTime'>
   readonly freelanceOrderId: Prisma.FieldRef<"PaymentTransaction", 'String'>
+  readonly businessGroupId: Prisma.FieldRef<"PaymentTransaction", 'String'>
+  readonly b2bOrderId: Prisma.FieldRef<"PaymentTransaction", 'String'>
 }
     
 
@@ -1954,6 +2284,44 @@ export type PaymentTransaction$freelanceOrderArgs<ExtArgs extends runtime.Types.
    */
   include?: Prisma.FreelanceOrderInclude<ExtArgs> | null
   where?: Prisma.FreelanceOrderWhereInput
+}
+
+/**
+ * PaymentTransaction.businessGroup
+ */
+export type PaymentTransaction$businessGroupArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderBusinessGroup
+   */
+  select?: Prisma.OrderBusinessGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderBusinessGroup
+   */
+  omit?: Prisma.OrderBusinessGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderBusinessGroupInclude<ExtArgs> | null
+  where?: Prisma.OrderBusinessGroupWhereInput
+}
+
+/**
+ * PaymentTransaction.b2bOrder
+ */
+export type PaymentTransaction$b2bOrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the B2BOrder
+   */
+  select?: Prisma.B2BOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the B2BOrder
+   */
+  omit?: Prisma.B2BOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.B2BOrderInclude<ExtArgs> | null
+  where?: Prisma.B2BOrderWhereInput
 }
 
 /**

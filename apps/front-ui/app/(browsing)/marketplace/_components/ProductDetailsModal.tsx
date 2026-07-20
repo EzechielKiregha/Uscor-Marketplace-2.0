@@ -1,5 +1,10 @@
 "use client";
 
+import { useCart } from "@/app/context/use-cart";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { getBusinessTypeConfig, getBusinessTypeEmoji } from "@/config/business-types";
 import {
     AlertTriangle,
     BaggageClaim,
@@ -13,11 +18,6 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useCart } from "@/app/context/use-cart";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { getBusinessTypeConfig, getBusinessTypeEmoji } from "@/config/business-types";
 import TypeSpecificFields from "./TypeSpecificFields";
 
 interface ProductDetailsModalProps {

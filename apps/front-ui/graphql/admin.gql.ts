@@ -1,6 +1,23 @@
 import { gql } from "@apollo/client";
 
 // ======================
+// ADMIN PHONE LOOKUP (for USSD)
+// ======================
+
+export const GET_ADMIN_BY_PHONE = gql`
+  query AdminByPhone($phone: String!) {
+    adminByPhone(phone: $phone) {
+      id
+      fullName
+      email
+      phone
+      role
+      isActive
+    }
+  }
+`;
+
+// ======================
 // USER MANAGEMENT QUERIES
 // ======================
 

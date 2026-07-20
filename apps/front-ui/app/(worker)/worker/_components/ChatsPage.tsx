@@ -303,6 +303,7 @@ export default function ChatsPage({
                   className="w-full sm:w-32 p-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <option value="">All Types</option>
+                  <option value="ORDER">Order</option>
                   <option value="REOWNERSHIP">Reownership</option>
                   <option value="FREELANCE_ORDER">Freelance Order</option>
                   <option value="PURCHASE">Purchase</option>
@@ -372,6 +373,11 @@ export default function ChatsPage({
                               {chat.negotiationType === "GENERAL" && (
                                 <span className="bg-muted px-1.5 py-0.5 rounded text-xs">
                                   General
+                                </span>
+                              )}
+                              {chat.negotiationType === "ORDER" && (
+                                <span className="bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded text-xs">
+                                  Order
                                 </span>
                               )}
                             </p>
@@ -474,6 +480,14 @@ export default function ChatsPage({
                       <ShoppingCart className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm">
                         {selectedChat.product.title}
+                      </span>
+                    </div>
+                  )}
+                  {selectedChat.negotiationType === "ORDER" && (
+                    <div className="ml-4 flex items-center gap-2 bg-amber-500/10 rounded-lg px-3 py-1 border border-amber-500/20">
+                      <ShoppingCart className="h-4 w-4 text-amber-500" />
+                      <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                        Order Chat
                       </span>
                     </div>
                   )}

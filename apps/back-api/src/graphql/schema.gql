@@ -875,6 +875,7 @@ enum NegotiationType {
   GENERAL
   COMPLAINT
   SUPPORT
+  ORDER
 }
 
 type PromotionEntity {
@@ -1379,6 +1380,34 @@ type SecurityLogEntity {
   createdAt: DateTime!
 }
 
+type PaginatedChatsResponse {
+  items: [ChatEntity!]!
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
+type PaginatedMessagesResponse {
+  items: [ChatMessageEntity!]!
+  hasMore: Boolean!
+  cursor: String
+}
+
+type UnreadCountResponse {
+  totalUnread: Float!
+  chatsWithUnread: [ChatUnreadInfo!]!
+}
+
+type ChatUnreadInfo {
+  chatId: String!
+  unreadCount: Float!
+}
+
+type MarkAsReadResponse {
+  success: Boolean!
+  unreadCount: Float!
+}
+
 type WholesalePriceEntity {
   id: String!
   productId: String!
@@ -1427,6 +1456,7 @@ type B2BOrderEntity {
   cancelledAt: DateTime
   buyer: BusinessEntity
   seller: BusinessEntity
+  payment: PaymentTransactionEntity
 }
 
 type B2BOrderListResponse {
@@ -1490,34 +1520,6 @@ type PaginatedReviews {
   total: Int!
   page: Int!
   limit: Int!
-}
-
-type PaginatedChatsResponse {
-  items: [ChatEntity!]!
-  total: Float!
-  page: Float!
-  limit: Float!
-}
-
-type PaginatedMessagesResponse {
-  items: [ChatMessageEntity!]!
-  hasMore: Boolean!
-  cursor: String
-}
-
-type UnreadCountResponse {
-  totalUnread: Float!
-  chatsWithUnread: [ChatUnreadInfo!]!
-}
-
-type ChatUnreadInfo {
-  chatId: String!
-  unreadCount: Float!
-}
-
-type MarkAsReadResponse {
-  success: Boolean!
-  unreadCount: Float!
 }
 
 type SuccessResponse {
@@ -2007,6 +2009,44 @@ type SyncResult {
   results: [SyncResultItem!]!
 }
 
+type SettlementBusinessEntity {
+  id: String!
+  name: String!
+  avatar: String
+}
+
+type SettlementEntity {
+  id: String!
+  orderId: String!
+  businessGroupId: String!
+  businessId: String!
+  business: SettlementBusinessEntity
+  grossAmount: Float!
+  platformFee: Float!
+  deliveryFee: Float!
+  netAmount: Float!
+  status: String!
+  distributedAt: DateTime
+  distributedBy: String
+  createdAt: DateTime!
+}
+
+type SettlementStatsEntity {
+  totalPending: Float!
+  totalDistributed: Float!
+  totalPlatformFees: Float!
+  totalDeliveryFees: Float!
+  pendingCount: Float!
+  distributedCount: Float!
+}
+
+type PaginatedSettlementsEntity {
+  items: [SettlementEntity!]!
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
 type BusinessSettingsEntity {
   id: String!
   name: String!
@@ -2170,6 +2210,24 @@ type Query {
   """Retrieves the account balance for a user."""
   accountBalance(userId: String!, userType: String!): AccountBalanceEntity!
 
+  """Retrieves chats for the user with pagination."""
+  chats(productId: String, clientId: String, businessId: String, workerId: String, status: String, search: String, page: Float! = 1, limit: Float! = 20): PaginatedChatsResponse!
+
+  """Retrieves a single chat by ID."""
+  chat(id: String!): ChatEntity!
+
+  """Retrieves messages for a chat."""
+  chatMessages(chatId: String!, after: String, before: String, limit: Int! = 20): PaginatedMessagesResponse!
+
+  """Gets unread message count for user."""
+  unreadChatCount(userId: String!): UnreadCountResponse!
+
+  """Gets chats by participant ID."""
+  chatsByParticipant(participantId: String!): [ChatEntity!]!
+
+  """Gets chat notifications for user."""
+  chatNotifications(userId: String!): [chatNotification!]!
+
   """Retrieve businesses with pagination and filtering."""
   businesses(search: String, businessType: String, hasLoyalty: Boolean, hasPromotions: Boolean, isB2BEnabled: Boolean, isVerified: Boolean, sort: String, page: Int, limit: Int): PaginatedBusinesses!
   businessProducts(businessId: String!, storeId: String, category: String, search: String, page: Int, limit: Int): [ProductEntity!]!
@@ -2213,24 +2271,6 @@ type Query {
   workerShifts(workerId: String!, storeId: String, startDate: DateTime, endDate: DateTime, page: Int! = 1, limit: Int! = 20): ShiftsPagedResult!
   workerCurrentShift(workerId: String!, storeId: String!): ShiftEntityWorker
   workerChats(workerId: String!, page: Int! = 1, limit: Int! = 20): ChatsPagedResult!
-
-  """Retrieves chats for the user with pagination."""
-  chats(productId: String, clientId: String, businessId: String, workerId: String, status: String, search: String, page: Float! = 1, limit: Float! = 20): PaginatedChatsResponse!
-
-  """Retrieves a single chat by ID."""
-  chat(id: String!): ChatEntity!
-
-  """Retrieves messages for a chat."""
-  chatMessages(chatId: String!, after: String, before: String, limit: Int! = 20): PaginatedMessagesResponse!
-
-  """Gets unread message count for user."""
-  unreadChatCount(userId: String!): UnreadCountResponse!
-
-  """Gets chats by participant ID."""
-  chatsByParticipant(participantId: String!): [ChatEntity!]!
-
-  """Gets chat notifications for user."""
-  chatNotifications(userId: String!): [chatNotification!]!
 
   """Retrieves reposted products for a business."""
   repostedProducts: [RepostedProductEntity!]!
@@ -2279,6 +2319,9 @@ type Query {
 
   """List B2B-enabled vendors"""
   b2bVendors(page: Int! = 1, limit: Int! = 20, businessType: String): B2BOrderListResponse!
+
+  """Get B2B orders by phone number"""
+  b2bOrdersByPhone(phone: String!, role: String! = "buyer"): B2BOrderListResponse!
   postOfSale(id: Int!): PostOfSaleEntity!
 
   """Retrieves all categories with their products."""
@@ -2336,6 +2379,18 @@ type Query {
   """Retrieves loyalty tiers for a loyalty program."""
   loyaltyTiers(loyaltyProgramId: String!): [LoyaltyTierEntity!]!
 
+  """List all settlements (admin only)."""
+  settlements(page: Int! = 1, limit: Int! = 20, status: String, businessId: String): PaginatedSettlementsEntity!
+
+  """List settlements for the current business."""
+  businessSettlements(businessId: String!, page: Int! = 1, limit: Int! = 20, status: String): PaginatedSettlementsEntity!
+
+  """Get settlement statistics (admin only)."""
+  settlementStats(businessId: String): SettlementStatsEntity!
+
+  """Get settlement statistics for a business."""
+  businessSettlementStats(businessId: String!): SettlementStatsEntity!
+
   """Retrieves inventory for a store."""
   inventory(storeId: String, productId: String, lowStockOnly: Boolean, page: Float! = 1, limit: Float! = 20): PaginatedInventoryResponse!
 
@@ -2368,6 +2423,9 @@ type Query {
 
   """Find a single admin by ID."""
   admin(id: String!): Admin!
+
+  """Find admin by phone number (for USSD)."""
+  adminByPhone(phone: String!): Admin
   all_businesses(input: GetUsersInput!): PaginatedBusinessesResponse!
   all_clients(input: GetUsersInput!): PaginatedClientsResponse!
   all_workers(input: GetUsersInput!): PaginatedWorkersResponse!
@@ -2440,6 +2498,11 @@ type Mutation {
   """Generates a PDF receipt for the order."""
   generateOrderReceipt(input: GenerateOrderReceiptInput!): OrderReceiptEntity!
 
+  """
+  Updates the status of an order business group. Workers set PROCESSING/READY_FOR_SHIPMENT, admins set SHIPPED/DELIVERED/COMPLETED.
+  """
+  updateBusinessOrderStatus(input: UpdateOrderStatusInput!): OrderBusinessGroupEntity!
+
   """Creates a token transaction."""
   createTokenTransaction(createTokenTransactionInput: CreateTokenTransactionInput!): TokenTransactionEntity!
 
@@ -2460,6 +2523,34 @@ type Mutation {
 
   """Deletes an account recharge."""
   deleteAccountRecharge(id: String!): AccountRechargeEntity!
+
+  """Creates a new chat with dynamic participants."""
+  createChat(createChatInput: CreateChatInput!): ChatEntity!
+
+  """Sends a message in a chat."""
+  createChatMessage(createChatMessageInput: CreateChatMessageInput!): ChatMessageEntity!
+
+  """Updates a chat’s status or properties."""
+  updateChat(id: String!, updateChatInput: UpdateChatInput!): ChatEntity!
+
+  """Deletes a chat."""
+  deleteChat(id: String!): ChatEntity!
+  sendMessage(input: SendChatMessageInput!): ChatMessageEntityV2!
+
+  """Marks messages as read."""
+  markMessagesAsRead(chatId: String!, userId: String!): MarkAsReadResponse!
+
+  """Updates chat status."""
+  updateChatStatus(id: String!, status: String!): ChatEntity!
+
+  """Starts a negotiation chat."""
+  startNegotiation(input: StartNegotiationInput!): ChatEntity!
+
+  """Accepts a negotiation."""
+  acceptNegotiation(negotiationId: String!): ChatEntity!
+
+  """Triggers a typing indicator for a chat."""
+  triggerTyping(chatId: String!, userId: String!, userName: String!): Boolean!
 
   """Creates a new business with hashed password."""
   createBusiness(createBusinessInput: CreateBusinessInput!): BusinessEntity!
@@ -2498,34 +2589,7 @@ type Mutation {
   createInventoryAdjustment(input: CreateInventoryAdjustmentInput!): InventoryAdjustmentEntity!
   startShift(input: StartShiftInput!): ShiftEntityWorker!
   endWorkerShift(input: EndWorkerShiftInput!): ShiftEntityWorker!
-
-  """Sends a message in a chat."""
-  sendMessage(input: SendMessageInput!): ChatMessageEntity!
   processMobileMoneyPayment(input: ProcessMobileMoneyPaymentInput!): MobileMoneyPaymentResponseEntity!
-
-  """Creates a new chat with dynamic participants."""
-  createChat(createChatInput: CreateChatInput!): ChatEntity!
-
-  """Sends a message in a chat."""
-  createChatMessage(createChatMessageInput: CreateChatMessageInput!): ChatMessageEntity!
-
-  """Updates a chat’s status or properties."""
-  updateChat(id: String!, updateChatInput: UpdateChatInput!): ChatEntity!
-
-  """Deletes a chat."""
-  deleteChat(id: String!): ChatEntity!
-
-  """Marks messages as read."""
-  markMessagesAsRead(chatId: String!, userId: String!): MarkAsReadResponse!
-
-  """Updates chat status."""
-  updateChatStatus(id: String!, status: String!): ChatEntity!
-
-  """Starts a negotiation chat."""
-  startNegotiation(input: StartNegotiationInput!): ChatEntity!
-
-  """Accepts a negotiation."""
-  acceptNegotiation(negotiationId: String!): ChatEntity!
 
   """Creates a reposted product."""
   createRepostedProduct(createRepostedProductInput: CreateRepostedProductInput!): RepostedProductEntity!
@@ -2606,6 +2670,9 @@ type Mutation {
   createB2BOrder(input: CreateB2BOrderInput!): B2BOrderEntity!
   submitB2BOrder(orderId: String!): B2BOrderEntity!
   updateB2BOrderStatus(input: UpdateB2BOrderStatusInput!): B2BOrderEntity!
+
+  """Pay for a B2B order"""
+  payB2BOrder(orderId: String!, method: String! = "MOBILE_MONEY"): B2BOrderEntity!
   createPostOfSale(createPostOfSaleInput: CreatePostOfSaleInput!): PostOfSaleEntity!
   updatePostOfSale(updatePostOfSaleInput: UpdatePostOfSaleInput!): PostOfSaleEntity!
   removePostOfSale(id: Int!): PostOfSaleEntity!
@@ -2677,6 +2744,12 @@ type Mutation {
 
   """Deletes a loyalty program."""
   deleteLoyaltyProgram(id: String!): Boolean!
+
+  """Distribute a settlement to a business."""
+  distributeSettlement(id: String!): SettlementEntity!
+
+  """Batch distribute settlements."""
+  batchDistributeSettlements(ids: [String!]!): [SettlementEntity!]!
 
   """Creates a new purchase order."""
   createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrderEntity!
@@ -2770,6 +2843,7 @@ input CreateOrderInput {
   qrCode: String
   orderProducts: [CreateOrderProductInput!]!
   payment: CreatePaymentTransactionInput!
+  loyaltyRedemptions: [LoyaltyRedemptionInput!]
 }
 
 input CreateOrderProductInput {
@@ -2794,6 +2868,11 @@ enum PaymentStatus {
   FAILED
 }
 
+input LoyaltyRedemptionInput {
+  businessId: String!
+  pointsToRedeem: Float!
+}
+
 input UpdateOrderInput {
   deliveryAddress: String
   qrCode: String
@@ -2809,6 +2888,11 @@ input ProcessPaymentInput {
 input GenerateOrderReceiptInput {
   orderId: String!
   email: String
+}
+
+input UpdateOrderStatusInput {
+  businessGroupId: String!
+  status: String!
 }
 
 input CreateTokenTransactionInput {
@@ -2843,6 +2927,40 @@ input UpdateAccountRechargeInput {
   method: RechargeMethod
   origin: Country
   status: String
+}
+
+input CreateChatInput {
+  productId: String
+  serviceId: String
+  participantIds: [String!]!
+  isSecure: Boolean! = false
+  negotiationType: NegotiationType
+}
+
+input CreateChatMessageInput {
+  chatId: String!
+  message: String!
+}
+
+input UpdateChatInput {
+  id: String!
+  status: ChatStatus
+  isSecure: Boolean
+  negotiationType: NegotiationType
+}
+
+input SendChatMessageInput {
+  chatId: String!
+  message: String!
+  senderType: MessageSenderType!
+  senderId: String!
+}
+
+input StartNegotiationInput {
+  productId: String
+  serviceId: String
+  participantIds: [String!]!
+  negotiationType: NegotiationType! = GENERAL
 }
 
 input CreateBusinessInput {
@@ -3031,13 +3149,6 @@ input EndWorkerShiftInput {
   sales: Float!
 }
 
-input SendMessageInput {
-  chatId: String!
-  content: String!
-  senderType: String!
-  senderId: String!
-}
-
 input ProcessMobileMoneyPaymentInput {
   saleId: String!
   phoneNumber: String!
@@ -3049,33 +3160,6 @@ enum MobileMoneyProvider {
   MTN
   AIRTEL
   VODAFONE
-}
-
-input CreateChatInput {
-  productId: String
-  serviceId: String
-  participantIds: [String!]!
-  isSecure: Boolean! = false
-  negotiationType: NegotiationType
-}
-
-input CreateChatMessageInput {
-  chatId: String!
-  message: String!
-}
-
-input UpdateChatInput {
-  id: String!
-  status: ChatStatus
-  isSecure: Boolean
-  negotiationType: NegotiationType
-}
-
-input StartNegotiationInput {
-  productId: String
-  serviceId: String
-  participantIds: [String!]!
-  negotiationType: NegotiationType! = GENERAL
 }
 
 input CreateRepostedProductInput {
@@ -3520,6 +3604,9 @@ type Subscription {
   tokenTransactionCreated(businessId: String!): TokenTransactionEntity!
   accountRechargeCreated(userId: String!, userType: String!): AccountRechargeEntity!
   accountBalanceUpdated(userId: String!, userType: String!): AccountBalanceEntity!
+  messageReceived(chatId: String!): ChatMessageEntity!
+  chatCreated(userId: String!): ChatEntity!
+  chatStatusUpdated(userId: String!): ChatEntity!
   businessUpdated(businessId: String!): BusinessEntity!
   businessAdded: BusinessEntity!
   saleCreated(storeId: String!): SaleEntity!
@@ -3528,9 +3615,6 @@ type Subscription {
   inventoryUpdated(storeId: String!): InventoryAdjustmentEntityWorker!
   newShiftStarted(workerId: String!): ShiftEntityWorker!
   shiftEnded(workerId: String!): ShiftEntityWorker!
-  messageReceived(chatId: String!): ChatMessageEntity!
-  chatCreated(userId: String!): ChatEntity!
-  chatStatusUpdated(userId: String!): ChatEntity!
   kycUpdated: KnowYourCustomerEntity!
   kycSubmitted: KnowYourCustomerEntity!
   freelanceServiceCreated(businessId: String!): FreelanceServiceEntity!

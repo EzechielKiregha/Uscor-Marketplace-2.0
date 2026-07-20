@@ -3,6 +3,7 @@
 import { useQuery } from "@apollo/client";
 import {
     BarChart,
+    ClipboardList,
     Clock,
     LogOut,
     Menu,
@@ -21,12 +22,14 @@ import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { GET_WORKER_PROFILE } from "@/graphql/worker.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
+import { usePusherNotifications } from "@/hooks/usePusherNotifications";
 import { logout } from "@/lib/auth";
 import { useMe } from "@/lib/useMe";
 import { cn } from "@/lib/utils";
 
 const workerSideLinks = [
   { section: "pos", icon: ShoppingCart, label: "Point of Sale" },
+  { section: "orders", icon: ClipboardList, label: "Orders" },
   { section: "inventory", icon: Package, label: "Inventory" },
   { section: "shifts", icon: Clock, label: "Shifts" },
   { section: "chats", icon: MessageSquare, label: "Chats" },
@@ -40,6 +43,7 @@ interface WorkerLayoutProps {
 
 type WorkerSection =
   | "pos"
+  | "orders"
   | "inventory"
   | "shifts"
   | "chats"
@@ -80,6 +84,7 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
 
     if (
       storedSection === "pos" ||
+      storedSection === "orders" ||
       storedSection === "inventory" ||
       storedSection === "shifts" ||
       storedSection === "chats" ||
@@ -112,6 +117,14 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
   });
   const { isOnline, syncing } = useIndexedDB();
   const { theme, setTheme } = useTheme();
+
+  // Pusher notifications for workers — subscribe to business channel
+  usePusherNotifications({
+    role: "worker",
+    userId: user?.id,
+    businessId: workerData?.worker?.business?.id,
+    enabled: !!user?.id,
+  });
 
   useEffect(() => {
     if (!selectedStoreId && storesData?.stores?.length > 0) {

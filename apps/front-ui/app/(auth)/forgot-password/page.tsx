@@ -1,29 +1,29 @@
 "use client";
 
+import { GlowButton } from "@/components/seraui/GlowButton";
+import { useToast } from "@/components/toast-provider";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { FORGOT_PASSWORD } from "@/graphql/auth.gql";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  ArrowLeftIcon,
-  CheckCircleIcon,
-  KeyIcon,
-  MailIcon,
-  ShieldIcon,
+    ArrowLeftIcon,
+    CheckCircleIcon,
+    KeyIcon,
+    MailIcon,
+    ShieldIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { GlowButton } from "@/components/seraui/GlowButton";
-import { useToast } from "@/components/toast-provider";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { FORGOT_PASSWORD } from "@/graphql/auth.gql";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -75,26 +75,26 @@ export default function ForgotPasswordPage() {
       </div>
 
       {/* Left Panel — Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-gradient-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/3 dark:from-primary/5 via-transparent to-accent/5 mix-blend-overlay" />
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 border-r border-border bg-linear-to-br from-primary/10 dark:from-primary/20 via-transparent to-accent/5 dark:to-accent/10 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-linear-to-br from-primary/3 dark:from-primary/5 via-transparent to-accent/5 mix-blend-overlay" />
 
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               USCOR MARKETPLACE
             </span>
           </div>
 
           <div className="mt-16 space-y-6">
             <h1 className="text-4xl xl:text-5xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Account Recovery
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-primary via-orange-400 to-accent bg-clip-text text-transparent">
                 Made Simple
               </span>
             </h1>
@@ -163,10 +163,10 @@ export default function ForgotPasswordPage() {
         <div className="w-full max-w-md relative z-10">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-2xl font-bold text-white">U</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               USCOR
             </span>
           </div>
@@ -177,7 +177,7 @@ export default function ForgotPasswordPage() {
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 mb-4">
                 <CheckCircleIcon className="h-10 w-10 text-primary" />
               </div>
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent">
                 Check Your Email
               </h2>
               <p className="text-muted-foreground max-w-sm mx-auto">
@@ -189,7 +189,7 @@ export default function ForgotPasswordPage() {
               <Link
                 href={`/reset-password?email=${encodeURIComponent(sentEmail)}`}
               >
-                <GlowButton className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 mt-4">
+                <GlowButton className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 mt-4">
                   Enter Verification Code
                 </GlowButton>
               </Link>
@@ -213,7 +213,7 @@ export default function ForgotPasswordPage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
                   <KeyIcon className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
+                <h2 className="text-3xl font-bold bg-linear-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent mb-2">
                   Forgot Password?
                 </h2>
                 <p className="text-muted-foreground">
@@ -255,7 +255,7 @@ export default function ForgotPasswordPage() {
                   <GlowButton
                     type="submit"
                     disabled={loading}
-                    className="w-full h-12 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="w-full h-12 rounded-xl bg-linear-to-r from-primary to-accent text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     {loading ? (
                       <div className="flex items-center justify-center gap-2">

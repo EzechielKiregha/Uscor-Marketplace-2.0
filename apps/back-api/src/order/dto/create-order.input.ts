@@ -2,6 +2,7 @@ import { Field, Float, InputType, Int } from "@nestjs/graphql";
 import { Type } from "class-transformer";
 import {
     ArrayMinSize,
+    IsArray,
     IsBoolean,
     IsNumber,
     IsOptional,
@@ -10,6 +11,18 @@ import {
     ValidateNested,
 } from "class-validator";
 import { CreatePaymentTransactionInput } from "../../payment-transaction/dto/create-payment-transaction.input";
+
+@InputType()
+export class LoyaltyRedemptionInput {
+	@Field()
+	@IsString()
+	businessId: string;
+
+	@Field(() => Float)
+	@IsNumber()
+	@Min(1)
+	pointsToRedeem: number;
+}
 
 @InputType()
 export class CreateOrderInput {
@@ -53,6 +66,13 @@ export class CreateOrderInput {
 	@ValidateNested()
 	@Type(() => CreatePaymentTransactionInput)
 	payment: CreatePaymentTransactionInput;
+
+	@Field(() => [LoyaltyRedemptionInput], { nullable: true })
+	@IsOptional()
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => LoyaltyRedemptionInput)
+	loyaltyRedemptions?: LoyaltyRedemptionInput[];
 }
 
 @InputType()

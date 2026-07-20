@@ -69,10 +69,22 @@ export default function BusinessOrdersPage() {
 
   return (
     <div className="space-y-6">
+      {/* Info banner — order processing delegated to workers */}
+      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 flex items-start gap-3">
+        <Search className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+        <div>
+          <p className="font-medium text-amber-800 dark:text-amber-300">Order processing is handled by your workers</p>
+          <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+            Workers can process orders, mark them ready for shipment, and coordinate pickup with USCOR.
+            View your <a href="/business/settlements" className="underline font-medium">settlements</a> for payment status.
+          </p>
+        </div>
+      </div>
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-page-title">Orders</h1>
-          <p className="text-page-subtitle">Manage customer orders</p>
+          <p className="text-page-subtitle">View customer orders (read-only)</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">

@@ -42,7 +42,6 @@ export type Country = (typeof Country)[keyof typeof Country]
 
 
 export const KycStatus = {
-  NONE: 'NONE',
   PENDING: 'PENDING',
   VERIFIED: 'VERIFIED',
   REJECTED: 'REJECTED'
@@ -128,7 +127,8 @@ export const NegotiationType = {
   PURCHASE: 'PURCHASE',
   GENERAL: 'GENERAL',
   COMPLAINT: 'COMPLAINT',
-  SUPPORT: 'SUPPORT'
+  SUPPORT: 'SUPPORT',
+  ORDER: 'ORDER'
 } as const
 
 export type NegotiationType = (typeof NegotiationType)[keyof typeof NegotiationType]
@@ -156,6 +156,7 @@ export const OrderStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
   PROCESSING: 'PROCESSING',
+  READY_FOR_SHIPMENT: 'READY_FOR_SHIPMENT',
   CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED',
   DELIVERED: 'DELIVERED',
@@ -163,6 +164,15 @@ export const OrderStatus = {
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const SettlementStatus = {
+  PENDING: 'PENDING',
+  DISTRIBUTED: 'DISTRIBUTED',
+  FAILED: 'FAILED'
+} as const
+
+export type SettlementStatus = (typeof SettlementStatus)[keyof typeof SettlementStatus]
 
 
 export const LoyaltyTransactionType = {

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import SidebarPageSkeleton from "@/components/skeletons/SidebarPageSkeleton";
+import { usePusherNotifications } from "@/hooks/usePusherNotifications";
 import { useMe } from "@/lib/useMe";
 import BusinessHeader from "./business/_components/BusinessHeader";
 import BusinessSidebar from "./business/_components/BusinessSidebar";
@@ -13,6 +14,13 @@ export default function ClientSideLayout({
   const { user, role, loading, error } = useMe();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+
+  // Pusher notifications for business — KYC updates, order status, disputes
+  usePusherNotifications({
+    role: "business",
+    userId: user?.id,
+    enabled: !!user?.id && role === "business",
+  });
 
   if (loading) return <SidebarPageSkeleton navItems={8} contentVariant="cards" />;
   if (error || role !== "business") return <div>Unauthorized</div>;

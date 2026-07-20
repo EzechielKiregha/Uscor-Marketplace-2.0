@@ -218,41 +218,13 @@ export default function OrderDetailsModal() {
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-border">
+          <div className="flex justify-between items-center gap-3 pt-4 border-t border-border">
+            <p className="text-xs text-muted-foreground">
+              Order processing is handled by workers
+            </p>
             <Button variant="outline" onClick={handleClose}>
               Close
             </Button>
-            {orderData.status === "PENDING" && (
-              <Button
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => {
-                  handleOrderPayment();
-                  handleClose();
-                }}
-              >
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Mark as Completed
-              </Button>
-            )}
-            {orderData.status !== "CANCELLED" && (
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  if (confirm("Are you sure you want to cancel this order?")) {
-                    cancelOrder({
-                        variables:{
-                            id: orderId
-                        }
-                    });
-                    alert("Order cancelled");
-                    handleClose();
-                  }
-                }}
-              >
-                <XCircle className="h-4 w-4 mr-2" />
-                Cancel Order
-              </Button>
-            )}
           </div>
         </div>
       )}

@@ -7,6 +7,8 @@ import { put } from '@vercel/blob'
 import * as puppeteer from 'puppeteer'
 import QRCode from 'qrcode'
 import { AuthPayload } from '../auth/entities/auth-payload.entity'
+import { ChatService } from '../chat/chat.service'
+import { PusherService } from '../chat/pusher.service'
 import {
     calcCommission,
     lineTotal,
@@ -26,6 +28,7 @@ import { TokenTransactionService } from '../token-transaction/token-transaction.
 import {
     CreateOrderInput,
     CreateOrderProductInput,
+    LoyaltyRedemptionInput,
 } from './dto/create-order.input'
 import { GenerateOrderReceiptInput } from './dto/receipt.input'
 import { UpdateOrderInput } from './dto/update-order.input'
@@ -42,6 +45,8 @@ export class OrderService {
     private tokenTransactionService: TokenTransactionService,
     private paymentTransaction: PaymentTransactionService,
     private configService: ConfigService,
+    private chatService: ChatService,
+    private pusherService: PusherService,
   ) {}
 
   private async earnPoints(
@@ -148,6 +153,7 @@ export class OrderService {
       payment,
       clientOrderId,
       useUnifiedPayment,
+      loyaltyRedemptions,
       ...orderData
     } = createOrderInput
 
@@ -305,12 +311,12 @@ export class OrderService {
       },
     })
 
-    // Create Business Groups + Items
+    // Create Business Groups + Items + Payment Transactions
     if (!clientOrderId) {
       for (const group of Object.values(
         businessGroups as OrderBusinessGroupEntity[],
       )) {
-        await this.prisma.orderBusinessGroup.create(
+        const createdGroup = await this.prisma.orderBusinessGroup.create(
           {
             data: {
               orderId: order.id,
@@ -330,6 +336,18 @@ export class OrderService {
             },
           },
         )
+
+        // Create a PaymentTransaction for this business group
+        await this.prisma.paymentTransaction.create({
+          data: {
+            amount: group.total,
+            method: payment.method,
+            status: PaymentStatus.PENDING,
+            qrCode: payment.qrCode,
+            clientId,
+            businessGroupId: createdGroup.id,
+          },
+        })
       }
     }
 
@@ -455,6 +473,76 @@ export class OrderService {
       await this.earnPoints(order, 'initial')
     }
 
+    // Process loyalty redemptions (deduct points, reduce business group totals)
+    if (
+      !clientOrderId &&
+      loyaltyRedemptions?.length
+    ) {
+      await this.processLoyaltyRedemptions(
+        order.id,
+        clientId!,
+        loyaltyRedemptions,
+      )
+    }
+
+    // Create order-context chats per business group
+    // Each business gets a chat thread with the client for order coordination
+    if (!clientOrderId) {
+      try {
+        const businessProductGroups: Record<string, { businessId: string; count: number; total: number }> = {};
+        for (const op of order.products) {
+          const bizId = op.product.businessId;
+          if (!bizId) continue;
+          if (!businessProductGroups[bizId]) {
+            businessProductGroups[bizId] = { businessId: bizId, count: 0, total: 0 };
+          }
+          businessProductGroups[bizId].count += op.quantity;
+          businessProductGroups[bizId].total += op.product.price * op.quantity;
+        }
+
+        for (const group of Object.values(businessProductGroups)) {
+          const business = await this.prisma.business.findUnique({
+            where: { id: group.businessId },
+            select: { id: true, name: true },
+          });
+          if (!business) continue;
+
+          const chat = await this.chatService.createOrderChat({
+            orderId: order.id,
+            clientId,
+            businessId: group.businessId,
+            businessName: business.name,
+            itemCount: group.count,
+            total: group.total,
+          });
+
+          // Notify via Pusher
+          await this.pusherService.trigger(
+            `business-${group.businessId}`,
+            'new-order-chat',
+            {
+              chatId: chat.id,
+              orderId: order.id,
+              orderRef: order.id.substring(0, 8).toUpperCase(),
+              itemCount: group.count,
+              total: group.total,
+            },
+          );
+          await this.pusherService.trigger(
+            `client-${clientId}`,
+            'new-order-chat',
+            {
+              chatId: chat.id,
+              orderId: order.id,
+              businessName: business.name,
+            },
+          );
+        }
+      } catch (chatError) {
+        this.logger.warn(`Failed to create order chats for order ${order.id}`, chatError);
+      }
+    }
+
     // Transform the data to match frontend expectations
     return {
       ...order,
@@ -499,6 +587,96 @@ export class OrderService {
       },
       {},
     )
+  }
+
+  private async processLoyaltyRedemptions(
+    orderId: string,
+    clientId: string,
+    redemptions: LoyaltyRedemptionInput[],
+  ) {
+    for (const redemption of redemptions) {
+      const program =
+        await this.prisma.loyaltyProgram.findFirst({
+          where: {
+            businessId: redemption.businessId,
+          },
+        })
+      if (!program) {
+        this.logger.warn(
+          `No loyalty program for business ${redemption.businessId}, skipping redemption`,
+        )
+        continue
+      }
+
+      // Check available points
+      const balance =
+        await this.prisma.pointsTransaction.aggregate(
+          {
+            where: {
+              clientId,
+              loyaltyProgramId: program.id,
+            },
+            _sum: { points: true },
+          },
+        )
+      const available = balance._sum.points || 0
+      if (available < redemption.pointsToRedeem) {
+        this.logger.warn(
+          `Insufficient points for business ${redemption.businessId}: has ${available}, wants ${redemption.pointsToRedeem}`,
+        )
+        continue
+      }
+
+      // Calculate discount: each point is worth (1 / pointsPerPurchase) in currency
+      const pointValue =
+        program.pointsPerPurchase > 0
+          ? 1 / program.pointsPerPurchase
+          : 0
+      const discount =
+        redemption.pointsToRedeem * pointValue
+
+      // Deduct points
+      await this.prisma.pointsTransaction.create({
+        data: {
+          clientId,
+          loyaltyProgramId: program.id,
+          points: -Math.abs(
+            redemption.pointsToRedeem,
+          ),
+          type: 'REDEEMED',
+        },
+      })
+
+      // Reduce the business group total on the order
+      const businessGroup =
+        await this.prisma.orderBusinessGroup.findFirst(
+          {
+            where: {
+              orderId,
+              businessId: redemption.businessId,
+            },
+          },
+        )
+      if (businessGroup && discount > 0) {
+        const newTotal = Math.max(
+          0,
+          businessGroup.total - discount,
+        )
+        const newSubtotal = Math.max(
+          0,
+          businessGroup.subtotal - discount,
+        )
+        await this.prisma.orderBusinessGroup.update(
+          {
+            where: { id: businessGroup.id },
+            data: {
+              subtotal: newSubtotal,
+              total: newTotal,
+            },
+          },
+        )
+      }
+    }
   }
 
   // Get orders for a specific business
@@ -2111,6 +2289,50 @@ export class OrderService {
       'remaining',
     )
 
+    // Auto-create PlatformSettlement records for each business group
+    if (updatedOrder.businessGroups?.length) {
+      try {
+        const settings =
+          await this.prisma.platformSettings.findFirst()
+        const feeRate =
+          settings?.platformFeePercentage ?? 0
+
+        for (const group of updatedOrder.businessGroups) {
+          const grossAmount = group.total
+          const platformFee = mulPrecise(
+            grossAmount,
+            feeRate / 100,
+          )
+          const deliveryFee = group.deliveryFee || 0
+          const netAmount = sumPrecise([
+            grossAmount,
+            -platformFee,
+            -deliveryFee,
+          ])
+
+          await this.prisma.platformSettlement.create(
+            {
+              data: {
+                orderId: updatedOrder.id,
+                businessGroupId: group.id,
+                businessId: group.businessId,
+                grossAmount,
+                platformFee,
+                deliveryFee,
+                netAmount: Math.max(0, netAmount),
+                status: 'PENDING',
+              },
+            },
+          )
+        }
+      } catch (settlementError) {
+        this.logger.warn(
+          `Failed to create settlements for order ${updatedOrder.id}`,
+          settlementError,
+        )
+      }
+    }
+
     // Transform the data to match frontend expectations
     return {
       ...updatedOrder,
@@ -2122,5 +2344,138 @@ export class OrderService {
         }),
       ),
     }
+  }
+
+  /**
+   * Update the status of an OrderBusinessGroup.
+   * Workers can set PROCESSING, READY_FOR_SHIPMENT.
+   * Admins can set SHIPPED, DELIVERED, COMPLETED.
+   * Business/Worker can set CANCELLED.
+   * Fires Pusher notifications to all relevant parties.
+   */
+  async updateOrderStatus(
+    businessGroupId: string,
+    status: string,
+    userId: string,
+    userRole: string,
+  ) {
+    // Validate role-based status permissions
+    const workerStatuses = ['PROCESSING', 'READY_FOR_SHIPMENT', 'CANCELLED']
+    const adminStatuses = ['SHIPPED', 'DELIVERED', 'COMPLETED', 'CANCELLED']
+
+    if (userRole === 'worker' && !workerStatuses.includes(status)) {
+      throw new Error(`Workers can only set status to: ${workerStatuses.join(', ')}`)
+    }
+    if (userRole === 'admin' && !adminStatuses.includes(status)) {
+      throw new Error(`Admins can only set status to: ${adminStatuses.join(', ')}`)
+    }
+
+    const group = await this.prisma.orderBusinessGroup.findUnique({
+      where: { id: businessGroupId },
+      include: {
+        order: {
+          include: {
+            client: { select: { id: true, fullName: true } },
+          },
+        },
+        business: { select: { id: true, name: true } },
+        items: {
+          include: {
+            product: {
+              include: { medias: { take: 1 } },
+            },
+          },
+        },
+      },
+    })
+
+    if (!group) {
+      throw new Error('Order business group not found')
+    }
+
+    // Update the business group status
+    const updated = await this.prisma.orderBusinessGroup.update({
+      where: { id: businessGroupId },
+      data: { status: status as any },
+      include: {
+        order: {
+          include: {
+            client: { select: { id: true, fullName: true, email: true } },
+          },
+        },
+        business: { select: { id: true, name: true } },
+        items: {
+          include: {
+            product: {
+              include: { medias: { take: 1 } },
+            },
+          },
+        },
+      },
+    })
+
+    const orderRef = group.order.id.substring(0, 8).toUpperCase()
+    const clientId = group.order.clientId
+    const businessId = group.businessId
+    const businessName = group.business.name
+
+    // Fire Pusher events based on status
+    const eventPayload = {
+      businessGroupId,
+      orderId: group.orderId,
+      orderRef,
+      status,
+      businessId,
+      businessName,
+      clientName: group.order.client.fullName,
+      itemCount: group.items.length,
+      total: group.total,
+      updatedBy: userId,
+      updatedByRole: userRole,
+    }
+
+    try {
+      if (status === 'READY_FOR_SHIPMENT') {
+        // Notify admin — order is ready for pickup
+        await this.pusherService.trigger(
+          'admin-orders',
+          'order-ready-for-shipment',
+          eventPayload,
+        )
+        // Notify client
+        await this.pusherService.trigger(
+          `client-${clientId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        // Notify business
+        await this.pusherService.trigger(
+          `business-${businessId}`,
+          'order-status-update',
+          eventPayload,
+        )
+      } else if (status === 'SHIPPED') {
+        // Notify all parties
+        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger('admin-orders', 'order-status-update', eventPayload)
+      } else if (status === 'DELIVERED' || status === 'COMPLETED') {
+        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger('admin-orders', 'order-status-update', eventPayload)
+      } else if (status === 'CANCELLED') {
+        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger('admin-orders', 'order-status-update', eventPayload)
+      } else {
+        // PROCESSING or other — notify business and client
+        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
+      }
+    } catch (pusherError) {
+      this.logger.warn(`Failed to send Pusher notification for order status update`, pusherError)
+    }
+
+    return updated
   }
 }

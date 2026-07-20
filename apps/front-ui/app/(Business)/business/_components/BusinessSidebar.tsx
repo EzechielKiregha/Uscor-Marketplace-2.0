@@ -2,6 +2,7 @@
 
 import { useQuery } from "@apollo/client";
 import {
+    Banknote,
     BarChart,
     BarChart3,
     BriefcaseBusiness,
@@ -51,6 +52,7 @@ export const sidebarItems = [
   { href: "/business/reposts", icon: Star, label: "Reposts & Reowns" },
   { href: "/business/loyalty", icon: Star, label: "Loyalty Program" },
   { href: "/business/wallet", icon: Wallet, label: "Business Wallet" },
+  { href: "/business/settlements", icon: Banknote, label: "Settlements" },
   { href: "/business/subscription", icon: Crown, label: "Subscription" },
   { href: "/business/settings", icon: Settings, label: "Settings" },
 ];

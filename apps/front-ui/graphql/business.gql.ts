@@ -1,5 +1,24 @@
 import { gql } from "@apollo/client";
 
+// Business payment config lookup (for checkout)
+export const GET_BUSINESS_PAYMENT_CONFIG = gql`
+  query GetBusinessById($id: String!) {
+    business(id: $id) {
+      id
+      name
+      avatar
+      paymentConfig {
+        mtnCode
+        airtelCode
+        orangeCode
+        mpesaCode
+        bankAccount
+        mobileMoneyEnabled
+      }
+    }
+  }
+`;
+
 // 📦 Get All Businesses
 export const GET_BUSINESSES = gql`
   query GetBusinesses {
