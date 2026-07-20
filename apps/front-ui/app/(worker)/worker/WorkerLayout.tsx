@@ -12,7 +12,8 @@ import {
     Package,
     Settings,
     ShoppingCart,
-    SunIcon
+    SunIcon,
+    X,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -71,7 +72,6 @@ export function useWorkerLayout() {
 
 export default function WorkerLayout({ children }: WorkerLayoutProps) {
   const { user, loading: authLoading } = useMe();
-  // const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<WorkerSection>("pos");
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
@@ -101,7 +101,6 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
     }
   }, [activeSection]);
 
-  // Always call all hooks at the top level, regardless of conditions
   const {
     data: storesData,
     loading: storesLoading,
@@ -118,7 +117,6 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
   const { isOnline, syncing } = useIndexedDB();
   const { theme, setTheme } = useTheme();
 
-  // Pusher notifications for workers — subscribe to business channel
   usePusherNotifications({
     role: "worker",
     userId: user?.id,
@@ -136,7 +134,6 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  // Handle loading and error states after all hooks are called
   if (authLoading || workerLoading || storesLoading)
     return <SidebarPageSkeleton navItems={6} contentVariant="cards" />;
   if (!user)
@@ -181,193 +178,129 @@ export default function WorkerLayout({ children }: WorkerLayoutProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden fixed top-4 left-4 z-50"
+          className="md:hidden fixed top-4 left-4 z-50 bg-card border border-border shadow-sm"
           onClick={() => setIsSidebarOpen(true)}
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-4 w-4" />
         </Button>
 
         {/* Sidebar */}
-        <div
-          className={`
-        fixed md:relative
-        inset-y-0 left-0 z-40
-        w-64 bg-card border-r border-border
-        transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        transition-transform duration-300 ease-in-out
-        md:translate-x-0
-      `}
+        <aside
+          className={cn(
+            "fixed md:sticky inset-y-0 left-0 z-40 w-64 bg-card border-r border-border flex flex-col h-screen transform transition-transform duration-200 ease-out md:translate-x-0",
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+          )}
         >
-          <div className="flex flex-col h-full">
-            {/* Sidebar Header */}
-            <div className="p-4 border-b border-border">
-              <div className="flex items-center gap-3">
-                {worker?.avatar ? (
-                  <img
-                    src={worker.avatar}
-                    alt={worker.fullName}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                    {worker?.fullName?.charAt(0) || "W"}
-                  </div>
-                )}
-                <div>
-                  <h2 className="font-semibold">{worker?.fullName}</h2>
-                  <p className="text-xs text-muted-foreground">
-                    {worker?.role}
-                  </p>
-                </div>
-              </div>
-
-              {worker?.business && (
-                <div className="mt-3 p-2 bg-muted rounded-lg">
-                  <p className="text-xs text-muted-foreground">Business</p>
-                  <p className="font-medium">{worker.business.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {worker.business.businessType === "ARTISAN" &&
-                      "🎨 Artisan & Handcrafted Goods"}
-                    {worker.business.businessType === "BOOKSTORE" &&
-                      "📚 Bookstore & Stationery"}
-                    {worker.business.businessType === "ELECTRONICS" &&
-                      "🔌 Electronics & Gadgets"}
-                    {worker.business.businessType === "HARDWARE" &&
-                      "🔨 Hardware & Tools"}
-                    {worker.business.businessType === "GROCERY" &&
-                      "🛒 Grocery & Convenience"}
-                    {worker.business.businessType === "CAFE" &&
-                      "☕ Café & Coffee Shops"}
-                    {worker.business.businessType === "RESTAURANT" &&
-                      "🍽️ Restaurant & Dining"}
-                    {worker.business.businessType === "RETAIL" &&
-                      "🏬 Retail & General Stores"}
-                    {worker.business.businessType === "BAR" && "🍷 Bar & Pub"}
-                    {worker.business.businessType === "CLOTHING" &&
-                      "👕 Clothing & Accessories"}
-                  </p>
-
-                  {/* Store Selection */}
-                  {/* {storesData?.stores && storesData.stores.length > 1 && (
-                    <div className="bg-card border border-border rounded-lg p-4">
-                      <div className="flex items-center gap-3">
-                        <Users className="h-5 w-5 text-primary" />
-                        <div className="">
-                          <label className="block text-sm font-medium mb-1">
-                            Select Store
-                          </label>
-                          <select
-                            value={selectedStoreId || ""}
-                            onChange={(e) => setSelectedStoreId(e.target.value)}
-                            className="p-2 border border-border rounded-md w-full bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          >
-                            <option value="">Select a store</option>
-                            {storesData?.stores.map((store: StoreEntity) => (
-                              <option key={store.id} value={store.id}>
-                                {store.name} - {store.address}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  )} */}
+          {/* Worker Info */}
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center gap-3">
+              {worker?.avatar ? (
+                <img
+                  src={worker.avatar}
+                  alt={worker.fullName}
+                  className="w-9 h-9 rounded-full object-cover shrink-0"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
+                  {worker?.fullName?.charAt(0) || "W"}
                 </div>
               )}
-
-              {/* Online Status */}
-              {/* <div className="mt-3 flex items-center gap-2 p-2 bg-muted rounded-lg"> */}
-              {syncing && (
-                <div className="w-3 h-3 my-2 border-2 p-2 border-primary border-t-transparent rounded-full animate-spin ml-auto"></div>
-              )}
-              {/* </div> */}
-              <div className="flex mt-3 flex-row justify-between gap-2 p-2 bg-muted rounded-lg">
-                <div className=" flex items-center ">
-                  <div
-                    className={`w-3 h-3 rounded-full ${isOnline ? "bg-success" : "bg-warning"}`}
-                  ></div>
-                  <span className="text-base">
-                    {isOnline ? "Online" : "Offline"}
-                  </span>
-                </div>
-                <div className="flex justify-end">
-                  {/* Notifications Popover */}
-                  <NotificationsPopover />
-                  <Button
-                    onClick={toggleTheme}
-                    variant="ghost"
-                    size="sm"
-                    className="text-sm cursor-pointer font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
-                    aria-label="Toggle theme"
-                  >
-                    {theme === "dark" ? (
-                      <SunIcon className="h-5 w-5" />
-                    ) : (
-                      <MoonIcon className="h-5 w-5" />
-                    )}
-                  </Button>
-                </div>
+              <div className="min-w-0">
+                <h2 className="font-semibold text-sm text-foreground truncate">{worker?.fullName}</h2>
+                <p className="text-xs text-muted-foreground">{worker?.role}</p>
               </div>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex-1 p-2">
-              <div className="space-y-1">
-                {workerSideLinks.map((item) => {
-                  const isActive = activeSection === item.section;
-                  return (
-                    <Button
-                      key={item.section}
-                      className={cn(
-                        `flex justify-start border-b-0 border-orange-700 w-full px-4 py-2 gap-1.5 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]`,
-                        isActive
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground",
-                      )}
-                      variant={isActive ? "ghost" : "ghost"}
-                      onClick={() => {
-                        setActiveSection(item.section as WorkerSection);
-                        setIsSidebarOpen(false);
-                      }}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {item.label}
-                    </Button>
-                  );
-                })}
+            {worker?.business && (
+              <div className="mt-3 p-2.5 bg-muted/50 rounded-lg">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Business</p>
+                <p className="text-sm font-medium text-foreground mt-0.5">{worker.business.name}</p>
               </div>
-            </nav>
+            )}
 
-            {/* Sidebar Footer */}
-            <div className="p-4 border-t border-border">
-              <Button
-                variant="outline"
-                className="w-full justify-start"
-                onClick={() => {
-                  logout()
-                  localStorage.removeItem("access_token");
-                  localStorage.removeItem("refresh_token");
-                  window.location.href = "/login";
-                }}
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Log Out
-              </Button>
+            {/* Status Bar */}
+            <div className="flex items-center justify-between mt-3 px-1">
+              <div className="flex items-center gap-1.5">
+                <div className={cn("w-2 h-2 rounded-full", isOnline ? "bg-green-500" : "bg-amber-500")} />
+                <span className="text-xs text-muted-foreground">{isOnline ? "Online" : "Offline"}</span>
+                {syncing && (
+                  <div className="w-3 h-3 border-[1.5px] border-primary border-t-transparent rounded-full animate-spin" />
+                )}
+              </div>
+              <div className="flex items-center gap-0.5">
+                <NotificationsPopover />
+                <Button
+                  onClick={toggleTheme}
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  aria-label="Toggle theme"
+                >
+                  {theme === "dark" ? (
+                    <SunIcon className="h-3.5 w-3.5" />
+                  ) : (
+                    <MoonIcon className="h-3.5 w-3.5" />
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 p-2 space-y-0.5">
+            {workerSideLinks.map((item) => {
+              const isActive = activeSection === item.section;
+              return (
+                <button
+                  type="button"
+                  key={item.section}
+                  className={cn(
+                    "flex items-center gap-2.5 w-full px-3 py-2 rounded-md text-sm transition-colors text-left",
+                    isActive
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted",
+                  )}
+                  onClick={() => {
+                    setActiveSection(item.section as WorkerSection);
+                    setIsSidebarOpen(false);
+                  }}
+                >
+                  <item.icon className="h-4 w-4 shrink-0" />
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Sidebar Footer */}
+          <div className="p-3 border-t border-border">
+            <button
+              type="button"
+              className="flex items-center gap-2.5 w-full px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+              onClick={() => {
+                logout();
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                window.location.href = "/login";
+              }}
+            >
+              <LogOut className="h-4 w-4" />
+              Log Out
+            </button>
+          </div>
+        </aside>
 
         {/* Overlay for mobile */}
         {isSidebarOpen && (
           <div
             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
             onClick={() => setIsSidebarOpen(false)}
-          ></div>
+          />
         )}
 
         {/* Main Content */}
-        <div className="flex-1">
-          <div className="container mx-auto px-4 py-8">{children}</div>
+        <div className="flex-1 min-w-0">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">{children}</div>
         </div>
       </div>
     </WorkerLayoutContext.Provider>

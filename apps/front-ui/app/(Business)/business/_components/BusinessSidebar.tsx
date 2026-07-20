@@ -24,14 +24,13 @@ import { GET_UNREAD_COUNT } from "@/graphql/chat.gql";
 import { cn } from "@/lib/utils";
 
 interface BusinessSidebarProps {
-  business: any; // Replace with actual BusinessEntity type
+  business: any;
   isOpen?: boolean;
 }
 
 export const sidebarItems = [
   { href: "/business/dashboard", icon: BarChart, label: "Dashboard" },
   { href: "/business/stores", icon: Building, label: "Stores" },
-//   { href: "/business/sales", icon: ShoppingCart, label: "Point of Sale" },
   { href: "/business/inventory", icon: Package, label: "Inventory" },
   { href: "/business/products", icon: Package, label: "Products" },
   { href: "/business/dashboard/orders", icon: ShoppingCart, label: "Orders" },
@@ -76,45 +75,43 @@ export default function BusinessSidebar({
     }
   }, [unreadMessages]);
 
-  const containerClass = isOpen
-    ? "hidden md:block w-64 bg-card border-r border-orange-400/60 dark:border-orange-500/70 h-screen sticky top-0 transition-all duration-200"
-    : "hidden md:block w-16 bg-card border-r border-orange-400/60 dark:border-orange-500/70 h-screen sticky top-0 transition-all duration-200";
-
   return (
-    <aside className={containerClass}>
-      <div className="p-3 border-b border-border flex items-center justify-center">
+    <aside
+      className={cn(
+        "hidden md:flex flex-col bg-card border-r border-border h-screen sticky top-0 transition-all duration-200 overflow-y-auto",
+        isOpen ? "w-64" : "w-16",
+      )}
+    >
+      {/* Sidebar Header */}
+      <div className="p-4 border-b border-border flex items-center gap-3">
         {business.avatar ? (
           <img
             src={business.avatar}
             alt={business.name}
-            className={
-              isOpen
-                ? "w-10 h-10 rounded-full object-cover"
-                : "w-8 h-8 rounded-full object-cover"
-            }
+            className={cn("rounded-full object-cover shrink-0", isOpen ? "w-9 h-9" : "w-8 h-8")}
           />
         ) : (
           <div
-            className={
-              isOpen
-                ? "w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
-                : "w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary"
-            }
+            className={cn(
+              "rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold shrink-0",
+              isOpen ? "w-9 h-9 text-sm" : "w-8 h-8 text-xs",
+            )}
           >
-            {business.name.charAt(0)}
+            {business.name?.charAt(0)}
           </div>
         )}
         {isOpen && (
-          <div className="ml-3">
-            <h2 className="font-semibold text-foreground truncate w-36">
+          <div className="min-w-0">
+            <h2 className="font-semibold text-sm text-foreground truncate">
               {business.name}
             </h2>
-            <p className="text-xs text-muted-foreground">Business Account</p>
+            <p className="text-xs text-muted-foreground">Business</p>
           </div>
         )}
       </div>
 
-      <nav className="p-2">
+      {/* Navigation */}
+      <nav className="flex-1 p-2 space-y-0.5">
         {sidebarItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -122,21 +119,21 @@ export default function BusinessSidebar({
               key={item.href}
               href={item.href}
               className={cn(
-                `flex items-center ${isOpen ? "px-4 py-2 gap-1.5" : "flex-col py-3 gap-0.5"} text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]`,
+                "flex items-center rounded-md text-sm transition-colors",
+                isOpen ? "px-3 py-2 gap-2.5" : "flex-col py-2.5 gap-1 justify-center",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground",
+                  ? "bg-primary/10 text-primary font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted",
               )}
             >
-              <item.icon className={isOpen ? "w-4 h-4" : "w-5 h-5"} />
-              {isOpen && <span>{item.label}</span>}
-              {item.badge && (
+              <item.icon className={cn("shrink-0", isOpen ? "w-4 h-4" : "w-5 h-5")} />
+              {isOpen && <span className="truncate">{item.label}</span>}
+              {item.badge && count > 0 && (
                 <span
-                  className={
-                    isOpen
-                      ? "ml-auto bg-primary text-xs rounded-full px-2 py-0.5"
-                      : "mt-1 bg-primary text-xs rounded-full px-2 py-0.5"
-                  }
+                  className={cn(
+                    "bg-primary text-primary-foreground text-[10px] font-medium rounded-full px-1.5 py-0.5",
+                    isOpen ? "ml-auto" : "mt-0.5",
+                  )}
                 >
                   {count}
                 </span>

@@ -14,10 +14,10 @@ import {
 } from "@/graphql/admin.gql";
 import { usePusherNotifications } from "@/hooks/usePusherNotifications";
 import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
     AlertTriangle,
-    BarChart,
     Menu,
     MoonIcon,
     SidebarClose,
@@ -123,25 +123,6 @@ export default function AdminDashboard() {
     setTheme(theme === "dark" ? "light" : "dark");
   }, [theme, setTheme]);
 
-  // Handle real-time updates
-  useSubscription(ON_NEW_USER, {
-    onData: ({ data }) => {
-      refetchDashboard();
-    },
-  });
-
-  useSubscription(ON_NEW_DISPUTE, {
-    onData: ({ data }) => {
-      refetchDashboard();
-    },
-  });
-
-  useSubscription(ON_KYC_SUBMITTED, {
-    onData: ({ data }) => {
-      refetchDashboard();
-    },
-  });
-
   useSubscription(ON_PLATFORM_SETTINGS_UPDATED, {
     onData: ({ data }) => {
       refetchDashboard();
@@ -180,120 +161,67 @@ export default function AdminDashboard() {
         <SideBar isOpen={isSidebarOpen} selectedSection={activeSection} />
 
         {/* Main Content Area */}
-        <div className=" flex-1">
-          <div className="container mx-auto px-4 py-8">
-            {/* Desktop sidebar toggle */}
-            <div className="flex flex-col lg:flex-row justify-between mb-6">
-              <div className="flex flex-row gap-3 justify-between">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hidden md:inline-flex mr-2"
-                  onClick={() => toggleSidebar?.()}
-                  aria-label={
-                    isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"
-                  }
-                >
-                  {isSidebarOpen ? (
-                    <SidebarClose className="h-5 w-5" />
-                  ) : (
-                    <SidebarOpen className="h-5 w-5" />
-                  )}
-                </Button>
-                {!isSidebarOpen ? (
-                  <>
-                    <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-                      <BarChart className="h-5 w-5" />
-                    </div>
-                    <h1 className="text-xl font-bold">USCOR Admin</h1>
-                  </>
-                ) : null}
-                {/* Mobile menu button */}
-
-                {showMobileMenu && (
-                  <div className="flex items-center gap-2 mb-6">
-                    {isSidebarOpen ? (
-                      <>
-                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-                          <BarChart className="h-5 w-5" />
-                        </div>
-                        <h1 className="text-xl font-bold">USCOR Admin</h1>
-                      </>
-                    ) : (
-                      <>
-                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-                          <Menu
-                            onClick={() => setShowMobileMenu(!showMobileMenu)}
-                            className="h-5 w-5"
-                          />
-                        </div>
-                        <h1 className="text-xl font-bold">USCOR Admin</h1>
-                      </>
-                    )}
-                  </div>
+        <div className="flex-1 min-w-0">
+          {/* Top Bar */}
+          <div className="sticky top-0 z-20 bg-card/95 backdrop-blur-sm border-b border-border px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hidden md:inline-flex"
+                onClick={() => toggleSidebar?.()}
+                aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+              >
+                {isSidebarOpen ? (
+                  <SidebarClose className="h-4 w-4" />
+                ) : (
+                  <SidebarOpen className="h-4 w-4" />
                 )}
-              </div>
-              <div className="flex flex-row items-center gap-4">
-                <Button
-                  onClick={toggleTheme}
-                  variant="ghost"
-                  size="sm"
-                  className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
-                  aria-label="Toggle theme"
-                >
-                  {theme === "dark" ? (
-                    <SunIcon className="h-5 w-5" />
-                  ) : (
-                    <MoonIcon className="h-5 w-5" />
-                  )}
-                </Button>
-                <UserDropdown />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg font-semibold text-foreground">
+                  {activeSection === "dashboard" && "Platform Dashboard"}
+                  {activeSection === "users" && "User Management"}
+                  {activeSection === "businesses" && "Business Management"}
+                  {activeSection === "workers" && "Worker Management"}
+                  {activeSection === "kyc" && "KYC Verification"}
+                  {activeSection === "tokens" && "Tokens & Wallets"}
+                  {activeSection === "orders" && "Order Fulfillment"}
+                  {activeSection === "settlements" && "Fund Distribution"}
+                  {activeSection === "disputes" && "Dispute Resolution"}
+                  {activeSection === "settings" && "Platform Settings"}
+                  {activeSection === "announcements" && "Announcements"}
+                  {activeSection === "audit" && "Audit Logs"}
+                </h1>
               </div>
             </div>
-
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold">
-                {activeSection === "dashboard" && "Platform Dashboard"}
-                {activeSection === "users" && "User Management"}
-                {activeSection === "businesses" && "Business Management"}
-                {activeSection === "workers" && "Worker Management"}
-                {activeSection === "kyc" && "KYC Verification"}
-                {activeSection === "tokens" && "Tokens & Wallets"}
-                {activeSection === "orders" && "Order Fulfillment"}
-                {activeSection === "settlements" && "Fund Distribution"}
-                {activeSection === "disputes" && "Dispute Resolution"}
-                {activeSection === "settings" && "Platform Settings"}
-                {activeSection === "announcements" && "Announcement Management"}
-                {activeSection === "audit" && "Audit Logs"}
-              </h1>
-              <p className="text-muted-foreground">
-                {activeSection === "dashboard" &&
-                  "Overview of platform metrics and activity"}
-                {activeSection === "users" &&
-                  "Manage all users and businesses on the platform"}
-                {activeSection === "businesses" &&
-                  "Verify, suspend, and manage registered businesses"}
-                {activeSection === "workers" &&
-                  "Overview of workers across all businesses"}
-                {activeSection === "kyc" &&
-                  "Review and verify KYC documents submitted by businesses"}
-                {activeSection === "tokens" &&
-                  "Monitor token circulation, wallet recharges, and revenue"}
-                {activeSection === "orders" &&
-                  "Manage order pickups, shipping, and delivery coordination"}
-                {activeSection === "settlements" &&
-                  "Distribute funds to businesses and track commissions"}
-                {activeSection === "disputes" &&
-                  "Resolve customer disputes and issues"}
-                {activeSection === "settings" &&
-                  "Configure platform rules and settings"}
-                {activeSection === "announcements" &&
-                  "Create and manage platform announcements"}
-                {activeSection === "audit" &&
-                  "View audit logs and system events"}
-              </p>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={toggleTheme}
+                variant="ghost"
+                size="icon"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <SunIcon className="h-4 w-4" />
+                ) : (
+                  <MoonIcon className="h-4 w-4" />
+                )}
+              </Button>
+              <UserDropdown />
             </div>
+          </div>
 
+          {/* Page Content */}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
             {dashboardLoading ? (
               <DashboardSkeleton statCount={4} showChart showTable />
             ) : dashboardError ? (
@@ -348,28 +276,12 @@ export default function AdminDashboard() {
             )}
           </div>
         </div>
+
+        {/* Mobile menu overlay */}
         {showMobileMenu && (
-          <div className="fixed inset-0 bg-background/90 z-50 md:hidden">
-            <div className="container mx-auto px-4 py-8 flex justify-between items-center">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground">
-                  <BarChart className="h-5 w-5" />
-                </div>
-                <h1 className="text-xl font-bold">USCOR Admin</h1>
-              </div>
-              <Button
-                onClick={toggleTheme}
-                variant="ghost"
-                size="sm"
-                className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? (
-                  <SunIcon className="h-5 w-5" />
-                ) : (
-                  <MoonIcon className="h-5 w-5" />
-                )}
-              </Button>
+          <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 md:hidden">
+            <div className="p-4 border-b border-border flex justify-between items-center">
+              <span className="font-bold text-foreground">USCOR Admin</span>
               <Button
                 variant="ghost"
                 size="icon"
@@ -378,26 +290,27 @@ export default function AdminDashboard() {
                 <X className="h-5 w-5" />
               </Button>
             </div>
-
-            <nav className="space-y-1">
+            <nav className="p-2 space-y-0.5">
               {sidebarItems.map((item) => {
-                const isActive =
-                  activeSection === item.section.toLowerCase();
+                const isActive = activeSection === item.section.toLowerCase();
                 return (
-                  <Button
-                    variant={isActive ? "secondary" : "ghost"}
-                    className="w-full justify-start"
+                  <button
+                    type="button"
                     key={item.label}
+                    className={cn(
+                      "flex items-center gap-2.5 w-full px-3 py-2.5 rounded-md text-sm transition-colors text-left",
+                      isActive
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted",
+                    )}
                     onClick={() => {
-                      handleActiveSectionChange(
-                        item.section.toLowerCase() as any,
-                      );
+                      handleActiveSectionChange(item.section.toLowerCase() as any);
                       setShowMobileMenu(false);
                     }}
                   >
-                    <item.icon className="h-4 w-4 mr-2" />
+                    <item.icon className="h-4 w-4" />
                     {item.label}
-                  </Button>
+                  </button>
                 );
               })}
             </nav>

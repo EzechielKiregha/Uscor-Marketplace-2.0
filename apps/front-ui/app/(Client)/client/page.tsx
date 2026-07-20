@@ -18,6 +18,7 @@ import {
   User,
   Wallet,
   Wallet2,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import MotionPage from "@/components/MotionPage";
@@ -61,6 +62,22 @@ type ClientSideLink = {
   label: string;
 };
 
+const clientSideLinks: ClientSideLink[] = [
+  { section: "profile", icon: User, label: "Profile" },
+  { section: "orders", icon: ShoppingBag, label: "Order History" },
+  { section: "purchases", icon: ShoppingCart, label: "Purchase History" },
+  { section: "warranty", icon: Shield, label: "Warranty Tracker" },
+  { section: "analytics", icon: BarChart3, label: "My Analytics" },
+  { section: "favorites", icon: Heart, label: "Favorite Stores" },
+  { section: "returns", icon: RefreshCcw, label: "Returns" },
+  { section: "chat", icon: MessageSquare, label: "My Chats" },
+  { section: "loyalty", icon: Star, label: "Loyalty Program" },
+  { section: "recommendations", icon: Home, label: "Recommendations" },
+  { section: "reviews", icon: MessageSquare, label: "Reviews" },
+  { section: "wallet", icon: Wallet2, label: "Uscor Wallet" },
+  { section: "settings", icon: Settings, label: "Account Settings" },
+];
+
 export default function ClientPanel() {
   const { user, loading: authLoading } = useMe();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -88,22 +105,6 @@ export default function ClientPanel() {
     }
   }, [activeSection]);
 
-  const clientSideLinks: ClientSideLink[] = [
-    { section: "profile", icon: User, label: "Profile" },
-    { section: "orders", icon: ShoppingBag, label: "Order History" },
-    { section: "purchases", icon: ShoppingCart, label: "Purchase History" },
-    { section: "warranty", icon: Shield, label: "Warranty Tracker" },
-    { section: "analytics", icon: BarChart3, label: "My Analytics" },
-    { section: "favorites", icon: Heart, label: "Favorite Stores" },
-    { section: "returns", icon: RefreshCcw, label: "Returns" },
-    { section: "chat", icon: MessageSquare, label: "My Chats" },
-    { section: "loyalty", icon: Star, label: "Loyalty Program" },
-    { section: "recommendations", icon: Home, label: "Recommendations" },
-    { section: "reviews", icon: MessageSquare, label: "Reviews" },
-    { section: "wallet", icon: Wallet2, label: "Uscor Wallet" },
-    { section: "settings", icon: Settings, label: "Account Settings" },
-  ];
-
   const {
     data: clientData,
     loading: clientLoading,
@@ -116,7 +117,7 @@ export default function ClientPanel() {
   if (authLoading || clientLoading) return <SidebarPageSkeleton navItems={13} contentVariant="profile" />;
   if (clientError)
     return <div>Error loading client data: {clientError.message}</div>;
-  if (!user || !user)
+  if (!user)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -136,110 +137,107 @@ export default function ClientPanel() {
     );
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="flex min-h-[calc(100vh-3.5rem)]">
       {/* Mobile Menu Button */}
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden fixed top-4 left-4 z-50"
+        className="md:hidden fixed top-[4.5rem] left-4 z-50 bg-card border border-border shadow-sm"
         onClick={() => setIsSidebarOpen(true)}
       >
-        <Menu className="h-5 w-5" />
+        <Menu className="h-4 w-4" />
       </Button>
 
       {/* Sidebar */}
-      <div
-        className={`
-        fixed md:relative
-        inset-y-0 left-0 z-40
-        w-64 bg-card border-r border-orange-500/60
-        transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        transition-transform duration-300 ease-in-out
-        md:translate-x-0
-      `}
+      <aside
+        className={cn(
+          "fixed md:sticky top-0 md:top-0 inset-y-0 left-0 z-40 w-64 bg-card border-r border-border flex flex-col transform transition-transform duration-200 ease-out md:translate-x-0 h-screen md:h-auto md:min-h-[calc(100vh-3.5rem)]",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+        )}
       >
-        <div className="flex flex-col h-[85vh]">
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1">
-            {clientSideLinks.map((item) => {
-              const isActive = activeSection === item.section;
-              const Icon = item.icon;
-              return (
-                <Button
-                  key={item.section}
-                  variant="ghost"
-                  className={cn(
-                    `flex justify-start border-b-0 border-orange-700 w-full px-4 py-2 gap-1.5 text-black/90 dark:text-white/90 hover:text-black dark:hover:text-white hover:bg-orange-400/20 dark:hover:bg-orange-500/20 hover:border-l-2 hover:border-orange-400/60 dark:hover:border-orange-500/60 rounded-md transition-all duration-300 ease-out backdrop-blur-sm hover:shadow-sm hover:scale-[1.02]`,
-                    isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground",
-                  )}
-                  onClick={() => {
-                    setActiveSection(item.section);
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </Button>
-              );
-            })}
-          </nav>
-
-          {/* Quick Actions */}
-          <div className="p-4 bottom-1 border-t border-orange-500/60 space-y-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start text-xs"
-              onClick={() => (window.location.href = "/client/wallet")}
-            >
-              <Wallet className="h-3 w-3 mr-2" />
-              My Wallet
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start text-xs"
-              onClick={() => (window.location.href = "/marketplace")}
-            >
-              <ShoppingBag className="h-3 w-3 mr-2" />
-              Browse Marketplace
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start text-xs"
-              onClick={() =>
-                (window.location.href = "/all-businesses?verified=true")
-              }
-            >
-              <ShieldCheck className="h-3 w-3 mr-2" />
-              Verified Businesses
-            </Button>
-          </div>
+        {/* Mobile close */}
+        <div className="md:hidden flex items-center justify-between p-3 border-b border-border">
+          <span className="text-sm font-medium text-foreground">My Account</span>
+          <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(false)}>
+            <X className="h-4 w-4" />
+          </Button>
         </div>
-      </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto">
+          {clientSideLinks.map((item) => {
+            const isActive = activeSection === item.section;
+            const Icon = item.icon;
+            return (
+              <button
+                type="button"
+                key={item.section}
+                className={cn(
+                  "flex items-center gap-2.5 w-full px-3 py-2 rounded-md text-sm transition-colors text-left",
+                  isActive
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted",
+                )}
+                onClick={() => {
+                  setActiveSection(item.section);
+                  setIsSidebarOpen(false);
+                }}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Quick Actions */}
+        <div className="p-3 border-t border-border space-y-1.5">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-xs text-muted-foreground hover:text-foreground"
+            onClick={() => (window.location.href = "/client/wallet")}
+          >
+            <Wallet className="h-3.5 w-3.5 mr-2" />
+            My Wallet
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-xs text-muted-foreground hover:text-foreground"
+            onClick={() => (window.location.href = "/marketplace")}
+          >
+            <ShoppingBag className="h-3.5 w-3.5 mr-2" />
+            Browse Marketplace
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-xs text-muted-foreground hover:text-foreground"
+            onClick={() => (window.location.href = "/all-businesses?verified=true")}
+          >
+            <ShieldCheck className="h-3.5 w-3.5 mr-2" />
+            Verified Businesses
+          </Button>
+        </div>
+      </aside>
 
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
-        ></div>
+        />
       )}
 
       {/* Main Content */}
-      <div className="flex-1">
-        <div className="container mx-auto px-4 py-8">
+      <div className="flex-1 min-w-0">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
           <MotionPage className="space-y-6">
             {activeSection === "profile" && (
               <ProfileOverview client={clientData.client} />
             )}
             {activeSection === "chat" && <ChatPage />}
-            {/* {activeSection === "chat" && <ChatsPage />} */}
             {activeSection === "orders" && (
               <OrderHistory client={clientData.client} />
             )}
