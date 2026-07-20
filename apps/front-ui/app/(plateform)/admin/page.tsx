@@ -1,37 +1,36 @@
 "use client";
 
-import { useQuery, useSubscription } from "@apollo/client";
-import {
-  AlertTriangle,
-  BarChart,
-  Menu,
-  MoonIcon,
-  SidebarClose,
-  SidebarOpen,
-  SunIcon,
-  X,
-} from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useTheme } from "next-themes";
-import { useCallback, useState } from "react";
 import MotionPage from "@/components/MotionPage";
 import UserDropdown from "@/components/seraui/UserDrodown";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
-  GET_PLATFORM_DASHBOARD,
-  ON_KYC_SUBMITTED,
-  ON_NEW_DISPUTE,
-  ON_NEW_USER,
-  ON_PLATFORM_SETTINGS_UPDATED,
+    GET_PLATFORM_DASHBOARD,
+    ON_KYC_SUBMITTED,
+    ON_NEW_DISPUTE,
+    ON_NEW_USER,
+    ON_PLATFORM_SETTINGS_UPDATED,
 } from "@/graphql/admin.gql";
 import { usePusherNotifications } from "@/hooks/usePusherNotifications";
 import { useMe } from "@/lib/useMe";
+import { useQuery, useSubscription } from "@apollo/client";
+import {
+    AlertTriangle,
+    BarChart,
+    Menu,
+    MoonIcon,
+    SidebarClose,
+    SidebarOpen,
+    SunIcon,
+    X,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import AnnouncementManagement from "./_components/AnnouncementManagement";
 import AuditLogs from "./_components/AuditLogs";
 import BusinessManagement from "./_components/BusinessManagement";
-import DashboardOverview from "./_components/DashboardOverview";
 import DisputeResolution from "./_components/DisputeResolution";
 import KycManagement from "./_components/KycManagement";
 import KycVerificationModal from "./_components/KycVerificationModal";
@@ -41,8 +40,8 @@ import PlatformSettings from "./_components/PlatformSettings";
 import SettlementManagement from "./_components/SettlementManagement";
 import SideBar, { sidebarItems } from "./_components/SideBar";
 import TokenDashboard from "./_components/TokenDashboard";
-import UserManagement from "./_components/UserManagement";
 import { useActiveSection } from "./_components/useActiveSection";
+import UserManagement from "./_components/UserManagement";
 import WorkerManagement from "./_components/WorkerManagement";
 
 export default function AdminDashboard() {
@@ -60,6 +59,7 @@ export default function AdminDashboard() {
         | "orders"
         | "disputes"
         | "settings"
+        | "settlements"
         | "announcements"
         | "audit")
     : "dashboard";
