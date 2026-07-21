@@ -286,7 +286,7 @@ export const SEND_MESSAGE = gql`
       createdAt
       sender {
         id
-        fullName
+        name
         avatar
       }
     }

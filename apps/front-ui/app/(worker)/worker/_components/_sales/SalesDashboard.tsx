@@ -65,7 +65,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
 
   if (isOffline) {
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-75 flex items-center justify-center">
           <div className="text-center">
             <div className="text-muted-foreground mb-2">Offline view</div>
@@ -80,7 +80,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
 
   if (loading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-75 flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -92,7 +92,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
 
   if (error && isOffline)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-75 flex items-center justify-center">
           <div className="text-center">
             <div className="text-muted-foreground mb-2">Offline view</div>
@@ -106,7 +106,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
 
   if (error)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-75 flex items-center justify-center">
           <div className="text-center">
             <div className="text-destructive mb-2">Error loading dashboard</div>
@@ -125,7 +125,7 @@ export default function SalesDashboard({ storeId }: SalesDashboardProps) {
   const chartData = dashboardData?.chartData || [];
 
   return (
-    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+    <Card className="border hover:border-primary  bg-card">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">Sales Dashboard</CardTitle>
         <div className="flex gap-1">

@@ -1,6 +1,7 @@
 // app/businesses/_components/BusinessCard.tsx
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
     ArrowRight,
     BriefcaseBusiness,
@@ -9,7 +10,6 @@ import {
     ShieldCheck,
     Star,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface BusinessCardProps {
 	business: any;
@@ -52,7 +52,7 @@ export default function BusinessCard({
 
 	if (viewMode === "grid") {
 		return (
-			<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card">
+			<div className="border hover:border-primary  rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card">
 				<div className="h-40 bg-muted relative">
 					{business.coverImage ? (
 						<img
@@ -156,7 +156,7 @@ export default function BusinessCard({
 	}
 
 	return (
-		<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card flex flex-col md:flex-row">
+		<div className="border hover:border-primary  rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card flex flex-col md:flex-row">
 			<div className="md:w-48 h-32 md:h-auto bg-muted relative">
 				{business.coverImage ? (
 					<img

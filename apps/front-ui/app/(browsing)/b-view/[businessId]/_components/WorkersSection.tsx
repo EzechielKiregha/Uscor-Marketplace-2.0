@@ -1,11 +1,11 @@
 // app/business/[id]/_components/WorkersSection.tsx
 "use client";
 
-import { Filter, MessageSquare, Search, Star, Users } from "lucide-react";
-import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Filter, MessageSquare, Search, Star, Users } from "lucide-react";
+import { useState } from "react";
 
 interface WorkersSectionProps {
 	workers: any[];
@@ -38,7 +38,7 @@ export default function WorkersSection({
 
 	if (loading) {
 		return (
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+			<div className="bg-card border hover:border-primary  rounded-lg p-6">
 				<div className="flex justify-center items-center h-64">
 					<div className="text-center">
 						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -51,7 +51,7 @@ export default function WorkersSection({
 
 	if (filteredWorkers.length === 0) {
 		return (
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+			<div className="bg-card border hover:border-primary  rounded-lg p-6">
 				<EmptyState
 					icon={emptyStateIcons.customers}
 					title="No workers found"
@@ -73,7 +73,7 @@ export default function WorkersSection({
 	}
 
 	return (
-		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+		<div className="bg-card border hover:border-primary  rounded-lg overflow-hidden">
 			{/* Header */}
 			<div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 				<div className="relative w-full sm:w-64">
@@ -98,7 +98,7 @@ export default function WorkersSection({
 							{selectedRole ? selectedRole : "All Roles"}
 						</Button>
 						{roles.length > 0 && (
-							<div className="absolute right-0 mt-2 w-48 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-md shadow-lg z-10 hidden group-hover:block">
+							<div className="absolute right-0 mt-2 w-48 bg-card border hover:border-primary  rounded-md shadow-lg z-10 hidden group-hover:block">
 								<div className="py-1">
 									<button
 										onClick={() => setSelectedRole(null)}
@@ -128,7 +128,7 @@ export default function WorkersSection({
 					{filteredWorkers.map((worker) => (
 						<div
 							key={worker.id}
-							className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+							className="border hover:border-primary  rounded-lg overflow-hidden hover:shadow-md transition-shadow"
 						>
 							<div className="p-4 text-center bg-muted border-b border-border">
 								<div className="w-20 h-20 rounded-full mx-auto mb-3 overflow-hidden border-2 border-border">

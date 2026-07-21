@@ -90,7 +90,7 @@ export default function DisputeResolution() {
 		return <div>Error loading disputes: {disputesError.message}</div>;
 
 	return (
-		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+		<div className="bg-card border hover:border-primary  rounded-lg overflow-hidden">
 			{/* Header */}
 			<div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 				<div className="relative w-full sm:w-64">
@@ -108,7 +108,7 @@ export default function DisputeResolution() {
 					<select
 						value={filters.status}
 						onChange={(e) => handleFilterChange("status", e.target.value)}
-						className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						<option value="">All Statuses</option>
 						<option value="OPEN">Open</option>
@@ -119,7 +119,7 @@ export default function DisputeResolution() {
 					<select
 						value={filters.type}
 						onChange={(e) => handleFilterChange("type", e.target.value)}
-						className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						<option value="">All Types</option>
 						<option value="PAYMENT">Payment Issue</option>

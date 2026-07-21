@@ -1,9 +1,9 @@
 // app/business/[id]/_components/ReviewsSection.tsx
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { MessageSquare, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 interface ReviewsSectionProps {
 	reviews: any[];
@@ -73,7 +73,7 @@ export default function ReviewsSection({
 
 	if (loading) {
 		return (
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+			<div className="bg-card border hover:border-primary  rounded-lg p-6">
 				<div className="flex justify-center items-center h-64">
 					<div className="text-center">
 						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -86,7 +86,7 @@ export default function ReviewsSection({
 
 	if (reviews.length === 0) {
 		return (
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+			<div className="bg-card border hover:border-primary  rounded-lg p-6">
 				<div className="text-center py-12">
 					<div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
 						<Star className="h-8 w-8 text-muted-foreground" />
@@ -106,7 +106,7 @@ export default function ReviewsSection({
 	}
 
 	return (
-		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+		<div className="bg-card border hover:border-primary  rounded-lg overflow-hidden">
 			{/* Header */}
 			<div className="p-4 bg-muted border-b border-border">
 				<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -250,7 +250,7 @@ export default function ReviewsSection({
 								<p className="mt-3 text-muted-foreground">{review.comment}</p>
 
 								{review.response && (
-									<div className="mt-4 p-3 bg-muted rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+									<div className="mt-4 p-3 bg-muted rounded-lg border hover:border-primary ">
 										<div className="flex items-center gap-2 mb-1">
 											<span className="font-medium">
 												{business.name} Response

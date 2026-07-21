@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { useMe } from "@/lib/useMe";
 import {
     Bookmark,
     BookmarkPlus,
@@ -10,8 +12,6 @@ import {
     Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useMe } from "@/lib/useMe";
 
 interface BusinessHeaderProps {
 	business: any;
@@ -89,7 +89,7 @@ export default function BusinessHeader({
 	};
 
 	return (
-		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-xl overflow-hidden">
+		<div className="bg-card border hover:border-primary  rounded-xl overflow-hidden">
 			{/* Cover Image */}
 			<div className="h-48 md:h-64 relative">
 				{business.coverImage ? (

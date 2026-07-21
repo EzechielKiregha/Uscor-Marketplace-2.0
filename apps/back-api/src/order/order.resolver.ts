@@ -108,7 +108,7 @@ export class OrderResolver {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("business")
+    @Roles("business", "worker")
     @Query(() => PaginatedOrdersResponse, {
         name: "businessOrders",
         description: "Retrieves orders for a business.",

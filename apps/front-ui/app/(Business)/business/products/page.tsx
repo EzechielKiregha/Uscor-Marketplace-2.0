@@ -90,7 +90,7 @@ export default function BusinessProductsPage() {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border hover:border-primary  bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
@@ -99,7 +99,7 @@ export default function BusinessProductsPage() {
             title="all categories"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Categories</option>
   
@@ -127,7 +127,7 @@ export default function BusinessProductsPage() {
         {filteredProducts.map((product: ProductEntity) => (
           <div
             key={product.id}
-            className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden bg-card"
+            className="border hover:border-primary  rounded-lg overflow-hidden bg-card"
           >
             <div className="relative pt-[100%]">
               <img

@@ -91,7 +91,7 @@ export default function ProductDetailsModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-card border hover:border-primary  rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -167,7 +167,7 @@ export default function ProductDetailsModal({
             {/* Right Column - Product Details */}
             <div className="space-y-6">
               {/* Business Info */}
-              <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+              <div className="border hover:border-primary  rounded-lg p-4">
                 <div className="flex items-start gap-3">
                   <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-xl font-bold shrink-0">
                     {getBusinessTypeIcon()}
@@ -270,7 +270,7 @@ export default function ProductDetailsModal({
               {/* Quantity Selector */}
               <div className="flex items-center gap-3">
                 <label className="font-medium">Quantity:</label>
-                <div className="flex items-center border border-border hover:border-primary hover:bg-primary/5 rounded-md">
+                <div className="flex items-center border hover:border-primary  rounded-md">
                   <Button
                     variant="outline"
                     size="icon"
@@ -326,7 +326,7 @@ export default function ProductDetailsModal({
               {(() => {
                 const config = getBusinessTypeConfig(product.business?.businessType);
                 return (
-                  <div className="mt-6 p-4 bg-muted rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+                  <div className="mt-6 p-4 bg-muted rounded-lg border hover:border-primary ">
                     <div className="flex items-start gap-3">
                       <div className={`p-1.5 rounded-md ${config.color.badge} shrink-0`}>
                         <config.icon className="h-4 w-4" />

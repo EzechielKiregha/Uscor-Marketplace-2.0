@@ -1,9 +1,6 @@
 // app/business/loyalty/_components/CustomerPointsManagement.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { Gift, Minus, Plus, Search, User, X } from "lucide-react";
-import { useMemo, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +11,9 @@ import {
     REDEEM_POINTS,
 } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { Gift, Minus, Plus, Search, User, X } from "lucide-react";
+import { useMemo, useState } from "react";
 
 interface CustomerPointsManagementProps {
 	programId: string;
@@ -131,7 +131,7 @@ export default function CustomerPointsManagement({
 
 	if (loading || customersLoading)
 		return (
-			<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+			<Card className="border hover:border-primary  bg-card">
 				<CardContent className="h-[500px] flex items-center justify-center">
 					<div className="text-center">
 						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -142,7 +142,7 @@ export default function CustomerPointsManagement({
 		);
 
 	return (
-		<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+		<Card className="border hover:border-primary  bg-card">
 			<CardHeader>
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 					<div>
@@ -281,7 +281,7 @@ export default function CustomerPointsManagement({
 			{/* Add Points Modal */}
 			{showAddPointsModal && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-md">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>
@@ -397,7 +397,7 @@ export default function CustomerPointsManagement({
 			{/* Redeem Points Modal */}
 			{showRedeemModal && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-md">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>

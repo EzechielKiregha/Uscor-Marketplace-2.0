@@ -17,7 +17,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  turbopack: {},
+  logging: {
+    fetches: {
+      fullUrl: false,
+    },
+  },
 };
 
 // 👇 FIRST configure Serwist

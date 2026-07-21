@@ -1,7 +1,7 @@
 "use client";
 
-import { AlertTriangle, Package, ShoppingCart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertTriangle, Package, ShoppingCart } from "lucide-react";
 import { useInventory } from "../../_hooks/use-inventory";
 
 interface InventorySummaryProps {
@@ -21,7 +21,7 @@ export default function InventorySummary({
 
   if (inventoryLoading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-[80px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -33,7 +33,7 @@ export default function InventorySummary({
 
   if (errorLoading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-[80px] flex items-center justify-center">
           <div className="text-center">
             <div className="text-destructive mb-2">
@@ -64,7 +64,7 @@ export default function InventorySummary({
   );
 
   return (
-    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+    <Card className="border hover:border-primary  bg-card">
       <CardHeader>
         <CardTitle className="text-sm font-medium">Inventory Summary</CardTitle>
       </CardHeader>

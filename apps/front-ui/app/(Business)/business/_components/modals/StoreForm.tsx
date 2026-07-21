@@ -1,11 +1,11 @@
 "use client";
 
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { CREATE_STORE, GET_STORES, UPDATE_STORE } from "@/graphql/store.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
 
 interface StoreFormProps {
 	initialData?: {
@@ -94,7 +94,7 @@ export default function StoreForm({
 						name="name"
 						value={formData.name}
 						onChange={handleChange}
-						className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+						className="w-full p-2 border hover:border-primary  rounded-md"
 						required
 					/>
 				</div>
@@ -109,7 +109,7 @@ export default function StoreForm({
 						value={formData.address}
 						onChange={handleChange}
 						rows={3}
-						className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+						className="w-full p-2 border hover:border-primary  rounded-md"
 					/>
 				</div>
 			</div>

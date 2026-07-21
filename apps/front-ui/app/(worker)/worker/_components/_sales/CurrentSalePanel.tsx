@@ -1,16 +1,6 @@
 // app/business/sales/_components/CurrentSalePanel.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-    CreditCard,
-    Minus,
-    Plus,
-    RefreshCcw,
-    ShoppingCart,
-    X
-} from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +14,16 @@ import {
 } from "@/graphql/sales.gql";
 import { useIndexedDB } from "@/hooks/use-indexed-db";
 import { ProductEntity } from "@/lib/types";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    CreditCard,
+    Minus,
+    Plus,
+    RefreshCcw,
+    ShoppingCart,
+    X
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useSales } from "../../../../(Business)/business/_hooks/use-sales";
 import ClientSelectionModal from "./ClientSelectionModal";
 import NewSaleModal from "./NewSaleModal";
@@ -494,7 +494,7 @@ export default function CurrentSalePanel({
 
   if (!currentSale && !currentSaleDetails) {
     return (
-      <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-card h-auto flex flex-col items-center justify-center p-8">
+      <div className="border hover:border-primary  rounded-lg bg-card h-auto flex flex-col items-center justify-center p-8">
         <div className="text-center max-w-md">
           <div className="bg-muted/50 p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
             <ShoppingCart className="h-10 w-10 text-primary" />
@@ -540,7 +540,7 @@ export default function CurrentSalePanel({
   }
 
   return (
-    <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-card h-auto overflow-hidden flex flex-col">
+    <div className="border hover:border-primary  rounded-lg bg-card h-auto overflow-hidden flex flex-col">
       {/* Sale Header */}
       <div className="border-b border-border p-4 flex items-center justify-between">
         <div>
@@ -639,7 +639,7 @@ export default function CurrentSalePanel({
             {filteredProducts.map((product: ProductEntity) => (
               <div
                 key={product.id}
-                className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors"
+                className="border hover:border-primary  rounded-lg overflow-hidden cursor-pointer hover:border-primary transition-colors"
                 onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative pt-[100%]">
@@ -675,7 +675,7 @@ export default function CurrentSalePanel({
       {/* Product Selection Modal */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md overflow-hidden">
+          <div className="bg-card border hover:border-primary  rounded-lg w-full max-w-md overflow-hidden">
             <div className="p-6">
               <div className="flex -mx-4 -mt-4 bg-muted border-b border-border p-4 mb-4">
                 <div className="w-24 h-24 shrink-0 mr-4">
@@ -708,7 +708,7 @@ export default function CurrentSalePanel({
               {/* Quantity Selector */}
               <div className="flex items-center justify-between mb-6">
                 <label className="text-sm font-medium">Quantity</label>
-                <div className="flex items-center border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
+                <div className="flex items-center border hover:border-primary  rounded-lg">
                   <Button
                     variant="ghost"
                     size="icon"
@@ -851,7 +851,7 @@ export default function CurrentSalePanel({
                 Card
                 {/* Payment Form */}
                 {showPaymentForm && paymentMethod && (
-                  <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 space-y-4">
+                  <div className="border hover:border-primary  rounded-lg p-4 space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium">Payment Details</h3>
                       <Button
@@ -874,7 +874,7 @@ export default function CurrentSalePanel({
                             Mobile Money Provider
                           </label>
                           <select
-                            className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                            className="w-full mt-1 p-2 border hover:border-primary  rounded-md"
                             value={paymentDetails.mobileMoneyMethod || ""}
                             onChange={(e) =>
                               setPaymentDetails({
@@ -893,7 +893,7 @@ export default function CurrentSalePanel({
                         <div>
                           <label className="text-sm font-medium">Country</label>
                           <select
-                            className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                            className="w-full mt-1 p-2 border hover:border-primary  rounded-md"
                             value={paymentDetails.country || ""}
                             onChange={(e) =>
                               setPaymentDetails({
@@ -1070,7 +1070,7 @@ export default function CurrentSalePanel({
 
           {/* Payment Form */}
           {showPaymentForm && paymentMethod && (
-            <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 space-y-4">
+            <div className="border hover:border-primary  rounded-lg p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium">Payment Details</h3>
                 <Button
@@ -1093,7 +1093,7 @@ export default function CurrentSalePanel({
                       Mobile Money Provider
                     </label>
                     <select
-                      className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                      className="w-full mt-1 p-2 border hover:border-primary  rounded-md"
                       value={paymentDetails.mobileMoneyMethod || ""}
                       onChange={(e) =>
                         setPaymentDetails({
@@ -1112,7 +1112,7 @@ export default function CurrentSalePanel({
                   <div>
                     <label className="text-sm font-medium">Country</label>
                     <select
-                      className="w-full mt-1 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                      className="w-full mt-1 p-2 border hover:border-primary  rounded-md"
                       value={paymentDetails.country || ""}
                       onChange={(e) =>
                         setPaymentDetails({

@@ -1,18 +1,6 @@
 // app/admin/_components/UserManagement.tsx
 "use client";
 
-import { useQuery, useSubscription } from "@apollo/client";
-import {
-    Briefcase,
-    Building2,
-    Eye,
-    Search,
-    Settings,
-    User,
-    Users,
-} from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
@@ -25,6 +13,18 @@ import {
     ON_NEW_CLIENT,
     ON_NEW_WORKER,
 } from "@/graphql/admin.gql";
+import { useQuery, useSubscription } from "@apollo/client";
+import {
+    Briefcase,
+    Building2,
+    Eye,
+    Search,
+    Settings,
+    User,
+    Users,
+} from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import UserDetailModal from "./UserDetailModal";
 
 // type UserManagementProps = {};
@@ -224,7 +224,7 @@ export default function UserManagement() {
   if (usersError) return <div>Error loading users: {usersError.message}</div>;
 
   return (
-    <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+    <div className="bg-card border hover:border-primary  rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="relative w-full sm:w-64">
@@ -242,7 +242,7 @@ export default function UserManagement() {
           <select
             value={filters.userType}
             onChange={(e) => handleFilterChange("userType", e.target.value)}
-            className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="ALL">All User Types</option>
             <option value="BUSINESS">Businesses</option>
@@ -254,7 +254,7 @@ export default function UserManagement() {
           <select
             value={filters.status}
             onChange={(e) => handleFilterChange("status", e.target.value)}
-            className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Statuses</option>
             <option value="ACTIVE">Active</option>
@@ -268,7 +268,7 @@ export default function UserManagement() {
             <select
               value={filters.kycStatus}
               onChange={(e) => handleFilterChange("kycStatus", e.target.value)}
-              className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
               <option value="">KYC Status</option>
               <option value="VERIFIED">Verified</option>
@@ -284,7 +284,7 @@ export default function UserManagement() {
               onChange={(e) =>
                 handleFilterChange("businessType", e.target.value)
               }
-              className="w-full sm:w-40 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full sm:w-40 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
               <option value="">Business Type</option>
               <option value="ARTISAN">Artisan & Handcrafted Goods</option>

@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Banknote,
     Clock,
@@ -13,8 +15,6 @@ import {
     X,
 } from "lucide-react";
 import { useMemo } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
 // ─── Types ─────────────────────────────────────────────
 
@@ -155,7 +155,7 @@ export default function ShiftSummary({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
+      <div className="bg-card border hover:border-primary  rounded-lg w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-border flex items-center justify-between bg-muted">
           <div className="flex items-center gap-2">

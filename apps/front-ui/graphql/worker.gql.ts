@@ -656,14 +656,14 @@ export const CREATE_INVENTORY_ADJUSTMENT = gql`
   }
 `;
 
-export const SEND_CHAT_MESSAGE = gql`
-  mutation SendChatMessage($input: SendChatMessageInput!) {
-    sendMessage(input: $input) {
-      ...ChatMessageEntity
-    }
-  }
-  ${CHAT_MESSAGE_ENTITY}
-`;
+// export const SEND_CHAT_MESSAGE = gql`
+//   mutation SendChatMessage($input: SendChatMessageInput!) {
+//     sendMessage(input: $input) {
+//       ...ChatMessageEntity
+//     }
+//   }
+//   ${CHAT_MESSAGE_ENTITY}
+// `;
 
 export const UPDATE_WORKER_PROFILE = gql`
   mutation UpdateWorkerProfile($id: String!, $updateWorkerInput: UpdateWorkerInput!) {

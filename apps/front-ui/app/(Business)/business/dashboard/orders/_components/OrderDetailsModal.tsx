@@ -10,7 +10,7 @@ import { UPDATE_PAYMENT_TRANSACTION } from "@/graphql/payment.gql";
 import { removeTypename } from "@/lib/removeTypeName";
 import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
-import { CheckCircle, CreditCard, Package, Truck, XCircle } from "lucide-react";
+import { CreditCard, Package, Truck } from "lucide-react";
 import { useOpenOrderDetailsModal } from "../../../_hooks/use-open-order-details-modal";
 
 export default function OrderDetailsModal() {
@@ -116,7 +116,7 @@ export default function OrderDetailsModal() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+            <div className="border hover:border-primary  rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Package className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Customer</h3>
@@ -136,7 +136,7 @@ export default function OrderDetailsModal() {
               )}
             </div>
 
-            <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+            <div className="border hover:border-primary  rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Truck className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Shipping</h3>
@@ -157,7 +157,7 @@ export default function OrderDetailsModal() {
               )}
             </div>
 
-            <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+            <div className="border hover:border-primary  rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <CreditCard className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold">Payment</h3>
@@ -180,7 +180,7 @@ export default function OrderDetailsModal() {
               {orderData.products.map((item: any) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-3 p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg"
+                  className="flex items-center gap-3 p-3 border hover:border-primary  rounded-lg"
                 >
                   <img
                     src={
@@ -211,7 +211,7 @@ export default function OrderDetailsModal() {
           </div>
 
           {/* Order Activity Timeline */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+          <div className="border hover:border-primary  rounded-lg p-4">
             <h3 className="font-semibold mb-3">Order Activity</h3>
             <ActivityTimeline
               items={buildOrderTimelineItems(orderData.status, orderData.createdAt)}

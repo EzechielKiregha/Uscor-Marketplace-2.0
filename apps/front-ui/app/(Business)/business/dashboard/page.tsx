@@ -25,8 +25,7 @@ import {
     DollarSign,
     MessageSquare,
     Package,
-    Plus,
-    ShoppingCart,
+    ShoppingCart
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -207,7 +206,7 @@ export default function BusinessDashboardPage() {
       {/* Stats Grid */}
       <MotionStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MotionStaggerItem>
-          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+          <Card className="border hover:border-primary  bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Total Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -222,7 +221,7 @@ export default function BusinessDashboardPage() {
         </MotionStaggerItem>
 
         <MotionStaggerItem>
-          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+          <Card className="border hover:border-primary  bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Total Orders</CardTitle>
               <ShoppingCart className="h-4 w-4 text-muted-foreground" />
@@ -237,7 +236,7 @@ export default function BusinessDashboardPage() {
         </MotionStaggerItem>
 
         <MotionStaggerItem>
-          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+          <Card className="border hover:border-primary  bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Products</CardTitle>
               <Package className="h-4 w-4 text-muted-foreground" />
@@ -252,7 +251,7 @@ export default function BusinessDashboardPage() {
         </MotionStaggerItem>
 
         <MotionStaggerItem>
-          <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+          <Card className="border hover:border-primary  bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-stat-label">Messages</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
@@ -280,7 +279,7 @@ export default function BusinessDashboardPage() {
           title="selected store ID"
           value={selectedStoreId || ""}
           onChange={(e) => setSelectedStoreId(e.target.value)}
-          className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="w-full sm:w-64 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
           {storesData.stores.map((store: StoreEntity) => (
             <option key={store.id} value={store.id}>
@@ -289,7 +288,7 @@ export default function BusinessDashboardPage() {
           ))}
         </select>
 
-        <Button
+        {/* <Button
           variant="default"
           size="sm"
           onClick={() => {
@@ -306,7 +305,7 @@ export default function BusinessDashboardPage() {
         >
           <Plus className="h-4 w-4 mr-2" />
           New Sale
-        </Button>
+        </Button> */}
       </div>
 
       {/* Sales Chart */}
@@ -323,7 +322,7 @@ export default function BusinessDashboardPage() {
                 "Redirecting to store page",
                 "You are now redirecting to the store page",
                 false,
-                9000,
+                3000,
               );
               router.push("/business/stores?create=true");
             },
@@ -331,7 +330,7 @@ export default function BusinessDashboardPage() {
         />
       ) : (
         <>
-          {/* <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+          {/* <Card className="border hover:border-primary  bg-card">
             <CardHeader>
               <CardTitle>Sales Overview</CardTitle>
             </CardHeader>

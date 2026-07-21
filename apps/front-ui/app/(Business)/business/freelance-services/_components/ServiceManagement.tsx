@@ -1,14 +1,6 @@
 // app/business/freelance-services/_components/ServiceManagement.tsx
 "use client";
 
-import { useMutation } from "@apollo/client";
-import {
-    AlertCircle,
-    BriefcaseBusiness,
-    CheckCircle,
-    Coins,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +11,14 @@ import {
 } from "@/graphql/freelance.gql";
 import { BusinessEntity, FreelanceServiceEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { useMutation } from "@apollo/client";
+import {
+    AlertCircle,
+    BriefcaseBusiness,
+    CheckCircle,
+    Coins,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ServiceManagementProps {
   service: FreelanceServiceEntity; // Replace with FreelanceServiceEntity
@@ -260,7 +260,7 @@ export default function ServiceManagement({
 
   if (loading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -273,7 +273,7 @@ export default function ServiceManagement({
   if (!service) return null;
 
   return (
-    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+    <Card className="border hover:border-primary  bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -389,7 +389,7 @@ export default function ServiceManagement({
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                  className="w-full p-2 border hover:border-primary  rounded-md"
                 >
                   <option value="">Select a category</option>
                   <option value="WOODWORKING">Woodworking</option>
@@ -420,21 +420,21 @@ export default function ServiceManagement({
           </div>
 
           {/* Service Preview */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
+          <div className="border hover:border-primary  rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <BriefcaseBusiness className="h-4 w-4 text-primary" />
               Service Preview
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm text-muted-foreground">Service</p>
                 <p className="font-medium mt-1 truncate">
                   {formData.title || "Service Name"}
                 </p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm text-muted-foreground">Rate</p>
                 <p className="font-medium mt-1">
                   ${formData.rate || "0.00"}{" "}
@@ -442,7 +442,7 @@ export default function ServiceManagement({
                 </p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm text-muted-foreground">Category</p>
                 <p className="font-medium mt-1 capitalize">
                   {formData.category || "Uncategorized"}
@@ -450,7 +450,7 @@ export default function ServiceManagement({
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+            <div className="mt-4 p-3 bg-background rounded-lg border hover:border-primary ">
               <p className="font-medium">Description:</p>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                 {formData.description || "Service description goes here..."}
@@ -459,7 +459,7 @@ export default function ServiceManagement({
           </div>
 
           {/* Contextual Benefits based on business type */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+          <div className="border hover:border-primary  rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}

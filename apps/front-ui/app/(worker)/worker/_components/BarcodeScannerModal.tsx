@@ -1,5 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    type CachedProduct,
+    searchCachedProducts,
+} from "@/lib/catalog-cache";
 import {
     Camera,
     CameraOff,
@@ -10,12 +16,6 @@ import {
     X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    type CachedProduct,
-    searchCachedProducts,
-} from "@/lib/catalog-cache";
 
 interface BarcodeScannerModalProps {
   isOpen: boolean;
@@ -210,7 +210,7 @@ export default function BarcodeScannerModal({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-lg overflow-hidden">
+      <div className="bg-card border hover:border-primary  rounded-lg w-full max-w-lg overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-2">

@@ -1,5 +1,30 @@
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { BUSINESS_TYPES, isDedicatedField, type ProductFieldConfig } from "@/config/business-types";
+import { CREATE_CATEGORY, GET_CATEGORIES } from "@/graphql/category.gql";
+import {
+    CREATE_PRODUCT,
+    GET_PRODUCTS,
+    GET_PRODUCTS_BY_BUSINESS_ID,
+    UPDATE_PRODUCT,
+} from "@/graphql/product.gql";
+import { GET_STORES } from "@/graphql/store.gql";
+import { BusinessEntity, StoreEntity } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
+import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -32,31 +57,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { BUSINESS_TYPES, isDedicatedField, type ProductFieldConfig } from "@/config/business-types";
-import { CREATE_CATEGORY, GET_CATEGORIES } from "@/graphql/category.gql";
-import {
-    CREATE_PRODUCT,
-    GET_PRODUCTS,
-    GET_PRODUCTS_BY_BUSINESS_ID,
-    UPDATE_PRODUCT,
-} from "@/graphql/product.gql";
-import { GET_STORES } from "@/graphql/store.gql";
-import { BusinessEntity, StoreEntity } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
-import { cn } from "@/lib/utils";
 
 // ─── Category definitions per business type ──────────────────────────────────
 
@@ -983,7 +983,7 @@ export default function ProductForm({
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+              className="w-full p-2 border hover:border-primary  rounded-md"
               required
             />
           </div>
@@ -1002,7 +1002,7 @@ export default function ProductForm({
               value={formData.description}
               onChange={handleChange}
               rows={2}
-              className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+              className="w-full p-2 border hover:border-primary  rounded-md"
               required
             />
           </div>
@@ -1021,7 +1021,7 @@ export default function ProductForm({
                 onChange={handleChange}
                 min="0"
                 step="0.01"
-                className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                className="w-full p-2 border hover:border-primary  rounded-md"
                 required
               />
             </div>
@@ -1039,7 +1039,7 @@ export default function ProductForm({
                 value={formData.quantity}
                 onChange={handleChange}
                 min="0"
-                className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                className="w-full p-2 border hover:border-primary  rounded-md"
                 required
               />
             </div>
@@ -1103,7 +1103,7 @@ export default function ProductForm({
                               }))
                             }
                             placeholder={field.placeholder}
-                            className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md text-sm"
+                            className="w-full p-2 border hover:border-primary  rounded-md text-sm"
                           />
                         )}
 
@@ -1120,7 +1120,7 @@ export default function ProductForm({
                             }
                             placeholder={field.placeholder}
                             min="0"
-                            className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md text-sm"
+                            className="w-full p-2 border hover:border-primary  rounded-md text-sm"
                           />
                         )}
 
@@ -1134,7 +1134,7 @@ export default function ProductForm({
                                 [field.key]: e.target.value,
                               }))
                             }
-                            className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted text-sm"
+                            className="w-full p-2 border hover:border-primary  rounded-lg bg-muted text-sm"
                           >
                             <option value="">Select {field.label}</option>
                             {field.options?.map((opt) => (
@@ -1174,7 +1174,7 @@ export default function ProductForm({
                                 [field.key]: e.target.value,
                               }))
                             }
-                            className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md text-sm"
+                            className="w-full p-2 border hover:border-primary  rounded-md text-sm"
                           />
                         )}
                       </div>
@@ -1240,7 +1240,7 @@ export default function ProductForm({
                 setSelectedStoreId(e.target.value);
               }}
               required
-              className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full sm:w-64 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
               {!storesData && !storesLoading && (
                 <option disabled>No stores found</option>

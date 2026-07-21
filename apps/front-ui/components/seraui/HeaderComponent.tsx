@@ -22,16 +22,16 @@ import NotificationsPopover from "./Notifications";
 import UserDropdown from "./UserDrodown";
 
 const BUSINESS_TYPE_IMAGES: Record<string, string> = {
-  ELECTRONICS: "/images/categories/electronics.jpg",
-  RETAIL: "/images/categories/retail.jpg",
-  CLOTHING: "/images/categories/clothing.jpg",
-  HARDWARE: "/images/categories/hardware.jpg",
-  BOOKSTORE: "/images/categories/bookstore.jpg",
-  CAFE: "/images/categories/cafe.jpg",
-  RESTAURANT: "/images/categories/restaurant.jpg",
-  GROCERY: "/images/categories/grocery.jpg",
-  ARTISAN: "/images/categories/artisan.jpg",
-  BAR: "/images/categories/bar.jpg",
+  ELECTRONICS: "/images/categories/electronics.jfif",
+  RETAIL: "/images/categories/retail.jfif",
+  CLOTHING: "/images/categories/clothing.jfif",
+  HARDWARE: "/images/categories/hardware.jfif",
+  BOOKSTORE: "/images/categories/bookstore.jfif",
+  CAFE: "/images/categories/cafe.jfif",
+  RESTAURANT: "/images/categories/restaurant.jfif",
+  GROCERY: "/images/categories/grocery.jfif",
+  ARTISAN: "/images/categories/artisan.jfif",
+  BAR: "/images/categories/bar.jfif",
 };
 
 const navLinks = [
@@ -81,7 +81,7 @@ function HeaderComponent() {
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-950/95 dark:backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
+      <header className="bg-card/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
         {/* Top bar - promotional or branding */}
         <div className="hidden lg:block bg-gradient-to-r from-orange-600 to-orange-500 text-white text-center text-xs py-1.5 font-medium tracking-wide">
           USCOR Marketplace — Local businesses, delivered to you
@@ -199,7 +199,7 @@ function HeaderComponent() {
           onMouseLeave={handleBrowseLeave}
         >
           <div className="max-w-[1200px] mx-auto">
-            <div className="bg-white dark:bg-gray-900 border border-orange-200/60 dark:border-orange-800/40 rounded-2xl shadow-xl shadow-black/5 dark:shadow-black/30 p-6 animate-fade-in">
+            <div className="bg-card border border-orange-200/60 dark:border-orange-800/40 rounded-2xl shadow-xl shadow-black/5 dark:shadow-black/30 p-6 animate-fade-in">
               {/* Header */}
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-800">
                 <div>
@@ -232,13 +232,13 @@ function HeaderComponent() {
                       className="group relative flex flex-col items-center gap-2 p-4 rounded-xl border border-transparent hover:border-orange-200 dark:hover:border-orange-800/60 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all duration-200"
                     >
                       {/* Image or icon fallback */}
-                      <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0">
+                      <div className="w-32 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0">
                         {imgSrc ? (
                           <Image
                             src={imgSrc}
                             alt={bt.label}
-                            width={56}
-                            height={56}
+                            width={72}
+                            height={64}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             onError={(e) => {
                               (e.target as HTMLImageElement).style.display = "none";

@@ -1,11 +1,11 @@
 "use client";
 
-import { Gift, Handshake, MapPin, ShieldCheck, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useCart } from "@/app/context/use-cart";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Gift, Handshake, MapPin, ShieldCheck, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 import NewChatSession from "../../../../components/chat/NewChatSession";
 import BusinessTypeIcon from "./BusinessTypeIcons";
 import ProductDetailsModal from "./ProductDetailsModal";
@@ -71,7 +71,7 @@ export default function ProductCard({ prodID, setProdID, product, viewMode, noBo
       <>
         <div className={cn(
           "rounded-lg overflow-hidden hover:shadow-md hover:border-orange-400/80 dark:hover:border-orange-500/80 hover:-translate-y-0.5 transition-all duration-200 bg-card",
-          !noBorder && "border border-border hover:border-primary hover:bg-primary/5",
+          !noBorder && "border hover:border-primary ",
         )}>
           {/* Product Image */}
           <div className="h-72 bg-muted relative">
@@ -225,7 +225,7 @@ export default function ProductCard({ prodID, setProdID, product, viewMode, noBo
     <>
       <div className={cn(
         "rounded-lg overflow-hidden hover:shadow-md transition-shadow bg-card flex flex-col md:flex-row",
-        !noBorder && "border border-border hover:border-primary hover:bg-primary/5",
+        !noBorder && "border hover:border-primary ",
       )}>
         {/* Product Image */}
         <div className="md:w-48 h-32 md:h-auto bg-muted relative">

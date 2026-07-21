@@ -1,6 +1,11 @@
 // app/admin/_components/AnnouncementDetailModal.tsx
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { CREATE_ANNOUNCEMENT } from "@/graphql/admin.gql";
 import { useMutation } from "@apollo/client";
 import {
     AlertTriangle,
@@ -11,11 +16,6 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { CREATE_ANNOUNCEMENT } from "@/graphql/admin.gql";
 
 interface AnnouncementDetailModalProps {
 	announcement?: any;
@@ -111,7 +111,7 @@ export default function AnnouncementDetailModal({
 
 	return (
 		<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+			<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 				<div className="p-6">
 					<div className="flex justify-between items-start mb-6">
 						<div>
@@ -177,7 +177,7 @@ export default function AnnouncementDetailModal({
 									name="type"
 									value={formData.type}
 									onChange={handleInputChange}
-									className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+									className="w-full p-2 border hover:border-primary  rounded-md"
 								>
 									<option value="GENERAL">General</option>
 									<option value="PROMOTIONAL">Promotional</option>
@@ -198,7 +198,7 @@ export default function AnnouncementDetailModal({
 									name="priority"
 									value={formData.priority}
 									onChange={handleInputChange}
-									className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+									className="w-full p-2 border hover:border-primary  rounded-md"
 								>
 									<option value="LOW">Low</option>
 									<option value="MEDIUM">Medium</option>
@@ -220,7 +220,7 @@ export default function AnnouncementDetailModal({
 								name="targetUsers"
 								value={formData.targetUsers}
 								onChange={handleInputChange}
-								className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+								className="w-full p-2 border hover:border-primary  rounded-md"
 							>
 								<option value="ALL">All Users</option>
 								<option value="BUSINESSES">Businesses Only</option>
@@ -288,7 +288,7 @@ export default function AnnouncementDetailModal({
 						</div>
 
 						{/* Preview */}
-						<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+						<div className="border hover:border-primary  rounded-lg overflow-hidden">
 							<div className="p-4 bg-muted border-b border-border">
 								<h3 className="font-semibold">Preview</h3>
 							</div>
@@ -358,7 +358,7 @@ export default function AnnouncementDetailModal({
 						</div>
 
 						{/* East Africa Information */}
-						<div className="p-4 bg-muted rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+						<div className="p-4 bg-muted rounded-lg border hover:border-primary ">
 							<div className="flex items-start gap-3">
 								<Megaphone className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
 								<div>

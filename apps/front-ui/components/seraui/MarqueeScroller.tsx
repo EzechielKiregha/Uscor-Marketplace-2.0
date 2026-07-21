@@ -54,7 +54,7 @@ export default function MarqueeScroller({
 				{items.concat(items).map((item, index) => (
 					<div
 						key={`${item.id}-${index}`}
-						className="shrink-0 flex items-center justify-center bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-2xl text-foreground"
+						className="shrink-0 flex items-center justify-center bg-card border hover:border-primary  rounded-2xl text-foreground"
 						style={{
 							width: "var(--item-width)",
 							aspectRatio: "1 / 1.2",

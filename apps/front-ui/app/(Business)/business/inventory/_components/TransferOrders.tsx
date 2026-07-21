@@ -1,18 +1,6 @@
 // app/business/inventory/_components/TransferOrders.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-    ArrowRightLeft,
-    Download,
-    Minus,
-    Package,
-    Plus,
-    Search,
-    Warehouse,
-    X,
-} from "lucide-react";
-import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -25,6 +13,18 @@ import {
 import { GET_PRODUCTS } from "@/graphql/product.gql";
 import { GET_STORES } from "@/graphql/store.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    ArrowRightLeft,
+    Download,
+    Minus,
+    Package,
+    Plus,
+    Search,
+    Warehouse,
+    X,
+} from "lucide-react";
+import { useState } from "react";
 
 interface TransferOrdersProps {
 	storeId: string;
@@ -156,7 +156,7 @@ export default function TransferOrders({
 		storesData?.stores?.filter((store: any) => store.id !== fromStoreId) || [];
 
 	return (
-		<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+		<Card className="border hover:border-primary  bg-card">
 			<CardHeader>
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 					<div>
@@ -249,7 +249,7 @@ export default function TransferOrders({
 			{/* Create Transfer Order Modal */}
 			{showCreateModal && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-3xl">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-3xl">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>
@@ -282,7 +282,7 @@ export default function TransferOrders({
 											title="from store ID"
 											value={fromStoreId}
 											onChange={(e) => setFromStoreId(e.target.value)}
-											className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+											className="w-full p-2 border hover:border-primary  rounded-md"
 										>
 											{storesData?.stores?.map((store: any) => (
 												<option key={store.id} value={store.id}>
@@ -300,7 +300,7 @@ export default function TransferOrders({
 											title="to store ID"
 											value={toStoreId}
 											onChange={(e) => setToStoreId(e.target.value)}
-											className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+											className="w-full p-2 border hover:border-primary  rounded-md"
 										>
 											<option value="">Select destination store</option>
 											{transferableStores.map((store: any) => (
@@ -330,7 +330,7 @@ export default function TransferOrders({
 									</div>
 
 									{selectedProducts.length === 0 ? (
-										<div className="text-center py-6 border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
+										<div className="text-center py-6 border hover:border-primary  rounded-lg">
 											<ArrowRightLeft className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
 											<p className="text-sm text-muted-foreground">
 												No products added yet
@@ -350,7 +350,7 @@ export default function TransferOrders({
 											{selectedProducts.map((product) => (
 												<div
 													key={product.id}
-													className="flex items-center justify-between p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg"
+													className="flex items-center justify-between p-3 border hover:border-primary  rounded-lg"
 												>
 													<div className="flex items-center gap-3">
 														{product.imageUrl ? (
@@ -458,7 +458,7 @@ export default function TransferOrders({
 			{/* Transfer Details Modal */}
 			{selectedOrder && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-3xl">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-3xl">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>

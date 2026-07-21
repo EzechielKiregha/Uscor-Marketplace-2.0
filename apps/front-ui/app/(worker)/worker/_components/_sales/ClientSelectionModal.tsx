@@ -1,8 +1,5 @@
 "use client";
 
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { Mail, MapPin, Phone, Plus, Search, User } from "lucide-react";
-import { useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +15,9 @@ import {
     GET_CLIENT_BY_EMAIL,
     SEARCH_CLIENTS,
 } from "@/graphql/client.gql";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { Mail, MapPin, Phone, Plus, Search, User } from "lucide-react";
+import { useState } from "react";
 
 interface Client {
   id: string;
@@ -196,7 +196,7 @@ export default function ClientSelectionModal({
                   {searchResults.map((client) => (
                     <div
                       key={client.id}
-                      className="p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                      className="p-3 border hover:border-primary  rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                       onClick={() => {
                         onClientSelected(client);
                         handleClose();

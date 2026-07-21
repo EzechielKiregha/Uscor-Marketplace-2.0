@@ -80,11 +80,11 @@ export default function ChatThread({ id }: ChatThreadProps) {
 		return <p className="text-center text-red-500">Error: {error.message}</p>;
 
 	return (
-		<div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 p-4 sm:p-6 md:p-8">
+		<div className="min-h-screen bg-background text-foreground p-4 sm:p-6 md:p-8">
 			<h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
 				Chat: {data.chat.service?.title || "Discussion"}
 			</h1>
-			<div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 border border-orange-500 p-4 rounded-lg">
+			<div className="max-w-2xl mx-auto bg-card border border-orange-500 p-4 rounded-lg">
 				{messagesData?.chatMessages.map((msg: any) => (
 					<ChatMessage
 						key={msg.id}

@@ -19,6 +19,7 @@ import {
 import {
     OrderStatus,
     PaymentStatus,
+    SettlementStatus,
 } from '../generated/prisma/enums'
 import { UpdatePaymentTransactionInput } from '../payment-transaction/dto/update-payment-transaction.input'
 import { PaymentTransactionService } from '../payment-transaction/payment-transaction.service'
@@ -316,14 +317,22 @@ export class OrderService {
       for (const group of Object.values(
         businessGroups as OrderBusinessGroupEntity[],
       )) {
+
+        const grossAmount = group.subtotal
+        const platformFee =
+          grossAmount -
+          (group.subtotal * 1.5) / 100
+        const deliveryFee = group.deliveryFee
+        const netAmount = grossAmount + platformFee + deliveryFee
+
         const createdGroup = await this.prisma.orderBusinessGroup.create(
           {
             data: {
               orderId: order.id,
               businessId: group.businessId,
               subtotal: group.subtotal,
-              deliveryFee: group.deliveryFee,
-              total: group.total,
+              deliveryFee,
+              total: netAmount,
               items: {
                 create: group.items.map(
                   (item) => ({
@@ -333,6 +342,17 @@ export class OrderService {
                   }),
                 ),
               },
+              settlement: {
+                create: {
+                    orderId: group.orderId,
+                    businessId: group.businessId,
+                    status: SettlementStatus.PENDING,
+                    grossAmount,
+                    platformFee,
+                    deliveryFee,
+                    netAmount
+                }
+              }
             },
           },
         )

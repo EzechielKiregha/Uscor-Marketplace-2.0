@@ -147,7 +147,7 @@ export const UPDATE_BUSINESS_PROFILE = gql`
 export const UPDATE_PAYMENT_CONFIG = gql`
   mutation UpdatePaymentConfig(
     $businessId: String!
-    $input: PaymentConfigInput!
+    $input: UpdatePaymentConfigInput!
   ) {
     updatePaymentConfig(businessId: $businessId, input: $input) {
       id

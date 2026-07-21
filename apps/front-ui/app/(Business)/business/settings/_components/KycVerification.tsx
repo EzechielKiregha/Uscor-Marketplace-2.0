@@ -1,6 +1,19 @@
 // app/business/settings/_components/KycVerification.tsx
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import {
+    GET_KYC_DOCUMENTS,
+    ON_KYC_UPDATED,
+    SUBMIT_KYC,
+    UPLOAD_KYC_DOCUMENT,
+} from "@/graphql/kyc.gql";
+import { downloadKycCertificatePDF } from "@/lib/pdf/kyc-certificate-pdf";
+import { Document } from "@/lib/types";
+import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -15,19 +28,6 @@ import {
     X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import {
-    GET_KYC_DOCUMENTS,
-    ON_KYC_UPDATED,
-    SUBMIT_KYC,
-    UPLOAD_KYC_DOCUMENT,
-} from "@/graphql/kyc.gql";
-import { downloadKycCertificatePDF } from "@/lib/pdf/kyc-certificate-pdf";
-import { Document } from "@/lib/types";
-import { useMe } from "@/lib/useMe";
 
 // Document types for KYC
 export const DOCUMENT_TYPES = [
@@ -305,7 +305,7 @@ export default function KycVerification() {
 
   if (authLoading || kycLoading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -316,7 +316,7 @@ export default function KycVerification() {
     );
 
   return (
-    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+    <Card className="border hover:border-primary  bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -551,7 +551,7 @@ export default function KycVerification() {
                 return (
                   <div
                     key={document.id}
-                    className={`border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 ${
+                    className={`border hover:border-primary  rounded-lg p-4 ${
                       status === "VERIFIED"
                         ? "bg-success/5"
                         : status === "PENDING"
@@ -667,7 +667,7 @@ export default function KycVerification() {
           {/* Document Upload Modal */}
           {selectedDocumentType && (
             <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-md">
+              <div className="bg-card border hover:border-primary  rounded-lg w-full max-w-md">
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-6">
                     <div>
@@ -814,7 +814,7 @@ export default function KycVerification() {
           )}
 
           {/* Benefits for Local Businesses */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+          <div className="border hover:border-primary  rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Why KYC Verification Matters
@@ -862,7 +862,7 @@ export default function KycVerification() {
           </div>
 
           {/* East Africa Specific Information */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
+          <div className="border hover:border-primary  rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
               KYC Requirements in East Africa

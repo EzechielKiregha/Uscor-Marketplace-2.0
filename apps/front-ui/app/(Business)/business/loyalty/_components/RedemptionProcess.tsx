@@ -1,5 +1,11 @@
 "use client";
 
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { GET_CUSTOMER_POINTS, REDEEM_POINTS } from "@/graphql/loyalty.gql";
+import { useMe } from "@/lib/useMe";
 import { useMutation, useQuery } from "@apollo/client";
 import {
     AlertTriangle,
@@ -14,12 +20,6 @@ import {
     X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { GET_CUSTOMER_POINTS, REDEEM_POINTS } from "@/graphql/loyalty.gql";
-import { useMe } from "@/lib/useMe";
 
 interface RedemptionProcessProps {
 	programId: string;
@@ -144,7 +144,7 @@ export default function RedemptionProcess({
 
 	if (loading || customersLoading)
 		return (
-			<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+			<Card className="border hover:border-primary  bg-card">
 				<CardContent className="h-125 flex items-center justify-center">
 					<div className="text-center">
 						<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -158,7 +158,7 @@ export default function RedemptionProcess({
 		<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 			{/* Left Column - Redemption Process */}
 			<div className="lg:col-span-2">
-				<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+				<Card className="border hover:border-primary  bg-card">
 					<CardHeader>
 						<CardTitle className="text-lg flex items-center gap-2">
 							<Gift className="h-5 w-5" />
@@ -169,7 +169,7 @@ export default function RedemptionProcess({
 					<CardContent>
 						<div className="space-y-6">
 							{/* Customer Selection */}
-							<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+							<div className="border hover:border-primary  rounded-lg p-4">
 								<div className="flex justify-between items-center mb-3">
 									<h3 className="font-semibold">1. Select Customer</h3>
 									<Button
@@ -234,7 +234,7 @@ export default function RedemptionProcess({
 										{filteredCustomers.slice(0, 5).map((customer: any) => (
 											<div
 												key={customer.clientId}
-												className="flex items-center justify-between p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg hover:bg-muted/50 cursor-pointer"
+												className="flex items-center justify-between p-2 border hover:border-primary  rounded-lg hover:bg-muted/50 cursor-pointer"
 												onClick={() => {
 													setSelectedCustomer(customer);
 													setPointsToRedeem(
@@ -269,7 +269,7 @@ export default function RedemptionProcess({
 
 							{/* Transaction Details */}
 							{selectedCustomer && (
-								<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+								<div className="border hover:border-primary  rounded-lg p-4">
 									<h3 className="font-semibold mb-3">
 										2. Enter Transaction Details
 									</h3>
@@ -379,7 +379,7 @@ export default function RedemptionProcess({
 
 							{/* Redemption Confirmation */}
 							{selectedCustomer && (
-								<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+								<div className="border hover:border-primary  rounded-lg p-4">
 									<h3 className="font-semibold mb-3">3. Confirm Redemption</h3>
 
 									<div className="space-y-4">
@@ -444,7 +444,7 @@ export default function RedemptionProcess({
 
 			{/* Right Column - Program Benefits */}
 			<div className="lg:col-span-1">
-				<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+				<Card className="border hover:border-primary  bg-card">
 					<CardHeader>
 						<CardTitle className="text-lg">Loyalty Program Benefits</CardTitle>
 					</CardHeader>
@@ -478,7 +478,7 @@ export default function RedemptionProcess({
 							</ul>
 						</div>
 
-						<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+						<div className="border hover:border-primary  rounded-lg p-4">
 							<h3 className="font-semibold mb-3 flex items-center gap-2">
 								<AlertTriangle className="h-4 w-4 text-warning" />
 								Best Practices
@@ -513,7 +513,7 @@ export default function RedemptionProcess({
 							</div>
 						</div>
 
-						<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+						<div className="border hover:border-primary  rounded-lg p-4">
 							<h3 className="font-semibold mb-2 flex items-center gap-2">
 								<Gift className="h-4 w-4" />
 								Sample Redemption Options

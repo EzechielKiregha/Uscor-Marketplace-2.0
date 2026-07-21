@@ -1,5 +1,9 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 import { useQuery } from "@apollo/client";
 import {
     ChevronDown,
@@ -13,10 +17,6 @@ import {
     X
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GET_CLIENT_ORDERS } from "@/graphql/client-panel.gql";
 
 interface PurchaseHistoryProps {
   client: any;
@@ -151,7 +151,7 @@ export default function PurchaseHistory({ client }: PurchaseHistoryProps) {
 
   if (loading) {
     return (
-      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+      <div className="bg-card border hover:border-primary  rounded-lg p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-muted rounded" />
           <div className="grid grid-cols-4 gap-4">

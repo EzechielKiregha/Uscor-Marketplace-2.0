@@ -1,11 +1,11 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { BriefcaseBusiness, Search, ShoppingCart, Star, X } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SEARCH_MARKETPLACE } from "@/graphql/marketplace.gql";
+import { useQuery } from "@apollo/client";
+import { BriefcaseBusiness, Search, ShoppingCart, Star, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface SearchModalProps {
 	onClose: () => void;
@@ -58,7 +58,7 @@ export default function SearchModal({ onClose, onSearch }: SearchModalProps) {
 
 	return (
 		<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-start justify-center pt-16 p-4">
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+			<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
 				<div className="p-4 border-b border-border flex items-center justify-between">
 					<div className="relative flex-1 max-w-xl">
 						<Input

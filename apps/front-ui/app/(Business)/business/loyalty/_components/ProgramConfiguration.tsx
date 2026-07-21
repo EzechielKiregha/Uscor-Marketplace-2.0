@@ -1,9 +1,6 @@
 // app/business/loyalty/_components/ProgramConfiguration.tsx
 "use client";
 
-import { useMutation } from "@apollo/client";
-import { AlertCircle, CheckCircle, Coins, Gift, Star } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +11,9 @@ import {
     UPDATE_LOYALTY_PROGRAM,
 } from "@/graphql/loyalty.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation } from "@apollo/client";
+import { AlertCircle, CheckCircle, Coins, Gift, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ProgramConfigurationProps {
   program: any; // Replace with LoyaltyProgramEntity
@@ -168,7 +168,7 @@ export default function ProgramConfiguration({
 
   if (loading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -179,7 +179,7 @@ export default function ProgramConfiguration({
     );
 
   return (
-    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+    <Card className="border hover:border-primary  bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -318,20 +318,20 @@ export default function ProgramConfiguration({
           </div>
 
           {/* Program Preview */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
+          <div className="border hover:border-primary  rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Star className="h-4 w-4 text-primary" />
               Program Preview
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm text-muted-foreground">For every</p>
                 <p className="text-2xl font-bold">${1.0}</p>
                 <p className="text-sm">you spend</p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm text-muted-foreground">Earn</p>
                 <p className="text-2xl font-bold">
                   {formData.pointsPerPurchase} pts
@@ -339,7 +339,7 @@ export default function ProgramConfiguration({
                 <p className="text-sm">points</p>
               </div>
 
-              <div className="p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm text-muted-foreground">Redeem</p>
                 <p className="text-2xl font-bold">
                   {formData.minimumPointsToRedeem} pts
@@ -348,7 +348,7 @@ export default function ProgramConfiguration({
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+            <div className="mt-4 p-3 bg-background rounded-lg border hover:border-primary ">
               <p className="font-medium">How it works for customers:</p>
               <p className="text-sm text-muted-foreground mt-1">
                 "Spend ${1.0} to earn {formData.pointsPerPurchase} points.
@@ -359,7 +359,7 @@ export default function ProgramConfiguration({
           </div>
 
           {/* Benefits for Local Businesses */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4">
+          <div className="border hover:border-primary  rounded-lg p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               Benefits for Your Local Business

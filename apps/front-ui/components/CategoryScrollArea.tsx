@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FREELANCE_SERVICE_CATEGORIES } from "@/config/freelance-categories";
 import { PRODUCT_CATEGORIES } from "@/config/product-categories";
+import Link from "next/link";
 
 interface CategoryScrollAreaProps {
 	type: "products" | "freelance";
@@ -14,7 +14,7 @@ const CategoryScrollArea = ({ type }: CategoryScrollAreaProps) => {
 		type === "products" ? PRODUCT_CATEGORIES : FREELANCE_SERVICE_CATEGORIES;
 
 	return (
-		<ScrollArea className="h-[calc(100vh)] w-80 flex-shrink-0 hidden lg:block rounded-xl backdrop-blur-xl bg-white/95 /95 border border-border hover:border-primary hover:bg-primary/5 shadow-lg p-1">
+		<ScrollArea className="h-[calc(100vh)] w-80 flex-shrink-0 hidden lg:block rounded-xl backdrop-blur-xl bg-white/95 /95 border hover:border-primary  shadow-lg p-1">
 			<div className="space-y-4">
 				{categories.map((category: any) => (
 					<div key={category.label} className="pb-2">

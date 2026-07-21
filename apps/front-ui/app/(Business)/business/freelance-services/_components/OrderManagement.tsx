@@ -1,9 +1,6 @@
 // app/business/freelance-services/_components/OrderManagement.tsx
 "use client";
 
-import { useMutation } from "@apollo/client";
-import { BriefcaseBusiness, Search, User } from "lucide-react";
-import { useMemo, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +9,9 @@ import {
     COMPLETE_FREELANCE_ORDER,
     UPDATE_FREELANCE_ORDER,
 } from "@/graphql/freelance.gql";
+import { useMutation } from "@apollo/client";
+import { BriefcaseBusiness, Search, User } from "lucide-react";
+import { useMemo, useState } from "react";
 
 interface OrderManagementProps {
 	serviceId: string;
@@ -113,7 +113,7 @@ export default function OrderManagement({
 
 	if (loading)
 		return (
-			<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+			<Card className="border hover:border-primary  bg-card">
 				<div className="text-center">
 					<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
 					<p className="text-muted-foreground">Loading data...</p>
@@ -122,7 +122,7 @@ export default function OrderManagement({
 		);
 
 	return (
-		<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+		<Card className="border hover:border-primary  bg-card">
 			<CardHeader>
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 					<div>
@@ -147,7 +147,7 @@ export default function OrderManagement({
 						<select
 							value={statusFilter}
 							onChange={(e) => setStatusFilter(e.target.value)}
-							className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+							className="w-full sm:w-48 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
 						>
 							<option value="">All Statuses</option>
 							<option value="PENDING">Pending</option>
@@ -237,7 +237,7 @@ export default function OrderManagement({
 			{/* Order Details Modal */}
 			{showOrderModal && selectedOrder && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-2xl">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-2xl">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>

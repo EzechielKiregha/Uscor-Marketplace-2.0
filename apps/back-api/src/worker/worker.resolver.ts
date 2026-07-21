@@ -21,7 +21,6 @@ import { CreateSaleInput } from './dto/create-sale.input'
 import { CreateWorkerInput } from './dto/create-worker.input'
 import { EndWorkerShiftInput } from './dto/end-shift.input'
 import { ProcessMobileMoneyPaymentInput } from './dto/process-mobile-money.input'
-import { SendChatMessageInput } from './dto/send-chat-message.input'
 import { StartShiftInput } from './dto/start-shift.input'
 import { UpdateSaleProductInput } from './dto/update-sale-product.input'
 import { UpdateWorkerInput } from './dto/update-worker.input'
@@ -621,21 +620,21 @@ export class WorkerResolver {
     )
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('worker')
-  @Mutation(() => ChatMessageEntityV2)
-  async sendMessage(
-    @Args('input') input: SendChatMessageInput,
-  ) {
-    const message =
-      await this.workerService.sendChatMessage(
-        input,
-      )
-    await this.pubSub.publish('newChatMessage', {
-      newChatMessage: message,
-    })
-    return message
-  }
+//   @UseGuards(JwtAuthGuard, RolesGuard)
+//   @Roles('worker')
+//   @Mutation(() => ChatMessageEntityV2)
+//   async sendMessage(
+//     @Args('input') input: SendChatMessageInput,
+//   ) {
+//     const message =
+//       await this.workerService.sendChatMessage(
+//         input,
+//       )
+//     await this.pubSub.publish('newChatMessage', {
+//       newChatMessage: message,
+//     })
+//     return message
+//   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('worker')

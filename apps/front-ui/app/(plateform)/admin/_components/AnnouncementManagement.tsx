@@ -66,7 +66,7 @@ export default function AnnouncementManagement() {
 		return <div>Error loading announcements: {announcementsError.message}</div>;
 
 	return (
-		<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+		<div className="bg-card border hover:border-primary  rounded-lg overflow-hidden">
 			{/* Header */}
 			<div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 				<div className="relative w-full sm:w-64">
@@ -84,7 +84,7 @@ export default function AnnouncementManagement() {
 					<select
 						value={filters.status}
 						onChange={(e) => handleFilterChange("status", e.target.value)}
-						className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						<option value="">All Statuses</option>
 						<option value="DRAFT">Draft</option>
@@ -95,7 +95,7 @@ export default function AnnouncementManagement() {
 					<select
 						value={filters.priority}
 						onChange={(e) => handleFilterChange("priority", e.target.value)}
-						className="w-full sm:w-32 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full sm:w-32 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						<option value="">All Priorities</option>
 						<option value="LOW">Low</option>

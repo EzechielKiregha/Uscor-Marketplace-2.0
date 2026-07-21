@@ -1,6 +1,15 @@
 // app/business/customers/page.tsx
 "use client";
 
+import MotionPage from "@/components/MotionPage";
+import TableSkeleton from "@/components/skeletons/TableSkeleton";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
+import { GET_STORES } from "@/graphql/store.gql";
+import { exportCustomersCSV } from "@/lib/export-utils";
+import { useMe } from "@/lib/useMe";
 import { useQuery } from "@apollo/client";
 import {
     ChevronDown,
@@ -15,15 +24,6 @@ import {
     X
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import MotionPage from "@/components/MotionPage";
-import TableSkeleton from "@/components/skeletons/TableSkeleton";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { GET_SALES_HISTORY } from "@/graphql/sales.gql";
-import { GET_STORES } from "@/graphql/store.gql";
-import { exportCustomersCSV } from "@/lib/export-utils";
-import { useMe } from "@/lib/useMe";
 
 interface CustomerRecord {
   id: string;
@@ -208,7 +208,7 @@ export default function CustomersPage() {
           title="Filter by store"
           value={selectedStoreId}
           onChange={(e) => setSelectedStoreId(e.target.value)}
-          className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="w-full sm:w-64 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
         >
           <option value="all">All Stores</option>
           {storesData?.stores?.map((store: any) => (
@@ -221,7 +221,7 @@ export default function CustomersPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+        <Card className="border hover:border-primary  bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Users className="h-4 w-4 text-primary" />
@@ -232,7 +232,7 @@ export default function CustomersPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+        <Card className="border hover:border-primary  bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-green-500" />
@@ -243,7 +243,7 @@ export default function CustomersPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+        <Card className="border hover:border-primary  bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <Star className="h-4 w-4 text-orange-500" />
@@ -254,7 +254,7 @@ export default function CustomersPage() {
           </CardContent>
         </Card>
 
-        <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+        <Card className="border hover:border-primary  bg-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-1">
               <ShoppingCart className="h-4 w-4 text-blue-500" />
@@ -303,7 +303,7 @@ export default function CustomersPage() {
       </div>
 
       {/* Customer Table */}
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="p-0">
           {filteredCustomers.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">

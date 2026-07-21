@@ -64,8 +64,8 @@ export default function FreelanceServiceDetail({
 	const { title, description, price, business } = data.freelanceService;
 
 	return (
-		<div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 p-4 sm:p-6 md:p-8">
-			<Card className="max-w-2xl mx-auto bg-white dark:bg-gray-800 border-orange-500 hover:border-orange-600 transition-colors">
+		<div className="min-h-screen bg-background text-foreground p-4 sm:p-6 md:p-8">
+			<Card className="max-w-2xl mx-auto bg-card border-orange-500 hover:border-orange-600 transition-colors">
 				<CardHeader>
 					<CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
 						{title}

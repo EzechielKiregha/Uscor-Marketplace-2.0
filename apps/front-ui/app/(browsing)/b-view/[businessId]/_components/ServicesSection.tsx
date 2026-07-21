@@ -1,6 +1,11 @@
 // app/business/[id]/_components/ServicesSection.tsx
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FreelanceServiceEntity } from "@/lib/types";
 import {
     Box,
     BriefcaseBusiness,
@@ -18,11 +23,6 @@ import {
     Wrench,
 } from "lucide-react";
 import { useState } from "react";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { FreelanceServiceEntity } from "@/lib/types";
 
 // Map service categories to icons (Lucide icons)
 const SERVICE_CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -72,7 +72,7 @@ export default function ServicesSection({
 
   if (loading) {
     return (
-      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+      <div className="bg-card border hover:border-primary  rounded-lg p-6">
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -85,7 +85,7 @@ export default function ServicesSection({
 
   if (filteredServices.length === 0) {
     return (
-      <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-6">
+      <div className="bg-card border hover:border-primary  rounded-lg p-6">
         <EmptyState
           icon={emptyStateIcons.search}
           title="No services found"
@@ -106,7 +106,7 @@ export default function ServicesSection({
   }
 
   return (
-    <div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden">
+    <div className="bg-card border hover:border-primary  rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-64">
@@ -131,7 +131,7 @@ export default function ServicesSection({
               {selectedCategory ? selectedCategory : "All Categories"}
             </Button>
             {categories.length > 0 && (
-              <div className="absolute right-0 mt-2 w-48 bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-md shadow-lg z-10 hidden group-hover:block">
+              <div className="absolute right-0 mt-2 w-48 bg-card border hover:border-primary  rounded-md shadow-lg z-10 hidden group-hover:block">
                 <div className="py-1">
                   <button
                     onClick={() => setSelectedCategory(null)}
@@ -153,7 +153,7 @@ export default function ServicesSection({
             )}
           </div>
 
-          <div className="flex border border-border hover:border-primary hover:bg-primary/5 rounded-md">
+          <div className="flex border hover:border-primary  rounded-md">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
               size="icon"
@@ -187,7 +187,7 @@ export default function ServicesSection({
               return (
                 <div
                   key={service.id}
-                  className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  className="border hover:border-primary  rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                 >
                   <div className="p-4 bg-muted border-b border-border">
                     <div className="flex items-center gap-2">
@@ -283,7 +283,7 @@ export default function ServicesSection({
             return (
               <div key={service.id} className="p-4 hover:bg-muted/50">
                 <div className="flex gap-4">
-                  <div className="w-16 h-16 flex-shrink-0 border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden flex items-center justify-center bg-muted">
+                  <div className="w-16 h-16 flex-shrink-0 border hover:border-primary  rounded-lg overflow-hidden flex items-center justify-center bg-muted">
                     {CategoryIcon && (
                       <CategoryIcon className="h-8 w-8 text-primary" />
                     )}

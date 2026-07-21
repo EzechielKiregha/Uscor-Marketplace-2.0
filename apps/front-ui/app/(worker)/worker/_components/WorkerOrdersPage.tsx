@@ -1,29 +1,29 @@
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  CheckCircle,
-  ChevronDown,
-  ChevronUp,
-  ClipboardList,
-  Loader2,
-  MessageSquare,
-  Package,
-  Search,
-  Truck,
-  XCircle,
-} from "lucide-react";
-import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import ChatModal from "@/components/chat/ChatModal";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
-  GET_WORKER_BUSINESS_ORDERS,
-  UPDATE_BUSINESS_ORDER_STATUS,
+    GET_WORKER_BUSINESS_ORDERS,
+    UPDATE_BUSINESS_ORDER_STATUS,
 } from "@/graphql/order.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    CheckCircle,
+    ChevronDown,
+    ChevronUp,
+    ClipboardList,
+    Loader2,
+    MessageSquare,
+    Package,
+    Search,
+    Truck,
+    XCircle,
+} from "lucide-react";
+import { useState } from "react";
 
 interface WorkerOrdersPageProps {
   businessId: string;
@@ -219,7 +219,7 @@ export default function WorkerOrdersPage({ businessId }: WorkerOrdersPageProps) 
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border hover:border-primary  bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
@@ -228,7 +228,7 @@ export default function WorkerOrdersPage({ businessId }: WorkerOrdersPageProps) 
             title="Status filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Statuses</option>
             <option value="PENDING">Pending</option>

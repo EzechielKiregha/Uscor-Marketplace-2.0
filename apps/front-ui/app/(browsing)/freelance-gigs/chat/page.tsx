@@ -1,8 +1,4 @@
 "use client";
-import { useMutation, useQuery } from "@apollo/client";
-import { Menu, MessageSquare } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import React from "react";
 import ChatList from "@/components/chat/ChatList";
 import ChatThread from "@/components/chat/ChatThread";
 import HeaderComponent from "@/components/seraui/HeaderComponent";
@@ -13,6 +9,10 @@ import {
     SEND_MESSAGE,
 } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import { Menu, MessageSquare } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 
 export default function ChatThreadListPage() {
   const user = useMe();
@@ -68,7 +68,7 @@ export default function ChatThreadListPage() {
         {/* Chat List Drawer (mobile) */}
         {drawerOpen && (
           <div className="fixed inset-0 z-30 bg-black/40 flex">
-            <div className="w-4/5 max-w-xs bg-background dark:bg-gray-900 h-full shadow-xl flex flex-col">
+            <div className="w-4/5 max-w-xs bg-card h-full shadow-xl flex flex-col">
               <div className="p-4 border-b border-border flex justify-between items-center">
                 <span className="font-bold text-lg">Chats</span>
                 <button
@@ -84,7 +84,7 @@ export default function ChatThreadListPage() {
                   placeholder="Search messages..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-3 pr-3 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full pl-3 pr-3 py-2 rounded-lg border hover:border-primary  bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
               <ChatList
@@ -110,7 +110,7 @@ export default function ChatThreadListPage() {
                 placeholder="Search messages..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full pl-9 pr-3 py-2 rounded-lg border hover:border-primary  bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
             </div>
           </div>

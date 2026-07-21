@@ -121,9 +121,9 @@ export default function UserDropdown() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-60 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl shadow-black/5 dark:shadow-black/30 overflow-hidden z-50 animate-fade-in">
+        <div className="absolute right-0 top-full mt-2 w-60 bg-card border border-border rounded-xl shadow-xl shadow-black/5 dark:shadow-black/30 overflow-hidden z-50 animate-fade-in">
           {/* User info header */}
-          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+          <div className="px-4 py-3 border-b border-border bg-muted/50">
             <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
               {displayName}
             </p>

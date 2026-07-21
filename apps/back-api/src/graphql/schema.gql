@@ -2535,7 +2535,9 @@ type Mutation {
 
   """Deletes a chat."""
   deleteChat(id: String!): ChatEntity!
-  sendMessage(input: SendChatMessageInput!): ChatMessageEntityV2!
+
+  """Sends a message in a chat."""
+  sendMessage(input: SendMessageInput!): ChatMessageEntity!
 
   """Marks messages as read."""
   markMessagesAsRead(chatId: String!, userId: String!): MarkAsReadResponse!
@@ -2949,10 +2951,10 @@ input UpdateChatInput {
   negotiationType: NegotiationType
 }
 
-input SendChatMessageInput {
+input SendMessageInput {
   chatId: String!
-  message: String!
-  senderType: MessageSenderType!
+  content: String!
+  senderType: String!
   senderId: String!
 }
 

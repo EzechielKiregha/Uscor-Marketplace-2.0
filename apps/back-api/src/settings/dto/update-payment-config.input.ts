@@ -1,22 +1,35 @@
 import { Field, InputType } from "@nestjs/graphql";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 
 @InputType()
 export class UpdatePaymentConfigInput {
-	@Field({ nullable: true })
-	mtnCode?: string;
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  mtnCode?: string
 
-	@Field({ nullable: true })
-	airtelCode?: string;
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  airtelCode?: string
 
-	@Field({ nullable: true })
-	orangeCode?: string;
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  orangeCode?: string
 
-	@Field({ nullable: true })
-	mpesaCode?: string;
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  mpesaCode?: string
 
-	@Field({ nullable: true })
-	bankAccount?: string;
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  bankAccount?: string
 
-	@Field({ nullable: true })
-	mobileMoneyEnabled?: boolean;
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  mobileMoneyEnabled?: boolean
 }

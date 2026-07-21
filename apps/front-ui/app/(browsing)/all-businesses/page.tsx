@@ -1,5 +1,15 @@
 "use client";
 
+import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
+import MotionPage from "@/components/MotionPage";
+import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    GET_BUSINESS_TYPES,
+    GET_BUSINESSES,
+    ON_BUSINESS_ADDED,
+} from "@/graphql/business-listing.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
     ArrowRight,
@@ -14,16 +24,6 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
-import MotionPage from "@/components/MotionPage";
-import CardGridSkeleton from "@/components/skeletons/CardGridSkeleton";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    GET_BUSINESS_TYPES,
-    GET_BUSINESSES,
-    ON_BUSINESS_ADDED,
-} from "@/graphql/business-listing.gql";
 import BusinessCard from "./_components/BusinessCard";
 
 export default function BusinessListingPage() {
@@ -162,7 +162,7 @@ export default function BusinessListingPage() {
 			</section>
 
 			{/* Search and Filter Controls */}
-			<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden mb-6">
+			<div className="bg-card border hover:border-primary  rounded-lg overflow-hidden mb-6">
 				<div className="p-4 bg-muted border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 					<div className="relative w-full sm:w-64">
 						<Input
@@ -181,7 +181,7 @@ export default function BusinessListingPage() {
 							onChange={(e) =>
 								handleFilterChange("businessType", e.target.value)
 							}
-							className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+							className="w-full sm:w-48 p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 						>
 							<option value="">All Business Types</option>
 							{businessTypes.map((type: any) => (
@@ -191,7 +191,7 @@ export default function BusinessListingPage() {
 							))}
 						</select>
 
-						<div className="flex border border-border hover:border-primary hover:bg-primary/5 rounded-md">
+						<div className="flex border hover:border-primary  rounded-md">
 							<Button
 								variant={viewMode === "grid" ? "default" : "outline"}
 								size="icon"
@@ -264,7 +264,7 @@ export default function BusinessListingPage() {
 					<select
 						value={filters.sort}
 						onChange={(e) => handleFilterChange("sort", e.target.value)}
-						className="p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="p-2 border hover:border-primary  rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						<option value="relevance">Relevance</option>
 						<option value="rating">Highest Rated</option>
@@ -378,7 +378,7 @@ export default function BusinessListingPage() {
 
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 					{/* In a real app, this would show featured businesses */}
-					<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden bg-card">
+					<div className="border hover:border-primary  rounded-lg overflow-hidden bg-card">
 						<div className="h-40 bg-muted" />
 						<div className="p-4">
 							<div className="flex items-center gap-2 mb-2">
@@ -402,7 +402,7 @@ export default function BusinessListingPage() {
 						</div>
 					</div>
 
-					<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden bg-card">
+					<div className="border hover:border-primary  rounded-lg overflow-hidden bg-card">
 						<div className="h-40 bg-muted" />
 						<div className="p-4">
 							<div className="flex items-center gap-2 mb-2">
@@ -426,7 +426,7 @@ export default function BusinessListingPage() {
 						</div>
 					</div>
 
-					<div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg overflow-hidden bg-card">
+					<div className="border hover:border-primary  rounded-lg overflow-hidden bg-card">
 						<div className="h-40 bg-muted" />
 						<div className="p-4">
 							<div className="flex items-center gap-2 mb-2">

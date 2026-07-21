@@ -1,5 +1,17 @@
 "use client";
 
+import FormFieldWrapper from "@/components/FormFieldWrapper";
+import { StatusBadge } from "@/components/StatusBadge";
+import { useToast } from "@/components/toast-provider";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
+import { UPDATE_BUSINESS_PROFILE } from "@/graphql/settings.gql";
+import { useFormValidation } from "@/hooks/use-form-validation";
+import { useMe } from "@/lib/useMe";
+import { businessProfileSchema } from "@/lib/validators/form-schemas";
 import { useMutation, useQuery } from "@apollo/client";
 import { put } from "@vercel/blob";
 import {
@@ -24,18 +36,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import FormFieldWrapper from "@/components/FormFieldWrapper";
-import { StatusBadge } from "@/components/StatusBadge";
-import { useToast } from "@/components/toast-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { GET_BUSINESS_BY_ID } from "@/graphql/business.gql";
-import { UPDATE_BUSINESS_PROFILE } from "@/graphql/settings.gql";
-import { useFormValidation } from "@/hooks/use-form-validation";
-import { useMe } from "@/lib/useMe";
-import { businessProfileSchema } from "@/lib/validators/form-schemas";
 
 // Business types with icons
 export const businessTypes = [
@@ -394,7 +394,7 @@ export default function ProfileSettings() {
 
   if (authLoading)
     return (
-      <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+      <Card className="border hover:border-primary  bg-card">
         <CardContent className="h-[500px] flex items-center justify-center">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -410,7 +410,7 @@ export default function ProfileSettings() {
     ] || businessBenefitsMap.ARTISAN;
 
   return (
-    <Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+    <Card className="border hover:border-primary  bg-card">
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
@@ -596,7 +596,7 @@ export default function ProfileSettings() {
               name="country"
               value={formData.country}
               onChange={handleSelectChange}
-              className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+              className="w-full p-2 border hover:border-primary  rounded-md"
             >
               <option value="RWANDA">Rwanda</option>
               <option value="UGANDA">Uganda</option>
@@ -661,7 +661,7 @@ export default function ProfileSettings() {
           </div>
 
           {/* Business Type Benefits */}
-          <div className="border border-border hover:border-primary hover:bg-primary/5 rounded-lg p-4 bg-muted">
+          <div className="border hover:border-primary  rounded-lg p-4 bg-muted">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-success" />
               {benefits.title}
@@ -677,7 +677,7 @@ export default function ProfileSettings() {
             </ul>
 
             {benefits.tip && (
-              <div className="mt-4 p-3 bg-background rounded-lg border border-border hover:border-primary hover:bg-primary/5">
+              <div className="mt-4 p-3 bg-background rounded-lg border hover:border-primary ">
                 <p className="text-sm">
                   <strong>Pro Tip:</strong> {benefits.tip}
                 </p>

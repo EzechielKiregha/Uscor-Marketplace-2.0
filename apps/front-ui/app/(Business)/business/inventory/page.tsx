@@ -1,14 +1,14 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import MotionPage from "@/components/MotionPage";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_STORES } from "@/graphql/store.gql";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useInventory } from "../_hooks/use-inventory";
 import { useOpenCreateStoreModal } from "../_hooks/use-open-create-store-modal";
 import InventorySummary from "./_components/InventorySummary";
@@ -87,7 +87,7 @@ export default function InventoryManagementPage() {
 						title="selected store ID"
 						value={selectedStoreId || ""}
 						onChange={(e) => setSelectedStoreId(e.target.value)}
-						className="w-full sm:w-64 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+						className="w-full sm:w-64 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
 					>
 						{storesData.stores.map((store: any) => (
 							<option key={store.id} value={store.id}>

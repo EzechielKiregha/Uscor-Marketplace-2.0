@@ -22,7 +22,7 @@ export default function ChatThreadList({ participantId }: ChatThreadListProps) {
 	}
 
 	return (
-		<div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 p-4 sm:p-6 md:p-8">
+		<div className="min-h-screen bg-background text-foreground p-4 sm:p-6 md:p-8">
 			<h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
 				Your Chats
 			</h1>
@@ -37,7 +37,7 @@ export default function ChatThreadList({ participantId }: ChatThreadListProps) {
 			)}
 			{data?.chats.map((chat: any) => (
 				<Link key={chat.id} href={`/freelance-gigs/chat/${chat.id}`}>
-					<Card className="mb-4 bg-white dark:bg-gray-800 border-orange-500 hover:border-orange-600 transition-colors">
+					<Card className="mb-4 bg-card border-orange-500 hover:border-orange-600 transition-colors">
 						<CardHeader>
 							<CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
 								{chat.service?.title || "Chat"}

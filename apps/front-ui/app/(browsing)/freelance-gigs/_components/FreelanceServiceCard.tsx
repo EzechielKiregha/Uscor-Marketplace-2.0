@@ -18,7 +18,7 @@ export default function FreelanceServiceCard({
 	business,
 }: FreelanceServiceCardProps) {
 	return (
-		<Card className="bg-white dark:bg-gray-800 border-orange-500 hover:border-orange-600 transition-colors">
+		<Card className="bg-card border-orange-500 hover:border-orange-600 transition-colors">
 			<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
 				{title}
 			</h3>

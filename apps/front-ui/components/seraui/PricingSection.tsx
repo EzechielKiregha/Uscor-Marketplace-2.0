@@ -1,15 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Check, X } from "lucide-react";
-import type React from "react";
-import { useEffect, useRef, useState } from "react";
 import { StatusBadge } from "@/components/StatusBadge";
 import {
     FEATURE_DEFINITIONS,
     type FeatureKey,
     getPlansArray
 } from "@/config/subscription-plans";
+import { motion } from "framer-motion";
+import { Check, X } from "lucide-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Feature keys to show in pricing cards
 const CARD_FEATURES: FeatureKey[] = [
@@ -122,7 +122,7 @@ const PricingSection = () => {
 					{/* Pricing Toggle */}
 					<div className="mt-8 sm:mt-10 flex justify-center px-4">
 						<div
-							className="relative flex items-center p-1 rounded-full border border-border hover:border-primary hover:bg-primary/5 cursor-pointer shadow-lg bg-card"
+							className="relative flex items-center p-1 rounded-full border hover:border-primary  cursor-pointer shadow-lg bg-card"
 							style={{
 								backdropFilter: "blur(10px)",
 								WebkitBackdropFilter: "blur(10px)",

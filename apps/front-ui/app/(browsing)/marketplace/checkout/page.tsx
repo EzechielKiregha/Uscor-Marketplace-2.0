@@ -1,37 +1,37 @@
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  ArrowLeft,
-  CheckCircle,
-  CheckCircle2,
-  CircleAlert,
-  CreditCard,
-  Gift,
-  MapPin,
-  ShieldCheck,
-  ShoppingBag,
-  Smartphone,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCart } from "@/app/context/use-cart";
+import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { GET_BUSINESS_PAYMENT_CONFIG } from "@/graphql/business.gql";
 import {
-  GET_CUSTOMER_POINTS,
-  GET_LOYALTY_PROGRAMS,
+    GET_CUSTOMER_POINTS,
+    GET_LOYALTY_PROGRAMS,
 } from "@/graphql/loyalty.gql";
 import { CREATE_ORDER } from "@/graphql/order.gql";
 import { GET_ACCOUNT_BALANCE } from "@/graphql/wallet.gql";
-import { GET_BUSINESS_PAYMENT_CONFIG } from "@/graphql/business.gql";
-import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
 import { Address } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
 import { formatPrice } from "@/lib/utils";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    ArrowLeft,
+    CheckCircle,
+    CheckCircle2,
+    CircleAlert,
+    CreditCard,
+    Gift,
+    MapPin,
+    ShieldCheck,
+    ShoppingBag,
+    Smartphone,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AddressSelector from "../_components/AddressSelector";
 import { GetBusinessType } from "../_components/BusinessType";
 import BusinessTypeIcon from "../_components/BusinessTypeIcons";
@@ -259,7 +259,7 @@ export default function CheckoutPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center animate-fade-in-up">
+          <div className="bg-card rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center animate-fade-in-up">
             <div className="w-16 h-16 rounded-full bg-orange-100 dark:bg-orange-950/40 flex items-center justify-center mx-auto mb-5">
               <ShoppingBag className="h-8 w-8 text-orange-500" />
             </div>

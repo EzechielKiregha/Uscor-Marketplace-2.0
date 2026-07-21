@@ -1,17 +1,6 @@
 // app/business/inventory/_components/PurchaseOrders.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-    Download,
-    Minus,
-    Package,
-    Pencil,
-    Plus,
-    Search,
-    X,
-} from "lucide-react";
-import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -23,6 +12,17 @@ import {
 } from "@/graphql/inventory.gql";
 import { GET_PRODUCTS } from "@/graphql/product.gql";
 import { useMe } from "@/lib/useMe";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+    Download,
+    Minus,
+    Package,
+    Pencil,
+    Plus,
+    Search,
+    X,
+} from "lucide-react";
+import { useState } from "react";
 
 interface PurchaseOrdersProps {
 	storeId: string;
@@ -157,7 +157,7 @@ export default function PurchaseOrders({
 	};
 
 	return (
-		<Card className="border border-border hover:border-primary hover:bg-primary/5 bg-card">
+		<Card className="border hover:border-primary  bg-card">
 			<CardHeader>
 				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 					<div>
@@ -260,7 +260,7 @@ export default function PurchaseOrders({
 			{/* Create/Edit Purchase Order Modal */}
 			{showCreateModal && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-3xl">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-3xl">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>
@@ -300,7 +300,7 @@ export default function PurchaseOrders({
                       title='supplier ID'
                       value={supplierId}
                       onChange={(e) => setSupplierId(e.target.value)}
-                      className="w-full p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-md"
+                      className="w-full p-2 border hover:border-primary  rounded-md"
                       disabled={selectedOrder && selectedOrder.status !== 'PENDING'}
                     >
                       <option value="">Select a supplier</option>
@@ -353,7 +353,7 @@ export default function PurchaseOrders({
 									</div>
 
 									{selectedProducts.length === 0 ? (
-										<div className="text-center py-6 border border-border hover:border-primary hover:bg-primary/5 rounded-lg">
+										<div className="text-center py-6 border hover:border-primary  rounded-lg">
 											<Package className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
 											<p className="text-sm text-muted-foreground">
 												No products added yet
@@ -373,7 +373,7 @@ export default function PurchaseOrders({
 											{selectedProducts.map((product) => (
 												<div
 													key={product.id}
-													className="flex items-center justify-between p-3 border border-border hover:border-primary hover:bg-primary/5 rounded-lg"
+													className="flex items-center justify-between p-3 border hover:border-primary  rounded-lg"
 												>
 													<div className="flex items-center gap-3">
 														{product.imageUrl ? (
@@ -481,7 +481,7 @@ export default function PurchaseOrders({
 			{/* Order Details Modal */}
 			{selectedOrder && !showCreateModal && (
 				<div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-					<div className="bg-card border border-border hover:border-primary hover:bg-primary/5 rounded-lg w-full max-w-3xl">
+					<div className="bg-card border hover:border-primary  rounded-lg w-full max-w-3xl">
 						<div className="p-6">
 							<div className="flex justify-between items-start mb-6">
 								<div>

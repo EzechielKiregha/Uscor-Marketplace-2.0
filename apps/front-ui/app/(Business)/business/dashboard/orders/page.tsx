@@ -1,15 +1,15 @@
 // app/business/orders/page.tsx
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { Search } from "lucide-react";
-import { useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import TableSkeleton from "@/components/skeletons/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import { GET_BUSINESS_ORDERS } from "@/graphql/order.gql";
 import { OrderEntity } from "@/lib/types";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import { Search } from "lucide-react";
+import { useState } from "react";
 import { useOpenOrderDetailsModal } from "../../_hooks/use-open-order-details-modal";
 import OrderDetailsModal from "./_components/OrderDetailsModal";
 
@@ -94,7 +94,7 @@ export default function BusinessOrdersPage() {
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border hover:border-primary  bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
@@ -103,7 +103,7 @@ export default function BusinessOrdersPage() {
             title="all"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Statuses</option>
             <option value="PENDING">Pending</option>
@@ -118,7 +118,7 @@ export default function BusinessOrdersPage() {
             title="all"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="w-full sm:w-48 p-2 border border-border hover:border-primary hover:bg-primary/5 rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full sm:w-48 p-2 border hover:border-primary  rounded-lg bg-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Dates</option>
             <option value="TODAY">Today</option>
