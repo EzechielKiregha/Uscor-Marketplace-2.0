@@ -22,6 +22,14 @@ const nextConfig: NextConfig = {
       fullUrl: false,
     },
   },
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
+  },
 };
 
 // 👇 FIRST configure Serwist
