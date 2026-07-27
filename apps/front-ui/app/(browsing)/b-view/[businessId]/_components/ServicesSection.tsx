@@ -252,13 +252,13 @@ export default function ServicesSection({
                     <div className="mt-4 flex justify-between items-center">
                       <div className="flex items-center">
                         <Star className="h-4 w-4 text-warning mr-1" />
-                        <span className="text-sm">4.5 (86)</span>
+                        <span className="text-sm">{service.averageRating?.toFixed(1) || "New"}</span>
                       </div>
                       <Button
                         variant="default"
                         size="sm"
                         onClick={() =>
-                          showToast("success", "Success", "Service booked")
+                          showToast("info", "Coming Soon", "Service booking is not yet available")
                         }
                       >
                         Book Now
@@ -324,14 +324,14 @@ export default function ServicesSection({
                           variant="default"
                           className="w-full md:w-auto"
                           onClick={() =>
-                            showToast("success", "Success", "Service booked")
+                            showToast("info", "Coming Soon", "Service booking is not yet available")
                           }
                         >
                           Book Now
                         </Button>
                         <div className="flex items-center justify-end mt-2">
                           <Star className="h-4 w-4 text-warning mr-1" />
-                          <span className="text-sm">4.5 (86)</span>
+                          <span className="text-sm">{service.averageRating?.toFixed(1) || "New"}</span>
                         </div>
                       </div>
                     </div>
@@ -343,52 +343,6 @@ export default function ServicesSection({
         </div>
       )}
 
-      {/* Business Type Specific Information */}
-      <div className="p-4 bg-muted border-t border-border">
-        <div className="flex items-start gap-3">
-          <div className="mt-0.5">
-            <BriefcaseBusiness className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <h4 className="font-semibold">About {business.name}'s Services</h4>
-            {business.businessType === "HARDWARE" && (
-              <p className="text-sm text-muted-foreground mt-1">
-                {business.name} offers a range of services including tool
-                rentals, on-site installations, and repair services. Their
-                technicians are certified and equipped to handle all your
-                hardware needs. Most services can be booked online and scheduled
-                at your convenience.
-              </p>
-            )}
-            {business.businessType === "TRANSPORTATION" && (
-              <p className="text-sm text-muted-foreground mt-1">
-                As a transportation service provider, {business.name} offers
-                reliable delivery and transportation services throughout the
-                region. Their fleet includes various vehicle types to
-                accommodate different cargo needs. Book a service now for
-                same-day delivery options.
-              </p>
-            )}
-            {business.businessType === "ARTISAN" && (
-              <p className="text-sm text-muted-foreground mt-1">
-                {business.name} specializes in custom handcrafted products.
-                Their artisans offer personalized consultations and custom order
-                services. Most custom orders take 2-4 weeks to complete,
-                depending on complexity.
-              </p>
-            )}
-            {business.businessType !== "HARDWARE" &&
-              business.businessType !== "TRANSPORTATION" &&
-              business.businessType !== "ARTISAN" && (
-                <p className="text-sm text-muted-foreground mt-1">
-                  {business.name} offers professional services in their field of
-                  expertise. Contact them directly for more information about
-                  their service offerings and availability.
-                </p>
-              )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -51,6 +51,7 @@ export type B2BOrderMinAggregateOutputType = {
   tax: number | null
   total: number | null
   shippingAddress: string | null
+  chatId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   submittedAt: Date | null
@@ -73,6 +74,7 @@ export type B2BOrderMaxAggregateOutputType = {
   tax: number | null
   total: number | null
   shippingAddress: string | null
+  chatId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   submittedAt: Date | null
@@ -95,6 +97,7 @@ export type B2BOrderCountAggregateOutputType = {
   tax: number
   total: number
   shippingAddress: number
+  chatId: number
   createdAt: number
   updatedAt: number
   submittedAt: number
@@ -131,6 +134,7 @@ export type B2BOrderMinAggregateInputType = {
   tax?: true
   total?: true
   shippingAddress?: true
+  chatId?: true
   createdAt?: true
   updatedAt?: true
   submittedAt?: true
@@ -153,6 +157,7 @@ export type B2BOrderMaxAggregateInputType = {
   tax?: true
   total?: true
   shippingAddress?: true
+  chatId?: true
   createdAt?: true
   updatedAt?: true
   submittedAt?: true
@@ -175,6 +180,7 @@ export type B2BOrderCountAggregateInputType = {
   tax?: true
   total?: true
   shippingAddress?: true
+  chatId?: true
   createdAt?: true
   updatedAt?: true
   submittedAt?: true
@@ -284,6 +290,7 @@ export type B2BOrderGroupByOutputType = {
   tax: number
   total: number
   shippingAddress: string | null
+  chatId: string | null
   createdAt: Date
   updatedAt: Date
   submittedAt: Date | null
@@ -329,6 +336,7 @@ export type B2BOrderWhereInput = {
   tax?: Prisma.FloatFilter<"B2BOrder"> | number
   total?: Prisma.FloatFilter<"B2BOrder"> | number
   shippingAddress?: Prisma.StringNullableFilter<"B2BOrder"> | string | null
+  chatId?: Prisma.StringNullableFilter<"B2BOrder"> | string | null
   createdAt?: Prisma.DateTimeFilter<"B2BOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"B2BOrder"> | Date | string
   submittedAt?: Prisma.DateTimeNullableFilter<"B2BOrder"> | Date | string | null
@@ -355,6 +363,7 @@ export type B2BOrderOrderByWithRelationInput = {
   tax?: Prisma.SortOrder
   total?: Prisma.SortOrder
   shippingAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  chatId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -384,6 +393,7 @@ export type B2BOrderWhereUniqueInput = Prisma.AtLeast<{
   tax?: Prisma.FloatFilter<"B2BOrder"> | number
   total?: Prisma.FloatFilter<"B2BOrder"> | number
   shippingAddress?: Prisma.StringNullableFilter<"B2BOrder"> | string | null
+  chatId?: Prisma.StringNullableFilter<"B2BOrder"> | string | null
   createdAt?: Prisma.DateTimeFilter<"B2BOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"B2BOrder"> | Date | string
   submittedAt?: Prisma.DateTimeNullableFilter<"B2BOrder"> | Date | string | null
@@ -410,6 +420,7 @@ export type B2BOrderOrderByWithAggregationInput = {
   tax?: Prisma.SortOrder
   total?: Prisma.SortOrder
   shippingAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  chatId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -440,6 +451,7 @@ export type B2BOrderScalarWhereWithAggregatesInput = {
   tax?: Prisma.FloatWithAggregatesFilter<"B2BOrder"> | number
   total?: Prisma.FloatWithAggregatesFilter<"B2BOrder"> | number
   shippingAddress?: Prisma.StringNullableWithAggregatesFilter<"B2BOrder"> | string | null
+  chatId?: Prisma.StringNullableWithAggregatesFilter<"B2BOrder"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"B2BOrder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"B2BOrder"> | Date | string
   submittedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"B2BOrder"> | Date | string | null
@@ -460,6 +472,7 @@ export type B2BOrderCreateInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -486,6 +499,7 @@ export type B2BOrderUncheckedCreateInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -508,6 +522,7 @@ export type B2BOrderUpdateInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -534,6 +549,7 @@ export type B2BOrderUncheckedUpdateInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -558,6 +574,7 @@ export type B2BOrderCreateManyInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -578,6 +595,7 @@ export type B2BOrderUpdateManyMutationInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,6 +618,7 @@ export type B2BOrderUncheckedUpdateManyInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637,6 +656,7 @@ export type B2BOrderCountOrderByAggregateInput = {
   tax?: Prisma.SortOrder
   total?: Prisma.SortOrder
   shippingAddress?: Prisma.SortOrder
+  chatId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
@@ -665,6 +685,7 @@ export type B2BOrderMaxOrderByAggregateInput = {
   tax?: Prisma.SortOrder
   total?: Prisma.SortOrder
   shippingAddress?: Prisma.SortOrder
+  chatId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
@@ -687,6 +708,7 @@ export type B2BOrderMinOrderByAggregateInput = {
   tax?: Prisma.SortOrder
   total?: Prisma.SortOrder
   shippingAddress?: Prisma.SortOrder
+  chatId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   submittedAt?: Prisma.SortOrder
@@ -840,6 +862,7 @@ export type B2BOrderCreateWithoutBuyerInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -864,6 +887,7 @@ export type B2BOrderUncheckedCreateWithoutBuyerInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -896,6 +920,7 @@ export type B2BOrderCreateWithoutSellerInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -920,6 +945,7 @@ export type B2BOrderUncheckedCreateWithoutSellerInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -973,6 +999,7 @@ export type B2BOrderScalarWhereInput = {
   tax?: Prisma.FloatFilter<"B2BOrder"> | number
   total?: Prisma.FloatFilter<"B2BOrder"> | number
   shippingAddress?: Prisma.StringNullableFilter<"B2BOrder"> | string | null
+  chatId?: Prisma.StringNullableFilter<"B2BOrder"> | string | null
   createdAt?: Prisma.DateTimeFilter<"B2BOrder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"B2BOrder"> | Date | string
   submittedAt?: Prisma.DateTimeNullableFilter<"B2BOrder"> | Date | string | null
@@ -1009,6 +1036,7 @@ export type B2BOrderCreateWithoutPaymentInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -1034,6 +1062,7 @@ export type B2BOrderUncheckedCreateWithoutPaymentInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -1071,6 +1100,7 @@ export type B2BOrderUpdateWithoutPaymentInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1096,6 +1126,7 @@ export type B2BOrderUncheckedUpdateWithoutPaymentInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1117,6 +1148,7 @@ export type B2BOrderCreateWithoutItemsInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -1142,6 +1174,7 @@ export type B2BOrderUncheckedCreateWithoutItemsInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -1179,6 +1212,7 @@ export type B2BOrderUpdateWithoutItemsInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1204,6 +1238,7 @@ export type B2BOrderUncheckedUpdateWithoutItemsInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1226,6 +1261,7 @@ export type B2BOrderCreateManyBuyerInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -1247,6 +1283,7 @@ export type B2BOrderCreateManySellerInput = {
   tax?: number
   total?: number
   shippingAddress?: string | null
+  chatId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   submittedAt?: Date | string | null
@@ -1267,6 +1304,7 @@ export type B2BOrderUpdateWithoutBuyerInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1291,6 +1329,7 @@ export type B2BOrderUncheckedUpdateWithoutBuyerInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1314,6 +1353,7 @@ export type B2BOrderUncheckedUpdateManyWithoutBuyerInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1334,6 +1374,7 @@ export type B2BOrderUpdateWithoutSellerInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1358,6 +1399,7 @@ export type B2BOrderUncheckedUpdateWithoutSellerInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1381,6 +1423,7 @@ export type B2BOrderUncheckedUpdateManyWithoutSellerInput = {
   tax?: Prisma.FloatFieldUpdateOperationsInput | number
   total?: Prisma.FloatFieldUpdateOperationsInput | number
   shippingAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chatId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1434,6 +1477,7 @@ export type B2BOrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tax?: boolean
   total?: boolean
   shippingAddress?: boolean
+  chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   submittedAt?: boolean
@@ -1461,6 +1505,7 @@ export type B2BOrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tax?: boolean
   total?: boolean
   shippingAddress?: boolean
+  chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   submittedAt?: boolean
@@ -1485,6 +1530,7 @@ export type B2BOrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tax?: boolean
   total?: boolean
   shippingAddress?: boolean
+  chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   submittedAt?: boolean
@@ -1509,6 +1555,7 @@ export type B2BOrderSelectScalar = {
   tax?: boolean
   total?: boolean
   shippingAddress?: boolean
+  chatId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   submittedAt?: boolean
@@ -1518,7 +1565,7 @@ export type B2BOrderSelectScalar = {
   cancelledAt?: boolean
 }
 
-export type B2BOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderNumber" | "buyerId" | "sellerId" | "status" | "paymentTerms" | "notes" | "rejectionReason" | "subtotal" | "tax" | "total" | "shippingAddress" | "createdAt" | "updatedAt" | "submittedAt" | "approvedAt" | "shippedAt" | "deliveredAt" | "cancelledAt", ExtArgs["result"]["b2BOrder"]>
+export type B2BOrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderNumber" | "buyerId" | "sellerId" | "status" | "paymentTerms" | "notes" | "rejectionReason" | "subtotal" | "tax" | "total" | "shippingAddress" | "chatId" | "createdAt" | "updatedAt" | "submittedAt" | "approvedAt" | "shippedAt" | "deliveredAt" | "cancelledAt", ExtArgs["result"]["b2BOrder"]>
 export type B2BOrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   buyer?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -1556,6 +1603,7 @@ export type $B2BOrderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tax: number
     total: number
     shippingAddress: string | null
+    chatId: string | null
     createdAt: Date
     updatedAt: Date
     submittedAt: Date | null
@@ -2002,6 +2050,7 @@ export interface B2BOrderFieldRefs {
   readonly tax: Prisma.FieldRef<"B2BOrder", 'Float'>
   readonly total: Prisma.FieldRef<"B2BOrder", 'Float'>
   readonly shippingAddress: Prisma.FieldRef<"B2BOrder", 'String'>
+  readonly chatId: Prisma.FieldRef<"B2BOrder", 'String'>
   readonly createdAt: Prisma.FieldRef<"B2BOrder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"B2BOrder", 'DateTime'>
   readonly submittedAt: Prisma.FieldRef<"B2BOrder", 'DateTime'>

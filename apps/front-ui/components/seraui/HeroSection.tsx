@@ -67,22 +67,22 @@ export default function HeroSection() {
             <div className="flex items-center justify-center w-10 h-10 mx-auto mb-2 rounded-xl bg-orange-100 dark:bg-orange-950/40">
               <Store className="h-5 w-5 text-orange-600 dark:text-orange-400" />
             </div>
-            <p className="text-2xl font-bold text-foreground">50+</p>
+            <p className="text-2xl font-bold text-foreground">Growing</p>
             <p className="text-xs text-muted-foreground">Local Businesses</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center w-10 h-10 mx-auto mb-2 rounded-xl bg-orange-100 dark:bg-orange-950/40">
               <Zap className="h-5 w-5 text-orange-600 dark:text-orange-400" />
             </div>
-            <p className="text-2xl font-bold text-foreground">10K+</p>
+            <p className="text-2xl font-bold text-foreground">Diverse</p>
             <p className="text-xs text-muted-foreground">Products Listed</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center w-10 h-10 mx-auto mb-2 rounded-xl bg-orange-100 dark:bg-orange-950/40">
               <ShoppingBag className="h-5 w-5 text-orange-600 dark:text-orange-400" />
             </div>
-            <p className="text-2xl font-bold text-foreground">5K+</p>
-            <p className="text-xs text-muted-foreground">Orders Delivered</p>
+            <p className="text-2xl font-bold text-foreground">Trusted</p>
+            <p className="text-xs text-muted-foreground">Delivery Network</p>
           </div>
         </div>
       </div>

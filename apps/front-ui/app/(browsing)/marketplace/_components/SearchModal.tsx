@@ -168,7 +168,7 @@ export default function SearchModal({ onClose, onSearch }: SearchModalProps) {
 																</p>
 																<div className="flex items-center gap-1">
 																	<Star className="h-4 w-4 text-warning fill-warning" />
-																	<span className="text-xs">4.7</span>
+																	<span className="text-xs">{product.averageRating?.toFixed(1) || "New"}</span>
 																</div>
 															</div>
 														</div>
@@ -234,7 +234,7 @@ export default function SearchModal({ onClose, onSearch }: SearchModalProps) {
 																</p>
 																<div className="flex items-center gap-1">
 																	<Star className="h-4 w-4 text-warning fill-warning" />
-																	<span className="text-xs">4.5</span>
+																	<span className="text-xs">{service.averageRating?.toFixed(1) || "New"}</span>
 																</div>
 															</div>
 														</div>

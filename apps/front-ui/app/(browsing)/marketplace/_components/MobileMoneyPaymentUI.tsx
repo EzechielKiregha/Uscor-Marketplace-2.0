@@ -206,12 +206,12 @@ export default function MobileMoneyPaymentUI({
           </p>
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-primary tracking-widest font-mono">
-              *384*66639#
+              {process.env.NEXT_PUBLIC_MOMO_USSD_CODE || "*384*66639#"}
             </p>
             <button
             type="button"
               onClick={() => {
-                navigator.clipboard.writeText("*384*66639#");
+                navigator.clipboard.writeText(process.env.NEXT_PUBLIC_MOMO_USSD_CODE || "*384*66639#");
                 showToast(
                   "success",
                   "Success",
@@ -232,11 +232,11 @@ export default function MobileMoneyPaymentUI({
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-muted rounded-lg p-3">
             <p className="text-xs text-muted-foreground mb-1">Merchant Name</p>
-            <p className="font-semibold text-sm">Kambale Kiregha</p>
+            <p className="font-semibold text-sm">{process.env.NEXT_PUBLIC_MOMO_MERCHANT_NAME || "USCOR Marketplace"}</p>
           </div>
           <div className="bg-muted rounded-lg p-3">
             <p className="text-xs text-muted-foreground mb-1">MoMoPay ID</p>
-            <p className="font-semibold text-sm">66639 (TIGer-6)</p>
+            <p className="font-semibold text-sm">{process.env.NEXT_PUBLIC_MOMO_MERCHANT_ID || "N/A"}</p>
           </div>
         </div>
 

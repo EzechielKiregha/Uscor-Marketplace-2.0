@@ -479,10 +479,8 @@ export default function OrderConfirmationPage() {
                 }
                 balance={balance}
                 tokenBalance={tokenBalance}
-                onSelectMethod={(method) => {
-                  // TODO: call your retry payment mutation here
-                  // e.g. retryPayment({ variables: { orderId: order.id, method } })
-                  console.log("Retry with method:", method);
+                onSelectMethod={(_method) => {
+                  // TODO: implement retry payment mutation
                 }}
               />
             )}

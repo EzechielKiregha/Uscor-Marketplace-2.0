@@ -285,7 +285,11 @@ export const BUSINESS_GROUPED_ORDER_ENTITY = gql`
       avatar
       businessType
       paymentConfig {
-        supportedPaymentMethods
+        mtnCode
+        airtelCode
+        orangeCode
+        mpesaCode
+        bankAccount
       }
     }
     items {

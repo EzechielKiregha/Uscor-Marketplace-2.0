@@ -1,7 +1,9 @@
 // app/business/[id]/page.tsx
 "use client";
 
+import ChatModal from "@/components/chat/ChatModal";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import {
     GET_BUSINESS_BY_ID,
@@ -10,8 +12,9 @@ import {
     GET_BUSINESS_SERVICES,
     ON_BUSINESS_UPDATED,
 } from "@/graphql/business-page.gql";
+import { CREATE_CHAT } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
-import { useQuery, useSubscription } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import {
     BriefcaseBusiness,
     Gift,
@@ -49,6 +52,10 @@ export default function BusinessPage() {
 		"products" | "services" | "workers" | "reviews"
 	>("products");
 	const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+	const [chatModalOpen, setChatModalOpen] = useState(false);
+	const [activeChatId, setActiveChatId] = useState<string | undefined>(undefined);
+	const { showToast } = useToast();
+	const [createChat] = useMutation(CREATE_CHAT);
 
 	const {
 		data: businessData,
@@ -104,6 +111,31 @@ export default function BusinessPage() {
 	const products = productsData?.businessProducts || [];
 	const services = servicesData?.businessServices || [];
 	const reviews = reviewsData?.businessReviews?.items || [];
+
+	const handleMessageBusiness = async () => {
+		if (!user) {
+			showToast("error", "Sign In Required", "Please sign in to message this business.");
+			return;
+		}
+		try {
+			const res = await createChat({
+				variables: {
+					input: {
+						participantIds: [user.id, businessId as string],
+						isSecure: false,
+						negotiationType: "GENERAL",
+					},
+				},
+			});
+			const chatId = res?.data?.createChat?.id;
+			if (chatId) {
+				setActiveChatId(chatId);
+				setChatModalOpen(true);
+			}
+		} catch (error) {
+			showToast("error", "Error", "Failed to start conversation. Please try again.");
+		}
+	};
 
 	if (businessLoading) return <DashboardSkeleton />;
 
@@ -176,7 +208,7 @@ export default function BusinessPage() {
 							<Star className="h-5 w-5 text-primary" />
 							<div>
 								<p className="text-sm text-muted-foreground">Rating</p>
-								<p className="font-bold text-lg">5.0 ⭐</p>
+								<p className="font-bold text-lg">{business.averageRating?.toFixed(1) || "N/A"}</p>
 							</div>
 						</div>
 					</div>
@@ -267,7 +299,7 @@ export default function BusinessPage() {
 						<div className="space-y-3">
 							{user && user?.id !== business.id && (
 								<>
-									<Button variant="default" className="w-full">
+									<Button variant="default" className="w-full" onClick={handleMessageBusiness}>
 										<MessageSquare className="h-4 w-4 mr-2" />
 										Message Business
 									</Button>
@@ -408,11 +440,19 @@ export default function BusinessPage() {
 								reviews={reviews}
 								loading={reviewsLoading}
 								business={business}
+								products={products}
 							/>
 						)}
 					</div>
 				</div>
 			</div>
+
+			{/* Chat Modal */}
+			<ChatModal
+				isOpen={chatModalOpen}
+				onClose={() => setChatModalOpen(false)}
+				chatId={activeChatId}
+			/>
 		</div>
 	);
 }

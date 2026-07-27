@@ -31,6 +31,7 @@ export class B2BOrderEntity {
     @Field(() => Float) tax: number;
     @Field(() => Float) total: number;
     @Field({ nullable: true }) shippingAddress?: string;
+    @Field({ nullable: true }) chatId?: string;
     @Field(() => [B2BOrderItemEntity]) items: B2BOrderItemEntity[];
     @Field() createdAt: Date;
     @Field() updatedAt: Date;
@@ -48,6 +49,14 @@ export class B2BOrderEntity {
 @ObjectType()
 export class B2BOrderListResponse {
     @Field(() => [B2BOrderEntity]) items: B2BOrderEntity[];
+    @Field(() => Int) total: number;
+    @Field(() => Int) page: number;
+    @Field(() => Int) limit: number;
+}
+
+@ObjectType()
+export class B2BVendorListResponse {
+    @Field(() => [BusinessEntity]) items: BusinessEntity[];
     @Field(() => Int) total: number;
     @Field(() => Int) page: number;
     @Field(() => Int) limit: number;

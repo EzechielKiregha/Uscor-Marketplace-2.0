@@ -19,6 +19,7 @@ interface PosPageProps {
   viewMode?: "worker" | "business";
   workerId?: string;
   retchDashData?: () => void;
+  businessId?: string;
 }
 
 export default function PosPage({
@@ -26,6 +27,7 @@ export default function PosPage({
   viewMode = "worker",
   workerId,
   retchDashData,
+  businessId,
 }: PosPageProps) {
   const { user, role } = useMe();
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
@@ -124,6 +126,7 @@ export default function PosPage({
             userId={effectiveWorkerId || ""}
             client={selectedClient}
             onCompleteSale={retchDashData}
+            businessId={businessId}
           />
         </div>
 

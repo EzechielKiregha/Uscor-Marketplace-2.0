@@ -28,7 +28,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
 				"Uscor Marketplace has transformed our shopping experience. The intuitive platform and robust features make it a game-changer for buyers and sellers.",
 			author: "Shekinah Tshikulila",
 			role: "Entrepreneur",
-			avatar: "https://i.pravatar.cc/150?img=1",
+			avatar: "https://placehold.co/48x48/6B7280/FFFFFF?text=ST",
 			avatarFallback: "https://placehold.co/48x48/6B7280/FFFFFF?text=ST",
 		},
 		{
@@ -36,7 +36,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
 				"The platform's ease of use and powerful tools have saved us countless hours. It's an invaluable asset for our business.",
 			author: "Jonathan Yombo",
 			role: "Business Owner",
-			avatar: "https://i.pravatar.cc/150?img=2",
+			avatar: "https://placehold.co/48x48/6B7280/FFFFFF?text=JY",
 			avatarFallback: "https://placehold.co/48x48/6B7280/FFFFFF?text=JY",
 		},
 		{
@@ -44,7 +44,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
 				"The product listings and loyalty program are top-notch. Uscor has elevated our customer engagement.",
 			author: "Yucel Farukşahan",
 			role: "Retailer",
-			avatar: "https://i.pravatar.cc/150?img=3",
+			avatar: "https://placehold.co/40x40/6B7280/FFFFFF?text=YF",
 			avatarFallback: "https://placehold.co/40x40/6B7280/FFFFFF?text=YF",
 		},
 		{
@@ -52,7 +52,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
 				"Exceptional quality and attention to detail. Uscor is the best marketplace platform I've used.",
 			author: "Rodrigo Aguilar",
 			role: "Freelancer",
-			avatar: "https://i.pravatar.cc/150?img=4",
+			avatar: "https://placehold.co/40x40/6B7280/FFFFFF?text=RA",
 			avatarFallback: "https://placehold.co/40x40/6B7280/FFFFFF?text=RA",
 		},
 	],

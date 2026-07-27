@@ -1441,6 +1441,7 @@ model B2BOrder {
   tax             Float               @default(0)
   total           Float               @default(0)
   shippingAddress String?
+  chatId          String?
   items           B2BOrderItem[]
   payment         PaymentTransaction?
   createdAt       DateTime            @default(now())

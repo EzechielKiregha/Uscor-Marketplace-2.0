@@ -30,14 +30,20 @@ export class PaymentTransactionEntity {
     @Field(() => String) // ← explicit enum
     status: string;
 
-    @Field()
-    transactionDate: Date;
+    @Field({ nullable: true })
+    transactionDate?: Date;
 
     @Field(() => String,{ nullable: true })
     qrCode?: string | null;
 
     @Field()
     createdAt: Date;
+
+    @Field(() => String, { nullable: true })
+    businessGroupId?: string;
+
+    @Field(() => String, { nullable: true })
+    b2bOrderId?: string;
 
     @Field(() => OrderEntity, { nullable: true })
     order?: OrderEntity;

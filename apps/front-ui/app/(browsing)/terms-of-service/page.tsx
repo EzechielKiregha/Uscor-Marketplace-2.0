@@ -205,7 +205,7 @@ export default function TermsOfService() {
 								9. Limitation of Liability
 							</h2>
 							<p>
-								In no event shall Lachs Golden Intelligent ERP, nor its
+								In no event shall USCOR Marketplace, nor its
 								directors, employees, partners, agents, suppliers, or
 								affiliates, be liable for any indirect, incidental, special,
 								consequential or punitive damages, including without limitation,

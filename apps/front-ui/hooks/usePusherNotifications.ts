@@ -169,6 +169,30 @@ export function usePusherNotifications({
           );
           break;
 
+        case "b2b-order-new":
+          showBrowserNotification(
+            "New B2B Order",
+            `New purchase order #${data.orderRef} from ${data.buyerName} — $${data.total?.toFixed(2)}`,
+            notification,
+          );
+          break;
+
+        case "b2b-order-update":
+          showBrowserNotification(
+            "B2B Order Update",
+            data.message || `B2B order #${data.orderRef} status updated.`,
+            notification,
+          );
+          break;
+
+        case "b2b-payment-received":
+          showBrowserNotification(
+            "B2B Payment Received",
+            `Payment of $${data.amount?.toFixed(2)} received for order #${data.orderRef}`,
+            notification,
+          );
+          break;
+
         default:
           break;
       }
@@ -218,6 +242,9 @@ export function usePusherNotifications({
       "new-order-chat",
       "new-dispute",
       "dispute-update",
+      "b2b-order-new",
+      "b2b-order-update",
+      "b2b-payment-received",
     ];
 
     // Subscribe and bind events

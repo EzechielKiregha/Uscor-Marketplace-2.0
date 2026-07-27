@@ -166,6 +166,7 @@ export const GET_B2B_ORDERS = gql`
         shippedAt
         deliveredAt
         cancelledAt
+        chatId
         items {
           id
           productId

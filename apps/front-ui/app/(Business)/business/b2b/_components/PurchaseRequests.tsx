@@ -67,6 +67,7 @@ export default function PurchaseRequests({ businessId }: Props) {
 
 	const [submitOrder] = useMutation(SUBMIT_B2B_ORDER);
 	const [updateStatus] = useMutation(UPDATE_B2B_ORDER_STATUS);
+	const [payOrder, { loading: payLoading }] = useMutation(PAY_B2B_ORDER);
 
 	const orders = data?.b2bOrders?.items || [];
 
@@ -89,6 +90,16 @@ export default function PurchaseRequests({ businessId }: Props) {
 			refetch();
 		} catch (err: any) {
 			showToast("error", "Error", err.message);
+		}
+	};
+
+	const handlePay = async (orderId: string) => {
+		try {
+			await payOrder({ variables: { orderId, method: "MOBILE_MONEY" } });
+			showToast("success", "Payment Sent", "B2B order payment processed");
+			refetch();
+		} catch (err: any) {
+			showToast("error", "Payment Failed", err.message);
 		}
 	};
 
@@ -282,7 +293,7 @@ export default function PurchaseRequests({ businessId }: Props) {
 													variant="outline"
 													size="sm"
 													onClick={() => {
-														setActiveChatId(null);
+														setActiveChatId(order.chatId || null);
 														setChatModalOpen(true);
 													}}
 												>
@@ -294,6 +305,16 @@ export default function PurchaseRequests({ businessId }: Props) {
 											{isBuyer && order.status === "DRAFT" && (
 												<Button size="sm" onClick={() => handleSubmit(order.id)}>
 													<Send className="h-4 w-4 mr-1" /> Submit Order
+												</Button>
+											)}
+											{isBuyer && ["APPROVED", "PROCESSING"].includes(order.status) && order.payment?.status !== "COMPLETED" && (
+												<Button
+													size="sm"
+													className="bg-success hover:bg-success/90 text-success-foreground"
+													onClick={() => handlePay(order.id)}
+													disabled={payLoading}
+												>
+													<CreditCard className="h-4 w-4 mr-1" /> {payLoading ? "Processing..." : "Pay Now"}
 												</Button>
 											)}
 											{isBuyer && ["DRAFT", "SUBMITTED"].includes(order.status) && (

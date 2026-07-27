@@ -162,7 +162,7 @@ export default function WorkersSection({
 								<div className="flex justify-between items-center">
 									<div className="flex items-center">
 										<Star className="h-4 w-4 text-warning mr-1" />
-										<span className="text-sm">4.7 (42)</span>
+										<span className="text-sm">{worker.averageRating?.toFixed(1) || "New"}</span>
 									</div>
 									<Button
 										variant="outline"
@@ -199,50 +199,6 @@ export default function WorkersSection({
 				</div>
 			</div>
 
-			{/* Business Type Specific Information */}
-			<div className="p-4 bg-muted border-t border-border">
-				<div className="flex items-start gap-3">
-					<div className="mt-0.5">
-						<Users className="h-5 w-5 text-primary" />
-					</div>
-					<div>
-						<h4 className="font-semibold">About {business.name}'s Team</h4>
-						{business.businessType === "HARDWARE" && (
-							<p className="text-sm text-muted-foreground mt-1">
-								{business.name} has a team of certified technicians and hardware
-								specialists ready to assist with all your tool and equipment
-								needs. Their staff is trained in the latest hardware
-								technologies and can provide expert advice on product selection.
-							</p>
-						)}
-						{business.businessType === "TRANSPORTATION" && (
-							<p className="text-sm text-muted-foreground mt-1">
-								{business.name} employs experienced drivers who are familiar
-								with the local area and traffic patterns. All drivers undergo
-								regular safety training and vehicle maintenance checks to ensure
-								safe and timely deliveries.
-							</p>
-						)}
-						{business.businessType === "ARTISAN" && (
-							<p className="text-sm text-muted-foreground mt-1">
-								{business.name} is staffed by skilled artisans and craftspeople
-								with years of experience in their respective fields. Each team
-								member brings unique expertise to create high-quality,
-								handcrafted products for customers.
-							</p>
-						)}
-						{business.businessType !== "HARDWARE" &&
-							business.businessType !== "TRANSPORTATION" &&
-							business.businessType !== "ARTISAN" && (
-								<p className="text-sm text-muted-foreground mt-1">
-									{business.name} has a dedicated team of professionals ready to
-									serve you. Their staff is trained to provide excellent
-									customer service and expertise in their field.
-								</p>
-							)}
-					</div>
-				</div>
 			</div>
-		</div>
 	);
 }

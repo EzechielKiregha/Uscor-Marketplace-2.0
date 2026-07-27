@@ -1,7 +1,6 @@
 "use client";
 
 import { useCart } from "@/app/context/use-cart";
-import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
@@ -206,7 +205,8 @@ export default function CheckoutPage() {
     0,
   );
 
-  const deliveryFee = 5.0; // Fixed delivery fee
+  // TODO: delivery fee should be fetched from business config or calculated by distance
+  const deliveryFee = 5.0;
   const [total, setTotal] = useState(subtotal + deliveryFee);
   const uTnAmount = total / 10; // 1 uTn = $10
 
@@ -299,72 +299,13 @@ export default function CheckoutPage() {
   const handleApplyPromotion = async () => {
     if (!promotionCode.trim()) return;
 
-    try {
-      // In a real app, this would call the APPLY_PROMOTION mutation
-      const mockPromotion = {
-        id: "PROMO10",
-        name: "10% Off",
-        discountType: "PERCENTAGE",
-        discountValue: 10,
-        applicableBusinesses: [
-          { id: groupedOrders[activeBusinessIndex]?.businessId },
-        ],
-        minimumPurchase: 0,
-      };
-
-      // Check if promotion applies to current business
-      const appliesToBusiness = mockPromotion.applicableBusinesses.some(
-        (b: any) => b.id === groupedOrders[activeBusinessIndex]?.businessId,
-      );
-
-      if (
-        !appliesToBusiness ||
-        groupedOrders[activeBusinessIndex]?.subtotal <
-          mockPromotion.minimumPurchase
-      ) {
-        setShowPromotionError(true);
-        setTimeout(() => setShowPromotionError(false), 3000);
-        return;
-      }
-
-      // Apply discount
-      let discountAmount = 0;
-      if (mockPromotion.discountType === "PERCENTAGE") {
-        discountAmount =
-          (groupedOrders[activeBusinessIndex]?.subtotal *
-            mockPromotion.discountValue) /
-          100;
-      } else {
-        discountAmount = mockPromotion.discountValue;
-      }
-
-      // Update totals
-      const newSubtotal =
-        groupedOrders[activeBusinessIndex]?.subtotal - discountAmount;
-      const newTotal =
-        newSubtotal + groupedOrders[activeBusinessIndex]?.deliveryFee;
-
-      // Update grouped orders
-      const updatedOrders = [...groupedOrders];
-      updatedOrders[activeBusinessIndex] = {
-        ...updatedOrders[activeBusinessIndex],
-        subtotal: newSubtotal,
-        total: newTotal,
-      };
-
-      setGroupedOrders(updatedOrders);
-      setTotal(newTotal);
-      setAppliedPromotions([...appliedPromotions, mockPromotion]);
-      setPromotionCode("");
-      showToast(
-        "success",
-        "Promotion Applied",
-        "Discount has been applied to your order",
-      );
-    } catch (error) {
-      setShowPromotionError(true);
-      setTimeout(() => setShowPromotionError(false), 3000);
-    }
+    // Promotion validation is not yet implemented on the backend
+    showToast(
+      "info",
+      "Coming Soon",
+      "Promotion codes are not yet supported. This feature is under development.",
+    );
+    setPromotionCode("");
   };
 
   const handlePaymentMethodSelect = (method: string) => {
@@ -579,6 +520,7 @@ export default function CheckoutPage() {
                         onClick={() => {
                           setActiveBusinessIndex(index);
                           setSelectedBusiness(order.business);
+                          setSelectedBusinessPaymentMethod(null);
                         }}
                       >
                         {order.business?.name}
@@ -735,31 +677,93 @@ export default function CheckoutPage() {
             </div>
 
             {/* Business Direct Payment Codes */}
-            {groupedOrders.length > 0 && (
+            {groupedOrders.length > 0 && !useUnifiedPayment && (
               <div className="bg-card border border-border rounded-lg overflow-hidden card-hover">
                 <div className="p-4 bg-muted border-b border-border">
                   <h2 className="font-semibold flex items-center gap-2 text-foreground">
                     <Smartphone className="h-5 w-5 text-muted-foreground" />
-                    Direct Business Payment Codes
+                    Select Payment Provider
                   </h2>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Alternative: pay each business directly via mobile money
+                    Choose your preferred mobile money provider for{" "}
+                    {activeBusinessOrder?.business?.name || "this business"}
                   </p>
                 </div>
                 <div className="p-4 space-y-3">
-                  {groupedOrders.map((order) => {
-                    const bizConfig = businessPaymentConfigs[order.businessId];
+                  {(() => {
+                    const bizConfig = businessPaymentConfigs[activeBusinessId];
+                    const config = bizConfig?.paymentConfig;
+                    const providers = [
+                      { key: "mtnCode", label: "MTN Money", code: config?.mtnCode, color: "border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20", textColor: "text-yellow-700 dark:text-yellow-400" },
+                      { key: "airtelCode", label: "Airtel Money", code: config?.airtelCode, color: "border-red-400 bg-red-50 dark:bg-red-900/20", textColor: "text-red-700 dark:text-red-400" },
+                      { key: "orangeCode", label: "Orange Money", code: config?.orangeCode, color: "border-orange-400 bg-orange-50 dark:bg-orange-900/20", textColor: "text-orange-700 dark:text-orange-400" },
+                      { key: "mpesaCode", label: "M-Pesa", code: config?.mpesaCode, color: "border-green-400 bg-green-50 dark:bg-green-900/20", textColor: "text-green-700 dark:text-green-400" },
+                      { key: "bankAccount", label: "Bank Transfer", code: config?.bankAccount, color: "border-blue-400 bg-blue-50 dark:bg-blue-900/20", textColor: "text-blue-700 dark:text-blue-400" },
+                    ].filter((p) => p.code);
+
+                    if (providers.length === 0) {
+                      return (
+                        <p className="text-sm text-muted-foreground text-center py-4">
+                          This business has not configured direct payment codes yet.
+                        </p>
+                      );
+                    }
+
                     return (
-                      <BusinessPaymentCodes
-                        key={order.businessId}
-                        businessName={bizConfig?.name || order.business?.name || "Business"}
-                        businessAvatar={bizConfig?.avatar || order.business?.avatar}
-                        paymentConfig={bizConfig?.paymentConfig}
-                        amount={order.total}
-                        compact
-                      />
+                      <>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {providers.map((provider) => (
+                            <button
+                              key={provider.key}
+                              onClick={() => setSelectedBusinessPaymentMethod(provider.key)}
+                              className={`p-3 rounded-lg border-2 transition-all text-center ${
+                                selectedBusinessPaymentMethod === provider.key
+                                  ? `${provider.color} border-opacity-100 ring-2 ring-primary/20`
+                                  : "border-border hover:border-primary/30"
+                              }`}
+                            >
+                              <Smartphone className={`h-5 w-5 mx-auto mb-1 ${
+                                selectedBusinessPaymentMethod === provider.key
+                                  ? provider.textColor
+                                  : "text-muted-foreground"
+                              }`} />
+                              <p className={`text-xs font-medium ${
+                                selectedBusinessPaymentMethod === provider.key
+                                  ? provider.textColor
+                                  : "text-foreground"
+                              }`}>
+                                {provider.label}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Show selected provider's code */}
+                        {selectedBusinessPaymentMethod && (() => {
+                          const selected = providers.find((p) => p.key === selectedBusinessPaymentMethod);
+                          if (!selected) return null;
+                          return (
+                            <div className={`mt-3 p-4 rounded-lg border ${selected.color}`}>
+                              <div className="flex items-center justify-between mb-2">
+                                <span className={`font-medium ${selected.textColor}`}>
+                                  {selected.label}
+                                </span>
+                                <span className="text-sm font-bold">
+                                  ${activeBusinessOrder?.total?.toFixed(2)}
+                                </span>
+                              </div>
+                              <code className="text-lg font-mono font-bold block bg-background p-2 rounded border text-center">
+                                {selected.code}
+                              </code>
+                              <p className="text-xs text-muted-foreground mt-2 text-center">
+                                Dial or use this code to pay {bizConfig?.name || activeBusinessOrder?.business?.name}
+                              </p>
+                            </div>
+                          );
+                        })()}
+                      </>
                     );
-                  })}
+                  })()}
                 </div>
               </div>
             )}

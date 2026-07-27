@@ -158,10 +158,10 @@ export class OrderService {
       ...orderData
     } = createOrderInput
 
-    // Group items by business (from frontend logic)
+    // Group items by business — only for main orders (no clientOrderId)
     const businessGroups = clientOrderId
-      ? this.groupItemsByBusiness(orderProducts)
-      : []
+      ? []
+      : this.groupItemsByBusiness(orderProducts)
 
     // Validate client
     const client =
@@ -320,10 +320,9 @@ export class OrderService {
 
         const grossAmount = group.subtotal
         const platformFee =
-          grossAmount -
           (group.subtotal * 1.5) / 100
         const deliveryFee = group.deliveryFee
-        const netAmount = grossAmount + platformFee + deliveryFee
+        const netAmount = grossAmount - platformFee + deliveryFee
 
         const createdGroup = await this.prisma.orderBusinessGroup.create(
           {
@@ -344,7 +343,7 @@ export class OrderService {
               },
               settlement: {
                 create: {
-                    orderId: group.orderId,
+                    orderId: order.id,
                     businessId: group.businessId,
                     status: SettlementStatus.PENDING,
                     grossAmount,
@@ -1595,6 +1594,55 @@ export class OrderService {
     }))
   }
 
+  async findAllPaginated(page: number = 1, limit: number = 20, status?: string) {
+    const skip = (page - 1) * limit
+    const where: any = {}
+    if (status) where.status = status
+
+    const [orders, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          client: {
+            select: { id: true, fullName: true, email: true, createdAt: true },
+          },
+          payment: {
+            select: { id: true, amount: true, method: true, status: true, transactionDate: true, qrCode: true, createdAt: true },
+          },
+          products: {
+            select: {
+              id: true, quantity: true, createdAt: true,
+              product: {
+                select: { id: true, businessId: true, title: true, price: true, createdAt: true, medias: { select: { url: true }, take: 1 } },
+              },
+            },
+          },
+          businessGroups: {
+            include: {
+              business: true,
+              items: { include: { product: { include: { medias: { take: 1 } } } } },
+              payment: true,
+            },
+          },
+        },
+      }),
+      this.prisma.order.count({ where }),
+    ])
+
+    return {
+      items: orders.map((order) => ({
+        ...order,
+        status: order.status || order.payment?.status || 'PENDING',
+      })),
+      total,
+      page,
+      limit,
+    }
+  }
+
   async findOne(id: string) {
     const order =
       await this.prisma.order.findUnique({
@@ -1878,11 +1926,9 @@ export class OrderService {
       ]
     }
 
-    // Add status filter
+    // Add status filter (filter by order status, not payment status)
     if (status) {
-      where.payment = {
-        status: status,
-      }
+      where.status = status
     }
 
     // Add date filter
@@ -1983,6 +2029,21 @@ export class OrderService {
                   },
                 },
               },
+            },
+          },
+          businessGroups: {
+            include: {
+              business: true,
+              items: {
+                include: {
+                  product: {
+                    include: {
+                      medias: { take: 1 },
+                    },
+                  },
+                },
+              },
+              payment: true,
             },
           },
         },

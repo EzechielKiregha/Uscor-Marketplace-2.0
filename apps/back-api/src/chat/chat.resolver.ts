@@ -212,36 +212,29 @@ export class ChatResolver {
 		});
 		console.log("[Chat Resolver] ✓ GraphQL PubSub published");
 
-		// Trigger Pusher event (for scalability and cross-connection reliability)
-		// const pusherPayload = {
-		// 	id: message.id,
-		// 	chatId: input.chatId,
-		// 	message: message.content,
-		// 	content: message.content,
-		// 	senderId: message.senderId,
-		// 	createdAt: message.createdAt,
-		// 	senderType: this.determineSenderType(user.role),
-		// 	sender: message.sender
-		// 		? {
-		// 			id: message.sender.id,
-		// 			fullName: message.sender.fullName,
-		// 			avatar: message.sender.avatar,
-		// 		}
-		// 		: null,
-		// };
+		// Trigger Pusher event for real-time chat delivery
+		const pusherPayload = {
+			id: message.id,
+			chatId: input.chatId,
+			message: message.content,
+			content: message.content,
+			senderId: message.senderId,
+			createdAt: message.createdAt,
+			senderType: this.determineSenderType(user.role),
+			sender: message.sender
+				? {
+					id: message.sender.id,
+					fullName: message.sender.fullName,
+					avatar: message.sender.avatar,
+				}
+				: null,
+		};
 
-		// console.log("[Chat Resolver] Triggering Pusher event:", {
-		// 	channel: `chat-${input.chatId}`,
-		// 	event: "message",
-		// 	payload: pusherPayload,
-		// });
-
-		// try {
-		// 	await this.pusherService.trigger(`chat-${input.chatId}`, "message", pusherPayload);
-		// 	console.log("[Chat Resolver] ✓ Pusher event triggered successfully");
-		// } catch (error) {
-		// 	console.error("[Chat Resolver] ✗ Pusher trigger failed:", error);
-		// }
+		try {
+			await this.pusherService.trigger(`chat-${input.chatId}`, "message", pusherPayload);
+		} catch (error) {
+			console.warn("[Chat Resolver] Pusher trigger failed:", error);
+		}
 
 		return message;
 	}

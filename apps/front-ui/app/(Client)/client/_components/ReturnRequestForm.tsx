@@ -88,13 +88,12 @@ export default function ReturnRequestForm({ client }: ReturnRequestFormProps) {
   };
 
   const handleSubmitReturn = () => {
-    // In a real app, this would call a mutation
+    // TODO: Implement return request API
     showToast(
-      "success",
-      "Return Request Submitted",
-      `Your return request for ${selectedItems.length} item(s) has been submitted. The business will review and respond within 48 hours.`,
+      "info",
+      "Coming Soon",
+      "Return requests are not yet supported. Please contact the business directly.",
     );
-    setStep("submitted");
   };
 
   const resetForm = () => {

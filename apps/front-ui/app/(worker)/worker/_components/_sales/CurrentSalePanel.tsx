@@ -1,9 +1,11 @@
 // app/business/sales/_components/CurrentSalePanel.tsx
 "use client";
 
+import BusinessPaymentCodes from "@/components/BusinessPaymentCodes";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { GET_BUSINESS_PAYMENT_CONFIG } from "@/graphql/business.gql";
 import { GET_PRODUCTS_BY_NAME } from "@/graphql/product.gql";
 import {
     ADD_SALE_PRODUCT,
@@ -36,6 +38,7 @@ interface CurrentSalePanelProps {
   userId: string;
   client?: any;
   onCompleteSale?: () => void;
+  businessId?: string;
 }
 
 export default function CurrentSalePanel({
@@ -45,7 +48,8 @@ export default function CurrentSalePanel({
   userRole,
   userId,
   onCompleteSale,
-  client
+  client,
+  businessId
 }: CurrentSalePanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -75,6 +79,24 @@ export default function CurrentSalePanel({
     },
     skip: !storeId,
   });
+
+  // Fetch business payment config for real payment codes
+  const { data: paymentConfigData } = useQuery(GET_BUSINESS_PAYMENT_CONFIG, {
+    variables: { id: businessId || "" },
+    skip: !businessId,
+  });
+  const businessPaymentConfig = paymentConfigData?.business?.paymentConfig;
+
+  const getPaymentCodeForProvider = (provider: string) => {
+    if (!businessPaymentConfig) return null;
+    switch (provider) {
+      case "MTN_MONEY": return businessPaymentConfig.mtnCode;
+      case "AIRTEL_MONEY": return businessPaymentConfig.airtelCode;
+      case "ORANGE_MONEY": return businessPaymentConfig.orangeCode;
+      case "MPESA": return businessPaymentConfig.mpesaCode;
+      default: return null;
+    }
+  };
 
   const [addSaleProduct] = useMutation(ADD_SALE_PRODUCT);
   const [updateSaleProduct] = useMutation(UPDATE_SALE_PRODUCT);
@@ -911,28 +933,22 @@ export default function CurrentSalePanel({
                             <option value="TANZANIA">Tanzania</option>
                           </select>
                         </div>
-                        {paymentDetails.mobileMoneyMethod &&
-                          paymentDetails.country && (
+                        {paymentDetails.mobileMoneyMethod && (
                             <div className="bg-muted p-3 rounded-md">
                               <p className="text-sm font-medium mb-2">
-                                Payment Code:
+                                Business Payment Code:
                               </p>
-                              <code className="text-lg font-mono bg-background p-2 rounded border">
-                                *
-                                {paymentDetails.mobileMoneyMethod?.substring(
-                                  0,
-                                  3,
-                                )}
-                                *{paymentDetails.country?.substring(0, 2)}*
-                                {Math.random()
-                                  .toString(36)
-                                  .substring(2, 8)
-                                  .toUpperCase()}
-                                #
-                              </code>
+                              {getPaymentCodeForProvider(paymentDetails.mobileMoneyMethod) ? (
+                                <code className="text-lg font-mono bg-background p-2 rounded border block">
+                                  {getPaymentCodeForProvider(paymentDetails.mobileMoneyMethod)}
+                                </code>
+                              ) : (
+                                <p className="text-sm text-muted-foreground">
+                                  No code configured for this provider
+                                </p>
+                              )}
                               <p className="text-xs text-muted-foreground mt-2">
-                                Dial this code on your mobile phone to complete
-                                payment
+                                Show this code to the customer for payment
                               </p>
                             </div>
                           )}
@@ -1130,24 +1146,22 @@ export default function CurrentSalePanel({
                       <option value="TANZANIA">Tanzania</option>
                     </select>
                   </div>
-                  {paymentDetails.mobileMoneyMethod &&
-                    paymentDetails.country && (
+                  {paymentDetails.mobileMoneyMethod && (
                       <div className="bg-muted p-3 rounded-md">
                         <p className="text-sm font-medium mb-2">
-                          Payment Code:
+                          Business Payment Code:
                         </p>
-                        <code className="text-lg font-mono bg-background p-2 rounded border">
-                          *{paymentDetails.mobileMoneyMethod?.substring(0, 3)}*
-                          {paymentDetails.country?.substring(0, 2)}*
-                          {Math.random()
-                            .toString(36)
-                            .substring(2, 8)
-                            .toUpperCase()}
-                          #
-                        </code>
+                        {getPaymentCodeForProvider(paymentDetails.mobileMoneyMethod) ? (
+                          <code className="text-lg font-mono bg-background p-2 rounded border block">
+                            {getPaymentCodeForProvider(paymentDetails.mobileMoneyMethod)}
+                          </code>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            No code configured for this provider
+                          </p>
+                        )}
                         <p className="text-xs text-muted-foreground mt-2">
-                          Dial this code on your mobile phone to complete
-                          payment
+                          Show this code to the customer for payment
                         </p>
                       </div>
                     )}

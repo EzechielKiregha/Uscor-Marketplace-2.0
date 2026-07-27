@@ -300,6 +300,7 @@ export default function WorkerPage() {
           <PosPage
             selectedStoreId={selectedStoreId}
             retchDashData={refetchDashboardData}
+            businessId={workerBusinessId}
           />
         )}
         {activeSection === "inventory" && (

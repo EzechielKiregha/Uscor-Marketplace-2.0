@@ -1,5 +1,4 @@
 "use client";
-import { StatusBadge } from "@/components/StatusBadge";
 import { GlowButton } from "@/components/seraui/GlowButton";
 import { useToast } from "@/components/toast-provider";
 import {
@@ -576,12 +575,12 @@ export default function SignupPage() {
                                           : "bg-card/50 dark:bg-white/5 border-border dark:border-white/10 hover:bg-card dark:hover:bg-white/10"
                                     }`}
                                   >
-                                    {!isActive && (
+                                    {/* {!isActive && (
                                       <StatusBadge
                                         text="Coming Soon"
                                         variant="coming-soon"
                                       />
-                                    )}
+                                    )} */}
                                     <div className={`mb-1 ${isActive ? "text-primary" : "text-muted-foreground"}`}>
                                       <TypeIcon className="h-5 w-5" />
                                     </div>

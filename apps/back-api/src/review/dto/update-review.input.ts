@@ -1,8 +1,10 @@
-import { Field, InputType, Int, PartialType } from "@nestjs/graphql";
-import { CreateReviewInput } from "./create-review.input";
+import { Field, InputType, Int } from "@nestjs/graphql";
 
 @InputType()
-export class UpdateReviewInput extends PartialType(CreateReviewInput) {
-	@Field(() => Int)
-	id: number;
+export class UpdateReviewInput {
+	@Field(() => Int, { nullable: true })
+	rating?: number;
+
+	@Field({ nullable: true })
+	comment?: string;
 }

@@ -45,6 +45,7 @@ const B2B_ORDER_INCLUDE = {
             businessType: true,
             kycStatus: true,
             phone: true,
+            paymentConfig: true,
         },
     },
     payment: {
@@ -270,6 +271,13 @@ export class B2BService {
                         },
                     },
                 });
+
+                // Link chat to B2B order (chatId added to schema, pending migration)
+                await client.b2BOrder.update({
+                    where: { id: order.id },
+                    data: { chatId: chat.id } as any,
+                });
+                (order as any).chatId = chat.id;
 
                 const orderRef = order.orderNumber.substring(0, 8).toUpperCase();
                 await this.prisma.chatMessage.create({
@@ -596,7 +604,11 @@ export class B2BService {
             this.logger.warn(`Failed to send B2B payment notification`, err);
         }
 
-        return payment;
+        // Return the full B2B order (not just payment) to match resolver return type
+        return client.b2BOrder.findFirst({
+            where: { id: orderId },
+            include: B2B_ORDER_INCLUDE,
+        });
     }
 
     // ─── Phone-based B2B order lookup (for USSD) ───────────
@@ -622,6 +634,6 @@ export class B2BService {
             take: 10,
         });
 
-        return { items, total: items.length, businessId: business.id, businessName: business.name };
+        return { items, total: items.length, page: 1, limit: 10, businessId: business.id, businessName: business.name };
     }
 }

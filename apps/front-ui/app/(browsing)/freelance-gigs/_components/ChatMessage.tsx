@@ -7,6 +7,7 @@ interface ChatMessageProps {
 	senderId: string;
 	createdAt: Date;
 	className?: string;
+	currentUserId?: string;
 }
 
 export default function ChatMessage({
@@ -14,8 +15,9 @@ export default function ChatMessage({
 	senderId,
 	createdAt,
 	className,
+	currentUserId,
 }: ChatMessageProps) {
-	const isCurrentUser = senderId === "current-user-id"; // Replace with actual user ID from auth
+	const isCurrentUser = currentUserId ? senderId === currentUserId : false;
 
 	return (
 		<Card

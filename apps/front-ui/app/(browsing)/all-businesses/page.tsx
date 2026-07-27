@@ -12,7 +12,6 @@ import {
 } from "@/graphql/business-listing.gql";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
-    ArrowRight,
     BriefcaseBusiness,
     Filter,
     Gift,
@@ -367,90 +366,23 @@ export default function BusinessListingPage() {
 				</div>
 			</div>
 
-			{/* Featured Businesses Section */}
-			<div className="mt-12">
-				<div className="flex justify-between items-center mb-6">
-					<h2 className="text-2xl font-bold">Featured Businesses</h2>
-					<Button variant="link">
-						View All <ArrowRight className="h-4 w-4 ml-1" />
-					</Button>
-				</div>
-
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-					{/* In a real app, this would show featured businesses */}
-					<div className="border hover:border-primary  rounded-lg overflow-hidden bg-card">
-						<div className="h-40 bg-muted" />
-						<div className="p-4">
-							<div className="flex items-center gap-2 mb-2">
-								<div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-									🎨
-								</div>
-								<h3 className="font-medium">Kigali Artisans Collective</h3>
-							</div>
-							<p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-								Handcrafted woodwork, pottery, and traditional Rwandan crafts
-							</p>
-							<div className="flex items-center justify-between">
-								<div className="flex">
-									<Star className="h-4 w-4 text-warning fill-warning mr-1" />
-									<span>4.8 (124)</span>
-								</div>
-								<Button variant="outline" size="sm">
-									View Profile
-								</Button>
-							</div>
-						</div>
+			{/* Featured Businesses Section — uses top verified businesses from query */}
+			{businesses.filter((b: any) => b.kycStatus === "VERIFIED").length > 0 && (
+				<div className="mt-12">
+					<div className="flex justify-between items-center mb-6">
+						<h2 className="text-2xl font-bold">Featured Businesses</h2>
 					</div>
 
-					<div className="border hover:border-primary  rounded-lg overflow-hidden bg-card">
-						<div className="h-40 bg-muted" />
-						<div className="p-4">
-							<div className="flex items-center gap-2 mb-2">
-								<div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-									☕
-								</div>
-								<h3 className="font-medium">Café Kigali</h3>
-							</div>
-							<p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-								Premium Rwandan coffee, pastries, and cozy workspace
-							</p>
-							<div className="flex items-center justify-between">
-								<div className="flex">
-									<Star className="h-4 w-4 text-warning fill-warning mr-1" />
-									<span>4.7 (218)</span>
-								</div>
-								<Button variant="outline" size="sm">
-									View Profile
-								</Button>
-							</div>
-						</div>
-					</div>
-
-					<div className="border hover:border-primary  rounded-lg overflow-hidden bg-card">
-						<div className="h-40 bg-muted" />
-						<div className="p-4">
-							<div className="flex items-center gap-2 mb-2">
-								<div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-									🔨
-								</div>
-								<h3 className="font-medium">Hardware Plus</h3>
-							</div>
-							<p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-								Tools, building materials, and expert advice for your projects
-							</p>
-							<div className="flex items-center justify-between">
-								<div className="flex">
-									<Star className="h-4 w-4 text-warning fill-warning mr-1" />
-									<span>4.9 (86)</span>
-								</div>
-								<Button variant="outline" size="sm">
-									View Profile
-								</Button>
-							</div>
-						</div>
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+						{businesses
+							.filter((b: any) => b.kycStatus === "VERIFIED")
+							.slice(0, 3)
+							.map((biz: any) => (
+								<BusinessCard key={biz.id} business={biz} viewMode="grid" />
+							))}
 					</div>
 				</div>
-			</div>
+			)}
 		</MotionPage>
 	);
 }

@@ -68,16 +68,15 @@ export default function WithdrawModal({
   const validationError = getValidationError();
   const isValid = !validationError;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
 
     setIsSubmitting(true);
-
-    // In a real app, this would call the mutation
-    setTimeout(() => {
-      onWithdraw(amount, withdrawMethod);
+    try {
+      await onWithdraw(amount, withdrawMethod);
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   if (!isOpen) return null;

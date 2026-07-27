@@ -50,18 +50,11 @@ export default function ServiceDetailsModal({
   };
 
   const handleBookService = () => {
-    // In a real app, this would create a booking
     showToast(
-      "success",
-      "Booking Requested",
-      "Your service booking has been requested. The business will confirm shortly.",
+      "info",
+      "Coming Soon",
+      "Service booking is not yet available. Please contact the business directly.",
     );
-    onClose();
-
-    // Navigate to bookings
-    setTimeout(() => {
-      window.location.href = "/client?tab=orders";
-    }, 1000);
   };
 
   return (
@@ -311,42 +304,9 @@ export default function ServiceDetailsModal({
                   <div>
                     <h3 className="font-semibold">Service Information</h3>
 
-                    {service.business.businessType === "HARDWARE" && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Hardware service providers typically respond to booking
-                        requests within 24 hours. For urgent issues like
-                        plumbing or electrical problems, indicate "URGENT" in
-                        your notes for priority response.
-                      </p>
-                    )}
-
-                    {service.business.businessType === "TRANSPORTATION" && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Transportation services require at least 24 hours notice
-                        for booking. Same-day requests may be accommodated based
-                        on availability. Please specify pickup location and
-                        destination in your notes.
-                      </p>
-                    )}
-
-                    {service.business.businessType === "ARTISAN" && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Artisans typically require consultation before booking
-                        custom work. Use the chat feature to discuss your
-                        project requirements and get a more accurate timeline
-                        and price estimate.
-                      </p>
-                    )}
-
-                    {service.business.businessType !== "HARDWARE" &&
-                      service.business.businessType !== "TRANSPORTATION" &&
-                      service.business.businessType !== "ARTISAN" && (
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Service providers typically respond to booking
-                          requests within 24 hours. For urgent requests, please
-                          indicate this in your notes for priority attention.
-                        </p>
-                      )}
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Contact the business directly for service inquiries and booking.
+                    </p>
                   </div>
                 </div>
               </div>

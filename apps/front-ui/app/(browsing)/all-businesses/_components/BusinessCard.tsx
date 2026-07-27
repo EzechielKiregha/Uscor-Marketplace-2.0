@@ -91,12 +91,14 @@ export default function BusinessCard({
 							</p>
 						</div>
 
-						<div className="text-center">
-							<div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto">
-								<Star className="h-4 w-4" />
+						{business.averageRating > 0 && (
+							<div className="text-center">
+								<div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto">
+									<Star className="h-4 w-4" />
+								</div>
+								<p className="text-xs mt-1">{business.averageRating?.toFixed(1)}</p>
 							</div>
-							<p className="text-xs mt-1">4.7</p>
-						</div>
+						)}
 					</div>
 
 					{business.description && (
@@ -234,11 +236,13 @@ export default function BusinessCard({
 					</div>
 
 					<div className="text-right">
-						<div className="flex items-center justify-end gap-1 mb-2">
-							<Star className="h-4 w-4 text-warning fill-warning" />
-							<span className="font-medium">4.7</span>
-							<span className="text-muted-foreground">(124)</span>
-						</div>
+						{business.averageRating > 0 && (
+							<div className="flex items-center justify-end gap-1 mb-2">
+								<Star className="h-4 w-4 text-warning fill-warning" />
+								<span className="font-medium">{business.averageRating?.toFixed(1)}</span>
+								{business.reviewCount > 0 && <span className="text-muted-foreground">({business.reviewCount})</span>}
+							</div>
+						)}
 						<Button
 							variant="outline"
 							size="sm"

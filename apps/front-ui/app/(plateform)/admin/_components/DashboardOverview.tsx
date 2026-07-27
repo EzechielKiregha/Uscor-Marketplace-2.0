@@ -11,7 +11,6 @@ import {
     Calendar,
     Clock,
     DollarSign,
-    Loader2,
     MapPin,
     ShieldCheck,
     ShoppingCart,
@@ -30,7 +29,6 @@ export default function DashboardOverview({
 	settings,
 }: DashboardOverviewProps) {
 	const [timeframe, setTimeframe] = useState<"24h" | "7d" | "30d">("7d");
-	const [loading, setLoading] = useState(false);
 	const { showToast } = useToast();
 
 	const getChartData = (period: string) => {
@@ -51,28 +49,11 @@ export default function DashboardOverview({
 	const chartData = getChartData(timeframe);
 
 	const handleExportData = () => {
-		setLoading(true);
-		try {
-			// In a real app, this would export the data
-			showToast(
-				"success",
-				"Export Started",
-				"Your data export is being prepared",
-			);
-
-			// Simulate export process
-			setTimeout(() => {
-				showToast(
-					"success",
-					"Export Complete",
-					"Your data has been exported successfully",
-				);
-				setLoading(false);
-			}, 1500);
-		} catch (_error) {
-			showToast("error", "Export Failed", "Failed to export data");
-			setLoading(false);
-		}
+		showToast(
+			"info",
+			"Coming Soon",
+			"Data export functionality is under development.",
+		);
 	};
 
 	return (
@@ -235,19 +216,9 @@ export default function DashboardOverview({
 							variant="outline"
 							size="sm"
 							onClick={handleExportData}
-							disabled={loading}
 						>
-							{loading ? (
-								<>
-									<Loader2 className="h-4 w-4 mr-2 animate-spin" />
-									Exporting...
-								</>
-							) : (
-								<>
-									<BarChart className="h-4 w-4 mr-2" />
-									Export Data
-								</>
-							)}
+							<BarChart className="h-4 w-4 mr-2" />
+							Export Data
 						</Button>
 					</div>
 				</div>
@@ -261,52 +232,13 @@ export default function DashboardOverview({
 					</div>
 
 					<div className="p-4 space-y-4">
-						<div>
-							<div className="flex justify-between mb-1">
-								<span className="text-sm">Server Uptime</span>
-								<span className="text-sm font-medium">99.9%</span>
-							</div>
-							<div className="w-full bg-border rounded-full h-2">
-								<div
-									className="bg-success h-2 rounded-full"
-									style={{ width: "99.9%" }}
-								></div>
-							</div>
-						</div>
-
-						<div>
-							<div className="flex justify-between mb-1">
-								<span className="text-sm">API Response Time</span>
-								<span className="text-sm font-medium">120ms</span>
-							</div>
-							<div className="w-full bg-border rounded-full h-2">
-								<div
-									className="bg-warning h-2 rounded-full"
-									style={{ width: "30%" }}
-								></div>
-							</div>
-						</div>
-
-						<div>
-							<div className="flex justify-between mb-1">
-								<span className="text-sm">Database Load</span>
-								<span className="text-sm font-medium">45%</span>
-							</div>
-							<div className="w-full bg-border rounded-full h-2">
-								<div
-									className="bg-primary h-2 rounded-full"
-									style={{ width: "45%" }}
-								></div>
-							</div>
-						</div>
-
-						<div className="pt-2 border-t border-border">
-							<div className="flex items-center gap-2 text-sm">
-								<div className="w-2 h-2 rounded-full bg-success"></div>
-								<span>All systems operational</span>
-							</div>
+						<div className="text-center py-8">
+							<ShieldCheck className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+							<p className="text-sm text-muted-foreground">
+								System health monitoring is not yet configured.
+							</p>
 							<p className="text-xs text-muted-foreground mt-1">
-								Last checked 5 minutes ago
+								Connect a monitoring service to display real-time metrics.
 							</p>
 						</div>
 					</div>
@@ -366,34 +298,14 @@ export default function DashboardOverview({
 						<h2 className="text-lg font-bold">Recent Disputes</h2>
 					</div>
 
-					<div className="divide-y divide-border">
-						{[1, 2, 3].map((i) => (
-							<div key={i} className="p-3 hover:bg-muted/50">
-								<div className="flex items-start gap-2">
-									<AlertTriangle className="h-5 w-5 text-warning mt-0.5 flex-shrink-0" />
-									<div>
-										<h4 className="font-medium truncate">
-											Payment not received for order #12345
-										</h4>
-										<p className="text-xs text-muted-foreground mt-1">
-											Reported 2 hours ago • Open
-										</p>
-										<div className="flex items-center gap-2 mt-1">
-											<div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs">
-												B
-											</div>
-											<span className="text-sm">Bookstore Central</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						))}
-					</div>
-
-					<div className="p-3 bg-muted border-t border-border text-center">
-						<Button variant="link" className="p-0">
-							View all disputes
-						</Button>
+					<div className="p-4 text-center py-8">
+						<AlertTriangle className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+						<p className="text-sm text-muted-foreground">
+							No disputes to display.
+						</p>
+						<p className="text-xs text-muted-foreground mt-1">
+							Disputes will appear here when reported by users.
+						</p>
 					</div>
 				</div>
 			</div>

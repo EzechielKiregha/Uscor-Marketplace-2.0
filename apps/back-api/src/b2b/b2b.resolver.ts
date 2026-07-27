@@ -3,7 +3,7 @@ import { Args, Context, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
 import { B2BService } from "./b2b.service";
 import { WholesalePriceEntity } from "./entities/wholesale-price.entity";
-import { B2BOrderEntity, B2BOrderListResponse } from "./entities/b2b-order.entity";
+import { B2BOrderEntity, B2BOrderListResponse, B2BVendorListResponse } from "./entities/b2b-order.entity";
 import { CreateWholesalePriceInput, UpdateWholesalePriceInput } from "./dto/create-wholesale-price.input";
 import { CreateB2BOrderInput, UpdateB2BOrderStatusInput } from "./dto/create-b2b-order.input";
 
@@ -120,7 +120,7 @@ export class B2BResolver {
 
 	// ─── Vendor Discovery ───────────────────────────────────
 
-	@Query(() => B2BOrderListResponse, { description: "List B2B-enabled vendors" })
+	@Query(() => B2BVendorListResponse, { description: "List B2B-enabled vendors" })
 	async b2bVendors(
 		@Args("page", { type: () => Int, defaultValue: 1 }) page?: number,
 		@Args("limit", { type: () => Int, defaultValue: 20 }) limit?: number,

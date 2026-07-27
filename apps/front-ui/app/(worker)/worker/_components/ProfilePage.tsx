@@ -642,7 +642,7 @@ export default function ProfilePage({
 
                 <div className="border border-border rounded-lg p-4 text-center">
                   <p className="text-2xl font-bold text-warning">
-                    {worker?.customerSatisfaction?.toFixed(1) || "4.7"}
+                    {worker?.customerSatisfaction?.toFixed(1) || "N/A"}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Customer Rating

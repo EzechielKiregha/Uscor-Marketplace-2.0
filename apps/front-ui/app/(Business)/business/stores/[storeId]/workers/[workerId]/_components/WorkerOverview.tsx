@@ -36,15 +36,14 @@ export default function WorkerOverview({
   worker,
   performance,
 }: WorkerOverviewProps) {
-  // Sample data for charts
-  const salesByDay = [
-    { name: "Mon", sales: 1200 },
-    { name: "Tue", sales: 1900 },
-    { name: "Wed", sales: 1500 },
-    { name: "Thu", sales: 2100 },
-    { name: "Fri", sales: 2800 },
-    { name: "Sat", sales: 3200 },
-    { name: "Sun", sales: 2400 },
+  const salesByDay = performance?.dailySales || [
+    { name: "Mon", sales: 0 },
+    { name: "Tue", sales: 0 },
+    { name: "Wed", sales: 0 },
+    { name: "Thu", sales: 0 },
+    { name: "Fri", sales: 0 },
+    { name: "Sat", sales: 0 },
+    { name: "Sun", sales: 0 },
   ];
 
   return (

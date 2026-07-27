@@ -58,10 +58,10 @@ export class OrderResolver {
     @Query(() => [OrderBusinessGroupEntity])
     @UseGuards(JwtAuthGuard, RolesGuard)
     async myBusinessOrders(@Context() context) {
-        const user = context.user;
+        const user = context.req.user;
 
-        if (user && user.role !== "business")
-            throw Error("UnAuthorized Access");
+        if (!user || user.role !== "business")
+            throw new Error("Unauthorized Access");
 
         return this.orderService.getBusinessOrders(user.id);
     }
@@ -84,14 +84,18 @@ export class OrderResolver {
     // }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client", "business")
-    @Query(() => [OrderEntity], {
+    @Roles("client", "business", "admin")
+    @Query(() => PaginatedOrdersResponse, {
         name: "orders",
-        description: "Retrieves orders.",
+        description: "Retrieves orders (paginated).",
     })
-    async getOrders(@Context() context) {
-        const _user = context.req.user;
-        return this.orderService.findAll();
+    async getOrders(
+        @Args("page", { type: () => Int, defaultValue: 1 }) page: number,
+        @Args("limit", { type: () => Int, defaultValue: 20 }) limit: number,
+        @Args("status", { type: () => String, nullable: true }) status?: string,
+        @Context() context?: any,
+    ) {
+        return this.orderService.findAllPaginated(page, limit, status);
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -141,8 +145,13 @@ export class OrderResolver {
             nullable: true,
         })
         date?: string,
-        @Context() _context?: any,
+        @Context() context?: any,
     ) {
+        // Authorization: business can only access own orders, worker must belong to business
+        const user = context?.req?.user;
+        if (user?.role === "business" && user.id !== businessId) {
+            throw new Error("You can only access your own business orders");
+        }
         return this.orderService.findBusinessOrders(
             businessId,
             page,
@@ -179,6 +188,11 @@ export class OrderResolver {
         status?: string,
         @Context() context?: any,
     ) {
+        // Authorization: clients can only access their own orders
+        const user = context?.req?.user;
+        if (user && user.id !== clientId) {
+            throw new Error("You can only access your own orders");
+        }
         return this.orderService.findClientOrders(
             clientId,
             page,

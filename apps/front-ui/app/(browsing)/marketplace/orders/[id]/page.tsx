@@ -1,6 +1,5 @@
 "use client";
 
-import { useCart } from "@/app/context/use-cart";
 import PageSkeleton from "@/components/skeletons/PageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +22,6 @@ export default function OrderDetailsPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const orderId = params?.id;
-  const { clearCart } = useCart();
 
   const { data, loading, error } = useQuery(GET_ORDER_BY_ID, {
     variables: { id: orderId },
@@ -33,8 +31,6 @@ export default function OrderDetailsPage() {
   if (loading) {
     return <PageSkeleton />;
   }
-
-  clearCart();
 
   if (error || !data?.order) {
     return (

@@ -473,6 +473,7 @@ export interface FreelanceServiceEntity {
 	isHourly: boolean;
 	rate: number;
 	category: FreelanceServiceCategory;
+	averageRating?: number;
 	createdAt: Date;
 	updatedAt: Date;
 	business: BusinessEntity;

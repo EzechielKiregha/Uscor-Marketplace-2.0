@@ -1,7 +1,9 @@
 import { Inject, UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
+import { Roles } from "../auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth/jwt-auth.guard";
+import { RolesGuard } from "../auth/guards/roles.guard";
 import { BusinessEntity } from "../business/entities/business.entity";
 import { ClientEntity } from "../client/entities/client.entity";
 import { WorkerEntity } from "../worker/entities/worker.entity";
@@ -59,6 +61,7 @@ export class AdminResolver {
 		return this.adminService.remove(id);
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Mutation(() => Admin)
 	async registerSuperAdmin(
 		@Args("createAdminInput")
@@ -67,6 +70,8 @@ export class AdminResolver {
 		return this.adminService.registerSuperAdmin(createAdminInput);
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("admin")
 	@Query(() => PaginatedBusinessesResponse, {
 		name: "all_businesses",
 	})
@@ -77,6 +82,8 @@ export class AdminResolver {
 		return this.userService.getBusinesses(input);
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("admin")
 	@Query(() => PaginatedClientsResponse, {
 		name: "all_clients",
 	})
@@ -87,6 +94,8 @@ export class AdminResolver {
 		return this.userService.getClients(input);
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("admin")
 	@Query(() => PaginatedWorkersResponse, {
 		name: "all_workers",
 	})
@@ -97,6 +106,8 @@ export class AdminResolver {
 		return this.userService.getWorkers(input);
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles("admin")
 	@Query(() => PaginatedAdminsResponse, {
 		name: "all_admins",
 	})

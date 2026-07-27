@@ -1,5 +1,6 @@
 import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 import { BusinessEntity } from "../../business/entities/business.entity";
+import { PaymentTransactionEntity } from "../../payment-transaction/entities/payment-transaction.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
 
 // New Entity
@@ -31,6 +32,9 @@ export class OrderBusinessGroupEntity {
 
 	@Field(() => [OrderItem])
 	items: OrderItem[];
+
+	@Field(() => PaymentTransactionEntity, { nullable: true })
+	payment?: any;
 
 	@Field()
 	createdAt: Date;

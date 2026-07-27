@@ -1123,6 +1123,7 @@ export const B2BOrderScalarFieldEnum = {
   tax: 'tax',
   total: 'total',
   shippingAddress: 'shippingAddress',
+  chatId: 'chatId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   submittedAt: 'submittedAt',

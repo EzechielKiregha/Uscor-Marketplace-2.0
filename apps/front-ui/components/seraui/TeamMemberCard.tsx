@@ -46,24 +46,6 @@ const teamMembers: TeamMember[] = [
 		linkedInUrl: "https://www.linkedin.com/in/kambale-kiregha-125a60264",
 		twitterUrl: "https://twitter.com/EzechielKiregh1",
 	},
-	{
-		name: "Emily Jonson",
-		role: "CEO",
-		imageUrl:
-			"https://i.pinimg.com/736x/8c/6d/db/8c6ddb5fe6600fcc4b183cb2ee228eb7.jpg",
-	},
-	{
-		name: "Harshita Patel",
-		role: "HR",
-		imageUrl:
-			"https://i.pinimg.com/736x/6f/a3/6a/6fa36aa2c367da06b2a4c8ae1cf9ee02.jpg",
-	},
-	{
-		name: "Eleanor Morales",
-		role: "HR",
-		imageUrl:
-			"https://i.pinimg.com/1200x/c2/4e/27/c24e271f2f992fd7e62e8c1e8d9b3e2f.jpg",
-	},
 ];
 
 interface TeamMemberCardProps {

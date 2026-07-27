@@ -34,7 +34,7 @@ class MessageDeduplicator {
       }
     });
 
-    // expiredKeys.forEach((key) => this.processedMessages.delete(key));
+    expiredKeys.forEach((key) => this.processedMessages.delete(key));
   }
 
   /**

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-    AlertTriangle,
     ArrowRight,
     BarChart,
     DollarSign,
@@ -39,20 +38,16 @@ export default function StoreOverview({
   const [timeRange, setTimeRange] = useState<"day" | "week" | "month">("week");
 
   const salesData = [
-    { name: "Mon", sales: stats?.dailySales?.[0]?.sales || 1200, orders: 12 },
-    { name: "Tue", sales: stats?.dailySales?.[1]?.sales || 1900, orders: 18 },
-    { name: "Wed", sales: stats?.dailySales?.[2]?.sales || 1500, orders: 15 },
-    { name: "Thu", sales: stats?.dailySales?.[3]?.sales || 2100, orders: 21 },
-    { name: "Fri", sales: stats?.dailySales?.[4]?.sales || 2800, orders: 28 },
-    { name: "Sat", sales: stats?.dailySales?.[5]?.sales || 3200, orders: 32 },
-    { name: "Sun", sales: stats?.dailySales?.[6]?.sales || 2400, orders: 24 },
+    { name: "Mon", sales: stats?.dailySales?.[0]?.sales || 0, orders: stats?.dailySales?.[0]?.orders || 0 },
+    { name: "Tue", sales: stats?.dailySales?.[1]?.sales || 0, orders: stats?.dailySales?.[1]?.orders || 0 },
+    { name: "Wed", sales: stats?.dailySales?.[2]?.sales || 0, orders: stats?.dailySales?.[2]?.orders || 0 },
+    { name: "Thu", sales: stats?.dailySales?.[3]?.sales || 0, orders: stats?.dailySales?.[3]?.orders || 0 },
+    { name: "Fri", sales: stats?.dailySales?.[4]?.sales || 0, orders: stats?.dailySales?.[4]?.orders || 0 },
+    { name: "Sat", sales: stats?.dailySales?.[5]?.sales || 0, orders: stats?.dailySales?.[5]?.orders || 0 },
+    { name: "Sun", sales: stats?.dailySales?.[6]?.sales || 0, orders: stats?.dailySales?.[6]?.orders || 0 },
   ];
 
-  const topProducts = stats?.topSellingProducts || [
-    { id: "1", title: "Wireless Earbuds", quantitySold: 45, revenue: 2250 },
-    { id: "2", title: "Phone Case", quantitySold: 38, revenue: 950 },
-    { id: "3", title: "USB-C Cable", quantitySold: 32, revenue: 640 },
-  ];
+  const topProducts = stats?.topSellingProducts || [];
 
   const recentSales = stats?.recentSales || [];
 
@@ -414,47 +409,6 @@ export default function StoreOverview({
         </div>
       </div>
 
-      {/* Business Type Specific Tips */}
-      <div className="bg-card border border-border rounded-lg p-4 card-hover">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-          <div>
-            <h4 className="font-semibold">Store Optimization Tips</h4>
-            <p className="text-sm text-muted-foreground mt-1">
-              {store?.business?.businessType === "ELECTRONICS" && (
-                <>
-                  Electronics stores benefit from tracking warranty periods and
-                  offering repair services. Consider promoting accessories
-                  alongside main products to increase average ticket value.
-                </>
-              )}
-              {store?.business?.businessType === "HARDWARE" && (
-                <>
-                  Hardware stores should focus on seasonal inventory planning
-                  and bulk order discounts. Track tool rentals and service
-                  appointments to maximize revenue per customer.
-                </>
-              )}
-              {store?.business?.businessType === "GROCERY" && (
-                <>
-                  Grocery stores need real-time stock tracking for perishables.
-                  Set up automatic reorder alerts for fast-moving items to
-                  prevent stockouts.
-                </>
-              )}
-              {store?.business?.businessType !== "ELECTRONICS" &&
-                store?.business?.businessType !== "HARDWARE" &&
-                store?.business?.businessType !== "GROCERY" && (
-                  <>
-                    Monitor your top-selling products and ensure adequate stock
-                    levels. Train workers on upselling techniques to increase
-                    average transaction value.
-                  </>
-                )}
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -6,12 +6,12 @@ export class PusherService {
     private pusher: Pusher;
     constructor(){
         this.pusher = new Pusher({
-            appId: "2155970",
-            key: "c17e46fbfce6e014e136",
-            secret: "d64776a3841e33ff5376",
-            cluster: "mt1",
-            useTLS: true
-            });
+            appId: process.env.PUSHER_APP_ID || "2155970",
+            key: process.env.PUSHER_KEY || "c17e46fbfce6e014e136",
+            secret: process.env.PUSHER_SECRET || "d64776a3841e33ff5376",
+            cluster: process.env.PUSHER_CLUSTER || "mt1",
+            useTLS: true,
+        });
     }
 
     async trigger(channel: string, event: string, data: any) {

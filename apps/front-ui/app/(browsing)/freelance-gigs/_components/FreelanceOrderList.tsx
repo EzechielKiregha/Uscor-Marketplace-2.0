@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { AnimatedBadge } from "@/components/seraui/AnimatedBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GET_FREELANCE_ORDERS_BY_CLIENT } from "@/graphql/freelance-order.gql";
-import FreelanceOrderForm from "./FreelanceOrderForm";
 
 interface FreelanceOrderListProps {
 	clientId: string;
@@ -20,8 +19,7 @@ export default function FreelanceOrderList({
 			<h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
 				Your Freelance Orders
 			</h1>
-			<FreelanceOrderForm serviceId="dynamic-service-id" />{" "}
-			{/* Replace with dynamic service ID */}
+			{/* FreelanceOrderForm requires a selected service — rendered from service detail page */}
 			{loading && (
 				<div className="text-center">
 					<div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>

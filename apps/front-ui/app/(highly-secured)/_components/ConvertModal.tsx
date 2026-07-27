@@ -65,16 +65,15 @@ export default function ConvertModal({
   const validationError = getValidationError();
   const isValid = !validationError;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
 
     setIsSubmitting(true);
-
-    // In a real app, this would call the mutation
-    setTimeout(() => {
-      onConvert(amount);
+    try {
+      await onConvert(amount);
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   if (!isOpen) return null;
