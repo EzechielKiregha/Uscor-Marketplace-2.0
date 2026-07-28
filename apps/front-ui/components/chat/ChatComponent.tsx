@@ -1,22 +1,20 @@
 // app/chat/page.tsx
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  AlertCircle,
-  ChevronLeft,
-  Loader2,
-  MessageSquare,
-  Search,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GET_CHATS } from "@/graphql/chat.gql";
 import { useMe } from "@/lib/useMe";
+import { useQuery } from "@apollo/client";
+import {
+    AlertCircle,
+    Loader2,
+    MessageSquare,
+    Search
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import ChatModal from "./ChatModal";
 
 export default function ChatPage() {

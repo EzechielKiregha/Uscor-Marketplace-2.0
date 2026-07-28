@@ -1,11 +1,12 @@
 // marketplace/_components/FloatingChat.tsx
 "use client";
 
-import { Loader2, MessageCircle, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
 import ChatModal from "@/components/chat/ChatModal";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/lib/useMe";
+import { MessageCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import Loader from "./seraui/Loader";
 
 export default function FloatingChat() {
   const { user, loading: authLoading } = useMe();
@@ -43,19 +44,7 @@ export default function FloatingChat() {
     setIsOpen(false);
   };
 
-  if (authLoading) {
-    return (
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          size="icon"
-          className="w-14 h-14 rounded-full bg-primary hover:bg-accent text-primary-foreground shadow-lg"
-          disabled
-        >
-          <Loader2 className="h-6 w-6 animate-spin" />
-        </Button>
-      </div>
-    );
-  }
+  if (authLoading) return <Loader loading={true} />;
 
   return (
     <>

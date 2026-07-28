@@ -1,22 +1,5 @@
 "use client";
 
-import { useQuery, useSubscription } from "@apollo/client";
-import {
-    BriefcaseBusiness,
-    Filter,
-    Gift,
-    Grid2x2,
-    Grid3x3,
-    List,
-    Search,
-    ShoppingCart,
-    SlidersHorizontal,
-    Square,
-    Star,
-    X,
-} from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 import EmptyState, { emptyStateIcons } from "@/components/EmptyState";
 import MotionPage from "@/components/MotionPage";
 import { Button } from "@/components/ui/button";
@@ -28,12 +11,26 @@ import {
     ON_SERVICE_ADDED,
 } from "@/graphql/marketplace.gql";
 import { GET_PRODUCTS } from "@/graphql/product.gql";
-import BusinessTypeShowcase from "./_components/BusinessTypeShowcase";
+import { useQuery, useSubscription } from "@apollo/client";
+import {
+    Gift,
+    Grid2x2,
+    Grid3x3,
+    List,
+    Search,
+    ShoppingCart,
+    SlidersHorizontal,
+    Square,
+    Star,
+    X
+} from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import EnhancedPagination from "./_components/EnhancedPagination";
-import FeaturedProductsCarousel from "./_components/FeaturedProductsCarousel";
 import FeaturedStoresSection from "./_components/FeaturedStoresSection";
 import HorizontalCategoryScroll from "./_components/HorizontalCategoryScroll";
 import ProductCardSkeleton from "./_components/ProductCardSkeleton";
+import ProductsCarousel from "./_components/Productscarousel";
 import SearchModal from "./_components/SearchModal";
 import ServiceCard from "./_components/ServiceCard";
 import TypedProductCard from "./_components/TypedProductCard";
@@ -274,8 +271,8 @@ export default function MarketplacePage() {
           </h1>
 
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Discover products and services from verified local businesses.
-            Shop, compare, and get it delivered.
+            Discover products and services from verified local businesses. Shop,
+            compare, and get it delivered.
           </p>
         </div>
       </section>
@@ -317,7 +314,11 @@ export default function MarketplacePage() {
           <div className="relative flex-1 min-w-0">
             <Input
               type="text"
-              placeholder={activeTab === "products" ? "Search products..." : "Search services..."}
+              placeholder={
+                activeTab === "products"
+                  ? "Search products..."
+                  : "Search services..."
+              }
               value={filters.search}
               onChange={(e) => handleFilterChange("search", e.target.value)}
               className="pl-9 h-10 rounded-lg bg-background text-sm"
@@ -347,17 +348,24 @@ export default function MarketplacePage() {
             onClick={() => setShowFilters(!showFilters)}
             title="Filters"
           >
-            {showFilters ? <X className="h-4 w-4" /> : <SlidersHorizontal className="h-4 w-4" />}
+            {showFilters ? (
+              <X className="h-4 w-4" />
+            ) : (
+              <SlidersHorizontal className="h-4 w-4" />
+            )}
           </Button>
 
           {/* View Mode - desktop */}
           <div className="hidden md:flex items-center border border-border rounded-lg overflow-hidden">
-            {([
+            {[
               { mode: "list" as const, icon: <List className="h-4 w-4" /> },
               { mode: "small" as const, icon: <Grid3x3 className="h-4 w-4" /> },
-              { mode: "medium" as const, icon: <Grid2x2 className="h-4 w-4" /> },
+              {
+                mode: "medium" as const,
+                icon: <Grid2x2 className="h-4 w-4" />,
+              },
               { mode: "large" as const, icon: <Square className="h-4 w-4" /> },
-            ]).map(({ mode, icon }) => (
+            ].map(({ mode, icon }) => (
               <button
                 key={mode}
                 onClick={() => setViewMode(mode)}
@@ -380,30 +388,40 @@ export default function MarketplacePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <select
                 value={filters.businessType}
-                onChange={(e) => handleFilterChange("businessType", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("businessType", e.target.value)
+                }
                 className="h-10 px-3 rounded-lg border border-border bg-background text-sm"
               >
                 <option value="">All Business Types</option>
                 {businessTypes.map((type: any) => (
-                  <option key={type.id} value={type.id}>{type.name}</option>
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
                 ))}
               </select>
 
               {activeTab === "products" ? (
                 <select
                   value={filters.category}
-                  onChange={(e) => handleFilterChange("category", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("category", e.target.value)
+                  }
                   className="h-10 px-3 rounded-lg border border-border bg-background text-sm"
                 >
                   <option value="">All Categories</option>
                   {productCategories.map((category: any) => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
                   ))}
                 </select>
               ) : (
                 <select
                   value={filters.category}
-                  onChange={(e) => handleFilterChange("category", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("category", e.target.value)
+                  }
                   className="h-10 px-3 rounded-lg border border-border bg-background text-sm"
                 >
                   <option value="">All Service Types</option>
@@ -422,7 +440,9 @@ export default function MarketplacePage() {
                   type="number"
                   placeholder="Min $"
                   value={filters.minPrice}
-                  onChange={(e) => handleFilterChange("minPrice", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("minPrice", e.target.value)
+                  }
                   className="h-10 rounded-lg text-sm"
                 />
                 <span className="text-muted-foreground text-xs">–</span>
@@ -430,7 +450,9 @@ export default function MarketplacePage() {
                   type="number"
                   placeholder="Max $"
                   value={filters.maxPrice}
-                  onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("maxPrice", e.target.value)
+                  }
                   className="h-10 rounded-lg text-sm"
                 />
               </div>
@@ -452,7 +474,9 @@ export default function MarketplacePage() {
             {/* Quick filters + Clear */}
             <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border">
               <button
-                onClick={() => handleFilterChange("hasPromotion", !filters.hasPromotion)}
+                onClick={() =>
+                  handleFilterChange("hasPromotion", !filters.hasPromotion)
+                }
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   filters.hasPromotion
                     ? "bg-orange-600 text-white"
@@ -463,7 +487,9 @@ export default function MarketplacePage() {
                 On Sale
               </button>
               <button
-                onClick={() => handleFilterChange("featured", !filters.featured)}
+                onClick={() =>
+                  handleFilterChange("featured", !filters.featured)
+                }
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   filters.featured
                     ? "bg-orange-600 text-white"
@@ -474,8 +500,12 @@ export default function MarketplacePage() {
                 Featured
               </button>
 
-              {(filters.category || filters.businessType || filters.hasPromotion ||
-                filters.featured || filters.minPrice || filters.maxPrice) && (
+              {(filters.category ||
+                filters.businessType ||
+                filters.hasPromotion ||
+                filters.featured ||
+                filters.minPrice ||
+                filters.maxPrice) && (
                 <button
                   onClick={handleClearFilters}
                   className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -496,23 +526,32 @@ export default function MarketplacePage() {
         <div className="space-y-10">
           {/* Loading state */}
           {isLoading ? (
-            <ProductCardSkeleton viewMode={getProductViewMode(viewMode)} count={8} />
+            <ProductCardSkeleton
+              viewMode={getProductViewMode(viewMode)}
+              count={8}
+            />
           ) : (
             <>
               {/* Featured Products Carousel */}
-              {featuredProducts.length > 0 && (
+              {/* {featuredProducts.length > 0 && (
                 <FeaturedProductsCarousel
                   products={featuredProducts}
                   onViewAll={() => handleFilterChange("featured", true)}
                   onProductClick={() => {}}
                 />
-              )}
+              )} */}
 
               {/* Featured Stores */}
               <FeaturedStoresSection />
+              {featuredProducts.length > 0 && (
+                <ProductsCarousel
+                  products={featuredProducts}
+                  onViewAll={() => handleFilterChange("featured", true)}
+                />
+              )}
 
               {/* Business Type Showcase Sections */}
-              {showcaseTypes.length > 0 && (
+              {/* {showcaseTypes.length > 0 && (
                 <div className="space-y-2">
                   {showcaseTypes.map((type) => (
                     <BusinessTypeShowcase
@@ -522,13 +561,14 @@ export default function MarketplacePage() {
                     />
                   ))}
                 </div>
-              )}
+              )} */}
 
               {/* Browse All Products */}
               <div>
                 <h2 className="text-xl font-bold mb-4">Browse All Products</h2>
                 <p className="text-sm text-muted-foreground mb-4">
-                  {totalProducts} {totalProducts === 1 ? "product" : "products"} available
+                  {totalProducts} {totalProducts === 1 ? "product" : "products"}{" "}
+                  available
                 </p>
                 <div className={getGridClasses(viewMode)}>
                   {products.map((product: any) => (
@@ -539,8 +579,7 @@ export default function MarketplacePage() {
                       prodID={prodID}
                       setProdID={setProdID}
                     />
-                  )
-                  )}
+                  ))}
                 </div>
               </div>
             </>
@@ -562,14 +601,21 @@ export default function MarketplacePage() {
 
           {/* Loading */}
           {isLoading ? (
-            <ProductCardSkeleton viewMode={getProductViewMode(viewMode)} count={8} />
+            <ProductCardSkeleton
+              viewMode={getProductViewMode(viewMode)}
+              count={8}
+            />
           ) : activeTab === "products" ? (
             products.length === 0 ? (
               <EmptyState
                 icon={emptyStateIcons.cart}
                 title="No products found"
                 description="Try adjusting your search or filter criteria"
-                action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
+                action={{
+                  label: "Clear All Filters",
+                  onClick: handleClearFilters,
+                  variant: "outline",
+                }}
               />
             ) : (
               <div className={getGridClasses(viewMode)}>
@@ -587,7 +633,11 @@ export default function MarketplacePage() {
               icon={emptyStateIcons.search}
               title="No services found"
               description="Try adjusting your search or filter criteria"
-              action={{ label: "Clear All Filters", onClick: handleClearFilters, variant: "outline" }}
+              action={{
+                label: "Clear All Filters",
+                onClick: handleClearFilters,
+                variant: "outline",
+              }}
             />
           ) : (
             <div className={getGridClasses(viewMode)}>
@@ -605,7 +655,9 @@ export default function MarketplacePage() {
           <EnhancedPagination
             page={page}
             totalPages={totalPages}
-            totalItems={activeTab === "products" ? totalProducts : totalServices}
+            totalItems={
+              activeTab === "products" ? totalProducts : totalServices
+            }
             pageSize={pageSize}
             onPageChange={handlePageChange}
           />

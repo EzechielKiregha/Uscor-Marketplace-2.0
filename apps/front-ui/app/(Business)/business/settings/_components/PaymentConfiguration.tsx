@@ -1,5 +1,6 @@
 "use client";
 
+import Loader from "@/components/seraui/Loader";
 import { useToast } from "@/components/toast-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -219,17 +220,7 @@ export default function PaymentConfiguration() {
     }
   };
 
-  if (authLoading)
-    return (
-      <Card className="border hover:border-primary  bg-card">
-        <CardContent className="h-[500px] flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading data...</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+  if (authLoading) return <Loader loading={true} />;
 
   const country = businessData?.country || "RWANDA";
   const businessType = businessData?.businessType || "ARTISAN";

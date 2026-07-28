@@ -1,24 +1,24 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  DollarSign,
-  Loader2,
-  Minus,
-  Percent,
-  Truck,
-} from "lucide-react";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import Loader from "@/components/seraui/Loader";
 import { Button } from "@/components/ui/button";
 import {
-  GET_BUSINESS_SETTLEMENT_STATS,
-  GET_BUSINESS_SETTLEMENTS,
+    GET_BUSINESS_SETTLEMENT_STATS,
+    GET_BUSINESS_SETTLEMENTS,
 } from "@/graphql/settlement.gql";
-import { formatPrice } from "@/lib/utils";
 import { useMe } from "@/lib/useMe";
+import { formatPrice } from "@/lib/utils";
+import { useQuery } from "@apollo/client";
+import {
+    ArrowRight,
+    CheckCircle2,
+    Clock,
+    DollarSign,
+    Loader2,
+    Minus,
+    Percent,
+    Truck,
+} from "lucide-react";
 import { useState } from "react";
 
 export default function BusinessSettlementsPage() {
@@ -42,7 +42,7 @@ export default function BusinessSettlementsPage() {
     fetchPolicy: "cache-and-network",
   });
 
-  if (authLoading) return <DashboardSkeleton statCount={4} showChart={false} showTable />;
+  if (authLoading) return <Loader loading={true} />;
 
   const settlements = settlementsData?.businessSettlements?.items || [];
   const total = settlementsData?.businessSettlements?.total || 0;

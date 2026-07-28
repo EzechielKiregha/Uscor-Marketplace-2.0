@@ -2,7 +2,7 @@
 
 import MotionPage from "@/components/MotionPage";
 import { StatusBadge } from "@/components/StatusBadge";
-import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
+import Loader from "@/components/seraui/Loader";
 import { getMinimumPlanForFeature } from "@/config/subscription-plans";
 import { GET_PRODUCTS_BY_BUSINESS_ID } from "@/graphql/product.gql";
 import { BusinessEntity } from "@/lib/types";
@@ -39,7 +39,7 @@ export default function B2BPage() {
 
 	const products = productsData?.fetchedBusinessProducts || [];
 
-	if (authLoading) return <DashboardSkeleton statCount={3} showChart={false} showTable />;
+	if (authLoading) return <Loader loading={true}/>;
 
 	if (!user) {
 		return (

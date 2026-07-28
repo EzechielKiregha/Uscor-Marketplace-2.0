@@ -1,6 +1,7 @@
 "use client";
 
 import MotionPage from "@/components/MotionPage";
+import Loader from "@/components/seraui/Loader";
 import UserDropdown from "@/components/seraui/UserDrodown";
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton";
 import { useToast } from "@/components/toast-provider";
@@ -133,7 +134,7 @@ export default function AdminDashboard() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  if (authLoading) return <DashboardSkeleton statCount={4} showChart={false} showTable={false} />;
+  if (authLoading) return <Loader loading={true}/>;
   if (!user || role !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center">
