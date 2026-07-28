@@ -56,7 +56,7 @@ import {
     Wrench,
     Zap,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -637,6 +637,8 @@ export default function BusinessSetupPage() {
     const { showToast } = useToast();
     const { loading, user, role } = useMe();
     const [updateBusiness, { loading: saving }] = useMutation(UPDATE_BUSINESS);
+    const params = useSearchParams();
+    const businessTypeFromUrl = params.get("businessType");
 
     const meBusiness = useMemo(() => {
         if (role === "business" && user) return user as BusinessEntity;
@@ -646,8 +648,8 @@ export default function BusinessSetupPage() {
     // State management
     const [step, setStep] = useState(1);
     const [selectedBusinessType, setSelectedBusinessType] = useState<
-        string | undefined
-    >(meBusiness?.businessType || undefined);
+      string | undefined
+    >(meBusiness?.businessType || businessTypeFromUrl || undefined);
     const [isServiceMode, setIsServiceMode] = useState(false);
 
     // Determine if we're in service mode
@@ -787,6 +789,7 @@ export default function BusinessSetupPage() {
                         </button>
                         <button
                             type="button"
+                            disabled
                             onClick={() => {
                                 setIsServiceMode(true);
                                 setSelectedBusinessType("SERVICE_FREELANCE");

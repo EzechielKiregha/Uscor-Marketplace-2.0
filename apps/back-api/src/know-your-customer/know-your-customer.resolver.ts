@@ -1,18 +1,19 @@
 import { Inject } from '@nestjs/common'
 import {
-  Args,
-  Mutation,
-  Query,
-  Resolver,
-  Subscription,
+    Args,
+    Mutation,
+    Query,
+    Resolver,
+    Subscription,
 } from '@nestjs/graphql'
 import { BusinessEntity } from '../business/entities/business.entity'
 import { RejectKycInput } from './dto/reject-kyc.input'
+import { UpdateKycInput } from './dto/update-kyc.input'
+import { UploadKycDocumentInput } from './dto/upload-kyc-document.input'
 import { VerifyKycInput } from './dto/verify-kyc.input'
 import { KnowYourCustomerEntity } from './entities/know-your-customer.entity'
 import { KycDocumentEntity } from './entities/kyc-document.entity'
 import { KnowYourCustomerService } from './know-your-customer.service'
-import { UpdateKycInput } from './dto/update-kyc.input'
 
 @Resolver(() => KnowYourCustomerEntity)
 export class KnowYourCustomerResolver {
@@ -21,6 +22,17 @@ export class KnowYourCustomerResolver {
     @Inject('PUB_SUB')
     private readonly pubSub: any,
   ) {}
+
+  @Mutation(() => KycDocumentEntity, {
+    name: 'uploadKycDocument',
+  })
+  async uploadKycDocument(
+    @Args('input') input: UploadKycDocumentInput,
+  ) {
+    return this.knowYourCustomerService.uploadKycDocument(
+      input,
+    )
+  }
 
   @Query(() => [KycDocumentEntity], {
     name: 'kycDocuments',

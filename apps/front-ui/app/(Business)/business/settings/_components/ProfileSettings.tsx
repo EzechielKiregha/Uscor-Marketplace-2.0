@@ -62,7 +62,7 @@ export const businessTypes = [
     color: "from-fuchsia-500 to-purple-500",
   },
   {
-    isActive: false,
+    isActive: true,
     value: "ARTISAN",
     label: "Artisan & Handcrafted Goods",
     icon: Palette,
@@ -76,7 +76,7 @@ export const businessTypes = [
     color: "from-blue-500 to-indigo-500",
   },
   {
-    isActive: false,
+    isActive: true,
     value: "GROCERY",
     label: "Grocery & Convenience",
     icon: ShoppingCart,

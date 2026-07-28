@@ -43,7 +43,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 // Electronics & Hardware are active; others are "Coming Soon"
-const ACTIVE_BUSINESS_TYPES = new Set(["ELECTRONICS", "HARDWARE"]);
+const ACTIVE_BUSINESS_TYPES = new Set([
+  "ELECTRONICS",
+  "HARDWARE",
+  "ARTISAN",
+  "CLOTHING",
+  "GROCERY",
+]);
 
 const workerRoles = [
   { value: "ADMIN", label: "Administrator", icon: "👑" },
@@ -205,7 +211,9 @@ export default function SignupPage() {
       }
 
       if (data.role === "Business") {
-        router.push("/create-business-setup");
+        router.push(
+          `/create-business-setup?bt=${encodeURIComponent(data.businessType || businessTypeFromUrl || "NA")}}`,
+        );
       } else {
         router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
       }

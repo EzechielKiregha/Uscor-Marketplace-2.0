@@ -2623,6 +2623,7 @@ type Mutation {
 
   """Creates shipping details for a re-owned product."""
   createShipping(createShippingInput: CreateShippingInput!): ShippingEntity!
+  uploadKycDocument(input: UploadKycDocumentInput!): KycDocumentEntity!
   verifyKyc(input: VerifyKycInput!): KnowYourCustomerEntity!
   updateKyc(input: UpdateKycInput!): KnowYourCustomerEntity!
   submitKyc(businessId: String!): BusinessEntity!
@@ -3216,6 +3217,12 @@ input CreateShippingInput {
   reOwnedProductId: String!
   trackingNumber: String!
   carrier: String!
+}
+
+input UploadKycDocumentInput {
+  businessId: String!
+  documentType: String!
+  documentUrl: String!
 }
 
 input VerifyKycInput {

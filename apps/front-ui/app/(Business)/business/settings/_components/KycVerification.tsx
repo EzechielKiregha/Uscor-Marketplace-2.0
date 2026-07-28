@@ -166,13 +166,14 @@ export default function KycVerification() {
       );
     }
 
+    const safeName = documentFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const blob = await put(
-      `business/uscor-kyc/${Date.now()}-${documentFile.name!}`,
+      `business/uscor-kyc/${Date.now()}-${safeName}`,
       documentFile,
       {
         access: "public",
-        addRandomSuffix: false,
-        allowOverwrite: true,
+        // addRandomSuffix: false,
+        // allowOverwrite: true,
         token: blobToken,
       },
     );
@@ -199,6 +200,7 @@ export default function KycVerification() {
         "Upload Failed",
         error.message || "Failed to upload document",
       );
+      setUploading(false);
     } finally {
       setUploading(false);
     }
