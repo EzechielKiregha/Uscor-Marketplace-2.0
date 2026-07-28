@@ -377,10 +377,16 @@ export default function Preferences({ businessT }: PreferencesProps) {
                     Allow other businesses to purchase your products and
                     services
                   </p>
+                  {businessData?.kycStatus !== "VERIFIED" && (
+                    <p className="text-xs text-warning mt-1">
+                      Complete KYC verification to enable B2B transactions.
+                    </p>
+                  )}
                 </div>
                 <Switch
                   checked={formData.isB2BEnabled}
                   onCheckedChange={() => handleToggle("isB2BEnabled")}
+                  disabled={businessData?.kycStatus !== "VERIFIED"}
                 />
               </div>
 
@@ -708,7 +714,7 @@ export default function Preferences({ businessT }: PreferencesProps) {
                               : businessData?.country === "BURUNDI"
                                 ? "Africa/Bujumbura"
                                 : "Africa/Kigali",
-                  businessType: businessData?.businessType || "ARTISAN",
+                  businessType: businessData?.businessType || businessT || "ARTISAN",
                 });
               }}
             >

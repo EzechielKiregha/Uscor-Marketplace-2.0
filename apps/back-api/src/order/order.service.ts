@@ -317,56 +317,60 @@ export class OrderService {
       for (const group of Object.values(
         businessGroups as OrderBusinessGroupEntity[],
       )) {
-
         const grossAmount = group.subtotal
         const platformFee =
           (group.subtotal * 1.5) / 100
         const deliveryFee = group.deliveryFee
-        const netAmount = grossAmount - platformFee + deliveryFee
+        const netAmount =
+          grossAmount - platformFee + deliveryFee
 
-        const createdGroup = await this.prisma.orderBusinessGroup.create(
-          {
-            data: {
-              orderId: order.id,
-              businessId: group.businessId,
-              subtotal: group.subtotal,
-              deliveryFee,
-              total: netAmount,
-              items: {
-                create: group.items.map(
-                  (item) => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    price: item.price || 0,
-                  }),
-                ),
-              },
-              settlement: {
-                create: {
+        const createdGroup =
+          await this.prisma.orderBusinessGroup.create(
+            {
+              data: {
+                orderId: order.id,
+                businessId: group.businessId,
+                subtotal: group.subtotal,
+                deliveryFee,
+                total: netAmount,
+                items: {
+                  create: group.items.map(
+                    (item) => ({
+                      productId: item.productId,
+                      quantity: item.quantity,
+                      price: item.price || 0,
+                    }),
+                  ),
+                },
+                settlement: {
+                  create: {
                     orderId: order.id,
                     businessId: group.businessId,
-                    status: SettlementStatus.PENDING,
+                    status:
+                      SettlementStatus.PENDING,
                     grossAmount,
                     platformFee,
                     deliveryFee,
-                    netAmount
-                }
-              }
+                    netAmount,
+                  },
+                },
+              },
+            },
+          )
+
+        // Create a PaymentTransaction for this business group
+        await this.prisma.paymentTransaction.create(
+          {
+            data: {
+              amount: group.total,
+              method: payment.method,
+              status: PaymentStatus.PENDING,
+              qrCode: payment.qrCode,
+              clientId,
+              businessGroupId: createdGroup.id,
             },
           },
         )
-
-        // Create a PaymentTransaction for this business group
-        await this.prisma.paymentTransaction.create({
-          data: {
-            amount: group.total,
-            method: payment.method,
-            status: PaymentStatus.PENDING,
-            qrCode: payment.qrCode,
-            clientId,
-            businessGroupId: createdGroup.id,
-          },
-        })
       }
     }
 
@@ -508,32 +512,53 @@ export class OrderService {
     // Each business gets a chat thread with the client for order coordination
     if (!clientOrderId) {
       try {
-        const businessProductGroups: Record<string, { businessId: string; count: number; total: number }> = {};
-        for (const op of order.products) {
-          const bizId = op.product.businessId;
-          if (!bizId) continue;
-          if (!businessProductGroups[bizId]) {
-            businessProductGroups[bizId] = { businessId: bizId, count: 0, total: 0 };
+        const businessProductGroups: Record<
+          string,
+          {
+            businessId: string
+            count: number
+            total: number
           }
-          businessProductGroups[bizId].count += op.quantity;
-          businessProductGroups[bizId].total += op.product.price * op.quantity;
+        > = {}
+        for (const op of order.products) {
+          const bizId = op.product.businessId
+          if (!bizId) continue
+          if (!businessProductGroups[bizId]) {
+            businessProductGroups[bizId] = {
+              businessId: bizId,
+              count: 0,
+              total: 0,
+            }
+          }
+          businessProductGroups[bizId].count +=
+            op.quantity
+          businessProductGroups[bizId].total +=
+            op.product.price * op.quantity
         }
 
-        for (const group of Object.values(businessProductGroups)) {
-          const business = await this.prisma.business.findUnique({
-            where: { id: group.businessId },
-            select: { id: true, name: true },
-          });
-          if (!business) continue;
+        for (const group of Object.values(
+          businessProductGroups,
+        )) {
+          const business =
+            await this.prisma.business.findUnique(
+              {
+                where: { id: group.businessId },
+                select: { id: true, name: true },
+              },
+            )
+          if (!business) continue
 
-          const chat = await this.chatService.createOrderChat({
-            orderId: order.id,
-            clientId,
-            businessId: group.businessId,
-            businessName: business.name,
-            itemCount: group.count,
-            total: group.total,
-          });
+          const chat =
+            await this.chatService.createOrderChat(
+              {
+                orderId: order.id,
+                clientId,
+                businessId: group.businessId,
+                businessName: business.name,
+                itemCount: group.count,
+                total: group.total,
+              },
+            )
 
           // Notify via Pusher
           await this.pusherService.trigger(
@@ -542,11 +567,13 @@ export class OrderService {
             {
               chatId: chat.id,
               orderId: order.id,
-              orderRef: order.id.substring(0, 8).toUpperCase(),
+              orderRef: order.id
+                .substring(0, 8)
+                .toUpperCase(),
               itemCount: group.count,
               total: group.total,
             },
-          );
+          )
           await this.pusherService.trigger(
             `client-${clientId}`,
             'new-order-chat',
@@ -555,10 +582,13 @@ export class OrderService {
               orderId: order.id,
               businessName: business.name,
             },
-          );
+          )
         }
       } catch (chatError) {
-        this.logger.warn(`Failed to create order chats for order ${order.id}`, chatError);
+        this.logger.warn(
+          `Failed to create order chats for order ${order.id}`,
+          chatError,
+        )
       }
     }
 
@@ -615,11 +645,13 @@ export class OrderService {
   ) {
     for (const redemption of redemptions) {
       const program =
-        await this.prisma.loyaltyProgram.findFirst({
-          where: {
-            businessId: redemption.businessId,
+        await this.prisma.loyaltyProgram.findFirst(
+          {
+            where: {
+              businessId: redemption.businessId,
+            },
           },
-        })
+        )
       if (!program) {
         this.logger.warn(
           `No loyalty program for business ${redemption.businessId}, skipping redemption`,
@@ -1594,10 +1626,57 @@ export class OrderService {
     }))
   }
 
-  async findAllPaginated(page: number = 1, limit: number = 20, status?: string) {
+  async findAllPaginated(
+    page: number = 1,
+    limit: number = 20,
+    status?: string,
+    clientId?: string,
+    businessId?: string,
+    minTotal?: number,
+    maxTotal?: number,
+    startDate?: Date,
+    endDate?: Date,
+  ) {
     const skip = (page - 1) * limit
     const where: any = {}
+
     if (status) where.status = status
+    if (clientId) where.clientId = clientId
+    if (businessId) {
+      where.OR = [
+        {
+          businessGroups: {
+            some: { businessId },
+          },
+        },
+        {
+          products: {
+            some: { product: { businessId } },
+          },
+        },
+      ]
+    }
+
+    if (
+      minTotal !== undefined ||
+      maxTotal !== undefined
+    ) {
+      where.totalAmount = {
+        ...(minTotal !== undefined && {
+          gte: minTotal,
+        }),
+        ...(maxTotal !== undefined && {
+          lte: maxTotal,
+        }),
+      }
+    }
+
+    if (startDate || endDate) {
+      where.createdAt = {
+        ...(startDate && { gte: startDate }),
+        ...(endDate && { lte: endDate }),
+      }
+    }
 
     const [orders, total] = await Promise.all([
       this.prisma.order.findMany({
@@ -1607,23 +1686,56 @@ export class OrderService {
         orderBy: { createdAt: 'desc' },
         include: {
           client: {
-            select: { id: true, fullName: true, email: true, createdAt: true },
+            select: {
+              id: true,
+              fullName: true,
+              email: true,
+              createdAt: true,
+            },
           },
           payment: {
-            select: { id: true, amount: true, method: true, status: true, transactionDate: true, qrCode: true, createdAt: true },
+            select: {
+              id: true,
+              amount: true,
+              method: true,
+              status: true,
+              transactionDate: true,
+              qrCode: true,
+              createdAt: true,
+            },
           },
           products: {
             select: {
-              id: true, quantity: true, createdAt: true,
+              id: true,
+              quantity: true,
+              createdAt: true,
               product: {
-                select: { id: true, businessId: true, title: true, price: true, createdAt: true, medias: { select: { url: true }, take: 1 } },
+                select: {
+                  id: true,
+                  businessId: true,
+                  title: true,
+                  price: true,
+                  createdAt: true,
+                  medias: {
+                    select: { url: true },
+                    take: 1,
+                  },
+                },
               },
             },
           },
           businessGroups: {
             include: {
               business: true,
-              items: { include: { product: { include: { medias: { take: 1 } } } } },
+              items: {
+                include: {
+                  product: {
+                    include: {
+                      medias: { take: 1 },
+                    },
+                  },
+                },
+              },
               payment: true,
             },
           },
@@ -1635,7 +1747,10 @@ export class OrderService {
     return {
       items: orders.map((order) => ({
         ...order,
-        status: order.status || order.payment?.status || 'PENDING',
+        status:
+          order.status ||
+          order.payment?.status ||
+          'PENDING',
       })),
       total,
       page,
@@ -2384,7 +2499,8 @@ export class OrderService {
             grossAmount,
             feeRate / 100,
           )
-          const deliveryFee = group.deliveryFee || 0
+          const deliveryFee =
+            group.deliveryFee || 0
           const netAmount = sumPrecise([
             grossAmount,
             -platformFee,
@@ -2441,61 +2557,109 @@ export class OrderService {
     userRole: string,
   ) {
     // Validate role-based status permissions
-    const workerStatuses = ['PROCESSING', 'READY_FOR_SHIPMENT', 'CANCELLED']
-    const adminStatuses = ['SHIPPED', 'DELIVERED', 'COMPLETED', 'CANCELLED']
+    const workerStatuses = [
+      'PROCESSING',
+      'READY_FOR_SHIPMENT',
+      'CANCELLED',
+    ]
+    const adminStatuses = [
+      'SHIPPED',
+      'DELIVERED',
+      'COMPLETED',
+      'CANCELLED',
+    ]
 
-    if (userRole === 'worker' && !workerStatuses.includes(status)) {
-      throw new Error(`Workers can only set status to: ${workerStatuses.join(', ')}`)
+    if (
+      userRole === 'worker' &&
+      !workerStatuses.includes(status)
+    ) {
+      throw new Error(
+        `Workers can only set status to: ${workerStatuses.join(', ')}`,
+      )
     }
-    if (userRole === 'admin' && !adminStatuses.includes(status)) {
-      throw new Error(`Admins can only set status to: ${adminStatuses.join(', ')}`)
+    if (
+      userRole === 'admin' &&
+      !adminStatuses.includes(status)
+    ) {
+      throw new Error(
+        `Admins can only set status to: ${adminStatuses.join(', ')}`,
+      )
     }
 
-    const group = await this.prisma.orderBusinessGroup.findUnique({
-      where: { id: businessGroupId },
-      include: {
-        order: {
+    const group =
+      await this.prisma.orderBusinessGroup.findUnique(
+        {
+          where: { id: businessGroupId },
           include: {
-            client: { select: { id: true, fullName: true } },
-          },
-        },
-        business: { select: { id: true, name: true } },
-        items: {
-          include: {
-            product: {
-              include: { medias: { take: 1 } },
+            order: {
+              include: {
+                client: {
+                  select: {
+                    id: true,
+                    fullName: true,
+                  },
+                },
+              },
+            },
+            business: {
+              select: { id: true, name: true },
+            },
+            items: {
+              include: {
+                product: {
+                  include: {
+                    medias: { take: 1 },
+                  },
+                },
+              },
             },
           },
         },
-      },
-    })
+      )
 
     if (!group) {
-      throw new Error('Order business group not found')
+      throw new Error(
+        'Order business group not found',
+      )
     }
 
     // Update the business group status
-    const updated = await this.prisma.orderBusinessGroup.update({
-      where: { id: businessGroupId },
-      data: { status: status as any },
-      include: {
-        order: {
+    const updated =
+      await this.prisma.orderBusinessGroup.update(
+        {
+          where: { id: businessGroupId },
+          data: { status: status as any },
           include: {
-            client: { select: { id: true, fullName: true, email: true } },
-          },
-        },
-        business: { select: { id: true, name: true } },
-        items: {
-          include: {
-            product: {
-              include: { medias: { take: 1 } },
+            order: {
+              include: {
+                client: {
+                  select: {
+                    id: true,
+                    fullName: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+            business: {
+              select: { id: true, name: true },
+            },
+            items: {
+              include: {
+                product: {
+                  include: {
+                    medias: { take: 1 },
+                  },
+                },
+              },
             },
           },
         },
-      },
-    })
+      )
 
-    const orderRef = group.order.id.substring(0, 8).toUpperCase()
+    const orderRef = group.order.id
+      .substring(0, 8)
+      .toUpperCase()
     const clientId = group.order.clientId
     const businessId = group.businessId
     const businessName = group.business.name
@@ -2537,24 +2701,74 @@ export class OrderService {
         )
       } else if (status === 'SHIPPED') {
         // Notify all parties
-        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger('admin-orders', 'order-status-update', eventPayload)
-      } else if (status === 'DELIVERED' || status === 'COMPLETED') {
-        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger('admin-orders', 'order-status-update', eventPayload)
+        await this.pusherService.trigger(
+          `business-${businessId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          `client-${clientId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          'admin-orders',
+          'order-status-update',
+          eventPayload,
+        )
+      } else if (
+        status === 'DELIVERED' ||
+        status === 'COMPLETED'
+      ) {
+        await this.pusherService.trigger(
+          `business-${businessId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          `client-${clientId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          'admin-orders',
+          'order-status-update',
+          eventPayload,
+        )
       } else if (status === 'CANCELLED') {
-        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger('admin-orders', 'order-status-update', eventPayload)
+        await this.pusherService.trigger(
+          `business-${businessId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          `client-${clientId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          'admin-orders',
+          'order-status-update',
+          eventPayload,
+        )
       } else {
         // PROCESSING or other — notify business and client
-        await this.pusherService.trigger(`business-${businessId}`, 'order-status-update', eventPayload)
-        await this.pusherService.trigger(`client-${clientId}`, 'order-status-update', eventPayload)
+        await this.pusherService.trigger(
+          `business-${businessId}`,
+          'order-status-update',
+          eventPayload,
+        )
+        await this.pusherService.trigger(
+          `client-${clientId}`,
+          'order-status-update',
+          eventPayload,
+        )
       }
     } catch (pusherError) {
-      this.logger.warn(`Failed to send Pusher notification for order status update`, pusherError)
+      this.logger.warn(
+        `Failed to send Pusher notification for order status update`,
+        pusherError,
+      )
     }
 
     return updated

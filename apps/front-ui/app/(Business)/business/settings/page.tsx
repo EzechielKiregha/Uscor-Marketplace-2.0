@@ -181,7 +181,7 @@ export default function SettingsPage() {
 
       {/* Content Area */}
       <div>
-        {activeSection === "profile" && <ProfileSettings />}
+        {activeSection === "profile" && <ProfileSettings businessT={(user as BusinessEntity).businessType} />}
         {activeSection === "payment" && <PaymentConfiguration />}
         {activeSection === "hardware" && (
           <HardwareSetup businessT={(user as BusinessEntity).businessType} />

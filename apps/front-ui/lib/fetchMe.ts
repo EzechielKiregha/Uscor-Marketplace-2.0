@@ -38,11 +38,14 @@ export const GET_BUSINESS_BY_ID = gql`
       address
       website
       businessType
+      country
       phone
       avatar
       coverImage
       isVerified
       kycStatus
+      isB2BEnabled
+      preferences
       createdAt
       updatedAt
     }

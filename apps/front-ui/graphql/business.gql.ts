@@ -160,8 +160,12 @@ export const GET_BUSINESS_BY_ID = gql`
       phone
       avatar
       coverImage
+      country
+      businessType
       isVerified
       kycStatus
+      isB2BEnabled
+      preferences
       totalProductsSold
       totalWorkers
       totalClients

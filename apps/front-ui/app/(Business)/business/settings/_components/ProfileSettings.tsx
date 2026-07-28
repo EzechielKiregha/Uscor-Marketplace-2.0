@@ -218,9 +218,11 @@ const businessBenefitsMap: Record<
   },
 };
 
-// type ProfileSettingsProps = {};
+type ProfileSettingsProps = {
+  businessT?: string;
+};
 
-export default function ProfileSettings() {
+export default function ProfileSettings({ businessT }: ProfileSettingsProps) {
   const { user, loading: authLoading } = useMe();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
@@ -269,7 +271,7 @@ export default function ProfileSettings() {
         address: businessData.business.address || "",
         phone: businessData.business.phone || "",
         country: businessData.business.country || "RWANDA",
-        businessType: businessData.business.businessType || "ELECTRONICS",
+        businessType: businessData.business.businessType || businessT || "ELECTRONICS",
         avatar: businessData.business.avatar || "",
         coverImage: businessData.business.coverImage || "",
       });
@@ -699,7 +701,7 @@ export default function ProfileSettings() {
                   phone: businessData?.business.phone || "",
                   country: businessData?.business.country || "RWANDA",
                   businessType:
-                    businessData?.business.businessType || "ARTISAN",
+                    businessData?.business.businessType || businessT || "ELECTRONICS",
                   avatar: businessData?.business.avatar || "",
                   coverImage: businessData?.business.coverImage || "",
                 });

@@ -368,14 +368,14 @@ export const GET_ORDERS = gql`
         receiptUrl
         deliveryAddress {
           id
-      createdAt
-      updatedAt
-      clientId
-      country
-      street
-      city
-      postalCode
-      isDefault
+            createdAt
+            updatedAt
+            clientId
+            country
+            street
+            city
+            postalCode
+            isDefault
         }
         qrCode
         createdAt

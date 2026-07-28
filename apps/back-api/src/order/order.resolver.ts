@@ -2,6 +2,7 @@ import { UseGuards } from "@nestjs/common";
 import {
     Args,
     Context,
+    Float,
     Int,
     Mutation,
     Query,
@@ -27,361 +28,463 @@ import { OrderService } from "./order.service";
 // Resolver
 @Resolver(() => OrderEntity)
 export class OrderResolver {
-    private pubSub = new PubSub();
+  private pubSub = new PubSub()
 
-    constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+  ) {}
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client")
-    @Mutation(() => OrderEntity, {
-        description: "Creates an order for a product.",
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => OrderEntity, {
+    description:
+      'Creates an order for a product.',
+  })
+  async createOrder(
+    @Context() context,
+    @Args('input') input: CreateOrderInput,
+  ) {
+    const user = context.req.user
+    if (user.id !== input.clientId) {
+      throw new Error(
+        'Clients can only create orders for themselves',
+      )
+    }
+    const order =
+      await this.orderService.create(input)
+
+    // Publish subscription event
+    this.pubSub.publish('orderCreated', {
+      orderCreated: order,
     })
-    async createOrder(
-        @Context() context,
-        @Args("input") input: CreateOrderInput,
-    ) {
-        const user = context.req.user;
-        if (user.id !== input.clientId) {
-            throw new Error("Clients can only create orders for themselves");
-        }
-        const order = await this.orderService.create(input);
 
-        // Publish subscription event
-        this.pubSub.publish("orderCreated", {
-            orderCreated: order,
-        });
+    return order
+  }
 
-        return order;
-    }
+  // Business fetches their own order groups
+  @Query(() => [OrderBusinessGroupEntity])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async myBusinessOrders(@Context() context) {
+    const user = context.req.user
 
-    // Business fetches their own order groups
-    @Query(() => [OrderBusinessGroupEntity])
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    async myBusinessOrders(@Context() context) {
-        const user = context.req.user;
+    if (!user || user.role !== 'business')
+      throw new Error('Unauthorized Access')
 
-        if (!user || user.role !== "business")
-            throw new Error("Unauthorized Access");
+    return this.orderService.getBusinessOrders(
+      user.id,
+    )
+  }
 
-        return this.orderService.getBusinessOrders(user.id);
-    }
+  // Client fetches full order with business breakdown
+  // @Query(() => OrderEntity)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // async orderById(
+  //     @Args("id", { type: () => String }) id: string,
+  //     @Context() context,
+  // ) {
+  //     const user = context.user;
+  //     return this.orderService.findOneWithGroups(id, user.id);
+  // }
 
-    // Client fetches full order with business breakdown
-    // @Query(() => OrderEntity)
-    // @UseGuards(JwtAuthGuard, RolesGuard)
-    // async orderById(
-    //     @Args("id", { type: () => String }) id: string,
-    //     @Context() context,
-    // ) {
-    //     const user = context.user;
-    //     return this.orderService.findOneWithGroups(id, user.id);
-    // }
+  // Resolve business details
+  // @ResolveField(() => BusinessEntity)
+  // async business(@Parent() group: OrderBusinessGroupEntity) {
+  //     return group.business;
+  // }
 
-    // Resolve business details
-    // @ResolveField(() => BusinessEntity)
-    // async business(@Parent() group: OrderBusinessGroupEntity) {
-    //     return group.business;
-    // }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client", "business", "admin")
-    @Query(() => PaginatedOrdersResponse, {
-        name: "orders",
-        description: "Retrieves orders (paginated).",
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client', 'business', 'admin')
+  @Query(() => PaginatedOrdersResponse, {
+    name: 'orders',
+    description: 'Retrieves orders (paginated).',
+  })
+  async getOrders(
+    @Args('page', {
+      type: () => Int,
+      defaultValue: 1,
     })
-    async getOrders(
-        @Args("page", { type: () => Int, defaultValue: 1 }) page: number,
-        @Args("limit", { type: () => Int, defaultValue: 20 }) limit: number,
-        @Args("status", { type: () => String, nullable: true }) status?: string,
-        @Context() context?: any,
-    ) {
-        return this.orderService.findAllPaginated(page, limit, status);
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client", "business")
-    @Query(() => OrderEntity, {
-        name: "order",
-        description: "Retrieves a single order by ID.",
+    page: number,
+    @Args('limit', {
+      type: () => Int,
+      defaultValue: 20,
     })
-    async getOrder(
-        @Args("id", { type: () => String })
-        id: string,
-    ) {
-        return this.orderService.findOne(id);
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("business", "worker")
-    @Query(() => PaginatedOrdersResponse, {
-        name: "businessOrders",
-        description: "Retrieves orders for a business.",
+    limit: number,
+    @Args('status', {
+      type: () => String,
+      nullable: true,
     })
-    async getBusinessOrders(
-        @Args("businessId", { type: () => String })
-        businessId: string,
-        @Args("page", {
-            type: () => Int,
-            defaultValue: 1,
-        })
-        page: number,
-        @Args("limit", {
-            type: () => Int,
-            defaultValue: 20,
-        })
-        limit: number,
-        @Args("search", {
-            type: () => String,
-            nullable: true,
-        })
-        search?: string,
-        @Args("status", {
-            type: () => String,
-            nullable: true,
-        })
-        status?: string,
-        @Args("date", {
-            type: () => String,
-            nullable: true,
-        })
-        date?: string,
-        @Context() context?: any,
-    ) {
-        // Authorization: business can only access own orders, worker must belong to business
-        const user = context?.req?.user;
-        if (user?.role === "business" && user.id !== businessId) {
-            throw new Error("You can only access your own business orders");
-        }
-        return this.orderService.findBusinessOrders(
-            businessId,
-            page,
-            limit,
-            search,
-            status,
-            date,
-        );
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client")
-    @Query(() => PaginatedOrdersResponse, {
-        name: "clientOrders",
-        description: "Retrieves orders for a client.",
+    status?: string,
+    @Args('clientId', {
+      type: () => String,
+      nullable: true,
     })
-    async getClientOrders(
-        @Args("clientId", { type: () => String })
-        clientId: string,
-        @Args("page", {
-            type: () => Int,
-            defaultValue: 1,
-        })
-        page: number,
-        @Args("limit", {
-            type: () => Int,
-            defaultValue: 20,
-        })
-        limit: number,
-        @Args("status", {
-            type: () => String,
-            nullable: true,
-        })
-        status?: string,
-        @Context() context?: any,
-    ) {
-        // Authorization: clients can only access their own orders
-        const user = context?.req?.user;
-        if (user && user.id !== clientId) {
-            throw new Error("You can only access your own orders");
-        }
-        return this.orderService.findClientOrders(
-            clientId,
-            page,
-            limit,
-            status,
-        );
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client")
-    @Mutation(() => OrderEntity, {
-        description: "Updates an order.",
+    clientId?: string,
+    @Args('businessId', {
+      type: () => String,
+      nullable: true,
     })
-    async updateOrder(
-        @Args("id", { type: () => String })
-        id: string,
-        @Args("input")
-        input: UpdateOrderInput,
-        @Context() context,
-    ) {
-        const user = context.req.user;
-        const order = await this.orderService.findOne(id);
-
-        if (!order) throw new Error("Order not found");
-
-        if (order.clientId !== user.id) {
-            throw new Error("Clients can only update their own orders");
-        }
-        const updatedOrder = await this.orderService.update(id, input);
-
-        // Publish subscription event
-        this.pubSub.publish("orderUpdated", {
-            orderUpdated: updatedOrder,
-        });
-
-        return updatedOrder;
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client")
-    @Mutation(() => OrderEntity, {
-        description: "Deletes an order.",
+    businessId?: string,
+    @Args('minTotal', {
+      type: () => Float,
+      nullable: true,
     })
-    async deleteOrder(
-        @Args("id", { type: () => String })
-        id: string,
-        @Context() context,
-    ) {
-        const user = context.req.user;
-        const order = await this.orderService.findOne(id);
-
-        if (!order) throw new Error("Order not found");
-
-        if (order.clientId !== user.id) {
-            throw new Error("Clients can only delete their own orders");
-        }
-        return this.orderService.remove(id);
-    }
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client")
-    @Mutation(() => OrderEntity, {
-        description: "Cancel an order.",
+    minTotal?: number,
+    @Args('maxTotal', {
+      type: () => Float,
+      nullable: true,
     })
-    async cancelOrder(
-        @Args("id", { type: () => String })
-        id: string,
-        @Context() context,
-    ) {
-        const user = context.req.user;
-        const order = await this.orderService.findOne(id);
-
-        if (!order) throw new Error("Order not found");
-
-        if (order.clientId !== user.id) {
-            throw new Error("Clients can only delete their own orders");
-        }
-        return this.orderService.cancelOrder(id);
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("business")
-    @Mutation(() => OrderEntity, {
-        description: "Process payment for an order.",
+    maxTotal?: number,
+    @Args('startDate', {
+      type: () => Date,
+      nullable: true,
     })
-    async processOrderPayment(
-        @Args("orderId", { type: () => String })
-        orderId: string,
-        @Args("input") input: ProcessPaymentInput,
-        @Context() _context,
-    ) {
-        const processedOrder = await this.orderService.processPayment(
-            orderId,
-            input,
-        );
-
-        // Publish subscription event
-        this.pubSub.publish("orderPaymentProcessed", {
-            orderPaymentProcessed: processedOrder,
-        });
-
-        return processedOrder;
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("client")
-    @Mutation(() => OrderReceiptEntity, {
-        description: "Generates a PDF receipt for the order.",
+    startDate?: Date,
+    @Args('endDate', {
+      type: () => Date,
+      nullable: true,
     })
-    async generateOrderReceipt(
-        @Args("input") input: GenerateOrderReceiptInput,
-        @Context() context,
-    ) {
-        const user = context.req.user;
-        return this.orderService.generateReceipt(input, user);
-    }
+    endDate?: Date,
+    @Context() context?: any,
+  ) {
+    return this.orderService.findAllPaginated(
+      page,
+      limit,
+      status,
+      clientId,
+      businessId,
+      minTotal,
+      maxTotal,
+      startDate,
+      endDate,
+    )
+  }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles("worker", "business", "admin")
-    @Mutation(() => OrderBusinessGroupEntity, {
-        description: "Updates the status of an order business group. Workers set PROCESSING/READY_FOR_SHIPMENT, admins set SHIPPED/DELIVERED/COMPLETED.",
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client', 'business')
+  @Query(() => OrderEntity, {
+    name: 'order',
+    description:
+      'Retrieves a single order by ID.',
+  })
+  async getOrder(
+    @Args('id', { type: () => String })
+    id: string,
+  ) {
+    return this.orderService.findOne(id)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business', 'worker')
+  @Query(() => PaginatedOrdersResponse, {
+    name: 'businessOrders',
+    description:
+      'Retrieves orders for a business.',
+  })
+  async getBusinessOrders(
+    @Args('businessId', { type: () => String })
+    businessId: string,
+    @Args('page', {
+      type: () => Int,
+      defaultValue: 1,
     })
-    async updateBusinessOrderStatus(
-        @Args("input") input: UpdateOrderStatusInput,
-        @Context() context,
-    ) {
-        const user = context.req.user;
-        const updated = await this.orderService.updateOrderStatus(
-            input.businessGroupId,
-            input.status,
-            user.id,
-            user.role,
-        );
-
-        // Publish subscription event
-        this.pubSub.publish("orderUpdated", {
-            orderUpdated: updated.order,
-        });
-
-        return updated;
-    }
-
-    // Subscriptions
-    @Subscription(() => OrderEntity, {
-        filter: (payload, variables) => {
-            return (
-                payload.orderCreated.clientId === variables.clientId ||
-                payload.orderCreated.products?.some(
-                    (p: any) => p.product.businessId === variables.businessId,
-                )
-            );
-        },
+    page: number,
+    @Args('limit', {
+      type: () => Int,
+      defaultValue: 20,
     })
-    orderCreated(
-        @Args("clientId", { type: () => String })
-        _clientId: string,
-        @Args("businessId", { type: () => String })
-        _businessId: string,
-    ) {
-        return this.pubSub.asyncIterableIterator("orderCreated");
-    }
-
-    @Subscription(() => OrderEntity, {
-        filter: (payload, variables) => {
-            return (
-                payload.orderUpdated.clientId === variables.clientId ||
-                payload.orderUpdated.products?.some(
-                    (p: any) => p.product.businessId === variables.businessId,
-                )
-            );
-        },
+    limit: number,
+    @Args('search', {
+      type: () => String,
+      nullable: true,
     })
-    orderUpdated(
-        @Args("clientId", { type: () => String })
-        _clientId: string,
-        @Args("businessId", { type: () => String })
-        _businessId: string,
-    ) {
-        return this.pubSub.asyncIterableIterator("orderUpdated");
-    }
-
-    @Subscription(() => OrderEntity, {
-        filter: (payload, variables) => {
-            return payload.orderPaymentProcessed.id === variables.orderId;
-        },
+    search?: string,
+    @Args('status', {
+      type: () => String,
+      nullable: true,
     })
-    orderPaymentProcessed(
-        @Args("orderId", { type: () => String })
-        _orderId: string,
+    status?: string,
+    @Args('date', {
+      type: () => String,
+      nullable: true,
+    })
+    date?: string,
+    @Context() context?: any,
+  ) {
+    // Authorization: business can only access own orders, worker must belong to business
+    const user = context?.req?.user
+    if (
+      user?.role === 'business' &&
+      user.id !== businessId
     ) {
-        return this.pubSub.asyncIterableIterator("orderPaymentProcessed");
+      throw new Error(
+        'You can only access your own business orders',
+      )
     }
+    return this.orderService.findBusinessOrders(
+      businessId,
+      page,
+      limit,
+      search,
+      status,
+      date,
+    )
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Query(() => PaginatedOrdersResponse, {
+    name: 'clientOrders',
+    description: 'Retrieves orders for a client.',
+  })
+  async getClientOrders(
+    @Args('clientId', { type: () => String })
+    clientId: string,
+    @Args('page', {
+      type: () => Int,
+      defaultValue: 1,
+    })
+    page: number,
+    @Args('limit', {
+      type: () => Int,
+      defaultValue: 20,
+    })
+    limit: number,
+    @Args('status', {
+      type: () => String,
+      nullable: true,
+    })
+    status?: string,
+    @Context() context?: any,
+  ) {
+    // Authorization: clients can only access their own orders
+    const user = context?.req?.user
+    if (user && user.id !== clientId) {
+      throw new Error(
+        'You can only access your own orders',
+      )
+    }
+    return this.orderService.findClientOrders(
+      clientId,
+      page,
+      limit,
+      status,
+    )
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => OrderEntity, {
+    description: 'Updates an order.',
+  })
+  async updateOrder(
+    @Args('id', { type: () => String })
+    id: string,
+    @Args('input')
+    input: UpdateOrderInput,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    const order =
+      await this.orderService.findOne(id)
+
+    if (!order) throw new Error('Order not found')
+
+    if (order.clientId !== user.id) {
+      throw new Error(
+        'Clients can only update their own orders',
+      )
+    }
+    const updatedOrder =
+      await this.orderService.update(id, input)
+
+    // Publish subscription event
+    this.pubSub.publish('orderUpdated', {
+      orderUpdated: updatedOrder,
+    })
+
+    return updatedOrder
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => OrderEntity, {
+    description: 'Deletes an order.',
+  })
+  async deleteOrder(
+    @Args('id', { type: () => String })
+    id: string,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    const order =
+      await this.orderService.findOne(id)
+
+    if (!order) throw new Error('Order not found')
+
+    if (order.clientId !== user.id) {
+      throw new Error(
+        'Clients can only delete their own orders',
+      )
+    }
+    return this.orderService.remove(id)
+  }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => OrderEntity, {
+    description: 'Cancel an order.',
+  })
+  async cancelOrder(
+    @Args('id', { type: () => String })
+    id: string,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    const order =
+      await this.orderService.findOne(id)
+
+    if (!order) throw new Error('Order not found')
+
+    if (order.clientId !== user.id) {
+      throw new Error(
+        'Clients can only delete their own orders',
+      )
+    }
+    return this.orderService.cancelOrder(id)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('business')
+  @Mutation(() => OrderEntity, {
+    description: 'Process payment for an order.',
+  })
+  async processOrderPayment(
+    @Args('orderId', { type: () => String })
+    orderId: string,
+    @Args('input') input: ProcessPaymentInput,
+    @Context() _context,
+  ) {
+    const processedOrder =
+      await this.orderService.processPayment(
+        orderId,
+        input,
+      )
+
+    // Publish subscription event
+    this.pubSub.publish('orderPaymentProcessed', {
+      orderPaymentProcessed: processedOrder,
+    })
+
+    return processedOrder
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('client')
+  @Mutation(() => OrderReceiptEntity, {
+    description:
+      'Generates a PDF receipt for the order.',
+  })
+  async generateOrderReceipt(
+    @Args('input')
+    input: GenerateOrderReceiptInput,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    return this.orderService.generateReceipt(
+      input,
+      user,
+    )
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('worker', 'business', 'admin')
+  @Mutation(() => OrderBusinessGroupEntity, {
+    description:
+      'Updates the status of an order business group. Workers set PROCESSING/READY_FOR_SHIPMENT, admins set SHIPPED/DELIVERED/COMPLETED.',
+  })
+  async updateBusinessOrderStatus(
+    @Args('input') input: UpdateOrderStatusInput,
+    @Context() context,
+  ) {
+    const user = context.req.user
+    const updated =
+      await this.orderService.updateOrderStatus(
+        input.businessGroupId,
+        input.status,
+        user.id,
+        user.role,
+      )
+
+    // Publish subscription event
+    this.pubSub.publish('orderUpdated', {
+      orderUpdated: updated.order,
+    })
+
+    return updated
+  }
+
+  // Subscriptions
+  @Subscription(() => OrderEntity, {
+    filter: (payload, variables) => {
+      return (
+        payload.orderCreated.clientId ===
+          variables.clientId ||
+        payload.orderCreated.products?.some(
+          (p: any) =>
+            p.product.businessId ===
+            variables.businessId,
+        )
+      )
+    },
+  })
+  orderCreated(
+    @Args('clientId', { type: () => String })
+    _clientId: string,
+    @Args('businessId', { type: () => String })
+    _businessId: string,
+  ) {
+    return this.pubSub.asyncIterableIterator(
+      'orderCreated',
+    )
+  }
+
+  @Subscription(() => OrderEntity, {
+    filter: (payload, variables) => {
+      return (
+        payload.orderUpdated.clientId ===
+          variables.clientId ||
+        payload.orderUpdated.products?.some(
+          (p: any) =>
+            p.product.businessId ===
+            variables.businessId,
+        )
+      )
+    },
+  })
+  orderUpdated(
+    @Args('clientId', { type: () => String })
+    _clientId: string,
+    @Args('businessId', { type: () => String })
+    _businessId: string,
+  ) {
+    return this.pubSub.asyncIterableIterator(
+      'orderUpdated',
+    )
+  }
+
+  @Subscription(() => OrderEntity, {
+    filter: (payload, variables) => {
+      return (
+        payload.orderPaymentProcessed.id ===
+        variables.orderId
+      )
+    },
+  })
+  orderPaymentProcessed(
+    @Args('orderId', { type: () => String })
+    _orderId: string,
+  ) {
+    return this.pubSub.asyncIterableIterator(
+      'orderPaymentProcessed',
+    )
+  }
 }

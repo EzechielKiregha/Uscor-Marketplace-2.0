@@ -37,6 +37,7 @@ export const GET_BUSINESS_SETTINGS = gql`
         cashDrawer
         cardReader
       }
+      preferences
       kyc {
         id
         status
@@ -117,6 +118,7 @@ export const UPDATE_BUSINESS_PROFILE = gql`
       totalProductsSold
       hasAgreedToTerms
       termsAgreedAt
+      preferences
       paymentConfig {
         mtnCode
         airtelCode

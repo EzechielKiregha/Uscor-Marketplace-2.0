@@ -325,6 +325,7 @@ type OrderBusinessGroupEntity {
   total: Float!
   status: String!
   items: [OrderItem!]!
+  payment: PaymentTransactionEntity
   createdAt: DateTime!
 }
 
@@ -394,9 +395,11 @@ type PaymentTransactionEntity {
   amount: Float!
   method: String!
   status: String!
-  transactionDate: DateTime!
+  transactionDate: DateTime
   qrCode: String
   createdAt: DateTime!
+  businessGroupId: String
+  b2bOrderId: String
   order: OrderEntity
   postTransaction: [PostTransactionEntity!]
 }
@@ -1408,19 +1411,6 @@ type MarkAsReadResponse {
   unreadCount: Float!
 }
 
-type WholesalePriceEntity {
-  id: String!
-  productId: String!
-  businessId: String!
-  minQuantity: Int!
-  price: Float!
-  maxQuantity: Int
-  businessTypeRestriction: String
-  isActive: Boolean!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type B2BOrderItemEntity {
   id: String!
   orderId: String!
@@ -1446,6 +1436,7 @@ type B2BOrderEntity {
   tax: Float!
   total: Float!
   shippingAddress: String
+  chatId: String
   items: [B2BOrderItemEntity!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1464,6 +1455,26 @@ type B2BOrderListResponse {
   total: Int!
   page: Int!
   limit: Int!
+}
+
+type B2BVendorListResponse {
+  items: [BusinessEntity!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+type WholesalePriceEntity {
+  id: String!
+  productId: String!
+  businessId: String!
+  minQuantity: Int!
+  price: Float!
+  maxQuantity: Int
+  businessTypeRestriction: String
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type DashboardStats {
@@ -2180,8 +2191,8 @@ type Query {
   searchedProducts(title: String!): [ProductEntity!]!
   myBusinessOrders: [OrderBusinessGroupEntity!]!
 
-  """Retrieves orders."""
-  orders: [OrderEntity!]!
+  """Retrieves orders (paginated)."""
+  orders(page: Int! = 1, limit: Int! = 20, status: String, clientId: String, businessId: String, minTotal: Float, maxTotal: Float, startDate: DateTime, endDate: DateTime): PaginatedOrdersResponse!
 
   """Retrieves a single order by ID."""
   order(id: String!): OrderEntity!
@@ -2271,6 +2282,8 @@ type Query {
   workerShifts(workerId: String!, storeId: String, startDate: DateTime, endDate: DateTime, page: Int! = 1, limit: Int! = 20): ShiftsPagedResult!
   workerCurrentShift(workerId: String!, storeId: String!): ShiftEntityWorker
   workerChats(workerId: String!, page: Int! = 1, limit: Int! = 20): ChatsPagedResult!
+  reviews: [ReviewEntity!]!
+  review(id: String!): ReviewEntity
 
   """Retrieves reposted products for a business."""
   repostedProducts: [RepostedProductEntity!]!
@@ -2318,7 +2331,7 @@ type Query {
   b2bOrder(orderId: String!): B2BOrderEntity!
 
   """List B2B-enabled vendors"""
-  b2bVendors(page: Int! = 1, limit: Int! = 20, businessType: String): B2BOrderListResponse!
+  b2bVendors(page: Int! = 1, limit: Int! = 20, businessType: String): B2BVendorListResponse!
 
   """Get B2B orders by phone number"""
   b2bOrdersByPhone(phone: String!, role: String! = "buyer"): B2BOrderListResponse!
@@ -2592,6 +2605,9 @@ type Mutation {
   startShift(input: StartShiftInput!): ShiftEntityWorker!
   endWorkerShift(input: EndWorkerShiftInput!): ShiftEntityWorker!
   processMobileMoneyPayment(input: ProcessMobileMoneyPaymentInput!): MobileMoneyPaymentResponseEntity!
+  createReview(createReviewInput: CreateReviewInput!): ReviewEntity!
+  updateReview(id: String!, updateReviewInput: UpdateReviewInput!): ReviewEntity!
+  deleteReview(id: String!): ReviewEntity!
 
   """Creates a reposted product."""
   createRepostedProduct(createRepostedProductInput: CreateRepostedProductInput!): RepostedProductEntity!
@@ -3162,6 +3178,18 @@ enum MobileMoneyProvider {
   MTN
   AIRTEL
   VODAFONE
+}
+
+input CreateReviewInput {
+  clientId: String!
+  productId: String!
+  rating: Int!
+  comment: String
+}
+
+input UpdateReviewInput {
+  rating: Int
+  comment: String
 }
 
 input CreateRepostedProductInput {
